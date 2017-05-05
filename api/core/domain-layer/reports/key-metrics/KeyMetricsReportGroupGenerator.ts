@@ -22,6 +22,8 @@ import { CommonValidationStructures } from "../../common/CommonValidations";
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _period: YieldManagerPeriodDO;
 	private _periodType: ThPeriodType;
+	private _startDate: ThDateDO;
+	private _endDate: ThDateDO;
 	private _keyMetricItem: KeyMetricsResultItem;
 
 	protected getParamsValidationStructure(): IValidationStructure {
@@ -42,11 +44,11 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	}
 
 	protected loadParameters(params: any) {
-		var startDate = new ThDateDO();
-		startDate.buildFromObject(params.startDate);
-		var endDate = new ThDateDO();
-		endDate.buildFromObject(params.endDate);
-		let dateInterval = ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
+		this._startDate = new ThDateDO();
+		this._startDate.buildFromObject(params.startDate);
+		this._endDate = new ThDateDO();
+		this._endDate.buildFromObject(params.endDate);
+		let dateInterval = ThDateIntervalDO.buildThDateIntervalDO(this._startDate, this._endDate);
 		this._period = new YieldManagerPeriodDO();
 		this._period.referenceDate = dateInterval.start;
 		this._period.noDays = dateInterval.getNumberOfDays() + 1;
@@ -62,9 +64,26 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	}
 
 	protected getMeta(): ReportGroupMeta {
+		var startDateKey: string = this._appContext.thTranslate.translate("Start Date");
+		var endDateKey: string = this._appContext.thTranslate.translate("End Date");
+		var groupValuesByKey: string = this._appContext.thTranslate.translate("Group Values By");
+		var displayParams = {};
+		displayParams[startDateKey] = this._startDate;
+		displayParams[endDateKey] = this._endDate;
+		displayParams[groupValuesByKey] =  this.getDisplayStringFromPeriodType();
 		return {
 			name: "Key Metrics",
+			displayParams: displayParams,
 			pageOrientation: PageOrientation.Landscape
+		}
+	}
+	
+	private getDisplayStringFromPeriodType() {
+		switch (this._periodType) {
+			case ThPeriodType.Day: return this._appContext.thTranslate.translate("Day");
+			case ThPeriodType.Week: return this._appContext.thTranslate.translate("Week");
+			case ThPeriodType.Month: return this._appContext.thTranslate.translate("Month");
+			default: return "";
 		}
 	}
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {

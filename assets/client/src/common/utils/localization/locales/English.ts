@@ -888,5 +888,8 @@ export var EnglishTranslations: Object = {
 	"External Booking Reference": "External Booking Reference",
 	"Agency": "Agency",
 	"N/A": "N/A",
+	"Generated At": "Generated At",
+	"Start Time": "Start Time",
+	"End Time": "End Time",
 	
 };

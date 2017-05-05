@@ -11,9 +11,12 @@ import { ReportSection } from '../result/ReportSection';
 import { IReportSectionGeneratorStrategy } from '../report-section-generator/IReportSectionGeneratorStrategy';
 
 import _ = require('underscore');
+import { HotelDO } from "../../../../data-layer/hotel/data-objects/HotelDO";
+import { ThTimestampDO } from "../../../../utils/th-dates/data-objects/ThTimestampDO";
 
 export abstract class AReportGeneratorStrategy implements IReportGeneratorStrategy {
 	protected _thUtils: ThUtils;
+	protected _reportGroup: ReportGroup;
 
 	constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext) {
 		this._thUtils = new ThUtils();
@@ -33,13 +36,10 @@ export abstract class AReportGeneratorStrategy implements IReportGeneratorStrate
 			return;
 		}
 		this.loadParameters(params);
-
-		var meta = this.getMeta();
-		meta.name = this._appContext.thTranslate.translate(meta.name);
-		meta.reference = this._thUtils.generateShortId();
-		var reportGroup = new ReportGroup(meta);
-
 		this.loadDependentData().then((result: any) => {
+			return this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id);
+		}).then((loadedHotel: HotelDO) => {
+			this.prepareMeta(loadedHotel);
 			var generators = this.getSectionGenerators();
 			var itemPromiseList: Promise<ReportSection>[] = [];
 			_.forEach(generators, (g: IReportSectionGeneratorStrategy) => {
@@ -47,11 +47,19 @@ export abstract class AReportGeneratorStrategy implements IReportGeneratorStrate
 			});
 			return Promise.all(itemPromiseList);
 		}).then((itemList: ReportSection[]) => {
-			reportGroup.sectionList = itemList;
-			resolve(reportGroup);
+			this._reportGroup.sectionList = itemList;
+			resolve(this._reportGroup);
 		}).catch((e) => {
 			reject(e);
 		});
+	}
+
+	private prepareMeta(loadedHotel: HotelDO) {
+		var meta = this.getMeta();
+		meta.name = this._appContext.thTranslate.translate(meta.name);
+		meta.reference = this._thUtils.generateShortId();
+		this._reportGroup = new ReportGroup(meta);
+		meta.generationTime = this._appContext.thTranslate.translate("Generated At") + ": " + ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone).toString();
 	}
 
 	private loadDependentData(): Promise<boolean> {

@@ -7,13 +7,14 @@ import { StringValidationRule } from "../../../utils/th-validation/rules/StringV
 import { ArrayValidationStructure } from "../../../utils/th-validation/structure/ArrayValidationStructure";
 import { NumberInListValidationRule } from "../../../utils/th-validation/rules/NumberInListValidationRule";
 import { BookingDOConstraints } from "../../../data-layer/bookings/data-objects/BookingDOConstraints";
-import { BookingConfirmationStatus } from "../../../data-layer/bookings/data-objects/BookingDO";
+import { BookingConfirmationStatus, BookingConfirmationStatusDisplayString } from "../../../data-layer/bookings/data-objects/BookingDO";
 import { ReportGroupMeta } from "../common/result/ReportGroup";
 import { ReportSection } from "../common/result/ReportSection";
 import { IReportSectionGeneratorStrategy } from "../common/report-section-generator/IReportSectionGeneratorStrategy";
 import { BookingsForPriceProductReportSectionGenerator } from "./BookingsForPriceProductReportSectionGenerator";
 import { PriceProductDO } from "../../../data-layer/price-products/data-objects/PriceProductDO";
 import { PageOrientation } from "../../../services/pdf-reports/PageOrientation";
+
 
 export class BookingsForPriceProductReportGroupGenerator extends AReportGeneratorStrategy {
     private _priceProductId: string;
@@ -39,9 +40,19 @@ export class BookingsForPriceProductReportGroupGenerator extends AReportGenerato
     }
 
     protected getMeta(): ReportGroupMeta {
+        var priceProductKey: string = this._appContext.thTranslate.translate("Price Product");
+        var bookingStatusesKey: string = this._appContext.thTranslate.translate("Booking Statuses");
+        var displayParams = {};
+        displayParams[priceProductKey] = this._priceProduct.name;
+        displayParams[bookingStatusesKey] = "";
+        this._confirmationStatusList.forEach((bookingStatus, index) => {
+            displayParams[bookingStatusesKey] += BookingConfirmationStatusDisplayString[bookingStatus];
+            displayParams[bookingStatusesKey] += (index != (this._confirmationStatusList.length -1)) ? ", ": "";
+        });
         return {
             name: "Reservations Booked for Price Product",
-            pageOrientation: PageOrientation.Landscape
+            pageOrientation: PageOrientation.Landscape,
+            displayParams: displayParams
         }
     }
 

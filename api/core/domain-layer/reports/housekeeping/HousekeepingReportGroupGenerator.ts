@@ -9,11 +9,12 @@ import { DeparturesReportSectionGeneratorStrategy } from "./strategies/Departure
 import { StayoversReportSectionGeneratorStrategy } from "./strategies/StayoversReportSectionGeneratorStrategy";
 
 export class HousekeepingReportGroupGenerator extends AReportGeneratorStrategy {
-    
+
     protected getParamsValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([]);
     }
-    protected loadParameters(params: any) { }
+    protected loadParameters(params: any) {
+    }
 
     protected getMeta(): ReportGroupMeta {
         return {

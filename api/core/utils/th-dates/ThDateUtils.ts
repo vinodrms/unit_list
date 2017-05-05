@@ -30,6 +30,9 @@ export class ThDateUtils {
 		var day = moment(ThDateUtils.MaxDateMillis);
 		return this.convertMomentToThDateDO(day);
 	}
+	public getTodayThDayeDO(): ThDateDO {
+		return this.convertMomentToThDateDO(moment());
+	}
 	public addDaysToThDateDO(inDate: ThDateDO, days: number): ThDateDO {
 		var inMoment = this.convertThDateDOToMoment(inDate);
 		inMoment = inMoment.add(days, "day");
