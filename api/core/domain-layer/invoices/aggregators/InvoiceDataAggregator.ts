@@ -1,26 +1,28 @@
-import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
-import {ThError} from '../../../utils/th-responses/ThError';
-import {ThUtils} from '../../../utils/ThUtils';
-import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../utils/AppContext';
-import {SessionContext} from '../../../utils/SessionContext';
-import {InvoiceAggregatedData, BookingAttachment} from './InvoiceAggregatedData';
-import {InvoiceGroupMetaRepoDO} from '../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import {InvoiceGroupDO} from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../../data-layer/invoices/data-objects/InvoiceDO';
-import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
-import {BookingSearchResultRepoDO} from '../../../data-layer/bookings/repositories/IBookingRepository';
-import {RoomCategoryDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryDO';
-import {CustomerMetaRepoDO} from '../../../data-layer/customers/repositories/ICustomerRepository';
-import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
-import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {AddOnProductMetaRepoDO, AddOnProductSearchResultRepoDO} from '../../../data-layer/add-on-products/repositories/IAddOnProductRepository';
-import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
-import {TaxResponseRepoDO} from '../../../data-layer/taxes/repositories/ITaxRepository';
-import {TaxDO} from '../../../data-layer/taxes/data-objects/TaxDO';
-import {CurrencyDO} from '../../../data-layer/common/data-objects/currency/CurrencyDO';
-import {PaymentMethodDO} from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
+import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { ThUtils } from '../../../utils/ThUtils';
+import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../utils/AppContext';
+import { SessionContext } from '../../../utils/SessionContext';
+import { InvoiceAggregatedData, BookingAttachment } from './InvoiceAggregatedData';
+import { InvoiceGroupMetaRepoDO } from '../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../data-layer/invoices/data-objects/InvoiceDO';
+import { BookingDO } from '../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingSearchResultRepoDO } from '../../../data-layer/bookings/repositories/IBookingRepository';
+import { RoomCategoryDO } from '../../../data-layer/room-categories/data-objects/RoomCategoryDO';
+import { CustomerMetaRepoDO } from '../../../data-layer/customers/repositories/ICustomerRepository';
+import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerDO';
+import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
+import { AddOnProductMetaRepoDO, AddOnProductSearchResultRepoDO } from '../../../data-layer/add-on-products/repositories/IAddOnProductRepository';
+import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
+import { TaxResponseRepoDO } from '../../../data-layer/taxes/repositories/ITaxRepository';
+import { TaxDO } from '../../../data-layer/taxes/data-objects/TaxDO';
+import { CurrencyDO } from '../../../data-layer/common/data-objects/currency/CurrencyDO';
+import { PaymentMethodDO } from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import { RoomDO } from '../../../data-layer/rooms/data-objects/RoomDO';
+
+import _ = require('underscore');
 
 export interface InvoiceDataAggregatorQuery {
     invoiceGroupId: string;
@@ -133,21 +135,30 @@ export class InvoiceDataAggregator {
         roomCategRepo.getRoomCategoryById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._loadedBooking.roomCategoryId)
             .then((roomCategory: RoomCategoryDO) => {
                 this._loadedRoomCateg = roomCategory;
-                
+
                 let customerIdDisplayedAsGuest = this._loadedBooking.defaultBillingDetails.customerIdDisplayedAsGuest;
 
                 var custRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
                 return custRepo.getCustomerById({ hotelId: this._hotel.id }, customerIdDisplayedAsGuest);
             }).then((customer: CustomerDO) => {
                 this._loadedGuest = customer;
-                var roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
-                return roomRepo.getRoomById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._loadedBooking.roomId);
+                return this.getRoomIfSet();
             }).then((room: RoomDO) => {
                 this._loadedRoom = room;
                 resolve(true);
             }).catch((err: any) => {
                 reject(err);
             });
+    }
+
+    private getRoomIfSet(): Promise<RoomDO> {
+        if (!_.isString(this._loadedBooking.roomId)) {
+            return new Promise<RoomDO>((resolve: { (result: RoomDO): void }, reject: { (err: ThError): void }) => {
+                resolve(null);
+            });
+        }
+        var roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
+        return roomRepo.getRoomById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._loadedBooking.roomId);
     }
 
     private buildInvoiceAggregatedDataContainerFromLoadedData(): InvoiceAggregatedData {
