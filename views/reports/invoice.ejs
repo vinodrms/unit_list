@@ -156,7 +156,15 @@
                                 <%}%>
                                 
                                 <br>
-                                
+                                <%if (externalBookingReferenceValue.length > 0) {%>
+                                    <%= externalBookingReferenceLabel %>: <%= externalBookingReferenceValue %><br>
+                                <%}%>
+                                <%if (bookingReferenceValue.length > 0) {%>
+                                    <%= bookingReferenceLabel %>: <%= bookingReferenceValue %><br>
+                                <%}%>
+                                <%if (roomNameValue.length > 0) {%>
+                                    <%= roomNameLabel %>: <%= roomNameValue %><br>
+                                <%}%>
                                 <%if (notesFromBooking.length > 0) {%>
                                     Notes:<br>
                                     <%= notesFromBooking %>

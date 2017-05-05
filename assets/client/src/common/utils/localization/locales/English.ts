@@ -892,8 +892,9 @@ export var EnglishTranslations: Object = {
 	"Total Price": "Total Price",
 	"Price Breakdown": "Price Breakdown",
 	"Other": "Other",
+	"Booking Reference": "Booking Reference",
+	"External Booking Reference": "External Booking Reference",													
 	"The invoice was credited succesfully.": "The invoice was credited succesfully.",
 	"The invoice was credited.": "The invoice was credited.",
-	
 
 };

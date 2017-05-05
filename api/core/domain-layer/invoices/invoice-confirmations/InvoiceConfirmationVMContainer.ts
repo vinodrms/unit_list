@@ -84,6 +84,13 @@ export class InvoiceConfirmationVMContainer {
     hotelVatLabel: string;
     hotelVatValue: string;
 
+    externalBookingReferenceLabel: string;
+    externalBookingReferenceValue: string;
+    bookingReferenceLabel: string;
+    bookingReferenceValue: string;
+    roomNameLabel: string;
+    roomNameValue: string;
+
     constructor(private _thTranslation: ThTranslation) {
         this._thUtils = new ThUtils();
     }
@@ -106,6 +113,21 @@ export class InvoiceConfirmationVMContainer {
         this.initTotalValues();
         this.initAdditionalFields();
         this.initHotelVatLabelAndValue();
+        this.initBookingInformationLabelsAndValues();
+    }
+    private initBookingInformationLabelsAndValues() {
+        this.bookingReferenceLabel = this._thTranslation.translate('Booking Reference');
+        this.externalBookingReferenceLabel = this._thTranslation.translate('External Booking Reference');
+        this.roomNameLabel = this._thTranslation.translate("Room");
+        this.externalBookingReferenceValue = "";
+        if (this._invoiceAggregatedData.bookingAttachment.booking.externalBookingReference) {
+            this.externalBookingReferenceValue = this._invoiceAggregatedData.bookingAttachment.booking.externalBookingReference;
+        }
+        this.bookingReferenceValue = "";
+        if (this._invoiceAggregatedData.bookingAttachment.booking.bookingReference) {
+            this.bookingReferenceValue = this._invoiceAggregatedData.bookingAttachment.booking.displayedReservationNumber;
+        }
+        this.roomNameValue = this._invoiceAggregatedData.bookingAttachment.room.name;
     }
     private initLogoSrcs() {
         if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.hotel.logoUrl)) {
