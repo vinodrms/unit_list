@@ -33,7 +33,7 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                 "Transaction Fee",
                 "Total",
                 "Reservation number",
-
+                "Paid/Lost by Management at"
             ]
         };
     }
@@ -81,7 +81,10 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                     if(!this._thUtils.isUndefinedOrNull(invoice.bookingId)) {
                         bookingRef = this._indexedBookingById[invoice.bookingId].displayedReservationNumber;
                     }
-                    let row = [invoice.invoiceReference, payerString, priceToPay, transactionFee, priceToPayPlusTransactionFee, bookingRef];
+
+                    let paidTimestampStr = !invoice.paidTimestamp.isValid()? '' : invoice.paidTimestamp.toString();
+
+                    let row = [invoice.invoiceReference, payerString, priceToPay, transactionFee, priceToPayPlusTransactionFee, bookingRef, paidTimestampStr];
                     data.push(row);
 
                     totalPriceToPay += priceToPay;

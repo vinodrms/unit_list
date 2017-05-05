@@ -22,7 +22,6 @@ import { ShiftReportByAopNameSectionGenerator } from './strategies/ShiftReportBy
 import { ShiftReportPaidInvoicesSectionGenerator } from './strategies/ShiftReportPaidInvoicesSectionGenerator';
 import { CommonValidationStructures } from "../../common/CommonValidations";
 import { ShiftReportPaidByAgreementSectionGenerator } from "./strategies/ShiftReportPaidByAgreementSectionGenerator";
-import { ShiftReportLossAcceptedByManagementSectionGenerator } from "./strategies/ShiftReportLossAcceptedByManagementSectionGenerator";
 
 export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	private _params: ShiftReportParams;
