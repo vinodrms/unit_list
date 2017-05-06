@@ -20,7 +20,7 @@ import { BookingsServiceUtils } from "./utils/BookingsServiceUtils";
 
 @Injectable()
 export class BookingsService extends ALazyLoadRequestService<BookingVM> {
-    public static DefaultDayOffset = 60;
+    public static DefaultDayOffset = 3650;
     private _bookingMetaFactory: BookingMetaFactory;
 
     private _interval: ThDateIntervalDO;

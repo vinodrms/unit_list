@@ -10,11 +10,16 @@ import {TaxDO} from '../../../data-layer/taxes/data-objects/TaxDO';
 import {PaymentMethodDO} from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
 import {RoomCategoryDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryDO';
+import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
+import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
+
 
 export interface BookingAttachment {
     exists: boolean;
     roomCategory?: RoomCategoryDO;
     guest?: CustomerDO;
+    booking?: BookingDO;
+    room?: RoomDO;
 }
 
 export class InvoiceAggregatedData {

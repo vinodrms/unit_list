@@ -2,6 +2,7 @@ import { ThUtils } from '../../../utils/ThUtils';
 import { ThError } from '../../../utils/th-responses/ThError';
 import { BaseDO } from '../../common/base/BaseDO';
 import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
+import { ThTimestampDO } from "../../../utils/th-dates/data-objects/ThTimestampDO";
 import { InvoicePayerDO } from './payers/InvoicePayerDO';
 import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from './items/InvoiceItemDO';
 import { IInvoiceItemMeta } from './items/IInvoiceItemMeta';
@@ -35,6 +36,7 @@ export class InvoiceDO extends BaseDO {
     reinstatedInvoiceId: string;
 
     paidDate: ThDateDO;
+    paidTimestamp: ThTimestampDO;
     paidDateUtcTimestamp: number;
     paidDateTimeUtcTimestamp: number;
 
@@ -67,11 +69,8 @@ export class InvoiceDO extends BaseDO {
         this.paidDate = new ThDateDO();
         this.paidDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidDate"));
 
-        var thUtils = new ThUtils();
-        if (thUtils.isUndefinedOrNull(this.paidDate.day) && thUtils.isUndefinedOrNull(this.paidDate.month) &&
-            thUtils.isUndefinedOrNull(this.paidDate.year)) {
-            delete this.paidDate;
-        }
+        this.paidTimestamp = new ThTimestampDO();
+        this.paidTimestamp.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidTimestamp"));
     }
 
     public getPayerCustomerIdList(): string[] {
@@ -155,7 +154,7 @@ export class InvoiceDO extends BaseDO {
 
                 var invoiceFeeItem = new InvoiceItemDO();
                 invoiceFeeItem.buildFeeItemFromCustomerDO(customerDO);
-                invoiceFeeItem.accountingType = 
+                invoiceFeeItem.accountingType =
                     (this.accountingType === InvoiceAccountingType.Credit) ? InvoiceItemAccountingType.Credit : InvoiceItemAccountingType.Debit;
                 this.itemList.push(invoiceFeeItem);
             }

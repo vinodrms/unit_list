@@ -198,6 +198,7 @@
 	"Part %partNo%": "Part %partNo%",
 	"Invoice Reference": "Invoice Reference",
 	"Customer": "Customer",
+	"Transaction Fee": "Transaction Fee",
 	"Paid Invoices": "Paid Invoices",
 	"Confirmed": "Confirmed",
 	"Guaranteed": "Guaranteed",
@@ -218,7 +219,7 @@
 	"Babies (in baby beds)": "Babies (in baby beds)",
 	"Stationary Beds": "Stationary Beds",
 	"Rollaway Beds": "Rollaway Beds",
-	"Payd By Agreement Breakdown": "Payd By Agreement Breakdown",
+	"Paid by agreement breakdown": "Paid by agreement breakdown",
 	"account no.": "account no.",
 	"Amount (fee included)": "Amount (fee included)",
 	"Amount (without fee)": "Amount (without fee)",
@@ -227,6 +228,8 @@
 	"External Booking No": "External Booking No",
 	"Guest Name": "Guest Name",
 	"Nights Billed": "Nights Billed",
+	"Reservation number": "Reservation number",
+	"Paid/Lost by Management at": "Paid/Lost by Management at",
 	
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."

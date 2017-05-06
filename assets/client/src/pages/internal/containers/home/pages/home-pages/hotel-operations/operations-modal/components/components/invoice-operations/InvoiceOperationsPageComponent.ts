@@ -240,6 +240,10 @@ export class InvoiceOperationsPageComponent implements OnInit {
         return indexList;
     }
 
+    public get groupBookingId(): string {
+        return this.invoiceGroupVM.invoiceGroupDO.groupBookingId;
+    }
+
     public getInvoiceUniqueIdentifier(invoiceIndex: number): string {
         return this.invoiceVMList[invoiceIndex].invoiceDO.getUniqueIdentifier();
     }

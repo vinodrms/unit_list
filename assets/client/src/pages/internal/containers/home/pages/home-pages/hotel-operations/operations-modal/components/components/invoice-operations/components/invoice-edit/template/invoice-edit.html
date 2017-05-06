@@ -13,7 +13,13 @@
                 <b *ngIf="isCredit">{{ 'CREDIT' | translate }}</b>
                 <b *ngIf="isLossAcceptedByManagement"> {{ 'LOSS ACCEPTED BY MANAGEMENT' | translate }}</b>
             </span>
-            <span class="invoice-remove" *ngIf="editMode && isNewlyAdded">
+            <span class="pull-right clickable-item p-r-6" 
+                *ngIf="!editMode && !isNewlyAdded && bookingId && groupBookingId"
+                (click)="viewBooking()">
+                <i class="fa unitpal-font" title="{{'View Booking' | translate}}">8</i> 
+                {{ 'View Booking' | translate }} 
+            </span>
+            <span class="invoice-remove p-r-6" *ngIf="editMode && isNewlyAdded">
                 <a class="btn btn-xs" title="{{ 'Delete' | translate}}" (click)="onDelete()"><i class="fa unitpal-font">\</i></a>
             </span>            
             <br/>

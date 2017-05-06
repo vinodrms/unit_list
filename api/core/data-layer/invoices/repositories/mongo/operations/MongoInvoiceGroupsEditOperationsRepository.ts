@@ -215,6 +215,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
     private setPaidDatesOnInvoice(invoice: InvoiceDO, timezone: string) {
         var thTimestamp = ThTimestampDO.buildThTimestampForTimezone(timezone);
         invoice.paidDate = thTimestamp.thDateDO;
+        invoice.paidTimestamp = thTimestamp;
         invoice.paidDateUtcTimestamp = invoice.paidDate.getUtcTimestamp();
         invoice.paidDateTimeUtcTimestamp = thTimestamp.getUtcTimestamp();
     }

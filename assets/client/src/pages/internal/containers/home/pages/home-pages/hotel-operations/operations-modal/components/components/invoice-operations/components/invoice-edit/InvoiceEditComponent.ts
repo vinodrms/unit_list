@@ -19,6 +19,7 @@ import { CustomerDO } from '../../../../../../../../../../../services/customers/
 import { InvoiceGroupControllerService } from '../../services/InvoiceGroupControllerService';
 import { InvoiceGroupsService } from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
 import { HotelOperationsResultService } from '../../../../../services/HotelOperationsResultService';
+import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
 
 @Component({
     selector: 'invoice-edit',
@@ -27,6 +28,7 @@ import { HotelOperationsResultService } from '../../../../../services/HotelOpera
 })
 export class InvoiceEditComponent implements OnInit {
     @Input() invoiceUniqueId: string;
+    @Input() groupBookingId: string;
     @Output() newlyAddedInvoiceRemoved = new EventEmitter();
     @Output() invoiceAdded = new EventEmitter();
 
@@ -40,7 +42,8 @@ export class InvoiceEditComponent implements OnInit {
         private _numberOfAddOnProductsModalService: NumberOfAddOnProductsModalService,
         private _customerRegisterModalService: CustomerRegisterModalService,
         private _invoiceGroupsService: InvoiceGroupsService,
-        private _invoiceGroupControllerService: InvoiceGroupControllerService) {
+        private _invoiceGroupControllerService: InvoiceGroupControllerService,
+        private _operationsPageControllerService: HotelOperationsPageControllerService) {
     }
 
     ngOnInit() {
@@ -312,5 +315,14 @@ export class InvoiceEditComponent implements OnInit {
 
     public get invoiceReference(): string {
         return this.invoiceVM.invoiceDO.invoiceReference;
+    }
+
+    public get bookingId(): string {
+        return this.invoiceVM.invoiceDO.bookingId;
+    }
+
+    public viewBooking() {
+        if (!this.bookingId || !this.groupBookingId) { return; }
+        this._operationsPageControllerService.goToBooking(this.groupBookingId, this.bookingId);
     }
 }
