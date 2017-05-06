@@ -126,4 +126,16 @@ export class InvoiceGroupDO extends BaseDO {
 
         return !thUtils.isUndefinedOrNull(reinstatementInvoice);
     }
+
+    public getReinstatedInvoiceReference(reinstatementInvoiceId): string {
+        let reinstatementInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.id === reinstatementInvoiceId;
+        });
+
+        let reinstatedInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.id === reinstatementInvoice.reinstatedInvoiceId;
+        });
+
+        return reinstatedInvoice.invoiceReference;
+    }
 }
