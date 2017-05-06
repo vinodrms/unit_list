@@ -8,9 +8,11 @@
                 <small><i *ngIf="!isNewlyAdded">{{ invoiceReference }}</i></small>
                 <small *ngIf="isNewlyAdded"><i>{{ '(unsaved)' | translate }}</i></small>
                 <b *ngIf="isPaid"> {{ 'PAID' | translate }}</b>
-                <b *ngIf="isPaid && (isCredited || isCredit)"> - </b>
+                <b *ngIf="isPaid && (isReinstated || isReinstatement || isCredited || isCredit)"> - </b>
                 <b *ngIf="isCredited">{{ 'CREDITED' | translate }}</b>
+                <b *ngIf="isReinstated">{{ 'REINSTATED' | translate }}</b>
                 <b *ngIf="isCredit">{{ 'CREDIT' | translate }}</b>
+                <b *ngIf="isReinstatement">{{ 'REINSTATEMENT of ' | translate }} {{ reinstatedInvoiceReference }}</b>
                 <b *ngIf="isLossAcceptedByManagement"> {{ 'LOSS ACCEPTED BY MANAGEMENT' | translate }}</b>
             </span>
             <span class="pull-right clickable-item p-r-6" 

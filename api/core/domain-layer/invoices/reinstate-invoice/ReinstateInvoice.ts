@@ -32,14 +32,14 @@ export class ReinstateInvoice {
     }
 
     public reinstateCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-        debugger
+        let invoiceToBeReinstated: InvoiceDO;
+        let invoiceToBeReinstatedIndex: number;
+
         let invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
         invoiceGroupRepo.getInvoiceGroupById(this.invoiceGroupMeta,
             this._reinstatedInvoiceMeta.invoiceGroupId).then((loadedInvoiceGroup: InvoiceGroupDO) => {
                 this._loadedInvoiceGroup = loadedInvoiceGroup;
 
-                let invoiceToBeReinstated: InvoiceDO;
-                let invoiceToBeReinstatedIndex: number;
                 _.forEach(this._loadedInvoiceGroup.invoiceList, (invoiceDO: InvoiceDO, index: number) => {
                     if(invoiceDO.id === this._reinstatedInvoiceMeta.invoiceId) {
                         invoiceToBeReinstated = invoiceDO;
@@ -47,8 +47,11 @@ export class ReinstateInvoice {
                     }
                 });
 
+                let creditInvoice = this.getCreditInvoice(invoiceToBeReinstated);
+                this._loadedInvoiceGroup.invoiceList.splice(invoiceToBeReinstatedIndex + 1, 0, creditInvoice);
+
                 let reinstatementInvoice = this.getReinstatementInvoice(invoiceToBeReinstated);
-                this._loadedInvoiceGroup.invoiceList.splice(invoiceToBeReinstatedIndex + 1, 0, reinstatementInvoice);
+                this._loadedInvoiceGroup.invoiceList.splice(invoiceToBeReinstatedIndex + 2, 0, reinstatementInvoice);
 
                 this._loadedInvoiceGroup.removeItemsPopulatedFromBooking();
 
@@ -82,6 +85,27 @@ export class ReinstateInvoice {
         delete reinstatementInvoice.paidDate;
         return reinstatementInvoice;
     }
+
+    private getCreditInvoice(invoiceToBeCredited: InvoiceDO): InvoiceDO {
+        let creditInvoice = new InvoiceDO();
+        creditInvoice.buildFromObject(invoiceToBeCredited);
+        creditInvoice.accountingType = InvoiceAccountingType.Credit;
+        creditInvoice.paymentStatus = InvoicePaymentStatus.Unpaid;
+
+        _.forEach(creditInvoice.itemList, (item: InvoiceItemDO) => {
+            item.accountingType = InvoiceItemAccountingType.Credit;
+        });
+        
+        _.forEach(creditInvoice.payerList, (payer: InvoicePayerDO) => {
+            let transactionFee = this._thUtils.roundNumberToTwoDecimals(payer.priceToPayPlusTransactionFee - payer.priceToPay);
+            payer.shouldApplyTransactionFee = false;
+            payer.priceToPay = payer.priceToPay * -1;
+            payer.priceToPayPlusTransactionFee = this._thUtils.roundNumberToTwoDecimals(payer.priceToPay + transactionFee);
+        });
+
+        delete creditInvoice.id;
+        return creditInvoice;
+    }    
 
     private get invoiceGroupMeta(): InvoiceGroupMetaRepoDO {
         return {

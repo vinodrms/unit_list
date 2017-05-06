@@ -201,6 +201,7 @@ export class InvoiceEditComponent implements OnInit {
             this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
 
             this.invoiceAdded.emit();
+            this.invoiceAdded.emit();
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);
         });
@@ -283,6 +284,15 @@ export class InvoiceEditComponent implements OnInit {
     }
     public get isCredit(): boolean {
         return this.invoiceVM.invoiceDO.accountingType === InvoiceAccountingType.Credit;
+    }
+    public get isReinstated(): boolean {
+        return this.invoiceGroupVM.invoiceGroupDO.invoiceIsReinstated(this.invoiceVM.invoiceDO.id);
+    }
+    public get isReinstatement(): boolean {
+        return this.invoiceVM.invoiceDO.isReinstatement();
+    }
+    public get reinstatedInvoiceReference(): string {
+        return this.invoiceGroupVM.invoiceGroupDO.getReinstatedInvoiceReference(this.invoiceVM.invoiceDO.id);
     }
     public get isLossAcceptedByManagement(): boolean {
         return this.invoiceVM.invoiceDO.isLossAcceptedByManagement;
