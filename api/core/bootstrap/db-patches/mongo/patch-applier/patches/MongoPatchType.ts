@@ -24,5 +24,6 @@ export enum MongoPatchType {
     RemoveMovableAttributeFromInvoiceItemsOnInvoices,
     RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings,
     MigrateBookingGroupsToBookings,
+    SetShouldApplyTransactionFeeOnInvoicePayer,
     
 }
