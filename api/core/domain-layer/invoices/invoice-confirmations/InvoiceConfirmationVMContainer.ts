@@ -328,7 +328,7 @@ export class InvoiceConfirmationVMContainer {
     }
 
     public get hasTransactionFee(): boolean {
-        return this.transactionFee.amount > 0;
+        return this.invoicePayer.shouldApplyTransactionFee && this.transactionFee.amount > 0;
     }
 
     public get transactionFeeIsFlat(): boolean {
