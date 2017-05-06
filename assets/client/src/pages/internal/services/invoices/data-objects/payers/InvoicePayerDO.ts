@@ -14,6 +14,12 @@ export class InvoicePayerDO extends BaseDO {
     priceToPayPlusTransactionFee: number;
     additionalInvoiceDetails: string;
 
+    constructor() {
+        super();
+        
+        this.shouldApplyTransactionFee = true;
+    }
+
     protected getPrimitivePropertyKeys(): string[] {
         return ["customerId", "shouldApplyTransactionFee", "priceToPay", "priceToPayPlusTransactionFee", "additionalInvoiceDetails"];
     }
