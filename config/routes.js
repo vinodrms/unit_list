@@ -124,7 +124,6 @@ module.exports.routes = {
 	'GET /api/invoiceGroups/invoiceGroupItem': 'InvoiceGroupsController.getInvoiceGroupById',
 	'GET /api/invoiceGroups/pdf': 'InvoiceGroupsController.downloadInvoicePdf',
 	'POST /api/invoiceGroups/saveInvoicegroupItem': 'InvoiceGroupsController.saveInvoiceGroupItem',
-	'POST /api/invoiceGroups/credit': 'InvoiceGroupsController.generateCreditInvoice',
 	'POST /api/invoiceGroups/reinstate': 'InvoiceGroupsController.reinstateInvoice',
 
 	'POST /api/hotelOperations/dashboard/arrivals': 'HotelDashboardOperationsController.getArrivals',

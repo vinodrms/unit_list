@@ -135,16 +135,6 @@ export class InvoiceEditComponent implements OnInit {
             this.updatePaymentStatusForCurrentInvoice(InvoicePaymentStatus.LossAcceptedByManagement, "loss-accepted-by-management", "The invoice was marked as loss accepted by management.");
         });
     }
-    public onCreditInvoice() {
-        if (!this.totalAmountIsValid()) { return; }
-        var title = this._appContext.thTranslation.translate("Info");
-        var content = this._appContext.thTranslation.translate("By crediting this paid invoice a new invoice which will contain all the items on the original invoice (negative quantity) will be generated. Continue?");
-        var positiveLabel = this._appContext.thTranslation.translate("Yes");
-        var negativeLabel = this._appContext.thTranslation.translate("No");
-        this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-            this.creditCurrentInvoice("credit", "The invoice was credited.");
-        });
-    }
     public onReinstateInvoice() {
         if (!this.totalAmountIsValid()) { return; }
         var title = this._appContext.thTranslation.translate("Info");
@@ -201,27 +191,6 @@ export class InvoiceEditComponent implements OnInit {
             this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
 
             this.invoiceAdded.emit();
-            this.invoiceAdded.emit();
-        }, (error: ThError) => {
-            this._appContext.toaster.error(error.message);
-        });
-    }
-
-    private creditCurrentInvoice(logEventName: string, logMessage: string) {
-        var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
-        let invoiceToBeCredited = _.find(invoiceGroupVMClone.invoiceVMList, (invoiceVM: InvoiceVM) => {
-            return invoiceVM.invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId);
-        });
-
-        this._invoiceGroupsService.credit({
-            invoiceGroupId: invoiceGroupVMClone.invoiceGroupDO.id,
-            invoiceId: invoiceToBeCredited.invoiceDO.id
-        }).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
-            this._appContext.analytics.logEvent("invoice", logEventName, logMessage);
-            this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
-            this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was credited succesfully."));
-            this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
-
             this.invoiceAdded.emit();
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);

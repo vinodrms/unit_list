@@ -97,7 +97,6 @@ export enum ThServerApi {
 	InvoiceGroups,
 	InvoiceGroupsCount,
 	InvoiceGroupItem,
-	InvoiceGroupsCredit,
 	InvoiceGroupsReinstate,
 	InvoiceGroupsSaveItem,
 
@@ -211,7 +210,6 @@ ThServerApiUrl[ThServerApi.HotelOperationsCommonSendEmail] = "/hotelOperations/c
 ThServerApiUrl[ThServerApi.InvoiceGroups] = "/invoiceGroups";
 ThServerApiUrl[ThServerApi.InvoiceGroupsCount] = "/invoiceGroups/count";
 ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem";
-ThServerApiUrl[ThServerApi.InvoiceGroupsCredit] = "/invoiceGroups/credit";
 ThServerApiUrl[ThServerApi.InvoiceGroupsReinstate] = "/invoiceGroups/reinstate";
 ThServerApiUrl[ThServerApi.InvoiceGroupsSaveItem] = "/invoiceGroups/saveInvoicegroupItem";
 
