@@ -90,17 +90,16 @@ export class ReinstateInvoice {
         let creditInvoice = new InvoiceDO();
         creditInvoice.buildFromObject(invoiceToBeCredited);
         creditInvoice.accountingType = InvoiceAccountingType.Credit;
-        creditInvoice.paymentStatus = InvoicePaymentStatus.Unpaid;
-
+        creditInvoice.paymentStatus = InvoicePaymentStatus.Paid;
+        
         _.forEach(creditInvoice.itemList, (item: InvoiceItemDO) => {
             item.accountingType = InvoiceItemAccountingType.Credit;
         });
         
         _.forEach(creditInvoice.payerList, (payer: InvoicePayerDO) => {
-            let transactionFee = this._thUtils.roundNumberToTwoDecimals(payer.priceToPayPlusTransactionFee - payer.priceToPay);
-            payer.shouldApplyTransactionFee = false;
+            payer.shouldApplyTransactionFee = true;
             payer.priceToPay = payer.priceToPay * -1;
-            payer.priceToPayPlusTransactionFee = this._thUtils.roundNumberToTwoDecimals(payer.priceToPay + transactionFee);
+            payer.priceToPayPlusTransactionFee = payer.priceToPayPlusTransactionFee * -1;
         });
 
         delete creditInvoice.id;
