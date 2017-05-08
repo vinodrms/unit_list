@@ -76,7 +76,6 @@ export class InvoiceGroupsController extends BaseController {
     }
 
     public reinstateInvoice(req: Express.Request, res: Express.Response) {
-        debugger
         let reinstatementInvoiceGenerator = new ReinstateInvoice(req.appContext, req.sessionContext);
         
         reinstatementInvoiceGenerator.reinstate(req.body.reinstatedInvoiceMeta).then((updatedInvoiceGroup: InvoiceGroupDO) => {
