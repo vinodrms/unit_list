@@ -896,5 +896,11 @@ export var EnglishTranslations: Object = {
 	"External Booking Reference": "External Booking Reference",													
 	"The invoice was credited succesfully.": "The invoice was credited succesfully.",
 	"The invoice was credited.": "The invoice was credited.",
+	"By reinstating this paid invoice a new invoice which will contain all the items on the original invoice will be opened. Continue?": "By reinstating this paid invoice a new invoice which will contain all the items on the original invoice will be opened. Continue?",
+	"The invoice was reinstated.": "The invoice was reinstated.",
+	"The invoice was reinstated succesfully.": "The invoice was reinstated succesfully.",
+	"Apply Fee": "Apply Fee",
+	"No fee": "No fee",
+	"(reinstatement of %reinstatedInvoiceRef%)": "(reinstatement of %reinstatedInvoiceRef%)",
 
 };

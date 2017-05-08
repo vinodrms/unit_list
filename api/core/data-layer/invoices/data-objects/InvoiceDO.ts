@@ -33,6 +33,8 @@ export class InvoiceDO extends BaseDO {
     paymentStatus: InvoicePaymentStatus;
     notesFromBooking: string;
 
+    reinstatedInvoiceId: string;
+
     paidDate: ThDateDO;
     paidTimestamp: ThTimestampDO;
     paidDateUtcTimestamp: number;
@@ -45,7 +47,7 @@ export class InvoiceDO extends BaseDO {
     }
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
+        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "reinstatedInvoiceId", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
     }
 
     public buildFromObject(object: Object) {
@@ -210,5 +212,10 @@ export class InvoiceDO extends BaseDO {
 
     public isWalkInInvoice(): boolean {
         return !_.isString(this.bookingId) || this.bookingId.length == 0;
+    }
+
+    public isReinstatement(): boolean {
+        var thUtils = new ThUtils();
+        return !thUtils.isUndefinedOrNull(this.reinstatedInvoiceId);
     }
 }

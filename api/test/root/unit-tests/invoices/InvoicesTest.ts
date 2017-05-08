@@ -18,7 +18,7 @@ import { SaveInvoiceGroupDO } from '../../../../core/domain-layer/invoices/save-
 import { InvoiceTestUtils } from './utils/InvoiceTestUtils';
 import { InvoiceDO, InvoiceAccountingType } from '../../../../core/data-layer/invoices/data-objects/InvoiceDO';
 import { InvoicePayerDO } from '../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
-import { GenerateCreditInvoice } from "../../../../core/domain-layer/invoices/generate-credit-invoice/GenerateCreditInvoice";
+import { ReinstateInvoice } from "../../../../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
 
 describe("Invoices Tests", function () {
     var testUtils: TestUtils;
@@ -213,21 +213,28 @@ describe("Invoices Tests", function () {
         });
     });
 
-    describe("Invoice crediting", function () {
-        it("Should credit an invoice", function (done) {
-            let creditGenerator = new GenerateCreditInvoice(testContext.appContext, testContext.sessionContext);
-            creditGenerator.generate({
+    describe("Invoice reinstatement", function () {
+        it("Should reinstate an invoice", function (done) {
+            let reinstatementGenerator = new ReinstateInvoice(testContext.appContext, testContext.sessionContext);
+            reinstatementGenerator.reinstate({
                 invoiceGroupId: createdBookingInvoiceGroup.id,
                 invoiceId: createdBookingInvoiceGroup.invoiceList[0].id
             }).then((updatedInvoiceGroup: InvoiceGroupDO) => {
-                let creditedInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                let reinstatedInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
                     return invoice.id === createdBookingInvoiceGroup.invoiceList[0].id;
                 });
-                let creditedInvoiceRef = creditedInvoice.invoiceReference;
+
+                let reinstatedInvoiceRef = reinstatedInvoice.invoiceReference;
                 let creditInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-                    return invoice.invoiceReference === creditedInvoiceRef && invoice.accountingType === InvoiceAccountingType.Credit;
+                    return invoice.invoiceReference === reinstatedInvoiceRef && invoice.accountingType === InvoiceAccountingType.Credit;
                 });
-                invoiceTestUtils.testIfCreditWasCorrect(creditedInvoice, creditInvoice);
+                invoiceTestUtils.testIfCreditWasCorrect(reinstatedInvoice, creditInvoice);
+
+                let reinstatementInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.reinstatedInvoiceId === createdBookingInvoiceGroup.invoiceList[0].id;
+                });
+                invoiceTestUtils.testInvoiceEquality(reinstatedInvoice, reinstatementInvoice);
+                
                 done();
             }).catch((err: any) => {
                 done(err);

@@ -109,4 +109,33 @@ export class InvoiceGroupDO extends BaseDO {
             }
         });
     }
+    
+    public invoiceIsReinstated(invoiceId: string): boolean {
+        let thUtils = new ThUtils();
+
+        let lookedUpInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.id === invoiceId;
+        });
+        if(thUtils.isUndefinedOrNull(lookedUpInvoice)) {
+            return false;
+        }
+
+        let reinstatementInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
+            invoice.reinstatedInvoiceId === lookedUpInvoice.id;    
+        });
+
+        return !thUtils.isUndefinedOrNull(reinstatementInvoice);
+    }
+
+    public getReinstatedInvoiceReference(reinstatementInvoiceId): string {
+        let reinstatementInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.id === reinstatementInvoiceId;
+        });
+
+        let reinstatedInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.id === reinstatementInvoice.reinstatedInvoiceId;
+        });
+
+        return reinstatedInvoice.invoiceReference;
+    }
 }

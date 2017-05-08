@@ -26,6 +26,7 @@ export class InvoiceDO extends BaseDO {
     itemList: InvoiceItemDO[];
     paymentStatus: InvoicePaymentStatus;
     notesFromBooking: string;
+    reinstatedInvoiceId: string;
 
     paidDate: ThDateDO;
     paidTimestamp: ThTimestampDO;
@@ -33,7 +34,7 @@ export class InvoiceDO extends BaseDO {
     paidDateTimeUtcTimestamp: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
+        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "reinstatedInvoiceId", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
     }
 
     public buildFromObject(object: Object) {
@@ -155,5 +156,10 @@ export class InvoiceDO extends BaseDO {
         let thUtils = new ThUtils();
         return thUtils.isUndefinedOrNull(this.id) ?
             this.invoiceReference === uniqueId : this.id === uniqueId;
+    }
+
+    public isReinstatement(): boolean {
+        var thUtils = new ThUtils();
+        return !thUtils.isUndefinedOrNull(this.reinstatedInvoiceId);
     }
 }

@@ -24,6 +24,7 @@ import { P21_AddInvoiceItemAccountingTypeDebitOnInvoices } from "./list/P21_AddI
 import { P22_RemoveMovableAttributeFromInvoiceItemsOnInvoices } from "./list/P22_RemoveMovableAttributeFromInvoiceItemsOnInvoices";
 import { P23_RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings } from "./list/P23_RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings";
 import { P24_MigrateBookingGroupsToBookings } from "./list/P24_MigrateBookingGroupsToBookings";
+import { P25_SetShouldApplyTransactionFeeOnInvoicePayer } from "./list/P25_SetShouldApplyTransactionFeeOnInvoicePayer";
 
 export class MongoPatchUtils {
 	public static get PatchList(): ATransactionalMongoPatch[] {
@@ -53,7 +54,8 @@ export class MongoPatchUtils {
 			new P22_RemoveMovableAttributeFromInvoiceItemsOnInvoices(),
 			new P23_RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings(),
 			new P24_MigrateBookingGroupsToBookings(),
-
+			new P25_SetShouldApplyTransactionFeeOnInvoicePayer(),
+			
 		];
 	}
 }
