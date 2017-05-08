@@ -76,8 +76,9 @@
         </form>
         
     </div>
-    <div *ngIf="invoicePayerVM.customerDO" class="payment-container" [ngClass]="{'read-only p-12' : !editMode, 'p-6': editMode}">
-        <form *ngIf="editMode" class="form-inline">
+    
+    <div class="payment-container" *ngIf="editMode" [ngClass]="{'read-only p-12' : !editMode, 'p-6': editMode}">
+        <form class="form-inline">
             <div class="form-group m-t-0 m-r-12 m-b-0 m-l-0">
                 <div class="input-group">
                     <div class="btn-group" data-toggle="buttons">
@@ -91,6 +92,9 @@
                 </div>
             </div>
         </form>
+    </div>
+
+    <div *ngIf="invoicePayerVM.customerDO" class="payment-container" [ngClass]="{'read-only p-12' : !editMode, 'p-6': editMode}">
         <form class="form-inline">
             <div class="form-group m-t-6 m-r-12 m-b-0 m-l-0">
                 <div class="input-group">
