@@ -30,7 +30,7 @@ export class InvoiceEditComponent implements OnInit {
     @Input() invoiceUniqueId: string;
     @Input() groupBookingId: string;
     @Output() newlyAddedInvoiceRemoved = new EventEmitter();
-    @Output() creditInvoiceAdded = new EventEmitter();
+    @Output() invoiceAdded = new EventEmitter();
 
     private static MAX_NO_OF_INVOICE_ITEMS = 50;
 
@@ -135,14 +135,14 @@ export class InvoiceEditComponent implements OnInit {
             this.updatePaymentStatusForCurrentInvoice(InvoicePaymentStatus.LossAcceptedByManagement, "loss-accepted-by-management", "The invoice was marked as loss accepted by management.");
         });
     }
-    public onCreditInvoice() {
+    public onReinstateInvoice() {
         if (!this.totalAmountIsValid()) { return; }
         var title = this._appContext.thTranslation.translate("Info");
-        var content = this._appContext.thTranslation.translate("By crediting this paid invoice a new invoice which will contain all the items on the original invoice (negative quantity) will be generated. Continue?");
+        var content = this._appContext.thTranslation.translate("By reinstating this paid invoice a new invoice which will contain all the items on the original invoice will be opened. Continue?");
         var positiveLabel = this._appContext.thTranslation.translate("Yes");
         var negativeLabel = this._appContext.thTranslation.translate("No");
         this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-            this.creditCurrentInvoice("credit", "The invoice was credited.");
+            this.reinstateCurrentInvoice("reinstate", "The invoice was reinstated.");
         });
     }
     private totalAmountIsValid(): boolean {
@@ -175,22 +175,23 @@ export class InvoiceEditComponent implements OnInit {
         });
     }
 
-    private creditCurrentInvoice(logEventName: string, logMessage: string) {
+    private reinstateCurrentInvoice(logEventName: string, logMessage: string) {
         var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
-        let invoiceToBeCredited = _.find(invoiceGroupVMClone.invoiceVMList, (invoiceVM: InvoiceVM) => {
+        let invoiceToBeReinstated = _.find(invoiceGroupVMClone.invoiceVMList, (invoiceVM: InvoiceVM) => {
             return invoiceVM.invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId);
         });
 
-        this._invoiceGroupsService.credit({
+        this._invoiceGroupsService.reinstate({
             invoiceGroupId: invoiceGroupVMClone.invoiceGroupDO.id,
-            invoiceId: invoiceToBeCredited.invoiceDO.id
+            invoiceId: invoiceToBeReinstated.invoiceDO.id
         }).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
             this._appContext.analytics.logEvent("invoice", logEventName, logMessage);
             this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
-            this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was credited succesfully."));
+            this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was reinstated succesfully."));
             this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
 
-            this.creditInvoiceAdded.emit();
+            this.invoiceAdded.emit();
+            this.invoiceAdded.emit();
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);
         });
@@ -252,6 +253,15 @@ export class InvoiceEditComponent implements OnInit {
     }
     public get isCredit(): boolean {
         return this.invoiceVM.invoiceDO.accountingType === InvoiceAccountingType.Credit;
+    }
+    public get isReinstated(): boolean {
+        return this.invoiceGroupVM.invoiceGroupDO.invoiceIsReinstated(this.invoiceVM.invoiceDO.id);
+    }
+    public get isReinstatement(): boolean {
+        return this.invoiceVM.invoiceDO.isReinstatement();
+    }
+    public get reinstatedInvoiceReference(): string {
+        return this.invoiceGroupVM.invoiceGroupDO.getReinstatedInvoiceReference(this.invoiceVM.invoiceDO.id);
     }
     public get isLossAcceptedByManagement(): boolean {
         return this.invoiceVM.invoiceDO.isLossAcceptedByManagement;

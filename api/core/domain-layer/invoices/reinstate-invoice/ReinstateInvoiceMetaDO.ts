@@ -1,4 +1,4 @@
-export interface CreditedInvoiceMetaDO {
+export class ReinstateInvoiceMetaDO {
     invoiceGroupId: string;
     invoiceId: string;
 }

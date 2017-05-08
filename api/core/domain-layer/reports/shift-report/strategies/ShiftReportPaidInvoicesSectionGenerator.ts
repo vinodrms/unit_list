@@ -83,8 +83,18 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                     }
 
                     let paidTimestampStr = !invoice.paidTimestamp.isValid()? '' : invoice.paidTimestamp.toString();
+                    
+                    let invoiceRefDisplayString = invoice.invoiceReference;
+                    if(invoice.isReinstatement()) {
+                        let reinstatedInvoiceRef = invoiceGroup.getReinstatedInvoiceReference(invoice.id);
+                        invoiceRefDisplayString += ' ' + this._appContext.thTranslate.translate('(reinstatement of %reinstatedInvoiceRef%)', {
+                            reinstatedInvoiceRef: reinstatedInvoiceRef 
+                        });
+                    }
 
-                    let row = [invoice.invoiceReference, payerString, priceToPay, transactionFee, priceToPayPlusTransactionFee, bookingRef, paidTimestampStr];
+                    let row = [invoiceRefDisplayString, payerString, priceToPay, transactionFee, priceToPayPlusTransactionFee, bookingRef, paidTimestampStr];
+                    
+
                     data.push(row);
 
                     totalPriceToPay += priceToPay;

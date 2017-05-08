@@ -23,6 +23,11 @@ export interface CreditedInvoiceMetaDO {
     invoiceId: string;
 }
 
+export interface ReinstateInvoiceMetaDO {
+    invoiceGroupId: string;
+    invoiceId: string;
+}
+
 @Injectable()
 export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupDO> {
     
@@ -50,8 +55,8 @@ export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupDO
 		return this.runServerPostActionOnInvoiceGroup(ThServerApi.InvoiceGroupsSaveItem, { invoiceGroup: invoiceGroup });
 	}
 
-    public credit(creditedInvoice: CreditedInvoiceMetaDO): Observable<InvoiceGroupDO> {
-		return this.runServerPostActionOnInvoiceGroup(ThServerApi.InvoiceGroupsCredit, { creditedInvoiceMeta: creditedInvoice });
+    public reinstate(reinstatedInvoice: ReinstateInvoiceMetaDO): Observable<InvoiceGroupDO> {
+		return this.runServerPostActionOnInvoiceGroup(ThServerApi.InvoiceGroupsReinstate, { reinstatedInvoiceMeta: reinstatedInvoice });
 	}
 
     private runServerPostActionOnInvoiceGroup(apiAction: ThServerApi, postData: Object): Observable<InvoiceGroupDO> {
