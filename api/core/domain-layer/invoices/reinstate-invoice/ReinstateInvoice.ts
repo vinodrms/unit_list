@@ -92,6 +92,8 @@ export class ReinstateInvoice {
         creditInvoice.accountingType = InvoiceAccountingType.Credit;
         creditInvoice.paymentStatus = InvoicePaymentStatus.Paid;
         
+        delete creditInvoice.reinstatedInvoiceId;
+
         _.forEach(creditInvoice.itemList, (item: InvoiceItemDO) => {
             item.accountingType = InvoiceItemAccountingType.Credit;
         });
