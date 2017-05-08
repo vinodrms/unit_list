@@ -216,20 +216,25 @@ describe("Invoices Tests", function () {
     describe("Invoice reinstatement", function () {
         it("Should reinstate an invoice", function (done) {
             let reinstatementGenerator = new ReinstateInvoice(testContext.appContext, testContext.sessionContext);
-            debugger
             reinstatementGenerator.reinstate({
                 invoiceGroupId: createdBookingInvoiceGroup.id,
                 invoiceId: createdBookingInvoiceGroup.invoiceList[0].id
             }).then((updatedInvoiceGroup: InvoiceGroupDO) => {
-                debugger
-                // let creditedInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-                //     return invoice.id === createdBookingInvoiceGroup.invoiceList[0].id;
-                // });
-                // let creditedInvoiceRef = creditedInvoice.invoiceReference;
-                // let creditInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-                //     return invoice.invoiceReference === creditedInvoiceRef && invoice.accountingType === InvoiceAccountingType.Credit;
-                // });
-                // invoiceTestUtils.testIfCreditWasCorrect(creditedInvoice, creditInvoice);
+                let reinstatedInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.id === createdBookingInvoiceGroup.invoiceList[0].id;
+                });
+
+                let reinstatedInvoiceRef = reinstatedInvoice.invoiceReference;
+                let creditInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.invoiceReference === reinstatedInvoiceRef && invoice.accountingType === InvoiceAccountingType.Credit;
+                });
+                invoiceTestUtils.testIfCreditWasCorrect(reinstatedInvoice, creditInvoice);
+
+                let reinstatementInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.reinstatedInvoiceId === createdBookingInvoiceGroup.invoiceList[0].id;
+                });
+                invoiceTestUtils.testInvoiceEquality(reinstatedInvoice, reinstatementInvoice);
+                
                 done();
             }).catch((err: any) => {
                 done(err);

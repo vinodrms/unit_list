@@ -111,7 +111,6 @@ export class InvoiceTestUtils {
             should.equal(invoice1.payerList[i].paymentMethod.type, invoice2.payerList[i].paymentMethod.type);
             should.equal(invoice1.payerList[i].paymentMethod.value, invoice2.payerList[i].paymentMethod.value);
         }
-        should.equal(invoice1.paymentStatus, invoice2.paymentStatus);
     }
 
     public testIfCreditWasCorrect(creditedInvoice: InvoiceDO, creditInvoice: InvoiceDO) {
