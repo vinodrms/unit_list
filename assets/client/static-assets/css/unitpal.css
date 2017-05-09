@@ -2261,16 +2261,14 @@ a.btn.btn-square:focus {
         font-size: 14px;
         color: #7c7c81;
         cursor: pointer;
-    }
-
-    .hotel-operations-dashboard .customer-name{
         max-width: 150px;
     }
-
+    .hotel-operations-dashboard .corporate-customer-name-container {
+        padding-top: 3px;
+    }
     .hotel-operations-dashboard .corporate-customer-name{
         font-size: 12px;
         color: #7c7c81;
-        cursor: pointer;
         max-width: 150px;
         padding-left: 3px;
         vertical-align: middle;
@@ -2280,6 +2278,7 @@ a.btn.btn-square:focus {
         font-size: 12px;
         color: #a9a9ac;
         width: 150px;
+        padding-top: 6px;
     }
 
     .hotel-operations-dashboard .period{
@@ -2577,6 +2576,9 @@ a.btn.btn-square:focus {
 
         arrival-item .header{
             font-size: 16px;
+            height: 20px;
+            padding-top: 3px;
+            padding-bottom: 3px;
         }
 
         arrival-item .body{
