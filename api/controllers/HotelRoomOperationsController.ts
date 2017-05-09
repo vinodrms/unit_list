@@ -1,17 +1,18 @@
-import {BaseController} from './base/BaseController';
-import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
-import {AppContext} from '../core/utils/AppContext';
-import {SessionContext} from '../core/utils/SessionContext';
-import {AssignRoom} from '../core/domain-layer/hotel-operations/room/assign/AssignRoom';
-import {AssignRoomDO} from '../core/domain-layer/hotel-operations/room/assign/AssignRoomDO';
-import {BookingDO} from '../core/data-layer/bookings/data-objects/BookingDO';
-import {CheckOutRoom} from '../core/domain-layer/hotel-operations/room/check-out/CheckOutRoom';
-import {ChangeRoomMaintenanceStatus} from '../core/domain-layer/hotel-operations/room/change-maintenance-status/ChangeRoomMaintenanceStatus';
-import {ChangeRollawayBedStatus} from '../core/domain-layer/hotel-operations/room/change-rollaway-bed-status/ChangeRollawayBedStatus';
-import {RoomDO} from '../core/data-layer/rooms/data-objects/RoomDO';
-import {RoomAttachedBooking} from '../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBooking';
-import {RoomAttachedBookingDO} from '../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBookingDO';
-import {RoomAttachedBookingResult, RoomAttachedBookingResultType} from '../core/domain-layer/hotel-operations/room/attached-booking/utils/RoomAttachedBookingResult';
+import { BaseController } from './base/BaseController';
+import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
+import { AppContext } from '../core/utils/AppContext';
+import { SessionContext } from '../core/utils/SessionContext';
+import { AssignRoom } from '../core/domain-layer/hotel-operations/room/assign/AssignRoom';
+import { AssignRoomDO } from '../core/domain-layer/hotel-operations/room/assign/AssignRoomDO';
+import { BookingDO } from '../core/data-layer/bookings/data-objects/BookingDO';
+import { CheckOutRoom } from '../core/domain-layer/hotel-operations/room/check-out/CheckOutRoom';
+import { ChangeRoomMaintenanceStatus } from '../core/domain-layer/hotel-operations/room/change-maintenance-status/ChangeRoomMaintenanceStatus';
+import { ChangeRollawayBedStatus } from '../core/domain-layer/hotel-operations/room/change-rollaway-bed-status/ChangeRollawayBedStatus';
+import { RoomDO } from '../core/data-layer/rooms/data-objects/RoomDO';
+import { RoomAttachedBooking } from '../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBooking';
+import { RoomAttachedBookingDO } from '../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBookingDO';
+import { RoomAttachedBookingResult, RoomAttachedBookingResultType } from '../core/domain-layer/hotel-operations/room/attached-booking/utils/RoomAttachedBookingResult';
+import { UnreserveRoom } from "../core/domain-layer/hotel-operations/room/unreserve/UnreserveRoom";
 
 class HotelRoomOperationsController extends BaseController {
 
@@ -38,6 +39,19 @@ class HotelRoomOperationsController extends BaseController {
             this.returnSuccesfulResponse(req, res, { booking: booking });
         }).catch((error: any) => {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelRoomOperationsControllerErrorReservingRoom);
+        });
+    }
+
+    public unreserveRoom(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var unreserveRoom = new UnreserveRoom(appContext, sessionContext);
+        unreserveRoom.unreserve(req.body.unreserveRoom).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelRoomOperationsControllerErrorUnreservingRoom);
         });
     }
 
@@ -116,6 +130,7 @@ var hotelRoomOperationsController = new HotelRoomOperationsController();
 module.exports = {
     checkIn: hotelRoomOperationsController.checkIn.bind(hotelRoomOperationsController),
     reserveRoom: hotelRoomOperationsController.reserveRoom.bind(hotelRoomOperationsController),
+    unreserveRoom: hotelRoomOperationsController.unreserveRoom.bind(hotelRoomOperationsController),
     changeRoom: hotelRoomOperationsController.changeRoom.bind(hotelRoomOperationsController),
     checkOut: hotelRoomOperationsController.checkOut.bind(hotelRoomOperationsController),
     changeMaintenanceStatus: hotelRoomOperationsController.changeMaintenanceStatus.bind(hotelRoomOperationsController),
