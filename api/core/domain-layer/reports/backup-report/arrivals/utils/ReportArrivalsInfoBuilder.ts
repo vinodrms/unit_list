@@ -38,6 +38,7 @@ export class ReportArrivalsItemInfoBuilder {
 	build(): ReportArrivalItemInfo {
 		var report: ReportArrivalItemInfo = {
 			customerName: this._arrivalInfo.customerName,
+			corporateCustomerName: this._arrivalInfo.corporateCustomerName,
 			roomCategory: this._roomCategory ? this._roomCategory.displayName : null,
 			roomNumber: this._room ? this._room.name : null,		// room[roomId].displayName -> make test to create bookings with reserver Room number
 			noAdults: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noAdults : null,

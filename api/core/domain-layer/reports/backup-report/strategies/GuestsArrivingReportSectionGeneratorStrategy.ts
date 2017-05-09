@@ -13,6 +13,7 @@ export class GuestsArrivingReportSectionGeneratorStrategy extends AReportSection
 			display: true,
 			values: [
 				"Customer name",
+				"Agency",
 				"Room category",
 				"Room number",
 				"Adults",
@@ -40,6 +41,7 @@ export class GuestsArrivingReportSectionGeneratorStrategy extends AReportSection
 			reportItems.forEach((item: ReportArrivalItemInfo) => {
 				let row = [
 					item.customerName,
+					item.corporateCustomerName,
 					item.roomCategory,
 					item.roomNumber,
 					item.noAdults,

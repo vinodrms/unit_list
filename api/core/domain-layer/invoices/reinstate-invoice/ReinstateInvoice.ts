@@ -83,6 +83,7 @@ export class ReinstateInvoice {
         delete reinstatementInvoice.paidDateTimeUtcTimestamp;
         delete reinstatementInvoice.invoiceReference;
         delete reinstatementInvoice.paidDate;
+        delete reinstatementInvoice.paidTimestamp;
         return reinstatementInvoice;
     }
 
@@ -105,6 +106,11 @@ export class ReinstateInvoice {
         });
 
         delete creditInvoice.id;
+        delete creditInvoice.paidDateUtcTimestamp;
+        delete creditInvoice.paidDateTimeUtcTimestamp;
+        delete creditInvoice.paidDate;
+        delete creditInvoice.paidTimestamp;
+        
         return creditInvoice;
     }    
 

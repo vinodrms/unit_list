@@ -10,6 +10,8 @@ export enum DeparturelItemBookingStatus {
 export interface DeparturelItemInfo {
     customerId: string;
     customerName?: string;
+    corporateCustomerId?: string;
+    corporateCustomerName?: string;
 
     bookingId?: string;
     groupBookingId?: string;

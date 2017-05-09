@@ -82,6 +82,11 @@ export class ArrivalItemComponent {
 		this._modalService.openCustomerModal(customerId);
 	}
 
+	public openCorporateCustomerModal() {
+		var customerId = this.arrivalItemVM.arrivalItemDO.corporateCustomerId;
+		this._modalService.openCustomerModal(customerId);
+	}
+
 	public openBookingModal() {
 		var bookingId = this.arrivalItemVM.arrivalItemDO.bookingId;
 		var groupBookingId = this.arrivalItemVM.arrivalItemDO.groupBookingId;

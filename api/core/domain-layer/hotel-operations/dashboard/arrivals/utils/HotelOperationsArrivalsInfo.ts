@@ -16,7 +16,9 @@ export interface ArrivalItemInfo {
     reservedRoomId: string;
 
     customerId: string;
+    corporateCustomerId?: string;
     customerName?: string;
+    corporateCustomerName?: string;
 
     bookingId: string;
     groupBookingId: string;
