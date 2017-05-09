@@ -8,14 +8,18 @@ import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/Inv
 import { CustomerSearchResultRepoDO } from '../../../../data-layer/customers/repositories/ICustomerRepository';
 import { CustomerDO } from '../../../../data-layer/customers/data-objects/CustomerDO';
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
+import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingDO";
+import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repositories/IBookingRepository";
 
 import _ = require('underscore');
 
 export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGeneratorStrategy {
     private _indexedCustomersById: { [id: string]: CustomerDO };
-
+    private _indexedBookingById: { [id: string]: BookingDO };
+    
     constructor(appContext: AppContext, sessionContext: SessionContext,
-        private _paidInvoiceGroupList: InvoiceGroupDO[]) {
+        private _paidInvoiceGroupList: InvoiceGroupDO[],
+        private _sectionMeta: ReportSectionMeta) {
         super(appContext, sessionContext);
     }
 
@@ -27,17 +31,20 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                 "Customer",
                 "Amount",
                 "Transaction Fee",
-                "Total"
+                "Total",
+                "Reservation number",
+                "Paid/Lost by Management at"
             ]
         };
     }
     protected getMeta(): ReportSectionMeta {
-        return {
-            title: "Paid Invoices"
-        }
+        return this._sectionMeta;
     }
 
     protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
+        let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+        let bookingIdList = this.getBookingIdList();
+
         let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
         let customerIdList = this.getCustomerIdList();
         customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
@@ -46,8 +53,17 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
             this._indexedCustomersById = _.indexBy(custSearchResult.customerList, (customer: CustomerDO) => {
                 return customer.id
             });
+
+            return bookingRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {bookingIdList: bookingIdList});
+        }).then((bookingsResult: BookingSearchResultRepoDO) => {
+            this._indexedBookingById = _.indexBy(bookingsResult.bookingList, (booking: BookingDO) => {
+                return booking.id;
+            });
+
             var data = [];
             var totalPriceToPay = 0.0, totalPriceToPayPlusTransactionFee = 0.0, totalTransactionFee = 0.0;
+            var bookingRef;
+
             this._paidInvoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
                 invoiceGroup.invoiceList.forEach((invoice: InvoiceDO) => {
                     var priceToPay = 0.0, priceToPayPlusTransactionFee = 0.0;
@@ -62,7 +78,23 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                     transactionFee = this._thUtils.roundNumberToTwoDecimals(transactionFee);
 
                     let payerString = this.getPayerString(invoice);
-                    let row = [invoice.invoiceReference, payerString, priceToPay, transactionFee, priceToPayPlusTransactionFee];
+                    if(!this._thUtils.isUndefinedOrNull(invoice.bookingId)) {
+                        bookingRef = this._indexedBookingById[invoice.bookingId].displayedReservationNumber;
+                    }
+
+                    let paidTimestampStr = !invoice.paidTimestamp.isValid()? '' : invoice.paidTimestamp.toString();
+                    
+                    let invoiceRefDisplayString = invoice.invoiceReference;
+                    if(invoice.isReinstatement()) {
+                        let reinstatedInvoiceRef = invoiceGroup.getReinstatedInvoiceReference(invoice.id);
+                        invoiceRefDisplayString += ' ' + this._appContext.thTranslate.translate('(reinstatement of %reinstatedInvoiceRef%)', {
+                            reinstatedInvoiceRef: reinstatedInvoiceRef 
+                        });
+                    }
+
+                    let row = [invoiceRefDisplayString, payerString, priceToPay, transactionFee, priceToPayPlusTransactionFee, bookingRef, paidTimestampStr];
+                    
+
                     data.push(row);
 
                     totalPriceToPay += priceToPay;
@@ -84,6 +116,20 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
         }).catch((e) => {
             reject(e);
         });
+    }
+
+    private getBookingIdList(): string[] {
+        let bookingIdList = [];
+
+        this._paidInvoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
+            invoiceGroup.invoiceList.forEach((invoice: InvoiceDO) => {
+                if (_.isString(invoice.bookingId) && !_.contains(bookingIdList, invoice.bookingId)) {
+                    bookingIdList.push(invoice.bookingId);
+                }
+            });
+        });
+
+        return bookingIdList;
     }
 
     private getCustomerIdList(): string[] {

@@ -97,7 +97,7 @@ export enum ThServerApi {
 	InvoiceGroups,
 	InvoiceGroupsCount,
 	InvoiceGroupItem,
-	InvoiceGroupsCredit,
+	InvoiceGroupsReinstate,
 	InvoiceGroupsSaveItem,
 
 	YieldManagerYieldPriceProducts,
@@ -210,7 +210,7 @@ ThServerApiUrl[ThServerApi.HotelOperationsCommonSendEmail] = "/hotelOperations/c
 ThServerApiUrl[ThServerApi.InvoiceGroups] = "/invoiceGroups";
 ThServerApiUrl[ThServerApi.InvoiceGroupsCount] = "/invoiceGroups/count";
 ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem";
-ThServerApiUrl[ThServerApi.InvoiceGroupsCredit] = "/invoiceGroups/credit";
+ThServerApiUrl[ThServerApi.InvoiceGroupsReinstate] = "/invoiceGroups/reinstate";
 ThServerApiUrl[ThServerApi.InvoiceGroupsSaveItem] = "/invoiceGroups/saveInvoicegroupItem";
 
 /* URLs prefixed with yManager instead of yieldManager because of AdBlock rules (EasyList) which contain the following definition: "/yieldmanager/*" */

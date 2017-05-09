@@ -15,7 +15,7 @@ import { EagerCustomersService } from '../../../../../../../../../../services/cu
 import { EagerAllotmentsService } from '../../../../../../../../../../services/allotments/EagerAllotmentsService';
 import { EagerInvoiceGroupsService } from '../../../../../../../../../../services/invoices/EagerInvoiceGroupsService';
 import { InvoiceGroupDO } from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { InvoiceDO, InvoiceAccountingType } from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
 import { AllotmentDO } from '../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
 import { CustomersDO } from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
 import { EagerAddOnProductsService } from '../../../../../../../../../../services/add-on-products/EagerAddOnProductsService';
@@ -71,9 +71,16 @@ export class BookingOperationsPageService {
             var invoiceGroupList: InvoiceGroupDO[] = result[5];
             if (invoiceGroupList.length > 0) {
                 pageData.invoiceGroupDO = invoiceGroupList[0];
-                pageData.invoiceDO = _.find(pageData.invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
-                    return invoice.bookingId === pageData.bookingDO.id;
+
+                let debitInvoicesRelatedToBooking = _.filter(pageData.invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.bookingId === pageData.bookingDO.id && invoice.accountingType === InvoiceAccountingType.Debit;
                 });
+
+                debitInvoicesRelatedToBooking = _.sortBy(debitInvoicesRelatedToBooking, (invoice: InvoiceDO) => {
+                    return invoice.paidDateTimeUtcTimestamp;                    
+                });
+
+                pageData.invoiceDO = _.last(debitInvoicesRelatedToBooking);
             }
             pageData.reservedAddOnProductsContainer = result[6];
             return pageData;

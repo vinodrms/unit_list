@@ -84,6 +84,13 @@ export class InvoiceConfirmationVMContainer {
     hotelVatLabel: string;
     hotelVatValue: string;
 
+    externalBookingReferenceLabel: string;
+    externalBookingReferenceValue: string;
+    bookingReferenceLabel: string;
+    bookingReferenceValue: string;
+    roomNameLabel: string;
+    roomNameValue: string;
+
     constructor(private _thTranslation: ThTranslation) {
         this._thUtils = new ThUtils();
     }
@@ -106,6 +113,28 @@ export class InvoiceConfirmationVMContainer {
         this.initTotalValues();
         this.initAdditionalFields();
         this.initHotelVatLabelAndValue();
+        this.initBookingInformationLabelsAndValues();
+    }
+    private initBookingInformationLabelsAndValues() {
+        this.bookingReferenceLabel = this._thTranslation.translate('Booking Reference');
+        this.externalBookingReferenceLabel = this._thTranslation.translate('External Booking Reference');
+        this.roomNameLabel = this._thTranslation.translate("Room");
+        this.externalBookingReferenceValue = "";
+        this.bookingReferenceValue = "";
+
+        if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.bookingAttachment.booking)) {
+            let booking = this._invoiceAggregatedData.bookingAttachment.booking;
+            if (booking.externalBookingReference) {
+                this.externalBookingReferenceValue = booking.externalBookingReference;
+            }
+            if (booking.bookingReference) {
+                this.bookingReferenceValue = booking.displayedReservationNumber;
+            }
+        }
+        this.roomNameValue = "";
+        if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.bookingAttachment.room)) {
+            this.roomNameValue = this._invoiceAggregatedData.bookingAttachment.room.name;
+        }
     }
     private initLogoSrcs() {
         if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.hotel.logoUrl)) {
@@ -150,14 +179,14 @@ export class InvoiceConfirmationVMContainer {
         this.payerAddressSecondLineValue = this.getFormattedAddressSecondLine(this._payerCustomer.customerDetails.getAddress());
         this.payerContactLabel = this._thTranslation.translate('Contact');
         this.payerContactValue = "";
-        var phone = (this._payerCustomer.customerDetails.getContactDetailsList() && this._payerCustomer.customerDetails.getContactDetailsList().length > 0)?
-                this._payerCustomer.customerDetails.getContactDetailsList()[0].phone : "";
+        var phone = (this._payerCustomer.customerDetails.getContactDetailsList() && this._payerCustomer.customerDetails.getContactDetailsList().length > 0) ?
+            this._payerCustomer.customerDetails.getContactDetailsList()[0].phone : "";
         if (_.isString(phone) && phone.length > 0) {
             this.payerContactValue += phone;
         }
 
-        var email = (this._payerCustomer.customerDetails.getContactDetailsList() && this._payerCustomer.customerDetails.getContactDetailsList().length > 0)?
-                this._payerCustomer.customerDetails.getContactDetailsList()[0].email : "";
+        var email = (this._payerCustomer.customerDetails.getContactDetailsList() && this._payerCustomer.customerDetails.getContactDetailsList().length > 0) ?
+            this._payerCustomer.customerDetails.getContactDetailsList()[0].email : "";
         if (_.isString(email) && email.length > 0) {
             this.payerContactValue += (this.payerContactValue.length > 0) ? " / " : "";
             this.payerContactValue += email;
@@ -192,7 +221,7 @@ export class InvoiceConfirmationVMContainer {
         this.netUnitPriceLabel = this._thTranslation.translate('Net Unit Price');
         this.vatLabel = this._thTranslation.translate('VAT');
         this.subtotalLabel = this._thTranslation.translate('Net Subtotal');
-        
+
         this.itemVMList = [];
         this.totalVat = 0;
         this.subtotalValue = 0;
@@ -209,8 +238,8 @@ export class InvoiceConfirmationVMContainer {
             }
         });
 
-        this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + _.reduce(this.itemVMList, function(sum, itemVM: InvoiceItemVM){ return sum + itemVM.vat; }, 0));
-        this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + _.reduce(this.itemVMList, function(sum, itemVM: InvoiceItemVM){ return sum + itemVM.subtotal; }, 0));
+        this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + _.reduce(this.itemVMList, function (sum, itemVM: InvoiceItemVM) { return sum + itemVM.vat; }, 0));
+        this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + _.reduce(this.itemVMList, function (sum, itemVM: InvoiceItemVM) { return sum + itemVM.subtotal; }, 0));
 
         if (this.hasTransactionFee) {
             let transactionFeeInvoiceItemVM = this.getTransactonFeeInvoiceItem();
@@ -299,7 +328,7 @@ export class InvoiceConfirmationVMContainer {
     }
 
     public get hasTransactionFee(): boolean {
-        return this.transactionFee.amount > 0;
+        return this.invoicePayer.shouldApplyTransactionFee && this.transactionFee.amount > 0;
     }
 
     public get transactionFeeIsFlat(): boolean {

@@ -64,9 +64,23 @@ export class InvoicePayerComponent implements OnInit {
         }
         
         this.invoicePayerVM.invoicePayerDO.transactionFeeSnapshot = this.transactionFee;
+        this.invoicePayerVM.invoicePayerDO.priceToPayPlusTransactionFee = this.getPriceToPayPlusTransactionFee();
+    }
+
+    private getPriceToPayPlusTransactionFee(): number {
+        if(!this.invoicePayerVM.invoicePayerDO.shouldApplyTransactionFee) {
+            return this.invoicePayerVM.invoicePayerDO.priceToPay;
+        }
         
-        this.invoicePayerVM.invoicePayerDO.priceToPayPlusTransactionFee = 
-            this.invoicePayerVM.invoicePayerDO.transactionFeeSnapshot.getAmountWihtTransactionFeeIncluded(this.invoicePayerVM.invoicePayerDO.priceToPay);
+        return this.invoicePayerVM.invoicePayerDO.transactionFeeSnapshot.getAmountWihtTransactionFeeIncluded(this.invoicePayerVM.invoicePayerDO.priceToPay);
+    }
+
+    public set shouldApplyTransacationFee(shouldApply: boolean) {
+        this.invoicePayerVM.invoicePayerDO.shouldApplyTransactionFee = shouldApply;
+        this.invoicePayerVM.invoicePayerDO.priceToPayPlusTransactionFee = this.getPriceToPayPlusTransactionFee();
+    }
+    public get shouldApplyTransacationFee(): boolean {
+        return this.invoicePayerVM.invoicePayerDO.shouldApplyTransactionFee;
     }
 
     ngOnInit() {
@@ -126,7 +140,7 @@ export class InvoicePayerComponent implements OnInit {
                 if (this.invoiceVM.invoicePayerVMList.length === 1) {
                     newInvoicePayer.priceToPay = this.invoicePayerVM.invoicePayerDO.priceToPay;
                     newInvoicePayer.transactionFeeSnapshot = this.selectedPaymentMethodVM.transactionFee;
-                    newInvoicePayer.priceToPayPlusTransactionFee = newInvoicePayer.transactionFeeSnapshot.getAmountWihtTransactionFeeIncluded(newInvoicePayer.priceToPay);
+                    newInvoicePayer.priceToPayPlusTransactionFee = this.getPriceToPayPlusTransactionFee();
                 }
                 this.invoicePayerVM.invoicePayerDO = newInvoicePayer;
                 this.invoicePayerVM.customerDO = selectedCustomer;
@@ -192,7 +206,7 @@ export class InvoicePayerComponent implements OnInit {
         return this.invoiceVM.invoiceDO.getPrice();
     }
     public get totalAmountWithTransactionFee(): number {
-        return this.transactionFee.getAmountWihtTransactionFeeIncluded(this.invoicePayerVM.invoicePayerDO.priceToPay);
+        return this.getPriceToPayPlusTransactionFee();
     }
     public get transactionFee(): TransactionFeeDO {
         return this.selectedPaymentMethodVM.transactionFee;

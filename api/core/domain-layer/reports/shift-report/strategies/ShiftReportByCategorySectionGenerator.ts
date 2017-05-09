@@ -3,7 +3,7 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { TaxDO } from '../../../../data-layer/taxes/data-objects/TaxDO';
 import { InvoiceItemVM } from '../../../invoices/invoice-confirmations/InvoiceItemVM';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
@@ -138,10 +138,12 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 		};
 	}
 	private getQuantityForItem(item: InvoiceItemDO): number {
+		let qtyFactor = item.accountingType === InvoiceItemAccountingType.Credit? -1 : 1;
+		
 		// we do not want to count the number of nights as separate rooms
 		if (item.type == InvoiceItemType.Booking) {
-			return 1;
+			return qtyFactor;
 		}
-		return item.meta.getNumberOfItems();
+		return item.meta.getNumberOfItems() * qtyFactor;
 	}
 }

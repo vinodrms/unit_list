@@ -8,13 +8,20 @@ import { TransactionFeeDO } from "../../../common/data-objects/payment-method/Tr
 export class InvoicePayerDO extends BaseDO {
     customerId: string;
     paymentMethod: InvoicePaymentMethodDO;
+    shouldApplyTransactionFee: boolean;
     transactionFeeSnapshot: TransactionFeeDO;
     priceToPay: number;
     priceToPayPlusTransactionFee: number;
     additionalInvoiceDetails: string;
 
+    constructor() {
+        super();
+        
+        this.shouldApplyTransactionFee = true;
+    }
+
     protected getPrimitivePropertyKeys(): string[] {
-        return ["customerId", "priceToPay", "priceToPayPlusTransactionFee", "additionalInvoiceDetails"];
+        return ["customerId", "shouldApplyTransactionFee", "priceToPay", "priceToPayPlusTransactionFee", "additionalInvoiceDetails"];
     }
 
     public buildFromObject(object: Object) {

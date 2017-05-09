@@ -34,10 +34,9 @@ export class TransactionFeeDO extends BaseDO {
     }
 
     public getAmountWihtTransactionFeeIncluded(amount: number): number {
-        // transaction fee should also be positive; no matter if credit or debit
         let totalAmount = 
             this.type === TransactionFeeType.Fixed ? 
-                amount + this.amount : amount + (Math.abs(amount) * this.amount);
+                amount + this.amount : amount * (1 + this.amount);
         
         let thUtils = new ThUtils();
         return thUtils.roundNumberToTwoDecimals(totalAmount);
