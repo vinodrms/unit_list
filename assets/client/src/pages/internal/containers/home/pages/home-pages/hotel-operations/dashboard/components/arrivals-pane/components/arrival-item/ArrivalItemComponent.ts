@@ -103,4 +103,10 @@ export class ArrivalItemComponent {
 		var bookingNotes = this.arrivalItemVM.arrivalItemDO.bookingNotes;
 		this._modalService.openBookingNotesModal(bookingNotes);
 	}
+
+	public openRoomModal() {
+		if(this.arrivalItemVM.hasReservedRoom) {
+			this._modalService.openRoomModal(this.arrivalItemVM.reservedRoomVM.room.id);
+		}
+	}
 }
