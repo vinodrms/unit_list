@@ -4,7 +4,7 @@
 	</div>
 	<div class="right p-6">
 		<div class="header" >
-			<span *ngIf="arrivalItemVM.hasReservedRoom" class="reserved-room ellipsis-text yellow-color" title="{{arrivalItemVM.reservedRoomVM.room.name}}">{{arrivalItemVM.reservedRoomVM.room.name}}</span>
+			<span *ngIf="arrivalItemVM.hasReservedRoom" class="reserved-room ellipsis-text yellow-color clickable" (click)="openRoomModal()" title="{{arrivalItemVM.reservedRoomVM.room.name}}">{{arrivalItemVM.reservedRoomVM.room.name}}</span>
 			<span class="customer-name ellipsis-text clickable" (click)="openCustomerModal()" title="{{arrivalItemVM.customerName}}">{{arrivalItemVM.customerName}}</span>
 			<i *ngIf="arrivalItemVM.arrivalItemDO.bookingNotes" title="{{ arrivalItemVM.arrivalItemDO.bookingNotes }}" (click)="openBookingNotesModal()" class="clickable booking-notes-icon pull-right fa fa-sticky-note-o" ></i>
 		</div>

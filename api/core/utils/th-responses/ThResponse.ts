@@ -464,11 +464,7 @@ export enum ThStatusCode {
 	BookingChangeDatesPaidInvoice,
 	BookingUndoCheckInError,
 	BookingUndoCheckInInvalidState,
-	BookingUndoCheckInPaidInvoice,
 	BookingUndoCheckInStartDateMustMatchHotelDate,
-	BookingUndoCheckInInvoiceGroupNotFound,
-	BookingUndoCheckInInvoiceNotFound,
-	BookingUndoCheckInInvoiceContainsAddOns,
 	HotelBookingOperationsControllerErrorChangingDates,
 	HotelBookingOperationsControllerErrorUndoCheckIn,
 	BookingChangeNoShowTimeError,
@@ -989,11 +985,7 @@ ThMessage[ThStatusCode.BookingChangeDatesInvalidState] = "The date can be change
 ThMessage[ThStatusCode.BookingChangeDatesPaidInvoice] = "The dates cannot be changed because the invoice for this booking was paid.";
 ThMessage[ThStatusCode.BookingUndoCheckInError] = "Error undoing the Check In.";
 ThMessage[ThStatusCode.BookingUndoCheckInInvalidState] = "Only Checked In Bookings can be undoed.";
-ThMessage[ThStatusCode.BookingUndoCheckInPaidInvoice] = "You cannot undo the checkin because the invoice was marked as paid.";
 ThMessage[ThStatusCode.BookingUndoCheckInStartDateMustMatchHotelDate] = "You can only undo check in for bookings that have their start date equal to the property's current date.";
-ThMessage[ThStatusCode.BookingUndoCheckInInvoiceGroupNotFound] = "The invoice group for the booking was not found.";
-ThMessage[ThStatusCode.BookingUndoCheckInInvoiceNotFound] = "The invoice for the booking was not found.";
-ThMessage[ThStatusCode.BookingUndoCheckInInvoiceContainsAddOns] = "The invoice for the booking contains some Add On Products that were added manually. Please move them to another invoice.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDates] = "Error changing booking dates.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorUndoCheckIn] = "There was an error while undoing the check in.";
 ThMessage[ThStatusCode.BookingChangeNoShowTimeError] = "Error changing the no show time.";
