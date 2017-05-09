@@ -5,8 +5,8 @@ import { ThError } from "../../../../../../utils/th-responses/ThError";
 import { CustomerSearchResultRepoDO } from "../../../../../../data-layer/customers/repositories/ICustomerRepository";
 import { CustomersContainer } from "../../../../../../domain-layer/customers/validators/results/CustomersContainer";
 
-export class P25_AddCorporateCustomerIdToBookings extends APaginatedTransactionalMongoPatch {
-    
+export class P26_AddCorporateCustomerIdToBookings extends APaginatedTransactionalMongoPatch {
+
     protected updateDocumentInMemory(booking) {
     }
 
@@ -20,7 +20,7 @@ export class P25_AddCorporateCustomerIdToBookings extends APaginatedTransactiona
 
     protected updateDocumentInMemoryAsyncCore(resolve: { (result: any): void }, reject: { (err: ThError): void }, booking) {
         var custRepo = this._customerRepository;
-        custRepo.getCustomerList({ hotelId: booking["hotelId"]}, { customerIdList: booking["customerIdList"]})
+        custRepo.getCustomerList({ hotelId: booking["hotelId"] }, { customerIdList: booking["customerIdList"] })
             .then((searchResult: CustomerSearchResultRepoDO) => {
                 var customersContainer = new CustomersContainer(searchResult.customerList);
                 var corporateDisplayCustomerId = "";
