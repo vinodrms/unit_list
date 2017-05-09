@@ -196,6 +196,11 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
                         reject(e);
                     });
             }
+            //attach paid dates if it's a new invoice and paymentStatus=PAID
+            else if(invoice.paymentStatus === InvoicePaymentStatus.Paid && _.isUndefined(oldPaymentStatus)) {
+                this.setPaidDatesOnInvoice(invoice, timezone);
+                resolve(invoice);
+            }
             else {
                 // attach a different reference for open invoices
                 if (this._thUtils.isUndefinedOrNull(invoice.invoiceReference)) {
