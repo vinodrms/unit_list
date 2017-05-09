@@ -1,18 +1,19 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
-import {BookingDO} from '../../bookings/data-objects/BookingDO';
-import {AssignRoomParam} from './utils/AssignRoomParam';
-import {CheckOutRoomParam} from './utils/CheckOutRoomParam';
-import {RoomDO} from '../../rooms/data-objects/RoomDO';
-import {RoomAttachedBookingResultDO} from './data-objects/RoomAttachedBookingResultDO';
-import {RoomAttachedBookingResultVM} from './view-models/RoomAttachedBookingResultVM';
-import {ChangeRoomMaintenanceStatusParam} from './utils/ChangeRoomMaintenanceStatusParam';
-import {ChangeRoomRollawayStatusParam} from './utils/ChangeRoomRollawayStatusParam';
-import {RoomsService} from '../../rooms/RoomsService';
-import {EagerCustomersService} from '../../customers/EagerCustomersService';
-import {CustomersDO} from '../../customers/data-objects/CustomersDO';
+import { AppContext, ThServerApi } from '../../../../../common/utils/AppContext';
+import { BookingDO } from '../../bookings/data-objects/BookingDO';
+import { AssignRoomParam } from './utils/AssignRoomParam';
+import { CheckOutRoomParam } from './utils/CheckOutRoomParam';
+import { RoomDO } from '../../rooms/data-objects/RoomDO';
+import { RoomAttachedBookingResultDO } from './data-objects/RoomAttachedBookingResultDO';
+import { RoomAttachedBookingResultVM } from './view-models/RoomAttachedBookingResultVM';
+import { ChangeRoomMaintenanceStatusParam } from './utils/ChangeRoomMaintenanceStatusParam';
+import { ChangeRoomRollawayStatusParam } from './utils/ChangeRoomRollawayStatusParam';
+import { RoomsService } from '../../rooms/RoomsService';
+import { EagerCustomersService } from '../../customers/EagerCustomersService';
+import { CustomersDO } from '../../customers/data-objects/CustomersDO';
+import { UnreserveRoomParam } from "./utils/UnreserveRoomParam";
 
 @Injectable()
 export class HotelOperationsRoomService {
@@ -27,6 +28,9 @@ export class HotelOperationsRoomService {
     }
     public reserveRoom(assignRoomParam: AssignRoomParam): Observable<BookingDO> {
         return this.applyRoomChange(ThServerApi.HotelOperationsRoomReserve, { assignRoom: assignRoomParam });
+    }
+    public unreserveRoom(unreserveRoomParam: UnreserveRoomParam): Observable<BookingDO> {
+        return this.applyRoomChange(ThServerApi.HotelOperationsRoomUnreserve, { unreserveRoom: unreserveRoomParam });
     }
     public changeRoom(assignRoomParam: AssignRoomParam): Observable<BookingDO> {
         return this.applyRoomChange(ThServerApi.HotelOperationsRoomChange, { assignRoom: assignRoomParam });
