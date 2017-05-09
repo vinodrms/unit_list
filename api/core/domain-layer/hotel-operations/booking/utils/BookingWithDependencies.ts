@@ -117,4 +117,8 @@ export class BookingWithDependencies {
             return groupInvoice.groupBookingId === this._bookingDO.groupBookingId;
         });
     }
+
+    public getRoom(): RoomDO {
+        return _.find(this._roomList, r => { return r.id === this._bookingDO.roomId; });
+    }
 }
