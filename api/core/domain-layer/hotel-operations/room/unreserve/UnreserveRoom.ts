@@ -79,7 +79,7 @@ export class UnreserveRoom {
         this.bookingWithDependencies.bookingDO.roomId = null;
         this.bookingWithDependencies.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: { room: roomName },
-            actionString: "%room% was unreserved from the booking.",
+            actionString: "Room %room% was unreserved from the booking.",
             userId: this._sessionContext.sessionDO.user.id
         }));
     }
