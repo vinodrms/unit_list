@@ -29,8 +29,6 @@ export class BookingUndoCheckIn {
     private _loadedHotel: HotelDO;
     private _currentHotelTimestamp: ThTimestampDO;
     private _bookingWithDependencies: BookingWithDependencies;
-    private _invoiceGroup: InvoiceGroupDO;
-    private _invoice: InvoiceDO;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._bookingUtils = new BookingUtils();
@@ -68,36 +66,13 @@ export class BookingUndoCheckIn {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "undo checkin: invalid booking state", this._bookingUndoCheckInDO, thError);
                     throw thError;
                 }
-                if (this._bookingWithDependencies.hasClosedInvoice()) {
-                    var thError = new ThError(ThStatusCode.BookingUndoCheckInPaidInvoice, null);
-                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "undo checkin: paid invoice", this._bookingUndoCheckInDO, thError);
-                    throw thError;
-                }
                 if (!this._currentHotelTimestamp.thDateDO.isSame(this._bookingWithDependencies.bookingDO.interval.start)) {
                     var thError = new ThError(ThStatusCode.BookingUndoCheckInStartDateMustMatchHotelDate, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "undo checkin: start date must match property's current date", this._bookingUndoCheckInDO, thError);
                     throw thError;
                 }
-                this._invoiceGroup = this._bookingWithDependencies.getInvoiceGroupDO();
-                if (this._thUtils.isUndefinedOrNull(this._invoiceGroup)) {
-                    var thError = new ThError(ThStatusCode.BookingUndoCheckInInvoiceGroupNotFound, null);
-                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "undo checkin: invoice group not found", this._bookingUndoCheckInDO, thError);
-                    throw thError;
-                }
-                this._invoice = this._invoiceGroup.getInvoiceForBooking(this._bookingWithDependencies.bookingDO.id);
-                if (this._thUtils.isUndefinedOrNull(this._invoice)) {
-                    var thError = new ThError(ThStatusCode.BookingUndoCheckInInvoiceNotFound, null);
-                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "undo checkin: invoice not found", this._bookingUndoCheckInDO, thError);
-                    throw thError;
-                }
-                if (this.invoiceContainsAddOns()) {
-                    var thError = new ThError(ThStatusCode.BookingUndoCheckInInvoiceContainsAddOns, null);
-                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "undo checkin: invoice contains addons", this._bookingUndoCheckInDO, thError);
-                    throw thError;
-                }
 
                 this.updateBooking();
-                this.updateInvoiceGroup();
 
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
@@ -107,13 +82,6 @@ export class BookingUndoCheckIn {
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
                 this._bookingWithDependencies.bookingDO = updatedBooking;
-
-                let invoiceRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-                return invoiceRepo.updateInvoiceGroup({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-                    id: this._invoiceGroup.id,
-                    versionId: this._invoiceGroup.versionId
-                }, this._invoiceGroup);
-            }).then((updatedInvoiceGroup: InvoiceGroupDO) => {
                 resolve(this._bookingWithDependencies.bookingDO);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingUndoCheckInError, error);
@@ -125,15 +93,6 @@ export class BookingUndoCheckIn {
     }
     private bookingHasValidStatus(): boolean {
         return _.contains(BookingDOConstraints.ConfirmationStatuses_CanUndoCheckIn, this._bookingWithDependencies.bookingDO.confirmationStatus);
-    }
-    private invoiceContainsAddOns(): boolean {
-        let invoiceCopy = new InvoiceDO();
-        invoiceCopy.buildFromObject(this._invoice);
-        invoiceCopy.removeItemsPopulatedFromBooking();
-        if (invoiceCopy.itemList.length > 1) {
-            return true;
-        }
-        return false;
     }
 
     private updateBooking() {
@@ -169,11 +128,5 @@ export class BookingUndoCheckIn {
         noShowTimestamp = this._thDateUtils.addThirtyMinutesToThTimestampDO(noShowTimestamp);
         noShowTimestamp = this._thDateUtils.addThirtyMinutesToThTimestampDO(noShowTimestamp);
         return noShowTimestamp;
-    }
-
-    private updateInvoiceGroup() {
-        this._invoiceGroup.invoiceList = _.reject(this._invoiceGroup.invoiceList, invoice => {
-            return invoice.bookingId === this._bookingWithDependencies.bookingDO.id;
-        });
     }
 }
