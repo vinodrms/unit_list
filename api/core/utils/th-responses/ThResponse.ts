@@ -430,6 +430,8 @@ export enum ThStatusCode {
 	AssignRoomOccupied,
 	AssignRoomCheckedInWrongInterval,
 	AssignRoomPaidInvoice,
+	UnreserveRoomInvalidState,
+	UnreserveRoomNoRoom,
 	ChangeRoomStrategyOnlyWhenCheckedIn,
 	ChangeRoomStrategyEndDateInPast,
 	CheckInStrategyOnlyConfirmedOrGuaranteed,
@@ -446,6 +448,7 @@ export enum ThStatusCode {
 	HotelRoomOperationsControllerErrorCheckingIn,
 	HotelRoomOperationsControllerErrorCheckingOut,
 	HotelRoomOperationsControllerErrorReservingRoom,
+	HotelRoomOperationsControllerErrorUnreservingRoom,
 	HotelRoomOperationsControllerErrorChangingRoom,
 	BookingOccupancyCalculatorWrapperError,
 	BookingOccupancyCalculatorWrapperInvalidInterval,
@@ -951,6 +954,8 @@ ThMessage[ThStatusCode.AssignRoomError] = "Error assigning the room.";
 ThMessage[ThStatusCode.AssignRoomOccupied] = "Error assigning the room. It's possible that the room is already occupied or reserved for another customer during this period.";
 ThMessage[ThStatusCode.AssignRoomCheckedInWrongInterval] = "There is already a checked in booking on this room that has the wrong interval. Please check out the room first.";
 ThMessage[ThStatusCode.AssignRoomPaidInvoice] = "You cannot change the price for this booking because the invoice has been already paid.";
+ThMessage[ThStatusCode.UnreserveRoomInvalidState] = "You can unreserve the room only for bookings that are not checked in.";
+ThMessage[ThStatusCode.UnreserveRoomNoRoom] = "The booking does not have any reserved rooms.";
 ThMessage[ThStatusCode.ChangeRoomStrategyOnlyWhenCheckedIn] = "The room can be changed only to checked in bookings.";
 ThMessage[ThStatusCode.ChangeRoomStrategyEndDateInPast] = "You cannot change the room for a booking that has the end date in the past. Please check out the room.";
 ThMessage[ThStatusCode.CheckInStrategyOnlyConfirmedOrGuaranteed] = "Only Confirmed or Guaranteed bookings can be checked in.";
@@ -967,6 +972,7 @@ ThMessage[ThStatusCode.HotelOperationsDashboardControllerErrorGettingRooms] = "E
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingIn] = "Error checking in the room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingOut] = "Error checking out the room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorReservingRoom] = "Error reserving room.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorUnreservingRoom] = "Error unreserving room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingRoom] = "Error changing room.";
 ThMessage[ThStatusCode.BookingOccupancyCalculatorWrapperError] = "Error getting occupancy.";
 ThMessage[ThStatusCode.BookingOccupancyCalculatorWrapperInvalidInterval] = "Invalid submitted interval.";
