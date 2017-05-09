@@ -75,8 +75,8 @@ export class UnreserveRoom {
         return _.contains(BookingDOConstraints.ConfirmationStatuses_CanBeCheckedIn, this.bookingWithDependencies.bookingDO.confirmationStatus);
     }
     private updateBooking() {
-        this.bookingWithDependencies.bookingDO.roomId = null;
         let roomName = this.bookingWithDependencies.getRoom().name;
+        this.bookingWithDependencies.bookingDO.roomId = null;
         this.bookingWithDependencies.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: { room: roomName },
             actionString: "%room% was unreserved from the booking.",
