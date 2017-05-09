@@ -15,6 +15,8 @@ export class ArrivalItemInfoDO extends BaseDO {
 
     customerId: string;
     customerName: string;
+    corporateCustomerId: string;
+    corporateCustomerName: string;
 
     bookingId: string;
     groupBookingId: string;
@@ -23,7 +25,7 @@ export class ArrivalItemInfoDO extends BaseDO {
     bookingNotes: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["itemStatus", "roomCategoryId", "reservedRoomId", "customerId", "customerName", "bookingId", "groupBookingId", "bookingNotes"];
+        return ["itemStatus", "roomCategoryId", "reservedRoomId", "customerId", "customerName", "corporateCustomerId","corporateCustomerName", "bookingId", "groupBookingId", "bookingNotes"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);

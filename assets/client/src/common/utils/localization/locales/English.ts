@@ -893,6 +893,8 @@ export var EnglishTranslations: Object = {
 	"Price Breakdown": "Price Breakdown",
 	"Other": "Other",
 	"Booking Reference": "Booking Reference",
+	"Agency": "Agency",
+	"N/A": "N/A",
 	"External Booking Reference": "External Booking Reference",													
 	"The invoice was credited succesfully.": "The invoice was credited succesfully.",
 	"The invoice was credited.": "The invoice was credited.",
@@ -902,5 +904,6 @@ export var EnglishTranslations: Object = {
 	"Apply Fee": "Apply Fee",
 	"No fee": "No fee",
 	"(reinstatement of %reinstatedInvoiceRef%)": "(reinstatement of %reinstatedInvoiceRef%)",
+
 
 };

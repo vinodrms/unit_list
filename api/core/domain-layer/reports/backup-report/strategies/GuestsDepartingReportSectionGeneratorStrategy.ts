@@ -13,6 +13,7 @@ export class GuestsDepartingReportSectionGeneratorStrategy extends AReportSectio
 			display: true,
 			values: [
 				"Customer name",
+				"Agency",
 				"Room number",
 				"Adults",
 				"Children",
@@ -37,6 +38,7 @@ export class GuestsDepartingReportSectionGeneratorStrategy extends AReportSectio
 			reportItems.forEach((item: ReportDepartureInfo) => {
 				let row = [
 					item.customerName,
+					item.corporateCustomerName,
 					item.roomNumber,
 					item.noAdults,
 					item.noChildren,

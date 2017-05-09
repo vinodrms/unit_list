@@ -25,5 +25,7 @@ export enum MongoPatchType {
     RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings,
     MigrateBookingGroupsToBookings,
     SetShouldApplyTransactionFeeOnInvoicePayer,
-    
+    AddCorporateCustomerIdToBookings,
+
+
 }

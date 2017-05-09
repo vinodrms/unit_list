@@ -5,6 +5,9 @@
 		<i *ngIf="departureItemVM.hasBooking && departureItemVM.departureItemDO.bookingNotes" title="{{ departureItemVM.departureItemDO.bookingNotes }}" (click)="openBookingNotesModal()" class="clickable booking-notes-icon pull-right fa fa-sticky-note-o" ></i>
 	</div>
 	<div class="body" >
+		<span class="f-12">{{ 'Agency' | translate }}:</span>
+		<span *ngIf="departureItemVM.corporateCustomerName && departureItemVM.corporateCustomerName.length > 0" class="corporate-customer-name ellipsis-text clickable" (click)="openCorporateCustomerModal()" title="{{departureItemVM.corporateCustomerName}}">{{departureItemVM.corporateCustomerName}}</span>
+		<span *ngIf="!departureItemVM.corporateCustomerName ||departureItemVM.corporateCustomerName.length <= 0" class="corporate-customer-name">{{ 'N/A' | translate }}</span>
 		<div *ngIf="departureItemVM.hasBooking" class="room-type ellipsis-text" title="{{departureItemVM.roomCategoryLabel}}">{{departureItemVM.roomCategoryLabel}}</div>
 		<div class="booking-quick-details" >
 			<div class="stats orange-color f-12">
