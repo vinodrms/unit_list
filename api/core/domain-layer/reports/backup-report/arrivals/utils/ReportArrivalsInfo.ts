@@ -11,6 +11,7 @@ import { RoomDO } from '../../../../../../core/data-layer/rooms/data-objects/Roo
 
 export interface ReportArrivalItemInfo {
 	customerName: string;
+	corporateCustomerName: string;
 	roomCategory: string;
 	roomNumber: string;
 	noAdults: number,

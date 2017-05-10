@@ -82,6 +82,11 @@ export class ArrivalItemComponent {
 		this._modalService.openCustomerModal(customerId);
 	}
 
+	public openCorporateCustomerModal() {
+		var customerId = this.arrivalItemVM.arrivalItemDO.corporateCustomerId;
+		this._modalService.openCustomerModal(customerId);
+	}
+
 	public openBookingModal() {
 		var bookingId = this.arrivalItemVM.arrivalItemDO.bookingId;
 		var groupBookingId = this.arrivalItemVM.arrivalItemDO.groupBookingId;
@@ -97,5 +102,11 @@ export class ArrivalItemComponent {
 	public openBookingNotesModal() {
 		var bookingNotes = this.arrivalItemVM.arrivalItemDO.bookingNotes;
 		this._modalService.openBookingNotesModal(bookingNotes);
+	}
+
+	public openRoomModal() {
+		if(this.arrivalItemVM.hasReservedRoom) {
+			this._modalService.openRoomModal(this.arrivalItemVM.reservedRoomVM.room.id);
+		}
 	}
 }

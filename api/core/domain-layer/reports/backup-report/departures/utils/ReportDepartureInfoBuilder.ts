@@ -32,6 +32,7 @@ export class ReportDepartureInfoBuilder {
 	build(): ReportDepartureInfo {
 		var report: ReportDepartureInfo = {
 			customerName: this._departureInfo.customerName,
+			corporateCustomerName: this._departureInfo.corporateCustomerName,
 			roomNumber: (this._room) ? this._room.name : null,
 			noAdults: (this._departureInfo.bookingCapacity) ? this._departureInfo.bookingCapacity.noAdults : null,
 			noChildren: (this._departureInfo.bookingCapacity) ? this._departureInfo.bookingCapacity.noChildren : null,

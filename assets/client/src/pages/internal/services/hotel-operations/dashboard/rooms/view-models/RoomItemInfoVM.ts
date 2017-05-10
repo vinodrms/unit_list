@@ -145,7 +145,7 @@ export class RoomItemInfoVM {
                 this.canFit(arrivalItem.bookingCapacity) &&
                 arrivalItem.hasReservedRoom &&
                 arrivalItem.reservedRoomVM.room.name &&
-                this.roomVM.category.id == arrivalItem.reservedRoomCategoryStats.roomCategory.id &&
+                this.roomVM.room.id == arrivalItem.reservedRoomVM.room.id &&
                 this._roomItemDO.bookingId == arrivalItem.arrivalItemDO.bookingId
             ){
                 return true;

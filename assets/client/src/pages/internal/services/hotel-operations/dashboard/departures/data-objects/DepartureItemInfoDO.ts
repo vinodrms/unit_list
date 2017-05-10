@@ -10,6 +10,8 @@ export enum DepartureItemBookingStatus {
 export class DepartureItemInfoDO extends BaseDO {
     customerId: string;
     customerName: string;
+    corporateCustomerId: string;
+    corporateCustomerName: string;
 
     bookingId: string;
     groupBookingId: string;
@@ -25,7 +27,7 @@ export class DepartureItemInfoDO extends BaseDO {
     bookingNotes: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["customerId", "customerName", "bookingId", "groupBookingId", "roomCategoryId", "roomId", "bookingItemStatus", "invoiceGroupId", "invoicePrice", "bookingNotes"];
+        return ["customerId", "customerName", "corporateCustomerId", "corporateCustomerName", "bookingId", "groupBookingId", "roomCategoryId", "roomId", "bookingItemStatus", "invoiceGroupId", "invoicePrice", "bookingNotes"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);

@@ -139,6 +139,7 @@ export class BookingItemsConverter {
                     priceProduct, billingCustomer, groupBookingRoomCategoryIdList);
 
                 this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
+                this._bookingUtils.updateCorporateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);                
                 bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest = bookingDO.displayCustomerId;
                 this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
 

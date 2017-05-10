@@ -28,6 +28,7 @@ export class HotelOperationsDeparturesInfoBuilder {
         }
         var departureItemInfo: DeparturelItemInfo = {
             customerId: booking.displayCustomerId,
+            corporateCustomerId: booking.corporateDisplayCustomerId,
             bookingId: booking.id,
             groupBookingId: booking.groupBookingId,
             bookingInterval: booking.interval,
@@ -118,6 +119,12 @@ export class HotelOperationsDeparturesInfoBuilder {
 
     public getCustomerIdList(): string[] {
         var customerIdList = _.map(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => { return departureInfoItem.customerId });
+        var departureInfoListWithCorporateCustomerId = _.filter(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => {return departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0 });
+        customerIdList = _.union(customerIdList, _.map(departureInfoListWithCorporateCustomerId, (departureInfoItem: DeparturelItemInfo) => {
+            if (departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0) {
+                return departureInfoItem.corporateCustomerId;
+            } else return;
+        }));
         return _.uniq(customerIdList);
     }
 
@@ -125,6 +132,10 @@ export class HotelOperationsDeparturesInfoBuilder {
         _.forEach(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => {
             var customer = customersContainer.getCustomerById(departureInfoItem.customerId);
             departureInfoItem.customerName = customer.customerDetails.getName();
+            if (departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0) {
+                var corporateCustomer = customersContainer.getCustomerById(departureInfoItem.corporateCustomerId);
+                departureInfoItem.corporateCustomerName = corporateCustomer.customerDetails.getName();
+            }
         });
     }
 

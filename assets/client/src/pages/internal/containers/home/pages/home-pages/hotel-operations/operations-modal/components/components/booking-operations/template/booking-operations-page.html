@@ -83,6 +83,9 @@
 		<div class="row">
 			<booking-undo-checkin [bookingOperationsPageData]="bookingOperationsPageData" (onBookingUndoCheckIn)="didChangeBooking($event) && loadPageData()"></booking-undo-checkin>
 		</div>
+		<div class="row">
+			<booking-unreserve-room [bookingOperationsPageData]="bookingOperationsPageData" (onBookingUnreserveRoom)="didChangeBooking($event) && loadPageData()"></booking-unreserve-room>
+		</div>
 		<div class="row padding-bottom-10px">
 			<booking-links [bookingOperationsPageData]="bookingOperationsPageData" (onInvoiceGenerated)="loadPageData()"></booking-links>
 		</div>

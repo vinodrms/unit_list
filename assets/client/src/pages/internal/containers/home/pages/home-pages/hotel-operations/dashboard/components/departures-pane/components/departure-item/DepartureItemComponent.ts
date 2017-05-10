@@ -27,6 +27,11 @@ export class DepartureItemComponent {
 		this._modalService.openCustomerModal(customerId);
 	}
 
+	public openCorporateCustomerModal() {
+		var customerId = this.departureItemVM.departureItemDO.corporateCustomerId;
+		this._modalService.openCustomerModal(customerId);
+	}
+
 	public openRoomModal() {
 		var roomId = this.departureItemVM.departureItemDO.roomId;
 		this._modalService.openRoomModal(roomId);

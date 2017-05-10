@@ -132,6 +132,7 @@ module.exports.routes = {
 
 	'POST /api/hotelOperations/room/checkIn': 'HotelRoomOperationsController.checkIn',
 	'POST /api/hotelOperations/room/reserve': 'HotelRoomOperationsController.reserveRoom',
+	'POST /api/hotelOperations/room/unreserve': 'HotelRoomOperationsController.unreserveRoom',
 	'POST /api/hotelOperations/room/change': 'HotelRoomOperationsController.changeRoom',
 	'POST /api/hotelOperations/room/checkOut': 'HotelRoomOperationsController.checkOut',
 	'POST /api/hotelOperations/room/maintenanceStatus': 'HotelRoomOperationsController.changeMaintenanceStatus',
