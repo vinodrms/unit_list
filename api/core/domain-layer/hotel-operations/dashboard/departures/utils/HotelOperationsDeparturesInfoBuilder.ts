@@ -29,7 +29,7 @@ export class HotelOperationsDeparturesInfoBuilder {
         var departureItemInfo: DeparturelItemInfo = {
             customerId: booking.displayCustomerId,
             corporateCustomerId: booking.corporateDisplayCustomerId,
-            bookingId: booking.bookingId,
+            bookingId: booking.id,
             groupBookingId: booking.groupBookingId,
             bookingInterval: booking.interval,
             bookingCapacity: booking.configCapacity,
@@ -110,7 +110,7 @@ export class HotelOperationsDeparturesInfoBuilder {
         if (this._thUtils.isUndefinedOrNull(invoice.bookingId)) {
             return false;
         }
-        var attachedBooking = _.find(attachedBookingList, (booking: BookingDO) => { return booking.bookingId === invoice.bookingId });
+        var attachedBooking = _.find(attachedBookingList, (booking: BookingDO) => { return booking.id === invoice.bookingId });
         if (this._thUtils.isUndefinedOrNull(attachedBooking)) {
             return false;
         }

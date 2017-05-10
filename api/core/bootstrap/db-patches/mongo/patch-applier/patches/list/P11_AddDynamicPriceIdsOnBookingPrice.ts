@@ -12,7 +12,7 @@ export class P11_AddDynamicPriceIdsOnBookingPrice extends APaginatedTransactiona
     }
 
     protected getMongoRepository(): MongoRepository {
-        return this._bookingRepository;
+        return this._legacyBookingGroupRepository;
     }
 
     protected updateDocumentInMemory(bookingGroup) {

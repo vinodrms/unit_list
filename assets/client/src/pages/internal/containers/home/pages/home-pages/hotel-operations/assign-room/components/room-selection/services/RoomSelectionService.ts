@@ -54,7 +54,7 @@ export class RoomSelectionService extends ASinglePageRequestService<AssignableRo
             this._checkedInBookings = result[2];
 
             return Observable.combineLatest(
-                this._bookingOccupancyService.getBookingOccupancyFor(this._bookingDO.interval, this._bookingDO.bookingId),
+                this._bookingOccupancyService.getBookingOccupancyFor(this._bookingDO.interval, this._bookingDO.id),
                 this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryIdList()
             );
         }).map((result: [BookingOccupancyDO, RoomCategoryStatsDO[]]) => {

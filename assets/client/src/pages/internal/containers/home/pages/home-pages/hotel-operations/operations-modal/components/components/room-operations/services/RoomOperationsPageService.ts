@@ -67,12 +67,12 @@ export class RoomOperationsPageService {
         }
         return this._eagerInvoiceGroupsService.getInvoiceGroupList({
             groupBookingId: attachedBooking.groupBookingId,
-            bookingId: attachedBooking.bookingId
+            bookingId: attachedBooking.id
         }).map((invoiceGroupList: InvoiceGroupDO[]) => {
             if (invoiceGroupList.length > 0) {
                 roomOperationsData.invoiceGroupDO = invoiceGroupList[0];
                 roomOperationsData.invoiceDO = _.find(roomOperationsData.invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
-                    return invoice.bookingId === attachedBooking.bookingId;
+                    return invoice.bookingId === attachedBooking.id;
                 });
             }
             return roomOperationsData;

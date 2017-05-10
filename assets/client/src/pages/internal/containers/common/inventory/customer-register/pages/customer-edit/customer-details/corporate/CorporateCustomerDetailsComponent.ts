@@ -7,6 +7,8 @@ import { CountriesDO } from '../../../../../../../../services/settings/data-obje
 import { CorporateDetailsFormBuilderService } from './services/CorporateDetailsFormBuilderService';
 import { CurrencyDO } from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 import { CommissionDO } from "../../../../../../../../services/common/data-objects/commission/CommissionDO";
+import { ContactDetailsDO } from "../../../../../../../../services/customers/data-objects/customer-details/ContactDetailsDO";
+import { AppContext } from "../../../../../../../../../../common/utils/AppContext";
 
 @Component({
 	selector: 'corporate-customer-details',
@@ -32,8 +34,9 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 	countriesDO: CountriesDO;
 	currency: CurrencyDO;
 	vatDetails: VatDetails;
+	currentContactDetails: ContactDetailsDO;
 
-	constructor(private _formBuilder: CorporateDetailsFormBuilderService) {
+	constructor(private _formBuilder: CorporateDetailsFormBuilderService, private _appContext: AppContext) {
 		super();
 	}
 
@@ -57,6 +60,9 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 	}
 	protected getDefaultFormGroup(): FormGroup {
 		return this._formBuilder.individualFormGroup;
+	}
+	public get contactDetailsFormGroup(): FormGroup {
+		return this._formBuilder.contactDetailsFormGroup;
 	}
 
 	public get payInvoiceByAgreement(): boolean {
@@ -90,5 +96,35 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 			return "";
 		}
 		return this.currency.nativeSymbol;
+	}
+	public selectContactDetails(contactDetails: ContactDetailsDO) {
+		this.currentContactDetails = contactDetails;
+		this._formBuilder.updateCompanyContactDetailsFrom(contactDetails);
+	}
+	public removeContactDetails(contactDetailsToRemove: ContactDetailsDO) {
+		var index = this._corporateDetails.contactDetailsList.indexOf(contactDetailsToRemove);
+		if (index >= 0) {
+			this._corporateDetails.contactDetailsList.splice(index, 1);
+		}
+		this.currentContactDetails = null;
+	}
+	public addContactDetails() {
+		this.currentContactDetails = new ContactDetailsDO();
+		this._formBuilder.updateCompanyContactDetailsFrom(this.currentContactDetails);
+	}
+	public saveContactDetails() {
+		this._formBuilder.updateContactDetailsValuesOn(this.currentContactDetails);
+		if (!this._formBuilder.contactDetailsFormGroup.valid) {
+			var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
+			this._appContext.toaster.error(errorMessage);
+			return;
+		}
+		var index = this._corporateDetails.contactDetailsList.indexOf(this.currentContactDetails);
+		if (index >= 0) {
+			this._corporateDetails.contactDetailsList[index] = this.currentContactDetails;
+		} else {
+			this._corporateDetails.contactDetailsList.push(this.currentContactDetails);
+		}
+		this.currentContactDetails = null;
 	}
 }

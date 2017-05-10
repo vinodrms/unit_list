@@ -16,8 +16,9 @@ import { InvoiceConfirmationEmailSender } from '../../../../core/domain-layer/in
 import { SaveInvoiceGroup } from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
 import { SaveInvoiceGroupDO } from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
 import { InvoiceTestUtils } from './utils/InvoiceTestUtils';
-import { InvoiceDO } from '../../../../core/data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceDO, InvoiceAccountingType } from '../../../../core/data-layer/invoices/data-objects/InvoiceDO';
 import { InvoicePayerDO } from '../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import { ReinstateInvoice } from "../../../../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
 
 describe("Invoices Tests", function () {
     var testUtils: TestUtils;
@@ -49,7 +50,7 @@ describe("Invoices Tests", function () {
                 should.equal(invoiceGroup.groupBookingId, generateBookingInvoiceDO.groupBookingId);
                 should.equal(createdBookingInvoiceGroup.invoiceList.length, 1);
                 should.equal(invoiceGroup.invoiceGroupReference, "IG0000002");
-                should.equal(createdBookingInvoiceGroup.invoiceList[0].bookingId, generateBookingInvoiceDO.bookingId);
+                should.equal(createdBookingInvoiceGroup.invoiceList[0].bookingId, generateBookingInvoiceDO.id);
                 var expectedNoInvoiceItems = bookingInvoiceGroupsHelper.getExpectedNoInvoiceItems(bookingInvoiceGroupsHelper.getFirstBooking());
                 should.equal(createdBookingInvoiceGroup.invoiceList[0].itemList.length, expectedNoInvoiceItems);
                 done();
@@ -65,7 +66,7 @@ describe("Invoices Tests", function () {
                 createdBookingInvoiceGroup = invoiceGroup;
                 should.equal(createdBookingInvoiceGroup.invoiceList.length, 2);
                 should.equal(invoiceGroup.invoiceGroupReference, "IG0000002");
-                should.equal(createdBookingInvoiceGroup.invoiceList[1].bookingId, generateBookingInvoiceDO.bookingId);
+                should.equal(createdBookingInvoiceGroup.invoiceList[1].bookingId, generateBookingInvoiceDO.id);
 
                 var expectedNoInvoiceItems = bookingInvoiceGroupsHelper.getExpectedNoInvoiceItems(bookingInvoiceGroupsHelper.getSecondBooking());
                 should.equal(createdBookingInvoiceGroup.invoiceList[1].itemList.length, expectedNoInvoiceItems);
@@ -198,10 +199,10 @@ describe("Invoices Tests", function () {
             var invoiceGroupId = createdBookingInvoiceGroup.id;
             var payerIndex = 0;
             var customerId = invoice.payerList[payerIndex].customerId;
-            var invoiceReference = invoice.invoiceReference;
+            var invoiceId = invoice.id;
             invoiceEmailSender.sendInvoiceConfirmation({
                 invoiceGroupId: invoiceGroupId,
-                invoiceReference: invoiceReference,
+                invoiceId: invoiceId,
                 payerIndex: payerIndex,
                 customerId: customerId
             }, ['dragos.pricope@gmail.com']).then((result: boolean) => {
@@ -211,4 +212,35 @@ describe("Invoices Tests", function () {
             });
         });
     });
+
+    describe("Invoice reinstatement", function () {
+        it("Should reinstate an invoice", function (done) {
+            let reinstatementGenerator = new ReinstateInvoice(testContext.appContext, testContext.sessionContext);
+            reinstatementGenerator.reinstate({
+                invoiceGroupId: createdBookingInvoiceGroup.id,
+                invoiceId: createdBookingInvoiceGroup.invoiceList[0].id
+            }).then((updatedInvoiceGroup: InvoiceGroupDO) => {
+                let reinstatedInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.id === createdBookingInvoiceGroup.invoiceList[0].id;
+                });
+
+                let reinstatedInvoiceRef = reinstatedInvoice.invoiceReference;
+                let creditInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.invoiceReference === reinstatedInvoiceRef && invoice.accountingType === InvoiceAccountingType.Credit;
+                });
+                invoiceTestUtils.testIfCreditWasCorrect(reinstatedInvoice, creditInvoice);
+
+                let reinstatementInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.reinstatedInvoiceId === createdBookingInvoiceGroup.invoiceList[0].id;
+                });
+                invoiceTestUtils.testInvoiceEquality(reinstatedInvoice, reinstatementInvoice);
+                
+                done();
+            }).catch((err: any) => {
+                done(err);
+            });
+        });
+
+    });
+
 });

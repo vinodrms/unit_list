@@ -3,7 +3,7 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { TaxDO } from '../../../../data-layer/taxes/data-objects/TaxDO';
 import { InvoiceItemVM } from '../../../invoices/invoice-confirmations/InvoiceItemVM';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
@@ -41,7 +41,7 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 		var totalNet = 0, totalVat = 0, total = 0;
 		var data = [];
 		Object.keys(mpmDetailsDict).forEach((productId) => {
-			let transactions = mpmDetailsDict[productId].transactions;
+			let transactions = Math.abs(mpmDetailsDict[productId].transactions);
 			let itemNet = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productId].itemNet);
 			let itemVat = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productId].itemVat);
 			let itemTotal = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productId].itemTotal);
@@ -56,6 +56,10 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 
 			data.push(row);
 		});
+		// sort by display name
+        data.sort((row1: string[], row2: string[]) => {
+            return row1[0].localeCompare(row2[0]);
+        });
 		totalNet = this._thUtils.roundNumberToTwoDecimals(totalNet);
 		totalVat = this._thUtils.roundNumberToTwoDecimals(totalVat);
 		total = this._thUtils.roundNumberToTwoDecimals(total);
@@ -134,10 +138,12 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 		};
 	}
 	private getQuantityForItem(item: InvoiceItemDO): number {
+		let qtyFactor = item.accountingType === InvoiceItemAccountingType.Credit? -1 : 1;
+		
 		// we do not want to count the number of nights as separate rooms
 		if (item.type == InvoiceItemType.Booking) {
-			return 1;
+			return qtyFactor;
 		}
-		return item.meta.getNumberOfItems();
+		return item.meta.getNumberOfItems() * qtyFactor;
 	}
 }

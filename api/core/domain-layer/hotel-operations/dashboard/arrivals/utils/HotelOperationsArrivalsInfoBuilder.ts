@@ -41,7 +41,7 @@ export class HotelOperationsArrivalsInfoBuilder {
             reservedRoomId: booking.roomId,
             customerId: booking.displayCustomerId,
             corporateCustomerId: booking.corporateDisplayCustomerId,
-            bookingId: booking.bookingId,
+            bookingId: booking.id,
             groupBookingId: booking.groupBookingId,
             bookingInterval: booking.interval,
             bookingCapacity: booking.configCapacity,

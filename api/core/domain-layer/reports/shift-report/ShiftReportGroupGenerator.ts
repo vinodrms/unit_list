@@ -126,7 +126,9 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 		return [
 			new ShiftReportByPaymentMethodSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList),
 			new ShiftReportPaidByAgreementSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList),
-			new ShiftReportPaidInvoicesSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList),
+			new ShiftReportPaidInvoicesSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, {
+				title: "Paid Invoices"
+			}),
 			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._aopContainer, {
 				title: "Transactions Grouped by Category"
 			}),
@@ -134,6 +136,10 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._lossAcceptedByManagementInvoiceGroupList, this._aopContainer, {
 				title: "Loss Accepted By Management Transactions Grouped by Category"
 			}),
+			new ShiftReportPaidInvoicesSectionGenerator(this._appContext, this._sessionContext, this._lossAcceptedByManagementInvoiceGroupList, {
+				title: "Loss Accepted By Management Invoices"
+			}),
+			
 		];
 	}
 }

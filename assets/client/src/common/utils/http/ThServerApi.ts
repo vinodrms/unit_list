@@ -72,6 +72,7 @@ export enum ThServerApi {
 
 	HotelOperationsRoomCheckIn,
 	HotelOperationsRoomReserve,
+	HotelOperationsRoomUnreserve,
 	HotelOperationsRoomChange,
 	HotelOperationsRoomCheckOut,
 	HotelOperationsRoomChangeMaintenanceStatus,
@@ -92,10 +93,12 @@ export enum ThServerApi {
 	HotelOperationsBookingReserveAddOnProducts,
 	HotelOperationsBookingChangePriceProduct,
 	HotelOperationsBookingUndoCheckIn,
+	HotelOperationsBookingGenerateInvoice,
 
 	InvoiceGroups,
 	InvoiceGroupsCount,
 	InvoiceGroupItem,
+	InvoiceGroupsReinstate,
 	InvoiceGroupsSaveItem,
 
 	YieldManagerYieldPriceProducts,
@@ -182,6 +185,7 @@ ThServerApiUrl[ThServerApi.HotelOperationsDashboardRooms] = "/hotelOperations/da
 
 ThServerApiUrl[ThServerApi.HotelOperationsRoomCheckIn] = "/hotelOperations/room/checkIn";
 ThServerApiUrl[ThServerApi.HotelOperationsRoomReserve] = "/hotelOperations/room/reserve";
+ThServerApiUrl[ThServerApi.HotelOperationsRoomUnreserve] = "/hotelOperations/room/unreserve";
 ThServerApiUrl[ThServerApi.HotelOperationsRoomChange] = "/hotelOperations/room/change";
 ThServerApiUrl[ThServerApi.HotelOperationsRoomCheckOut] = "/hotelOperations/room/checkOut";
 ThServerApiUrl[ThServerApi.HotelOperationsRoomChangeMaintenanceStatus] = "/hotelOperations/room/maintenanceStatus";
@@ -201,12 +205,14 @@ ThServerApiUrl[ThServerApi.HotelOperationsBookingReactivate] = "/hotelOperations
 ThServerApiUrl[ThServerApi.HotelOperationsBookingReserveAddOnProducts] = "/hotelOperations/booking/reserveAddOnProducts";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangePriceProduct] = "/hotelOperations/booking/changePriceProduct";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingUndoCheckIn] = "/hotelOperations/booking/undoCheckIn";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingGenerateInvoice] = "/hotelOperations/booking/generateInvoice";
 
 ThServerApiUrl[ThServerApi.HotelOperationsCommonSendEmail] = "/hotelOperations/common/sendEmail";
 
 ThServerApiUrl[ThServerApi.InvoiceGroups] = "/invoiceGroups";
 ThServerApiUrl[ThServerApi.InvoiceGroupsCount] = "/invoiceGroups/count";
 ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem";
+ThServerApiUrl[ThServerApi.InvoiceGroupsReinstate] = "/invoiceGroups/reinstate";
 ThServerApiUrl[ThServerApi.InvoiceGroupsSaveItem] = "/invoiceGroups/saveInvoicegroupItem";
 
 /* URLs prefixed with yManager instead of yieldManager because of AdBlock rules (EasyList) which contain the following definition: "/yieldmanager/*" */

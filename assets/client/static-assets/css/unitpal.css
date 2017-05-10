@@ -2258,19 +2258,27 @@ a.btn.btn-square:focus {
         }
         
     .hotel-operations-dashboard .customer-name{
-        font-size: 16px;
+        font-size: 14px;
         color: #7c7c81;
         cursor: pointer;
-    }
-
-    .hotel-operations-dashboard .customer-name{
         max-width: 150px;
+    }
+    .hotel-operations-dashboard .corporate-customer-name-container {
+        padding-top: 3px;
+    }
+    .hotel-operations-dashboard .corporate-customer-name{
+        font-size: 12px;
+        color: #7c7c81;
+        max-width: 150px;
+        padding-left: 3px;
+        vertical-align: middle;
     }
 
     .hotel-operations-dashboard .room-type{
         font-size: 12px;
         color: #a9a9ac;
         width: 150px;
+        padding-top: 6px;
     }
 
     .hotel-operations-dashboard .period{
@@ -2567,8 +2575,10 @@ a.btn.btn-square:focus {
         }
 
         arrival-item .header{
-            padding-top: 10px;
             font-size: 16px;
+            height: 20px;
+            padding-top: 3px;
+            padding-bottom: 3px;
         }
 
         arrival-item .body{
@@ -2653,7 +2663,6 @@ a.btn.btn-square:focus {
         }
 
         departure-item .header{
-            padding-top: 10px;
             font-size: 16px;
         }
 
@@ -3984,7 +3993,7 @@ textarea.payer-details {
 }
 
 .booking-notes-icon {
-    padding: 10px 10px 0px 0px
+    padding-right: 10px;
 }
 
 .operations-datepicker .input-group {

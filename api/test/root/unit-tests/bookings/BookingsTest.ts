@@ -41,8 +41,7 @@ describe("New Bookings Tests", function () {
     var bookingTestHelper: BookingTestHelper;
     var genericPriceProduct: PriceProductDO;
 
-    var randomBookingReference: string;
-    var randomGroupBookingReference: string;
+    var randomGroupBookingId: string;
     var retrievedBookingList: BookingDO[];
 
     var allotmentsHelper: AllotmentsHelper;
@@ -84,8 +83,7 @@ describe("New Bookings Tests", function () {
             }
             Promise.all(promiseList).then((groupBookingsList: BookingDO[][]) => {
                 should.equal(groupBookingsList.length, BookingTestHelper.NoBookingGroups);
-                randomBookingReference = groupBookingsList[0][0].bookingReference;
-                randomGroupBookingReference = groupBookingsList[0][0].groupBookingReference;
+                randomGroupBookingId = groupBookingsList[0][0].groupBookingId;
                 done();
             }).catch((err: any) => {
                 done(err);
@@ -96,23 +94,30 @@ describe("New Bookings Tests", function () {
             let initialNumberOfBookings = 0;
             let noOfNewBookings = 0;
             let bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
-            bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: randomGroupBookingReference }).then((result: BookingSearchResultRepoDO) => {
-                initialNumberOfBookings = result.bookingList.length;
-                
-                let addBookingsDO: AddBookingItemsDO = bookingTestHelper.getBookingItems(testDataBuilder, genericPriceProduct);
-                addBookingsDO.groupBookingId = randomGroupBookingReference;
-                noOfNewBookings = addBookingsDO.bookingList.length;
-                
-                let addBookings = new AddBookingItems(testContext.appContext, testContext.sessionContext);
-                return addBookings.add(addBookingsDO, GroupBookingInputChannel.PropertyManagementSystem);
-            }).then((result: BookingDO[]) => {
-                return bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: randomGroupBookingReference });
-            }).then((result: BookingSearchResultRepoDO) => {
-                should.equal(result.bookingList.length, initialNumberOfBookings + noOfNewBookings);
-                done();
-            }).catch((err: any) => {
-                done(err);
-            });
+            bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: randomGroupBookingId })
+                .then((result: BookingSearchResultRepoDO) => {
+                    initialNumberOfBookings = result.bookingList.length;
+                    result.bookingList.forEach(booking => {
+                        should.equal(booking.noOfRooms, initialNumberOfBookings);
+                    });
+
+                    let addBookingsDO: AddBookingItemsDO = bookingTestHelper.getBookingItems(testDataBuilder, genericPriceProduct);
+                    addBookingsDO.groupBookingId = randomGroupBookingId;
+                    noOfNewBookings = addBookingsDO.bookingList.length;
+
+                    let addBookings = new AddBookingItems(testContext.appContext, testContext.sessionContext);
+                    return addBookings.add(addBookingsDO, GroupBookingInputChannel.PropertyManagementSystem);
+                }).then((result: BookingDO[]) => {
+                    return bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: randomGroupBookingId });
+                }).then((result: BookingSearchResultRepoDO) => {
+                    should.equal(result.bookingList.length, initialNumberOfBookings + noOfNewBookings);
+                    result.bookingList.forEach(booking => {
+                        should.equal(booking.noOfRooms, initialNumberOfBookings + noOfNewBookings);
+                    });
+                    done();
+                }).catch((err: any) => {
+                    done(err);
+                });
         });
     });
     describe("Bookings Repository Tests", function () {
@@ -155,9 +160,9 @@ describe("New Bookings Tests", function () {
         it("Should get booking by id", function (done) {
             var randomBooking: BookingDO = testUtils.getRandomListElement(retrievedBookingList);
             var bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
-            bookingRepo.getBookingById({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, randomBooking.groupBookingId, randomBooking.bookingId
+            bookingRepo.getBookingById({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, randomBooking.groupBookingId, randomBooking.id
             ).then((foundBooking: BookingDO) => {
-                should.equal(randomBooking.bookingId, foundBooking.bookingId);
+                should.equal(randomBooking.id, foundBooking.id);
                 should.equal(randomBooking.bookingReference, foundBooking.bookingReference);
                 should.equal(randomBooking.groupBookingId, foundBooking.groupBookingId);
                 should.equal(randomBooking.groupBookingReference, foundBooking.groupBookingReference);
@@ -263,7 +268,7 @@ describe("New Bookings Tests", function () {
         it("Should change the dates for the booking made with allotment", function (done) {
             var bookingChangeDatesDO = new BookingChangeDatesDO();
             bookingChangeDatesDO.groupBookingId = addedBooking.groupBookingId;
-            bookingChangeDatesDO.bookingId = addedBooking.bookingId;
+            bookingChangeDatesDO.id = addedBooking.id;
             bookingChangeDatesDO.interval = bookingTestHelper.generateRandomFutureInterval(testDataBuilder);
             var bookingChangeDates = new BookingChangeDates(testContext.appContext, testContext.sessionContext);
             bookingChangeDates.changeDates(bookingChangeDatesDO).then((updatedBooking: BookingDO) => {

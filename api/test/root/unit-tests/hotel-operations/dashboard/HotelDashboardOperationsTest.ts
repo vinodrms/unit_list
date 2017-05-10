@@ -3,41 +3,43 @@ import should = require('should');
 import supertest = require('supertest');
 import _ = require("underscore");
 
-import {ThError} from '../../../../../core/utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../core/utils/th-responses/ThResponse';
-import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
-import {TestContext} from '../../../../helpers/TestContext';
-import {BookingTestHelper} from '../../bookings/helpers/BookingTestHelper';
-import {PriceProductDO, PriceProductAvailability} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {AddBookingItems} from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
-import {BookingItemDO} from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
-import {BookingDO, GroupBookingInputChannel, BookingConfirmationStatus} from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
-import {HotelDashboardOperationsTestHelper} from './helpers/HotelDashboardOperationsTestHelper';
-import {HotelOperationsArrivalsReader} from '../../../../../core/domain-layer/hotel-operations/dashboard/arrivals/HotelOperationsArrivalsReader';
-import {HotelOperationsArrivalsInfo, ArrivalItemInfo} from '../../../../../core/domain-layer/hotel-operations/dashboard/arrivals/utils/HotelOperationsArrivalsInfo';
-import {HotelOperationsRoomInfoReader} from '../../../../../core/domain-layer/hotel-operations/dashboard/room-info/HotelOperationsRoomInfoReader';
-import {HotelOperationsRoomInfo, RoomItemStatus} from '../../../../../core/domain-layer/hotel-operations/dashboard/room-info/utils/HotelOperationsRoomInfo';
-import {AssignRoom} from '../../../../../core/domain-layer/hotel-operations/room/assign/AssignRoom';
-import {AssignRoomDO} from '../../../../../core/domain-layer/hotel-operations/room/assign/AssignRoomDO';
-import {HotelOperationsDeparturesReader} from '../../../../../core/domain-layer/hotel-operations/dashboard/departures/HotelOperationsDeparturesReader';
-import {HotelOperationsDeparturesInfo, DeparturelItemInfo, DeparturelItemBookingStatus} from '../../../../../core/domain-layer/hotel-operations/dashboard/departures/utils/HotelOperationsDeparturesInfo';
-import {CheckOutRoom} from '../../../../../core/domain-layer/hotel-operations/room/check-out/CheckOutRoom';
-import {CheckOutRoomDO} from '../../../../../core/domain-layer/hotel-operations/room/check-out/CheckOutRoomDO';
-import {BookingPossiblePrices} from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/BookingPossiblePrices';
-import {BookingPossiblePricesDO} from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/BookingPossiblePricesDO';
-import {BookingPossiblePriceItems, BookingPriceItem} from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/utils/BookingPossiblePriceItems';
-import {MarkOccupiedCleanRoomsAsDirtyProcess} from '../../../../../core/domain-layer/hotel-operations/room/processes/MarkOccupiedCleanRoomsAsDirtyProcess';
-import {RoomDO, RoomMaintenanceStatus} from '../../../../../core/data-layer/rooms/data-objects/RoomDO';
-import {RoomAttachedBooking} from '../../../../../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBooking';
-import {RoomAttachedBookingDO} from '../../../../../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBookingDO';
-import {RoomAttachedBookingResult, RoomAttachedBookingResultType} from '../../../../../core/domain-layer/hotel-operations/room/attached-booking/utils/RoomAttachedBookingResult';
+import { ThError } from '../../../../../core/utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../core/utils/th-responses/ThResponse';
+import { DefaultDataBuilder } from '../../../../db-initializers/DefaultDataBuilder';
+import { TestContext } from '../../../../helpers/TestContext';
+import { BookingTestHelper } from '../../bookings/helpers/BookingTestHelper';
+import { PriceProductDO, PriceProductAvailability } from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { AddBookingItems } from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
+import { BookingItemDO } from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
+import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
+import { HotelDashboardOperationsTestHelper } from './helpers/HotelDashboardOperationsTestHelper';
+import { HotelOperationsArrivalsReader } from '../../../../../core/domain-layer/hotel-operations/dashboard/arrivals/HotelOperationsArrivalsReader';
+import { HotelOperationsArrivalsInfo, ArrivalItemInfo } from '../../../../../core/domain-layer/hotel-operations/dashboard/arrivals/utils/HotelOperationsArrivalsInfo';
+import { HotelOperationsRoomInfoReader } from '../../../../../core/domain-layer/hotel-operations/dashboard/room-info/HotelOperationsRoomInfoReader';
+import { HotelOperationsRoomInfo, RoomItemStatus } from '../../../../../core/domain-layer/hotel-operations/dashboard/room-info/utils/HotelOperationsRoomInfo';
+import { AssignRoom } from '../../../../../core/domain-layer/hotel-operations/room/assign/AssignRoom';
+import { AssignRoomDO } from '../../../../../core/domain-layer/hotel-operations/room/assign/AssignRoomDO';
+import { HotelOperationsDeparturesReader } from '../../../../../core/domain-layer/hotel-operations/dashboard/departures/HotelOperationsDeparturesReader';
+import { HotelOperationsDeparturesInfo, DeparturelItemInfo, DeparturelItemBookingStatus } from '../../../../../core/domain-layer/hotel-operations/dashboard/departures/utils/HotelOperationsDeparturesInfo';
+import { CheckOutRoom } from '../../../../../core/domain-layer/hotel-operations/room/check-out/CheckOutRoom';
+import { CheckOutRoomDO } from '../../../../../core/domain-layer/hotel-operations/room/check-out/CheckOutRoomDO';
+import { BookingPossiblePrices } from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/BookingPossiblePrices';
+import { BookingPossiblePricesDO } from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/BookingPossiblePricesDO';
+import { BookingPossiblePriceItems, BookingPriceItem } from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/utils/BookingPossiblePriceItems';
+import { MarkOccupiedCleanRoomsAsDirtyProcess } from '../../../../../core/domain-layer/hotel-operations/room/processes/MarkOccupiedCleanRoomsAsDirtyProcess';
+import { RoomDO, RoomMaintenanceStatus } from '../../../../../core/data-layer/rooms/data-objects/RoomDO';
+import { RoomAttachedBooking } from '../../../../../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBooking';
+import { RoomAttachedBookingDO } from '../../../../../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBookingDO';
+import { RoomAttachedBookingResult, RoomAttachedBookingResultType } from '../../../../../core/domain-layer/hotel-operations/room/attached-booking/utils/RoomAttachedBookingResult';
+import { UnreserveRoom } from "../../../../../core/domain-layer/hotel-operations/room/unreserve/UnreserveRoom";
+import { UnreserveRoomDO } from "../../../../../core/domain-layer/hotel-operations/room/unreserve/UnreserveRoomDO";
 
 function checkArrivals(createdBookingList: BookingDO[], arrivalsInfo: HotelOperationsArrivalsInfo) {
     should.equal(arrivalsInfo.arrivalInfoList.length >= createdBookingList.length, true);
     createdBookingList.forEach((booking: BookingDO) => {
-        var arrivalItem = _.find(arrivalsInfo.arrivalInfoList, (item: ArrivalItemInfo) => { return item.bookingId === booking.bookingId });
+        var arrivalItem = _.find(arrivalsInfo.arrivalInfoList, (item: ArrivalItemInfo) => { return item.bookingId === booking.id });
         should.exist(arrivalItem);
-        should.equal(arrivalItem.bookingId, booking.bookingId);
+        should.equal(arrivalItem.bookingId, booking.id);
         should.equal(arrivalItem.roomCategoryId, booking.roomCategoryId);
         should.equal(arrivalItem.customerId, booking.displayCustomerId);
     });
@@ -119,9 +121,9 @@ describe("Hotel Dashboard Operations Tests", function () {
             });
         });
 
-        it("Should reserve a room for one of the added bookings", function (done) {
+        it("Should reserve, unreserve and reserve back a room for one of the added bookings", function (done) {
             var assignRoomDO = new AssignRoomDO();
-            assignRoomDO.bookingId = booking.bookingId;
+            assignRoomDO.bookingId = booking.id;
             assignRoomDO.groupBookingId = booking.groupBookingId;
             assignRoomDO.roomId = attachedRoom.id;
             var assignRoom = new AssignRoom(testContext.appContext, testContext.sessionContext);
@@ -129,6 +131,20 @@ describe("Hotel Dashboard Operations Tests", function () {
                 should.equal(updatedBooking.roomId, attachedRoom.id);
                 should.equal(updatedBooking.confirmationStatus, booking.confirmationStatus);
                 booking = updatedBooking;
+
+                let unreserveRoomDO = new UnreserveRoomDO();
+                unreserveRoomDO.bookingId = booking.id;
+                unreserveRoomDO.groupBookingId = booking.groupBookingId;
+                let unreserveRoom = new UnreserveRoom​​(testContext.appContext, testContext.sessionContext);
+                return unreserveRoom.unreserve(unreserveRoomDO);
+            }).then((updatedBooking: BookingDO) => {
+                should.equal(_.isEmpty(updatedBooking.roomId), true);
+
+                return assignRoom.reserveRoom(assignRoomDO);
+            }).then((updatedBooking: BookingDO) => {
+                should.equal(updatedBooking.roomId, attachedRoom.id);
+                should.equal(updatedBooking.confirmationStatus, booking.confirmationStatus);
+
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -139,7 +155,7 @@ describe("Hotel Dashboard Operations Tests", function () {
             roomAttachedBooking.getBooking(new RoomAttachedBookingDO(attachedRoom.id)).then((attachedBookingResult: RoomAttachedBookingResult) => {
                 should.equal(attachedBookingResult.resultType, RoomAttachedBookingResultType.ReservedBooking);
                 should.exist(attachedBookingResult.booking);
-                should.equal(attachedBookingResult.booking.bookingId, booking.bookingId);
+                should.equal(attachedBookingResult.booking.id, booking.id);
                 should.equal(attachedBookingResult.booking.groupBookingId, booking.groupBookingId);
                 done();
             }).catch((error: any) => {
@@ -149,7 +165,7 @@ describe("Hotel Dashboard Operations Tests", function () {
         it("Should get the possible prices for the booking and include the current price", function (done) {
             var possiblePrices = new BookingPossiblePrices(testContext.appContext, testContext.sessionContext);
             var possiblePricesDO = new BookingPossiblePricesDO();
-            possiblePricesDO.bookingId = booking.bookingId;
+            possiblePricesDO.id = booking.id;
             possiblePricesDO.groupBookingId = booking.groupBookingId;
             possiblePrices.getPossiblePrices(possiblePricesDO).then((priceItems: BookingPossiblePriceItems) => {
                 should.equal(priceItems.priceItemList.length > 0, true);
@@ -167,7 +183,7 @@ describe("Hotel Dashboard Operations Tests", function () {
             roomInfoReader.read().then((arrivalsInfo: HotelOperationsRoomInfo) => {
                 should.equal(arrivalsInfo.roomInfoList.length, 1);
                 should.equal(arrivalsInfo.roomInfoList[0].roomStatus, RoomItemStatus.Reserved);
-                should.equal(arrivalsInfo.roomInfoList[0].bookingId, booking.bookingId);
+                should.equal(arrivalsInfo.roomInfoList[0].bookingId, booking.id);
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -214,10 +230,10 @@ describe("Hotel Dashboard Operations Tests", function () {
             });
         });
         it("Should check in the reserved booking", function (done) {
-            createdBookingList = _.filter(createdBookingList, (createdBooking: BookingDO) => { return createdBooking.bookingId !== booking.bookingId });
+            createdBookingList = _.filter(createdBookingList, (createdBooking: BookingDO) => { return createdBooking.id !== booking.id });
 
             var assignRoomDO = new AssignRoomDO();
-            assignRoomDO.bookingId = booking.bookingId;
+            assignRoomDO.bookingId = booking.id;
             assignRoomDO.groupBookingId = booking.groupBookingId;
             assignRoomDO.roomId = booking.roomId;
             var assignRoom = new AssignRoom(testContext.appContext, testContext.sessionContext);
@@ -235,7 +251,7 @@ describe("Hotel Dashboard Operations Tests", function () {
             roomAttachedBooking.getBooking(new RoomAttachedBookingDO(attachedRoom.id)).then((attachedBookingResult: RoomAttachedBookingResult) => {
                 should.equal(attachedBookingResult.resultType, RoomAttachedBookingResultType.CheckedInBooking);
                 should.exist(attachedBookingResult.booking);
-                should.equal(attachedBookingResult.booking.bookingId, booking.bookingId);
+                should.equal(attachedBookingResult.booking.id, booking.id);
                 should.equal(attachedBookingResult.booking.groupBookingId, booking.groupBookingId);
                 done();
             }).catch((error: any) => {
@@ -259,7 +275,7 @@ describe("Hotel Dashboard Operations Tests", function () {
             roomInfoReader.read().then((arrivalsInfo: HotelOperationsRoomInfo) => {
                 should.equal(arrivalsInfo.roomInfoList.length, 1);
                 should.equal(arrivalsInfo.roomInfoList[0].roomStatus, RoomItemStatus.Occupied);
-                should.equal(arrivalsInfo.roomInfoList[0].bookingId, booking.bookingId);
+                should.equal(arrivalsInfo.roomInfoList[0].bookingId, booking.id);
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -279,7 +295,7 @@ describe("Hotel Dashboard Operations Tests", function () {
             departuresReader.read(dashboardHelper.getQueryForTomorrow(testDataBuilder)).then((departuresInfo: HotelOperationsDeparturesInfo) => {
                 should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + 1 + testDataBuilder.getNoUnpaidInvoices());
                 departuresInfo.departureInfoList.forEach((departureItem: DeparturelItemInfo) => {
-                    if (departureItem.bookingId === booking.bookingId) {
+                    if (departureItem.bookingId === booking.id) {
                         should.equal(departureItem.bookingItemStatus, DeparturelItemBookingStatus.CanCheckOut);
                     }
                     else {
@@ -293,7 +309,7 @@ describe("Hotel Dashboard Operations Tests", function () {
         });
         it("Should check out the room", function (done) {
             var checkOutDO = new CheckOutRoomDO();
-            checkOutDO.bookingId = booking.bookingId;
+            checkOutDO.bookingId = booking.id;
             checkOutDO.groupBookingId = booking.groupBookingId;
             var checkOutRoomOp = new CheckOutRoom(testContext.appContext, testContext.sessionContext);
             checkOutRoomOp.checkOut(checkOutDO).then((checkedOutBooking: BookingDO) => {

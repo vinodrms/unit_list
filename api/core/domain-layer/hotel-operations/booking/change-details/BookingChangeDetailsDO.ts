@@ -1,13 +1,13 @@
-import {IValidationStructure} from '../../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {ArrayValidationStructure} from '../../../../utils/th-validation/structure/ArrayValidationStructure';
-import {StringValidationRule} from '../../../../utils/th-validation/rules/StringValidationRule';
-import {FileAttachmentDO} from '../../../../data-layer/common/data-objects/file/FileAttachmentDO';
+import { IValidationStructure } from '../../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { ArrayValidationStructure } from '../../../../utils/th-validation/structure/ArrayValidationStructure';
+import { StringValidationRule } from '../../../../utils/th-validation/rules/StringValidationRule';
+import { FileAttachmentDO } from '../../../../data-layer/common/data-objects/file/FileAttachmentDO';
 
 export class BookingChangeDetailsDO {
     groupBookingId: string;
-    bookingId: string;
+    id: string;
     externalBookingReference: string;
     notes: string;
     invoiceNotes: string;
@@ -20,7 +20,7 @@ export class BookingChangeDetailsDO {
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
-                key: "bookingId",
+                key: "id",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {

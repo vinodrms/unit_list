@@ -5,7 +5,7 @@ import {
     BookingCapacityEditRight, BookingPaymentGuaranteeEditRight, BookingDetailsEditRight,
     BookingCustomerEditRight, BookingCancelRight, BookingReactivateRight,
     BookingSendConfirmationRight, BookingReserveAddOnProductRight, BookingChangePriceProductRight,
-    BookingUndoCheckInRight
+    BookingUndoCheckInRight, BookingGenerateInvoiceRight, BookingUnreserveRoomRight
 } from './BookingEditRights';
 
 export class BookingMetaFactory {
@@ -27,6 +27,8 @@ export class BookingMetaFactory {
                 reserveAddOnProductRight: BookingReserveAddOnProductRight.Edit,
                 changePriceProductRight: BookingChangePriceProductRight.Edit,
                 undoCheckInRight: BookingUndoCheckInRight.None,
+                unreserveRoomRight: BookingUnreserveRoomRight.Allowed,
+                generateInvoiceRight: BookingGenerateInvoiceRight.Allowed,
                 displayClassName: "upcoming",
                 fontName: "Z"
             }),
@@ -46,6 +48,8 @@ export class BookingMetaFactory {
                 reserveAddOnProductRight: BookingReserveAddOnProductRight.Edit,
                 changePriceProductRight: BookingChangePriceProductRight.Edit,
                 undoCheckInRight: BookingUndoCheckInRight.None,
+                unreserveRoomRight: BookingUnreserveRoomRight.Allowed,
+                generateInvoiceRight: BookingGenerateInvoiceRight.Allowed,
                 displayClassName: "upcoming",
                 fontName: "Z"
             }),
@@ -65,6 +69,8 @@ export class BookingMetaFactory {
                 reserveAddOnProductRight: BookingReserveAddOnProductRight.None,
                 changePriceProductRight: BookingChangePriceProductRight.None,
                 undoCheckInRight: BookingUndoCheckInRight.None,
+                unreserveRoomRight: BookingUnreserveRoomRight.None,
+                generateInvoiceRight: BookingGenerateInvoiceRight.None,
                 displayClassName: "noshow",
                 fontName: "+"
             }),
@@ -84,6 +90,8 @@ export class BookingMetaFactory {
                 reserveAddOnProductRight: BookingReserveAddOnProductRight.None,
                 changePriceProductRight: BookingChangePriceProductRight.None,
                 undoCheckInRight: BookingUndoCheckInRight.None,
+                unreserveRoomRight: BookingUnreserveRoomRight.None,
+                generateInvoiceRight: BookingGenerateInvoiceRight.Allowed,
                 displayClassName: "noshow",
                 fontName: "+"
             }),
@@ -103,6 +111,8 @@ export class BookingMetaFactory {
                 reserveAddOnProductRight: BookingReserveAddOnProductRight.None,
                 changePriceProductRight: BookingChangePriceProductRight.None,
                 undoCheckInRight: BookingUndoCheckInRight.None,
+                unreserveRoomRight: BookingUnreserveRoomRight.None,
+                generateInvoiceRight: BookingGenerateInvoiceRight.Allowed,
                 displayClassName: "",
                 fontName: "C"
             }),
@@ -122,6 +132,8 @@ export class BookingMetaFactory {
                 reserveAddOnProductRight: BookingReserveAddOnProductRight.None,
                 changePriceProductRight: BookingChangePriceProductRight.Edit,
                 undoCheckInRight: BookingUndoCheckInRight.Allowed,
+                unreserveRoomRight: BookingUnreserveRoomRight.None,
+                generateInvoiceRight: BookingGenerateInvoiceRight.Allowed,
                 displayClassName: "checkedin",
                 fontName: "("
             }),
@@ -141,6 +153,8 @@ export class BookingMetaFactory {
                 reserveAddOnProductRight: BookingReserveAddOnProductRight.None,
                 changePriceProductRight: BookingChangePriceProductRight.None,
                 undoCheckInRight: BookingUndoCheckInRight.None,
+                unreserveRoomRight: BookingUnreserveRoomRight.None,
+                generateInvoiceRight: BookingGenerateInvoiceRight.None,
                 displayClassName: "checkedout",
                 fontName: "*"
             })

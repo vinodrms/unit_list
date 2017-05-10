@@ -1,27 +1,40 @@
 import { BaseDO } from '../../../../../common/base/BaseDO';
 import { ThUtils } from '../../../../../common/utils/ThUtils';
-import { InvoiceItemDO, InvoiceItemType } from './items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from './items/InvoiceItemDO';
 import { InvoicePayerDO } from './payers/InvoicePayerDO';
 import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
 import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 import { BookingPriceDO } from "../../bookings/data-objects/price/BookingPriceDO";
 import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
+import { ThDateDO } from "../../common/data-objects/th-dates/ThDateDO";
+import { ThTimestampDO } from "../../common/data-objects/th-dates/ThTimestampDO";
+
+export enum InvoiceAccountingType {
+    Debit, Credit
+}
 
 export enum InvoicePaymentStatus {
     Unpaid, Paid, LossAcceptedByManagement
 }
 
 export class InvoiceDO extends BaseDO {
-
+    id: string;
+    accountingType: InvoiceAccountingType;
     bookingId: string;
     invoiceReference: string;
     payerList: InvoicePayerDO[];
     itemList: InvoiceItemDO[];
     paymentStatus: InvoicePaymentStatus;
     notesFromBooking: string;
+    reinstatedInvoiceId: string;
+
+    paidDate: ThDateDO;
+    paidTimestamp: ThTimestampDO;
+    paidDateUtcTimestamp: number;
+    paidDateTimeUtcTimestamp: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["bookingId", "invoiceReference", "paymentStatus", "notesFromBooking"];
+        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "reinstatedInvoiceId", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
     }
 
     public buildFromObject(object: Object) {
@@ -39,9 +52,16 @@ export class InvoiceDO extends BaseDO {
             itemDO.buildFromObject(itemObject);
             this.itemList.push(itemDO);
         });
+
+        this.paidDate = new ThDateDO();
+        this.paidDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidDate"));
+
+        this.paidTimestamp = new ThTimestampDO();
+        this.paidTimestamp.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidTimestamp"));
     }
 
-    public buildCleanInvoice() {
+    public buildCleanInvoice(accountingType: InvoiceAccountingType = InvoiceAccountingType.Debit) {
+        this.accountingType = accountingType;
         this.payerList = [];
         var cleanInvoicePayerDO = new InvoicePayerDO();
         cleanInvoicePayerDO.priceToPay = this.getPrice();
@@ -76,19 +96,9 @@ export class InvoiceDO extends BaseDO {
     public getPrice(): number {
         let totalPrice = 0;
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
-            if(item.isBookingPrice()) {
-                let bookingPrice = new BookingPriceDO();
-                bookingPrice.buildFromObject(item.meta);
-
-                _.forEach(bookingPrice.roomPricePerNightList, (pricePerDay: PricePerDayDO) => {
-                    totalPrice += pricePerDay.price;
-                });
-            }
-            else {
-                totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice();
-            }
+            let factor = item.accountingType === InvoiceItemAccountingType.Credit ? -1 : 1;
+            totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice() * factor;
         });
-        
         var thUtils = new ThUtils();
         return thUtils.roundNumberToTwoDecimals(totalPrice);
     }
@@ -116,11 +126,11 @@ export class InvoiceDO extends BaseDO {
     public removeItemsPopulatedFromBooking() {
         var itemsToRemoveIdList = [];
         _.forEach(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
-            if (invoiceItemDO.isDerivedFromBooking()) {
-                itemsToRemoveIdList.push(invoiceItemDO.id);
-            }
-            else if (invoiceItemDO.type === InvoiceItemType.Booking) {
+            if (invoiceItemDO.type === InvoiceItemType.Booking) {
                 delete invoiceItemDO.meta;
+            }
+            else if (invoiceItemDO.meta.isDerivedFromBooking()) {
+                itemsToRemoveIdList.push(invoiceItemDO.id);
             }
         });
         _.forEach(itemsToRemoveIdList, (id: string) => {
@@ -135,5 +145,21 @@ export class InvoiceDO extends BaseDO {
 
     public isWalkInInvoice(): boolean {
         return !_.isString(this.bookingId) || this.bookingId.length == 0;
+    }
+
+    public getUniqueIdentifier(): string {
+        let thUtils = new ThUtils();
+        return thUtils.isUndefinedOrNull(this.id) ? this.invoiceReference : this.id;
+    }
+
+    public uniqueIdentifierEquals(uniqueId: string): boolean {
+        let thUtils = new ThUtils();
+        return thUtils.isUndefinedOrNull(this.id) ?
+            this.invoiceReference === uniqueId : this.id === uniqueId;
+    }
+
+    public isReinstatement(): boolean {
+        var thUtils = new ThUtils();
+        return !thUtils.isUndefinedOrNull(this.reinstatedInvoiceId);
     }
 }

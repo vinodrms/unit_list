@@ -12,7 +12,7 @@ export class P6_AddAppliedDiscountValueOnBookingPrice extends APaginatedTransact
     }
 
     protected getMongoRepository(): MongoRepository {
-        return this._bookingRepository;
+        return this._legacyBookingGroupRepository;
     }
 
     protected updateDocumentInMemory(bookingGroup) {

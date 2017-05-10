@@ -5,7 +5,7 @@ import { SaveInvoiceGroupDO } from '../../../../../core/domain-layer/invoices/sa
 import { InvoiceBuilder } from '../builders/InvoiceBuilder';
 import { InvoicePayerBuilder } from '../builders/InvoicePayerBuilder';
 import { InvoiceGroupDO } from '../../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoicePaymentStatus } from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
+import { InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceItemDO } from '../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { IInvoiceItemMeta } from '../../../../../core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
 import { BookingDO } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
@@ -29,12 +29,12 @@ export class BookingInvoicesTestHelper {
 
         return {
             groupBookingId: booking.groupBookingId,
-            bookingId: booking.bookingId
+            id: booking.id
         };
     }
 
     public getSecondBooking(): BookingDO {
-        return this._defaultDataBuilder.bookingList[0];
+        return this._defaultDataBuilder.bookingList[1];
     }
 
     public buildGenerateBookingInvoiceDOForExistingInvoiceGroup(): GenerateBookingInvoiceDO {
@@ -42,7 +42,7 @@ export class BookingInvoicesTestHelper {
 
         return {
             groupBookingId: booking.groupBookingId,
-            bookingId: booking.bookingId
+            id: booking.id
         };
     }
 
@@ -51,6 +51,7 @@ export class BookingInvoicesTestHelper {
         if (booking.price.hasDeductedCommission()) {
             noItems++;
         }
+        noItems += booking.reservedAddOnProductIdList.length;
         return noItems;
     }
 
@@ -69,35 +70,35 @@ export class BookingInvoicesTestHelper {
         invoiceGroupToUpdate.invoiceList[0].paymentStatus = InvoicePaymentStatus.Paid;
 
         var aopItemList = this._invoiceTestUtils.buildRandomItemListOfAddOnProducts(this._defaultDataBuilder.addOnProductList, 2);
-        var aopItemMetaPromiseList = [];
+        var aopItemMetaList = [];
         _.forEach(aopItemList, (aopItem: InvoiceItemDO) => {
-            aopItemMetaPromiseList.push(aopItem.meta);
+            aopItemMetaList.push(aopItem.meta);
         })
-        Promise.all(aopItemMetaPromiseList).then((invoiceItemMetaList: IInvoiceItemMeta[]) => {
-            this._invoiceTestUtils.getTotalPriceFromItemMetaList(invoiceItemMetaList).then((totalPrice: number) => {
-                var invoicePayer = invoiceGroupToUpdate.invoiceList[0].payerList[0];
-                var invoicePayerWithUpdatedPricetoPay = new InvoicePayerBuilder()
-                    .withCustomerId(invoicePayer.customerId)
-                    .withPaymentMethod(invoicePayer.paymentMethod)
-                    .withTransactionFeeSnapshot(TransactionFeeDO.getDefaultTransactionFee())
-                    .withPriceToPay(totalPrice).build();
-
-                invoiceGroupToUpdate.invoiceList.push(new InvoiceBuilder()
-                    .withItemList(aopItemList)
-                    .withPayerList([invoicePayerWithUpdatedPricetoPay])
-                    .withPaymentStatus(InvoicePaymentStatus.Unpaid)
-                    .build());
-                resolve(
-                    new SaveInvoiceGroupBuilder()
-                        .withId(invoiceGroupToUpdate.id)
-                        .withGroupBookingId(invoiceGroupToUpdate.groupBookingId)
-                        .withInvoiceList(invoiceGroupToUpdate.invoiceList)
-                        .build()
-                );
-            });
+        
+        this._invoiceTestUtils.getTotalPriceFromItemMetaList(aopItemMetaList).then((totalPrice: number) => {
+            var invoicePayer = invoiceGroupToUpdate.invoiceList[0].payerList[0];
+            var invoicePayerWithUpdatedPricetoPay = new InvoicePayerBuilder()
+                .withCustomerId(invoicePayer.customerId)
+                .withPaymentMethod(invoicePayer.paymentMethod)
+                .withTransactionFeeSnapshot(TransactionFeeDO.getDefaultTransactionFee())
+                .withPriceToPay(totalPrice).build();
+            invoiceGroupToUpdate.invoiceList.push(new InvoiceBuilder()
+                .withAccountingType(InvoiceAccountingType.Debit)
+                .withItemList(aopItemList)
+                .withPayerList([invoicePayerWithUpdatedPricetoPay])
+                .withPaymentStatus(InvoicePaymentStatus.Unpaid)
+                .build());
+            resolve(
+                new SaveInvoiceGroupBuilder()
+                    .withId(invoiceGroupToUpdate.id)
+                    .withGroupBookingId(invoiceGroupToUpdate.groupBookingId)
+                    .withInvoiceList(invoiceGroupToUpdate.invoiceList)
+                    .build()
+            );
         }).catch((error) => {
             reject(error);
-        })
+        });
+        
     }
 
     private getOneBookingIdFromInvoiceGroup(invoiceGroup: InvoiceGroupDO): string {

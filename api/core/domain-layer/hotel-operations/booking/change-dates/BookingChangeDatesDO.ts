@@ -8,7 +8,7 @@ import { CommonValidationStructures } from "../../../common/CommonValidations";
 
 export class BookingChangeDatesDO {
     groupBookingId: string;
-    bookingId: string;
+    id: string;
     interval: ThDateIntervalDO;
 
     public static getValidationStructure(): IValidationStructure {
@@ -18,7 +18,7 @@ export class BookingChangeDatesDO {
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
-                key: "bookingId",
+                key: "id",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {

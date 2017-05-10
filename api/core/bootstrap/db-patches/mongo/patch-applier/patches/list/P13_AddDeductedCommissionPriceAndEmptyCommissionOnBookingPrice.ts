@@ -14,7 +14,7 @@ export class P13_AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice exte
     }
 
     protected getMongoRepository(): MongoRepository {
-        return this._bookingRepository;
+        return this._legacyBookingGroupRepository;
     }
 
     protected updateDocumentInMemory(bookingGroup) {

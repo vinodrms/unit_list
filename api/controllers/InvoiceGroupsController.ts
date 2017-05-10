@@ -13,6 +13,7 @@ import { InvoiceDataAggregator, InvoiceDataAggregatorQuery } from '../core/domai
 import { InvoiceAggregatedData } from '../core/domain-layer/invoices/aggregators/InvoiceAggregatedData';
 import { InvoiceConfirmationVMContainer } from '../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationVMContainer';
 import { ReportType, PdfReportsServiceResponse } from '../core/services/pdf-reports/IPdfReportsService';
+import { ReinstateInvoice } from "../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
 
 import path = require("path");
 
@@ -74,6 +75,16 @@ export class InvoiceGroupsController extends BaseController {
         });
     }
 
+    public reinstateInvoice(req: Express.Request, res: Express.Response) {
+        let reinstatementInvoiceGenerator = new ReinstateInvoice(req.appContext, req.sessionContext);
+        
+        reinstatementInvoiceGenerator.reinstate(req.body.reinstatedInvoiceMeta).then((updatedInvoiceGroup: InvoiceGroupDO) => {
+            this.returnSuccesfulResponse(req, res, { invoiceGroup: updatedInvoiceGroup });
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorsavingInvoiceGroup);
+        });
+    }
+
     public downloadInvoicePdf(req: Express.Request, res: any) {
 
         var pdfReportsService = req.appContext.getServiceFactory().getPdfReportsService();
@@ -82,7 +93,7 @@ export class InvoiceGroupsController extends BaseController {
         var query: InvoiceDataAggregatorQuery = {
             customerId: req.query['customerId'],
             invoiceGroupId: req.query['invoiceGroupId'],
-            invoiceReference: req.query['invoiceReference'],
+            invoiceId: req.query['invoiceId'],
             payerIndex: req.query['payerIndex']
         };
         var thTranslation = new ThTranslation(req.sessionContext.language);
@@ -117,6 +128,7 @@ module.exports = {
     getInvoiceGroupList: invoiceGroupsController.getInvoiceGroupList.bind(invoiceGroupsController),
     getInvoiceGroupListCount: invoiceGroupsController.getInvoiceGroupListCount.bind(invoiceGroupsController),
     saveInvoiceGroupItem: invoiceGroupsController.saveInvoiceGroupItem.bind(invoiceGroupsController),
+    reinstateInvoice: invoiceGroupsController.reinstateInvoice.bind(invoiceGroupsController),
     downloadInvoicePdf: invoiceGroupsController.downloadInvoicePdf.bind(invoiceGroupsController),
 
 }

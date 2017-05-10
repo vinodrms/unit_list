@@ -76,17 +76,41 @@
         </form>
         
     </div>
-    <div *ngIf="invoicePayerVM.customerDO" class="payment-container" [ngClass]="{'read-only p-12' : !editMode, 'p-6': editMode}">
+    
+    <div class="payment-container" *ngIf="editMode" [ngClass]="{'read-only p-12' : !editMode, 'p-6': editMode}">
         <form class="form-inline">
             <div class="form-group m-t-0 m-r-12 m-b-0 m-l-0">
                 <div class="input-group">
-                    <span><b><i class="fa" [ngClass]="selectedPaymentMethodVM.iconUrl"></i> {{selectedPaymentMethodVM.displayName | translate}}</b> has a transaction fee of: 
-                    <b *ngIf="transactionFeeIsFixed">{{ccySymbol}} {{ transactionFee.amount }}</b>
-                    <b *ngIf="!transactionFeeIsFixed">{{ transactionFee.amount | percentage}}</b>
-                    . <b>To pay</b> (transaction fee included): <b>{{ccySymbol}} {{totalAmountWithTransactionFee | price}}</b></span>
+                    <div class="btn-group" data-toggle="buttons">
+                        <button class="btn btn-default" (click)="shouldApplyTransacationFee=true" [ngClass]="{'active': shouldApplyTransacationFee}">
+                            {{ 'Apply Fee' | translate }}
+                        </button>
+                        <button class="btn btn-default" (click)="shouldApplyTransacationFee=false" [ngClass]="{'active': !shouldApplyTransacationFee}">
+                            {{ 'No Fee' | translate }}
+                        </button>
+                    </div>
                 </div>
             </div>
+        </form>
+    </div>
 
+    <div *ngIf="invoicePayerVM.customerDO" class="payment-container" [ngClass]="{'read-only p-12' : !editMode, 'p-6': editMode}">
+        <form class="form-inline">
+            <div class="form-group m-t-6 m-r-12 m-b-0 m-l-0">
+                <div class="input-group">
+                    <span>
+                        <span *ngIf="shouldApplyTransacationFee"><b><i class="fa" [ngClass]="selectedPaymentMethodVM.iconUrl"></i> {{selectedPaymentMethodVM.displayName | translate}}</b> has a transaction fee of: 
+                    <b *ngIf="transactionFeeIsFixed">{{ccySymbol}} {{ transactionFee.amount }}</b>
+                    <b *ngIf="!transactionFeeIsFixed">{{ transactionFee.amount | percentage}}</b>
+                    . </span>
+                        <span><b>To pay </b>
+                            <span *ngIf="shouldApplyTransacationFee">(transaction fee included)</span>
+                            <span *ngIf="!shouldApplyTransacationFee"> (no transaction fee)</span>
+                            : <b>{{ccySymbol}} {{totalAmountWithTransactionFee | price}}</b>
+                        </span>
+                    </span>
+                </div>
+            </div>
         </form>
     </div>
 </div>

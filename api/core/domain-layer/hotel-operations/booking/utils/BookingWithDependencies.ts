@@ -106,7 +106,7 @@ export class BookingWithDependencies {
         let invoiceGroup = this.getInvoiceGroupDO();
         if (this._thUtils.isUndefinedOrNull(invoiceGroup)) { return false; }
 
-        let invoice = invoiceGroup.getInvoiceForBooking(this._bookingDO.bookingId);
+        let invoice = invoiceGroup.getInvoiceForBooking(this._bookingDO.id);
         if (this._thUtils.isUndefinedOrNull(invoice)) { return false; }
         return invoice.isClosed();
     }
@@ -116,5 +116,9 @@ export class BookingWithDependencies {
         return _.find(this._invoiceGroupList, (groupInvoice: InvoiceGroupDO) => {
             return groupInvoice.groupBookingId === this._bookingDO.groupBookingId;
         });
+    }
+
+    public getRoom(): RoomDO {
+        return _.find(this._roomList, r => { return r.id === this._bookingDO.roomId; });
     }
 }

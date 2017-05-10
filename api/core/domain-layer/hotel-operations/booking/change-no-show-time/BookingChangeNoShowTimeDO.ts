@@ -7,7 +7,7 @@ import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestamp
 
 export class BookingChangeNoShowTimeDO {
     groupBookingId: string;
-    bookingId: string;
+    id: string;
     noShowTimestamp: ThTimestampDO;
 
     public static getValidationStructure(): IValidationStructure {
@@ -17,7 +17,7 @@ export class BookingChangeNoShowTimeDO {
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
-                key: "bookingId",
+                key: "id",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {

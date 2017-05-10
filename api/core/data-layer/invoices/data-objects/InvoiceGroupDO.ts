@@ -6,6 +6,9 @@ import { IBookingRepository } from '../../bookings/repositories/IBookingReposito
 import { BookingDO } from '../../bookings/data-objects/BookingDO';
 import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 import { TaxDO } from '../../taxes/data-objects/TaxDO';
+import { ThUtils } from "../../../utils/ThUtils";
+
+import _ = require('underscore');
 
 export enum InvoiceGroupStatus {
     Active,
@@ -95,5 +98,44 @@ export class InvoiceGroupDO extends BaseDO {
         return _.find(this.invoiceList, (innerInvoice: InvoiceDO) => {
             return innerInvoice.bookingId === bookingId;
         });
+    }
+
+    public attachIdsToInvoicesIfNecessary() {
+        let thUtils = new ThUtils();
+        
+        _.forEach(this.invoiceList, (invoice: InvoiceDO) => {
+            if(thUtils.isUndefinedOrNull(invoice.id)) {
+                invoice.id = thUtils.generateUniqueID();
+            }
+        });
+    }
+    
+    public invoiceIsReinstated(invoiceId: string): boolean {
+        let thUtils = new ThUtils();
+
+        let lookedUpInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.id === invoiceId;
+        });
+        if(thUtils.isUndefinedOrNull(lookedUpInvoice)) {
+            return false;
+        }
+
+        let reinstatementInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
+            invoice.reinstatedInvoiceId === lookedUpInvoice.id;    
+        });
+
+        return !thUtils.isUndefinedOrNull(reinstatementInvoice);
+    }
+
+    public getReinstatedInvoiceReference(reinstatementInvoiceId): string {
+        let reinstatementInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.id === reinstatementInvoiceId;
+        });
+
+        let reinstatedInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.id === reinstatementInvoice.reinstatedInvoiceId;
+        });
+
+        return reinstatedInvoice.invoiceReference;
     }
 }

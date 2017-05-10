@@ -6,6 +6,7 @@ import { BookingPossiblePriceItemsDO } from './data-objects/BookingPossiblePrice
 import { BookingDO } from '../../bookings/data-objects/BookingDO';
 import { ThTimestampDO } from '../../common/data-objects/th-dates/ThTimestampDO';
 import { InvoicePaymentMethodDO } from '../../invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoiceGroupDO } from "../../invoices/data-objects/InvoiceGroupDO";
 
 @Injectable()
 export class HotelOperationsBookingService {
@@ -15,9 +16,9 @@ export class HotelOperationsBookingService {
 
     public getPossiblePrices(groupBookingId: string, bookingId: string): Observable<BookingPossiblePriceItemsDO> {
         return this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingPossiblePrices, {
-            bookingReference: {
+            booking: {
                 groupBookingId: groupBookingId,
-                bookingId: bookingId
+                id: bookingId
             }
         }).map((possiblePricesObject: Object) => {
             var possiblePrices = new BookingPossiblePriceItemsDO();
@@ -38,7 +39,7 @@ export class HotelOperationsBookingService {
             this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeNoShowTime, {
                 booking: {
                     groupBookingId: booking.groupBookingId,
-                    bookingId: booking.bookingId,
+                    id: booking.id,
                     noShowTimestamp: noShowTimestamp
                 }
             })
@@ -58,7 +59,7 @@ export class HotelOperationsBookingService {
             this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingAddPaymentGuarantee, {
                 booking: {
                     groupBookingId: booking.groupBookingId,
-                    bookingId: booking.bookingId,
+                    id: booking.id,
                     paymentMethod: paymentMethod
                 }
             })
@@ -127,6 +128,16 @@ export class HotelOperationsBookingService {
                 booking: booking
             })
         );
+    }
+
+    public generateInvoice(booking: BookingDO): Observable<InvoiceGroupDO> {
+        return this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingGenerateInvoice, {
+            booking: booking
+        }).map(invoiceGroupObject => {
+            var updatedInvoiceGroupDO = new InvoiceGroupDO();
+            updatedInvoiceGroupDO.buildFromObject(invoiceGroupObject["invoiceGroup"]);
+            return updatedInvoiceGroupDO;
+        });
     }
 
     private mapToBookingObservable(bookingObjectObservable: Observable<Object>): Observable<BookingDO> {

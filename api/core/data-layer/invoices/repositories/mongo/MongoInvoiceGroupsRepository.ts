@@ -5,7 +5,6 @@ import { InvoiceDO } from '../../data-objects/InvoiceDO';
 import { MongoInvoiceGroupsReadOperationsRepository } from './operations/MongoInvoiceGroupsReadOperationsRepository';
 import { MongoInvoiceGroupsEditOperationsRepository } from './operations/MongoInvoiceGroupsEditOperationsRepository';
 import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../common/repo-data-objects/LazyLoadRepoDO';
-import { MongoBookingRepository } from '../../../bookings/repositories/mongo/MongoBookingRepository';
 import { IHotelRepository } from '../../../hotel/repositories/IHotelRepository';
 
 export class MongoInvoiceGroupsRepository extends MongoRepository implements IInvoiceGroupsRepository {

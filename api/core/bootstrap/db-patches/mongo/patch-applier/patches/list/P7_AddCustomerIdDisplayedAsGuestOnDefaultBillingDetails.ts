@@ -10,7 +10,7 @@ export class P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails extends APa
     }
 
     protected getMongoRepository(): MongoRepository {
-        return this._bookingRepository;
+        return this._legacyBookingGroupRepository;
     }
 
     protected updateDocumentInMemory(bookingGroup) {

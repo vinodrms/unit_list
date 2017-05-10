@@ -1,4 +1,4 @@
-import { InvoiceItemDO } from '../data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../data-objects/items/InvoiceItemDO';
 import { ThTranslation } from '../../../../../common/utils/localization/ThTranslation';
 import { ThUtils } from '../../../../../common/utils/ThUtils';
 import { BookingPriceDO } from "../../bookings/data-objects/price/BookingPriceDO";
@@ -20,19 +20,21 @@ export class InvoiceItemVM {
         return this.invoiceItemDO.meta.getDisplayName(this._thTranslation);
     }
     public get qty(): number {
-        return this.invoiceItemDO.meta.getNumberOfItems();
+        let noOfItems = this.invoiceItemDO.meta.getNumberOfItems();
+        return this.invoiceItemDO.accountingType === InvoiceItemAccountingType.Credit? noOfItems * -1 : noOfItems;
     }
     public get price(): number {
         return this.invoiceItemDO.meta.getUnitPrice();
     }
     public get totalPrice(): number {
-        return this._thUtils.roundNumberToTwoDecimals(this.invoiceItemDO.meta.getUnitPrice() * this.qty);
+        return this.invoiceItemDO.getTotalPrice();
     }
     public isMovable(): boolean {
-        return this.invoiceItemDO.meta.isMovable();
+        return this.invoiceItemDO.meta.isMovableByDefault() 
+            && this.invoiceItemDO.accountingType === InvoiceItemAccountingType.Debit;
     }
     public displayBookingDateBreakdown(): boolean {
-        if (!this.invoiceItemDO.isBookingPrice()) {
+        if (!(this.invoiceItemDO.type === InvoiceItemType.Booking)) {
             return false;
         }
         let bookingPrice: BookingPriceDO = <BookingPriceDO>this.invoiceItemDO.meta;

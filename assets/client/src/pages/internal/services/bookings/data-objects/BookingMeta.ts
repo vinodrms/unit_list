@@ -4,7 +4,7 @@ import {
     BookingCapacityEditRight, BookingPaymentGuaranteeEditRight, BookingDetailsEditRight,
     BookingCustomerEditRight, BookingCancelRight, BookingReactivateRight,
     BookingSendConfirmationRight, BookingReserveAddOnProductRight, BookingChangePriceProductRight,
-    BookingUndoCheckInRight
+    BookingUndoCheckInRight, BookingGenerateInvoiceRight, BookingUnreserveRoomRight
 } from './BookingEditRights';
 
 export interface BookingMetaOptions {
@@ -25,6 +25,8 @@ export interface BookingMetaOptions {
     reserveAddOnProductRight: BookingReserveAddOnProductRight;
     changePriceProductRight: BookingChangePriceProductRight;
     undoCheckInRight: BookingUndoCheckInRight;
+    unreserveRoomRight: BookingUnreserveRoomRight;
+    generateInvoiceRight: BookingGenerateInvoiceRight;
 }
 
 export class BookingMeta {
@@ -45,6 +47,8 @@ export class BookingMeta {
     reserveAddOnProductRight: BookingReserveAddOnProductRight;
     changePriceProductRight: BookingChangePriceProductRight;
     undoCheckInRight: BookingUndoCheckInRight;
+    unreserveRoomRight: BookingUnreserveRoomRight;
+    generateInvoiceRight: BookingGenerateInvoiceRight;
 
     constructor(metaOptions: BookingMetaOptions) {
         this.confirmationStatus = metaOptions.confirmationStatus;
@@ -64,5 +68,7 @@ export class BookingMeta {
         this.reserveAddOnProductRight = metaOptions.reserveAddOnProductRight;
         this.changePriceProductRight = metaOptions.changePriceProductRight;
         this.undoCheckInRight = metaOptions.undoCheckInRight;
+        this.unreserveRoomRight = metaOptions.unreserveRoomRight;
+        this.generateInvoiceRight = metaOptions.generateInvoiceRight;
     }
 }

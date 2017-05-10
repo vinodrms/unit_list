@@ -1,14 +1,14 @@
-import {TestUtils} from '../../../../helpers/TestUtils';
-import {InvoiceItemBuilder} from '../builders/InvoiceItemBuilder';
-import {InvoiceGroupDO} from '../../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
-import {SaveInvoiceGroupDO} from '../../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
-import {InvoiceItemDO, InvoiceItemType} from '../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {AddOnProductDO} from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
-import {ThUtils} from '../../../../../core/utils/ThUtils';
-import {IInvoiceItemMeta} from '../../../../../core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
-import {InvoicePayerDO} from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
-import {AddOnProductInvoiceItemMetaDO} from '../../../../../core/data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import { TestUtils } from '../../../../helpers/TestUtils';
+import { InvoiceItemBuilder } from '../builders/InvoiceItemBuilder';
+import { InvoiceGroupDO } from '../../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoiceAccountingType } from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
+import { SaveInvoiceGroupDO } from '../../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { AddOnProductDO } from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
+import { ThUtils } from '../../../../../core/utils/ThUtils';
+import { IInvoiceItemMeta } from '../../../../../core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
+import { InvoicePayerDO } from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import { AddOnProductInvoiceItemMetaDO } from '../../../../../core/data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 
 import should = require('should');
 
@@ -29,7 +29,7 @@ export class InvoiceTestUtils {
             var aop = _.find(aopList, (aop: AddOnProductDO) => {
                 return aop.id === aopId;
             });
-            
+
             var aopItem = new AddOnProductInvoiceItemMetaDO();
             aopItem.pricePerItem = aop.price;
             aopItem.numberOfItems = 3;
@@ -111,6 +111,19 @@ export class InvoiceTestUtils {
             should.equal(invoice1.payerList[i].paymentMethod.type, invoice2.payerList[i].paymentMethod.type);
             should.equal(invoice1.payerList[i].paymentMethod.value, invoice2.payerList[i].paymentMethod.value);
         }
-        should.equal(invoice1.paymentStatus, invoice2.paymentStatus);
+    }
+
+    public testIfCreditWasCorrect(creditedInvoice: InvoiceDO, creditInvoice: InvoiceDO) {
+        should.equal(creditedInvoice.accountingType, InvoiceAccountingType.Debit);
+        should.equal(creditInvoice.accountingType, InvoiceAccountingType.Credit);
+        should.equal(creditedInvoice.itemList.length, creditInvoice.itemList.length);
+
+        _.forEach(creditedInvoice.itemList, (item: InvoiceItemDO) => {
+            should.equal(item.accountingType, InvoiceItemAccountingType.Debit);
+        });
+
+        _.forEach(creditInvoice.itemList, (item: InvoiceItemDO) => {
+            should.equal(item.accountingType, InvoiceItemAccountingType.Credit);
+        });
     }
 }

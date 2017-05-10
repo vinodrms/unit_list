@@ -14,6 +14,7 @@ module.exports = {
         connection: 'mongodbprod'
     },
     hookTimeout: 40000,
+    bootstrapTimeout: 400000,
     log: {
         level: "silent"
     },

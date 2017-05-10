@@ -60,7 +60,7 @@ export class BookingsForPriceProductReportSectionGenerator extends AReportSectio
                 bookingList.forEach(booking => {
                     var custString = booking.getIndexedCustomerNames().join(" / ");
                     let row = [
-                        booking.groupBookingReference + " / " + booking.bookingReference,
+                        booking.displayedReservationNumber,
                         booking.interval.start.toString(),
                         booking.interval.end.toString(),
                         this._appContext.thTranslate.translate(this._bookingMetaByStatus[booking.confirmationStatus].name),

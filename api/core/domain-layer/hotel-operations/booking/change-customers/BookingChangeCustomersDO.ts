@@ -6,7 +6,7 @@ import {StringValidationRule} from '../../../../utils/th-validation/rules/String
 
 export class BookingChangeCustomersDO {
     groupBookingId: string;
-    bookingId: string;
+    id: string;
     customerIdList: string[];
 
     public static getValidationStructure(): IValidationStructure {
@@ -16,7 +16,7 @@ export class BookingChangeCustomersDO {
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
-                key: "bookingId",
+                key: "id",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
