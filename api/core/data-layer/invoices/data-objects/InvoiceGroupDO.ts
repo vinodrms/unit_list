@@ -136,6 +136,7 @@ export class InvoiceGroupDO extends BaseDO {
             return invoice.id === reinstatementInvoice.reinstatedInvoiceId;
         });
 
-        return reinstatedInvoice.invoiceReference;
+        let thUtils = new ThUtils();
+        return thUtils.isUndefinedOrNull(reinstatedInvoice)? '' : reinstatedInvoice.invoiceReference;
     }
 }
