@@ -25,6 +25,7 @@ import { ShiftReportPaidByAgreementSectionGenerator } from "./strategies/ShiftRe
 
 export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	private _shiftReportParams: ShiftReportParams;
+	private _allInvoiceGroupList: InvoiceGroupDO[];
 	private _paidInvoiceGroupList: InvoiceGroupDO[];
 	private _lossAcceptedByManagementInvoiceGroupList: InvoiceGroupDO[];
 	private _aopContainer: AddOnProductItemContainer;
@@ -77,6 +78,7 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 		igRepository.getInvoiceGroupList(igMeta, searchCriteria)
 			.then((result: InvoiceGroupSearchResultRepoDO) => {
 				let invoiceGroupList = result.invoiceGroupList;
+				this._allInvoiceGroupList = invoiceGroupList;
 				this._paidInvoiceGroupList = this.getFilteredInvoiceGroupList(invoiceGroupList, (invoice: InvoiceDO) => { return invoice.isPaid(); });
 				this._lossAcceptedByManagementInvoiceGroupList = this.getFilteredInvoiceGroupList(invoiceGroupList, (invoice: InvoiceDO) => { return invoice.isLossAcceptedByManagement(); });
 
@@ -126,7 +128,7 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 		return [
 			new ShiftReportByPaymentMethodSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList),
 			new ShiftReportPaidByAgreementSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList),
-			new ShiftReportPaidInvoicesSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, {
+			new ShiftReportPaidInvoicesSectionGenerator(this._appContext, this._sessionContext, this._allInvoiceGroupList, this._paidInvoiceGroupList, {
 				title: "Paid Invoices"
 			}),
 			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._aopContainer, {
@@ -136,7 +138,7 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._lossAcceptedByManagementInvoiceGroupList, this._aopContainer, {
 				title: "Loss Accepted By Management Transactions Grouped by Category"
 			}),
-			new ShiftReportPaidInvoicesSectionGenerator(this._appContext, this._sessionContext, this._lossAcceptedByManagementInvoiceGroupList, {
+			new ShiftReportPaidInvoicesSectionGenerator(this._appContext, this._sessionContext, this._allInvoiceGroupList, this._lossAcceptedByManagementInvoiceGroupList, {
 				title: "Loss Accepted By Management Invoices"
 			}),
 			

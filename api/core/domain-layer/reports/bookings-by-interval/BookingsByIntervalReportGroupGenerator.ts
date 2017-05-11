@@ -42,8 +42,14 @@ export class BookingsByIntervalReportGroupGenerator extends AReportGeneratorStra
     }
 
     protected getMeta(): ReportGroupMeta {
+        var startDateKey: string = this._appContext.thTranslate.translate("Start Date");
+        var endDateKey: string = this._appContext.thTranslate.translate("End Date");
+        var displayParams = {};
+        displayParams[startDateKey] = this._startDate;
+        displayParams[endDateKey] = this._endDate;        
         return {
             name: "Bookings by Interval",
+            displayParams: displayParams,
             pageOrientation: PageOrientation.Landscape
         }
     }
