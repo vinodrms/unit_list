@@ -24,7 +24,7 @@ import { CommonValidationStructures } from "../../common/CommonValidations";
 import { ShiftReportPaidByAgreementSectionGenerator } from "./strategies/ShiftReportPaidByAgreementSectionGenerator";
 
 export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
-	private _params: ShiftReportParams;
+	private _shiftReportParams: ShiftReportParams;
 	private _allInvoiceGroupList: InvoiceGroupDO[];
 	private _paidInvoiceGroupList: InvoiceGroupDO[];
 	private _lossAcceptedByManagementInvoiceGroupList: InvoiceGroupDO[];
@@ -62,7 +62,7 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 		let endHour = new ThHourDO();
 		endHour.buildFromObject(params.endDateTime);
 
-		this._params = {
+		this._shiftReportParams = {
 			dateInterval: ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate),
 			startTime: ThTimestampDO.buildThTimestampDO(startDate, startHour),
 			endTime: ThTimestampDO.buildThTimestampDO(endDate, endHour)
@@ -73,7 +73,7 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 		let igRepository = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
 		let igMeta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 		let searchCriteria = {
-			paidInterval: this._params.dateInterval
+			paidInterval: this._shiftReportParams.dateInterval
 		};
 		igRepository.getInvoiceGroupList(igMeta, searchCriteria)
 			.then((result: InvoiceGroupSearchResultRepoDO) => {
@@ -97,7 +97,7 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 		invoiceGroupList.forEach((ig) => {
 			let filteredInvoiceList = _.filter(ig.invoiceList, (invoice: InvoiceDO) => {
 				return checkInvoice(invoice) &&
-					this.invoicePaidInTimeFrame(invoice, this._params.startTime, this._params.endTime);
+					this.invoicePaidInTimeFrame(invoice, this._shiftReportParams.startTime, this._shiftReportParams.endTime);
 			});
 			if (filteredInvoiceList.length > 0) {
 				let igCopy = new InvoiceGroupDO();
@@ -114,8 +114,14 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	}
 
 	protected getMeta(): ReportGroupMeta {
+		var startNameKey: string = this._appContext.thTranslate.translate("Start Time");
+		var endNameKey: string = this._appContext.thTranslate.translate("End Time");
+		var displayParams = {};
+		displayParams[startNameKey] = this._shiftReportParams.startTime;
+		displayParams[endNameKey] = this._shiftReportParams.endTime;		
 		return {
-			name: "Shift Report"
+			name: "Shift Report",
+			displayParams: displayParams
 		}
 	}
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {

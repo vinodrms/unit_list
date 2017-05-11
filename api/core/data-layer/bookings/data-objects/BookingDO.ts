@@ -30,7 +30,7 @@ export enum GroupBookingInputChannel {
     PropertyManagementSystem
 }
 
-var BookingConfirmationStatusDisplayString: { [index: number]: string; } = {};
+export var BookingConfirmationStatusDisplayString: { [index: number]: string; } = {};
 BookingConfirmationStatusDisplayString[BookingConfirmationStatus.Confirmed] = "Confirmed";
 BookingConfirmationStatusDisplayString[BookingConfirmationStatus.Guaranteed] = "Guaranteed";
 BookingConfirmationStatusDisplayString[BookingConfirmationStatus.NoShow] = "No Show";
