@@ -906,6 +906,6 @@ export var EnglishTranslations: Object = {
 	"Apply Fee": "Apply Fee",
 	"No fee": "No fee",
 	"(reinstatement of %reinstatedInvoiceRef%)": "(reinstatement of %reinstatedInvoiceRef%)",
-
+	"The invoice was paid successfully": "The invoice was paid successfully",
 
 };
