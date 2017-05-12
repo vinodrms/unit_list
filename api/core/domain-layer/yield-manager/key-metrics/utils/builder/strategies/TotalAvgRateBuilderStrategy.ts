@@ -4,6 +4,8 @@ import { KeyMetricType } from '../../KeyMetricType';
 import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
 import { PriceKeyMetric } from '../../values/PriceKeyMetric';
 
+import _ = require('underscore');
+
 export class TotalAvgRateBuilderStrategy extends AMetricBuilderStrategy {
     constructor(hotelInventoryStats: IHotelInventoryStats) {
         super(hotelInventoryStats);
@@ -15,17 +17,19 @@ export class TotalAvgRateBuilderStrategy extends AMetricBuilderStrategy {
     protected getValueType(): KeyMetricValueType {
         return KeyMetricValueType.Price;
     }
-    protected getKeyMetricValueCore(statsForDate: HotelInventoryStatsForDate): IKeyMetricValue {
-        var metric = new PriceKeyMetric({
-            computeAverageForMultipleValues: true
+    protected getKeyMetricValueCore(statsForDateList: HotelInventoryStatsForDate[]): IKeyMetricValue {
+        let metric = new PriceKeyMetric();
+        let totalNoOccupiedRooms = 0;
+        let totalRoomRevenue = 0;
+        _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
+            totalNoOccupiedRooms += statsForDate.confirmedOccupancy.getTotalRoomOccupancy() + statsForDate.guaranteedOccupancy.getTotalRoomOccupancy();
+            totalRoomRevenue += statsForDate.confirmedRevenue.roomRevenue + statsForDate.guaranteedRevenue.roomRevenue;
         });
-        var noOccupiedRooms = statsForDate.confirmedOccupancy.getTotalRoomOccupancy() + statsForDate.guaranteedOccupancy.getTotalRoomOccupancy();
-        if (noOccupiedRooms == 0) {
+        if (totalNoOccupiedRooms == 0) {
             metric.price = 0.0;
             return metric;
         }
-        var roomRevenue = statsForDate.confirmedRevenue.roomRevenue + statsForDate.guaranteedRevenue.roomRevenue;
-        metric.price = this.roundValueToNearestInteger(roomRevenue / noOccupiedRooms);
+        metric.price = this.roundValueToNearestInteger(totalRoomRevenue / totalNoOccupiedRooms);
         return metric;
     }
     protected getKeyMetricDisplayName(): string {

@@ -8,5 +8,4 @@ export enum KeyMetricValueType {
 
 export interface IKeyMetricValue {
     getDisplayValue(periodType: ThPeriodType): string;
-    add(value: IKeyMetricValue);
 }

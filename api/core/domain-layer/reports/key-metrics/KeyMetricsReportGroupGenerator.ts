@@ -57,7 +57,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 
 	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
 		let reader = new KeyMetricReader(this._appContext, this._sessionContext);
-		reader.getKeyMetrics(this._period, false).then((reportItems: KeyMetricsResult) => {
+		reader.getKeyMetrics(this._period, false, this._periodType).then((reportItems: KeyMetricsResult) => {
 			this._keyMetricItem = reportItems.currentItem;
 			resolve(true);
 		}).catch((e) => { reject(e); })

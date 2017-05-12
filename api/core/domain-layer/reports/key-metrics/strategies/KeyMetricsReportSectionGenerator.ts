@@ -6,15 +6,10 @@ import { AReportSectionGeneratorStrategy } from '../../common/report-section-gen
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { ThDateDO } from '../../../../utils/th-dates/data-objects/ThDateDO';
-import { KeyMetricsResultItem, KeyMetric } from '../../../yield-manager/key-metrics/utils/KeyMetricsResult';
+import { KeyMetricsResultItem, KeyMetric, IKeyMetricValueGroup } from '../../../yield-manager/key-metrics/utils/KeyMetricsResult';
 import { IKeyMetricValue, KeyMetricValueType } from '../../../yield-manager/key-metrics/utils/values/IKeyMetricValue';
 import { ThPeriodDO, ThPeriodType } from '../period-converter/ThPeriodDO';
 import { IThDateToThPeriodConverter } from '../period-converter/IThDateToThPeriodConverter';
-
-interface IKeyMetricValueGroup {
-	period: ThPeriodDO;
-	metricValue?: IKeyMetricValue;
-}
 
 export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStrategy {
 	// use to keep the chronological order of the results 
@@ -85,27 +80,13 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
 		var data: any[] = [];
 		this._kmResultItem.metricList.forEach((metric: KeyMetric) => {
-			for (var i = 0; i < metric.valueList.length; i++) {
-				let metricValue = metric.valueList[i];
-				let thDate = this._kmResultItem.dateList[i];
-				let thPeriod = this._thDateToThPeriodMap[thDate.toString()];
-
-				let group = this._periodIdToValueGroupMap[thPeriod.id];
-				if (this._thUtils.isUndefinedOrNull(group.metricValue)) {
-					group.metricValue = metricValue;
-				} else {
-					group.metricValue.add(metricValue);
-				}
-			}
-
-			var typeStr = this._appContext.thTranslate.translate(metric.displayName);
+			let typeStr = this._appContext.thTranslate.translate(metric.displayName);
 			let row: any = [typeStr];
-			this._periodIdList.forEach((periodId: string) => {
-				let group = this._periodIdToValueGroupMap[periodId];
-				row.push(group.metricValue.getDisplayValue(this._periodType));
-				group.metricValue = null;
-			});
+			for (var i = 0; i < metric.aggregatedValueList.length; i++) {				
+				row.push(metric.aggregatedValueList[i].metricValue.getDisplayValue(this._periodType));
+			}
 			data.push(row);
+			row = [];
 		});
 		resolve(data);
 	}
