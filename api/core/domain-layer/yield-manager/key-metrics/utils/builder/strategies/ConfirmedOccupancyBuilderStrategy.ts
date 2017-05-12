@@ -4,6 +4,8 @@ import { KeyMetricType } from '../../KeyMetricType';
 import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
 import { PercentageKeyMetric } from '../../values/PercentageKeyMetric';
 
+import _ = require('underscore');
+
 export class ConfirmedOccupancyBuilderStrategy extends AMetricBuilderStrategy {
     constructor(hotelInventoryStats: IHotelInventoryStats) {
         super(hotelInventoryStats);
@@ -15,15 +17,18 @@ export class ConfirmedOccupancyBuilderStrategy extends AMetricBuilderStrategy {
     protected getValueType(): KeyMetricValueType {
         return KeyMetricValueType.Percentage;
     }
-    protected getKeyMetricValueCore(statsForDate: HotelInventoryStatsForDate): IKeyMetricValue {
+    protected getKeyMetricValueCore(statsForDateList: HotelInventoryStatsForDate[]): IKeyMetricValue {
         var metric = new PercentageKeyMetric();
-        var totalNoOfRooms = statsForDate.totalInventory.noOfRooms;
-        if (totalNoOfRooms == 0) {
-            metric.percentage = 0.0;
-            return metric;
-        }
-        var noOccupiedRooms = statsForDate.confirmedOccupancy.getTotalRoomOccupancy();
-        metric.percentage = this.roundValue(noOccupiedRooms / totalNoOfRooms);
+        metric.percentage = 0;
+        _.forEach(statsForDateList, (statsForDay: HotelInventoryStatsForDate) => {
+            var totalNoOfRooms = statsForDay.totalInventory.noOfRooms;
+            if (totalNoOfRooms == 0) {
+                return;
+            }
+            var noOccupiedRooms = statsForDay.confirmedOccupancy.getTotalRoomOccupancy();
+            metric.percentage += noOccupiedRooms / totalNoOfRooms;
+        });
+        metric.percentage = this.roundValue(metric.percentage) / statsForDateList.length;
         return metric;
     }
     protected getKeyMetricDisplayName(): string {

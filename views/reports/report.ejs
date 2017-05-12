@@ -61,13 +61,23 @@
         height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
         height: 100%;
     }
+    h3, h4 {
+        font-family: 'Roboto', sans-serif;
+        color:#555;
+    }
 
     </style>
 </head>
 
     <body>
+
         <div class="table-box wrapper">
-            
+            <h3><%= meta.name %></h3>
+            <h4><%= meta.generationTime %></h4>
+            <% for (key in meta.displayParams) { %>
+                <h4><b><%= key %>: </b><%= meta.displayParams[key] %></h4>
+            <% } %>
+ 
             <% sectionList.forEach(function(section){ %>
 
                 <% if (section.newLineBefore) { %>

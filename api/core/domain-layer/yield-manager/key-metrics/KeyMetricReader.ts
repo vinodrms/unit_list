@@ -21,10 +21,16 @@ import { HotelInventoryStatsReader } from '../../hotel-inventory-snapshots/stats
 import { IHotelInventoryStats } from '../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
 import { IMetricBuilderStrategy } from './utils/builder/IMetricBuilderStrategy';
 import { MetricBuilderStrategyFactory } from './utils/builder/MetricBuilderStrategyFactory';
+import { ThPeriodType, ThPeriodDO } from "../../reports/key-metrics/period-converter/ThPeriodDO";
+import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
+import { ThDateToThPeriodConverterFactory } from "../../reports/key-metrics/period-converter/ThDateToThPeriodConverterFactory";
+import { ThUtils } from "../../../utils/ThUtils";
 
 import _ = require('underscore');
 
 export class KeyMetricReader {
+    private _thUtils: ThUtils;
+    
     private _currentIndexedInterval: IndexedBookingInterval;
     private _previousIndexedInterval: IndexedBookingInterval;
 
@@ -38,14 +44,16 @@ export class KeyMetricReader {
     private _keyMetricsResult: KeyMetricsResult;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+        this._thUtils = new ThUtils();
     }
 
-    public getKeyMetrics(yieldManagerPeriodDO: YieldManagerPeriodDO, includePreviousPeriod: boolean = true): Promise<KeyMetricsResult> {
+    public getKeyMetrics(yieldManagerPeriodDO: YieldManagerPeriodDO, includePreviousPeriod: boolean = true, 
+                            dataAggregationType: ThPeriodType = ThPeriodType.Day): Promise<KeyMetricsResult> {
         return new Promise<KeyMetricsResult>((resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }) => {
-            this.getKeyMetricsCore(resolve, reject, yieldManagerPeriodDO, includePreviousPeriod);
+            this.getKeyMetricsCore(resolve, reject, yieldManagerPeriodDO, includePreviousPeriod, dataAggregationType);
         });
     }
-    private getKeyMetricsCore(resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }, yieldManagerPeriodDO: YieldManagerPeriodDO, includePreviousPeriod: boolean) {
+    private getKeyMetricsCore(resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }, yieldManagerPeriodDO: YieldManagerPeriodDO, includePreviousPeriod: boolean, dataAggregationType: ThPeriodType) {
         var ymPeriodParser = new YieldManagerPeriodParser(yieldManagerPeriodDO);
         if (!ymPeriodParser.isValid()) {
             var thError = new ThError(ThStatusCode.KeyMetricReaderInvalidInterval, null);
@@ -82,7 +90,7 @@ export class KeyMetricReader {
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
                 this._keyMetricsResult = new KeyMetricsResult();
-                return this.getKeyMetricsResultItem(this._currentIndexedInterval);
+                return this.getKeyMetricsResultItem(this._currentIndexedInterval, dataAggregationType);
             }).then((currentItem: KeyMetricsResultItem) => {
                 this._keyMetricsResult.currentItem = currentItem;
                 if (!includePreviousPeriod) {
@@ -90,7 +98,7 @@ export class KeyMetricReader {
                         resolve(null);
                     });
                 }
-                return this.getKeyMetricsResultItem(this._previousIndexedInterval);
+                return this.getKeyMetricsResultItem(this._previousIndexedInterval, dataAggregationType);
             }).then((previousItem: KeyMetricsResultItem) => {
                 this._keyMetricsResult.previousItem = previousItem;
                 resolve(this._keyMetricsResult);
@@ -103,12 +111,12 @@ export class KeyMetricReader {
             });
     }
 
-    private getKeyMetricsResultItem(indexedInterval: IndexedBookingInterval): Promise<KeyMetricsResultItem> {
+    private getKeyMetricsResultItem(indexedInterval: IndexedBookingInterval, dataAggregationType: ThPeriodType): Promise<KeyMetricsResultItem> {
         return new Promise<KeyMetricsResultItem>((resolve: { (result: KeyMetricsResultItem): void }, reject: { (err: ThError): void }) => {
-            this.getKeyMetricsResultItemCore(resolve, reject, indexedInterval);
+            this.getKeyMetricsResultItemCore(resolve, reject, indexedInterval, dataAggregationType);
         });
     }
-    private getKeyMetricsResultItemCore(resolve: { (result: KeyMetricsResultItem): void }, reject: { (err: ThError): void }, indexedInterval: IndexedBookingInterval) {
+    private getKeyMetricsResultItemCore(resolve: { (result: KeyMetricsResultItem): void }, reject: { (err: ThError): void }, indexedInterval: IndexedBookingInterval, dataAggregationType) {
         var statsReader = new HotelInventoryStatsReader(this._appContext, this._sessionContext, {
             currentRoomList: this._loadedRoomList,
             currentAllotmentList: this._loadedAllotmentList,
@@ -123,16 +131,43 @@ export class KeyMetricReader {
                 indexedInterval.getArrivalDate().buildPrototype(),
                 indexedInterval.getDepartureDate().buildPrototype()
             );
+            let aggregationPeriodList = this.getAggregationPeriodList(resultItem.dateList, dataAggregationType);
+            resultItem.aggregationPeriodList = aggregationPeriodList;
+
             resultItem.metricList = [];
             var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedRoomCategoryStatsList);
             var metricBuilderStrategyList: IMetricBuilderStrategy[] = metricFactory.getMetricStrategies();
+
             _.forEach(metricBuilderStrategyList, (metricBuilderStrategy: IMetricBuilderStrategy) => {
-                var keyMetric = metricBuilderStrategy.buildKeyMetric(indexedInterval.bookingDateList);
+                var keyMetric = metricBuilderStrategy.buildKeyMetric(indexedInterval.bookingDateList, aggregationPeriodList);
                 resultItem.metricList.push(keyMetric);
             });
             resolve(resultItem);
         }).catch((error: any) => {
             reject(error);
         });
+    }
+
+    public getAggregationPeriodList(thDateList: ThDateDO[], aggregationType: ThPeriodType): ThPeriodDO[] {
+        let converterFactory = new ThDateToThPeriodConverterFactory();
+        let periodConverter = converterFactory.getConverter(aggregationType);
+        
+        let periodIdToPeriodMap: { [index: string]: ThPeriodDO; } = {};
+        let periodIdList = [];
+        _.forEach(thDateList, (date: ThDateDO) => {
+            let period = periodConverter.convert(date);
+
+            if (this._thUtils.isUndefinedOrNull(periodIdToPeriodMap[period.id])) {
+                periodIdToPeriodMap[period.id] = period;
+                periodIdList.push(period.id);
+            }
+        });
+        
+        let periodList = [];
+        _.forEach(periodIdList, (periodId: string) => {
+            periodList.push(periodIdToPeriodMap[periodId]);
+        });
+
+        return periodList;
     }
 }
