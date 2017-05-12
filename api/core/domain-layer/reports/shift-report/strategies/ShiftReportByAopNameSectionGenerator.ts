@@ -36,6 +36,10 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
         }
     }
 
+    protected getSummary(): Object {
+		return {}
+	}
+
     protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
         let mpmDetailsDict = this.getProductDetailsDict();
         var totalTransaction = 0;

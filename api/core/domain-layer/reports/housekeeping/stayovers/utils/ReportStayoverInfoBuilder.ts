@@ -41,13 +41,14 @@ export class ReportStayoverInfoBuilder {
 			roomNumber: this._room ? this._room.name : null,
 			customerName: this._roomInfo.customerName,
 			companyOrTA: this._companyOrTravelAgency ? this._companyOrTravelAgency.customerDetails.getName() : null,
+			interval: (this._booking && this._booking.interval) ? this._booking.interval.toString() : null,
+			noNights: (this._booking && this._booking.interval) ? this._booking.interval.getNumberOfDays() : null,
 			noAdults: this._roomInfo.bookingCapacity ? this._roomInfo.bookingCapacity.noAdults: null,
 			noChildren: this._roomInfo.bookingCapacity ? this._roomInfo.bookingCapacity.noChildren: null,
 			noBabies: this._roomInfo.bookingCapacity ? this._roomInfo.bookingCapacity.noBabies: null,
 			noBabiesSleepingInBabyBeds: this._roomInfo.bookingCapacity ? this._roomInfo.bookingCapacity.noBabyBeds: null,
 			stationaryBeds: this._roomCategoryStats? this._roomCategoryStats.getStationaryBedCount(): null,
 			rollawayBeds: this._roomCategoryStats? this._roomCategoryStats.getRollawayBedCount(): null,
-			departingDate: this._roomInfo.bookingInterval ? this._roomInfo.bookingInterval.getEnd(): null,
 			notes: this._booking ? this._booking.notes : null
 		}
 		return report;

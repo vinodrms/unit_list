@@ -65,6 +65,17 @@
         font-family: 'Roboto', sans-serif;
         color:#555;
     }
+    .summary-row:before, 
+    .summary-row:after {
+        content:"";
+        display: table;
+        clear: both;
+    }
+    .summary-col {
+        float: left;
+        min-height: 1px; 
+        width: 33.33%; 
+    }
 
     </style>
 </head>
@@ -77,6 +88,18 @@
             <% for (key in meta.displayParams) { %>
                 <h4><b><%= key %>: </b><%= meta.displayParams[key] %></h4>
             <% } %>
+            <br><br>
+            <div class="summary-row">
+                <% sectionList.forEach(function(section){ %>
+                    <div class="summary-col">
+                    <% if (section.summary) { %>
+                        <% for (key in section.summary) { %>
+                            <h4><b><%= key %>: </b><%= section.summary[key] %></h4>
+                        <% } %>
+                    <% } %>
+                    </div>
+                <% }); %>
+            </div>
  
             <% sectionList.forEach(function(section){ %>
 

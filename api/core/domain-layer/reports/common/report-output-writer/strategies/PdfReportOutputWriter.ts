@@ -11,7 +11,7 @@ import _ = require('underscore');
 
 export class PdfReportOutputWriter extends AReportOutputWriter {
     private static MaxNoColumnsPerRow_Portrait = 10;
-    private static MaxNoColumnsPerRow_Landscape = 13;
+    private static MaxNoColumnsPerRow_Landscape = 14;
 
     private static NoRowsForNewPage_Portrait = 22;
     private static NoRowsForNewPage_Landscape = 17;

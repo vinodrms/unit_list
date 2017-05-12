@@ -26,6 +26,10 @@ export class BookingsByIntervalReportSectionGenerator extends AReportSectionGene
         }
     }
 
+    protected getSummary(): Object {
+		return {};
+	}
+
     protected getHeader(): ReportSectionHeader {
         return {
             display: true,
