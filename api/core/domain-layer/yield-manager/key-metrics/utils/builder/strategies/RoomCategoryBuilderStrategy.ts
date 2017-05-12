@@ -5,6 +5,8 @@ import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValu
 import { InventoryKeyMetric } from '../../values/InventoryKeyMetric';
 import { RoomCategoryStatsDO } from '../../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 
+import _ = require('underscore');
+
 export class RoomCategoryBuilderStrategy extends AMetricBuilderStrategy {
     constructor(hotelInventoryStats: IHotelInventoryStats, private _roomCategoryStats: RoomCategoryStatsDO) {
         super(hotelInventoryStats);
@@ -16,12 +18,18 @@ export class RoomCategoryBuilderStrategy extends AMetricBuilderStrategy {
     protected getValueType(): KeyMetricValueType {
         return KeyMetricValueType.Inventory;
     }
-    protected getKeyMetricValueCore(statsForDate: HotelInventoryStatsForDate): IKeyMetricValue {
+    protected getKeyMetricValueCore(statsForDateList: HotelInventoryStatsForDate[]): IKeyMetricValue {
         var metric = new InventoryKeyMetric();
         var roomCategoryId = this._roomCategoryStats.roomCategory.id;
-        metric.total = statsForDate.totalInventory.getNumberOfRoomsFor(roomCategoryId);
-        var occupied = statsForDate.confirmedOccupancy.getOccupancyForRoomCategoryId(roomCategoryId) + statsForDate.guaranteedOccupancy.getOccupancyForRoomCategoryId(roomCategoryId);
-        metric.available = metric.total - occupied;
+        metric.total = 0;
+        metric.available = 0;
+        _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
+            let total = statsForDate.totalInventory.getNumberOfRoomsFor(roomCategoryId);
+            let occupied = statsForDate.confirmedOccupancy.getOccupancyForRoomCategoryId(roomCategoryId) + statsForDate.guaranteedOccupancy.getOccupancyForRoomCategoryId(roomCategoryId);
+            let available = total - occupied;
+            metric.total += total;
+            metric.available += available;
+        });
         return metric;
     }
     protected getKeyMetricDisplayName(): string {

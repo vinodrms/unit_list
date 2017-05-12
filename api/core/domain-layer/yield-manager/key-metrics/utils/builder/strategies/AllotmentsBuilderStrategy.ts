@@ -4,6 +4,8 @@ import { KeyMetricType } from '../../KeyMetricType';
 import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
 import { InventoryKeyMetric } from '../../values/InventoryKeyMetric';
 
+import _ = require('underscore');
+
 export class AllotmentsBuilderStrategy extends AMetricBuilderStrategy {
     constructor(hotelInventoryStats: IHotelInventoryStats) {
         super(hotelInventoryStats);
@@ -15,11 +17,16 @@ export class AllotmentsBuilderStrategy extends AMetricBuilderStrategy {
     protected getValueType(): KeyMetricValueType {
         return KeyMetricValueType.Inventory;
     }
-    protected getKeyMetricValueCore(statsForDate: HotelInventoryStatsForDate): IKeyMetricValue {
-        var metric = new InventoryKeyMetric();
-        metric.total = statsForDate.totalInventory.noOfRoomsWithAllotment;
-        var occupied = statsForDate.confirmedOccupancy.getTotalAllotmentOccupancy() + statsForDate.guaranteedOccupancy.getTotalAllotmentOccupancy();
-        metric.available = metric.total - occupied;
+    protected getKeyMetricValueCore(statsForDateList: HotelInventoryStatsForDate[]): IKeyMetricValue {
+        var metric = new InventoryKeyMetric();        
+        metric.total = 0;
+        metric.available = 0;        _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
+            let total = statsForDate.totalInventory.noOfRoomsWithAllotment;
+            let occupied = statsForDate.confirmedOccupancy.getTotalAllotmentOccupancy() + statsForDate.guaranteedOccupancy.getTotalAllotmentOccupancy();
+            let available = total - occupied;
+            metric.total += total;
+            metric.available += available;
+        });
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
