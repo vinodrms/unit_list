@@ -66,6 +66,7 @@ export class HotelOperationsDeparturesInfoBuilder {
             var linkedInvoice = this.getLinkedInvoice(invoiceGroupList, departureItem);
             if (!this._thUtils.isUndefinedOrNull(linkedInvoice)) {
                 departureItem.invoiceGroupId = linkedInvoice.invoiceGroupId;
+                departureItem.invoiceId = linkedInvoice.invoiceDO.id;
                 departureItem.invoicePrice = linkedInvoice.invoiceDO.getPrice();
             }
         });
@@ -102,6 +103,7 @@ export class HotelOperationsDeparturesInfoBuilder {
             customerId: invoice.payerList[0].customerId,
             bookingItemStatus: DeparturelItemBookingStatus.CanNotCheckOut,
             invoiceGroupId: invoiceGroupId,
+            invoiceId: invoice.id,
             invoicePrice: invoice.getPrice()
         }
         this._departuresInfo.departureInfoList.push(departureItemInfo);

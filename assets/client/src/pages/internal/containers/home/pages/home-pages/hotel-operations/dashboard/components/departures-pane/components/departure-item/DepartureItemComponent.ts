@@ -6,7 +6,7 @@ import { AppContext, ThError } from "../../../../../../../../../../../../common/
 import { HotelOperationsRoomService } from "../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService";
 import { CheckOutRoomParam } from "../../../../../../../../../../services/hotel-operations/room/utils/CheckOutRoomParam";
 import { BookingDO } from "../../../../../../../../../../services/bookings/data-objects/BookingDO";
-import { InvoicePaymentStatus } from "../../../../../../../../../../services/invoices/data-objects/InvoiceDO";
+import { InvoicePaymentStatus, InvoiceDO } from "../../../../../../../../../../services/invoices/data-objects/InvoiceDO";
 import { EagerInvoiceGroupsService } from "../../../../../../../../../../services/invoices/EagerInvoiceGroupsService";
 import { InvoiceGroupDO } from "../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO";
 import { InvoiceGroupsService } from "../../../../../../../../../../services/invoices/InvoiceGroupsService";
@@ -21,7 +21,7 @@ declare var $: any;
 
 export class DepartureItemComponent {
     @Input() departureItemVM: DepartureItemInfoVM;
-    @Output() refresh = new EventEmitter();
+    @Output() onCheckOut = new EventEmitter();
 
     isCheckingOut: boolean = false;
 
@@ -69,7 +69,7 @@ export class DepartureItemComponent {
         this._hotelOperationsRoomService.checkOut(chechOutParams).subscribe((updatedBooking: BookingDO) => {
             this._appContext.analytics.logEvent("room", "check-out", "Checked out a room");
             this.isCheckingOut = false;
-            this.refresh.emit();
+            this.onCheckOut.emit();
         }, (error: ThError) => {
             this.isCheckingOut = false;
             this._appContext.toaster.error(error.message);
@@ -92,13 +92,15 @@ export class DepartureItemComponent {
         this._eagerInvoiceGroupsService.getInvoiceGroup(
             this.departureItemVM.departureItemDO.invoiceGroupId
         ).subscribe((invoiceGroup: InvoiceGroupDO) => {
-                for (var j = 0; j < invoiceGroup.invoiceList.length; j++) {
-                    invoiceGroup.invoiceList[j].paymentStatus = InvoicePaymentStatus.Paid;
-                }
+                _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                    if (invoice.id == this.departureItemVM.departureItemDO.invoiceId) {
+                        invoice.paymentStatus = InvoicePaymentStatus.Paid;
+                    }
+                });
                 this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroup).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
                 this._appContext.analytics.logEvent("invoice", "paid", "Marked an invoice as paid");
                 this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was paid succesfully."));
-                this.refresh.emit();
+                this.onCheckOut.emit();
             }, (error: ThError) => {
                 this._appContext.toaster.error(error.message);
             });

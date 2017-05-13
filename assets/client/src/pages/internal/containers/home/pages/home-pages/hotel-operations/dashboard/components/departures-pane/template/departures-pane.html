@@ -31,7 +31,7 @@
 		*ngFor="let departureItemVM of filteredDeparturesVMList"
 		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
 		[departureItemVM] = "departureItemVM" 
-		(refresh)="refresh($event)"
+		(onCheckOut)="refreshParent($event)"
 		(click) = "selectDepartureItem(departureItemVM)">
 	</departure-item>
 </div>

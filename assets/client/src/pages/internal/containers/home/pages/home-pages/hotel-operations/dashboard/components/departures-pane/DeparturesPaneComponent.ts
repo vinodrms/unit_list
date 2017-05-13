@@ -1,4 +1,4 @@
-import {Component, ViewChild, OnInit, Input} from '@angular/core';
+import { Component, ViewChild, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import {IHotelOperationsDashboardDeparturesMediator} from '../../HotelOperationsDashboardComponent';
 import {DepartureItemInfoVM} from '../../../../../../../../services/hotel-operations/dashboard/departures/view-models/DepartureItemInfoVM';
@@ -27,6 +27,7 @@ export class DeparturesPaneComponent implements OnInit {
 	public searchText: string = "";
 
 	@Input() hotelOperationsDashboard: IHotelOperationsDashboardDeparturesMediator;
+	@Output() onRefresh = new EventEmitter();
 
 	constructor(
 		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
@@ -105,6 +106,10 @@ export class DeparturesPaneComponent implements OnInit {
 		this.selectedDate.addDays(-1);
 		this.selectedDate = this.selectedDate.buildPrototype();
 		this.refresh();
+	}
+
+	public refreshParent() {
+		this.onRefresh.emit();
 	}
 
 	public refresh() {

@@ -44,7 +44,6 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
             var hotelAggregatedInfo: HotelAggregatedInfo = result[1];
             var roomCategStatsList: RoomCategoryStatsDO[] = result[2];
             var departuresInfoObject = result[3];
-
             var roomItemIndexer = new RoomItemsIndexer([], roomVMList);
 
             var departuresInfo = new DeparturesInfoDO();

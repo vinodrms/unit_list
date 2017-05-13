@@ -22,12 +22,13 @@ export class DepartureItemInfoDO extends BaseDO {
     bookingItemStatus: DepartureItemBookingStatus;
 
     invoiceGroupId: string;
+    invoiceId: string;
     invoicePrice: number;
 
     bookingNotes: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["customerId", "customerName", "corporateCustomerId", "corporateCustomerName", "bookingId", "groupBookingId", "roomCategoryId", "roomId", "bookingItemStatus", "invoiceGroupId", "invoicePrice", "bookingNotes"];
+        return ["customerId", "customerName", "corporateCustomerId", "corporateCustomerName", "bookingId", "groupBookingId", "roomCategoryId", "roomId", "bookingItemStatus", "invoiceGroupId", "invoiceId", "invoicePrice", "bookingNotes"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);

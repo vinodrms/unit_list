@@ -22,6 +22,7 @@ export interface DeparturelItemInfo {
     bookingItemStatus: DeparturelItemBookingStatus;
 
     invoiceGroupId?: string;
+    invoiceId?: string;
     invoicePrice?: number;
     bookingNotes?: string;
 }
