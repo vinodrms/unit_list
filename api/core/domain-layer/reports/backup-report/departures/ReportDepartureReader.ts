@@ -18,10 +18,14 @@ import { HotelOperationsDeparturesReader } from '../../../../../core/domain-laye
 import { HotelOperationsDeparturesInfo, DeparturelItemInfo } from '../../../../../core/domain-layer/hotel-operations/dashboard/departures/utils/HotelOperationsDeparturesInfo';
 import { RoomCategoryDO } from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import { RoomDO } from '../../../../../core/data-layer/rooms/data-objects/RoomDO';
+import { ThUtils } from "../../../../utils/ThUtils";
 
 
 export class ReportDepartureReader {
+		private _thUtils: ThUtils;
+
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+		this._thUtils = new ThUtils();
 	}
 
 	public read(): Promise<ReportDepartureInfo[]> {
@@ -42,6 +46,9 @@ export class ReportDepartureReader {
 			.then((result: HotelOperationsDeparturesInfo) => {
 				let promiseList = [];
 				result.departureInfoList.forEach((departureInfo: DeparturelItemInfo) => {
+					if (this._thUtils.isUndefinedOrNull(departureInfo.bookingId) || this._thUtils.isUndefinedOrNull(departureInfo.groupBookingId)){
+						return;
+					}
 					let p = this.buildReportDepartureItem(departureInfo)
 					promiseList.push(p);
 				});

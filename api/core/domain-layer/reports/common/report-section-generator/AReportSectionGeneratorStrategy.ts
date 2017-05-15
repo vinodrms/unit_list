@@ -27,11 +27,22 @@ export abstract class AReportSectionGeneratorStrategy implements IReportSectionG
         this.translateMetaValues(item.meta);
         this.getData().then((data: any[][]) => {
             item.data = data;
+            item.summary = this.getSummary();
+            this.translateSummary(item);
             resolve(item);
         }).catch((e: ThError) => {
             reject(e);
         });
     }
+
+    private translateSummary(item: ReportSection) {
+        var translatedSummary = {};
+        for (var key in item.summary) {
+            translatedSummary[this._appContext.thTranslate.translate(key)] = item.summary[key];
+        }
+        item.summary = translatedSummary;
+    }
+
     private translateHeaderValues(header: ReportSectionHeader) {
         if (!_.isArray(header.values)) { return; }
         for (var i = 0; i < header.values.length; i++) {
@@ -45,6 +56,7 @@ export abstract class AReportSectionGeneratorStrategy implements IReportSectionG
     }
     protected abstract getHeader(): ReportSectionHeader;
     protected abstract getMeta(): ReportSectionMeta;
+    protected abstract getSummary(): Object;
 
     private getData(): Promise<any[][]> {
         return new Promise<any[][]>((resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) => {

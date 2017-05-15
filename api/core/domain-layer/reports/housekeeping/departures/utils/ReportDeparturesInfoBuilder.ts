@@ -46,6 +46,8 @@ export class ReportDepartureInfoBuilder {
 			roomNumber: this._room ? this._room.name : null,
 			customerName: this._departureInfo.customerName,
 			companyOrTA: this._companyOrTravelAgency ? this._companyOrTravelAgency.customerDetails.getName() : null,
+			interval: (this._departureInfo.bookingInterval) ? this._departureInfo.bookingInterval.toString() : null,
+			noNights: (this._departureInfo.bookingInterval) ? this._departureInfo.bookingInterval.getNumberOfDays() : null,
 			noAdults: this._departureInfo.bookingCapacity ? this._departureInfo.bookingCapacity.noAdults: null,
 			noChildren: this._departureInfo.bookingCapacity ? this._departureInfo.bookingCapacity.noChildren: null,
 			noBabies: this._departureInfo.bookingCapacity ? this._departureInfo.bookingCapacity.noBabies: null,

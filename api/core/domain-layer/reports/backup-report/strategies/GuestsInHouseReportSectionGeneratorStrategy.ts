@@ -8,17 +8,24 @@ import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/Repo
 
 export class GuestsInHouseReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
 
+	private _totalGuests: number = 0;
+	private _totalAdults: number = 0;
+	private _totalChildren: number = 0;
+	private _totalBabies: number = 0;
+	private _totalBabyBeds: number = 0;
+
 	protected getHeader(): ReportSectionHeader {
 		return {
 			display: true,
 			values: [
 				"Customer name",
 				"Room number",
+				"Arrival/Departure",
+				"Number of Nights",
 				"Adults",
 				"Children",
 				"Babies",
 				"Baby Beds",
-				"Departing Date",
 				"Notes"
 			]
 		};
@@ -30,19 +37,43 @@ export class GuestsInHouseReportSectionGeneratorStrategy extends AReportSectionG
 		}
 	}
 
+	protected getSummary(): Object {
+		return {
+			"Total Number of Guests in House" : this._totalGuests,
+			"Adults": this._totalAdults,
+			"Children": this._totalChildren,
+			"Babies": this._totalBabies,
+			"Baby Beds": this._totalBabyBeds
+		}
+	}
+
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
 		let inhouseReader = new ReportInHouseReader(this._appContext, this._sessionContext);
 		inhouseReader.read().then((reportItems: ReportInHouseItemInfo[]) => {
+			this._totalGuests = reportItems.length;
 			var data = [];
 			reportItems.forEach((item: ReportInHouseItemInfo) => {
+				if (item.noAdults != null) {
+					this._totalAdults += item.noAdults;
+				}
+				if (item.noChildren != null) {
+					this._totalChildren += item.noChildren;
+				}
+				if (item.noBabies != null) {
+					this._totalBabies += item.noBabies;
+				}
+				if (item.noBabyBeds != null) {
+					this._totalBabyBeds += item.noBabyBeds;
+				}
 				let row = [
 					item.customerName,
 					item.roomNumber,
+					item.interval,
+					item.noNights,
 					item.noAdults,
 					item.noChildren,
 					item.noBabies,
 					item.noBabyBeds,
-					item.departingDate,
 					item.notes
 				];
 				data.push(row);

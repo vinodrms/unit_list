@@ -42,6 +42,10 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
         return this._sectionMeta;
     }
 
+    protected getSummary(): Object {
+		return {}
+	}
+
     protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
         let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
         let bookingIdList = this.getBookingIdList();

@@ -909,5 +909,11 @@ export var EnglishTranslations: Object = {
 	"No fee": "No fee",
 	"(reinstatement of %reinstatedInvoiceRef%)": "(reinstatement of %reinstatedInvoiceRef%)",
 	"The invoice was paid successfully": "The invoice was paid successfully",
+	"Arrival/Departure": "Arrival/Departure",
+	"Total Number of Arrivals": "Total Number of Arrivals",
+	"Baby Beds": "Baby Beds",
+	"Total Number of Departures": "Total Number of Departures",
+	"Total Number of Stayovers": "Total Number of Stayovers",
+	"Total Number of Guests in House": "Total Number of Guests in House",
 	
 };

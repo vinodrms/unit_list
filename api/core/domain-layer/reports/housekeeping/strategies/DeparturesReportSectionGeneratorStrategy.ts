@@ -5,7 +5,10 @@ import { ReportDeparturesReader } from "../departures/ReportDeparturesReader";
 import { ReportDepartureItemInfo } from "../departures/utils/ReportDepartureItemInfo";
 
 export class DeparturesReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
-    protected getHeader(): ReportSectionHeader {
+    
+	private _totalDepartures: number;
+	
+	protected getHeader(): ReportSectionHeader {
         return {
 			display: true,
 			values: [
@@ -13,6 +16,8 @@ export class DeparturesReportSectionGeneratorStrategy extends AReportSectionGene
                 "Room",
                 "Customer",
 				"Company/TA",
+				"Arrival/Departure",
+				"Number of Nights",
 				"Adults",
 				"Children",
 				"Babies",
@@ -28,9 +33,16 @@ export class DeparturesReportSectionGeneratorStrategy extends AReportSectionGene
 			title: "Departures"
 		}
     }
+
+	protected getSummary(): Object {
+		return {
+			"Total Number of Departures" : this._totalDepartures
+		}
+	}
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
         let depaturesReader = new ReportDeparturesReader(this._appContext, this._sessionContext);
         depaturesReader.read().then((reportItems: ReportDepartureItemInfo[]) => {
+			this._totalDepartures = reportItems.length;
 			var data = [];
 			reportItems.forEach((item: ReportDepartureItemInfo) => {
 				let row = [
@@ -38,6 +50,8 @@ export class DeparturesReportSectionGeneratorStrategy extends AReportSectionGene
 					item.roomNumber,
 					item.customerName,
 					item.companyOrTA,
+					item.interval,
+					item.noNights,
 					item.noAdults,
 					item.noChildren,
 					item.noBabies,
