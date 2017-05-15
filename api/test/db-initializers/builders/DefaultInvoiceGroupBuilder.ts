@@ -8,6 +8,7 @@ import { AddOnProductDO } from '../../../core/data-layer/add-on-products/data-ob
 import { AddOnProductInvoiceItemMetaDO } from '../../../core/data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import { TestContext } from '../../helpers/TestContext';
 import { HotelDO } from "../../../core/data-layer/hotel/data-objects/HotelDO";
+import { TransactionFeeDO } from "../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 export interface IInvoiceGroupDataSource {
     getInvoiceGroupList(hotel: HotelDO, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]): InvoiceGroupDO[];
@@ -62,6 +63,8 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
         var defaultInvoicePayer =
             InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(defaultBillingCustomer, booking.defaultBillingDetails.paymentMethod);
         defaultInvoicePayer.priceToPay = booking.price.getUnitPrice() * booking.price.getNumberOfItems();
+        defaultInvoicePayer.priceToPayPlusTransactionFee = defaultInvoicePayer.priceToPay;
+        defaultInvoicePayer.transactionFeeSnapshot = TransactionFeeDO.getDefaultTransactionFee();
         invoice.payerList.push(defaultInvoicePayer);
         return invoice;
     }
@@ -90,6 +93,8 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
         invoice.payerList = [];
         payerCustomer.priceToPay = totalAmountToPay;
+        payerCustomer.priceToPayPlusTransactionFee = payerCustomer.priceToPay;
+        payerCustomer.transactionFeeSnapshot = TransactionFeeDO.getDefaultTransactionFee();
         invoice.payerList.push(payerCustomer);
 
         return invoice;

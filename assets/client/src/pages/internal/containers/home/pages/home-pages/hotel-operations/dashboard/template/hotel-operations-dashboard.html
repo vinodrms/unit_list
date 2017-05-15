@@ -2,6 +2,8 @@
 	<div class="hotel-operations-dashboard operations-dashboard">
 		<arrivals-pane [hotelOperationsDashboard]="self" class="pane full-height"></arrivals-pane>
 		<rooms-canvas [hotelOperationsDashboard]="self" class="full-height p-b-32"></rooms-canvas>
-		<departures-pane [hotelOperationsDashboard]="self" class="pane full-height"></departures-pane>
+		<departures-pane [hotelOperationsDashboard]="self" class="pane full-height"
+			(onRefresh)="refresh($event)"
+		></departures-pane>
 	</div>
 </div>
