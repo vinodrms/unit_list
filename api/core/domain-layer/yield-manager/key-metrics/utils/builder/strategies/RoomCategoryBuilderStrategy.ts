@@ -25,7 +25,7 @@ export class RoomCategoryBuilderStrategy extends AMetricBuilderStrategy {
         metric.available = 0;
         _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
             let total = statsForDate.totalInventory.getNumberOfRoomsFor(roomCategoryId);
-            let occupied = statsForDate.confirmedOccupancy.getOccupancyForRoomCategoryId(roomCategoryId) + statsForDate.guaranteedOccupancy.getOccupancyForRoomCategoryId(roomCategoryId);
+            let occupied = statsForDate.confirmedOccupancy.getOccupancyForRoomCategoryId(roomCategoryId) + statsForDate.guaranteedOccupancyOccupyingRoomsFromInventory.getOccupancyForRoomCategoryId(roomCategoryId);
             let available = total - occupied;
             metric.total += total;
             metric.available += available;
