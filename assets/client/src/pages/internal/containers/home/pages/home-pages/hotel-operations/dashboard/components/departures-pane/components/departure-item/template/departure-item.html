@@ -24,10 +24,10 @@
 		</div>
 	</div>
 	<div class="footer">
-		<button class="btn btn-sm btn-green m-r-6" (click)="openRoomModal()" *ngIf="departureItemVM.canCheckOut">
+		<button class="btn btn-sm btn-green m-r-6" (click)="checkOut()" *ngIf="departureItemVM.canCheckOut">
 			<span class="unitpal-font p-r-6" >.</span> <span class="uppercase">{{ 'Check Out' | translate }}</span>
 		</button>
-		<button class="btn btn-sm btn-danger" (click)="openInvoiceModal()" *ngIf="departureItemVM.hasInvoice">
+		<button class="btn btn-sm btn-danger" (click)="payInvoice()" *ngIf="departureItemVM.hasInvoice">
 			<span class="unitpal-font p-r-6" >L</span> <span class="uppercase">{{ 'Pay' | translate }}</span>
 		</button>
 		<div class="flex-row flex-center-v yellow-color" *ngIf="!departureItemVM.hasInvoice && !departureItemVM.canCheckOut">

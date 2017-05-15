@@ -92,7 +92,7 @@ export class BookingSearch {
                 return roomCategStatsAggregator.getRoomCategoryStatsList();
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 var roomCategoryStatsFilter = new RoomCategoryStatsFilter(this._searchParams.configCapacity);
-                this._loadedRoomCategoryStatsList = roomCategoryStatsFilter.filterSync(roomCategoryStatsList);
+                this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
                 var resultBuilder = new BookingSearchResultBuilder(this._appContext, this._sessionContext);
                 return resultBuilder.build({

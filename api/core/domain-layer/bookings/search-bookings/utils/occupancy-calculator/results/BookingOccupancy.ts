@@ -1,6 +1,6 @@
 import {ThUtils} from '../../../../../../utils/ThUtils';
 import {IRoom} from '../../../../../../data-layer/rooms/data-objects/IRoom';
-import {BookingDO} from '../../../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingDO, BookingConfirmationStatus } from '../../../../../../data-layer/bookings/data-objects/BookingDO';
 import {IBookingOccupancy} from './IBookingOccupancy';
 import {BookingOccupancyDO} from './BookingOccupancyDO';
 import {BookingUtils} from '../utils/BookingUtils';
@@ -25,7 +25,11 @@ export class BookingOccupancy implements IBookingOccupancy {
     }
 
     public initializeFromBookings(bookingList: BookingDO[]) {
-        this.indexedRoomCategoryIdOccupancy = _.countBy(bookingList, (booking: BookingDO) => {
+        let bookingsThatAreNotAlreadyCheckedOut = _.filter(bookingList, (booking: BookingDO) => {
+            return booking.confirmationStatus != BookingConfirmationStatus.CheckedOut;
+        });
+
+        this.indexedRoomCategoryIdOccupancy = _.countBy(bookingsThatAreNotAlreadyCheckedOut, (booking: BookingDO) => {
             if (this._thUtils.isUndefinedOrNull(booking.roomId) || !_.isString(booking.roomId)) {
                 return this._bookingUtils.transformToEmptyStringIfNull(booking.roomCategoryId);
             }
@@ -35,10 +39,10 @@ export class BookingOccupancy implements IBookingOccupancy {
             }
             return actualRoom.categoryId;
         });
-        this.indexedRoomIdOccupancy = _.countBy(bookingList, (booking: BookingDO) => {
+        this.indexedRoomIdOccupancy = _.countBy(bookingsThatAreNotAlreadyCheckedOut, (booking: BookingDO) => {
             return this._bookingUtils.transformToEmptyStringIfNull(booking.roomId);
         });
-        this.indexedAllotmentIdOccupancy = _.countBy(bookingList, (booking: BookingDO) => {
+        this.indexedAllotmentIdOccupancy = _.countBy(bookingsThatAreNotAlreadyCheckedOut, (booking: BookingDO) => {
             return this._bookingUtils.transformToEmptyStringIfNull(booking.allotmentId);
         });
     }

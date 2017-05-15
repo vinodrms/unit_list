@@ -34,6 +34,10 @@ export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGe
 		}
 	}
 
+	protected getSummary(): Object {
+		return {}
+	}
+
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
 		this.createPaymentMethodIdToNameMap().then((pmIdToNameMap) => {
 			let mpmDetailsDict = this.getPaymentMethodsDetailsDict();

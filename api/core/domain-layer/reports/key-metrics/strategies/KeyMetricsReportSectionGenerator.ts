@@ -74,7 +74,11 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 	}
 
 	protected getMeta(): ReportSectionMeta {
-		return {}
+		return {};
+	}
+
+	protected getSummary(): Object {
+		return {};
 	}
 
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
