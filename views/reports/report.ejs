@@ -85,10 +85,13 @@
         <div class="table-box wrapper">
             <h3><%= meta.name %></h3>
             <h4><%= meta.generationTime %></h4>
+            
+            <br>
+            
             <% for (key in meta.displayParams) { %>
                 <h4><b><%= key %>: </b><%= meta.displayParams[key] %></h4>
             <% } %>
-            <br><br>
+
             <div class="summary-row">
                 <% sectionList.forEach(function(section){ %>
                     <div class="summary-col">
@@ -102,11 +105,7 @@
             </div>
  
             <% sectionList.forEach(function(section){ %>
-
-                <% if (section.newLineBefore) { %>
-                    <div style="page-break-before:always;">
-                <% } %>
-
+                
                 <br>
 
                 <% if (section.meta.title) { %>
@@ -135,10 +134,6 @@
                     <% }); %>
 
                 </table>
-                
-                <% if (section.newLineBefore) { %>
-                    </div>
-                <% } %>
 
             <% }); %>
         </div>
