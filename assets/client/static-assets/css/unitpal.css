@@ -1712,7 +1712,7 @@ table.lazy-loading .th-pagination {
     box-shadow: 0 0 3px;
     display: none;
     float: left;
-    font-size: 12px;
+    font-size: 15px;
     left: 0;
     list-style: none outside none;
     padding: 0;
@@ -1735,8 +1735,13 @@ table.lazy-loading .th-pagination {
     top: -6px;
 }
 
-.dropdown-menu>li>a {
+.dropdown-menu.actions>li {
+    height: 35px;
+}
+
+.dropdown-menu.actions>li>a {
     color: #5A738E;
+    height: 100%;
 }
 
 .info-number .badge {
