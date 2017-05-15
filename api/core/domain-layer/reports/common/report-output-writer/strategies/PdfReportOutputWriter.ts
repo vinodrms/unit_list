@@ -11,10 +11,7 @@ import _ = require('underscore');
 
 export class PdfReportOutputWriter extends AReportOutputWriter {
     private static MaxNoColumnsPerRow_Portrait = 10;
-    private static MaxNoColumnsPerRow_Landscape = 13;
-
-    private static NoRowsForNewPage_Portrait = 22;
-    private static NoRowsForNewPage_Landscape = 17;
+    private static MaxNoColumnsPerRow_Landscape = 14;
 
     constructor(private _appContext: AppContext) {
         super();
@@ -22,7 +19,6 @@ export class PdfReportOutputWriter extends AReportOutputWriter {
 
     protected saveToFileCore(resolve: { (result: ReportFileResult): void }, reject: { (err: ThError): void }, group: ReportGroup) {
         let splitReportGroup = this.getReportGroupWithSplitSections(group);
-        this.addNewLineBreaksIfNecessary(splitReportGroup);
         let pdfReportsService = this._appContext.getServiceFactory().getPdfReportsService();
         pdfReportsService.generatePdfReport({
             reportType: ReportType.Report,
@@ -92,30 +88,5 @@ export class PdfReportOutputWriter extends AReportOutputWriter {
             return PdfReportOutputWriter.MaxNoColumnsPerRow_Landscape;
         }
         return PdfReportOutputWriter.MaxNoColumnsPerRow_Portrait;
-    }
-
-    private addNewLineBreaksIfNecessary(group: ReportGroup) {
-        let noRowsForNewPage = this.getNoRowsForNewPage(group);
-        var noRowsOnCurrentPage = 0;
-        group.sectionList.forEach((section: ReportSection, index: number) => {
-            noRowsOnCurrentPage += section.data.length;
-            if (section.header.display) {
-                noRowsOnCurrentPage += 1;
-            }
-            if (section.meta.title) {
-                noRowsOnCurrentPage += 1;
-            }
-
-            if (noRowsOnCurrentPage > noRowsForNewPage) {
-                noRowsOnCurrentPage = 0;
-                section.newLineBefore = true;
-            }
-        });
-    }
-    private getNoRowsForNewPage(group: ReportGroup): number {
-        if (group.meta.pageOrientation === PageOrientation​​.Landscape) {
-            return PdfReportOutputWriter.NoRowsForNewPage_Landscape;
-        }
-        return PdfReportOutputWriter.NoRowsForNewPage_Portrait;
     }
 }

@@ -36,6 +36,10 @@ export class ShiftReportPaidByAgreementSectionGenerator extends AReportSectionGe
         }
     }
 
+    protected getSummary(): Object {
+		return {}
+	}
+
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
         let data = [];
 

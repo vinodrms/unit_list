@@ -25,6 +25,10 @@ export class BookingsForPriceProductReportSectionGenerator extends AReportSectio
         }
     }
 
+    protected getSummary(): Object {
+		return {};
+	}
+
     protected getHeader(): ReportSectionHeader {
         return {
             display: true,

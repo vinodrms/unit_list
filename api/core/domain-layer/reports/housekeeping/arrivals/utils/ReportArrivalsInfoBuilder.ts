@@ -48,6 +48,8 @@ export class ReportArrivalsItemInfoBuilder {
 			roomCategory: this._roomCategory ? this._roomCategory.displayName : null,
 			customerName: this._arrivalInfo.customerName,
 			companyOrTA: this._companyOrTravelAgency ? this._companyOrTravelAgency.customerDetails.getName() : null,
+			interval: (this._booking && this._booking.interval) ? this._booking.interval.toString() : null,
+			noNights: (this._booking && this._booking.interval) ? this._booking.interval.getNumberOfDays() : null,
 			noAdults: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noAdults : null,
 			noChildren: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noChildren : null,
 			noBabies: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noBabies : null,
