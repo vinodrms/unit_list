@@ -4,6 +4,8 @@ import { KeyMetricType } from '../../KeyMetricType';
 import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
 import { PriceKeyMetric } from '../../values/PriceKeyMetric';
 
+import _ = require('underscore');
+
 export class RoomRevenueBuilderStrategy extends AMetricBuilderStrategy {
     constructor(hotelInventoryStats: IHotelInventoryStats) {
         super(hotelInventoryStats);
@@ -15,11 +17,13 @@ export class RoomRevenueBuilderStrategy extends AMetricBuilderStrategy {
     protected getValueType(): KeyMetricValueType {
         return KeyMetricValueType.Price;
     }
-    protected getKeyMetricValueCore(statsForDate: HotelInventoryStatsForDate): IKeyMetricValue {
-        var metric = new PriceKeyMetric({
-            computeAverageForMultipleValues: false
+    protected getKeyMetricValueCore(statsForDateList: HotelInventoryStatsForDate[]): IKeyMetricValue {
+        let metric = new PriceKeyMetric();
+        metric.price = 0;
+        _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
+            metric.price += statsForDate.confirmedRevenue.roomRevenue + statsForDate.guaranteedRevenue.roomRevenue;
         });
-        metric.price = this.roundValueToNearestInteger(statsForDate.confirmedRevenue.roomRevenue + statsForDate.guaranteedRevenue.roomRevenue);
+        metric.price = this.roundValueToNearestInteger(metric.price);
         return metric;
     }
     protected getKeyMetricDisplayName(): string {

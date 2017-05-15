@@ -18,6 +18,7 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
     private _indexedBookingById: { [id: string]: BookingDO };
     
     constructor(appContext: AppContext, sessionContext: SessionContext,
+        private _allInvoiceGroupList: InvoiceGroupDO[],
         private _paidInvoiceGroupList: InvoiceGroupDO[],
         private _sectionMeta: ReportSectionMeta) {
         super(appContext, sessionContext);
@@ -85,8 +86,12 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                     let paidTimestampStr = !invoice.paidTimestamp.isValid()? '' : invoice.paidTimestamp.toString();
                     
                     let invoiceRefDisplayString = invoice.invoiceReference;
+                    
                     if(invoice.isReinstatement()) {
-                        let reinstatedInvoiceRef = invoiceGroup.getReinstatedInvoiceReference(invoice.id);
+                        let unfilteredInvoiceGroup = _.find(this._allInvoiceGroupList, (group: InvoiceGroupDO) => {
+                            return group.id === invoiceGroup.id;
+                        });
+                        let reinstatedInvoiceRef = unfilteredInvoiceGroup.getReinstatedInvoiceReference(invoice.id);
                         invoiceRefDisplayString += ' ' + this._appContext.thTranslate.translate('(reinstatement of %reinstatedInvoiceRef%)', {
                             reinstatedInvoiceRef: reinstatedInvoiceRef 
                         });

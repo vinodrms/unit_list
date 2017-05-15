@@ -15,7 +15,8 @@ export class BackUpReportGroupGenerator extends AReportGeneratorStrategy {
 	protected getParamsValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([]);
 	}
-	protected loadParameters(params: any) { }
+	protected loadParameters(params: any) {
+	}
 
 	protected getMeta(): ReportGroupMeta {
 		return {

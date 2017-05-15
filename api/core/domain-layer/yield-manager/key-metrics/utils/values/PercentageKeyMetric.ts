@@ -8,11 +8,7 @@ export class PercentageKeyMetric extends AKeyMetricValue {
 
     public getDisplayValue(periodType: ThPeriodType): string {
         let thUtils = new ThUtils();
-        let actualPercentage = (this.percentage * 100.0) / this._noValues;
+        let actualPercentage = this.percentage * 100.0;
         return thUtils.roundNumberToNearestInteger(actualPercentage).toString() + "%";
-    }
-
-    protected addCore(value: any) {
-        this.percentage += value.percentage;
     }
 }
