@@ -22,8 +22,10 @@
 		</div>
 	</div>
 </div>
+<div class="rooms-canvas-upper"></div>
 <div customScroll class="body rooms-canvas">
 	<div *ngFor="let roomVM of filteredRoomVMList">
 		<room-card [roomVM]="roomVM" [roomCanvas]="self" (dropped)="dropHandled($event)"></room-card>
 	</div>
 </div>
+<div class="rooms-canvas-lower"></div>

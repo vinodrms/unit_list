@@ -2360,7 +2360,15 @@ a.btn.btn-square:focus {
 
     rooms-canvas .body {
         overflow-y: hidden;
-        height: calc(100% - 49px);
+        height: calc(100% - 81px);
+    }
+    .rooms-canvas-upper {
+        height: 16px;
+        width: 100%;
+    }
+    .rooms-canvas-lower {
+        height: 16px;
+        width: 100%;
     }
 
         /* Room cards */
@@ -2505,7 +2513,7 @@ a.btn.btn-square:focus {
         .rooms-canvas {
             display: flex;
             flex-direction: row;
-            padding: 24px 24px 24px 12px;
+            padding: 0px 12px 12px 0px;
         }
 
         .room-card .card-header{
@@ -2549,7 +2557,7 @@ a.btn.btn-square:focus {
             align-items: center;
             justify-content: center;
             border-right: 1px solid #dbdbdb;
-            width: 13px;
+            width: 18px;
         }
 
         arrival-item .right:hover{

@@ -18,7 +18,10 @@ export class RoomAvailabilityModalComponent extends BaseComponent implements ICu
         private _modalDialogRef: ModalDialogRef<any>,
         private _roomAvailabilityModalInput: RoomAvailabilityModalInput ) {
         super();
-        this._roomCategoryItemList = _roomAvailabilityModalInput.roomCategoryItemList;
+
+        this._roomCategoryItemList = _.sortBy(_roomAvailabilityModalInput.roomCategoryItemList, (roomCategoryItem: RoomCategoryItemDO) => {
+            return roomCategoryItem.stats.roomCategory.displayName;
+        });
     }
 
     public isBlocking() : boolean {
