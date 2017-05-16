@@ -38,9 +38,10 @@ export class HotelInventoryIndexer {
     private _dateUtils: ThDateUtils;
     private _indexedInterval: IndexedBookingInterval;
     private _indexedRoomsById: { [id: string]: IRoom; };
-    
+
     private _confirmedBookingsContainer: BookingsContainer;
     private _guaranteedBookingsContainer: BookingsContainer;
+    private _guaranteedOccupyingRoomsFromInventoryBookingsContainer: BookingsContainer;
     private _penaltyBookingsContainer: BookingsContainer;
     private _invoiceStats: IInvoiceStats;
 
@@ -94,6 +95,12 @@ export class HotelInventoryIndexer {
             [BookingConfirmationStatus.Guaranteed, BookingConfirmationStatus.CheckedIn, BookingConfirmationStatus.CheckedOut]);
         this._guaranteedBookingsContainer = new BookingsContainer(guaranteedBookingList);
 
+        this._guaranteedOccupyingRoomsFromInventoryBookingsContainer = new BookingsContainer(
+            _.filter(guaranteedBookingList, booking => {
+                return _.contains(BookingDOConstraints.ConfirmationStatuses_OccupyingRoomsFromInventory, booking.confirmationStatus);
+            })
+        );
+
         var penaltyBookingList = this.filterBookingsByStatus(bookingList, [BookingConfirmationStatus.NoShowWithPenalty, BookingConfirmationStatus.Cancelled]);
         penaltyBookingList = _.filter(penaltyBookingList, (booking: BookingDO) => {
             return this._bookingUtils.hasPenalty(booking, {
@@ -114,6 +121,9 @@ export class HotelInventoryIndexer {
     }
     public getGuaranteedOccupancy(thDate: ThDateDO): IBookingOccupancy {
         return this.getOccupancy(this._guaranteedBookingsContainer, thDate);
+    }
+    public getGuaranteedOccupyingRoomsFromInventoryOccupancy(thDate: ThDateDO): IBookingOccupancy {
+        return this.getOccupancy(this._guaranteedOccupyingRoomsFromInventoryBookingsContainer, thDate);
     }
     private getOccupancy(bookingsContainer: BookingsContainer, thDate: ThDateDO): BookingOccupancy {
         var indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(thDate);
@@ -148,7 +158,7 @@ export class HotelInventoryIndexer {
         return revenue;
     }
 
-    private getBookingRoomPriceForDate(bookingPrice: BookingPriceDO, bookingCapacity: ConfigCapacityDO​​, totalNoNights: number, thDate: ThDateDO): number {
+    private getBookingRoomPriceForDate(bookingPrice: BookingPriceDO, bookingCapacity: ConfigCapacityDO, totalNoNights: number, thDate: ThDateDO): number {
         if (bookingPrice.isPenalty()) {
             return bookingPrice.totalRoomPrice / totalNoNights;
         }
@@ -170,7 +180,7 @@ export class HotelInventoryIndexer {
         return roomPriceForNight;
     }
 
-    private getBookingOtherPriceAvgPerNight(bookingPrice: BookingPriceDO, bookingCapacity: ConfigCapacityDO​​, totalNoNights: number): number {
+    private getBookingOtherPriceAvgPerNight(bookingPrice: BookingPriceDO, bookingCapacity: ConfigCapacityDO, totalNoNights: number): number {
         if (bookingPrice.isPenalty()) {
             return 0.0;
         }

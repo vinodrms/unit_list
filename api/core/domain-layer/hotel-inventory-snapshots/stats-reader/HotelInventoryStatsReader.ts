@@ -98,6 +98,7 @@ export class HotelInventoryStatsReader {
                 totalInventory: this.getTotalInventoryForDate(date),
                 confirmedOccupancy: this._inventoryIndexer.getConfirmedOccupancy(date),
                 guaranteedOccupancy: this._inventoryIndexer.getGuaranteedOccupancy(date),
+                guaranteedOccupancyOccupyingRoomsFromInventory: this._inventoryIndexer.getGuaranteedOccupyingRoomsFromInventoryOccupancy(date),
                 confirmedRevenue: this._inventoryIndexer.getConfirmedRevenue(date),
                 guaranteedRevenue: this._inventoryIndexer.getGuaranteedRevenue(date)
             }

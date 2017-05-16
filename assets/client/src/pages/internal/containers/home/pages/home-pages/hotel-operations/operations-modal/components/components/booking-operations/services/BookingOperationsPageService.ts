@@ -71,16 +71,7 @@ export class BookingOperationsPageService {
             var invoiceGroupList: InvoiceGroupDO[] = result[5];
             if (invoiceGroupList.length > 0) {
                 pageData.invoiceGroupDO = invoiceGroupList[0];
-
-                let debitInvoicesRelatedToBooking = _.filter(pageData.invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
-                    return invoice.bookingId === pageData.bookingDO.id && invoice.accountingType === InvoiceAccountingType.Debit;
-                });
-
-                debitInvoicesRelatedToBooking = _.sortBy(debitInvoicesRelatedToBooking, (invoice: InvoiceDO) => {
-                    return invoice.paidDateTimeUtcTimestamp;                    
-                });
-
-                pageData.invoiceDO = _.last(debitInvoicesRelatedToBooking);
+                pageData.invoiceDO = pageData.invoiceGroupDO.getInvoiceForBooking(pageData.bookingDO.id);
             }
             pageData.reservedAddOnProductsContainer = result[6];
             return pageData;
