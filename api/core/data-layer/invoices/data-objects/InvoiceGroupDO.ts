@@ -1,5 +1,5 @@
 import { BaseDO } from '../../common/base/BaseDO';
-import { InvoiceDO, InvoicePaymentStatus } from './InvoiceDO';
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from './InvoiceDO';
 import { InvoiceItemDO } from './items/InvoiceItemDO';
 import { InvoicePayerDO } from './payers/InvoicePayerDO';
 import { IBookingRepository } from '../../bookings/repositories/IBookingRepository';
@@ -94,34 +94,41 @@ export class InvoiceGroupDO extends BaseDO {
             invoiceDO.removeItemsPopulatedFromBooking();
         });
     }
+
     public getInvoiceForBooking(bookingId: string): InvoiceDO {
-        return _.find(this.invoiceList, (innerInvoice: InvoiceDO) => {
-            return innerInvoice.bookingId === bookingId;
+        let debitInvoicesRelatedToBooking = _.filter(this.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.bookingId === bookingId && invoice.accountingType === InvoiceAccountingType.Debit;
         });
+
+        debitInvoicesRelatedToBooking = _.sortBy(debitInvoicesRelatedToBooking, (invoice: InvoiceDO) => {
+            return invoice.paidDateTimeUtcTimestamp;
+        });
+
+        return _.last(debitInvoicesRelatedToBooking);
     }
 
     public attachIdsToInvoicesIfNecessary() {
         let thUtils = new ThUtils();
-        
+
         _.forEach(this.invoiceList, (invoice: InvoiceDO) => {
-            if(thUtils.isUndefinedOrNull(invoice.id)) {
+            if (thUtils.isUndefinedOrNull(invoice.id)) {
                 invoice.id = thUtils.generateUniqueID();
             }
         });
     }
-    
+
     public invoiceIsReinstated(invoiceId: string): boolean {
         let thUtils = new ThUtils();
 
         let lookedUpInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
             return invoice.id === invoiceId;
         });
-        if(thUtils.isUndefinedOrNull(lookedUpInvoice)) {
+        if (thUtils.isUndefinedOrNull(lookedUpInvoice)) {
             return false;
         }
 
         let reinstatementInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
-            invoice.reinstatedInvoiceId === lookedUpInvoice.id;    
+            invoice.reinstatedInvoiceId === lookedUpInvoice.id;
         });
 
         return !thUtils.isUndefinedOrNull(reinstatementInvoice);
@@ -137,6 +144,6 @@ export class InvoiceGroupDO extends BaseDO {
         });
 
         let thUtils = new ThUtils();
-        return thUtils.isUndefinedOrNull(reinstatedInvoice)? '' : reinstatedInvoice.invoiceReference;
+        return thUtils.isUndefinedOrNull(reinstatedInvoice) ? '' : reinstatedInvoice.invoiceReference;
     }
 }

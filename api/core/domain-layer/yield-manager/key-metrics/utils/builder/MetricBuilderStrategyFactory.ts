@@ -31,6 +31,11 @@ export class MetricBuilderStrategyFactory {
             new AllotmentsBuilderStrategy(this._hotelInventoryStats),
             new RoomsBuilderStrategy(this._hotelInventoryStats)
         ];
+
+        this._roomCategoryStatsList = _.sortBy(this._roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
+             return roomCategoryStats.roomCategory.displayName; 
+        });
+
         _.forEach(this._roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
             metricList.push(new RoomCategoryBuilderStrategy(this._hotelInventoryStats, roomCategoryStats));
         });
