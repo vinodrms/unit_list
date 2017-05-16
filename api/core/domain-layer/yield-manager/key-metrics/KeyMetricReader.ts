@@ -25,6 +25,7 @@ import { ThPeriodType, ThPeriodDO } from "../../reports/key-metrics/period-conve
 import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
 import { ThDateToThPeriodConverterFactory } from "../../reports/key-metrics/period-converter/ThDateToThPeriodConverterFactory";
 import { ThUtils } from "../../../utils/ThUtils";
+import { KeyMetricsReaderInput } from "./utils/KeyMetricsReaderInput";
 
 import _ = require('underscore');
 
@@ -47,17 +48,16 @@ export class KeyMetricReader {
         this._thUtils = new ThUtils();
     }
 
-    public getKeyMetrics(yieldManagerPeriodDO: YieldManagerPeriodDO, includePreviousPeriod: boolean = true, 
-                            dataAggregationType: ThPeriodType = ThPeriodType.Day): Promise<KeyMetricsResult> {
+    public getKeyMetrics(input: KeyMetricsReaderInput): Promise<KeyMetricsResult> {
         return new Promise<KeyMetricsResult>((resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }) => {
-            this.getKeyMetricsCore(resolve, reject, yieldManagerPeriodDO, includePreviousPeriod, dataAggregationType);
+            this.getKeyMetricsCore(resolve, reject, input);
         });
     }
-    private getKeyMetricsCore(resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }, yieldManagerPeriodDO: YieldManagerPeriodDO, includePreviousPeriod: boolean, dataAggregationType: ThPeriodType) {
-        var ymPeriodParser = new YieldManagerPeriodParser(yieldManagerPeriodDO);
+    private getKeyMetricsCore(resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }, input: KeyMetricsReaderInput) {
+        var ymPeriodParser = new YieldManagerPeriodParser(input.yieldManagerPeriodDO);
         if (!ymPeriodParser.isValid()) {
             var thError = new ThError(ThStatusCode.KeyMetricReaderInvalidInterval, null);
-            ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid interval for key metrics reader", yieldManagerPeriodDO, thError);
+            ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid interval for key metrics reader", input.yieldManagerPeriodDO, thError);
             reject(thError);
             return;
         }
@@ -90,15 +90,15 @@ export class KeyMetricReader {
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
                 this._keyMetricsResult = new KeyMetricsResult();
-                return this.getKeyMetricsResultItem(this._currentIndexedInterval, dataAggregationType);
+                return this.getKeyMetricsResultItem(this._currentIndexedInterval, input.dataAggregationType);
             }).then((currentItem: KeyMetricsResultItem) => {
                 this._keyMetricsResult.currentItem = currentItem;
-                if (!includePreviousPeriod) {
+                if (!input.includePreviousPeriod) {
                     return new Promise<KeyMetricsResultItem>((resolve: { (result: KeyMetricsResultItem): void }, reject: { (err: ThError): void }) => {
                         resolve(null);
                     });
                 }
-                return this.getKeyMetricsResultItem(this._previousIndexedInterval, dataAggregationType);
+                return this.getKeyMetricsResultItem(this._previousIndexedInterval, input.dataAggregationType);
             }).then((previousItem: KeyMetricsResultItem) => {
                 this._keyMetricsResult.previousItem = previousItem;
                 resolve(this._keyMetricsResult);

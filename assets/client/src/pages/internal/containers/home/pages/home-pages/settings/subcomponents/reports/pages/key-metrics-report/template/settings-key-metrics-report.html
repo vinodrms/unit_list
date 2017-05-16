@@ -26,16 +26,6 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-6 form-group">
-					<label>{{ 'Group Values By' | translate }}</label>
-					<div class="input-group">
-						<select class="form-control" [ngModel]="selectedPeriodType" (ngModelChange)="didSelectPeriodOption($event)">
-							<option *ngFor="let periodOption of periodOptionList" [value]="periodOption.type">{{ periodOption.displayName | translate }}</option>
-						</select>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-6 form-group">
 					<label>{{ 'Exclude commission' | translate }} </label>
 					<div class="input-group">
 						<div class="btn-group" data-toggle="buttons">
@@ -64,6 +54,16 @@
 								{{ 'No' | translate }}
 							</button>
 						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6 form-group">
+					<label>{{ 'Group Values By' | translate }}</label>
+					<div class="input-group">
+						<select class="form-control" [ngModel]="selectedPeriodType" (ngModelChange)="didSelectPeriodOption($event)">
+							<option *ngFor="let periodOption of periodOptionList" [value]="periodOption.type">{{ periodOption.displayName | translate }}</option>
+						</select>
 					</div>
 				</div>
 			</div>

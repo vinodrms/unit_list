@@ -18,12 +18,15 @@ import { ThPeriodType } from './period-converter/ThPeriodDO';
 import { ThDateToThPeriodConverterFactory } from './period-converter/ThDateToThPeriodConverterFactory';
 import { PageOrientation } from '../../../services/pdf-reports/PageOrientation';
 import { CommonValidationStructures } from "../../common/CommonValidations";
+import { KeyMetricsReaderInputBuilder } from "../../yield-manager/key-metrics/utils/KeyMetricsReaderInputBuilder";
 
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _period: YieldManagerPeriodDO;
 	private _periodType: ThPeriodType;
 	private _startDate: ThDateDO;
 	private _endDate: ThDateDO;
+	private _excludeCommission: boolean;
+	private _excludeVat: boolean;
 	private _keyMetricItem: KeyMetricsResultItem;
 
 	protected getParamsValidationStructure(): IValidationStructure {
@@ -53,11 +56,21 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		this._period.referenceDate = dateInterval.start;
 		this._period.noDays = dateInterval.getNumberOfDays() + 1;
 		this._periodType = params.periodType;
+		this._excludeCommission = params.excludeCommission;
+		this._excludeVat = params.excludeVat;
 	}
 
 	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
 		let reader = new KeyMetricReader(this._appContext, this._sessionContext);
-		reader.getKeyMetrics(this._period, false, this._periodType).then((reportItems: KeyMetricsResult) => {
+		reader.getKeyMetrics(
+			new KeyMetricsReaderInputBuilder()
+				.setYieldManagerPeriodDO(this._period)
+				.includePreviousPeriod(false)
+				.setDataAggregationType(this._periodType)
+				.excludeCommission(this._excludeCommission)
+				.excludeVat(this._excludeVat)
+				.build()
+		).then((reportItems: KeyMetricsResult) => {
 			this._keyMetricItem = reportItems.currentItem;
 			resolve(true);
 		}).catch((e) => { reject(e); })
@@ -67,17 +80,25 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		var startDateKey: string = this._appContext.thTranslate.translate("Start Date");
 		var endDateKey: string = this._appContext.thTranslate.translate("End Date");
 		var groupValuesByKey: string = this._appContext.thTranslate.translate("Group Values By");
+		var excludeCommission: string = this._appContext.thTranslate.translate("Exclude Commission");
+		var excludeVat: string = this._appContext.thTranslate.translate("Exclude VAT");
+		
 		var displayParams = {};
 		displayParams[startDateKey] = this._startDate;
 		displayParams[endDateKey] = this._endDate;
-		displayParams[groupValuesByKey] =  this.getDisplayStringFromPeriodType();
+		displayParams[groupValuesByKey] = this.getDisplayStringFromPeriodType();
+		displayParams[excludeCommission] = 
+			this._excludeCommission? this._appContext.thTranslate.translate("Yes") : this._appContext.thTranslate.translate("No");
+		displayParams[excludeVat] = 
+			this._excludeVat? this._appContext.thTranslate.translate("Yes") : this._appContext.thTranslate.translate("No");
+		
 		return {
 			name: "Key Metrics",
 			displayParams: displayParams,
 			pageOrientation: PageOrientation.Landscape
 		}
 	}
-	
+
 	private getDisplayStringFromPeriodType() {
 		switch (this._periodType) {
 			case ThPeriodType.Day: return this._appContext.thTranslate.translate("Day");
