@@ -38,6 +38,7 @@ export class ArrivalItemComponent {
 					appendTo: 'arrivals-pane',
 					scroll: false,
 					cursorAt: { left: 12, bottom: 6 },
+					refreshPositions: true,
 					helper: () => {
 						var helperHtml = `
 						<arrival-helper class="flex-row">
