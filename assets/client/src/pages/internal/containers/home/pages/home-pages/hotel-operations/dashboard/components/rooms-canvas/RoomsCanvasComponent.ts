@@ -1,18 +1,19 @@
-import {Component, Input, OnInit, NgZone} from '@angular/core';
-import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
-import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
-import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
+import { Component, Input, OnInit, NgZone, AfterViewInit, ViewChild } from '@angular/core';
+import { AppContext } from '../../../../../../../../../../common/utils/AppContext';
+import { ThError } from '../../../../../../../../../../common/utils/responses/ThError';
+import { ThDateDO } from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
-import {HotelOperationsDashboardService} from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
-import {IHotelOperationsDashboardRoomsCanvasMediator} from '../../HotelOperationsDashboardComponent';
-import {HotelService} from '../../../../../../../../services/hotel/HotelService';
-import {HotelDetailsDO} from '../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
-import {ArrivalItemInfoVM} from '../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
-import {RoomItemInfoVM, RoomItemInfoVM_UI_Properties} from '../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
-import {RoomItemInfoDO, RoomItemStatus} from '../../../../../../../../services/hotel-operations/dashboard/rooms/data-objects/RoomItemInfoDO';
+import { HotelOperationsDashboardService } from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
+import { IHotelOperationsDashboardRoomsCanvasMediator } from '../../HotelOperationsDashboardComponent';
+import { HotelService } from '../../../../../../../../services/hotel/HotelService';
+import { HotelDetailsDO } from '../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
+import { ArrivalItemInfoVM } from '../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
+import { RoomItemInfoVM, RoomItemInfoVM_UI_Properties } from '../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
+import { RoomItemInfoDO, RoomItemStatus } from '../../../../../../../../services/hotel-operations/dashboard/rooms/data-objects/RoomItemInfoDO';
 
-import {FilterValueType, IDragStyles, IFilterNotificationProperties, IFilterNotification, IFilterValue} from './utils/RoomsCanvasInterfaces';
-import {RoomsCanvasUtils} from './utils/RoomsCanvasUtils';
+import { FilterValueType, IDragStyles, IFilterNotificationProperties, IFilterNotification, IFilterValue } from './utils/RoomsCanvasInterfaces';
+import { RoomsCanvasUtils } from './utils/RoomsCanvasUtils';
+import { CustomScroll } from "../../../../../../../../../../common/utils/directives/CustomScroll";
 
 declare var $: any;
 
@@ -21,8 +22,13 @@ declare var $: any;
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/template/rooms-canvas.html',
 	providers: [RoomsCanvasUtils]
 })
-export class RoomsCanvasComponent implements OnInit {
+export class RoomsCanvasComponent implements OnInit, AfterViewInit {
 	@Input() hotelOperationsDashboard: IHotelOperationsDashboardRoomsCanvasMediator;
+	@ViewChild(CustomScroll) private scrollableRoomsCanvas: CustomScroll;
+
+	private static scrollTimeout = 100;
+	private lowerScrollInterval: number;
+	private upperScrollInterval: number;
 
 	public self: RoomsCanvasComponent;
 	public filterValue: IFilterValue;
@@ -74,6 +80,40 @@ export class RoomsCanvasComponent implements OnInit {
 			});
 
 		})
+	}
+	ngAfterViewInit(): void {
+		$('.rooms-canvas-lower').droppable({
+			tolerance: "touch",
+			over: (event, ui) => {
+				if (!this.scrollableRoomsCanvas || _.isNumber(this.lowerScrollInterval)) {
+					return;
+				}
+				this.scrollableRoomsCanvas.scrollDown();
+				this.lowerScrollInterval = setInterval(() => {
+					this.scrollableRoomsCanvas.scrollDown();
+				}, RoomsCanvasComponent.scrollTimeout);
+			},
+			out: (event, ui) => {
+				clearInterval(this.lowerScrollInterval);
+				this.lowerScrollInterval = null;
+			}
+		});
+		$('.rooms-canvas-upper').droppable({
+			tolerance: "touch",
+			over: (event, ui) => {
+				if (!this.scrollableRoomsCanvas || _.isNumber(this.upperScrollInterval)) {
+					return;
+				}
+				this.scrollableRoomsCanvas.scrollUp();
+				this.upperScrollInterval = setInterval(() => {
+					this.scrollableRoomsCanvas.scrollUp();
+				}, RoomsCanvasComponent.scrollTimeout);
+			},
+			out: (event, ui) => {
+				clearInterval(this.upperScrollInterval);
+				this.upperScrollInterval = null;
+			}
+		});
 	}
 
 	public refresh() {
