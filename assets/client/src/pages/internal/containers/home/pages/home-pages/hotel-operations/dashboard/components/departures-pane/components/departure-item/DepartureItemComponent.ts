@@ -38,6 +38,12 @@ export class DepartureItemComponent {
     ngAfterViewInit() {
     }
 
+    public openInvoiceModal() {
+		var invoiceGroupId = this.departureItemVM.departureItemDO.invoiceGroupId;
+		var customerId = this.departureItemVM.departureItemDO.customerId;
+		this._modalService.openInvoiceModal(invoiceGroupId, customerId);
+	}
+
     public openCustomerModal() {
         var customerId = this.departureItemVM.departureItemDO.customerId;
         this._modalService.openCustomerModal(customerId);
@@ -73,37 +79,6 @@ export class DepartureItemComponent {
         }, (error: ThError) => {
             this.isCheckingOut = false;
             this._appContext.toaster.error(error.message);
-        });
-    }
-
-    public payInvoice() {
-        var title = this._appContext.thTranslation.translate("Info");
-        var content = this._appContext.thTranslation.translate("By marking this invoice as paid you acknowledge that all payments were made. Continue?");
-        var positiveLabel = this._appContext.thTranslation.translate("Yes");
-        var negativeLabel = this._appContext.thTranslation.translate("No");
-        this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-            this.payInvoiceCore();
-        });
-    }
-
-    private payInvoiceCore() {
-        if (!this.departureItemVM.departureItemDO.invoiceGroupId) { return; }
-
-        this._eagerInvoiceGroupsService.getInvoiceGroup(
-            this.departureItemVM.departureItemDO.invoiceGroupId
-        ).subscribe((invoiceGroup: InvoiceGroupDO) => {
-                _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-                    if (invoice.id == this.departureItemVM.departureItemDO.invoiceId) {
-                        invoice.paymentStatus = InvoicePaymentStatus.Paid;
-                    }
-                });
-                this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroup).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
-                this._appContext.analytics.logEvent("invoice", "paid", "Marked an invoice as paid");
-                this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was paid succesfully."));
-                this.onCheckOut.emit();
-            }, (error: ThError) => {
-                this._appContext.toaster.error(error.message);
-            });
         });
     }
 
