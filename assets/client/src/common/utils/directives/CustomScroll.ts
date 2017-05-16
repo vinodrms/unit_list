@@ -1,4 +1,4 @@
-import {Directive, AfterViewInit, OnDestroy, ElementRef} from '@angular/core';
+import { Directive, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
 
 @Directive({
     selector: '[customScroll]',
@@ -7,6 +7,8 @@ import {Directive, AfterViewInit, OnDestroy, ElementRef} from '@angular/core';
     }
 })
 export class CustomScroll implements AfterViewInit, OnDestroy {
+    private static scrollOffset = 20;
+
     constructor(private _el: ElementRef) {
     }
 
@@ -22,7 +24,7 @@ export class CustomScroll implements AfterViewInit, OnDestroy {
         this.updateScrollableRegion();
     }
 
-    private create(){
+    private create() {
         var jqElement = this.getjQueryElement();
         jqElement.addClass('position-relative');
         jqElement.perfectScrollbar({
@@ -33,7 +35,7 @@ export class CustomScroll implements AfterViewInit, OnDestroy {
         jqElement.perfectScrollbar('update');
     }
 
-    private destroy(){
+    private destroy() {
         var jqElement = this.getjQueryElement();
         jqElement.perfectScrollbar('destroy');
     }
@@ -53,4 +55,15 @@ export class CustomScroll implements AfterViewInit, OnDestroy {
         });
     }
 
+    public scrollUp() {
+        this.scroll(-1);
+    }
+    public scrollDown() {
+        this.scroll(1);
+    }
+    private scroll(direction: number) {
+        var jqElement = this.getjQueryElement();
+        let newScrollTop = jqElement.scrollTop() + (direction * CustomScroll.scrollOffset);
+        jqElement.scrollTop(newScrollTop).perfectScrollbar('update');
+    }
 }
