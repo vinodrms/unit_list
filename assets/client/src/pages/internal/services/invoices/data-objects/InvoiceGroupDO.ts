@@ -1,8 +1,8 @@
-import {BaseDO} from '../../../../../common/base/BaseDO';
-import {ThUtils} from '../../../../../common/utils/ThUtils';
-import {InvoiceDO, InvoicePaymentStatus} from './InvoiceDO';
-import {InvoicePayerDO} from './payers/InvoicePayerDO';
-import {TaxDO} from '../../taxes/data-objects/TaxDO';
+import { BaseDO } from '../../../../../common/base/BaseDO';
+import { ThUtils } from '../../../../../common/utils/ThUtils';
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from './InvoiceDO';
+import { InvoicePayerDO } from './payers/InvoicePayerDO';
+import { TaxDO } from '../../taxes/data-objects/TaxDO';
 
 export enum InvoiceGroupStatus {
     Active,
@@ -84,7 +84,7 @@ export class InvoiceGroupDO extends BaseDO {
             .filter((invoice: InvoiceDO) => {
                 return invoice.paymentStatus === type;
             }).map((invoice: InvoiceDO) => {
-            return invoice.payerList;
+                return invoice.payerList;
             }).flatten().filter((invoicePayer: InvoicePayerDO) => {
                 return invoicePayer.customerId === customerId;
             }).map((invoicePayer: InvoicePayerDO) => {
@@ -94,18 +94,30 @@ export class InvoiceGroupDO extends BaseDO {
             }, 0).value();
     }
 
+    public getInvoiceForBooking(bookingId: string): InvoiceDO {
+        let debitInvoicesRelatedToBooking = _.filter(this.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.bookingId === bookingId && invoice.accountingType === InvoiceAccountingType.Debit;
+        });
+
+        debitInvoicesRelatedToBooking = _.sortBy(debitInvoicesRelatedToBooking, (invoice: InvoiceDO) => {
+            return invoice.paidDateTimeUtcTimestamp;
+        });
+
+        return _.last(debitInvoicesRelatedToBooking);
+    }
+
     public invoiceIsReinstated(invoiceId: string): boolean {
         let thUtils = new ThUtils();
 
         let lookedUpInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
             return invoice.id === invoiceId;
         });
-        if(thUtils.isUndefinedOrNull(lookedUpInvoice)) {
+        if (thUtils.isUndefinedOrNull(lookedUpInvoice)) {
             return false;
         }
 
         let reinstatementInvoice = _.find(this.invoiceList, (invoice: InvoiceDO) => {
-            invoice.reinstatedInvoiceId === lookedUpInvoice.id;    
+            invoice.reinstatedInvoiceId === lookedUpInvoice.id;
         });
 
         return !thUtils.isUndefinedOrNull(reinstatementInvoice);
@@ -121,6 +133,6 @@ export class InvoiceGroupDO extends BaseDO {
         });
 
         let thUtils = new ThUtils();
-        return thUtils.isUndefinedOrNull(reinstatedInvoice)? '' : reinstatedInvoice.invoiceReference;
+        return thUtils.isUndefinedOrNull(reinstatedInvoice) ? '' : reinstatedInvoice.invoiceReference;
     }
 }
