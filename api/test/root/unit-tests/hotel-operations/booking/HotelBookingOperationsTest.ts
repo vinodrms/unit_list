@@ -333,10 +333,14 @@ describe("Hotel Booking Operations Tests", function () {
             assignRoomDO.groupBookingId = bookingToChange.groupBookingId;
             let room = dashboardHelper.getRoomForSameRoomCategoryFromBooking(testDataBuilder, bookingToChange);
             assignRoomDO.roomId = room.id;
+            let startUtcTimestamp = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone).getUtcTimestamp();
 
             var assignRoom = new AssignRoom(testContext.appContext, testContext.sessionContext);
             assignRoom.checkIn(assignRoomDO).then((updatedBooking: BookingDO) => {
                 should.equal(updatedBooking.confirmationStatus, BookingConfirmationStatus.CheckedIn);
+                let endUtcTimestamp = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone).getUtcTimestamp();
+                should.equal(startUtcTimestamp <= updatedBooking.checkInUtcTimestamp, true);
+                should.equal(updatedBooking.checkInUtcTimestamp <= endUtcTimestamp, true);
                 bookingToChange = updatedBooking;
                 done();
             }).catch((error: any) => {
@@ -380,6 +384,7 @@ describe("Hotel Booking Operations Tests", function () {
             undoCheckIn.undo(undoCheckInDO).then((updatedBooking: BookingDO) => {
                 should.equal(updatedBooking.confirmationStatus === BookingConfirmationStatus.Confirmed
                     || updatedBooking.confirmationStatus === BookingConfirmationStatus.Guaranteed, true);
+                should.equal(updatedBooking.checkInUtcTimestamp, null);
                 bookingToChange = updatedBooking;
                 done();
             }).catch((error: any) => {

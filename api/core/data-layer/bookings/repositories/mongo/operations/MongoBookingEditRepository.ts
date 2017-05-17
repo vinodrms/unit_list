@@ -111,6 +111,8 @@ export class MongoBookingEditRepository extends MongoRepository {
                 "interval": booking.interval,
                 "startUtcTimestamp": booking.startUtcTimestamp,
                 "endUtcTimestamp": booking.endUtcTimestamp,
+                "checkInUtcTimestamp": booking.checkInUtcTimestamp,
+                "checkOutUtcTimestamp": booking.checkOutUtcTimestamp,
                 "configCapacity": booking.configCapacity,
                 "roomCategoryId": booking.roomCategoryId,
                 "roomId": booking.roomId,
