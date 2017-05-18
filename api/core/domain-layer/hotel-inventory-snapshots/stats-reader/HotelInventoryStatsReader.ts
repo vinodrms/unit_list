@@ -26,6 +26,7 @@ export interface HotelInventoryStatsParams {
     currentRoomList: RoomDO[];
     currentAllotmentList: AllotmentDO[];
     cancellationHour: ThHourDO;
+    checkOutHour: ThHourDO;
     currentHotelTimestamp: ThTimestampDO;
     configurationCompletedTimestamp: ThTimestampDO;
 }
@@ -74,6 +75,7 @@ export class HotelInventoryStatsReader {
 
                 this._inventoryIndexer = new HotelInventoryIndexer(this._appContext, this._sessionContext, {
                     cancellationHour: this._readerParams.cancellationHour,
+                    checkOutHour: this._readerParams.checkOutHour,
                     currentHotelTimestamp: this._readerParams.currentHotelTimestamp,
                     roomList: this._currentRoomSnapshots
                 });

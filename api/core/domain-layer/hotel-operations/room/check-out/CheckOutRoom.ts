@@ -1,17 +1,20 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {CheckOutRoomDO} from './CheckOutRoomDO';
-import {BookingDO, BookingConfirmationStatus} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {ValidationResultParser} from '../../../common/ValidationResultParser';
-import {RoomDO, RoomMaintenanceStatus} from '../../../../data-layer/rooms/data-objects/RoomDO';
-import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { CheckOutRoomDO } from './CheckOutRoomDO';
+import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { ValidationResultParser } from '../../../common/ValidationResultParser';
+import { RoomDO, RoomMaintenanceStatus } from '../../../../data-layer/rooms/data-objects/RoomDO';
+import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { HotelDO } from "../../../../data-layer/hotel/data-objects/HotelDO";
+import { ThTimestampDO } from "../../../../utils/th-dates/data-objects/ThTimestampDO";
 
 export class CheckOutRoom {
     private _checkOutRoomDO: CheckOutRoomDO;
 
+    private _loadedHotel: HotelDO;
     private _loadedBooking: BookingDO;
     private _loadedRoom: RoomDO;
 
@@ -32,9 +35,13 @@ export class CheckOutRoom {
             return;
         }
 
-        var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._checkOutRoomDO.groupBookingId, this._checkOutRoomDO.bookingId)
-            .then((booking: BookingDO) => {
+        let hotelRepo = this._appContext.getRepositoryFactory().getHotelRepository();
+        hotelRepo.getHotelById(this._sessionContext.sessionDO.hotel.id)
+            .then((hotel: HotelDO) => {
+                this._loadedHotel = hotel;
+                var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+                return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._checkOutRoomDO.groupBookingId, this._checkOutRoomDO.bookingId);
+            }).then((booking: BookingDO) => {
                 this._loadedBooking = booking;
                 if (this._loadedBooking.confirmationStatus !== BookingConfirmationStatus.CheckedIn) {
                     var thError = new ThError(ThStatusCode.CheckOutRoomBookingNotCheckedIn, null);
@@ -76,6 +83,8 @@ export class CheckOutRoom {
 
     private markLoadedBookingAsCheckedOut() {
         this._loadedBooking.confirmationStatus = BookingConfirmationStatus.CheckedOut;
+        let timestamp = ThTimestampDO​​.buildThTimestampForTimezone(this._loadedHotel.timezone);
+        this._loadedBooking.checkOutUtcTimestamp = timestamp.getUtcTimestamp();
         this._loadedBooking.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {},
             actionString: "The room was checked out."

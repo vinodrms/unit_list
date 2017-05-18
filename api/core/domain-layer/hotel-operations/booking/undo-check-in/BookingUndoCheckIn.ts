@@ -108,6 +108,7 @@ export class BookingUndoCheckIn {
         this._bookingWithDependencies.bookingDO.noShowTime.thTimestamp = noShowTimestamp;
         this._bookingWithDependencies.bookingDO.noShowTime.utcTimestamp = noShowTimestamp.getUtcTimestamp();
         this._bookingWithDependencies.bookingDO.roomId = null;
+        this._bookingWithDependencies.bookingDO.checkInUtcTimestamp = null;
 
         this._bookingWithDependencies.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {},
