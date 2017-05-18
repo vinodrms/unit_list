@@ -36,7 +36,7 @@ export class ShiftReportPaidByAgreementSectionGenerator extends AReportSectionGe
         }
     }
 
-    protected getSummary(): Object {
+    protected getGlobalSummary(): Object {
 		return {}
 	}
 

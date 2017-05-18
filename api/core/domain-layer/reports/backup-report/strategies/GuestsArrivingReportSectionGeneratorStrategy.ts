@@ -42,7 +42,7 @@ export class GuestsArrivingReportSectionGeneratorStrategy extends AReportSection
 		}
 	}
 
-	protected getSummary(): Object {
+	protected getGlobalSummary(): Object {
 		return {
 			"Total Number of Arrivals" : this._totalArrivals,
 			"Adults": this._totalAdults,

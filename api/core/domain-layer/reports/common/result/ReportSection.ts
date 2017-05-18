@@ -14,7 +14,8 @@ export class ReportSection {
     meta: ReportSectionMeta;
     data: any[][];
     newLineBefore: boolean;
-    summary: Object;
+    globalSummary: Object;
+    localSummary: Object;
 
     constructor() {
         this.newLineBefore = false;

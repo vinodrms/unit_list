@@ -77,7 +77,7 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 		return {};
 	}
 
-	protected getSummary(): Object {
+	protected getGlobalSummary(): Object {
 		return {};
 	}
 

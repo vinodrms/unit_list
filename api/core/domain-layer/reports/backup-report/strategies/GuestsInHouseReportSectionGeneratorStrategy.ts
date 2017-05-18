@@ -37,7 +37,7 @@ export class GuestsInHouseReportSectionGeneratorStrategy extends AReportSectionG
 		}
 	}
 
-	protected getSummary(): Object {
+	protected getGlobalSummary(): Object {
 		return {
 			"Total Number of Guests in House" : this._totalGuests,
 			"Adults": this._totalAdults,

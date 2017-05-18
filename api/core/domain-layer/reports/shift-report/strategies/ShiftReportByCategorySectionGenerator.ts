@@ -35,7 +35,7 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 		return this._sectionMeta;
 	}
 
-	protected getSummary(): Object {
+	protected getGlobalSummary(): Object {
 		return {}
 	}
 

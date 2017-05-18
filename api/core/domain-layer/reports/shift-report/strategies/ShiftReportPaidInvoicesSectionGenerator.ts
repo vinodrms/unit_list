@@ -42,7 +42,7 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
         return this._sectionMeta;
     }
 
-    protected getSummary(): Object {
+    protected getGlobalSummary(): Object {
         return {}
     }
 

@@ -95,9 +95,9 @@
             <div class="summary-row">
                 <% sectionList.forEach(function(section){ %>
                     <div class="summary-col">
-                    <% if (section.summary) { %>
-                        <% for (key in section.summary) { %>
-                            <h4><b><%= key %>: </b><%= section.summary[key] %></h4>
+                    <% if (section.globalSummary) { %>
+                        <% for (key in section.globalSummary) { %>
+                            <h4><b><%= key %>: </b><%= section.globalSummary[key] %></h4>
                         <% } %>
                     <% } %>
                     </div>
@@ -110,6 +110,12 @@
 
                 <% if (section.meta.title) { %>
                     <h3> <%= section.meta.title %> </h3>
+                <% } %>
+                
+                <% if (section.localSummary) { %>
+                    <% for (key in section.localSummary) { %>
+                        <h4><b><%= key %>: </b><%= section.localSummary[key] %></h4>
+                    <% } %>
                 <% } %>
 
                 <table cellpadding="0" cellspacing="0">

@@ -10,7 +10,7 @@ import _ = require('underscore');
 export abstract class AReportSectionGeneratorStrategy implements IReportSectionGeneratorStrategy {
     protected _thUtils: ThUtils;
 
-    constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext) {
+    constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext, private _hideGlobalSummary?: boolean) {
         this._thUtils = new ThUtils();
     }
 
@@ -27,20 +27,30 @@ export abstract class AReportSectionGeneratorStrategy implements IReportSectionG
         this.translateMetaValues(item.meta);
         this.getData().then((data: any[][]) => {
             item.data = data;
-            item.summary = this.getSummary();
-            this.translateSummary(item);
+            item.globalSummary = (this._hideGlobalSummary)? undefined: this.getGlobalSummary();
+            this.translateGlobalSummary(item);
+            item.localSummary = this.getLocalSummary();
+            this.translateLocalSummary(item);
             resolve(item);
         }).catch((e: ThError) => {
             reject(e);
         });
     }
 
-    private translateSummary(item: ReportSection) {
+    private translateGlobalSummary(item: ReportSection) {
         var translatedSummary = {};
-        for (var key in item.summary) {
-            translatedSummary[this._appContext.thTranslate.translate(key)] = item.summary[key];
+        for (var key in item.globalSummary) {
+            translatedSummary[this._appContext.thTranslate.translate(key)] = item.globalSummary[key];
         }
-        item.summary = translatedSummary;
+        item.globalSummary = translatedSummary;
+    }
+
+    private translateLocalSummary(item: ReportSection) {
+        var translatedSummary = {};
+        for (var key in item.localSummary) {
+            translatedSummary[this._appContext.thTranslate.translate(key)] = item.localSummary[key];
+        }
+        item.localSummary = translatedSummary;
     }
 
     private translateHeaderValues(header: ReportSectionHeader) {
@@ -56,7 +66,11 @@ export abstract class AReportSectionGeneratorStrategy implements IReportSectionG
     }
     protected abstract getHeader(): ReportSectionHeader;
     protected abstract getMeta(): ReportSectionMeta;
-    protected abstract getSummary(): Object;
+    protected abstract getGlobalSummary(): Object;
+
+    protected getLocalSummary(): Object {
+        return {};
+    }
 
     private getData(): Promise<any[][]> {
         return new Promise<any[][]>((resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) => {

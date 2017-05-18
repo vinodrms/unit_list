@@ -39,7 +39,7 @@ export class GuestsDepartingReportSectionGeneratorStrategy extends AReportSectio
 		}
 	}
 
-	protected getSummary(): Object {
+	protected getGlobalSummary(): Object {
 		return {
 			"Total Number of Departures" : this._totalDepartures,
 			"Adults": this._totalAdults,

@@ -915,5 +915,12 @@ export var EnglishTranslations: Object = {
 	"Total Number of Departures": "Total Number of Departures",
 	"Total Number of Stayovers": "Total Number of Stayovers",
 	"Total Number of Guests in House": "Total Number of Guests in House",
-	
+	"Arrivals Floor %floorNumber%" :"Arrivals Floor %floorNumber%",
+	"Departures Floor %floorNumber%" :"Departures Floor %floorNumber%",
+	"Stayovers Floor %floorNumber%" :"Stayovers Floor %floorNumber%",
+	"Nothing": "Nothing",
+	"Floor": "Floor",
+	"Total Arrivals": "Total Arrivals",
+	"Total Stayovers": "Total Stayovers",
+	"Total Departures": "Total Departures",
 };

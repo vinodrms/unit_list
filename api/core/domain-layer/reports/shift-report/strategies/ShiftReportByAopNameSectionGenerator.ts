@@ -36,7 +36,7 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
         }
     }
 
-    protected getSummary(): Object {
+    protected getGlobalSummary(): Object {
 		return {}
 	}
 

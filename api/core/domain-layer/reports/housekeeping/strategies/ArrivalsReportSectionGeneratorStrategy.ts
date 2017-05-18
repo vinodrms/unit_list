@@ -3,12 +3,21 @@ import { ReportSectionHeader, ReportSectionMeta } from "../../common/result/Repo
 import { ThError } from "../../../../utils/th-responses/ThError";
 import { ReportArrivalsReader } from "../arrivals/ReportArrivalsReader";
 import { ReportArrivalItemInfo } from "../arrivals/utils/ReportArrivalsInfo";
+import { AppContext } from "../../../../utils/AppContext";
+import { SessionContext } from "../../../../utils/SessionContext";
 
 export class ArrivalsReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
     
 	private _totalArrivals: number;
-	
-	protected getHeader(): ReportSectionHeader {
+	private _floor: number;
+	private _totalArrivalsOnFloor: number = 0;
+
+	constructor(appContext: AppContext, sessionContext: SessionContext, hideGlobalSummary?: boolean, floor?: number) {
+		super(appContext, sessionContext, hideGlobalSummary);
+		this._floor = floor;
+	}
+
+    protected getHeader(): ReportSectionHeader {
         return {
 			display: true,
 			values: [
@@ -31,13 +40,23 @@ export class ArrivalsReportSectionGeneratorStrategy extends AReportSectionGenera
     }
     protected getMeta(): ReportSectionMeta {
         return {
-			title: "Arrivals"
+			title: (!this._floor) ? "Arrivals" : this._appContext.thTranslate.translate("Arrivals Floor %floorNumber%", {floorNumber: this._floor})
 		}
     }
 
-	protected getSummary(): Object {
+	protected getGlobalSummary(): Object {	
 		return {
 			"Total Number of Arrivals" : this._totalArrivals
+		}
+	}
+
+	protected getLocalSummary(): Object {
+		if (this._floor) {
+			return {
+				"Total Arrivals": this._totalArrivalsOnFloor
+			}
+		} else {
+			return {};
 		}
 	}
 
@@ -47,23 +66,26 @@ export class ArrivalsReportSectionGeneratorStrategy extends AReportSectionGenera
 			this._totalArrivals = reportItems.length;
 			var data = [];
 			reportItems.forEach((item: ReportArrivalItemInfo) => {
-				let row = [
-					item.floorNumber,
-					item.roomNumber,
-					item.roomCategory,
-					item.customerName,
-					item.companyOrTA,
-					item.interval,
-					item.noNights,
-					item.noAdults,
-					item.noChildren,
-					item.noBabies,
-					item.noBabiesSleepingInBabyBeds,
-					item.stationaryBeds,
-					item.rollawayBeds,
-					item.notes
-				];
-				data.push(row);
+				if (!this._floor || (item.floorNumber && this._floor == item.floorNumber)) {
+					this._totalArrivalsOnFloor++;
+					let row = [
+						item.floorNumber,
+						item.roomNumber,
+						item.roomCategory,
+						item.customerName,
+						item.companyOrTA,
+						item.interval,
+						item.noNights,
+						item.noAdults,
+						item.noChildren,
+						item.noBabies,
+						item.noBabiesSleepingInBabyBeds,
+						item.stationaryBeds,
+						item.rollawayBeds,
+						item.notes
+					];
+					data.push(row);
+				}
 			});
 			resolve(data);
 		}).catch((e) => {

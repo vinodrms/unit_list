@@ -3,10 +3,19 @@ import { ReportSectionHeader, ReportSectionMeta } from "../../common/result/Repo
 import { ThError } from "../../../../utils/th-responses/ThError";
 import { ReportStayoversReader } from "../stayovers/ReportStayoversReader";
 import { ReportStayoverInfo } from "../stayovers/utils/ReportStayoverInfo";
+import { AppContext } from "../../../../utils/AppContext";
+import { SessionContext } from "../../../../utils/SessionContext";
 
 export class StayoversReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
     
 	private _totalStayovers: number;
+	private _floor: number;
+	private _totalStayoversOnFloor: number = 0;
+
+	constructor(appContext: AppContext, sessionContext: SessionContext, hideGlobalSummary?: boolean, floor?: number) {
+		super(appContext, sessionContext, hideGlobalSummary);
+		this._floor = floor;
+	}
 	
 	protected getHeader(): ReportSectionHeader {
         return {
@@ -31,20 +40,34 @@ export class StayoversReportSectionGeneratorStrategy extends AReportSectionGener
     }
     protected getMeta(): ReportSectionMeta {
         return {
-			title: "Stayovers"
+			title: (!this._floor) ? "Stayovers" : this._appContext.thTranslate.translate("Stayovers Floor %floorNumber%", {floorNumber: this._floor})
 		}
     }
-	protected getSummary(): Object {
+
+	protected getGlobalSummary(): Object {
 		return {
 			"Total Number of Stayovers" : this._totalStayovers
 		}
 	}
+
+	protected getLocalSummary(): Object {
+		if (this._floor) {
+			return {
+				"Total Stayovers": this._totalStayoversOnFloor
+			}
+		} else {
+			return {};
+		}
+	}
+
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
         let arrivalsReader = new ReportStayoversReader(this._appContext, this._sessionContext);
         arrivalsReader.read().then((reportItems: ReportStayoverInfo[]) => {
 			this._totalStayovers = reportItems.length;
 			var data = [];
 			reportItems.forEach((item: ReportStayoverInfo) => {
+				if (!this._floor || (item.floorNumber && this._floor == item.floorNumber)) {
+				this._totalStayoversOnFloor++;
 				let row = [
 					item.floorNumber,
 					item.roomNumber,
@@ -61,6 +84,7 @@ export class StayoversReportSectionGeneratorStrategy extends AReportSectionGener
 					item.notes
 				];
 				data.push(row);
+			}
 			});
 			resolve(data);
 		}).catch((e) => {
