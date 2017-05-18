@@ -39,6 +39,12 @@ export class IndividualDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	public getName(): string {
 		return this.firstName + " " + this.lastName;
 	}
+	public getFirstName(): string {
+		return this.firstName;
+	}
+	public getLastName(): string {
+		return this.lastName;
+	}
 	public canPayInvoiceByAgreement(): boolean {
 		return false;
 	}

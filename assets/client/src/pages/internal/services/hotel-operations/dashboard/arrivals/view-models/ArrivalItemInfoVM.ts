@@ -47,8 +47,10 @@ export class ArrivalItemInfoVM {
         this._reservedRoomVM = reservedRoomVM;
     }
 
-    public get customerName():string{
-        return this.arrivalItemDO.customerName;
+    public get customerName():string {
+        var arrivalItemDO = this.arrivalItemDO;
+        return (arrivalItemDO.customerFirstName && arrivalItemDO.customerLastName) ?
+            arrivalItemDO.customerLastName + " " + arrivalItemDO.customerFirstName : arrivalItemDO.customerName;
     }
 
     public get corporateCustomerName():string {

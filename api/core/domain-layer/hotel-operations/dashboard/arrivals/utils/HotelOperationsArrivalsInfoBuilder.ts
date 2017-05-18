@@ -70,6 +70,8 @@ export class HotelOperationsArrivalsInfoBuilder {
         _.forEach(this._arrivalsInfo.arrivalInfoList, (arrivalInfoItem: ArrivalItemInfo) => {
             var customer = customersContainer.getCustomerById(arrivalInfoItem.customerId);
             arrivalInfoItem.customerName = customer.customerDetails.getName();
+            arrivalInfoItem.customerFirstName = customer.customerDetails.getFirstName();
+            arrivalInfoItem.customerLastName = customer.customerDetails.getLastName();
             if (arrivalInfoItem.corporateCustomerId && arrivalInfoItem.corporateCustomerId.length > 0) {
                 var corporateCustomer = customersContainer.getCustomerById(arrivalInfoItem.corporateCustomerId);
                 arrivalInfoItem.corporateCustomerName = corporateCustomer.customerDetails.getName();
