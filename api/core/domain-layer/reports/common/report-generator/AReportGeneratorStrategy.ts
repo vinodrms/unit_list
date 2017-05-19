@@ -17,6 +17,7 @@ import { ThTimestampDO } from "../../../../utils/th-dates/data-objects/ThTimesta
 export abstract class AReportGeneratorStrategy implements IReportGeneratorStrategy {
 	protected _thUtils: ThUtils;
 	protected _reportGroup: ReportGroup;
+	protected _globalSummary: Object = {};
 
 	constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext) {
 		this._thUtils = new ThUtils();
@@ -48,18 +49,28 @@ export abstract class AReportGeneratorStrategy implements IReportGeneratorStrate
 			return Promise.all(itemPromiseList);
 		}).then((itemList: ReportSection[]) => {
 			this._reportGroup.sectionList = itemList;
+			this._reportGroup.summary = this._globalSummary;
+			this.translateGlobalSummary();
 			resolve(this._reportGroup);
 		}).catch((e) => {
 			reject(e);
 		});
 	}
 
+    private translateGlobalSummary() {
+        var translatedSummary = {};
+        for (var key in this._reportGroup.summary) {
+            translatedSummary[this._appContext.thTranslate.translate(key)] = this._reportGroup.summary[key];
+        }
+        this._reportGroup.summary = translatedSummary;
+    }
+
 	private prepareMeta(loadedHotel: HotelDO) {
 		var meta = this.getMeta();
 		meta.name = this._appContext.thTranslate.translate(meta.name);
-		meta.reference = this._thUtils.generateShortId();
-		this._reportGroup = new ReportGroup(meta);
 		meta.generationTime = this._appContext.thTranslate.translate("Generated At") + ": " + ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone).toString();
+		meta.reference = this._thUtils.generateShortId();
+		this._reportGroup = new ReportGroup(meta, {});
 	}
 
 	private loadDependentData(): Promise<boolean> {

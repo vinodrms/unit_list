@@ -12,10 +12,12 @@ export interface ReportGroupMeta {
 
 export class ReportGroup {
     meta: ReportGroupMeta;
+    summary: Object;
     sectionList: ReportSection[];
 
-    constructor(meta: ReportGroupMeta) {
+    constructor(meta: ReportGroupMeta, summary: Object) {
         this.meta = meta;
         this.sectionList = [];
+        this.summary = summary;
     }
 }

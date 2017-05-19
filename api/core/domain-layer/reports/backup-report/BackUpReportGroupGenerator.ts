@@ -26,9 +26,9 @@ export class BackUpReportGroupGenerator extends AReportGeneratorStrategy {
 	}
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
 		return [
-			new GuestsArrivingReportSectionGeneratorStrategy(this._appContext, this._sessionContext),
-			new GuestsInHouseReportSectionGeneratorStrategy(this._appContext, this._sessionContext),
-			new GuestsDepartingReportSectionGeneratorStrategy(this._appContext, this._sessionContext),
+			new GuestsArrivingReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary),
+			new GuestsInHouseReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary),
+			new GuestsDepartingReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary),
 		];
 	}
 }

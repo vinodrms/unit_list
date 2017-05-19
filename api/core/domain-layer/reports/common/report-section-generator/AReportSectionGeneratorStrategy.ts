@@ -10,7 +10,7 @@ import _ = require('underscore');
 export abstract class AReportSectionGeneratorStrategy implements IReportSectionGeneratorStrategy {
     protected _thUtils: ThUtils;
 
-    constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext, private _hideGlobalSummary?: boolean) {
+    constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext, private _globalSummary: Object) {
         this._thUtils = new ThUtils();
     }
 
@@ -27,22 +27,13 @@ export abstract class AReportSectionGeneratorStrategy implements IReportSectionG
         this.translateMetaValues(item.meta);
         this.getData().then((data: any[][]) => {
             item.data = data;
-            item.globalSummary = (this._hideGlobalSummary)? undefined: this.getGlobalSummary();
-            this.translateGlobalSummary(item);
+            this._globalSummary = _.extend(this._globalSummary,this.getGlobalSummary());
             item.localSummary = this.getLocalSummary();
             this.translateLocalSummary(item);
             resolve(item);
         }).catch((e: ThError) => {
             reject(e);
         });
-    }
-
-    private translateGlobalSummary(item: ReportSection) {
-        var translatedSummary = {};
-        for (var key in item.globalSummary) {
-            translatedSummary[this._appContext.thTranslate.translate(key)] = item.globalSummary[key];
-        }
-        item.globalSummary = translatedSummary;
     }
 
     private translateLocalSummary(item: ReportSection) {

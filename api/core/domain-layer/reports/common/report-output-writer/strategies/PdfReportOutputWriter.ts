@@ -37,7 +37,7 @@ export class PdfReportOutputWriter extends AReportOutputWriter {
 
     // the sections could have many columns that cannot fit in the same table row
     private getReportGroupWithSplitSections(inGroup: ReportGroup): ReportGroup {
-        let splitGroup = new ReportGroup(inGroup.meta);
+        let splitGroup = new ReportGroup(inGroup.meta, inGroup.summary);
         _.forEach(inGroup.sectionList, (inSection: ReportSection) => {
             let splitSectionList = this.getSplitSections(inGroup, inSection);
             splitGroup.sectionList = splitGroup.sectionList.concat(splitSectionList);

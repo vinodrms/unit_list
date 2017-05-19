@@ -923,4 +923,17 @@ export var EnglishTranslations: Object = {
 	"Total Arrivals": "Total Arrivals",
 	"Total Stayovers": "Total Stayovers",
 	"Total Departures": "Total Departures",
+	"Arrivals Adults": "Arrivals Adults",
+	"Arrivals Children": "Arrivals Children",
+	"Arrivals Babies": "Arrivals Babies",
+	"Arrivals Baby Beds": "Arrivals Baby Beds",
+	"Guests Adults": "Guests Adults",
+	"Guests Children": "Guests Children",
+	"Guests Babies": "Guests Babies",
+	"Guests Baby Beds": "Guests Baby Beds",
+	"Departures Adults": "Departures Adults",
+	"Departures Children": "Departures Children",
+	"Departures Babies": "Departures Babies",
+	"Departures Baby Beds": "Departures Baby Beds",
+
 };

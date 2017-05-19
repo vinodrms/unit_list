@@ -69,7 +69,7 @@ export class BookingsForPriceProductReportGroupGenerator extends AReportGenerato
 
     protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
         return [
-            new BookingsForPriceProductReportSectionGenerator(this._appContext, this._sessionContext,
+            new BookingsForPriceProductReportSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
                 this._priceProduct, this._confirmationStatusList)
         ];
     }

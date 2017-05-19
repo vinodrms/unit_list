@@ -17,11 +17,11 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
     private _indexedCustomersById: { [id: string]: CustomerDO };
     private _indexedBookingById: { [id: string]: BookingDO };
 
-    constructor(appContext: AppContext, sessionContext: SessionContext,
+    constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
         private _allInvoiceGroupList: InvoiceGroupDO[],
         private _paidInvoiceGroupList: InvoiceGroupDO[],
         private _sectionMeta: ReportSectionMeta) {
-        super(appContext, sessionContext);
+        super(appContext, sessionContext, globalSummary);
     }
 
     protected getHeader(): ReportSectionHeader {

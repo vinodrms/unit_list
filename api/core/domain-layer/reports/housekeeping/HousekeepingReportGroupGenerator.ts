@@ -37,24 +37,17 @@ export class HousekeepingReportGroupGenerator extends AReportGeneratorStrategy {
     protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
         if (this._groupBy == HousekeepingReportGroupByType.NOTHING) {
             return [
-                new ArrivalsReportSectionGeneratorStrategy(this._appContext, this._sessionContext),
-                new StayoversReportSectionGeneratorStrategy(this._appContext, this._sessionContext),
-                new DeparturesReportSectionGeneratorStrategy(this._appContext, this._sessionContext),
+                new ArrivalsReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary),
+                new StayoversReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary),
+                new DeparturesReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary),
             ];
         } else {
             var strategies = [];
-            var isFirstArrivalsSection = true;
-            var isFirstDeparturesSection = true;
-            var isFirstStayoversSection = true;
-
             _.forEach(this._floors, (floor: number) => {
                 strategies.push(
-                    new ArrivalsReportSectionGeneratorStrategy(this._appContext, this._sessionContext, !isFirstArrivalsSection, floor),
-                    new StayoversReportSectionGeneratorStrategy(this._appContext, this._sessionContext, !isFirstStayoversSection, floor),
-                    new DeparturesReportSectionGeneratorStrategy(this._appContext, this._sessionContext, !isFirstDeparturesSection, floor));
-                isFirstArrivalsSection = false;
-                isFirstStayoversSection = false;
-                isFirstDeparturesSection = false;
+                    new ArrivalsReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary, floor),
+                    new StayoversReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary, floor),
+                    new DeparturesReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary, floor));
             });
             return strategies;
         }

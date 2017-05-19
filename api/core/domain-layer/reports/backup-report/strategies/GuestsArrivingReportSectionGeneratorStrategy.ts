@@ -45,10 +45,10 @@ export class GuestsArrivingReportSectionGeneratorStrategy extends AReportSection
 	protected getGlobalSummary(): Object {
 		return {
 			"Total Number of Arrivals" : this._totalArrivals,
-			"Adults": this._totalAdults,
-			"Children": this._totalChildren,
-			"Babies": this._totalBabies,
-			"Baby Beds": this._totalBabyBeds
+			"Arrivals Adults": this._totalAdults,
+			"Arrivals Children": this._totalChildren,
+			"Arrivals Babies": this._totalBabies,
+			"Arrivals Baby Beds": this._totalBabyBeds
 		}
 	}
 

@@ -12,8 +12,8 @@ export class DeparturesReportSectionGeneratorStrategy extends AReportSectionGene
 	private _floor: number;
 	private _totalDeparturesOnFloor: number = 0;
 
-	constructor(appContext: AppContext, sessionContext: SessionContext, hideGlobalSummary?: boolean, floor?: number) {
-		super(appContext, sessionContext, hideGlobalSummary);
+	constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object, floor?: number) {
+		super(appContext, sessionContext, globalSummary);
 		this._floor = floor;
 	}
 

@@ -12,8 +12,8 @@ export class StayoversReportSectionGeneratorStrategy extends AReportSectionGener
 	private _floor: number;
 	private _totalStayoversOnFloor: number = 0;
 
-	constructor(appContext: AppContext, sessionContext: SessionContext, hideGlobalSummary?: boolean, floor?: number) {
-		super(appContext, sessionContext, hideGlobalSummary);
+	constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object, floor?: number) {
+		super(appContext, sessionContext, globalSummary);
 		this._floor = floor;
 	}
 	
