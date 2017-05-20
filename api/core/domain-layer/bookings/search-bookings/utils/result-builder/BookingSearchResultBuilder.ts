@@ -66,9 +66,14 @@ export class BookingSearchResultBuilder {
         var priceProductsContainer = new PriceProductsContainer(this._builderParams.bookingSearchDependencies.priceProductList);
         searchResult.roomCategoryItemList = this.buildRoomCategoryItemList(priceProductsContainer);
 
+        let roomCategoryIdCanFitMap: { [index: string]: boolean } = {};
+        searchResult.roomCategoryItemList.forEach(roomCategoryItem => {
+            roomCategoryIdCanFitMap[roomCategoryItem.stats.roomCategory.id] = roomCategoryItem.canFit;
+        });
+
         var mergedPriceProductList = this._builderParams.bookingSearchDependencies.getMergedPriceProductList();
         var mergedPriceProductsContainer = new PriceProductsContainer(mergedPriceProductList);
-        searchResult.priceProductItemList = this.buildPriceProductItemList(mergedPriceProductsContainer);
+        searchResult.priceProductItemList = this.buildPriceProductItemList(mergedPriceProductsContainer, roomCategoryIdCanFitMap);
 
         resolve(searchResult);
     }
@@ -111,7 +116,7 @@ export class BookingSearchResultBuilder {
         return allotmentItemList;
     }
 
-    private buildPriceProductItemList(priceProductsContainer: PriceProductsContainer): PriceProductItem[] {
+    private buildPriceProductItemList(priceProductsContainer: PriceProductsContainer, roomCategoryIdCanFitMap: { [index: string]: boolean }): PriceProductItem[] {
         var priceProductItemList: PriceProductItem[] = [];
         _.forEach(priceProductsContainer.priceProductList, (priceProduct: PriceProductDO) => {
             priceProduct.prepareForClient();
@@ -122,7 +127,11 @@ export class BookingSearchResultBuilder {
 
             let bookingCreationDate = this._bookingUtils.getCurrentThDateForHotel(this._builderParams.hotel);
 
-            _.forEach(priceProduct.roomCategoryIdList, (roomCategoryId: string) => {
+            let roomCategoryIdList = _.filter(priceProduct.roomCategoryIdList, roomCategId => {
+                return roomCategoryIdCanFitMap[roomCategId];
+            });
+
+            _.forEach(roomCategoryIdList, (roomCategoryId: string) => {
                 let priceQuery: PriceProductPriceQueryDO = {
                     roomCategoryId: roomCategoryId,
                     configCapacity: this._builderParams.searchParams.configCapacity,
