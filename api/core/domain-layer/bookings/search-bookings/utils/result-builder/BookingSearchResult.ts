@@ -10,6 +10,7 @@ export class RoomCategoryItem {
     stats: RoomCategoryStatsDO;
     noOccupiedRooms: number;
     priceProductIdList: string[];
+    canFit: boolean;
 }
 export class AllotmentItem {
     allotment: AllotmentDO;

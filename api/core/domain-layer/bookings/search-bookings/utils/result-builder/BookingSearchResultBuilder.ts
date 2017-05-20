@@ -89,6 +89,7 @@ export class BookingSearchResultBuilder {
             roomCategoryItem.priceProductIdList = this.getIdListFromPriceProductList(
                 priceProductsContainer.getFilteredPriceProductsByRoomCategoryId(roomCategoryStats.roomCategory.id)
             );
+            roomCategoryItem.canFit = roomCategoryStats.capacity.canFit(this._builderParams.searchParams.configCapacity);
             roomCategoryItemList.push(roomCategoryItem);
         });
         return roomCategoryItemList;
