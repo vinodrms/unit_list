@@ -19,7 +19,6 @@ import { BookingOccupancyCalculator } from './utils/occupancy-calculator/Booking
 import { IBookingOccupancy } from './utils/occupancy-calculator/results/IBookingOccupancy';
 import { RoomCategoryStatsAggregator } from '../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import { RoomCategoryStatsDO, RoomCategoryCapacityDO } from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import { RoomCategoryStatsFilter } from '../validators/filters/room-category-stats/RoomCategoryStatsFilter';
 import { BookingSearchResultBuilder } from './utils/result-builder/BookingSearchResultBuilder';
 import { BookingSearchResult } from './utils/result-builder/BookingSearchResult';
 
@@ -91,7 +90,6 @@ export class BookingSearch {
                 var roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
                 return roomCategStatsAggregator.getRoomCategoryStatsList();
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
-                var roomCategoryStatsFilter = new RoomCategoryStatsFilter(this._searchParams.configCapacity);
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
                 var resultBuilder = new BookingSearchResultBuilder(this._appContext, this._sessionContext);
