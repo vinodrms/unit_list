@@ -34,6 +34,10 @@ export class BookingViewModelConverter {
     private getBookingSearchResultForRoom(roomCategoryItem: RoomCategoryItemDO, bookingSearchResultDO: BookingSearchResultDO,
         bookingSearchParams: BookingSearchParams, hotelAggregatedInfo: HotelAggregatedInfo): BookingCartItemVM[] {
 
+        if (!roomCategoryItem.canFit) {
+            return [];
+        }
+
         var bookingItemVMList: BookingCartItemVM[] = [];
 
         var addedPriceProductIdByRoomCateg: { [index: string]: string; } = {};

@@ -1,5 +1,5 @@
-import {BaseDO} from '../../../../../../../../../../../common/base/BaseDO';
-import {RoomCategoryStatsDO} from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
+import { BaseDO } from '../../../../../../../../../../../common/base/BaseDO';
+import { RoomCategoryStatsDO } from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
 
 export class RoomCategoryItemDO extends BaseDO {
     constructor() {
@@ -9,9 +9,10 @@ export class RoomCategoryItemDO extends BaseDO {
     stats: RoomCategoryStatsDO;
     noOccupiedRooms: number;
     priceProductIdList: string[];
+    canFit: boolean;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["noOccupiedRooms", "priceProductIdList"];
+        return ["noOccupiedRooms", "priceProductIdList", "canFit"];
     }
 
     public buildFromObject(object: Object) {
