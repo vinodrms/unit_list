@@ -39,6 +39,7 @@ export class KeyMetricReader {
     private _loadedAllotmentList: AllotmentDO[];
     private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
     private _cancellationHour: ThHourDO;
+    private _checkOutHour: ThHourDO;
     private _currentHotelTimestamp: ThTimestampDO;
     private _configurationCompletedTimestamp: ThTimestampDO;
 
@@ -67,6 +68,7 @@ export class KeyMetricReader {
         this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id)
             .then((loadedHotel: HotelDO) => {
                 this._cancellationHour = loadedHotel.operationHours.cancellationHour;
+                this._checkOutHour = loadedHotel.operationHours.checkOutTo;
                 this._currentHotelTimestamp = ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone);
                 this._configurationCompletedTimestamp = loadedHotel.configurationCompletedTimestamp;
 
@@ -121,6 +123,7 @@ export class KeyMetricReader {
             currentRoomList: this._loadedRoomList,
             currentAllotmentList: this._loadedAllotmentList,
             cancellationHour: this._cancellationHour,
+            checkOutHour: this._checkOutHour,
             currentHotelTimestamp: this._currentHotelTimestamp,
             configurationCompletedTimestamp: this._configurationCompletedTimestamp
         });

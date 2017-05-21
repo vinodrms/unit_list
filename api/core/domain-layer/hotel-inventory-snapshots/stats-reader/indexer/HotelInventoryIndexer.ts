@@ -30,6 +30,7 @@ import _ = require('underscore');
 
 export interface HotelInventoryIndexerParams {
     cancellationHour: ThHourDO;
+    checkOutHour: ThHourDO;
     currentHotelTimestamp: ThTimestampDO;
     roomList: RoomSnapshotDO[];
 }
@@ -95,9 +96,23 @@ export class HotelInventoryIndexer {
             [BookingConfirmationStatus.Guaranteed, BookingConfirmationStatus.CheckedIn, BookingConfirmationStatus.CheckedOut]);
         this._guaranteedBookingsContainer = new BookingsContainer(guaranteedBookingList);
 
+        let currentUtcTimestamp = this._indexerParams.currentHotelTimestamp.getUtcTimestamp();
         this._guaranteedOccupyingRoomsFromInventoryBookingsContainer = new BookingsContainer(
             _.filter(guaranteedBookingList, booking => {
-                return _.contains(BookingDOConstraints.ConfirmationStatuses_OccupyingRoomsFromInventory, booking.confirmationStatus);
+
+                // always consider guaranteed and checked in bookings
+                if (booking.confirmationStatus !== BookingConfirmationStatus.CheckedOut) {
+                    return true;
+                }
+
+                // only consider bookings that were checked out in the past
+                let latestCheckOutTimestamp = ThTimestampDO.buildThTimestampDO(booking.interval.end, this._indexerParams.checkOutHour);
+                let latestCheckOutUtcTimestamp = latestCheckOutTimestamp.getUtcTimestamp();
+                if (booking.checkOutUtcTimestamp <= latestCheckOutUtcTimestamp
+                    && currentUtcTimestamp <= latestCheckOutUtcTimestamp) {
+                    return false;
+                }
+                return true;
             })
         );
 
