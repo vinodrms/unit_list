@@ -18,6 +18,8 @@ export interface ArrivalItemInfo {
     customerId: string;
     corporateCustomerId?: string;
     customerName?: string;
+    customerFirstName?: string;
+    customerLastName?: string;
     corporateCustomerName?: string;
 
     bookingId: string;
