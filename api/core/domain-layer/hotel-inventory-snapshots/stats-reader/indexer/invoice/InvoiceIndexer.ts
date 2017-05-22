@@ -34,7 +34,6 @@ export class InvoiceIndexer {
     }
 
     private getInvoiceStatsCore(resolve: { (result: IInvoiceStats): void }, reject: { (err: ThError): void }, indexedInterval: IndexedBookingInterval) {
-        debugger
         var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
         invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id },
             {
