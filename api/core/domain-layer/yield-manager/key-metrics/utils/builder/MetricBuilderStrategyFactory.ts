@@ -16,7 +16,8 @@ import _ = require('underscore');
 
 export class MetricBuilderStrategyFactory {
     constructor(private _hotelInventoryStats: IHotelInventoryStats,
-        private _roomCategoryStatsList: RoomCategoryStatsDO[]) {
+        private _roomCategoryStatsList: RoomCategoryStatsDO[],
+        private _excludeCommission: boolean) {
     }
 
     public getMetricStrategies(): IMetricBuilderStrategy[] {
@@ -25,9 +26,9 @@ export class MetricBuilderStrategyFactory {
             new TotalAvgRateBuilderStrategy(this._hotelInventoryStats),
             new TotalOccupancyBuilderStrategy(this._hotelInventoryStats),
             new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats),
-            new RoomRevenueBuilderStrategy(this._hotelInventoryStats),
-            new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats),
-            new OtherRevenueBuilderStrategy(this._hotelInventoryStats),
+            new RoomRevenueBuilderStrategy(this._hotelInventoryStats, this._excludeCommission),
+            new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, this._excludeCommission),
+            new OtherRevenueBuilderStrategy(this._hotelInventoryStats, this._excludeCommission),
             new AllotmentsBuilderStrategy(this._hotelInventoryStats),
             new RoomsBuilderStrategy(this._hotelInventoryStats)
         ];

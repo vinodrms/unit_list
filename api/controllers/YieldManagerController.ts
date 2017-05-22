@@ -7,6 +7,7 @@ import { PriceProductYieldResult } from '../core/domain-layer/yield-manager/pric
 import { KeyMetricReader } from '../core/domain-layer/yield-manager/key-metrics/KeyMetricReader';
 import { KeyMetricsResult } from '../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
 import { DynamicPriceYielding } from "../core/domain-layer/yield-manager/dynamic-price-yielding/DynamicPriceYielding";
+import { KeyMetricsReaderInputBuilder } from "../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsReaderInputBuilder";
 
 export class YieldManagerController extends BaseController {
 	public yieldPriceProducts(req: Express.Request, res: Express.Response) {
@@ -40,7 +41,13 @@ export class YieldManagerController extends BaseController {
 
 	public getKeyMetrics(req: Express.Request, res: Express.Response) {
 		var keyMetricReader = new KeyMetricReader(req.appContext, req.sessionContext);
-		keyMetricReader.getKeyMetrics(req.body.yieldParams).then((keyMetricsResult: KeyMetricsResult) => {
+		keyMetricReader.getKeyMetrics(
+			new KeyMetricsReaderInputBuilder()
+				.setYieldManagerPeriodDO(req.body.yieldParams)
+				.excludeCommission(false)
+				.excludeVat(false)
+				.build()
+		).then((keyMetricsResult: KeyMetricsResult) => {
 			this.returnSuccesfulResponse(req, res, { keyMetricsResult: keyMetricsResult });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.YieldManagerControllerErrorGettingKeyMetrics);

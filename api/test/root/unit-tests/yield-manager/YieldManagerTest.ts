@@ -23,6 +23,7 @@ import { KeyMetricReader } from '../../../../core/domain-layer/yield-manager/key
 import { KeyMetricsResult, KeyMetric } from '../../../../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
 import { DynamicPriceYielding } from "../../../../core/domain-layer/yield-manager/dynamic-price-yielding/DynamicPriceYielding";
 import { DynamicPriceYieldingDO } from "../../../../core/domain-layer/yield-manager/dynamic-price-yielding/DynamicPriceYieldingDO";
+import { KeyMetricsReaderInputBuilder } from "../../../../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsReaderInputBuilder";
 
 function testPriceProductOpenInterval(priceProduct: PriceProductDO, firstIntervalEnd: ThDateDO, secondIntervalStart: ThDateDO) {
 	should.equal(priceProduct.openIntervalList.length >= 2, true);
@@ -563,7 +564,11 @@ describe("Price Products Interval Tests", function () {
 			yieldPeriodDO.referenceDate = ThDateDO.buildThDateDO(2015, ThMonth.December, 31);
 			yieldPeriodDO.noDays = 14;
 			var keyMetricReader = new KeyMetricReader(testContext.appContext, testContext.sessionContext);
-			keyMetricReader.getKeyMetrics(yieldPeriodDO).then((keyMetricsResult: KeyMetricsResult) => {
+			keyMetricReader.getKeyMetrics(
+				new KeyMetricsReaderInputBuilder()
+					.setYieldManagerPeriodDO(yieldPeriodDO)
+					.build()
+			).then((keyMetricsResult: KeyMetricsResult) => {
 				should.equal(keyMetricsResult.currentItem.dateList.length, 14);
 				keyMetricsResult.currentItem.metricList.forEach((metric: KeyMetric) => {
 					should.equal(metric.valueList.length, 14);

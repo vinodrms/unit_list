@@ -915,5 +915,7 @@ export var EnglishTranslations: Object = {
 	"Total Number of Departures": "Total Number of Departures",
 	"Total Number of Stayovers": "Total Number of Stayovers",
 	"Total Number of Guests in House": "Total Number of Guests in House",
+	"Exclude Commission": "Exclude Commission",
+	"Exclude VAT": "Exclude VAT",
 	
 };
