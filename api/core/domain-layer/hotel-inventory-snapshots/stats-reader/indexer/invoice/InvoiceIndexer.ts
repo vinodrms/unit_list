@@ -14,6 +14,7 @@ import { InvoiceDO } from '../../../../../data-layer/invoices/data-objects/Invoi
 import { InvoiceItemDO, InvoiceItemType } from '../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { RevenueForDate } from '../../data-objects/revenue/RevenueForDate';
 import { TaxDO } from "../../../../../data-layer/taxes/data-objects/TaxDO";
+import { ThUtils } from "../../../../../utils/ThUtils";
 
 import _ = require('underscore');
 
@@ -89,9 +90,20 @@ export class InvoiceIndexer {
         _.forEach(invoice.itemList, (item: InvoiceItemDO) => {
             if (item.type === InvoiceItemType.AddOnProduct) {
                 otherRevenue += (this._excludeVat)?  
-                    this._indexedVatById[item.meta.getVatId()].getNetValue(item.getTotalPrice()) : item.getTotalPrice();
+                    this.getNetValue(item.meta.getVatId(), item.getTotalPrice()) : item.getTotalPrice();
             }
         });
         return otherRevenue;
     }
+
+    private getNetValue(vatId: string, price: number): number {
+        let vat = this._indexedVatById[vatId];
+
+        let thUtils = new ThUtils();
+        if(thUtils.isUndefinedOrNull(vat)) {
+            return price;
+        }
+
+        return vat.getNetValue(price);
+    } 
 }
