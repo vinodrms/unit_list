@@ -25,6 +25,7 @@ export class InvoiceIndexer {
     }
 
     public getInvoiceStats(indexedInterval: IndexedBookingInterval, indexedVatById: { [id: string]: TaxDO; }, excludeVat: boolean): Promise<IInvoiceStats> {
+        this._indexedVatById = indexedVatById;
         this._excludeVat = excludeVat;
 
         return new Promise<IInvoiceStats>((resolve: { (result: IInvoiceStats): void }, reject: { (err: ThError): void }) => {
@@ -33,6 +34,7 @@ export class InvoiceIndexer {
     }
 
     private getInvoiceStatsCore(resolve: { (result: IInvoiceStats): void }, reject: { (err: ThError): void }, indexedInterval: IndexedBookingInterval) {
+        debugger
         var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
         invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id },
             {

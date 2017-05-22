@@ -27,6 +27,7 @@ import { RoomSnapshotDO } from "../../../../data-layer/hotel-inventory-snapshots
 import { IRoom } from "../../../../data-layer/rooms/data-objects/IRoom";
 import { CommissionType, CommissionDO } from "../../../../data-layer/common/data-objects/commission/CommissionDO";
 import { TaxDO } from "../../../../data-layer/taxes/data-objects/TaxDO";
+import { ThUtils } from "../../../../utils/ThUtils";
 
 import _ = require('underscore');
 
@@ -183,14 +184,13 @@ export class HotelInventoryIndexer {
 
     private getBookingRoomPriceForDate(booking: BookingDO, totalNoNights: number,
         thDate: ThDateDO, excludeCommission: boolean, excludeVat: boolean): number {
-            
+
         let bookingPrice = booking.price;
         let bookingCapacity = booking.configCapacity;
-        let vatTax = this._indexedVatById[bookingPrice.getVatId()];
 
         if (bookingPrice.isPenalty()) {
             let price = bookingPrice.totalRoomPrice / totalNoNights;
-            return excludeVat ? vatTax.getNetValue(price) : price;
+            return excludeVat ?  this.getNetValue(bookingPrice.getVatId(), price) : price;
         }
 
         var roomPriceForNight = bookingPrice.roomPricePerNightAvg;
@@ -214,7 +214,7 @@ export class HotelInventoryIndexer {
         }
 
         // commission has vat included
-        return excludeVat ? vatTax.getNetValue(roomPriceForNight) : roomPriceForNight;
+        return excludeVat ? this.getNetValue(bookingPrice.getVatId(), roomPriceForNight) : roomPriceForNight;
     }
 
     private getBookingOtherPriceAvgPerNight(booking: BookingDO, totalNoNights: number,
@@ -230,7 +230,8 @@ export class HotelInventoryIndexer {
         let otherPrice = 0.0;
         if (this._excludeVat) {
             let bookingUtils = new BookingUtils();
-            let netOtherTotalPrice = bookingUtils.getIncludedInvoiceItems(booking.priceProductSnapshot, booking.configCapacity, this._indexedInterval).getNetTotalPrice(this._indexedVatById);
+            let netOtherTotalPrice = bookingUtils.getIncludedInvoiceItems(booking.priceProductSnapshot, booking.configCapacity, 
+                this._indexedInterval).getNetTotalPrice(this._indexedVatById);
             otherPrice = netOtherTotalPrice;
         }
         else {
@@ -244,7 +245,7 @@ export class HotelInventoryIndexer {
                 breakfastPrice = this.getPriceWithoutCommission(breakfastPrice, bookingPrice.commissionSnapshot, totalNoNights);
             }
             if (this._excludeVat) {
-                breakfastPrice = this._indexedVatById[bookingPrice.vatId].getNetValue(breakfastPrice);
+                breakfastPrice = this.getNetValue(bookingPrice.getVatId(), breakfastPrice);
             }
             otherPrice = otherPrice + breakfastPrice;
         }
@@ -265,6 +266,17 @@ export class HotelInventoryIndexer {
         var singleDayInterval = ThDateIntervalDO.buildThDateIntervalDO(thDate.buildPrototype(), this._dateUtils.addDaysToThDateDO(thDate.buildPrototype(), 1));
         return new IndexedBookingInterval(singleDayInterval);
     }
+
+    private getNetValue(vatId: string, price: number): number {
+        let vat = this._indexedVatById[vatId];
+
+        let thUtils = new ThUtils();
+        if(thUtils.isUndefinedOrNull(vat)) {
+            return price;
+        }
+
+        return vat.getNetValue(price);
+    } 
 
     public destroy() {
         this._confirmedBookingsContainer.destroy();
