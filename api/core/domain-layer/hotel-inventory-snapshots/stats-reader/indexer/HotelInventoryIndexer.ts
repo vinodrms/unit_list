@@ -25,6 +25,7 @@ import { InvoiceIndexer } from './invoice/InvoiceIndexer';
 import { IInvoiceStats } from './invoice/IInvoiceStats';
 import { RoomSnapshotDO } from "../../../../data-layer/hotel-inventory-snapshots/data-objects/room/RoomSnapshotDO";
 import { IRoom } from "../../../../data-layer/rooms/data-objects/IRoom";
+import { CommissionType, CommissionDO } from "../../../../data-layer/common/data-objects/commission/CommissionDO";
 
 import _ = require('underscore');
 
@@ -148,32 +149,36 @@ export class HotelInventoryIndexer {
         return bookingOccupancy;
     }
 
-    public getConfirmedRevenue(thDate: ThDateDO): IRevenueForDate {
-        return this.getRevenue(this._confirmedBookingsContainer, thDate);
+    public getConfirmedRevenue(thDate: ThDateDO, excludeCommission: boolean = false): IRevenueForDate {
+        return this.getRevenue(this._confirmedBookingsContainer, thDate, excludeCommission);
     }
-    public getGuaranteedRevenue(thDate: ThDateDO): IRevenueForDate {
-        var guaranteedRev = this.getRevenue(this._guaranteedBookingsContainer, thDate);
-        var penaltyRev = this.getRevenue(this._penaltyBookingsContainer, thDate);
+    public getGuaranteedRevenue(thDate: ThDateDO, excludeCommission: boolean = false): IRevenueForDate {
+        var guaranteedRev = this.getRevenue(this._guaranteedBookingsContainer, thDate, excludeCommission);
+        var penaltyRev = this.getRevenue(this._penaltyBookingsContainer, thDate, excludeCommission);
         guaranteedRev.addRevenue(penaltyRev);
         var invoiceRevenue = this._invoiceStats.getRevenueForDate(thDate);
         guaranteedRev.addRevenue(invoiceRevenue);
         return guaranteedRev;
     }
-    private getRevenue(bookingsContainer: BookingsContainer, thDate: ThDateDO): RevenueForDate {
+    private getRevenue(bookingsContainer: BookingsContainer, thDate: ThDateDO, excludeCommission: boolean = false): RevenueForDate {
         var indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(thDate);
         var filteredBookingItemList: BookingItemContainer[] = bookingsContainer.getBookingItemContainersFilteredByInterval(indexedSingleDayInterval);
         var revenue = new RevenueForDate(0.0, 0.0);
         _.forEach(filteredBookingItemList, (bookingItem: BookingItemContainer) => {
             var noNights = bookingItem.indexedBookingInterval.getLengthOfStay();
             if (noNights > 0 && !this._invoiceStats.bookingHasInvoiceWithLossAcceptedByManagement(bookingItem.booking.id)) {
-                revenue.roomRevenue += this.getBookingRoomPriceForDate(bookingItem.booking.price, bookingItem.booking.configCapacity, noNights, thDate);
-                revenue.otherRevenue += this.getBookingOtherPriceAvgPerNight(bookingItem.booking.price, bookingItem.booking.configCapacity, noNights);
+                revenue.roomRevenue += this.getBookingRoomPriceForDate(bookingItem.booking.price, bookingItem.booking.configCapacity,
+                    noNights, thDate, excludeCommission);
+                revenue.otherRevenue += this.getBookingOtherPriceAvgPerNight(bookingItem.booking.price, bookingItem.booking.configCapacity,
+                    noNights, excludeCommission);
             }
         });
         return revenue;
     }
 
-    private getBookingRoomPriceForDate(bookingPrice: BookingPriceDO, bookingCapacity: ConfigCapacityDO, totalNoNights: number, thDate: ThDateDO): number {
+    private getBookingRoomPriceForDate(bookingPrice: BookingPriceDO, bookingCapacity: ConfigCapacityDO, totalNoNights: number,
+        thDate: ThDateDO, excludeCommission: boolean = false): number {
+
         if (bookingPrice.isPenalty()) {
             return bookingPrice.totalRoomPrice / totalNoNights;
         }
@@ -192,18 +197,40 @@ export class HotelInventoryIndexer {
             roomPriceForNight = roomPriceForNight - (bookingPrice.breakfast.meta.getUnitPrice() * bookingCapacity.getNoAdultsAndChildren());
         }
         if (roomPriceForNight < 0) { roomPriceForNight = 0; }
+
+        if (excludeCommission) {
+            roomPriceForNight = this.getPriceWithoutCommission(roomPriceForNight, bookingPrice.commissionSnapshot, totalNoNights);
+        }
+
         return roomPriceForNight;
     }
 
-    private getBookingOtherPriceAvgPerNight(bookingPrice: BookingPriceDO, bookingCapacity: ConfigCapacityDO, totalNoNights: number): number {
+    private getBookingOtherPriceAvgPerNight(bookingPrice: BookingPriceDO, bookingCapacity: ConfigCapacityDO, totalNoNights: number,
+        excludeCommission: boolean = false): number {
+
         if (bookingPrice.isPenalty()) {
             return 0.0;
         }
         var otherPrice = bookingPrice.totalOtherPrice / totalNoNights;
         if (bookingPrice.hasBreakfast()) {
-            otherPrice = otherPrice + (bookingPrice.breakfast.meta.getUnitPrice() * bookingCapacity.getNoAdultsAndChildren());
+            let breakfastPrice = bookingPrice.breakfast.meta.getUnitPrice() * bookingCapacity.getNoAdultsAndChildren();
+            if (excludeCommission) {
+                breakfastPrice = this.getPriceWithoutCommission(breakfastPrice, bookingPrice.commissionSnapshot, totalNoNights);
+            }
+
+            otherPrice = otherPrice + breakfastPrice;
         }
         return otherPrice;
+    }
+
+    private getPriceWithoutCommission(price: number, commission: CommissionDO, totalNoNights: number) {
+        let commissionAmount = commission.getCommissionFor(price);
+
+        if (commission.type === CommissionType.Fixed) {
+            commissionAmount = commissionAmount / totalNoNights;
+        }
+
+        return price - commissionAmount;
     }
 
     private getSingleDayIntervalStartingFrom(thDate: ThDateDO): IndexedBookingInterval {

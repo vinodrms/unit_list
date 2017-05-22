@@ -101,8 +101,11 @@ export class HotelInventoryStatsReader {
                 confirmedOccupancy: this._inventoryIndexer.getConfirmedOccupancy(date),
                 guaranteedOccupancy: this._inventoryIndexer.getGuaranteedOccupancy(date),
                 guaranteedOccupancyOccupyingRoomsFromInventory: this._inventoryIndexer.getGuaranteedOccupyingRoomsFromInventoryOccupancy(date),
-                confirmedRevenue: this._inventoryIndexer.getConfirmedRevenue(date),
-                guaranteedRevenue: this._inventoryIndexer.getGuaranteedRevenue(date)
+                confirmedRevenue: this._inventoryIndexer.getConfirmedRevenue(date, false),
+                confirmedRevenueWithoutCommission: this._inventoryIndexer.getConfirmedRevenue(date, true),
+                guaranteedRevenue: this._inventoryIndexer.getGuaranteedRevenue(date, false),
+                guaranteedRevenueWithoutCommission: this._inventoryIndexer.getGuaranteedRevenue(date, true)
+
             }
             hotelInventory.indexHotelInventoryForDate(inventoryForDate, date);
         });

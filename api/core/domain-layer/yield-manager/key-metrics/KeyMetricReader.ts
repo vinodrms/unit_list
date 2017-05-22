@@ -43,6 +43,7 @@ export class KeyMetricReader {
     private _currentHotelTimestamp: ThTimestampDO;
     private _configurationCompletedTimestamp: ThTimestampDO;
 
+    private _input: KeyMetricsReaderInput;
     private _keyMetricsResult: KeyMetricsResult;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
@@ -50,15 +51,16 @@ export class KeyMetricReader {
     }
 
     public getKeyMetrics(input: KeyMetricsReaderInput): Promise<KeyMetricsResult> {
+        this._input = input;
         return new Promise<KeyMetricsResult>((resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }) => {
-            this.getKeyMetricsCore(resolve, reject, input);
+            this.getKeyMetricsCore(resolve, reject);
         });
     }
-    private getKeyMetricsCore(resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }, input: KeyMetricsReaderInput) {
-        var ymPeriodParser = new YieldManagerPeriodParser(input.yieldManagerPeriodDO);
+    private getKeyMetricsCore(resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }) {
+        var ymPeriodParser = new YieldManagerPeriodParser(this._input.yieldManagerPeriodDO);
         if (!ymPeriodParser.isValid()) {
             var thError = new ThError(ThStatusCode.KeyMetricReaderInvalidInterval, null);
-            ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid interval for key metrics reader", input.yieldManagerPeriodDO, thError);
+            ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid interval for key metrics reader", this._input.yieldManagerPeriodDO, thError);
             reject(thError);
             return;
         }
@@ -92,15 +94,15 @@ export class KeyMetricReader {
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
                 this._keyMetricsResult = new KeyMetricsResult();
-                return this.getKeyMetricsResultItem(this._currentIndexedInterval, input.dataAggregationType);
+                return this.getKeyMetricsResultItem(this._currentIndexedInterval, this._input.dataAggregationType);
             }).then((currentItem: KeyMetricsResultItem) => {
                 this._keyMetricsResult.currentItem = currentItem;
-                if (!input.includePreviousPeriod) {
+                if (!this._input.includePreviousPeriod) {
                     return new Promise<KeyMetricsResultItem>((resolve: { (result: KeyMetricsResultItem): void }, reject: { (err: ThError): void }) => {
                         resolve(null);
                     });
                 }
-                return this.getKeyMetricsResultItem(this._previousIndexedInterval, input.dataAggregationType);
+                return this.getKeyMetricsResultItem(this._previousIndexedInterval, this._input.dataAggregationType);
             }).then((previousItem: KeyMetricsResultItem) => {
                 this._keyMetricsResult.previousItem = previousItem;
                 resolve(this._keyMetricsResult);
@@ -138,7 +140,7 @@ export class KeyMetricReader {
             resultItem.aggregationPeriodList = aggregationPeriodList;
 
             resultItem.metricList = [];
-            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedRoomCategoryStatsList);
+            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedRoomCategoryStatsList, this._input.excludeCommission);
             var metricBuilderStrategyList: IMetricBuilderStrategy[] = metricFactory.getMetricStrategies();
 
             _.forEach(metricBuilderStrategyList, (metricBuilderStrategy: IMetricBuilderStrategy) => {
