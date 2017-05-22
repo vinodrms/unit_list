@@ -26,6 +26,7 @@ import { P23_RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings } from "./
 import { P24_MigrateBookingGroupsToBookings } from "./list/P24_MigrateBookingGroupsToBookings";
 import { P25_SetShouldApplyTransactionFeeOnInvoicePayer } from "./list/P25_SetShouldApplyTransactionFeeOnInvoicePayer";
 import { P26_AddCorporateCustomerIdToBookings } from './list/P26_AddCorporateCustomerIdToBookings';
+import { P27_AddCheckInAndCheckOutUtcTimestampsOnBookings } from "./list/P27_AddCheckInAndCheckOutUtcTimestampsOnBookings";
 
 export class MongoPatchUtils {
 	public static get PatchList(): ATransactionalMongoPatch[] {
@@ -56,7 +57,9 @@ export class MongoPatchUtils {
 			new P23_RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings(),
 			new P24_MigrateBookingGroupsToBookings(),
 			new P25_SetShouldApplyTransactionFeeOnInvoicePayer(),
-			new P26_AddCorporateCustomerIdToBookings()
+			new P26_AddCorporateCustomerIdToBookings(),
+			new P27_AddCheckInAndCheckOutUtcTimestampsOnBookings(),
+
 
 		];
 	}

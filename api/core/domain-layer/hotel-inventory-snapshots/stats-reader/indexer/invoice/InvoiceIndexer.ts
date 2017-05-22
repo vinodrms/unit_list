@@ -13,14 +13,22 @@ import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/
 import { InvoiceDO } from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceItemDO, InvoiceItemType } from '../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { RevenueForDate } from '../../data-objects/revenue/RevenueForDate';
+import { TaxDO } from "../../../../../data-layer/taxes/data-objects/TaxDO";
+import { ThUtils } from "../../../../../utils/ThUtils";
 
 import _ = require('underscore');
 
 export class InvoiceIndexer {
+    private _indexedVatById: { [id: string]: TaxDO; };
+    private _excludeVat: boolean;
+    
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
     }
 
-    public getInvoiceStats(indexedInterval: IndexedBookingInterval): Promise<IInvoiceStats> {
+    public getInvoiceStats(indexedInterval: IndexedBookingInterval, indexedVatById: { [id: string]: TaxDO; }, excludeVat: boolean): Promise<IInvoiceStats> {
+        this._indexedVatById = indexedVatById;
+        this._excludeVat = excludeVat;
+
         return new Promise<IInvoiceStats>((resolve: { (result: IInvoiceStats): void }, reject: { (err: ThError): void }) => {
             this.getInvoiceStatsCore(resolve, reject, indexedInterval);
         });
@@ -81,9 +89,21 @@ export class InvoiceIndexer {
         var otherRevenue = 0.0;
         _.forEach(invoice.itemList, (item: InvoiceItemDO) => {
             if (item.type === InvoiceItemType.AddOnProduct) {
-                otherRevenue += item.getTotalPrice();
+                otherRevenue += (this._excludeVat)?  
+                    this.getNetValue(item.meta.getVatId(), item.getTotalPrice()) : item.getTotalPrice();
             }
         });
         return otherRevenue;
     }
+
+    private getNetValue(vatId: string, price: number): number {
+        let vat = this._indexedVatById[vatId];
+
+        let thUtils = new ThUtils();
+        if(thUtils.isUndefinedOrNull(vat)) {
+            return price;
+        }
+
+        return vat.getNetValue(price);
+    } 
 }

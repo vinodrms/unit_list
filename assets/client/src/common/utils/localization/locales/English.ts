@@ -935,5 +935,7 @@ export var EnglishTranslations: Object = {
 	"Departures Children": "Departures Children",
 	"Departures Babies": "Departures Babies",
 	"Departures Baby Beds": "Departures Baby Beds",
-
+	"Exclude Commission": "Exclude Commission",
+	"Exclude VAT": "Exclude VAT",
+	
 };

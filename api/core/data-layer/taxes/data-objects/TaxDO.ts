@@ -1,4 +1,4 @@
-import {BaseDO} from '../../common/base/BaseDO';
+import { BaseDO } from '../../common/base/BaseDO';
 import _ = require("underscore");
 
 export enum TaxType {
@@ -48,6 +48,17 @@ export class TaxDO extends BaseDO {
 				return _.isNumber(this.value) && this.value >= 0;
 			default:
 				return false;
+		}
+	}
+
+	public getNetValue(price: number): number {
+		switch (this.valueType) {
+			case TaxValueType.Percentage:
+				return price / (1 + this.value);
+			case TaxValueType.Fixed:
+				return price - this.value;
+			default:
+				return price;
 		}
 	}
 }

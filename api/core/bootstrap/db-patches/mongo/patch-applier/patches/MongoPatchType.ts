@@ -26,6 +26,7 @@ export enum MongoPatchType {
     MigrateBookingGroupsToBookings,
     SetShouldApplyTransactionFeeOnInvoicePayer,
     AddCorporateCustomerIdToBookings,
+    AddCheckInAndCheckOutUtcTimestampsOnBookings,
 
 
 }
