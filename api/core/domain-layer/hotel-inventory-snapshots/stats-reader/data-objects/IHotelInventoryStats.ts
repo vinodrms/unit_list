@@ -9,7 +9,9 @@ export interface HotelInventoryStatsForDate {
     guaranteedOccupancy: IBookingOccupancy;
     guaranteedOccupancyOccupyingRoomsFromInventory: IBookingOccupancy;
     confirmedRevenue: IRevenueForDate;
+    confirmedRevenueWithoutCommission: IRevenueForDate;
     guaranteedRevenue: IRevenueForDate;
+    guaranteedRevenueWithoutCommission: IRevenueForDate;
 }
 
 export interface IHotelInventoryStats {

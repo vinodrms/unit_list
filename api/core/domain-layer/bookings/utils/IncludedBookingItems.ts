@@ -1,6 +1,7 @@
 import {InvoiceItemDO, InvoiceItemType} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 
 import _ = require('underscore');
+import { TaxDO } from "../../../data-layer/taxes/data-objects/TaxDO";
 
 export class IncludedBookingItems {
     private _breakfast: InvoiceItemDO;
@@ -15,6 +16,14 @@ export class IncludedBookingItems {
             totalPrice = totalPrice + includedInvoiceItem.getTotalPrice();
         });
         return totalPrice;
+    }
+
+    public getNetTotalPrice(indexedVatById: { [id: string]: TaxDO; }): number {
+        var netTotalPrice: number = 0.0;
+        _.forEach(this._includedInvoiceItemList, (includedInvoiceItem: InvoiceItemDO) => {
+            netTotalPrice = netTotalPrice + indexedVatById[includedInvoiceItem.meta.getVatId()].getNetValue(includedInvoiceItem.getTotalPrice());
+        });
+        return netTotalPrice;
     }
 
     public get breakfast(): InvoiceItemDO {

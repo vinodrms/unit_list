@@ -25,6 +25,9 @@ import { ThPeriodType, ThPeriodDO } from "../../reports/key-metrics/period-conve
 import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
 import { ThDateToThPeriodConverterFactory } from "../../reports/key-metrics/period-converter/ThDateToThPeriodConverterFactory";
 import { ThUtils } from "../../../utils/ThUtils";
+import { KeyMetricsReaderInput } from "./utils/KeyMetricsReaderInput";
+import { TaxDO } from "../../../data-layer/taxes/data-objects/TaxDO";
+import { TaxResponseRepoDO } from "../../../data-layer/taxes/repositories/ITaxRepository";
 
 import _ = require('underscore');
 
@@ -37,28 +40,31 @@ export class KeyMetricReader {
     private _loadedRoomList: RoomDO[];
     private _loadedAllotmentList: AllotmentDO[];
     private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
+    private _loadedVatTaxList: TaxDO[];
+
     private _cancellationHour: ThHourDO;
     private _checkOutHour: ThHourDO;
     private _currentHotelTimestamp: ThTimestampDO;
     private _configurationCompletedTimestamp: ThTimestampDO;
 
+    private _input: KeyMetricsReaderInput;
     private _keyMetricsResult: KeyMetricsResult;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
     }
 
-    public getKeyMetrics(yieldManagerPeriodDO: YieldManagerPeriodDO, includePreviousPeriod: boolean = true, 
-                            dataAggregationType: ThPeriodType = ThPeriodType.Day): Promise<KeyMetricsResult> {
+    public getKeyMetrics(input: KeyMetricsReaderInput): Promise<KeyMetricsResult> {
+        this._input = input;
         return new Promise<KeyMetricsResult>((resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }) => {
-            this.getKeyMetricsCore(resolve, reject, yieldManagerPeriodDO, includePreviousPeriod, dataAggregationType);
+            this.getKeyMetricsCore(resolve, reject);
         });
     }
-    private getKeyMetricsCore(resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }, yieldManagerPeriodDO: YieldManagerPeriodDO, includePreviousPeriod: boolean, dataAggregationType: ThPeriodType) {
-        var ymPeriodParser = new YieldManagerPeriodParser(yieldManagerPeriodDO);
+    private getKeyMetricsCore(resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }) {
+        var ymPeriodParser = new YieldManagerPeriodParser(this._input.yieldManagerPeriodDO);
         if (!ymPeriodParser.isValid()) {
             var thError = new ThError(ThStatusCode.KeyMetricReaderInvalidInterval, null);
-            ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid interval for key metrics reader", yieldManagerPeriodDO, thError);
+            ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid interval for key metrics reader", this._input.yieldManagerPeriodDO, thError);
             reject(thError);
             return;
         }
@@ -71,7 +77,12 @@ export class KeyMetricReader {
                 this._checkOutHour = loadedHotel.operationHours.checkOutTo;
                 this._currentHotelTimestamp = ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone);
                 this._configurationCompletedTimestamp = loadedHotel.configurationCompletedTimestamp;
-
+                
+                var taxRepo = this._appContext.getRepositoryFactory().getTaxRepository();
+                return taxRepo.getTaxList({ hotelId: this._sessionContext.sessionDO.hotel.id });
+            }).then((result: TaxResponseRepoDO) => {
+                this._loadedVatTaxList = result.vatList;
+            
                 var roomsRepo = this._appContext.getRepositoryFactory().getRoomRepository();
                 return roomsRepo.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     maintenanceStatusList: RoomDO.inInventoryMaintenanceStatusList
@@ -92,15 +103,15 @@ export class KeyMetricReader {
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
                 this._keyMetricsResult = new KeyMetricsResult();
-                return this.getKeyMetricsResultItem(this._currentIndexedInterval, dataAggregationType);
+                return this.getKeyMetricsResultItem(this._currentIndexedInterval, this._input.dataAggregationType);
             }).then((currentItem: KeyMetricsResultItem) => {
                 this._keyMetricsResult.currentItem = currentItem;
-                if (!includePreviousPeriod) {
+                if (!this._input.includePreviousPeriod) {
                     return new Promise<KeyMetricsResultItem>((resolve: { (result: KeyMetricsResultItem): void }, reject: { (err: ThError): void }) => {
                         resolve(null);
                     });
                 }
-                return this.getKeyMetricsResultItem(this._previousIndexedInterval, dataAggregationType);
+                return this.getKeyMetricsResultItem(this._previousIndexedInterval, this._input.dataAggregationType);
             }).then((previousItem: KeyMetricsResultItem) => {
                 this._keyMetricsResult.previousItem = previousItem;
                 resolve(this._keyMetricsResult);
@@ -120,13 +131,14 @@ export class KeyMetricReader {
     }
     private getKeyMetricsResultItemCore(resolve: { (result: KeyMetricsResultItem): void }, reject: { (err: ThError): void }, indexedInterval: IndexedBookingInterval, dataAggregationType) {
         var statsReader = new HotelInventoryStatsReader(this._appContext, this._sessionContext, {
+            currentVatTaxList: this._loadedVatTaxList,
             currentRoomList: this._loadedRoomList,
             currentAllotmentList: this._loadedAllotmentList,
             cancellationHour: this._cancellationHour,
             checkOutHour: this._checkOutHour,
             currentHotelTimestamp: this._currentHotelTimestamp,
             configurationCompletedTimestamp: this._configurationCompletedTimestamp
-        });
+        }, this._input.excludeVat);
         statsReader.readInventoryForInterval(indexedInterval).then((inventoryStats: IHotelInventoryStats) => {
             var resultItem: KeyMetricsResultItem = new KeyMetricsResultItem();
             resultItem.dateList = indexedInterval.bookingDateList;
@@ -138,7 +150,7 @@ export class KeyMetricReader {
             resultItem.aggregationPeriodList = aggregationPeriodList;
 
             resultItem.metricList = [];
-            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedRoomCategoryStatsList);
+            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedRoomCategoryStatsList, this._input.excludeCommission);
             var metricBuilderStrategyList: IMetricBuilderStrategy[] = metricFactory.getMetricStrategies();
 
             _.forEach(metricBuilderStrategyList, (metricBuilderStrategy: IMetricBuilderStrategy) => {

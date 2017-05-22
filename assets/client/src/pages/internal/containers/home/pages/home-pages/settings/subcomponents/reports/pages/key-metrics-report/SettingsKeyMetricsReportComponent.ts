@@ -21,6 +21,8 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 	private endDate: ThDateDO;
 	private isLoading: boolean = true;
 	private periodOptionList: ThPeriodOption[];
+	private excludeCommission: boolean;
+	private excludeVat: boolean;
 	private selectedPeriodType: ThPeriodType;
 	private format: ReportOutputFormatType;
 
@@ -32,6 +34,8 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 		super();
 		this._pagesService.bootstrapSelectedTab(ReportGroupType.KeyMetrics);
 		this.periodOptionList = ThPeriodOption.getValues();
+		this.excludeCommission = true;
+		this.excludeVat = true;
 		this.selectedPeriodType = this.periodOptionList[0].type;
 	}
 	ngOnInit() {
@@ -66,7 +70,9 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 			properties: {
 				startDate: this.startDate,
 				endDate: this.endDate,
-				periodType: this.selectedPeriodType
+				periodType: this.selectedPeriodType,
+				excludeCommission: this.excludeCommission,
+				excludeVat: this.excludeVat
 			}
 		}
 		var encodedParams = encodeURI(JSON.stringify(params));

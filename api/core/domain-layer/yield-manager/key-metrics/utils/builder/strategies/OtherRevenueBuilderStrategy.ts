@@ -7,7 +7,7 @@ import { PriceKeyMetric } from '../../values/PriceKeyMetric';
 import _ = require('underscore');
 
 export class OtherRevenueBuilderStrategy extends AMetricBuilderStrategy {
-    constructor(hotelInventoryStats: IHotelInventoryStats) {
+    constructor(hotelInventoryStats: IHotelInventoryStats,  private _excludeCommission) {
         super(hotelInventoryStats);
     }
 
@@ -21,7 +21,9 @@ export class OtherRevenueBuilderStrategy extends AMetricBuilderStrategy {
         let metric = new PriceKeyMetric();
         metric.price = 0;
         _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
-            metric.price += statsForDate.confirmedRevenue.otherRevenue + statsForDate.guaranteedRevenue.otherRevenue;
+            let confirmedRevenue = this._excludeCommission? statsForDate.confirmedRevenueWithoutCommission : statsForDate.confirmedRevenue;
+            let guaranteedRevenue = this._excludeCommission? statsForDate.guaranteedRevenueWithoutCommission : statsForDate.guaranteedRevenue;
+            metric.price += confirmedRevenue.otherRevenue + guaranteedRevenue.otherRevenue;
         });
         metric.price = this.roundValueToNearestInteger(metric.price);
         return metric;
