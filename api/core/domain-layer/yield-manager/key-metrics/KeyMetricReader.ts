@@ -26,6 +26,8 @@ import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
 import { ThDateToThPeriodConverterFactory } from "../../reports/key-metrics/period-converter/ThDateToThPeriodConverterFactory";
 import { ThUtils } from "../../../utils/ThUtils";
 import { KeyMetricsReaderInput } from "./utils/KeyMetricsReaderInput";
+import { TaxDO } from "../../../data-layer/taxes/data-objects/TaxDO";
+import { TaxResponseRepoDO } from "../../../data-layer/taxes/repositories/ITaxRepository";
 
 import _ = require('underscore');
 
@@ -38,6 +40,8 @@ export class KeyMetricReader {
     private _loadedRoomList: RoomDO[];
     private _loadedAllotmentList: AllotmentDO[];
     private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
+    private _loadedVatTaxList: TaxDO[];
+
     private _cancellationHour: ThHourDO;
     private _checkOutHour: ThHourDO;
     private _currentHotelTimestamp: ThTimestampDO;
@@ -73,7 +77,12 @@ export class KeyMetricReader {
                 this._checkOutHour = loadedHotel.operationHours.checkOutTo;
                 this._currentHotelTimestamp = ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone);
                 this._configurationCompletedTimestamp = loadedHotel.configurationCompletedTimestamp;
-
+                
+                var taxRepo = this._appContext.getRepositoryFactory().getTaxRepository();
+                return taxRepo.getTaxList({ hotelId: this._sessionContext.sessionDO.hotel.id });
+            }).then((result: TaxResponseRepoDO) => {
+                this._loadedVatTaxList = result.vatList;
+            
                 var roomsRepo = this._appContext.getRepositoryFactory().getRoomRepository();
                 return roomsRepo.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     maintenanceStatusList: RoomDO.inInventoryMaintenanceStatusList
@@ -122,13 +131,14 @@ export class KeyMetricReader {
     }
     private getKeyMetricsResultItemCore(resolve: { (result: KeyMetricsResultItem): void }, reject: { (err: ThError): void }, indexedInterval: IndexedBookingInterval, dataAggregationType) {
         var statsReader = new HotelInventoryStatsReader(this._appContext, this._sessionContext, {
+            currentVatTaxList: this._loadedVatTaxList,
             currentRoomList: this._loadedRoomList,
             currentAllotmentList: this._loadedAllotmentList,
             cancellationHour: this._cancellationHour,
             checkOutHour: this._checkOutHour,
             currentHotelTimestamp: this._currentHotelTimestamp,
             configurationCompletedTimestamp: this._configurationCompletedTimestamp
-        });
+        }, this._input.excludeVat);
         statsReader.readInventoryForInterval(indexedInterval).then((inventoryStats: IHotelInventoryStats) => {
             var resultItem: KeyMetricsResultItem = new KeyMetricsResultItem();
             resultItem.dateList = indexedInterval.bookingDateList;

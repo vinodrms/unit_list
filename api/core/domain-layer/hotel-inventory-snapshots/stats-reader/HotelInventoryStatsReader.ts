@@ -19,10 +19,13 @@ import { IHotelInventoryStats, HotelInventoryStatsForDate } from './data-objects
 import { TotalInventoryForDate } from './data-objects/total-inventory/TotalInventoryForDate';
 import { SnapshotUtils } from '../utils/SnapshotUtils';
 import { HotelInventoryIndexer } from './indexer/HotelInventoryIndexer';
+import { TaxResponseRepoDO } from "../../../data-layer/taxes/repositories/ITaxRepository";
+import { TaxDO } from "../../../data-layer/taxes/data-objects/TaxDO";
 
 import _ = require('underscore');
 
 export interface HotelInventoryStatsParams {
+    currentVatTaxList: TaxDO[];
     currentRoomList: RoomDO[];
     currentAllotmentList: AllotmentDO[];
     cancellationHour: ThHourDO;
@@ -44,12 +47,13 @@ export class HotelInventoryStatsReader {
 
     constructor(private _appContext: AppContext,
         private _sessionContext: SessionContext,
-        private _readerParams: HotelInventoryStatsParams) {
+        private _readerParams: HotelInventoryStatsParams,
+        private _exludeVat: boolean = false) {
         this._thUtils = new ThUtils();
         this._thDateUtils = new ThDateUtils();
         this._snapshotUtils = new SnapshotUtils();
         this._currentRoomSnapshots = this._snapshotUtils.buildRoomSnapshots(this._readerParams.currentRoomList);
-        this.buildMinInventoryDate();
+        this.buildMinInventoryDate();   
     }
     private buildMinInventoryDate() {
         var configCompletedTimestamp: ThTimestampDO = this._readerParams.configurationCompletedTimestamp;
@@ -68,29 +72,28 @@ export class HotelInventoryStatsReader {
     }
     private readInventoryForIntervalCore(resolve: { (result: IHotelInventoryStats): void }, reject: { (err: ThError): void }) {
         var snapshotRepo = this._appContext.getRepositoryFactory().getSnapshotRepository();
-        snapshotRepo.getSnapshotList({ hotelId: this._sessionContext.sessionDO.hotel.id },
-            { interval: this._indexedInterval.indexedBookingInterval })
-            .then((searchResult: HotelInventorySnapshotSearchResultRepoDO) => {
-                this._loadedSnapshotList = searchResult.snapshotList;
+        snapshotRepo.getSnapshotList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { interval: this._indexedInterval.indexedBookingInterval }).then((searchResult: HotelInventorySnapshotSearchResultRepoDO) => {
+            this._loadedSnapshotList = searchResult.snapshotList;
 
-                this._inventoryIndexer = new HotelInventoryIndexer(this._appContext, this._sessionContext, {
-                    cancellationHour: this._readerParams.cancellationHour,
-                    checkOutHour: this._readerParams.checkOutHour,
-                    currentHotelTimestamp: this._readerParams.currentHotelTimestamp,
-                    roomList: this._currentRoomSnapshots
-                });
-                return this._inventoryIndexer.indexInventory(this._indexedInterval);
-            }).then((result: boolean) => {
-                var hotelInventory = this.getHotelInventory();
-                this._inventoryIndexer.destroy();
-                resolve(hotelInventory);
-            }).catch((error: any) => {
-                var thError = new ThError(ThStatusCode.HotelInventoryStatsReaderError, error);
-                if (thError.isNativeError()) {
-                    ThLogger.getInstance().logError(ThLogLevel.Error, "error reading hotel stats", { interval: this._indexedInterval, session: this._sessionContext.sessionDO }, thError);
-                }
-                reject(thError);
-            });
+            this._inventoryIndexer = new HotelInventoryIndexer(this._appContext, this._sessionContext, {
+                cancellationHour: this._readerParams.cancellationHour,
+                checkOutHour: this._readerParams.checkOutHour,
+                currentHotelTimestamp: this._readerParams.currentHotelTimestamp,
+                roomList: this._currentRoomSnapshots,
+                vatTaxList: this._readerParams.currentVatTaxList 
+            }, this._exludeVat);
+            return this._inventoryIndexer.indexInventory(this._indexedInterval);
+        }).then((result: boolean) => {
+            var hotelInventory = this.getHotelInventory();
+            this._inventoryIndexer.destroy();
+            resolve(hotelInventory);
+        }).catch((error: any) => {
+            var thError = new ThError(ThStatusCode.HotelInventoryStatsReaderError, error);
+            if (thError.isNativeError()) {
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error reading hotel stats", { interval: this._indexedInterval, session: this._sessionContext.sessionDO }, thError);
+            }
+            reject(thError);
+        });
     }
 
     private getHotelInventory(): HotelInventoryStats {
