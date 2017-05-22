@@ -22,8 +22,8 @@ export class MetricBuilderStrategyFactory {
 
     public getMetricStrategies(): IMetricBuilderStrategy[] {
         var metricList: IMetricBuilderStrategy[] = [
-            new TotalRevParBuilderStrategy(this._hotelInventoryStats),
-            new TotalAvgRateBuilderStrategy(this._hotelInventoryStats),
+            new TotalRevParBuilderStrategy(this._hotelInventoryStats, this._excludeCommission),
+            new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, this._excludeCommission),
             new TotalOccupancyBuilderStrategy(this._hotelInventoryStats),
             new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats),
             new RoomRevenueBuilderStrategy(this._hotelInventoryStats, this._excludeCommission),
