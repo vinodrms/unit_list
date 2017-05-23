@@ -14,8 +14,8 @@ export class BookingsByIntervalReportSectionGenerator extends AReportSectionGene
     public static MaxBookings = 2000;
     private _bookingMetaByStatus: { [id: number]: BookingMeta };
 
-    constructor(appContext: AppContext, sessionContext: SessionContext, private _startDate: ThDateDO, private _endDate: ThDateDO) {
-        super(appContext, sessionContext);
+    constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object, private _startDate: ThDateDO, private _endDate: ThDateDO) {
+        super(appContext, sessionContext, globalSummary);
 
         this._bookingMetaByStatus = _.indexBy(BookingDOConstraints.BookingMetaList, meta => { return meta.status; });
     }
@@ -26,7 +26,7 @@ export class BookingsByIntervalReportSectionGenerator extends AReportSectionGene
         }
     }
 
-    protected getSummary(): Object {
+    protected getGlobalSummary(): Object {
 		return {};
 	}
 

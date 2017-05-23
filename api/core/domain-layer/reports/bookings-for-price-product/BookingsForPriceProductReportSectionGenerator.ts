@@ -13,9 +13,9 @@ export class BookingsForPriceProductReportSectionGenerator extends AReportSectio
     public static MaxBookings = 2000;
     private _bookingMetaByStatus: { [id: number]: BookingMeta };
 
-    constructor(appContext: AppContext, sessionContext: SessionContext,
+    constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
         private _priceProduct: PriceProductDO, private _confirmationStatusList: BookingConfirmationStatus[]) {
-        super(appContext, sessionContext);
+        super(appContext, sessionContext, globalSummary);
         this._bookingMetaByStatus = _.indexBy(BookingDOConstraints.BookingMetaList, meta => { return meta.status; });
     }
 
@@ -25,7 +25,7 @@ export class BookingsForPriceProductReportSectionGenerator extends AReportSectio
         }
     }
 
-    protected getSummary(): Object {
+    protected getGlobalSummary(): Object {
 		return {};
 	}
 

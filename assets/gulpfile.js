@@ -52,14 +52,14 @@ gulp.task('compile-internal', function () {
 	return compileAppFromDirectory('client/src/pages/internal/**/*.ts');
 });
 gulp.task('pack-internal', ['compile-internal'], function (endCallback) {
-	packCompiledFiles('systemjs.internal.config.js', 'unitpal-internal-1.0.63.min.js', 'internal', endCallback);
+	packCompiledFiles('systemjs.internal.config.js', 'unitpal-internal-1.0.64.min.js', 'internal', endCallback);
 });
 
 gulp.task('compile-external', ['pack-internal'], function () {
 	return compileAppFromDirectory('client/src/pages/external/**/*.ts');
 });
 gulp.task('pack-external', ['compile-external'], function (endCallback) {
-	packCompiledFiles('systemjs.external.config.js', 'unitpal-external-1.0.63.min.js', 'external', endCallback);
+	packCompiledFiles('systemjs.external.config.js', 'unitpal-external-1.0.64.min.js', 'external', endCallback);
 });
 
 gulp.task('clean-dist', function () {

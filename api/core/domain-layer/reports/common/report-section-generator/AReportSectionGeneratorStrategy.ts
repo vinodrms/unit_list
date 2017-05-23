@@ -10,7 +10,7 @@ import _ = require('underscore');
 export abstract class AReportSectionGeneratorStrategy implements IReportSectionGeneratorStrategy {
     protected _thUtils: ThUtils;
 
-    constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext) {
+    constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext, private _globalSummary: Object) {
         this._thUtils = new ThUtils();
     }
 
@@ -27,15 +27,16 @@ export abstract class AReportSectionGeneratorStrategy implements IReportSectionG
         this.translateMetaValues(item.meta);
         this.getData().then((data: any[][]) => {
             item.data = data;
-            item.summary = this.getSummary();
-            this.translateSummary(item);
+            this._globalSummary = _.extend(this._globalSummary,this.getGlobalSummary());
+            item.summary = this.getLocalSummary();
+            this.translateLocalSummary(item);
             resolve(item);
         }).catch((e: ThError) => {
             reject(e);
         });
     }
 
-    private translateSummary(item: ReportSection) {
+    private translateLocalSummary(item: ReportSection) {
         var translatedSummary = {};
         for (var key in item.summary) {
             translatedSummary[this._appContext.thTranslate.translate(key)] = item.summary[key];
@@ -56,7 +57,11 @@ export abstract class AReportSectionGeneratorStrategy implements IReportSectionG
     }
     protected abstract getHeader(): ReportSectionHeader;
     protected abstract getMeta(): ReportSectionMeta;
-    protected abstract getSummary(): Object;
+    protected abstract getGlobalSummary(): Object;
+
+    protected getLocalSummary(): Object {
+        return {};
+    }
 
     private getData(): Promise<any[][]> {
         return new Promise<any[][]>((resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) => {

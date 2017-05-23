@@ -7,7 +7,7 @@ import { PriceKeyMetric } from '../../values/PriceKeyMetric';
 import _ = require('underscore');
 
 export class TotalRevParBuilderStrategy extends AMetricBuilderStrategy {
-    constructor(hotelInventoryStats: IHotelInventoryStats) {
+    constructor(hotelInventoryStats: IHotelInventoryStats, private _excludeCommission) {
         super(hotelInventoryStats);
     }
 
@@ -22,8 +22,11 @@ export class TotalRevParBuilderStrategy extends AMetricBuilderStrategy {
         let totalNoOfRooms = 0;
         let totalRoomRevenue = 0;
         _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
+            let confirmedRevenue = this._excludeCommission? statsForDate.confirmedRevenueWithoutCommission : statsForDate.confirmedRevenue;
+            let guaranteedRevenue = this._excludeCommission? statsForDate.guaranteedRevenueWithoutCommission : statsForDate.guaranteedRevenue;
+
             totalNoOfRooms += statsForDate.totalInventory.noOfRooms;
-            totalRoomRevenue += statsForDate.confirmedRevenue.roomRevenue + statsForDate.guaranteedRevenue.roomRevenue;
+            totalRoomRevenue += confirmedRevenue.roomRevenue + guaranteedRevenue.roomRevenue;
         });
         if (totalNoOfRooms == 0) {
             metric.price = 0.0;

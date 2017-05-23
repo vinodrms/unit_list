@@ -56,7 +56,7 @@ export class BookingsByIntervalReportGroupGenerator extends AReportGeneratorStra
 
     protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
         return [
-            new BookingsByIntervalReportSectionGenerator(this._appContext, this._sessionContext, this._startDate, this._endDate)
+            new BookingsByIntervalReportSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._startDate, this._endDate)
         ];
     }
 }
