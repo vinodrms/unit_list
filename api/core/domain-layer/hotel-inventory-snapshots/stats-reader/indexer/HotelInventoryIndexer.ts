@@ -6,7 +6,7 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { ConfigCapacityDO } from "../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO";
 import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingDO, BookingConfirmationStatus, BookingStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { BookingPriceDO } from "../../../../data-layer/bookings/data-objects/price/BookingPriceDO";
 import { BookingSearchResultRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
 import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
@@ -69,23 +69,27 @@ export class HotelInventoryIndexer {
         });
     }
     private indexInventoryCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-        var invoiceIndexer = new InvoiceIndexer(this._appContext, this._sessionContext);
-        invoiceIndexer.getInvoiceStats(this._indexedInterval, this._indexedVatById, this._excludeVat)
-            .then((invoiceStats: IInvoiceStats) => {
-                this._invoiceStats = invoiceStats;
-
-                var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-                return bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
-                    {
-                        confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_BookingsConsideredInYieldManager,
-                        interval: ThDateIntervalDO.buildThDateIntervalDO(
-                            this._indexedInterval.getArrivalDate().buildPrototype(),
-                            this._indexedInterval.getDepartureDate().buildPrototype()
-                        )
-                    });
+        var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+        bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
+            {
+                confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_BookingsConsideredInYieldManager,
+                interval: ThDateIntervalDO.buildThDateIntervalDO(
+                    this._indexedInterval.getArrivalDate().buildPrototype(),
+                    this._indexedInterval.getDepartureDate().buildPrototype()
+                )
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 this.indexBookingsByType(bookingSearchResult.bookingList);
-                resolve(true);
+
+                let bookingIdList = _.map(bookingSearchResult.bookingList, (booking: BookingDO) => {
+                    return booking.id;
+                });
+                
+                var invoiceIndexer = new InvoiceIndexer(this._appContext, this._sessionContext);
+                return invoiceIndexer.getInvoiceStats(this._indexedInterval, bookingIdList, this._indexedVatById, this._excludeVat);
+            }).then((invoiceStats: IInvoiceStats) => {
+                this._invoiceStats = invoiceStats;
+
+                resolve(true); 
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingsIndexerError, error);
                 if (thError.isNativeError()) {

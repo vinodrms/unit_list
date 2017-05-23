@@ -10,7 +10,7 @@ import { ThDateIntervalDO } from '../../../../../utils/th-dates/data-objects/ThD
 import { ThDateDO } from '../../../../../utils/th-dates/data-objects/ThDateDO';
 import { InvoiceGroupSearchResultRepoDO } from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceItemDO, InvoiceItemType } from '../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { RevenueForDate } from '../../data-objects/revenue/RevenueForDate';
 import { TaxDO } from "../../../../../data-layer/taxes/data-objects/TaxDO";
@@ -19,14 +19,19 @@ import { ThUtils } from "../../../../../utils/ThUtils";
 import _ = require('underscore');
 
 export class InvoiceIndexer {
+    private _bookingIdList: string[];
     private _indexedVatById: { [id: string]: TaxDO; };
     private _excludeVat: boolean;
     
+    private _invoicesPaidInIndexedInterval: InvoiceGroupDO[];
+    private _invoicesLossByManagement: InvoiceGroupDO[];
+
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
     }
 
-    public getInvoiceStats(indexedInterval: IndexedBookingInterval, indexedVatById: { [id: string]: TaxDO; }, excludeVat: boolean): Promise<IInvoiceStats> {
+    public getInvoiceStats(indexedInterval: IndexedBookingInterval, bookingIdList: string[], indexedVatById: { [id: string]: TaxDO; }, excludeVat: boolean): Promise<IInvoiceStats> {
         this._indexedVatById = indexedVatById;
+        this._bookingIdList = bookingIdList;
         this._excludeVat = excludeVat;
 
         return new Promise<IInvoiceStats>((resolve: { (result: IInvoiceStats): void }, reject: { (err: ThError): void }) => {
@@ -43,7 +48,17 @@ export class InvoiceIndexer {
                     indexedInterval.getDepartureDate().buildPrototype()
                 )
             }).then((invoiceSearchResult: InvoiceGroupSearchResultRepoDO) => {
-                var invoiceStats = this.getIndexedInvoiceStats(indexedInterval, invoiceSearchResult.invoiceGroupList);
+                this._invoicesPaidInIndexedInterval = invoiceSearchResult.invoiceGroupList;
+
+                return invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id },
+                {
+                    bookingIdList: this._bookingIdList,
+                    invoicePaymentStatus: InvoicePaymentStatus.LossAcceptedByManagement
+                });
+            }).then((invoiceSearchResult: InvoiceGroupSearchResultRepoDO) => {
+                this._invoicesLossByManagement = invoiceSearchResult.invoiceGroupList;
+
+                var invoiceStats = this.getIndexedInvoiceStats(indexedInterval);
                 resolve(invoiceStats);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.InvoiceIndexerError, error);
@@ -54,17 +69,17 @@ export class InvoiceIndexer {
             });
     }
 
-    private getIndexedInvoiceStats(indexedInterval: IndexedBookingInterval, invoiceGroupList: InvoiceGroupDO[]): IInvoiceStats {
+    private getIndexedInvoiceStats(indexedInterval: IndexedBookingInterval): IInvoiceStats {
         var invoiceStats = new InvoiceStats();
         _.forEach(indexedInterval.bookingDateList, (thDate: ThDateDO) => {
-            var revenueForDate = this.getRevenueForDate(thDate, invoiceGroupList);
+            var revenueForDate = this.getRevenueForDate(thDate, this._invoicesPaidInIndexedInterval);
             invoiceStats.indexRevenueForDate(revenueForDate, thDate);
         });
-        this.indexBookingsLossAcceptedByManagement(invoiceStats, invoiceGroupList);
+        this.indexBookingsLossAcceptedByManagement(invoiceStats);
         return invoiceStats;
     }
-    private indexBookingsLossAcceptedByManagement(invoiceStats: InvoiceStats, invoiceGroupList: InvoiceGroupDO[]) {
-        _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
+    private indexBookingsLossAcceptedByManagement(invoiceStats: InvoiceStats) {
+        _.forEach(this._invoicesLossByManagement, (invoiceGroup: InvoiceGroupDO) => {
             _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
                 if (invoice.isLossAcceptedByManagement() && _.isString(invoice.bookingId) && invoice.bookingId.length > 0) {
                     invoiceStats.indexBookingLossAcceptedByManagement(invoice.bookingId);
