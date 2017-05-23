@@ -15,8 +15,8 @@ import _ = require('underscore');
 
 export class ShiftReportPaidByAgreementSectionGenerator extends AReportSectionGeneratorStrategy {
 
-    constructor(appContext: AppContext, sessionContext: SessionContext, private _paidInvoiceGroupList: InvoiceGroupDO[]) {
-        super(appContext, sessionContext);
+    constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object, private _paidInvoiceGroupList: InvoiceGroupDO[]) {
+        super(appContext, sessionContext, globalSummary);
     }
 
     protected getHeader(): ReportSectionHeader {
@@ -36,7 +36,7 @@ export class ShiftReportPaidByAgreementSectionGenerator extends AReportSectionGe
         }
     }
 
-    protected getSummary(): Object {
+    protected getGlobalSummary(): Object {
 		return {}
 	}
 

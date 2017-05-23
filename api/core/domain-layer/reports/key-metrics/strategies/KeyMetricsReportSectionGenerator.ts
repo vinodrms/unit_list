@@ -19,10 +19,10 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 	// used for caching ThPeriod objects
 	private _thDateToThPeriodMap: { [index: string]: ThPeriodDO; };
 
-	constructor(appContext: AppContext, sessionContext: SessionContext,
+	constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
 		private _kmResultItem: KeyMetricsResultItem, private _periodConverter: IThDateToThPeriodConverter,
 		private _periodType: ThPeriodType) {
-		super(appContext, sessionContext);
+		super(appContext, sessionContext, globalSummary);
 
 		this._periodIdList = [];
 		this._periodIdToValueGroupMap = {};
@@ -77,7 +77,7 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 		return {};
 	}
 
-	protected getSummary(): Object {
+	protected getGlobalSummary(): Object {
 		return {};
 	}
 

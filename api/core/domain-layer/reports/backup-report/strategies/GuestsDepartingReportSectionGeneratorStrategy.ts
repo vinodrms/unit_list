@@ -39,13 +39,13 @@ export class GuestsDepartingReportSectionGeneratorStrategy extends AReportSectio
 		}
 	}
 
-	protected getSummary(): Object {
+	protected getGlobalSummary(): Object {
 		return {
 			"Total Number of Departures" : this._totalDepartures,
-			"Adults": this._totalAdults,
-			"Children": this._totalChildren,
-			"Babies": this._totalBabies,
-			"Baby Beds": this._totalBabyBeds
+			"Departures Adults": this._totalAdults,
+			"Departures Children": this._totalChildren,
+			"Departures Babies": this._totalBabies,
+			"Departures Baby Beds": this._totalBabyBeds
 		}
 	}
 

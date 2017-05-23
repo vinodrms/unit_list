@@ -111,8 +111,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		let converterFactory = new ThDateToThPeriodConverterFactory();
 		let periodConverter = converterFactory.getConverter(this._periodType);
 		return [
-			new KeyMetricsReportSectionGenerator(this._appContext, this._sessionContext, this._keyMetricItem, periodConverter, 
-				this._periodType)
+			new KeyMetricsReportSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._keyMetricItem, periodConverter, this._periodType)
 		];
 	}
 }
