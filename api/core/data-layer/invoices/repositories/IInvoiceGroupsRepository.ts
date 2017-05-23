@@ -16,6 +16,7 @@ export interface InvoiceGroupSearchCriteriaRepoDO {
     invoiceGroupIdList?: string[];
     groupBookingId?: string;
     bookingId?: string;
+    bookingIdList?: string[];
     customerIdList?: string[];
     invoicePaymentStatus?: InvoicePaymentStatus;
     paidInterval?: ThDateIntervalDO;
