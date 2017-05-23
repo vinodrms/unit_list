@@ -9,10 +9,10 @@ import { ReportGroup } from '../result/ReportGroup';
 import { ReportGroupMeta } from '../result/ReportGroup';
 import { ReportSection } from '../result/ReportSection';
 import { IReportSectionGeneratorStrategy } from '../report-section-generator/IReportSectionGeneratorStrategy';
-
-import _ = require('underscore');
 import { HotelDO } from "../../../../data-layer/hotel/data-objects/HotelDO";
 import { ThTimestampDO } from "../../../../utils/th-dates/data-objects/ThTimestampDO";
+
+import _ = require('underscore');
 
 export abstract class AReportGeneratorStrategy implements IReportGeneratorStrategy {
 	protected _thUtils: ThUtils;

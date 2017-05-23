@@ -23,7 +23,7 @@ class HousekeepingReportGroupBy {
 
     public static getPossibleValues(): HousekeepingReportGroupBy[] {
         return [
-            new HousekeepingReportGroupBy(HousekeepingReportGroupByType.Nothing, "Nothing"),
+            new HousekeepingReportGroupBy(HousekeepingReportGroupByType.Nothing, "No grouping"),
             new HousekeepingReportGroupBy(HousekeepingReportGroupByType.Floor, "Floor")
         ]
     }

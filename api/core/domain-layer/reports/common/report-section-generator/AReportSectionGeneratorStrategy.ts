@@ -28,7 +28,7 @@ export abstract class AReportSectionGeneratorStrategy implements IReportSectionG
         this.getData().then((data: any[][]) => {
             item.data = data;
             this._globalSummary = _.extend(this._globalSummary,this.getGlobalSummary());
-            item.localSummary = this.getLocalSummary();
+            item.summary = this.getLocalSummary();
             this.translateLocalSummary(item);
             resolve(item);
         }).catch((e: ThError) => {
@@ -38,10 +38,10 @@ export abstract class AReportSectionGeneratorStrategy implements IReportSectionG
 
     private translateLocalSummary(item: ReportSection) {
         var translatedSummary = {};
-        for (var key in item.localSummary) {
-            translatedSummary[this._appContext.thTranslate.translate(key)] = item.localSummary[key];
+        for (var key in item.summary) {
+            translatedSummary[this._appContext.thTranslate.translate(key)] = item.summary[key];
         }
-        item.localSummary = translatedSummary;
+        item.summary = translatedSummary;
     }
 
     private translateHeaderValues(header: ReportSectionHeader) {

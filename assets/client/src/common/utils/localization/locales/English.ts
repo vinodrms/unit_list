@@ -918,7 +918,7 @@ export var EnglishTranslations: Object = {
 	"Arrivals Floor %floorNumber%" :"Arrivals Floor %floorNumber%",
 	"Departures Floor %floorNumber%" :"Departures Floor %floorNumber%",
 	"Stayovers Floor %floorNumber%" :"Stayovers Floor %floorNumber%",
-	"Nothing": "Nothing",
+	"No grouping": "No grouping",
 	"Floor": "Floor",
 	"Total Arrivals": "Total Arrivals",
 	"Total Stayovers": "Total Stayovers",

@@ -49,7 +49,7 @@
         border-top:2px solid #eee;
         font-weight:bold;
     }
-    
+
     * {
         margin: 0;
     }
@@ -88,7 +88,13 @@
             </div>
  
             <% sectionList.forEach(function(section){ %>
-                
+            
+            <% if (section.meta.pageBreakAfter == true) { %>
+                <div style="page-break-after: always;">        
+            <% } else{ %>
+                <div>
+            <%}%>
+
                 <br>
 
                 <% if (section.meta.title) { %>
@@ -123,7 +129,7 @@
                     <% }); %>
 
                 </table>
-
+            </div>
             <% }); %>
         </div>
     </body>

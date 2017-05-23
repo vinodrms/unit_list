@@ -39,7 +39,8 @@ export class DeparturesReportSectionGeneratorStrategy extends AReportSectionGene
     }
     protected getMeta(): ReportSectionMeta {
         return {
-			title: (!this._floor) ? "Departures" : this._appContext.thTranslate.translate("Departures Floor %floorNumber%", {floorNumber: this._floor})
+			title: (!this._floor) ? "Departures" : this._appContext.thTranslate.translate("Departures Floor %floorNumber%", {floorNumber: this._floor}),
+			pageBreakAfter: (!this._floor)? false : true
 		}
     }
 

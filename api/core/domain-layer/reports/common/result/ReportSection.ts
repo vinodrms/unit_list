@@ -7,18 +7,14 @@ export interface ReportSectionHeader {
 
 export interface ReportSectionMeta {
     title?: string;
+    pageBreakAfter?: boolean;
 }
 
 export class ReportSection {
     header: ReportSectionHeader;
     meta: ReportSectionMeta;
     data: any[][];
-    newLineBefore: boolean;
-    localSummary: Object;
-
-    constructor() {
-        this.newLineBefore = false;
-    }
+    summary: Object;
 
     public getNoColumns(): number {
         if (this.header.display && _.isArray(this.header.values)) {
