@@ -6,25 +6,25 @@ import _ = require('underscore');
 
 export class InvoiceStats implements IInvoiceStats {
     private _indexedRevenueByDate: { [index: number]: RevenueForDate; } = {};
-    private _bookingIdListWithInvoiceLossAcceptedByManagement: { [index: string]: boolean; } = {};
+    private _bookingIdWithInvoiceLossAcceptedByManagementMap: { [index: string]: boolean; } = {};
 
     constructor() {
         this._indexedRevenueByDate = {};
-        this._bookingIdListWithInvoiceLossAcceptedByManagement = {};
+        this._bookingIdWithInvoiceLossAcceptedByManagementMap = {};
     }
 
     public indexRevenueForDate(revenueForDate: RevenueForDate, thDate: ThDateDO) {
         this._indexedRevenueByDate[thDate.getUtcTimestamp()] = revenueForDate;
     }
     public indexBookingLossAcceptedByManagement(bookingId: string) {
-        this._bookingIdListWithInvoiceLossAcceptedByManagement[bookingId] = true;
+        this._bookingIdWithInvoiceLossAcceptedByManagementMap[bookingId] = true;
     }
 
     public getRevenueForDate(thDate: ThDateDO): RevenueForDate {
         return this._indexedRevenueByDate[thDate.getUtcTimestamp()];
     }
     public bookingHasInvoiceWithLossAcceptedByManagement(bookingId: string): boolean {
-        var isLostAcceptedByManagement = this._bookingIdListWithInvoiceLossAcceptedByManagement[bookingId];
+        var isLostAcceptedByManagement = this._bookingIdWithInvoiceLossAcceptedByManagementMap[bookingId];
         if (!_.isBoolean(isLostAcceptedByManagement)) {
             return false;
         }
