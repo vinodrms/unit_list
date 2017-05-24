@@ -48,10 +48,12 @@ export class BookingPriceProductEditorComponent implements OnInit {
     private loadDependentData() {
         if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._bookingOperationsPageData)) { return; }
         if (this.bookingDO.price.hasBreakfast()) {
+            let noPeople = this.bookingDO.configCapacity.noAdults + this.bookingDO.configCapacity.noChildren;
             this.includedString = this.bookingDO.price.breakfast.meta.getDisplayName(this._appContext.thTranslation)
-                + " " + this.bookingDO.price.breakfast.meta.getNumberOfItems() + " x " + this.currencySymbolString + " "
-                + this.bookingDO.price.breakfast.meta.getUnitPrice()
-                + " (" + this._appContext.thTranslation.translate("Included") + ")";
+                + " " + this.bookingDO.price.breakfast.meta.getNumberOfItems() + " " + this._appContext.thTranslation.translate("night(s)")
+                + " x " + noPeople.toString() + " guest(s)"
+                + " x " + this.currencySymbolString + this.bookingDO.price.breakfast.meta.getUnitPrice().toString()
+                + " (" + this._appContext.thTranslation.translate("Included in Room") + ")";
         }
         _.forEach(this.bookingDO.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
             if (this.includedString.length > 0) { this.includedString += ", "; }
