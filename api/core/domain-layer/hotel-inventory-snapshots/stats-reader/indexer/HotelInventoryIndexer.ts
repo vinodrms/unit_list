@@ -41,10 +41,12 @@ export interface HotelInventoryIndexerParams {
 export class HotelInventoryIndexer {
     private _bookingUtils: BookingUtils;
     private _dateUtils: ThDateUtils;
+    private _thUtils: ThUtils;
     private _indexedInterval: IndexedBookingInterval;
     private _indexedRoomsById: { [id: string]: IRoom; };
     private _indexedVatById: { [id: string]: TaxDO; };
 
+    private _bookingIdList: string[];
     private _confirmedBookingsContainer: BookingsContainer;
     private _guaranteedBookingsContainer: BookingsContainer;
     private _guaranteedOccupyingRoomsFromInventoryBookingsContainer: BookingsContainer;
@@ -57,6 +59,7 @@ export class HotelInventoryIndexer {
         private _excludeVat: boolean) {
         this._bookingUtils = new BookingUtils();
         this._dateUtils = new ThDateUtils();
+        this._thUtils = new ThUtils();
 
         this._indexedRoomsById = _.indexBy(this._indexerParams.roomList, (room: IRoom) => { return room.id });
         this._indexedVatById = _.indexBy(this._indexerParams.vatTaxList, (tax: TaxDO) => { return tax.id });
@@ -78,18 +81,18 @@ export class HotelInventoryIndexer {
                     this._indexedInterval.getDepartureDate().buildPrototype()
                 )
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
-                this.indexBookingsByType(bookingSearchResult.bookingList);
-
-                let bookingIdList = _.map(bookingSearchResult.bookingList, (booking: BookingDO) => {
+                this._bookingIdList = _.map(bookingSearchResult.bookingList, (booking: BookingDO) => {
                     return booking.id;
                 });
-                
+
+                return this.indexBookingsByType(bookingSearchResult.bookingList);
+            }).then(indexResult => {
                 var invoiceIndexer = new InvoiceIndexer(this._appContext, this._sessionContext);
-                return invoiceIndexer.getInvoiceStats(this._indexedInterval, bookingIdList, this._indexedVatById, this._excludeVat);
+                return invoiceIndexer.getInvoiceStats(this._indexedInterval, this._bookingIdList, this._indexedVatById, this._excludeVat);
             }).then((invoiceStats: IInvoiceStats) => {
                 this._invoiceStats = invoiceStats;
 
-                resolve(true); 
+                resolve(true);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingsIndexerError, error);
                 if (thError.isNativeError()) {
@@ -99,7 +102,7 @@ export class HotelInventoryIndexer {
             });
     }
 
-    private indexBookingsByType(bookingList: BookingDO[]) {
+    private indexBookingsByType(bookingList: BookingDO[]): Promise<boolean> {
         var confirmedBookingList = this.filterBookingsByStatus(bookingList, [BookingConfirmationStatus.Confirmed]);
         this._confirmedBookingsContainer = new BookingsContainer(confirmedBookingList);
 
@@ -134,7 +137,33 @@ export class HotelInventoryIndexer {
                 currentHotelTimestamp: this._indexerParams.currentHotelTimestamp
             });
         });
-        this._penaltyBookingsContainer = new BookingsContainer(penaltyBookingList);
+        let penaltyBookingIdList = _.map(penaltyBookingList, booking => { return booking.id; });
+
+        // we only keep the penalty bookings 
+        return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
+            let invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            invoiceGroupRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+                bookingIdList: penaltyBookingIdList
+            }).then(searchResult => {
+                let bookingIdMap = {};
+
+                // we create a map of the bookings that have invoices
+                searchResult.invoiceGroupList.forEach(invoiceGroup => {
+                    invoiceGroup.invoiceList.forEach(invoice => {
+                        if (!this._thUtils.isUndefinedOrNull(invoice.bookingId)) {
+                            bookingIdMap[invoice.bookingId] = true;
+                        }
+                    });
+                });
+
+                // filter the penalty bookings that have an invoice
+                penaltyBookingList = _.filter(penaltyBookingList, booking => { return bookingIdMap[booking.id] });
+                this._penaltyBookingsContainer = new BookingsContainer(penaltyBookingList);
+                resolve(true);
+            }).catch(e => {
+                reject(e);
+            });
+        });
     }
     private filterBookingsByStatus(bookingList: BookingDO[], confirmationStatusList: BookingConfirmationStatus[]): BookingDO[] {
         return _.filter(bookingList, (booking: BookingDO) => {
@@ -194,7 +223,7 @@ export class HotelInventoryIndexer {
 
         if (bookingPrice.isPenalty()) {
             let price = bookingPrice.totalRoomPrice / totalNoNights;
-            return excludeVat ?  this.getNetValue(bookingPrice.getVatId(), price) : price;
+            return excludeVat ? this.getNetValue(bookingPrice.getVatId(), price) : price;
         }
 
         var roomPriceForNight = bookingPrice.roomPricePerNightAvg;
@@ -234,7 +263,7 @@ export class HotelInventoryIndexer {
         let otherPrice = 0.0;
         if (this._excludeVat) {
             let bookingUtils = new BookingUtils();
-            let netOtherTotalPrice = bookingUtils.getIncludedInvoiceItems(booking.priceProductSnapshot, booking.configCapacity, 
+            let netOtherTotalPrice = bookingUtils.getIncludedInvoiceItems(booking.priceProductSnapshot, booking.configCapacity,
                 this._indexedInterval).getNetTotalPrice(this._indexedVatById);
             otherPrice = netOtherTotalPrice;
         }
@@ -274,13 +303,12 @@ export class HotelInventoryIndexer {
     private getNetValue(vatId: string, price: number): number {
         let vat = this._indexedVatById[vatId];
 
-        let thUtils = new ThUtils();
-        if(thUtils.isUndefinedOrNull(vat)) {
+        if (this._thUtils.isUndefinedOrNull(vat)) {
             return price;
         }
 
         return vat.getNetValue(price);
-    } 
+    }
 
     public destroy() {
         this._confirmedBookingsContainer.destroy();
