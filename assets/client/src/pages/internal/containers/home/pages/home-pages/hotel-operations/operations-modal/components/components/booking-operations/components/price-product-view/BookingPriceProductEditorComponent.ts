@@ -49,13 +49,15 @@ export class BookingPriceProductEditorComponent implements OnInit {
         if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._bookingOperationsPageData)) { return; }
         if (this.bookingDO.price.hasBreakfast()) {
             this.includedString = this.bookingDO.price.breakfast.meta.getDisplayName(this._appContext.thTranslation)
+                + " " + this.bookingDO.price.breakfast.meta.getNumberOfItems() + " x " + this.currencySymbolString + " "
+                + this.bookingDO.price.breakfast.meta.getUnitPrice()
                 + " (" + this._appContext.thTranslation.translate("Included") + ")";
         }
         _.forEach(this.bookingDO.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
             if (this.includedString.length > 0) { this.includedString += ", "; }
-            
+
             let totalPrice = invoiceItem.getTotalPrice();
-            
+
             this.includedString += invoiceItem.meta.getNumberOfItems() + "x" + invoiceItem.meta.getDisplayName(this._appContext.thTranslation) +
                 " (" + totalPrice + this.currencySymbolString + ")";
         });
@@ -100,9 +102,9 @@ export class BookingPriceProductEditorComponent implements OnInit {
     }
     public get discountValueString(): string {
         let dayTranslation = this._appContext.thTranslation.translate('Day');
-        
+
         let discountBreakdown = [];
-        
+
         _.forEach(this.bookingDO.price.roomPricePerNightList, (pricePerDay: PricePerDayDO, index) => {
             discountBreakdown.push(dayTranslation + ' ' + (index + 1) + ': ' + Math.round(pricePerDay.discount * 100) + '%');
         });
