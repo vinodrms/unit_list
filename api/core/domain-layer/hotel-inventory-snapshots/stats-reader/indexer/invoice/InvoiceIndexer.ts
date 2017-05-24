@@ -22,7 +22,7 @@ export class InvoiceIndexer {
     private _bookingIdList: string[];
     private _indexedVatById: { [id: string]: TaxDO; };
     private _excludeVat: boolean;
-    
+
     private _invoicesPaidInIndexedInterval: InvoiceGroupDO[];
     private _invoicesLossByManagement: InvoiceGroupDO[];
 
@@ -44,17 +44,17 @@ export class InvoiceIndexer {
         invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id },
             {
                 paidInterval: ThDateIntervalDO.buildThDateIntervalDO(
-                    indexedInterval.getArrivalDate().buildPrototype(),
-                    indexedInterval.getDepartureDate().buildPrototype()
+                    _.first(indexedInterval.bookingDateList).buildPrototype(),
+                    _.last(indexedInterval.bookingDateList).buildPrototype()
                 )
             }).then((invoiceSearchResult: InvoiceGroupSearchResultRepoDO) => {
                 this._invoicesPaidInIndexedInterval = invoiceSearchResult.invoiceGroupList;
 
                 return invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id },
-                {
-                    bookingIdList: this._bookingIdList,
-                    invoicePaymentStatus: InvoicePaymentStatus.LossAcceptedByManagement
-                });
+                    {
+                        bookingIdList: this._bookingIdList,
+                        invoicePaymentStatus: InvoicePaymentStatus.LossAcceptedByManagement
+                    });
             }).then((invoiceSearchResult: InvoiceGroupSearchResultRepoDO) => {
                 this._invoicesLossByManagement = invoiceSearchResult.invoiceGroupList;
 
@@ -104,7 +104,7 @@ export class InvoiceIndexer {
         var otherRevenue = 0.0;
         _.forEach(invoice.itemList, (item: InvoiceItemDO) => {
             if (item.type === InvoiceItemType.AddOnProduct) {
-                otherRevenue += (this._excludeVat)?  
+                otherRevenue += (this._excludeVat) ?
                     this.getNetValue(item.meta.getVatId(), item.getTotalPrice()) : item.getTotalPrice();
             }
         });
@@ -115,10 +115,10 @@ export class InvoiceIndexer {
         let vat = this._indexedVatById[vatId];
 
         let thUtils = new ThUtils();
-        if(thUtils.isUndefinedOrNull(vat)) {
+        if (thUtils.isUndefinedOrNull(vat)) {
             return price;
         }
 
         return vat.getNetValue(price);
-    } 
+    }
 }
