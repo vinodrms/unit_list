@@ -3,6 +3,11 @@ import { IValidationStructure } from '../../../../utils/th-validation/structure/
 import { ObjectValidationStructure } from '../../../../utils/th-validation/structure/ObjectValidationStructure';
 import { CommonValidationStructures } from "../../../common/CommonValidations";
 
+export enum HotelOperationsQueryType {
+	RealTime,
+	FixedForTheDay
+}
+
 export class HotelOperationsQueryDO {
     referenceDate: ThDateDO;
 

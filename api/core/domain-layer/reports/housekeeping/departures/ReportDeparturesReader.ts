@@ -13,6 +13,8 @@ import { ThUtils } from "../../../../utils/ThUtils";
 import { RoomCategoryStatsAggregator } from "../../../room-categories/aggregators/RoomCategoryStatsAggregator";
 import { RoomCategoryStatsDO } from "../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
 import { BookingCustomers } from "../common/BookingCustomers";
+import { HotelOperationsQueryType, HotelOperationsQueryDO } from "../../../hotel-operations/dashboard/utils/HotelOperationsQueryDO";
+import { ThDateDO } from "../../../../utils/th-dates/data-objects/ThDateDO";
 
 export class ReportDeparturesReader {
 	private _thUtils: ThUtils;
@@ -34,15 +36,15 @@ export class ReportDeparturesReader {
 		var meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 
 		var departureInfo: DeparturelItemInfo = null;
-
-		departureReader.read(emptyDateRefParam)
+		
+		departureReader.read(emptyDateRefParam, HotelOperationsQueryType.FixedForTheDay)
 			.then((result: HotelOperationsDeparturesInfo) => {
 				let promiseList = [];
 				result.departureInfoList.forEach((departureInfo: DeparturelItemInfo) => {
-					if(this._thUtils.isUndefinedOrNull(departureInfo.roomId)) {
+					if(!this.departureItemIsGuestCheckingOut(departureInfo)) {
 						return;
 					}
-
+					
 					let p = this.buildReportDepartureItem(departureInfo)
 					promiseList.push(p);
 				});
@@ -59,6 +61,10 @@ export class ReportDeparturesReader {
 				}
 				reject(thError);
 			});
+	}
+
+	private departureItemIsGuestCheckingOut(departureInfo: DeparturelItemInfo) {
+		return !this._thUtils.isUndefinedOrNull(departureInfo.roomId);
 	}
 
 	private sortComparator(a: ReportDepartureItemInfo, b: ReportDepartureItemInfo) {
