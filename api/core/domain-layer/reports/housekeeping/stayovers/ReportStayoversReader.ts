@@ -34,7 +34,7 @@ export class ReportStayoversReader {
 		var inHouseReader = new HotelOperationsRoomInfoReader(this._appContext, this._sessionContext);
 		
 		var meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
-
+		
 		this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id)
 			.then((hotel: HotelDO) => {
 				this._hotelDO = hotel;
@@ -43,7 +43,7 @@ export class ReportStayoversReader {
 				let promiseList = [];
 				result.roomInfoList.forEach(roomInfo => {
 					var today = this._bookingUtils.getCurrentThDateForHotel(this._hotelDO);
-					if(roomInfo.bookingInterval.end.isSame(today)) {
+					if(roomInfo.bookingInterval.start.isSame(today) || roomInfo.bookingInterval.end.isSame(today)) {
 						return;
 					}
 

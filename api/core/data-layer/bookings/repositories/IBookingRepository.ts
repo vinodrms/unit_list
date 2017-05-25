@@ -38,6 +38,7 @@ export interface BookingSearchCriteriaRepoDO {
     descendentSortOrder?: boolean;
     reservedAddOnProductId?: string;
     priceProductId?: string;
+    checkOutDateNullOrGreaterOrEqualThan?: ThDateDO;
 }
 export interface BookingSearchResultRepoDO {
     lazyLoad?: LazyLoadRepoDO;

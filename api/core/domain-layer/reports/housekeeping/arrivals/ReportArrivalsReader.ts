@@ -14,6 +14,7 @@ import { RoomCategoryStatsAggregator } from "../../../room-categories/aggregator
 import { RoomCategoryStatsDO } from "../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
 import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
 import { BookingCustomers } from "../common/BookingCustomers";
+import { HotelOperationsQueryType, HotelOperationsQueryDO } from "../../../hotel-operations/dashboard/utils/HotelOperationsQueryDO";
 
 import _ = require("underscore");
 
@@ -33,8 +34,8 @@ export class ReportArrivalsReader {
 	private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
 		let emptyDateRefParam: any = {};
 		let arrivalsReader = new HotelOperationsArrivalsReader(this._appContext, this._sessionContext);
-		
-		arrivalsReader.read(emptyDateRefParam)
+
+		arrivalsReader.read(emptyDateRefParam, HotelOperationsQueryType.FixedForTheDay)
 			.then((result: HotelOperationsArrivalsInfo) => {
 				let promiseList = [];
 				result.arrivalInfoList.forEach(arrivalInfo => {

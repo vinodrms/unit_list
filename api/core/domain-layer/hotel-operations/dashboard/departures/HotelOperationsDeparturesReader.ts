@@ -4,14 +4,14 @@ import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../../utils/AppContext';
 import {SessionContext} from '../../../../utils/SessionContext';
 import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {BookingSearchResultRepoDO} from '../../../../data-layer/bookings/repositories/IBookingRepository';
+import { BookingSearchResultRepoDO, BookingSearchCriteriaRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
 import {InvoicePaymentStatus} from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import {InvoiceGroupSearchResultRepoDO} from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import {InvoiceGroupDO} from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import {InvoiceDO} from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import {CustomerIdValidator} from '../../../customers/validators/CustomerIdValidator';
 import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
-import {HotelOperationsQueryDO} from '../utils/HotelOperationsQueryDO';
+import { HotelOperationsQueryDO, HotelOperationsQueryType } from '../utils/HotelOperationsQueryDO';
 import {HotelOperationsQueryDOParser} from '../utils/HotelOperationsQueryDOParser';
 import {HotelOperationsDeparturesInfo} from './utils/HotelOperationsDeparturesInfo';
 import {HotelOperationsDeparturesInfoBuilder} from './utils/HotelOperationsDeparturesInfoBuilder';
@@ -29,24 +29,24 @@ export class HotelOperationsDeparturesReader {
         this._thUtils = new ThUtils();
     }
 
-    public read(query: HotelOperationsQueryDO): Promise<HotelOperationsDeparturesInfo> {
+    public read(query: HotelOperationsQueryDO, queryType: HotelOperationsQueryType = HotelOperationsQueryType.RealTime): Promise<HotelOperationsDeparturesInfo> {
         return new Promise<HotelOperationsDeparturesInfo>((resolve: { (result: HotelOperationsDeparturesInfo): void }, reject: { (err: ThError): void }) => {
-            this.readCore(resolve, reject, query);
+            this.readCore(resolve, reject, queryType, query);
         });
     }
 
-    private readCore(resolve: { (result: HotelOperationsDeparturesInfo): void }, reject: { (err: ThError): void }, query: HotelOperationsQueryDO) {
+    private readCore(resolve: { (result: HotelOperationsDeparturesInfo): void }, reject: { (err: ThError): void }, queryType: HotelOperationsQueryType, query: HotelOperationsQueryDO) {
         var departuresInfoBuilder = new HotelOperationsDeparturesInfoBuilder();
-
+        
         var queryParser = new HotelOperationsQueryDOParser(this._appContext, this._sessionContext);
         return queryParser.parse(query).then((parsedQuery: HotelOperationsQueryDO) => {
             this._parsedQuery = parsedQuery;
 
             var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
-            return bookingRepository.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-                confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_ShowInDepartures,
-                endDate: this._parsedQuery.referenceDate
-            });
+            return bookingRepository.getBookingList(
+                { hotelId: this._sessionContext.sessionDO.hotel.id }, 
+                this.getDeparturesQuery(queryType)
+            );
         }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
             var bookingList = bookingSearchResult.bookingList;
             departuresInfoBuilder.appendBookingList(bookingList);
@@ -94,5 +94,21 @@ export class HotelOperationsDeparturesReader {
             });
         });
         return _.uniq(bookingIdList);
+    }
+
+    private getDeparturesQuery(queryType: HotelOperationsQueryType): BookingSearchCriteriaRepoDO {
+        switch(queryType) {
+            case HotelOperationsQueryType.FixedForTheDay :
+                return {
+                    confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_FixedDepartures,
+                    endDate: this._parsedQuery.referenceDate,
+                    checkOutDateNullOrGreaterOrEqualThan: this._parsedQuery.referenceDate
+                }
+            default:
+                return {
+                    confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_ShowInDepartures,
+                    endDate: this._parsedQuery.referenceDate
+                }
+        }
     }
 }

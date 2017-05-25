@@ -64,6 +64,11 @@ export class BookingDOConstraints {
         BookingConfirmationStatus.Confirmed,
         BookingConfirmationStatus.Guaranteed
     ];
+    public static ConfirmationStatuses_FixedArrivals: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed,
+        BookingConfirmationStatus.CheckedIn
+    ];
     public static ConfirmationStatuses_NoShow: BookingConfirmationStatus[] = [
         BookingConfirmationStatus.NoShow,
         BookingConfirmationStatus.NoShowWithPenalty
@@ -72,6 +77,12 @@ export class BookingDOConstraints {
         BookingConfirmationStatus.Confirmed,
         BookingConfirmationStatus.Guaranteed,
         BookingConfirmationStatus.CheckedIn
+    ];
+    public static ConfirmationStatuses_FixedDepartures: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed,
+        BookingConfirmationStatus.CheckedIn,
+        BookingConfirmationStatus.CheckedOut
     ];
     public static ConfirmationStatuses_CanChangeDates: BookingConfirmationStatus[] = [
         BookingConfirmationStatus.Confirmed,
