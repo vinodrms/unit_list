@@ -105,7 +105,7 @@ export class MongoBookingReadRepository extends MongoRepository {
         this.appendTriggerParamsIfNecessary(mongoQueryBuilder, searchCriteria);
         this.appendDateParamsIfNecessary(mongoQueryBuilder, searchCriteria);
         this.appendBeforeStartDateParamIfNecessary(mongoQueryBuilder, searchCriteria);
-        this.appendCheckOutUtcTimestampBeforeIfNecessary(mongoQueryBuilder, searchCriteria);
+        this.appendCheckOutUtcTimestampNullOrGreaterThanIfNecessary(mongoQueryBuilder, searchCriteria);
         mongoQueryBuilder.addMultipleSelectOptionList("confirmationStatus", searchCriteria.confirmationStatusList);
         mongoQueryBuilder.addExactMatch("groupBookingId", searchCriteria.groupBookingId);
         mongoQueryBuilder.addMultipleSelectOptionList("groupBookingId", searchCriteria.groupBookingIdList);
@@ -181,12 +181,12 @@ export class MongoBookingReadRepository extends MongoRepository {
         var overlappingUtcTimestampInterval = IndexedBookingInterval.getOverlappingUtcTimestampIntervalForDate(maxThDate);
         mongoQueryBuilder.addCustomQuery("startUtcTimestamp", { $lte: overlappingUtcTimestampInterval.maxUtcTimestamp });
     }
-    private appendCheckOutUtcTimestampBeforeIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
-        if (this._thUtils.isUndefinedOrNull(searchCriteria.checkOutDateGreaterOrEqualThan)) {
+    private appendCheckOutUtcTimestampNullOrGreaterThanIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
+        if (this._thUtils.isUndefinedOrNull(searchCriteria.checkOutDateNullOrGreaterOrEqualThan)) {
             return;
         }
         var startThDate = new ThDateDO();
-        startThDate.buildFromObject(searchCriteria.checkOutDateGreaterOrEqualThan);
+        startThDate.buildFromObject(searchCriteria.checkOutDateNullOrGreaterOrEqualThan);
         if (!startThDate.isValid()) {
             return;
         }

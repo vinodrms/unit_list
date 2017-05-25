@@ -102,7 +102,7 @@ export class HotelOperationsDeparturesReader {
                 return {
                     confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_FixedDepartures,
                     endDate: this._parsedQuery.referenceDate,
-                    checkOutDateGreaterOrEqualThan: this._parsedQuery.referenceDate
+                    checkOutDateNullOrGreaterOrEqualThan: this._parsedQuery.referenceDate
                 }
             default:
                 return {
