@@ -53,9 +53,16 @@ export class MongoBookingReadRepository extends MongoRepository {
 
         var mongoSearchCriteria: MongoSearchCriteria = {
             criteria: this.buildSearchCriteria(meta, searchCriteria),
-            sortCriteria: { "startUtcTimestamp": sortCriteria },
             lazyLoad: lazyLoad
         };
+
+        // mongo can't obtain the sort index via scan index, so we only sort when we require lazy loading
+        // you can read more here: https://docs.mongodb.com/manual/reference/method/cursor.sort/#limit-results
+        var lazyLoadValidationStructure = LazyLoadRepoDO.getValidationStructure().validateStructure(lazyLoad);
+        if (lazyLoadValidationStructure.isValid()) {
+            mongoSearchCriteria.sortCriteria = { "startUtcTimestamp": sortCriteria };
+        }
+
         this.findMultipleDocuments(mongoSearchCriteria,
             (err: Error) => {
                 var thError = new ThError(ThStatusCode.BookingsRepositoryErrorGettingList, err);
@@ -114,7 +121,7 @@ export class MongoBookingReadRepository extends MongoRepository {
         mongoQueryBuilder.addExactMatch("roomId", searchCriteria.roomId);
         mongoQueryBuilder.addMultipleSelectOption("customerIdList", searchCriteria.customerId);
         mongoQueryBuilder.addMultipleSelectOption("reservedAddOnProductIdList", searchCriteria.reservedAddOnProductId);
-        mongoQueryBuilder.addExactMatch("priceProductId", searchCriteria.priceProductId);      
+        mongoQueryBuilder.addExactMatch("priceProductId", searchCriteria.priceProductId);
         return mongoQueryBuilder.processedQuery;
     }
     private appendTriggerParamsIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
