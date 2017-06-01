@@ -55,7 +55,7 @@ class BookingMigrator {
         bookingGroup.bookingList.forEach((bookingItem: any) => {
             let booking: BookingDO = new BookingDO();
             booking.buildFromObject(bookingItem);
-            booking.legacyBookingId = bookingItem.bookingId;
+            (<any>booking).legacyBookingId = bookingItem.bookingId;
 
             booking.groupBookingId = bookingGroup.id;
             booking.groupBookingReference = bookingGroup.groupBookingReference;
@@ -71,7 +71,7 @@ class BookingMigrator {
             .then((convertedBookingList: BookingDO[]) => {
                 this.legacyToNewBookingIdMap = {};
                 convertedBookingList.forEach(booking => {
-                    this.legacyToNewBookingIdMap[booking.legacyBookingId] = booking.id;
+                    this.legacyToNewBookingIdMap[(<any>booking).legacyBookingId] = booking.id;
                 });
 
                 return this._invoiceGroupsRepository.getInvoiceGroupList({ hotelId: this.hotelId }, {

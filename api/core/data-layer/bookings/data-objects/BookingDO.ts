@@ -57,9 +57,6 @@ export class BookingDO extends BaseDO {
     // individual booking
     id: string;
 
-    //TODO: remove after migrating the new bookings' repo
-    legacyBookingId: string;
-
     bookingReference: string;
     externalBookingReference: string;
     confirmationStatus: BookingConfirmationStatus;
@@ -90,7 +87,7 @@ export class BookingDO extends BaseDO {
     indexedSearchTerms: string[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "id", "legacyBookingId", "bookingReference", "externalBookingReference", "confirmationStatus",
+        return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "id", "bookingReference", "externalBookingReference", "confirmationStatus",
             "customerIdList", "displayCustomerId", "corporateDisplayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "checkInUtcTimestamp", "checkOutUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
             "reservedAddOnProductIdList", "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms"];
     }
