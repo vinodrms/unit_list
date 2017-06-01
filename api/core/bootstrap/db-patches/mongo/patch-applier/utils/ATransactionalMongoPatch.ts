@@ -24,9 +24,6 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
 	protected _invoiceGroupsRepository: MongoInvoiceGroupsRepository;
 	protected _bookingRepository: MongoBookingRepository;
 
-	// TODO: remove along with all the old patches
-	protected _legacyBookingGroupRepository: MongoRepository;
-
 	constructor() {
 		this._thUtils = new ThUtils();
 
@@ -36,9 +33,6 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
 		this._customerRepository = new MongoCustomerRepository();
 		this._invoiceGroupsRepository = new MongoInvoiceGroupsRepository(this._hotelRepository);
 		this._bookingRepository = new MongoBookingRepository();
-
-		// TODO: remove along with all the old patches
-		this._legacyBookingGroupRepository = new MongoRepository(sails.models.bookinggroupsentity);
 	}
 
 	public apply(): Promise<boolean> {
