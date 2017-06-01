@@ -36,9 +36,6 @@ class BookingsEntity extends BasePersistentEntity {
             noOfRooms: {
                 type: 'integer'
             },
-            legacyBookingId: {
-                type: 'string'
-            },
             bookingReference: {
                 type: 'string',
                 required: true
