@@ -1,4 +1,4 @@
-import { HotelOperationsDeparturesInfo, DeparturelItemInfo, DeparturelItemBookingStatus } from './HotelOperationsDeparturesInfo';
+import { HotelOperationsDeparturesInfo, DeparturelItemInfo, DeparturelItemBookingStatus, DepartureItemCustomerInfo } from './HotelOperationsDeparturesInfo';
 import { BookingDO, BookingConfirmationStatus } from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import { CustomersContainer } from '../../../../customers/validators/results/CustomersContainer';
 import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
@@ -21,14 +21,24 @@ export class HotelOperationsDeparturesInfoBuilder {
             this.appendInformationFromBooking(booking);
         });
     }
+
     private appendInformationFromBooking(booking: BookingDO) {
         var departureItemStatus = DeparturelItemBookingStatus.CanNotCheckOut;
         if (booking.confirmationStatus === BookingConfirmationStatus.CheckedIn) {
             departureItemStatus = DeparturelItemBookingStatus.CanCheckOut;
         }
+
+        let guestCustomerInfoList: DepartureItemCustomerInfo[] = [];
+        _.forEach(booking.customerIdList, (customerId: string) => {
+            let customerInfo = new DepartureItemCustomerInfo();
+            customerInfo.customerId = customerId;
+            guestCustomerInfoList.push(customerInfo);
+        })
+
         var departureItemInfo: DeparturelItemInfo = {
             customerId: booking.displayCustomerId,
             corporateCustomerId: booking.corporateDisplayCustomerId,
+            guestCustomerInfoList: guestCustomerInfoList,
             bookingId: booking.id,
             groupBookingId: booking.groupBookingId,
             bookingInterval: booking.interval,
@@ -121,7 +131,7 @@ export class HotelOperationsDeparturesInfoBuilder {
 
     public getCustomerIdList(): string[] {
         var customerIdList = _.map(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => { return departureInfoItem.customerId });
-        var departureInfoListWithCorporateCustomerId = _.filter(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => {return departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0 });
+        var departureInfoListWithCorporateCustomerId = _.filter(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => { return departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0 });
         customerIdList = _.union(customerIdList, _.map(departureInfoListWithCorporateCustomerId, (departureInfoItem: DeparturelItemInfo) => {
             if (departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0) {
                 return departureInfoItem.corporateCustomerId;
@@ -138,6 +148,11 @@ export class HotelOperationsDeparturesInfoBuilder {
                 var corporateCustomer = customersContainer.getCustomerById(departureInfoItem.corporateCustomerId);
                 departureInfoItem.corporateCustomerName = corporateCustomer.customerDetails.getName();
             }
+
+            _.forEach(departureInfoItem.guestCustomerInfoList, (customerInfo: DepartureItemCustomerInfo) => {
+                let customer = customersContainer.getCustomerById(customerInfo.customerId);
+                customerInfo.customerName = customer.customerDetails.getName();
+            });
         });
     }
 

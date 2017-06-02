@@ -1,11 +1,14 @@
-import {DepartureItemInfoDO, DepartureItemBookingStatus} from '../data-objects/DepartureItemInfoDO';
-import {RoomVM} from '../../../../rooms/view-models/RoomVM';
-import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
-import {CurrencyDO} from '../../../../common/data-objects/currency/CurrencyDO';
-import {RoomCategoryDO} from '../../../../room-categories/data-objects/RoomCategoryDO';
+import { DepartureItemInfoDO, DepartureItemBookingStatus } from '../data-objects/DepartureItemInfoDO';
+import { RoomVM } from '../../../../rooms/view-models/RoomVM';
+import { ThTranslation } from '../../../../../../../common/utils/localization/ThTranslation';
+import { CurrencyDO } from '../../../../common/data-objects/currency/CurrencyDO';
+import { RoomCategoryDO } from '../../../../room-categories/data-objects/RoomCategoryDO';
+import { ThUtils } from "../../../../../../../common/utils/ThUtils";
 
 export class DepartureItemInfoVM {
-    private _departureItemDO: DepartureItemInfoDO;
+    private _departureItemDOList: DepartureItemInfoDO[];
+    private _bookingDepartureItem: DepartureItemInfoDO;
+
     private _hasInvoice: boolean;
     private _hasBooking: boolean;
     private _hasAttachedRoom: boolean;
@@ -16,11 +19,11 @@ export class DepartureItemInfoVM {
     constructor(private _thTranslation: ThTranslation) {
     }
 
-    public get departureItemDO(): DepartureItemInfoDO {
-        return this._departureItemDO;
+    public get departureItemDOList(): DepartureItemInfoDO[] {
+        return this._departureItemDOList;
     }
-    public set departureItemDO(departureItemDO: DepartureItemInfoDO) {
-        this._departureItemDO = departureItemDO;
+    public set departureItemDOList(departureItemDOList: DepartureItemInfoDO[]) {
+        this._departureItemDOList = departureItemDOList;
     }
     public get hasInvoice(): boolean {
         return this._hasInvoice;
@@ -59,8 +62,20 @@ export class DepartureItemInfoVM {
         this._currency = currency;
     }
 
+    public get bookingDepartureItem(): DepartureItemInfoDO {
+        return this._bookingDepartureItem;
+    }
+
+    public set bookingDepartureItem(bookingDepartureItem: DepartureItemInfoDO) {
+        this._bookingDepartureItem = bookingDepartureItem;
+    }
+
+    private get departureItemContainingCustomerInfo(): DepartureItemInfoDO {
+        return this.hasBooking? this.bookingDepartureItem : this.departureItemDOList[0];
+    }
+
     public get canCheckOut(): boolean {
-        return this._departureItemDO.bookingItemStatus === DepartureItemBookingStatus.CanCheckOut;
+        return this.hasBooking? this.bookingDepartureItem.bookingItemStatus === DepartureItemBookingStatus.CanCheckOut : false;
     }
 
     public get roomName(): string {
@@ -68,11 +83,11 @@ export class DepartureItemInfoVM {
     }
 
     public get customerName(): string {
-        return this._departureItemDO.customerName;
+        return this.departureItemContainingCustomerInfo.customerName;
     }
 
-    public get corporateCustomerName():string{
-        return this.departureItemDO.corporateCustomerName;
+    public get corporateCustomerName(): string {
+        return this.departureItemContainingCustomerInfo.corporateCustomerName;
     }
 
     public get roomCategoryLabel(): string {
@@ -81,14 +96,14 @@ export class DepartureItemInfoVM {
     }
 
     public get numberOfPeople(): number {
-        return this.departureItemDO.bookingCapacity.noAdults + this.departureItemDO.bookingCapacity.noChildren;
+        return this.bookingDepartureItem.bookingCapacity.noAdults + this.bookingDepartureItem.bookingCapacity.noChildren;
     }
 
     public get numberOfNights(): number {
-        return this.departureItemDO.bookingInterval.getNumberOfDays();
+        return this.bookingDepartureItem.bookingInterval.getNumberOfDays();
     }
 
     public get priceString(): string {
-        return this._departureItemDO.invoicePrice + this.currency.nativeSymbol;
+        return this.departureItemContainingCustomerInfo.invoicePrice + this.currency.nativeSymbol;
     }
 }

@@ -2,7 +2,7 @@
 	<div class="header" >
 		<span *ngIf="departureItemVM.hasAttachedRoom" class="reserved-room clickable ellipsis-text green-color" (click)="openRoomModal()" title="{{departureItemVM.roomName}}">{{departureItemVM.roomName}}</span>
 		<span class="customer-name ellipsis-text clickable" (click)="openCustomerModal()" title="{{departureItemVM.customerName}}">{{departureItemVM.customerName}}</span>
-		<i *ngIf="departureItemVM.hasBooking && departureItemVM.departureItemDO.bookingNotes" title="{{ departureItemVM.departureItemDO.bookingNotes }}" (click)="openBookingNotesModal()" class="clickable booking-notes-icon pull-right fa fa-sticky-note-o" ></i>
+		<i *ngIf="departureItemVM.hasBooking && departureItemVM.bookingDepartureItem.bookingNotes" title="{{ departureItemVM.bookingDepartureItem.bookingNotes }}" (click)="openBookingNotesModal()" class="clickable booking-notes-icon pull-right fa fa-sticky-note-o" ></i>
 	</div>
 	<div class="body" >
 		<span class="f-12">{{ 'Agency' | translate }}:</span>
@@ -24,12 +24,20 @@
 		</div>
 	</div>
 	<div class="footer">
-		<button class="btn btn-sm btn-green m-r-6" (click)="checkOut()" *ngIf="departureItemVM.canCheckOut">
+		<div class="pay-dropdown">
+			<button class="btn btn-sm btn-danger" (click)="openPayInvoiceDropdown()" *ngIf="departureItemVM.hasInvoice">
+				<span class="unitpal-font p-r-6" >L</span> <span class="uppercase">{{ 'Pay' | translate }}</span>
+			</button>
+
+			<div [ngClass]="getPayDropdownClasses()">
+				<a (click)="openInvoiceModal()">Link 1</a>
+			</div>
+		</div>
+
+		<button class="btn btn-sm btn-green m-l-6" (click)="checkOut()" *ngIf="departureItemVM.canCheckOut">
 			<span class="unitpal-font p-r-6" >.</span> <span class="uppercase">{{ 'Check Out' | translate }}</span>
 		</button>
-		<button class="btn btn-sm btn-danger" (click)="openInvoiceModal()" *ngIf="departureItemVM.hasInvoice">
-			<span class="unitpal-font p-r-6" >L</span> <span class="uppercase">{{ 'Pay' | translate }}</span>
-		</button>
+
 		<div class="flex-row flex-center-v yellow-color" *ngIf="!departureItemVM.hasInvoice && !departureItemVM.canCheckOut">
 			<span class="unitpal-font f-14 p-r-6">+</span>
 			<span class="f-11">{{ 'Future Booking' | translate }}</span>

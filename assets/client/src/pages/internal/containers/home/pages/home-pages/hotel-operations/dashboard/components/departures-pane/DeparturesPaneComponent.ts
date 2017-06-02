@@ -1,17 +1,17 @@
 import { Component, ViewChild, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import {IHotelOperationsDashboardDeparturesMediator} from '../../HotelOperationsDashboardComponent';
-import {DepartureItemInfoVM} from '../../../../../../../../services/hotel-operations/dashboard/departures/view-models/DepartureItemInfoVM';
+import { IHotelOperationsDashboardDeparturesMediator } from '../../HotelOperationsDashboardComponent';
+import { DepartureItemInfoVM } from '../../../../../../../../services/hotel-operations/dashboard/departures/view-models/DepartureItemInfoVM';
 
-import {HotelOperationsDashboardService} from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
-import {HotelService} from '../../../../../../../../services/hotel/HotelService';
+import { HotelOperationsDashboardService } from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
+import { HotelService } from '../../../../../../../../services/hotel/HotelService';
 
-import {HotelDetailsDO} from '../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
+import { HotelDetailsDO } from '../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 
-import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
-import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
+import { AppContext } from '../../../../../../../../../../common/utils/AppContext';
+import { ThError } from '../../../../../../../../../../common/utils/responses/ThError';
 
-import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
+import { ThDateDO } from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
 declare var $: any;
 @Component({
@@ -43,6 +43,7 @@ export class DeparturesPaneComponent implements OnInit {
 			this._hotelOperationsDashboardService.getDepartureItems(this.selectedDate)
 				.subscribe((departures: DepartureItemInfoVM[]) => {
 					this.departureItemsVMList = departures;
+					debugger
 					this.updateFilterDepartures();
 				}, (error: ThError) => {
 					this._appContext.toaster.error(error.message);
@@ -66,10 +67,10 @@ export class DeparturesPaneComponent implements OnInit {
 				return 1;
 			}
 			if (a.hasBooking && b.hasBooking) {
-				if (!this._appContext.thUtils.isUndefinedOrNull(a.departureItemDO.roomId) && this._appContext.thUtils.isUndefinedOrNull(b.departureItemDO.roomId)) {
+				if (!this._appContext.thUtils.isUndefinedOrNull(a.bookingDepartureItem.roomId) && this._appContext.thUtils.isUndefinedOrNull(b.bookingDepartureItem.roomId)) {
 					return -1;
 				}
-				if (this._appContext.thUtils.isUndefinedOrNull(a.departureItemDO.roomId) && !this._appContext.thUtils.isUndefinedOrNull(b.departureItemDO.roomId)) {
+				if (this._appContext.thUtils.isUndefinedOrNull(a.bookingDepartureItem.roomId) && !this._appContext.thUtils.isUndefinedOrNull(b.bookingDepartureItem.roomId)) {
 					return 1;
 				}
 			}
