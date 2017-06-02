@@ -3,7 +3,9 @@ import {ObjectValidationStructure} from '../../../../utils/th-validation/structu
 import {PrimitiveValidationStructure} from '../../../../utils/th-validation/structure/PrimitiveValidationStructure';
 import {ArrayValidationStructure} from '../../../../utils/th-validation/structure/ArrayValidationStructure';
 import {NumberInListValidationRule} from '../../../../utils/th-validation/rules/NumberInListValidationRule';
-import {EmailValidationRule} from '../../../../utils/th-validation/rules/EmailValidationRule';
+import { EmailValidationRule } from '../../../../utils/th-validation/rules/EmailValidationRule';
+import { StringValidationRule } from "../../../../utils/th-validation/rules/StringValidationRule";
+import { EmailDistributionDO } from "./utils/data-objects/EmailDistributionDO";
 
 export enum EmailConfirmationType {
     Booking,
@@ -12,7 +14,7 @@ export enum EmailConfirmationType {
 
 export class EmailConfirmationDO {
     type: EmailConfirmationType;
-    emailList: string[];
+    emailList: EmailDistributionDO[];
     parameters: any;
 
     public static getValidationStructure(): IValidationStructure {
@@ -23,7 +25,17 @@ export class EmailConfirmationDO {
             },
             {
                 key: "emailList",
-                validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new EmailValidationRule()))
+                validationStruct: new ArrayValidationStructure(
+                    new ObjectValidationStructure([
+                        {
+                            key: "email",
+                            validationStruct: new PrimitiveValidationStructure(new EmailValidationRule())
+                        },
+                        {
+                            key: "guestName",
+                            validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+                        }
+                    ]))
             }
         ]);
     }

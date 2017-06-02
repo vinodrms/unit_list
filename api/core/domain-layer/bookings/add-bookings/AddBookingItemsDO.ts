@@ -13,6 +13,7 @@ import { BooleanValidationRule } from '../../../utils/th-validation/rules/Boolea
 import { NumberInListValidationRule } from '../../../utils/th-validation/rules/NumberInListValidationRule';
 import { CommonValidationStructures } from "../../common/CommonValidations";
 import { BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
+import { EmailDistributionDO } from "../../hotel-operations/common/email-confirmations/utils/data-objects/EmailDistributionDO";
 
 export class BookingItemDO {
     interval: ThDateIntervalDO;
@@ -45,7 +46,7 @@ export class BookingItemDO {
 export class AddBookingItemsDO {
     groupBookingId?: string;
     bookingList: BookingItemDO[];
-    confirmationEmailList: string[];
+    confirmationEmailList: EmailDistributionDO[];
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
@@ -122,7 +123,17 @@ export class AddBookingItemsDO {
             },
             {
                 key: "confirmationEmailList",
-                validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new EmailValidationRule()))
+                validationStruct: new ArrayValidationStructure(
+                    new ObjectValidationStructure([
+                        {
+                            key: "email",
+                            validationStruct: new PrimitiveValidationStructure(new EmailValidationRule())
+                        },
+                        {
+                            key: "guestName",
+                            validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+                        }
+                    ]))
             }
         ]);
     }

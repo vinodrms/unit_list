@@ -95,7 +95,7 @@ describe("Hotel Booking Operations Tests", function () {
             bookingToChange = testUtils.getRandomListElement(createdBookingList);
             var emailConfirmationDO = new EmailConfirmationDO();
             emailConfirmationDO.type = EmailConfirmationType.Booking;
-            emailConfirmationDO.emailList = ["ionut.paraschiv@3angle.tech"];
+            emailConfirmationDO.emailList = [{email: "ionut.paraschiv@3angle.tech"}];
             var parameters: BookingConfirmationEmailParameters = {
                 bookingId: bookingToChange.id,
                 groupBookingId: bookingToChange.groupBookingId

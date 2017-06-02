@@ -1,3 +1,5 @@
+import { EmailDistributionDO } from "../../../../containers/home/pages/utils/new-booking/services/data-objects/AddBookingItemsDO";
+
 export enum EmailConfirmationType {
     Booking,
     Invoice
@@ -5,6 +7,6 @@ export enum EmailConfirmationType {
 
 export class EmailConfirmationParams {
     type: EmailConfirmationType;
-    emailList: string[];
+    emailList: EmailDistributionDO[];
     parameters: any;
 }

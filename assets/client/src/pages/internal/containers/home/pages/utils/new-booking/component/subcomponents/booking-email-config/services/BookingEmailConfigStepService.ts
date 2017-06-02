@@ -8,12 +8,12 @@ import { BookingStepType } from '../../utils/BookingStepType';
 import { BookingCartService } from '../../../../services/search/BookingCartService';
 import { TransientBookingItem } from '../../../../services/data-objects/TransientBookingItem';
 import { BookingCartItemVM } from '../../../../services/search/view-models/BookingCartItemVM';
-import { AddBookingItemsDO } from '../../../../services/data-objects/AddBookingItemsDO';
+import { AddBookingItemsDO, EmailDistributionDO } from '../../../../services/data-objects/AddBookingItemsDO';
 import { BookingDO } from "../../../../../../../../../services/bookings/data-objects/BookingDO";
 
 @Injectable()
 export class BookingEmailConfigStepService implements IBookingStepService, ILastBookingStepService {
-    emailRecipientList: string[] = [];
+    emailRecipientList: EmailDistributionDO[] = [];
     private _stepPath: string[];
 
     didAppearObservable: Observable<boolean>;
