@@ -5,15 +5,26 @@ import { CurrencyDO } from '../../../../common/data-objects/currency/CurrencyDO'
 import { RoomCategoryDO } from '../../../../room-categories/data-objects/RoomCategoryDO';
 import { ThUtils } from "../../../../../../../common/utils/ThUtils";
 
+export class DepartureItemInvoiceInfoVM {
+    invoiceGroupId: string;
+    invoiceId: string;
+    customerName: string;
+    price: number;
+
+    constructor() { }
+}
+
 export class DepartureItemInfoVM {
     private _departureItemDOList: DepartureItemInfoDO[];
     private _bookingDepartureItem: DepartureItemInfoDO;
+    private _departureItemInvoiceInfoVMList: DepartureItemInvoiceInfoVM[];
 
     private _hasInvoice: boolean;
     private _hasBooking: boolean;
     private _hasAttachedRoom: boolean;
     private _attachedRoomVM: RoomVM;
     private _roomCategory: RoomCategoryDO;
+    private _totalPrice: number;
     private _currency: CurrencyDO;
 
     constructor(private _thTranslation: ThTranslation) {
@@ -70,12 +81,20 @@ export class DepartureItemInfoVM {
         this._bookingDepartureItem = bookingDepartureItem;
     }
 
-    private get departureItemContainingCustomerInfo(): DepartureItemInfoDO {
-        return this.hasBooking? this.bookingDepartureItem : this.departureItemDOList[0];
+    public get departureItemContainingCustomerInfo(): DepartureItemInfoDO {
+        return this.hasBooking ? this.bookingDepartureItem : this.departureItemDOList[0];
+    }
+
+    public get departureItemInvoiceInfoVMList(): DepartureItemInvoiceInfoVM[] {
+        return this._departureItemInvoiceInfoVMList;
+    }
+
+    public set departureItemInvoiceInfoVMList(departureItemInvoiceInfoVMList: DepartureItemInvoiceInfoVM[]) {
+        this._departureItemInvoiceInfoVMList = departureItemInvoiceInfoVMList;
     }
 
     public get canCheckOut(): boolean {
-        return this.hasBooking? this.bookingDepartureItem.bookingItemStatus === DepartureItemBookingStatus.CanCheckOut : false;
+        return this.hasBooking ? this.bookingDepartureItem.bookingItemStatus === DepartureItemBookingStatus.CanCheckOut : false;
     }
 
     public get roomName(): string {
@@ -104,6 +123,14 @@ export class DepartureItemInfoVM {
     }
 
     public get priceString(): string {
-        return this.departureItemContainingCustomerInfo.invoicePrice + this.currency.nativeSymbol;
+        return this.totalPrice + this.currency.nativeSymbol;
+    }
+
+    public set totalPrice(totalPrice: number) {
+        this._totalPrice = totalPrice;
+    }
+
+    public get totalPrice(): number {
+        return this._totalPrice;
     }
 }

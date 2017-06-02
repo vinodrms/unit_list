@@ -1,7 +1,7 @@
 import { Component, Input, Output, NgZone, ElementRef, EventEmitter } from '@angular/core';
 
 import { HotelDashboardModalService } from '../../../../services/HotelDashboardModalService';
-import { DepartureItemInfoVM } from '../../../../../../../../../../services/hotel-operations/dashboard/departures/view-models/DepartureItemInfoVM'
+import { DepartureItemInfoVM, DepartureItemInvoiceInfoVM } from '../../../../../../../../../../services/hotel-operations/dashboard/departures/view-models/DepartureItemInfoVM'
 import { AppContext, ThError } from "../../../../../../../../../../../../common/utils/AppContext";
 import { HotelOperationsRoomService } from "../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService";
 import { CheckOutRoomParam } from "../../../../../../../../../../services/hotel-operations/room/utils/CheckOutRoomParam";
@@ -47,20 +47,19 @@ export class DepartureItemComponent {
         this.shouldShowPayDropdown = true;
     }
 
-    public openInvoiceModal() {
+    public openInvoiceModal(invoiceInfo: DepartureItemInvoiceInfoVM) {
         this.shouldShowPayDropdown = false;
-        var invoiceGroupId = this.departureItemVM.bookingDepartureItem.invoiceGroupId;
-        var customerId = this.departureItemVM.bookingDepartureItem.customerId;
-        this._modalService.openInvoiceModal(invoiceGroupId, customerId);
+        
+        this._modalService.openInvoiceModal(invoiceInfo.invoiceGroupId, { invoiceId: invoiceInfo.invoiceId });
     }
 
     public openCustomerModal() {
-        var customerId = this.departureItemVM.bookingDepartureItem.customerId;
+        var customerId = this.departureItemVM.departureItemContainingCustomerInfo.customerId;
         this._modalService.openCustomerModal(customerId);
     }
 
     public openCorporateCustomerModal() {
-        var customerId = this.departureItemVM.bookingDepartureItem.corporateCustomerId;
+        var customerId = this.departureItemVM.departureItemContainingCustomerInfo.corporateCustomerId;
         this._modalService.openCustomerModal(customerId);
     }
 
@@ -79,8 +78,8 @@ export class DepartureItemComponent {
         this.isCheckingOut = true;
 
         var chechOutParams: CheckOutRoomParam = {
-            bookingId: this.departureItemVM.bookingDepartureItem.bookingId,
-            groupBookingId: this.departureItemVM.bookingDepartureItem.groupBookingId
+            bookingId: this.departureItemVM.departureItemContainingCustomerInfo.bookingId,
+            groupBookingId: this.departureItemVM.departureItemContainingCustomerInfo.groupBookingId
         }
         this._hotelOperationsRoomService.checkOut(chechOutParams).subscribe((updatedBooking: BookingDO) => {
             this._appContext.analytics.logEvent("room", "check-out", "Checked out a room");
@@ -93,7 +92,7 @@ export class DepartureItemComponent {
     }
 
     public openBookingNotesModal() {
-        var bookingNotes = this.departureItemVM.bookingDepartureItem.bookingNotes;
+        var bookingNotes = this.departureItemVM.departureItemContainingCustomerInfo.bookingNotes;
         this._modalService.openBookingNotesModal(bookingNotes);
     }
 
@@ -107,7 +106,7 @@ export class DepartureItemComponent {
         }
     }
 
-    public eventTriggeredInsideHost( event ) {
+    public eventTriggeredInsideHost(event) {
         var current = event.target;
         // Reach under the hood to get the actual DOM element that is
         // being used to render the component.
@@ -119,14 +118,14 @@ export class DepartureItemComponent {
         do {
             // If we hit the host node, we know that the target resides
             // within the host component.
-            if ( current === host ) {
-                return( true );
+            if (current === host) {
+                return (true);
             }
             current = current.parentNode;
-        } while ( current );
+        } while (current);
         // If we made it this far, we never encountered the host
         // component as we walked up the DOM tree. As such, we know that
         // the target resided outside of the host component.
-        return( false );
+        return (false);
     }
 }

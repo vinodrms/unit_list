@@ -26,6 +26,11 @@ import { ModalDialogRef } from '../../../../../../../../../../../common/utils/mo
 import { HotelOperationsResult } from '../../../services/utils/HotelOperationsResult';
 import { ItemAdditionMeta } from "../../../../../../../../../../../common/utils/components/item-list-navigator/ItemAdditionMeta";
 
+export enum FilterType {
+    Customer,
+    InvoiceRef
+}
+
 @Component({
     selector: 'invoice-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/template/invoice-operations-page.html',
@@ -106,8 +111,10 @@ export class InvoiceOperationsPageComponent implements OnInit {
             this.editMode = true;
         });
 
-        if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceGroupId) &&
-            !this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
+        if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceGroupId) && (
+            !this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)
+            || !this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.invoiceId))) {
+
             this.invoiceOperationsPageParam.updateTitle(this._title, subtitle, this.filterMetaForEnabledFilter);
             this.itemListNavigatorConfig = {
                 initialNumberOfItems: this.invoiceVMList.length,
@@ -249,9 +256,17 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
 
     public get filterMetaForEnabledFilter(): HotelOperationsPageFilterMeta {
+        let fontName = '';
+        switch(this.filterType) {
+            case FilterType.Customer: fontName = '('; break;
+            case FilterType.InvoiceRef: fontName = '-'; break;
+            default: fontName = '-';
+        }
+        
         return {
             filterInfo: 'filtered by:',
             filterValue: this.invoiceFilterValue,
+            filterFontName: fontName,
             filterRemoveInfo: 'Remove filter in order to edit.',
         }
     }
@@ -268,6 +283,13 @@ export class InvoiceOperationsPageComponent implements OnInit {
         if (!this._thUtils.isUndefinedOrNull(customerDO)) {
             return customerDO.customerName;
         }
+        else if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.invoiceId)) {
+            let invoiceVM = _.find(this.invoiceGroupVM.invoiceVMList, (invoiceVM: InvoiceVM) => {
+                return invoiceVM.invoiceDO.id === this.invoiceOperationsPageParam.invoiceFilter.invoiceId;
+            });
+            return invoiceVM.invoiceDO.invoiceReference;
+        }
+
         return null;
     }
 
@@ -277,14 +299,22 @@ export class InvoiceOperationsPageComponent implements OnInit {
     public set invoiceGroupVM(invoiceGroupVM: InvoiceGroupVM) {
         this._invoiceGroupControllerService.invoiceGroupVM = invoiceGroupVM;
     }
+
     public get invoiceVMList(): InvoiceVM[] {
         if (this.filterEnabled) {
-            return _.filter(this.invoiceGroupVM.invoiceVMList, (invoiceVM: InvoiceVM) => {
-                var customerIdList = _.map(invoiceVM.invoicePayerVMList, (invoicePayerVM: InvoicePayerVM) => {
-                    return invoicePayerVM.invoicePayerDO.customerId;
-                })
-                return _.contains(customerIdList, this.invoiceOperationsPageParam.invoiceFilter.customerId);
-            });
+            if (this.filterType === FilterType.Customer) {
+                return _.filter(this.invoiceGroupVM.invoiceVMList, (invoiceVM: InvoiceVM) => {
+                    var customerIdList = _.map(invoiceVM.invoicePayerVMList, (invoicePayerVM: InvoicePayerVM) => {
+                        return invoicePayerVM.invoicePayerDO.customerId;
+                    })
+                    return _.contains(customerIdList, this.invoiceOperationsPageParam.invoiceFilter.customerId);
+                });
+            }
+            else if (this.filterType === FilterType.InvoiceRef) {
+                return _.filter(this.invoiceGroupVM.invoiceVMList, (invoiceVM: InvoiceVM) => {
+                    return invoiceVM.invoiceDO.id === this.invoiceOperationsPageParam.invoiceFilter.invoiceId;
+                });
+            }
         }
         return this.invoiceGroupVM.invoiceVMList;
     }
@@ -326,5 +356,14 @@ export class InvoiceOperationsPageComponent implements OnInit {
             maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
             numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
         });
+    }
+
+    private get filterType(): FilterType {
+        if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
+            return FilterType.Customer;
+        }
+        else if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.invoiceId)) {
+            return FilterType.InvoiceRef;
+        }
     }
 }

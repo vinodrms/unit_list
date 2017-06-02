@@ -43,7 +43,6 @@ export class DeparturesPaneComponent implements OnInit {
 			this._hotelOperationsDashboardService.getDepartureItems(this.selectedDate)
 				.subscribe((departures: DepartureItemInfoVM[]) => {
 					this.departureItemsVMList = departures;
-					debugger
 					this.updateFilterDepartures();
 				}, (error: ThError) => {
 					this._appContext.toaster.error(error.message);

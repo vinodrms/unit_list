@@ -130,7 +130,15 @@ export class HotelOperationsDeparturesInfoBuilder {
     }
 
     public getCustomerIdList(): string[] {
-        var customerIdList = _.map(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => { return departureInfoItem.customerId });
+        let customerIdList = [];
+        _.forEach(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => { 
+            let guestCustomerIdList = _.map(departureInfoItem.guestCustomerInfoList, (customerInfo: DepartureItemCustomerInfo) => {
+                return customerInfo.customerId;
+            });
+            customerIdList = customerIdList.concat(guestCustomerIdList);
+            customerIdList.push(departureInfoItem.customerId);
+        });
+        
         var departureInfoListWithCorporateCustomerId = _.filter(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => { return departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0 });
         customerIdList = _.union(customerIdList, _.map(departureInfoListWithCorporateCustomerId, (departureInfoItem: DeparturelItemInfo) => {
             if (departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0) {

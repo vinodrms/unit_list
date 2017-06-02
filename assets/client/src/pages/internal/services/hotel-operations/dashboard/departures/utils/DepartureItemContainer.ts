@@ -1,4 +1,4 @@
-import { DepartureItemInfoVM } from "../view-models/DepartureItemInfoVM";
+import { DepartureItemInfoVM, DepartureItemInvoiceInfoVM } from "../view-models/DepartureItemInfoVM";
 import { DepartureItemInfoDO } from "../data-objects/DepartureItemInfoDO";
 import { AppContext } from "../../../../../../../common/utils/AppContext";
 import { ThTranslation } from "../../../../../../../common/utils/localization/ThTranslation";
@@ -29,7 +29,6 @@ export class DepartureItemContainer {
 
     public get departureItemInfoVMList(): DepartureItemInfoVM[] {
         let indexedDepartures = this._departureItemIndexer.getIndexedDepartures();
-        debugger
         let bookingIdList = Object.keys(indexedDepartures.departuresIndexedByBookings);
         _.forEach(bookingIdList, (bookingId: string) => {
             this._departureItemInfoVMList.push(
@@ -44,7 +43,6 @@ export class DepartureItemContainer {
             );
         });
 
-        debugger
         return this._departureItemInfoVMList;
     }
 
@@ -59,6 +57,24 @@ export class DepartureItemContainer {
         let departureItemWithInvoice = _.find(departureItemVM.departureItemDOList, (departureItem: DepartureItemInfoDO) => {
             return !this._appContext.thUtils.isUndefinedOrNull(departureItem.invoiceGroupId);
         });
+
+        departureItemVM.totalPrice = _.chain(departureItemVM.departureItemDOList).map((departureItem: DepartureItemInfoDO) => {
+            return this._appContext.thUtils.isUndefinedOrNull(departureItem.invoiceGroupId) ? 0 : departureItem.invoicePrice;
+        }).reduce((sum: number, price: number) => {
+            return sum + price;
+        }).value();
+
+        departureItemVM.departureItemInvoiceInfoVMList = _.chain(departureItemVM.departureItemDOList).filter((departureItem: DepartureItemInfoDO) => {
+            return !this._appContext.thUtils.isUndefinedOrNull(departureItem.invoiceGroupId);
+        }).map((departureItem: DepartureItemInfoDO) => {
+            let invoiceInfo = new DepartureItemInvoiceInfoVM();
+            invoiceInfo.customerName = departureItem.customerName;
+            invoiceInfo.price = departureItem.invoicePrice;
+            invoiceInfo.invoiceGroupId = departureItem.invoiceGroupId;
+            invoiceInfo.invoiceId = departureItem.invoiceId;
+
+            return invoiceInfo;
+        }).value();
 
         departureItemVM.hasInvoice = !this._appContext.thUtils.isUndefinedOrNull(departureItemWithInvoice);
         departureItemVM.hasBooking = !this._appContext.thUtils.isUndefinedOrNull(departureItemVM.bookingDepartureItem);
