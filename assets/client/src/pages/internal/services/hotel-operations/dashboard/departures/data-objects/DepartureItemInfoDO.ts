@@ -7,11 +7,22 @@ export enum DepartureItemBookingStatus {
     CanNotCheckOut
 }
 
+export class DepartureItemCustomerInfoDO extends BaseDO {
+    customerId: string;
+    customerName: string;
+
+    protected getPrimitivePropertyKeys(): string[] {
+        return ["customerId", "customerName"];
+    }
+}
+
 export class DepartureItemInfoDO extends BaseDO {
     customerId: string;
     customerName: string;
     corporateCustomerId: string;
     corporateCustomerName: string;
+
+    guestCustomerInfoList?: DepartureItemCustomerInfoDO[];
 
     bookingId: string;
     groupBookingId: string;
@@ -32,6 +43,14 @@ export class DepartureItemInfoDO extends BaseDO {
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
+
+        this.guestCustomerInfoList = [];
+        this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "guestCustomerInfoList"), (guestCustomerInfo: Object) => {
+            let customerInfo = new DepartureItemCustomerInfoDO();
+            customerInfo.buildFromObject(guestCustomerInfo);
+
+            this.guestCustomerInfoList.push(customerInfo);
+        });
 
         this.bookingInterval = new ThDateIntervalDO();
         this.bookingInterval.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "bookingInterval"));

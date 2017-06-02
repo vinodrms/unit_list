@@ -1,13 +1,14 @@
-import {Injectable} from '@angular/core';
-import {BookingDO} from '../../../../../../../services/bookings/data-objects/BookingDO';
-import {ModalDialogRef} from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {ArrivalItemInfoVM} from '../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
+import { Injectable } from '@angular/core';
+import { BookingDO } from '../../../../../../../services/bookings/data-objects/BookingDO';
+import { ModalDialogRef } from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { ArrivalItemInfoVM } from '../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
 
-import {AssignRoomModalService} from '../../assign-room/services/AssignRoomModalService';
-import {HotelOperationsModalService} from '../../operations-modal/services/HotelOperationsModalService';
+import { AssignRoomModalService } from '../../assign-room/services/AssignRoomModalService';
+import { HotelOperationsModalService } from '../../operations-modal/services/HotelOperationsModalService';
 
-import {HotelOperationsResult} from '../../operations-modal/services/utils/HotelOperationsResult';
-import {HotelOperationsDashboardService} from '../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
+import { HotelOperationsResult } from '../../operations-modal/services/utils/HotelOperationsResult';
+import { HotelOperationsDashboardService } from '../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
+import { HotelInvoiceOperationsPageFilterParam } from "../../operations-modal/components/components/invoice-operations/utils/HotelInvoiceOperationsPageParam";
 
 @Injectable()
 export class HotelDashboardModalService {
@@ -32,8 +33,8 @@ export class HotelDashboardModalService {
 		this.handleHotelOperationsModalPromise(p)
 	}
 
-	public openInvoiceModal(invoiceGroupId: string, customerId: string) {
-		var p = this._hotelOperationsModalService.openInvoiceGroupOperationsModal(invoiceGroupId, customerId);
+	public openInvoiceModal(invoiceGroupId: string, filter: HotelInvoiceOperationsPageFilterParam) {
+		var p = this._hotelOperationsModalService.openInvoiceGroupOperationsModal(invoiceGroupId, filter);
 		this.handleHotelOperationsModalPromise(p)
 	}
 
