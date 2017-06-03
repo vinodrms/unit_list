@@ -5,9 +5,8 @@ import { SettingsReportsComponent } from './main/SettingsReportsComponent';
 import { SettingsShiftReportComponent } from './pages/shift-report/SettingsShiftReportComponent';
 import { SettingsBackUpReportComponent } from './pages/backup-report/SettingsBackUpReportComponent';
 import { SettingsKeyMetricsReportComponent } from './pages/key-metrics-report/SettingsKeyMetricsReportComponent';
-import { BookingsForPriceProductComponent } from "./pages/bookings-for-price-product/BookingsForPriceProductComponent";
 import { SettingsHousekeepingReportComponent } from "./pages/housekeeping-report/SettingsHousekeepingReportComponent";
-import { BookingsByIntervalReportComponent } from "./pages/bookings-by-interval/BookingsByIntervalReportComponent";
+import { BookingsReportComponent } from "./pages/bookings-report/BookingsReportComponent";
 
 const settingsReportsRoutes: Routes = [
     {
@@ -17,9 +16,8 @@ const settingsReportsRoutes: Routes = [
             { path: 'shift', component: SettingsShiftReportComponent },
             { path: 'backup', component: SettingsBackUpReportComponent },
             { path: 'key-metrics', component: SettingsKeyMetricsReportComponent },
-            { path: 'bookings-for-price-product', component: BookingsForPriceProductComponent },
             { path: 'housekeeping', component: SettingsHousekeepingReportComponent },
-            { path: 'bookings-by-interval', component: BookingsByIntervalReportComponent },
+            { path: 'bookings', component: BookingsReportComponent },
 
         ]
     }

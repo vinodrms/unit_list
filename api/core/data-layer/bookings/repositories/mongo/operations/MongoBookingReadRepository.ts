@@ -109,10 +109,12 @@ export class MongoBookingReadRepository extends MongoRepository {
                 ]);
             }
         }
+
         this.appendTriggerParamsIfNecessary(mongoQueryBuilder, searchCriteria);
         this.appendDateParamsIfNecessary(mongoQueryBuilder, searchCriteria);
         this.appendBeforeStartDateParamIfNecessary(mongoQueryBuilder, searchCriteria);
         this.appendCheckOutUtcTimestampNullOrGreaterThanIfNecessary(mongoQueryBuilder, searchCriteria);
+        this.appendCreationDateTimestampParamsIfNecessary(mongoQueryBuilder, searchCriteria);
         mongoQueryBuilder.addMultipleSelectOptionList("confirmationStatus", searchCriteria.confirmationStatusList);
         mongoQueryBuilder.addExactMatch("groupBookingId", searchCriteria.groupBookingId);
         mongoQueryBuilder.addMultipleSelectOptionList("groupBookingId", searchCriteria.groupBookingIdList);
@@ -123,6 +125,17 @@ export class MongoBookingReadRepository extends MongoRepository {
         mongoQueryBuilder.addMultipleSelectOption("reservedAddOnProductIdList", searchCriteria.reservedAddOnProductId);
         mongoQueryBuilder.addExactMatch("priceProductId", searchCriteria.priceProductId);
         return mongoQueryBuilder.processedQuery;
+    }
+    private appendCreationDateTimestampParamsIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
+        if (!this._thUtils.isUndefinedOrNull(searchCriteria.creationInterval)) {
+            var andQuery: Object[] = (mongoQueryBuilder.processedQuery["$and"]) ? mongoQueryBuilder.processedQuery["$and"]: [];
+            andQuery.push({ "creationDateUtcTimestamp": { $gte: searchCriteria.creationInterval.start.getUtcTimestamp() } });
+            andQuery.push({ "creationDateUtcTimestamp": { $lte: searchCriteria.creationInterval.end.getUtcTimestamp()  } });
+
+            mongoQueryBuilder.addCustomQuery(
+                    "$and", andQuery
+            ); 
+        }
     }
     private appendTriggerParamsIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
         if (this._thUtils.isUndefinedOrNull(searchCriteria.triggerParams)

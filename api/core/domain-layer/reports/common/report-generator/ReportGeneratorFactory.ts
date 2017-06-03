@@ -5,9 +5,8 @@ import { IReportGeneratorStrategy } from './IReportGeneratorStrategy';
 import { KeyMetricsReportGroupGenerator } from '../../key-metrics/KeyMetricsReportGroupGenerator';
 import { BackUpReportGroupGenerator } from '../../backup-report/BackUpReportGroupGenerator';
 import { ShiftReportGroupGenerator } from '../../shift-report/ShiftReportGroupGenerator';
-import { BookingsForPriceProductReportGroupGenerator } from "../../bookings-for-price-product/BookingsForPriceProductReportGroupGenerator";
 import { HousekeepingReportGroupGenerator } from "../../housekeeping/HousekeepingReportGroupGenerator";
-import { BookingsByIntervalReportGroupGenerator } from "../../bookings-by-interval/BookingsByIntervalReportGroupGenerator";
+import { BookingsReportGroupGenerator } from "../../bookings/BookingsReportGroupGenerator";
 
 export class ReportGeneratorFactory {
 	private _thUtils: ThUtils;
@@ -24,12 +23,10 @@ export class ReportGeneratorFactory {
 				return new BackUpReportGroupGenerator(this._appContext, this._sessionContext);
 			case ReportGroupType.Shift:
 				return new ShiftReportGroupGenerator(this._appContext, this._sessionContext);
-			case ReportGroupType.BookingsForPriceProduct:
-				return new BookingsForPriceProductReportGroupGenerator(this._appContext, this._sessionContext);
 			case ReportGroupType.Housekeeping:
 				return new HousekeepingReportGroupGenerator(this._appContext, this._sessionContext);
-			case ReportGroupType.BookingsByInterval:
-				return new BookingsByIntervalReportGroupGenerator(this._appContext, this._sessionContext);
+			case ReportGroupType.Bookings:
+				return new BookingsReportGroupGenerator(this._appContext, this._sessionContext);
 		}
 	}
 }

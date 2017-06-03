@@ -17,6 +17,7 @@ import { ReportFileResult } from '../../../../core/domain-layer/reports/common/r
 import { ThDateDO, ThMonth } from "../../../../core/utils/th-dates/data-objects/ThDateDO";
 import { ThHourDO } from "../../../../core/utils/th-dates/data-objects/ThHourDO";
 import { ThPeriodType } from "../../../../core/domain-layer/reports/key-metrics/period-converter/ThPeriodDO";
+import { ThTimestampDO } from "../../../../core/utils/th-dates/data-objects/ThTimestampDO";
 
 describe("Reports", function () {
 	var testUtils: TestUtils;
@@ -116,10 +117,14 @@ describe("Reports", function () {
 
 			let generatorDO = new ReportGeneratorDO();
 			generatorDO.properties = {
-				priceProductId: testDataBuilder.bookingList[0].priceProductId,
-				confirmationStatusList: [testDataBuilder.bookingList[0].confirmationStatus]
+				priceProductIdList: [testDataBuilder.bookingList[2].priceProductId],
+				confirmationStatusList: [testDataBuilder.bookingList[2].confirmationStatus],
+				startDate: testDataBuilder.bookingList[2].interval.start,
+				endDate: testDataBuilder.bookingList[2].interval.end,
+				creationStartDateUtcTimestamp: testDataBuilder.bookingList[2].creationDateUtcTimestamp,
+				creationEndDateUtcTimestamp: testDataBuilder.bookingList[2].creationDateUtcTimestamp,		
 			};
-			generatorDO.reportType = ReportGroupType.BookingsForPriceProduct;
+			generatorDO.reportType = ReportGroupType.Bookings;
 			generatorDO.format = ReportOutputFormat.Pdf;
 
 			generator.getReport(generatorDO).then((report: ReportFileResult) => {
@@ -138,25 +143,6 @@ describe("Reports", function () {
 			let generatorDO = new ReportGeneratorDO();
 			generatorDO.properties = {};
 			generatorDO.reportType = ReportGroupType.Housekeeping;
-			generatorDO.format = ReportOutputFormat.Pdf;
-			
-			generator.getReport(generatorDO).then((reportFile: ReportFileResult) => {
-				should.equal(reportFile.reportPath.length > 0, true);
-				done();
-			}).catch((e) => {
-				done(e);
-			});
-		});
-
-		it("Should generate the bookings by interval report", function (done) {
-			let generator = new ReportGenerator(testContext.appContext, testContext.sessionContext);
-
-			let generatorDO = new ReportGeneratorDO();
-			generatorDO.properties = {
-				startDate: ThDateDO.buildThDateDO(2018, ThMonth.January, 22),
-				endDate: ThDateDO.buildThDateDO(2018, ThMonth.May, 22)
-			};
-			generatorDO.reportType = ReportGroupType.BookingsByInterval;
 			generatorDO.format = ReportOutputFormat.Pdf;
 			
 			generator.getReport(generatorDO).then((reportFile: ReportFileResult) => {
