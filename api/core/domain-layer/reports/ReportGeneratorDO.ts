@@ -7,9 +7,8 @@ export enum ReportGroupType {
     Backup,
     KeyMetrics,
     Shift,
-    BookingsForPriceProduct,
     Housekeeping,
-    BookingsByInterval,
+    Bookings,
 
 }
 
@@ -17,9 +16,8 @@ var SupportedReportGroupTypes: ReportGroupType[] = [
     ReportGroupType.Backup,
     ReportGroupType.KeyMetrics,
     ReportGroupType.Shift,
-    ReportGroupType.BookingsForPriceProduct,
     ReportGroupType.Housekeeping,
-    ReportGroupType.BookingsByInterval,
+    ReportGroupType.Bookings,
     
 ]
 

@@ -114,6 +114,7 @@ export class BookingItemsConverter {
                 bookingDO.invoiceNotes = bookingItem.invoiceNotes;
                 bookingDO.interval = bookingInterval;
                 bookingDO.creationDate = this._converterParams.currentHotelTimestamp.thDateDO;
+                bookingDO.creationDateUtcTimestamp = bookingDO.creationDate.getUtcTimestamp();
 
                 var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
                 bookingDO.startUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();

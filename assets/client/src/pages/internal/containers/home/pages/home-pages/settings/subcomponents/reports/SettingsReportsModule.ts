@@ -12,11 +12,10 @@ import { ReportOutputFormatComponent } from './pages/common/report-output-format
 import { SettingsShiftReportComponent } from './pages/shift-report/SettingsShiftReportComponent';
 import { SettingsBackUpReportComponent } from './pages/backup-report/SettingsBackUpReportComponent';
 import { SettingsKeyMetricsReportComponent } from './pages/key-metrics-report/SettingsKeyMetricsReportComponent';
-import { BookingsForPriceProductComponent } from "./pages/bookings-for-price-product/BookingsForPriceProductComponent";
 import { SettingsHousekeepingReportComponent } from "./pages/housekeeping-report/SettingsHousekeepingReportComponent";
-import { BookingsByIntervalReportComponent } from "./pages/bookings-by-interval/BookingsByIntervalReportComponent";
 
 import { TimezoneService } from '../../../../../../../services/timezones/TimezoneService';
+import { BookingsReportComponent } from "./pages/bookings-report/BookingsReportComponent";
 
 var settingsReportsComponents = [
     SettingsReportsComponent,
@@ -24,9 +23,8 @@ var settingsReportsComponents = [
     SettingsShiftReportComponent,
     SettingsBackUpReportComponent,
     SettingsKeyMetricsReportComponent,
-    BookingsForPriceProductComponent,
     SettingsHousekeepingReportComponent,
-    BookingsByIntervalReportComponent,
+    BookingsReportComponent,
 
 ];
 @NgModule({

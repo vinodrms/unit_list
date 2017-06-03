@@ -82,6 +82,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.reservedAddOnProductIdList = reservedAddOnProductList;
         var indexedBookingInterval = new IndexedBookingInterval(booking.interval);
         booking.creationDate = ThTimestampDO.buildThTimestampForTimezone(hotelDO.timezone).thDateDO;
+        booking.creationDateUtcTimestamp = booking.creationDate.getUtcTimestamp();
         booking.startUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
         booking.endUtcTimestamp = indexedBookingInterval.getEndUtcTimestamp();
         var currentHotelDate = this._bookingUtils.getCurrentThDateForHotel(hotelDO);

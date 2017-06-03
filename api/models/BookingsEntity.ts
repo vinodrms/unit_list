@@ -67,6 +67,10 @@ class BookingsEntity extends BasePersistentEntity {
                 type: 'json',
                 required: true
             },
+            creationDateUtcTimestamp: {
+                type: 'float',
+                required: true,
+            },
             startUtcTimestamp: {
                 type: 'float',
                 required: true
