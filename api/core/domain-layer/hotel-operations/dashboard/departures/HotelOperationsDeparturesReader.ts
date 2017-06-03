@@ -1,21 +1,21 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { BookingSearchResultRepoDO, BookingSearchCriteriaRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
-import {InvoicePaymentStatus} from '../../../../data-layer/invoices/data-objects/InvoiceDO';
-import {InvoiceGroupSearchResultRepoDO} from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import {InvoiceGroupDO} from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../../../data-layer/invoices/data-objects/InvoiceDO';
-import {CustomerIdValidator} from '../../../customers/validators/CustomerIdValidator';
-import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
+import { InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { CustomerIdValidator } from '../../../customers/validators/CustomerIdValidator';
+import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
 import { HotelOperationsQueryDO, HotelOperationsQueryType } from '../utils/HotelOperationsQueryDO';
-import {HotelOperationsQueryDOParser} from '../utils/HotelOperationsQueryDOParser';
-import {HotelOperationsDeparturesInfo} from './utils/HotelOperationsDeparturesInfo';
-import {HotelOperationsDeparturesInfoBuilder} from './utils/HotelOperationsDeparturesInfoBuilder';
-import {ThUtils} from '../../../../utils/ThUtils';
+import { HotelOperationsQueryDOParser } from '../utils/HotelOperationsQueryDOParser';
+import { HotelOperationsDeparturesInfo } from './utils/HotelOperationsDeparturesInfo';
+import { HotelOperationsDeparturesInfoBuilder } from './utils/HotelOperationsDeparturesInfoBuilder';
+import { ThUtils } from '../../../../utils/ThUtils';
 
 import _ = require('underscore');
 
@@ -37,14 +37,14 @@ export class HotelOperationsDeparturesReader {
 
     private readCore(resolve: { (result: HotelOperationsDeparturesInfo): void }, reject: { (err: ThError): void }, queryType: HotelOperationsQueryType, query: HotelOperationsQueryDO) {
         var departuresInfoBuilder = new HotelOperationsDeparturesInfoBuilder();
-        
+
         var queryParser = new HotelOperationsQueryDOParser(this._appContext, this._sessionContext);
         return queryParser.parse(query).then((parsedQuery: HotelOperationsQueryDO) => {
             this._parsedQuery = parsedQuery;
 
             var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
             return bookingRepository.getBookingList(
-                { hotelId: this._sessionContext.sessionDO.hotel.id }, 
+                { hotelId: this._sessionContext.sessionDO.hotel.id },
                 this.getDeparturesQuery(queryType)
             );
         }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
@@ -73,7 +73,7 @@ export class HotelOperationsDeparturesReader {
             departuresInfoBuilder.appendCustomerInformation(customersContainer);
 
             var departuresInfo = departuresInfoBuilder.getBuiltHotelOperationsDeparturesInfo();
-            departuresInfo.referenceDate = this._parsedQuery.referenceDate;
+            departuresInfo.referenceDate = this._parsedQuery.referenceDate;        
             resolve(departuresInfo);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.HotelOperationsDeparturesReaderError, error);
@@ -97,8 +97,8 @@ export class HotelOperationsDeparturesReader {
     }
 
     private getDeparturesQuery(queryType: HotelOperationsQueryType): BookingSearchCriteriaRepoDO {
-        switch(queryType) {
-            case HotelOperationsQueryType.FixedForTheDay :
+        switch (queryType) {
+            case HotelOperationsQueryType.FixedForTheDay:
                 return {
                     confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_FixedDepartures,
                     endDate: this._parsedQuery.referenceDate,

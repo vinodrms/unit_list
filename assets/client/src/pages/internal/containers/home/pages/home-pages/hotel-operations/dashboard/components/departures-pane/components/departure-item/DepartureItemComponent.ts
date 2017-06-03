@@ -1,7 +1,7 @@
-import {Component, Input, Output, NgZone, ElementRef, EventEmitter} from '@angular/core';
+import { Component, Input, Output, NgZone, ElementRef, EventEmitter } from '@angular/core';
 
-import {HotelDashboardModalService} from '../../../../services/HotelDashboardModalService';
-import { DepartureItemInfoVM } from '../../../../../../../../../../services/hotel-operations/dashboard/departures/view-models/DepartureItemInfoVM'
+import { HotelDashboardModalService } from '../../../../services/HotelDashboardModalService';
+import { DepartureItemInfoVM, DepartureItemInvoiceInfoVM } from '../../../../../../../../../../services/hotel-operations/dashboard/departures/view-models/DepartureItemInfoVM'
 import { AppContext, ThError } from "../../../../../../../../../../../../common/utils/AppContext";
 import { HotelOperationsRoomService } from "../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService";
 import { CheckOutRoomParam } from "../../../../../../../../../../services/hotel-operations/room/utils/CheckOutRoomParam";
@@ -16,6 +16,9 @@ declare var $: any;
 @Component({
     selector: 'departure-item',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/departures-pane/components/departure-item/template/departure-item.html',
+    host: {
+        '(document:click)': 'onClick($event)',
+    },
     providers: [EagerInvoiceGroupsService, InvoiceGroupsService]
 })
 
@@ -24,6 +27,8 @@ export class DepartureItemComponent {
     @Output() onCheckOut = new EventEmitter();
 
     isCheckingOut: boolean = false;
+
+    shouldShowPayDropdown: boolean = false;
 
     constructor(private _zone: NgZone,
         private _root: ElementRef,
@@ -38,19 +43,23 @@ export class DepartureItemComponent {
     ngAfterViewInit() {
     }
 
-    public openInvoiceModal() {
-		var invoiceGroupId = this.departureItemVM.departureItemDO.invoiceGroupId;
-		var customerId = this.departureItemVM.departureItemDO.customerId;
-		this._modalService.openInvoiceModal(invoiceGroupId, customerId);
-	}
+    public openPayInvoiceDropdown() {
+        this.shouldShowPayDropdown = true;
+    }
+
+    public openInvoiceModal(invoiceInfo: DepartureItemInvoiceInfoVM) {
+        this.shouldShowPayDropdown = false;
+        
+        this._modalService.openInvoiceModal(invoiceInfo.invoiceGroupId, { invoiceId: invoiceInfo.invoiceId });
+    }
 
     public openCustomerModal() {
-        var customerId = this.departureItemVM.departureItemDO.customerId;
+        var customerId = this.departureItemVM.departureItemContainingCustomerInfo.customerId;
         this._modalService.openCustomerModal(customerId);
     }
 
     public openCorporateCustomerModal() {
-        var customerId = this.departureItemVM.departureItemDO.corporateCustomerId;
+        var customerId = this.departureItemVM.departureItemContainingCustomerInfo.corporateCustomerId;
         this._modalService.openCustomerModal(customerId);
     }
 
@@ -69,8 +78,8 @@ export class DepartureItemComponent {
         this.isCheckingOut = true;
 
         var chechOutParams: CheckOutRoomParam = {
-            bookingId: this.departureItemVM.departureItemDO.bookingId,
-            groupBookingId: this.departureItemVM.departureItemDO.groupBookingId
+            bookingId: this.departureItemVM.departureItemContainingCustomerInfo.bookingId,
+            groupBookingId: this.departureItemVM.departureItemContainingCustomerInfo.groupBookingId
         }
         this._hotelOperationsRoomService.checkOut(chechOutParams).subscribe((updatedBooking: BookingDO) => {
             this._appContext.analytics.logEvent("room", "check-out", "Checked out a room");
@@ -83,7 +92,40 @@ export class DepartureItemComponent {
     }
 
     public openBookingNotesModal() {
-        var bookingNotes = this.departureItemVM.departureItemDO.bookingNotes;
+        var bookingNotes = this.departureItemVM.departureItemContainingCustomerInfo.bookingNotes;
         this._modalService.openBookingNotesModal(bookingNotes);
+    }
+
+    public getPayDropdownClasses(): string {
+        return this.shouldShowPayDropdown ? 'pay-dropdown-content show' : 'pay-dropdown-content';
+    }
+
+    public onClick(event) {
+        if (!this.eventTriggeredInsideHost(event)) {
+            this.shouldShowPayDropdown = false;
+        }
+    }
+
+    public eventTriggeredInsideHost(event) {
+        var current = event.target;
+        // Reach under the hood to get the actual DOM element that is
+        // being used to render the component.
+        var host = this._root.nativeElement;
+        // Here, we are going to walk up the DOM tree, checking to see
+        // if we hit the "host" node. If we hit the host node at any
+        // point, we know that the target must reside within the local
+        // tree of the host.
+        do {
+            // If we hit the host node, we know that the target resides
+            // within the host component.
+            if (current === host) {
+                return (true);
+            }
+            current = current.parentNode;
+        } while (current);
+        // If we made it this far, we never encountered the host
+        // component as we walked up the DOM tree. As such, we know that
+        // the target resided outside of the host component.
+        return (false);
     }
 }

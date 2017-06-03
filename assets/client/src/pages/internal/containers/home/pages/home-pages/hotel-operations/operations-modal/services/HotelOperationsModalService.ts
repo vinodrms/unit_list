@@ -1,14 +1,14 @@
-import {Injectable, ReflectiveInjector} from '@angular/core';
-import {AppContext} from '../../../../../../../../../common/utils/AppContext';
-import {ModalDialogRef} from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {HotelOperationsModalComponent} from '../HotelOperationsModalComponent';
-import {HotelOperationsModalModule} from '../HotelOperationsModalModule';
-import {HotelOperationsResult} from './utils/HotelOperationsResult';
-import {IHotelOperationsPageParam} from './utils/IHotelOperationsPageParam';
-import {HotelRoomOperationsPageParam} from '../components/components/room-operations/utils/HotelRoomOperationsPageParam';
-import {HotelBookingOperationsPageParam} from '../components/components/booking-operations/utils/HotelBookingOperationsPageParam';
-import {HotelCustomerOperationsPageParam} from '../components/components/customer-operations/utils/HotelCustomerOperationsPageParam';
-import {HotelInvoiceOperationsPageParam} from '../components/components/invoice-operations/utils/HotelInvoiceOperationsPageParam';
+import { Injectable, ReflectiveInjector } from '@angular/core';
+import { AppContext } from '../../../../../../../../../common/utils/AppContext';
+import { ModalDialogRef } from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { HotelOperationsModalComponent } from '../HotelOperationsModalComponent';
+import { HotelOperationsModalModule } from '../HotelOperationsModalModule';
+import { HotelOperationsResult } from './utils/HotelOperationsResult';
+import { IHotelOperationsPageParam } from './utils/IHotelOperationsPageParam';
+import { HotelRoomOperationsPageParam } from '../components/components/room-operations/utils/HotelRoomOperationsPageParam';
+import { HotelBookingOperationsPageParam } from '../components/components/booking-operations/utils/HotelBookingOperationsPageParam';
+import { HotelCustomerOperationsPageParam } from '../components/components/customer-operations/utils/HotelCustomerOperationsPageParam';
+import { HotelInvoiceOperationsPageParam, HotelInvoiceOperationsPageFilterParam } from '../components/components/invoice-operations/utils/HotelInvoiceOperationsPageParam';
 
 @Injectable()
 export class HotelOperationsModalService {
@@ -29,8 +29,8 @@ export class HotelOperationsModalService {
         return this.openOperationsModal(custOperationsPageParam);
     }
 
-    public openInvoiceGroupOperationsModal(invoiceGroupId: string, customerId: string): Promise<ModalDialogRef<HotelOperationsResult>> {
-        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, { customerId: customerId }, false);
+    public openInvoiceGroupOperationsModal(invoiceGroupId: string, filter: HotelInvoiceOperationsPageFilterParam): Promise<ModalDialogRef<HotelOperationsResult>> {
+        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, filter, false);
         return this.openOperationsModal(invoiceOperationsPageParam);
     }
 

@@ -1,10 +1,20 @@
 import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
 import {ThDateIntervalDO} from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {ConfigCapacityDO} from '../../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
+import { BaseDO } from "../../../../../data-layer/common/base/BaseDO";
 
 export enum DeparturelItemBookingStatus {
     CanCheckOut,
     CanNotCheckOut
+}
+
+export class DepartureItemCustomerInfo extends BaseDO {
+    customerId: string;
+    customerName: string;
+
+    protected getPrimitivePropertyKeys(): string[] {
+        return ["customerId", "customerName"];
+    }
 }
 
 export interface DeparturelItemInfo {
@@ -12,6 +22,8 @@ export interface DeparturelItemInfo {
     customerName?: string;
     corporateCustomerId?: string;
     corporateCustomerName?: string;
+
+    guestCustomerInfoList?: DepartureItemCustomerInfo[];
 
     bookingId?: string;
     groupBookingId?: string;

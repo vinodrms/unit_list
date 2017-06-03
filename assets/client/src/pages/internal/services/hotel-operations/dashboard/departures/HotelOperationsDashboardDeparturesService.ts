@@ -1,23 +1,24 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
 
-import {AppContext, ThServerApi} from '../../../../../../common/utils/AppContext';
-import {ThDateDO} from '../../../common/data-objects/th-dates/ThDateDO';
-import {ARequestService} from '../../../common/ARequestService';
-import {DeparturesInfoDO} from './data-objects/DeparturesInfoDO';
-import {DepartureItemInfoDO, DepartureItemBookingStatus} from './data-objects/DepartureItemInfoDO';
-import {DepartureItemInfoVM} from './view-models/DepartureItemInfoVM';
-import {RoomsService} from '../../../rooms/RoomsService';
-import {RoomVM} from '../../../rooms/view-models/RoomVM';
-import {RoomItemsIndexer} from '../utils/RoomItemsIndexer';
-import {HotelAggregatorService} from '../../../hotel/HotelAggregatorService';
-import {HotelAggregatedInfo} from '../../../hotel/utils/HotelAggregatedInfo';
-import {RoomCategoriesStatsService} from '../../../room-categories/RoomCategoriesStatsService';
-import {RoomCategoryStatsDO} from '../../../room-categories/data-objects/RoomCategoryStatsDO';
+import { AppContext, ThServerApi } from '../../../../../../common/utils/AppContext';
+import { ThDateDO } from '../../../common/data-objects/th-dates/ThDateDO';
+import { ARequestService } from '../../../common/ARequestService';
+import { DeparturesInfoDO } from './data-objects/DeparturesInfoDO';
+import { DepartureItemInfoDO, DepartureItemBookingStatus } from './data-objects/DepartureItemInfoDO';
+import { DepartureItemInfoVM } from './view-models/DepartureItemInfoVM';
+import { RoomsService } from '../../../rooms/RoomsService';
+import { RoomVM } from '../../../rooms/view-models/RoomVM';
+import { RoomItemsIndexer } from '../utils/RoomItemsIndexer';
+import { HotelAggregatorService } from '../../../hotel/HotelAggregatorService';
+import { HotelAggregatedInfo } from '../../../hotel/utils/HotelAggregatedInfo';
+import { RoomCategoriesStatsService } from '../../../room-categories/RoomCategoriesStatsService';
+import { RoomCategoryStatsDO } from '../../../room-categories/data-objects/RoomCategoryStatsDO';
 
-import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
+import { ThTranslation } from '../../../../../../common/utils/localization/ThTranslation';
+import { DepartureItemContainer } from "./utils/DepartureItemContainer";
 
 @Injectable()
 export class HotelOperationsDashboardDeparturesService extends ARequestService<DepartureItemInfoVM[]> {
@@ -49,34 +50,11 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
             var departuresInfo = new DeparturesInfoDO();
             departuresInfo.buildFromObject(departuresInfoObject);
 
-            var departureItemVMList: DepartureItemInfoVM[] = [];
-            _.forEach(departuresInfo.departureInfoList, (departureItemDO: DepartureItemInfoDO) => {
-                var departureItemVM = new DepartureItemInfoVM(this._thTranslation);
-                departureItemVM.departureItemDO = departureItemDO;
-                departureItemVM.hasInvoice = !this._appContext.thUtils.isUndefinedOrNull(departureItemDO.invoiceGroupId);
-                departureItemVM.hasBooking = !this._appContext.thUtils.isUndefinedOrNull(departureItemDO.bookingId)
-                    && !this._appContext.thUtils.isUndefinedOrNull(departureItemDO.groupBookingId);
+            let departureContainer = new DepartureItemContainer(this._appContext, this._thTranslation, 
+                departuresInfo.departureInfoList, hotelAggregatedInfo, roomCategStatsList, roomVMList);
+            let list = departureContainer.departureItemInfoVMList;
 
-                if (departureItemVM.hasBooking) {
-                    var attachedRoomVM = roomItemIndexer.getRoomVMById(departureItemDO.roomId);
-                    if (!this._appContext.thUtils.isUndefinedOrNull(attachedRoomVM)) {
-                        departureItemVM.attachedRoomVM = attachedRoomVM;
-                        departureItemVM.hasAttachedRoom = true;
-                        departureItemVM.roomCategory = attachedRoomVM.category;
-                    }
-                    else {
-                        var roomCategStats: RoomCategoryStatsDO = _.find(roomCategStatsList, (stat: RoomCategoryStatsDO) => {
-                            return stat.roomCategory.id === departureItemDO.roomCategoryId;
-                        });
-                        if (!this._appContext.thUtils.isUndefinedOrNull(roomCategStats)) {
-                            departureItemVM.roomCategory = roomCategStats.roomCategory;
-                        }
-                    }
-                }
-                departureItemVM.currency = hotelAggregatedInfo.ccy;
-                departureItemVMList.push(departureItemVM);
-            });
-            return departureItemVMList;
+            return list;
         });
     }
 
