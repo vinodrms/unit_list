@@ -70,7 +70,7 @@ export class EmailSenderModalComponent extends BaseComponent implements ICustomM
             var customerWithThatEmail: CustomerDO = _.find(this.customerList, (customer: CustomerDO) => {
                 return customer.emailString === emailRecipient;
             });
-            return {email: emailRecipient, guestName: customerWithThatEmail ? customerWithThatEmail.customerName : ""};
+            return {email: emailRecipient, recipientName: customerWithThatEmail ? customerWithThatEmail.customerName : ""};
         });
         return emailDistributionList;
     }

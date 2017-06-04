@@ -87,7 +87,7 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
             var customerWithThatEmail: CustomerDO = _.find(this.customerList, (customer: CustomerDO) => {
                 return customer.emailString === emailRecipient;
             });
-            return {email: emailRecipient, firstName: customerWithThatEmail ? customerWithThatEmail.customerName : ""};
+            return {email: emailRecipient, recipientName: customerWithThatEmail ? customerWithThatEmail.customerName : ""};
         });
         this._wizardEmailConfigStepService.emailRecipientList = emailDistributionList;
     }

@@ -2,7 +2,7 @@ import {TransientBookingItem} from './TransientBookingItem';
 
 export class EmailDistributionDO {
     email: string;
-    guestName?: string;
+    recipientName?: string;
 }
 
 export class AddBookingItemsDO {

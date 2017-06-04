@@ -88,7 +88,7 @@ export class BookingConfirmationEmailSender {
         emailTemplateDO.hotelAddressLine1 = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.streetAddress") ? hotelDO.contactDetails.address.streetAddress: "";
         emailTemplateDO.hotelAddressLine2 = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.postalCode") ? hotelDO.contactDetails.address.postalCode : "";
         emailTemplateDO.hotelAddressLine2 += !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.city") ? (" " + hotelDO.contactDetails.address.city) : "";
-        emailTemplateDO.guestName = !this._thUtils.isUndefinedOrNull(emailDistribution.guestName) ? emailDistribution.guestName : "";
+        emailTemplateDO.guestName = !this._thUtils.isUndefinedOrNull(emailDistribution.recipientName) ? emailDistribution.recipientName : "";
         return emailTemplateDO;
     }
 
