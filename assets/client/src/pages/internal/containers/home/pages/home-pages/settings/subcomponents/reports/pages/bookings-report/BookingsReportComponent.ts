@@ -10,32 +10,45 @@ import { PriceProductDO } from "../../../../../../../../../services/price-produc
 import { BookingConfirmationStatus } from "../../../../../../../../../services/bookings/data-objects/BookingDO";
 import { BookingMeta } from "../../../../../../../../../services/bookings/data-objects/BookingMeta";
 import { BookingMetaFactory } from "../../../../../../../../../services/bookings/data-objects/BookingMetaFactory";
+import { ThDateDO } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateDO";
+import { HotelDetailsDO } from "../../../../../../../../../services/hotel/data-objects/HotelDetailsDO";
+import { HotelService } from "../../../../../../../../../services/hotel/HotelService";
+import { Observable } from "rxjs/Observable";
 
 @Component({
-    selector: 'bookings-for-price-product',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/bookings-for-price-product/template/bookings-for-price-product.html',
+    selector: 'bookings-report',
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/bookings-report/template/bookings-report.html',
     providers: [EagerPriceProductsService]
 })
-export class BookingsForPriceProductComponent extends BaseComponent implements OnInit {
+export class BookingsReportComponent extends BaseComponent implements OnInit {
+
+    public filterByBookingCreationDate: boolean;
     private format: ReportOutputFormatType;
     private isLoading: boolean = false;
 
     private _priceProductList: PriceProductDO[];
-    private priceProductId: string;
     private bookingMetaList: BookingMeta[];
     private selectedConfirmationStatuses: { [index: number]: boolean } = {};
+    private selectedPriceProducts: { [index: string]: boolean } = {};
+    private startDate: ThDateDO;
+    private endDate: ThDateDO;
+    private bookingCreationStartDate: ThDateDO;
+    private bookingCreationEndDate: ThDateDO;
 
     constructor(private _appContext: AppContext,
         private _pagesService: SettingsReportsPagesService,
-        private _eagerPriceProductsService: EagerPriceProductsService) {
+        private _eagerPriceProductsService: EagerPriceProductsService,
+        private _hotelService: HotelService) {
         super();
-        this._pagesService.bootstrapSelectedTab(ReportGroupType.BookingsForPriceProduct);
+        this.filterByBookingCreationDate = false;
+        this._pagesService.bootstrapSelectedTab(ReportGroupType.Bookings);
         let factory = new BookingMetaFactory();
         this.bookingMetaList = factory.getBookingMetaList();
-        this.setDefaultStatuses();
+        this.setDefaultConfirmationStatuses();
 
     }
-    private setDefaultStatuses() {
+
+    private setDefaultConfirmationStatuses() {
         this.bookingMetaList.forEach(meta => {
             this.selectedConfirmationStatuses[meta.confirmationStatus] = false;
         });
@@ -49,12 +62,46 @@ export class BookingsForPriceProductComponent extends BaseComponent implements O
     ngOnInit() {
         this.isLoading = true;
         this._priceProductList = [];
-        this._eagerPriceProductsService.getActivePriceProducts().subscribe((priceProducts: PriceProductsDO) => {
+
+		Observable.combineLatest(
+        this._eagerPriceProductsService.getActivePriceProducts(),
+        this._hotelService.getHotelDetailsDO())
+        .subscribe((result: [PriceProductsDO, HotelDetailsDO]) => {
+            var priceProducts = result[0];
+            var details = result[1];
             this.priceProductList = priceProducts.priceProductList;
+            this.setDefaultPriceProducts();
+            this.startDate = details.currentThTimestamp.thDateDO.buildPrototype();
+			this.endDate = this.startDate.buildPrototype();
+			this.endDate.addDays(1);
+            this.bookingCreationStartDate = details.currentThTimestamp.thDateDO.buildPrototype();
+			this.bookingCreationEndDate = this.startDate.buildPrototype();
             this.isLoading = false;
         }, (error: ThError) => {
             this.isLoading = false;
             this._appContext.toaster.error(error.message);
+        });
+    }
+
+    public didSelectStartDate(startDate) {
+        this.startDate = startDate;
+    }
+
+    public didSelectEndDate(endDate) {
+        this.endDate = endDate;
+    }
+
+    public didSelectBookingCreationStartDate(startDate) {
+        this.bookingCreationStartDate = startDate;
+    }
+
+    public didSelectBookingCreationEndDate(endDate) {
+        this.bookingCreationEndDate = endDate;
+    }
+
+    private setDefaultPriceProducts() {
+        _.forEach(this.priceProductList, (pp: PriceProductDO) => {
+            this.selectedPriceProducts[pp.id] = false;
         });
     }
 
@@ -63,9 +110,6 @@ export class BookingsForPriceProductComponent extends BaseComponent implements O
     }
     public set priceProductList(priceProductList: PriceProductDO[]) {
         this._priceProductList = priceProductList;
-        if (priceProductList.length > 0) {
-            this.priceProductId = priceProductList[0].id;
-        }
     }
 
     public didSelectFormat(format: ReportOutputFormatType) {
@@ -80,13 +124,25 @@ export class BookingsForPriceProductComponent extends BaseComponent implements O
                 confirmationList.push(parseInt(confirmationString));
             }
         });
+        var priceProductIdList: string[] = [];
+        _.forEach(this._priceProductList, (pp: PriceProductDO) => {
+            if (this.selectedPriceProducts[pp.id] === true) {
+                priceProductIdList.push(pp.id);
+            }
+        });
         let params = {
-            reportType: ReportGroupType.BookingsForPriceProduct,
+            reportType: ReportGroupType.Bookings,
             format: this.format,
             properties: {
-                priceProductId: this.priceProductId,
-                confirmationStatusList: confirmationList
+                startDate: this.startDate,
+                endDate: this.endDate,
+                priceProductIdList: priceProductIdList,
+                confirmationStatusList: confirmationList,
             }
+        }
+        if (this.filterByBookingCreationDate) {
+            params.properties["bookingCreationStartDate"] = this.bookingCreationStartDate;
+            params.properties["bookingCreationEndDate"] = this.bookingCreationEndDate;
         }
         var encodedParams = encodeURI(JSON.stringify(params));
         return 'api/reports/report?params=' + encodedParams;

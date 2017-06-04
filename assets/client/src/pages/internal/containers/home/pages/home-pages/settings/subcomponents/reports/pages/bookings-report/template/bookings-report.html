@@ -1,0 +1,94 @@
+<div class="container full-height" customScroll>
+	<div class="row basic-info-form">
+	    <div class="col-xs-12 col-md-6">
+			<label class="control-label">
+				<h3>{{ 'Bookings Report' | translate }}</h3><small>{{ "Get detailed info about bookings in a period of time for the Price Products you choose" | translate }}</small>
+			</label>
+			<hr>
+            <loading-component [isLoading]="isLoading"></loading-component>
+            <div class="row">
+                <div class="col-xs-12 col-md-6 form-group">
+                    <th-date-picker
+                        [initialThDate]="startDate"
+                        [label]="'Start date'"
+                        (didSelectThDate)="didSelectStartDate($event)"
+                        >
+                    </th-date-picker>
+                </div>
+
+                <div class="col-xs-12 col-md-6 form-group">
+                    <th-date-picker
+                        [initialThDate]="endDate"
+                        [label]="'End date'"
+                        (didSelectThDate)="didSelectEndDate($event)"
+                        >
+                    </th-date-picker>
+                </div>
+                <div class="col-xs-12 col-sm-6 form-group">
+                    <label class="control-label">{{"Price Products" | translate}}</label>
+                    <div class="well form-group">
+                        <div class="input-group">
+                            <ul class="list-group checked-list-box">
+                                <div class="checkbox" *ngFor="let priceProduct of priceProductList">
+                                    <label>
+                                        <input type="checkbox" 
+                                            [(ngModel)]="selectedPriceProducts[priceProduct.id]" 
+                                            name="bookingMetaSelected"> {{priceProduct.name}}
+                                    </label>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 form-group">
+                    <label class="control-label">{{"Booking Statuses" | translate}}</label>
+                    <div class="well form-group">
+                        <div class="input-group">
+                            <ul class="list-group checked-list-box">
+                                <div class="checkbox" *ngFor="let bookingMeta of bookingMetaList">
+                                    <label>
+                                        <input type="checkbox" 
+                                            [(ngModel)]="selectedConfirmationStatuses[bookingMeta.confirmationStatus]" 
+                                            name="bookingMetaSelected"> {{bookingMeta.displayName | translate}}
+                                    </label>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 checkbox">
+                    <label>
+                        <input type="checkbox" 
+                            [(ngModel)]="filterByBookingCreationDate" 
+                            name="filterByBookingCreationDate"> {{'Filter by Booking creation date' | translate}}
+                    </label>
+                </div>
+                <div class="col-xs-12 col-md-6 form-group" *ngIf="filterByBookingCreationDate">
+                    <th-date-picker
+                        [initialThDate]="bookingCreationStartDate"
+                        [label]="'Booking Created From'"
+                        (didSelectThDate)="didSelectBookingCreationStartDate($event)"
+                        >
+                    </th-date-picker>
+                </div>
+
+                <div class="col-xs-12 col-md-6 form-group" *ngIf="filterByBookingCreationDate">
+                    <th-date-picker
+                        [initialThDate]="bookingCreationEndDate"
+                        [label]="'Booking Created Until'"
+                        (didSelectThDate)="didSelectBookingCreationEndDate($event)"
+                        >
+                    </th-date-picker>
+                </div>
+                <div class="col-xs-12 col-sm-6 form-group">
+                    <label>{{ 'File Format' | translate }}</label>
+                    <report-output-format (onFormatSelected)="didSelectFormat($event)"></report-output-format>
+                </div>
+                <div *ngIf="!isLoading" class="col-xs-12 col-md-offset-9 col-md-3">
+                    <a class="btn btn-primary btn-block" [href]="reportCSVUrl()" target="_blank">{{ 'Generate' | translate }}</a>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

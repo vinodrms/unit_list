@@ -109,6 +109,7 @@ export class MongoBookingEditRepository extends MongoRepository {
                 "corporateDisplayCustomerId": booking.corporateDisplayCustomerId,
                 "defaultBillingDetails": booking.defaultBillingDetails,
                 "interval": booking.interval,
+                "creationDateUtcTimestamp": booking.creationDateUtcTimestamp,
                 "startUtcTimestamp": booking.startUtcTimestamp,
                 "endUtcTimestamp": booking.endUtcTimestamp,
                 "checkInUtcTimestamp": booking.checkInUtcTimestamp,

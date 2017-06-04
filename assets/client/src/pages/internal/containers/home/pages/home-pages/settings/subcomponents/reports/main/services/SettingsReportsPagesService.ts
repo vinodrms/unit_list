@@ -14,9 +14,8 @@ export class SettingsReportsPagesService {
 			new SettingsReportsPageVM("shift", ReportGroupType.Shift, "Shift"),
 			new SettingsReportsPageVM("backup", ReportGroupType.Backup, "Backup"),
 			new SettingsReportsPageVM("key-metrics", ReportGroupType.KeyMetrics, "Key Metrics"),
-			new SettingsReportsPageVM("bookings-for-price-product", ReportGroupType.BookingsForPriceProduct, "Bookings by Price Product"),
 			new SettingsReportsPageVM("housekeeping", ReportGroupType.Housekeeping, "Housekeeping"),
-			new SettingsReportsPageVM("bookings-by-interval", ReportGroupType.BookingsByInterval, "Bookings by Interval"),
+			new SettingsReportsPageVM("bookings", ReportGroupType.Bookings, "Bookings"),
 
 		];
 	}

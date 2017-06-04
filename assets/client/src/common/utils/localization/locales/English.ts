@@ -941,5 +941,9 @@ export var EnglishTranslations: Object = {
 	"Departures Baby Beds": "Departures Baby Beds",
 	"Exclude Commission": "Exclude Commission",
 	"Exclude VAT": "Exclude VAT",
-	
+	"Bookings Report" : "Bookings Report",
+	"Get detailed info about bookings in a period of time for the Price Products you choose" : "Get detailed info about bookings in a period of time for the Price Products you choose",
+	"Filter by Booking creation date" : "Filter by Booking creation date",
+	"Booking Created From" : "Booking Created From",
+	"Booking Created Until" : "Booking Created Until",
 };

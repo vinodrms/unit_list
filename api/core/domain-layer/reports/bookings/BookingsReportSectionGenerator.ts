@@ -6,23 +6,24 @@ import { ReportSectionHeader, ReportSectionMeta } from "../common/result/ReportS
 import { PriceProductDO } from "../../../data-layer/price-products/data-objects/PriceProductDO";
 import { BookingConfirmationStatus, BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
 import { LazyLoadRepoDO } from "../../../data-layer/common/repo-data-objects/LazyLoadRepoDO";
-import { BookingSearchResultRepoDO } from "../../../data-layer/bookings/repositories/IBookingRepository";
+import { BookingSearchResultRepoDO, BookingSearchCriteriaRepoDO } from "../../../data-layer/bookings/repositories/IBookingRepository";
 import { BookingMeta, BookingDOConstraints } from "../../../data-layer/bookings/data-objects/BookingDOConstraints";
 import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
+import { ThDateIntervalDO } from "../../../utils/th-dates/data-objects/ThDateIntervalDO";
 
-export class BookingsByIntervalReportSectionGenerator extends AReportSectionGeneratorStrategy {
+export class BookingsReportSectionGenerator extends AReportSectionGeneratorStrategy {
     public static MaxBookings = 2000;
     private _bookingMetaByStatus: { [id: number]: BookingMeta };
 
-    constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object, private _startDate: ThDateDO, private _endDate: ThDateDO) {
+    constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
+        private _priceProduct: PriceProductDO, private _confirmationStatusList: BookingConfirmationStatus[],  private _startDate: ThDateDO, private _endDate: ThDateDO, private _creationStartDate?: ThDateDO, private _creationEndDate?: ThDateDO) {
         super(appContext, sessionContext, globalSummary);
-
         this._bookingMetaByStatus = _.indexBy(BookingDOConstraints.BookingMetaList, meta => { return meta.status; });
     }
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Bookings"
+            title: this._priceProduct.name
         }
     }
 
@@ -37,11 +38,15 @@ export class BookingsByIntervalReportSectionGenerator extends AReportSectionGene
                 "Booking No",
                 "External Booking No",
                 "Guest Name",
-                "Status",
-                "Rooms",
+                "Reference",
                 "Start Date",
                 "End Date",
                 "Nights Billed",
+                "Status",
+                "Rooms",
+                "Adults",
+                "Children",
+                "Babies",
                 "Total Charge"
             ]
         };
@@ -51,13 +56,22 @@ export class BookingsByIntervalReportSectionGenerator extends AReportSectionGene
         let bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
         let lazyLoad = new LazyLoadRepoDO();
 
-        bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
-            {
+        let bookingSearchCriteria: BookingSearchCriteriaRepoDO = {
+                confirmationStatusList: this._confirmationStatusList,
+                priceProductId: this._priceProduct.id,
                 startDate: this._startDate,
-                endDate: this._endDate
-            }, {
+                endDate: this._endDate,
+            };
+        if (this._creationStartDate && this._creationEndDate) {
+            bookingSearchCriteria.creationInterval = ThDateIntervalDO.buildThDateIntervalDO(
+                this._creationStartDate, this._creationEndDate
+            );
+        }
+
+        bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
+            bookingSearchCriteria, {
                 pageNumber: 0,
-                pageSize: BookingsByIntervalReportSectionGenerator.MaxBookings
+                pageSize: BookingsReportSectionGenerator.MaxBookings
             }).then((bookingMetaRsp: BookingSearchResultRepoDO) => {
                 let bookingList: BookingDO[] = bookingMetaRsp.bookingList;
 
@@ -68,11 +82,15 @@ export class BookingsByIntervalReportSectionGenerator extends AReportSectionGene
                         booking.displayedReservationNumber,
                         booking.externalBookingReference,
                         custString,
-                        this._appContext.thTranslate.translate(this._bookingMetaByStatus[booking.confirmationStatus].name),
-                        1,
+                        booking.displayedReservationNumber,
                         booking.interval.start.toString(),
                         booking.interval.end.toString(),
                         booking.interval.getNumberOfDays(),
+                        this._appContext.thTranslate.translate(this._bookingMetaByStatus[booking.confirmationStatus].name),
+                        1,
+                        booking.configCapacity.noAdults,
+                        booking.configCapacity.noChildren,
+                        booking.configCapacity.noBabies,
                         booking.price.totalBookingPrice.toString()
                     ];
                     data.push(row);
