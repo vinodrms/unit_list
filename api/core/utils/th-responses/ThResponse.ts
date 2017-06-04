@@ -487,6 +487,7 @@ export enum ThStatusCode {
 	BookingChangeDetailsError,
 	HotelBookingOperationsControllerErrorChangingDetails,
 	BookingChangeCustomersInvalidState,
+	HotelBookingOperationsControllerErrorChangingBilledCustomer,
 	BookingChangeCustomersError,
 	HotelBookingOperationsControllerErrorChangingGuestOnInvoice,
 	BookingChangeGuestOnInvoiceInvalidState,
@@ -1011,6 +1012,7 @@ ThMessage[ThStatusCode.BookingChangeDetailsInvoiceSyncError] = "There was an err
 ThMessage[ThStatusCode.BookingChangeDetailsError] = "Error changing booking details.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDetails] = "Error changing booking details.";
 ThMessage[ThStatusCode.BookingChangeCustomersInvalidState] = "The customers can be changed only for checked in, confirmed or guaranteed bookings.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingBilledCustomer] = "Error changing billed customer.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingGuestOnInvoice] = "Error changing guest displayed on invoice.";
 ThMessage[ThStatusCode.BookingChangeGuestOnInvoiceInvalidState] = "The guest displayed on invoice can be changed only for checked in, confirmed or guaranteed bookings.";
 ThMessage[ThStatusCode.BookingChangeGuestOnInvoiceGuestNotOnBooking] = "The guest displayed on invoice should already be on the booking.";
