@@ -3381,6 +3381,14 @@ a.btn.btn-square:focus {
   padding-right: 14px !important;
 }
 
+.p-l-15 {
+  padding-left: 15px !important;
+}
+
+.p-r-15 {
+  padding-right: 15px !important;
+}
+
 .p-16 {
   padding: 16px !important;
 }
