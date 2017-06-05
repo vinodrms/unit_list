@@ -19,7 +19,6 @@ import { BookingUndoCheckIn } from '../core/domain-layer/hotel-operations/bookin
 import { BookingChangeGuestOnInvoice } from "../core/domain-layer/hotel-operations/booking/change-guest-invoice/BookingChangeGuestOnInvoice";
 import { GenerateBookingInvoice } from "../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoice";
 import { InvoiceGroupDO } from "../core/data-layer/invoices/data-objects/InvoiceGroupDO";
-import { BookingChangeBilledCustomer } from "../core/domain-layer/hotel-operations/booking/change-billed-customer/BookingChangeBilledCustomer";
 
 class HotelBookingOperationsController extends BaseController {
     public getPossiblePrices(req: Express.Request, res: Express.Response) {
@@ -69,19 +68,6 @@ class HotelBookingOperationsController extends BaseController {
             this.returnSuccesfulResponse(req, res, { booking: booking });
         }).catch((error: any) => {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorChangingCapacity);
-        });
-    }
-
-    public changeBilledCustomer(req: Express.Request, res: Express.Response) {
-        var appContext: AppContext = req.appContext;
-        var sessionContext: SessionContext = req.sessionContext;
-
-        let bookingChangeBilledCustomer = new BookingChangeBilledCustomer(appContext, sessionContext);
-        bookingChangeBilledCustomer.changeBilledCustomer(req.body.booking).then((booking: BookingDO) => {
-            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
-            this.returnSuccesfulResponse(req, res, { booking: booking });
-        }).catch((error: any) => {
-            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorChangingBilledCustomer);
         });
     }
 
@@ -221,7 +207,6 @@ module.exports = {
     changeDates: hotelBookingOperationsController.changeDates.bind(hotelBookingOperationsController),
     changeNoShowTime: hotelBookingOperationsController.changeNoShowTime.bind(hotelBookingOperationsController),
     changeCapacity: hotelBookingOperationsController.changeCapacity.bind(hotelBookingOperationsController),
-    changeBilledCustomer: hotelBookingOperationsController.changeBilledCustomer.bind(hotelBookingOperationsController),
     addPaymentGuarantee: hotelBookingOperationsController.addPaymentGuarantee.bind(hotelBookingOperationsController),
     changeDetails: hotelBookingOperationsController.changeDetails.bind(hotelBookingOperationsController),
     changeGuestCustomerDisplayedOnInvoice: hotelBookingOperationsController.changeGuestCustomerDisplayedOnInvoice.bind(hotelBookingOperationsController),
