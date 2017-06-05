@@ -7,6 +7,7 @@ import { BookingDO } from '../../bookings/data-objects/BookingDO';
 import { ThTimestampDO } from '../../common/data-objects/th-dates/ThTimestampDO';
 import { InvoicePaymentMethodDO } from '../../invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { InvoiceGroupDO } from "../../invoices/data-objects/InvoiceGroupDO";
+import { CustomerDO } from "../../customers/data-objects/CustomerDO";
 
 @Injectable()
 export class HotelOperationsBookingService {
@@ -54,12 +55,13 @@ export class HotelOperationsBookingService {
         );
     }
 
-    public addPaymentGuarantee(booking: BookingDO, paymentMethod: InvoicePaymentMethodDO): Observable<BookingDO> {
+    public addPaymentGuarantee(booking: BookingDO, billedCustomer: CustomerDO, paymentMethod: InvoicePaymentMethodDO): Observable<BookingDO> {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingAddPaymentGuarantee, {
                 booking: {
                     groupBookingId: booking.groupBookingId,
                     id: booking.id,
+                    billedCustomerId: billedCustomer.id,
                     paymentMethod: paymentMethod
                 }
             })

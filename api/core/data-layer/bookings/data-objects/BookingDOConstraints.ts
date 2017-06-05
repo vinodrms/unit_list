@@ -102,6 +102,10 @@ export class BookingDOConstraints {
         BookingConfirmationStatus.Confirmed,
         BookingConfirmationStatus.Guaranteed
     ];
+    public static ConfirmationStatuses_CanChangeBilledCustomer: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed
+    ];
     public static ConfirmationStatuses_CanChangeDetails: BookingConfirmationStatus[] = [
         BookingConfirmationStatus.Confirmed,
         BookingConfirmationStatus.Guaranteed,
