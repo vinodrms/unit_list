@@ -478,6 +478,8 @@ export enum ThStatusCode {
 	BookingChangeCapacityPaidInvoice,
 	BookingChangeCapacityError,
 	HotelBookingOperationsControllerErrorChangingCapacity,
+	BookingChangeBilledCustomerError,
+	BookingChangeBilledCustomerInvalidState,
 	BookingPaymentGuaranteeError,
 	BookingPaymentGuaranteeInvalidState,
 	HotelBookingOperationsControllerErrorAddingPaymentGuarantee,
@@ -487,6 +489,7 @@ export enum ThStatusCode {
 	BookingChangeDetailsError,
 	HotelBookingOperationsControllerErrorChangingDetails,
 	BookingChangeCustomersInvalidState,
+	HotelBookingOperationsControllerErrorChangingBilledCustomer,
 	BookingChangeCustomersError,
 	HotelBookingOperationsControllerErrorChangingGuestOnInvoice,
 	BookingChangeGuestOnInvoiceInvalidState,
@@ -1002,6 +1005,8 @@ ThMessage[ThStatusCode.BookingChangeCapacityInvalidState] = "The capacity can be
 ThMessage[ThStatusCode.BookingChangeCapacityPaidInvoice] = "The capacity cannot be changed because the invoice for this booking was paid.";
 ThMessage[ThStatusCode.BookingChangeCapacityError] = "Error changing booking capacity.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingCapacity] = "Error changing booking capacity.";
+ThMessage[ThStatusCode.BookingChangeBilledCustomerError] = "Error changing the booking's billed customer.";
+ThMessage[ThStatusCode.BookingChangeBilledCustomerInvalidState] = "The billed customer can be added only for confirmed or guaranteed bookings.";
 ThMessage[ThStatusCode.BookingPaymentGuaranteeError] = "Error adding payment guarantee.";
 ThMessage[ThStatusCode.BookingPaymentGuaranteeInvalidState] = "A payment guarantee can be added only for confirmed or guaranteed bookings.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorAddingPaymentGuarantee] = "Error adding payment guarantee.";
@@ -1011,6 +1016,7 @@ ThMessage[ThStatusCode.BookingChangeDetailsInvoiceSyncError] = "There was an err
 ThMessage[ThStatusCode.BookingChangeDetailsError] = "Error changing booking details.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDetails] = "Error changing booking details.";
 ThMessage[ThStatusCode.BookingChangeCustomersInvalidState] = "The customers can be changed only for checked in, confirmed or guaranteed bookings.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingBilledCustomer] = "Error changing billed customer.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingGuestOnInvoice] = "Error changing guest displayed on invoice.";
 ThMessage[ThStatusCode.BookingChangeGuestOnInvoiceInvalidState] = "The guest displayed on invoice can be changed only for checked in, confirmed or guaranteed bookings.";
 ThMessage[ThStatusCode.BookingChangeGuestOnInvoiceGuestNotOnBooking] = "The guest displayed on invoice should already be on the booking.";

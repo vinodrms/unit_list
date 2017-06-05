@@ -5,7 +5,8 @@ import {ICustomModalComponent, ModalSize} from '../../../../../../../../common/u
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {CustomerDO} from '../../../../../../services/customers/data-objects/CustomerDO';
 import {EmailSenderModalInput} from './services/utils/EmailSenderModalInput';
-import {HotelOperationsCommonService} from '../../../../../../services/hotel-operations/common/HotelOperationsCommonService';
+import { HotelOperationsCommonService } from '../../../../../../services/hotel-operations/common/HotelOperationsCommonService';
+import { EmailDistributionDO } from "../../../utils/new-booking/services/data-objects/AddBookingItemsDO";
 
 @Component({
     selector: 'email-sender-modal',
@@ -49,7 +50,9 @@ export class EmailSenderModalComponent extends BaseComponent implements ICustomM
         if (!this.canSendEmails() || this.isSending) { return; }
 
         this.isSending = true;
-        this._modalInput.emailConfirmationParams.emailList = _.uniq(this.emailList);
+        this._modalInput.emailConfirmationParams.emailList = _.uniq(this.getEmailRecipientList(), false, (emailDistribution: EmailDistributionDO) => {
+            return emailDistribution.email;
+        });
         this._hotelOperationsCommonService.sendEmail(this._modalInput.emailConfirmationParams).subscribe((result: boolean) => {
             this.isSending = false;
             this._appContext.toaster.success(this._appContext.thTranslation.translate("Email(s) sent succesfully"));
@@ -59,5 +62,16 @@ export class EmailSenderModalComponent extends BaseComponent implements ICustomM
             this.isSending = false;
             this._appContext.toaster.error(error.message);
         });
+    }
+
+    public getEmailRecipientList(): EmailDistributionDO[] {
+        var emailDistributionList: EmailDistributionDO[] = [];
+        emailDistributionList =_.map(this.emailList, (emailRecipient: string) => {
+            var customerWithThatEmail: CustomerDO = _.find(this.customerList, (customer: CustomerDO) => {
+                return customer.emailString === emailRecipient;
+            });
+            return {email: emailRecipient, recipientName: customerWithThatEmail ? customerWithThatEmail.customerName : ""};
+        });
+        return emailDistributionList;
     }
 }

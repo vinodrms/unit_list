@@ -9,7 +9,8 @@ import {StringValidationRule} from '../../../../../../utils/th-validation/rules/
 import {IEmailConfirmationStrategy} from '../IEmailConfirmationStrategy';
 import {EmailConfirmationDO} from '../../EmailConfirmationDO';
 import {InvoiceConfirmationEmailSender} from '../../../../../invoices/invoice-confirmations/InvoiceConfirmationEmailSender';
-import {InvoiceDataAggregatorQuery} from '../../../../../invoices/aggregators/InvoiceDataAggregator';
+import { InvoiceDataAggregatorQuery } from '../../../../../invoices/aggregators/InvoiceDataAggregator';
+import { EmailDistributionDO } from "../data-objects/EmailDistributionDO";
 
 export interface InvoiceEmailConfirmationParams {
     invoiceGroupId: string;
@@ -46,7 +47,13 @@ export class InvoiceEmailConfirmationStrategy implements IEmailConfirmationStrat
             invoiceId: invoiceConfirmationParams.invoiceId,
             payerIndex: invoiceConfirmationParams.payerIndex
         };
+        var emailList = this.buildEmailList(confirmationDO);
+        return emailSender.sendInvoiceConfirmation(invoiceQuery, emailList);
+    }
 
-        return emailSender.sendInvoiceConfirmation(invoiceQuery, confirmationDO.emailList);
+    private buildEmailList(confirmationDO: EmailConfirmationDO): string[] {
+        return _.map(confirmationDO.emailList, (emailDistributionDO: EmailDistributionDO) => {
+            return emailDistributionDO.email;
+        });
     }
 }

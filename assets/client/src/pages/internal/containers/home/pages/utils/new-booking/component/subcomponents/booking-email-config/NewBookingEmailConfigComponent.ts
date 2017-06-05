@@ -8,7 +8,8 @@ import {BookingCartItemVM} from '../../../services/search/view-models/BookingCar
 import {BookingCartTableMetaBuilderService} from '../utils/table-builder/BookingCartTableMetaBuilderService';
 import {BookingTableUtilsService} from '../utils/table-builder/BookingTableUtilsService';
 import {BookingEmailConfigStepService} from './services/BookingEmailConfigStepService';
-import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
+import { CustomerDO } from '../../../../../../../../services/customers/data-objects/CustomerDO';
+import { EmailDistributionDO } from "../../../services/data-objects/AddBookingItemsDO";
 
 @Component({
     selector: 'new-booking-email-config',
@@ -76,9 +77,18 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
     }
 
     public get emailRecipientList(): string[] {
-        return this._wizardEmailConfigStepService.emailRecipientList;
+        return _.map(this._wizardEmailConfigStepService.emailRecipientList, (emailDistribution: EmailDistributionDO) => {
+            return emailDistribution.email;
+        });
     }
     public set emailRecipientList(emailRecipientList: string[]) {
-        this._wizardEmailConfigStepService.emailRecipientList = emailRecipientList;
+        var emailDistributionList: EmailDistributionDO[] = [];
+        emailDistributionList =_.map(emailRecipientList, (emailRecipient: string) => {
+            var customerWithThatEmail: CustomerDO = _.find(this.customerList, (customer: CustomerDO) => {
+                return customer.emailString === emailRecipient;
+            });
+            return {email: emailRecipient, recipientName: customerWithThatEmail ? customerWithThatEmail.customerName : ""};
+        });
+        this._wizardEmailConfigStepService.emailRecipientList = emailDistributionList;
     }
 }
