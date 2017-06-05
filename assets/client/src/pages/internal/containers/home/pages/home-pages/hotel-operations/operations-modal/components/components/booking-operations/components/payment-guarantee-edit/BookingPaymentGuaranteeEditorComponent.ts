@@ -8,6 +8,9 @@ import { HotelOperationsBookingService } from '../../../../../../../../../../../
 import { InvoicePaymentMethodVMGenerator } from '../../../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
 import { InvoicePaymentMethodVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
 import { InvoicePaymentMethodDO } from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { CustomerDO } from "../../../../../../../../../../../services/customers/data-objects/CustomerDO";
+import { ModalDialogRef } from "../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
+import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
 
 @Component({
     selector: 'booking-payment-guarantee-editor',
@@ -35,9 +38,13 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
 
     paymentMethodVMList: InvoicePaymentMethodVM[] = [];
     selectedPaymentMethodVM: InvoicePaymentMethodVM;
+    
     private _selectedPaymentMethodVMCopy: InvoicePaymentMethodVM;
+    private _billedCustomer: CustomerDO;
+    private _pmGenerator: InvoicePaymentMethodVMGenerator;
 
     constructor(private _appContext: AppContext,
+        private _operationsPageControllerService: HotelOperationsPageControllerService,
         private _hotelOperationsBookingService: HotelOperationsBookingService) { }
 
     ngOnInit() {
@@ -49,13 +56,25 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
         if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._bookingOperationsPageData)) { return; }
         this.readonly = true;
         this.isSaving = false;
-        var pmGenerator = new InvoicePaymentMethodVMGenerator(this._bookingOperationsPageData.allowedPaymentMethods);
+
+        this._pmGenerator = new InvoicePaymentMethodVMGenerator(this._bookingOperationsPageData.allowedPaymentMethods);
+        
         var billedCustomerId = this.defaultBillingDetailsDO.customerId;
-        var billedCustomer = this._bookingOperationsPageData.customersContainer.getCustomerById(billedCustomerId);
-        this.paymentMethodVMList = pmGenerator.generatePaymentMethodsFor(billedCustomer);
-        this.selectedPaymentMethodVM = pmGenerator.generateInvoicePaymentMethodVMForPaymentMethod(this.defaultBillingDetailsDO.paymentMethod, this._bookingOperationsPageData.allPaymentMethods);
+        this._billedCustomer = this._bookingOperationsPageData.customersContainer.getCustomerById(billedCustomerId);
+        
+        this.paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this._billedCustomer);
+        this.selectedPaymentMethodVM = this._pmGenerator.generateInvoicePaymentMethodVMForPaymentMethod(this.defaultBillingDetailsDO.paymentMethod, this._bookingOperationsPageData.allPaymentMethods);
     }
 
+    public get customerList(): CustomerDO[] {
+        return this._bookingOperationsPageData.customersContainer.customerList;
+    }
+    public get billedCustomer(): CustomerDO {
+        return this._billedCustomer;
+    }
+    public isBilledCustomer(customer: CustomerDO): boolean {
+        return customer.id === this.billedCustomer.id;
+    }
     public get hasPaymentGuaranteeEditAccess(): boolean {
         return this._bookingOperationsPageData.bookingMeta.paymentGuaranteeEditRight === BookingPaymentGuaranteeEditRight.Edit;
     }
@@ -71,8 +90,17 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
     }
 
     public get buttonChangeText(): string {
-        if (!this.hasPaymentGuarantee) { return "Add"; }
         return "Change";
+    }
+
+    public onBilledCustomerSelectionChange(selectedCustomer: CustomerDO) {
+        this._billedCustomer = selectedCustomer;
+        this.paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this._billedCustomer);
+        this.selectedPaymentMethodVM = this.paymentMethodVMList[0];
+    }
+
+    public goToCustomer(customer: CustomerDO) {
+        this._operationsPageControllerService.goToCustomer(customer.id);
     }
 
     public startEdit() {
@@ -92,14 +120,14 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
         this.selectedPaymentMethodVM = this._selectedPaymentMethodVMCopy;
     }
     public savePaymentGuarantee() {
-        if (!this.hasPaymentGuaranteeEditAccess ||
-            (this._selectedPaymentMethodVMCopy.paymentMethod.isSame(this.selectedPaymentMethodVM.paymentMethod) && this.hasPaymentGuarantee)) {
+        if (!this.hasPaymentGuaranteeEditAccess || !this.paymentGuaranteeHasChanged()) {
             this.endEdit();
             return;
         }
         this.isSaving = true;
-        this._hotelOperationsBookingService.addPaymentGuarantee(this.bookingDO, this.selectedPaymentMethodVM.paymentMethod).subscribe((updatedBooking: BookingDO) => {
-            this._appContext.analytics.logEvent("booking", "payment-guarantee", "Added a payment guarantee on a booking");
+        
+        this._hotelOperationsBookingService.addPaymentGuarantee(this.bookingDO, this.billedCustomer, this.selectedPaymentMethodVM.paymentMethod).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("booking", "payment-guarantee", "Updated payment guarantee on a booking");
             this.readonly = true;
             this.isSaving = false;
             this.triggerOnBookingPaymentGuaranteeChanged(updatedBooking);
@@ -107,5 +135,10 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
             this.isSaving = false;
             this._appContext.toaster.error(error.message);
         });
+    }
+
+    private paymentGuaranteeHasChanged(): boolean {
+        return !(this._selectedPaymentMethodVMCopy.paymentMethod.isSame(this.selectedPaymentMethodVM.paymentMethod) && this.hasPaymentGuarantee) ||
+             this.billedCustomer.id != this.bookingDO.defaultBillingDetails.customerId;
     }
 }
