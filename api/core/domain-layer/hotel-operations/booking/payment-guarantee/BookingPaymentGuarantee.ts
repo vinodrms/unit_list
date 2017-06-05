@@ -1,21 +1,21 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
-import {CustomerIdValidator} from '../../../customers/validators/CustomerIdValidator';
-import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
-import {BookingDO} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {InvoicePaymentMethodDO} from '../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
-import {ValidationResultParser} from '../../../common/ValidationResultParser';
-import {BookingWithDependenciesLoader} from '../utils/BookingWithDependenciesLoader';
-import {BookingWithDependencies} from '../utils/BookingWithDependencies';
-import {BookingPaymentGuaranteeDO} from './BookingPaymentGuaranteeDO';
-import {BusinessValidationRuleContainer} from '../../../common/validation-rules/BusinessValidationRuleContainer';
-import {BookingBillingDetailsValidationRule} from '../../../bookings/validators/validation-rules/booking/BookingBillingDetailsValidationRule';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
+import { CustomerIdValidator } from '../../../customers/validators/CustomerIdValidator';
+import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
+import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { InvoicePaymentMethodDO } from '../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { ValidationResultParser } from '../../../common/ValidationResultParser';
+import { BookingWithDependenciesLoader } from '../utils/BookingWithDependenciesLoader';
+import { BookingWithDependencies } from '../utils/BookingWithDependencies';
+import { BookingPaymentGuaranteeDO } from './BookingPaymentGuaranteeDO';
+import { BusinessValidationRuleContainer } from '../../../common/validation-rules/BusinessValidationRuleContainer';
+import { BookingBillingDetailsValidationRule } from '../../../bookings/validators/validation-rules/booking/BookingBillingDetailsValidationRule';
 
 import _ = require('underscore');
 
@@ -50,8 +50,10 @@ export class BookingPaymentGuarantee {
             }).then((bookingWithDependencies: BookingWithDependencies) => {
                 this._bookingWithDependencies = bookingWithDependencies;
 
-                var customerValidator = new CustomerIdValidator(this._appContext, this._sessionContext);
                 var customerIdListToValidate = this._bookingWithDependencies.bookingDO.customerIdList;
+                customerIdListToValidate.push(this._bookingPaymentGuaranteeDO.billedCustomerId);
+
+                var customerValidator = new CustomerIdValidator(this._appContext, this._sessionContext);
                 return customerValidator.validateCustomerIdList(customerIdListToValidate);
             }).then((loadedCustomersContainer: CustomersContainer) => {
                 this._loadedCustomersContainer = loadedCustomersContainer;
@@ -89,6 +91,7 @@ export class BookingPaymentGuarantee {
     }
     private updateBooking() {
         this._bookingWithDependencies.bookingDO.defaultBillingDetails.paymentGuarantee = true;
+        this._bookingWithDependencies.bookingDO.defaultBillingDetails.customerId = this._bookingPaymentGuaranteeDO.billedCustomerId;
         this._bookingWithDependencies.bookingDO.defaultBillingDetails.paymentMethod = new InvoicePaymentMethodDO();
         this._bookingWithDependencies.bookingDO.defaultBillingDetails.paymentMethod.buildFromObject(this._bookingPaymentGuaranteeDO.paymentMethod);
 
