@@ -185,6 +185,7 @@ describe("Hotel Booking Operations Tests", function () {
             var paymentGuaranteeDO = new BookingPaymentGuaranteeDO();
             paymentGuaranteeDO.groupBookingId = bookingToChange.groupBookingId;
             paymentGuaranteeDO.id = bookingToChange.id;
+            paymentGuaranteeDO.billedCustomerId = bookingToChange.defaultBillingDetails.customerId; 
             paymentGuaranteeDO.paymentMethod = new InvoicePaymentMethodDO();
             paymentGuaranteeDO.paymentMethod.type = InvoicePaymentMethodType.DefaultPaymentMethod;
             var paymentMethod = testUtils.getRandomListElement(testDataBuilder.paymentMethodList);
