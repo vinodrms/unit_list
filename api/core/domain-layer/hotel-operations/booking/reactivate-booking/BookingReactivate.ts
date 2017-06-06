@@ -104,7 +104,6 @@ export class BookingReactivate {
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
                 this._bookingWithDependencies.bookingDO = updatedBooking;
-                debugger
                 return this._bookingInvoiceSync.syncInvoiceWithBookingPrice(updatedBooking);
             }).then((updatedGroup: InvoiceGroupDO) => {
                 resolve(this._bookingWithDependencies.bookingDO);

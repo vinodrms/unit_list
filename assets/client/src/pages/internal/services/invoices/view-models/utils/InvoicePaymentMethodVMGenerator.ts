@@ -21,7 +21,7 @@ export class InvoicePaymentMethodVMGenerator {
 
     public generatePaymentMethodsFor(customer: CustomerDO): InvoicePaymentMethodVM[] {
         if (customer.customerDetails.canPayInvoiceByAgreement()) {
-            return [this.generatePayInvoiceByAgreementPaymentMethodVM()];
+            return [this.generatePayInvoiceByAgreementPaymentMethodVM()].concat(this._allowedPaymentMethodVMList);
         }
         return this._allowedPaymentMethodVMList;
     }
