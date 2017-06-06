@@ -56,18 +56,20 @@ export class BookingsReportSectionGenerator extends AReportSectionGeneratorStrat
         let bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
         let lazyLoad = new LazyLoadRepoDO();
 
+        let interval = new ThDateIntervalDO();
+        interval.start = this._startDate;
+        interval.end = this._endDate;
+
         let bookingSearchCriteria: BookingSearchCriteriaRepoDO = {
                 confirmationStatusList: this._confirmationStatusList,
                 priceProductId: this._priceProduct.id,
-                startDate: this._startDate,
-                endDate: this._endDate,
+                interval: interval
             };
         if (this._creationStartDate && this._creationEndDate) {
             bookingSearchCriteria.creationInterval = ThDateIntervalDO.buildThDateIntervalDO(
                 this._creationStartDate, this._creationEndDate
             );
         }
-
         bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
             bookingSearchCriteria, {
                 pageNumber: 0,
