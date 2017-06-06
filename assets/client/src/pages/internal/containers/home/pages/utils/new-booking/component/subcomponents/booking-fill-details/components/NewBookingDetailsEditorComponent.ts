@@ -145,11 +145,12 @@ export class NewBookingDetailsEditorComponent extends BaseComponent {
         var billableCustomer = this._bookingCartItem.getCustomerById(billableCustomerId);
         this.paymentMethodVMList = pmGenerator.generatePaymentMethodsFor(billableCustomer);
 
-        if (!this.updateExistingPaymentMethodReference()) {
+        if (!this.updatePaymentMethodOnBookingIfFound() || billableCustomer.customerDetails.canPayInvoiceByAgreement()) {
             this.setDefaultPaymentMethodReference();
         }
     }
-    private updateExistingPaymentMethodReference(): boolean {
+
+    private updatePaymentMethodOnBookingIfFound() {
         var paymentMethodToFind = this._bookingCartItem.transientBookingItem.defaultBillingDetails.paymentMethod;
         var foundPaymentMethodVM = _.find(this.paymentMethodVMList, (pm: InvoicePaymentMethodVM) => {
             return pm.paymentMethod.type === paymentMethodToFind.type && pm.paymentMethod.value === paymentMethodToFind.value;
@@ -160,6 +161,7 @@ export class NewBookingDetailsEditorComponent extends BaseComponent {
         }
         return false;
     }
+
     private setDefaultPaymentMethodReference(): boolean {
         if (this.paymentMethodVMList.length > 0) {
             this._bookingCartItem.transientBookingItem.defaultBillingDetails.paymentMethod = this.paymentMethodVMList[0].paymentMethod;
