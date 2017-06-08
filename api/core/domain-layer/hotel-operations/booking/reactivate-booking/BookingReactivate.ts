@@ -77,11 +77,6 @@ export class BookingReactivate {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "reactivate: end date in the past", this._reactivateDO, thError);
                     throw thError;
                 }
-                if (this._bookingWithDependencies.hasClosedInvoice()) {
-                    var thError = new ThError(ThStatusCode.BookingReactivatePaidInvoice, null);
-                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "reactivate: paid invoice", this._reactivateDO, thError);
-                    throw thError;
-                }
 
                 this.updateBooking();
 
@@ -109,6 +104,7 @@ export class BookingReactivate {
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
                 this._bookingWithDependencies.bookingDO = updatedBooking;
+                debugger
                 return this._bookingInvoiceSync.syncInvoiceWithBookingPrice(updatedBooking);
             }).then((updatedGroup: InvoiceGroupDO) => {
                 resolve(this._bookingWithDependencies.bookingDO);
