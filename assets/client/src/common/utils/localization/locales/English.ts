@@ -946,4 +946,8 @@ export var EnglishTranslations: Object = {
 	"Filter by Booking creation date" : "Filter by Booking creation date",
 	"Booking Created From" : "Booking Created From",
 	"Booking Created Until" : "Booking Created Until",
+	"Invoices": "Invoices",
+	"Invoices Report": "Invoices Report",
+	"The invoices report on customers and paid date interval": "The invoices report on customers and paid date interval",
+	
 };
