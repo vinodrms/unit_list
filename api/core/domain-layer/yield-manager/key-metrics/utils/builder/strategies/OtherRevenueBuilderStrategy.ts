@@ -29,6 +29,6 @@ export class OtherRevenueBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "Other Revenue Total";
+        return "Other Revenue Total" + ((this._excludeCommission) ? " W/O Commission" : "");
     }
 }

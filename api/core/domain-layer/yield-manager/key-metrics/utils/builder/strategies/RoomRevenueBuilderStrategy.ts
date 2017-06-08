@@ -30,6 +30,6 @@ export class RoomRevenueBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "Room Revenue Total";
+        return "Room Revenue Total" + ((this._excludeCommission) ? " W/O Commission" : "");
     }
 }

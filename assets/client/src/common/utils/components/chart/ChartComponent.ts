@@ -53,7 +53,7 @@ export class ChartComponent implements AfterViewInit {
     }
     private getChartOptionTitle(chatDO: ChartComponentDO): Object {
         return {
-            text: chatDO.title,
+            text: (chatDO.title.length > 22) ? (chatDO.title.substr(0, 22) + "\n" + chatDO.title.substr(22)) : chatDO.title,
             subtext: chatDO.subtitle
         };
     }

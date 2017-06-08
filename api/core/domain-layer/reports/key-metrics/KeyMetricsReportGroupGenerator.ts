@@ -19,13 +19,14 @@ import { ThDateToThPeriodConverterFactory } from './period-converter/ThDateToThP
 import { PageOrientation } from '../../../services/pdf-reports/PageOrientation';
 import { CommonValidationStructures } from "../../common/CommonValidations";
 import { KeyMetricsReaderInputBuilder } from "../../yield-manager/key-metrics/utils/KeyMetricsReaderInputBuilder";
+import { CommissionOption, CommissionOptionDisplayNames } from "../../yield-manager/key-metrics/utils/KeyMetricsReaderInput";
 
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _period: YieldManagerPeriodDO;
 	private _periodType: ThPeriodType;
 	private _startDate: ThDateDO;
 	private _endDate: ThDateDO;
-	private _excludeCommission: boolean;
+	private _commissionOption: CommissionOption;
 	private _excludeVat: boolean;
 	private _keyMetricItem: KeyMetricsResultItem;
 
@@ -56,7 +57,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		this._period.referenceDate = dateInterval.start;
 		this._period.noDays = dateInterval.getNumberOfDays() + 1;
 		this._periodType = params.periodType;
-		this._excludeCommission = params.excludeCommission;
+		this._commissionOption = params.commissionOption;
 		this._excludeVat = params.excludeVat;
 	}
 
@@ -68,7 +69,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 				.includePreviousPeriod(false)
 				.setDataAggregationType(this._periodType)
 				.excludeVat(this._excludeVat)
-				.excludeCommission(this._excludeCommission)
+				.setCommissionOption(this._commissionOption)
 				.build()
 		).then((reportItems: KeyMetricsResult) => {
 			this._keyMetricItem = reportItems.currentItem;
@@ -80,15 +81,14 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		var startDateKey: string = this._appContext.thTranslate.translate("Start Date");
 		var endDateKey: string = this._appContext.thTranslate.translate("End Date");
 		var groupValuesByKey: string = this._appContext.thTranslate.translate("Group Values By");
-		var excludeCommission: string = this._appContext.thTranslate.translate("Exclude Commission");
+		var commission: string = this._appContext.thTranslate.translate("Commission");
 		var excludeVat: string = this._appContext.thTranslate.translate("Exclude VAT");
 		
 		var displayParams = {};
 		displayParams[startDateKey] = this._startDate;
 		displayParams[endDateKey] = this._endDate;
 		displayParams[groupValuesByKey] = this.getDisplayStringFromPeriodType();
-		displayParams[excludeCommission] = 
-			this._excludeCommission? this._appContext.thTranslate.translate("Yes") : this._appContext.thTranslate.translate("No");
+		displayParams[commission] = this._appContext.thTranslate.translate(CommissionOptionDisplayNames[this._commissionOption]);
 		displayParams[excludeVat] = 
 			this._excludeVat? this._appContext.thTranslate.translate("Yes") : this._appContext.thTranslate.translate("No");
 		

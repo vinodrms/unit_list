@@ -11,17 +11,24 @@ import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ThPeriodType, ThPeriodOption } from '../../utils/ThPeriodType';
 import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 
+export enum CommissionOption {
+    INCLUDE,
+    EXCLUDE,
+    BOTH
+}
+
 @Component({
 	selector: 'settings-key-metrics-report',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/key-metrics-report/template/settings-key-metrics-report.html',
 	providers: [SettingsReportsService]
 })
 export class SettingsKeyMetricsReportComponent extends BaseComponent {
+	private static CommissionOption = CommissionOption;
 	private startDate: ThDateDO;
 	private endDate: ThDateDO;
 	private isLoading: boolean = true;
 	private periodOptionList: ThPeriodOption[];
-	private excludeCommission: boolean;
+	private commissionOption: CommissionOption;
 	private excludeVat: boolean;
 	private selectedPeriodType: ThPeriodType;
 	private format: ReportOutputFormatType;
@@ -34,7 +41,7 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 		super();
 		this._pagesService.bootstrapSelectedTab(ReportGroupType.KeyMetrics);
 		this.periodOptionList = ThPeriodOption.getValues();
-		this.excludeCommission = true;
+		this.commissionOption = CommissionOption.EXCLUDE;
 		this.excludeVat = true;
 		this.selectedPeriodType = this.periodOptionList[0].type;
 	}
@@ -71,11 +78,35 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 				startDate: this.startDate,
 				endDate: this.endDate,
 				periodType: this.selectedPeriodType,
-				excludeCommission: this.excludeCommission,
+				commissionOption: this.commissionOption,
 				excludeVat: this.excludeVat
 			}
 		}
 		var encodedParams = encodeURI(JSON.stringify(params));
 		return 'api/reports/report?params=' + encodedParams;
+	}
+
+	public isSelectedCommissionOptionExclude(): boolean {
+		return this.commissionOption === CommissionOption.EXCLUDE;
+	}
+
+	public isSelectedCommissionOptionInclude(): boolean {
+		return this.commissionOption === CommissionOption.INCLUDE;
+	}
+
+	public isSelectedCommissionOptionBoth(): boolean {
+		return this.commissionOption === CommissionOption.BOTH;
+	}
+
+	public setSelectedCommissionOptionExclude() {
+		this.commissionOption = CommissionOption.EXCLUDE;
+	}
+
+	public setSelectedCommissionOptionInclude() {
+		this.commissionOption = CommissionOption.INCLUDE;
+	}
+
+		public setSelectedCommissionOptionBoth() {
+		this.commissionOption = CommissionOption.BOTH;
 	}
 }
