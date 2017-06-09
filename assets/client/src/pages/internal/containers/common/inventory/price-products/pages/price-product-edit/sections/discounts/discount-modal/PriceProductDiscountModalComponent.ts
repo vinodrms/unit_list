@@ -49,7 +49,9 @@ export class PriceProductDiscountModalComponent extends BaseComponent implements
     public getSize(): ModalSize {
         return ModalSize.Medium;
     }
-
+    public get maxCustomers(): number {
+        return PriceProductDiscountModalComponent.MaxCustomers;
+    }
     public isPublic() {
         return this.discount.isPublic();
     }

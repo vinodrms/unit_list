@@ -86,8 +86,8 @@
         <div class="col-xs-12">
             <customer-selector
                 (onCustomerAdded)="didAddCustomer($event)"
-                (onCustomerRemoved)="didRemoveCustomer($event)">
-
+                (onCustomerRemoved)="didRemoveCustomer($event)"
+                [maxCustomers]="maxCustomers">
             </customer-selector>
         </div>
     </div>

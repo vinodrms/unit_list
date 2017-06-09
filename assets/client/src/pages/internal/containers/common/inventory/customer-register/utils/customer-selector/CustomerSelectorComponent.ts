@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, Type, ResolvedReflectiveProvider, ViewContainerRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, Type, ResolvedReflectiveProvider, ViewContainerRef, OnInit } from '@angular/core';
 import { BaseComponent } from "../../../../../../../../common/base/BaseComponent";
 import { CustomerDO } from "../../../../../../services/customers/data-objects/CustomerDO";
 import { AppContext } from "../../../../../../../../common/utils/AppContext";
@@ -11,15 +11,17 @@ import { ModalDialogRef } from "../../../../../../../../common/utils/modals/util
     providers: [CustomerRegisterModalService],
     
 })
-export class CustomerSelectorComponent extends BaseComponent {
-    public static MaxCustomers = 10;
+export class CustomerSelectorComponent extends BaseComponent implements OnInit {
+    private static MaxCustomersDefaultValue = 3;
 
-    customerMap: { [index: string]: CustomerDO };
-    customerIdList: string[] = [];
-    
+    @Input() maxCustomers: number;
+
     @Output() onCustomerAdded = new EventEmitter();
     @Output() onCustomerRemoved = new EventEmitter();
     
+    customerMap: { [index: string]: CustomerDO };
+    customerIdList: string[] = [];
+
     constructor(
         private _customerRegisterModalService: CustomerRegisterModalService
         ) {
@@ -28,6 +30,12 @@ export class CustomerSelectorComponent extends BaseComponent {
         this.customerIdList = [];
         this.customerMap = {};
     }
+
+    public ngOnInit() {
+		if (!_.isNumber(this.maxCustomers)) {
+			this.maxCustomers = CustomerSelectorComponent.MaxCustomersDefaultValue;
+		}
+	}
 
     public openCustomerSelectModal() {
         this._customerRegisterModalService.openCustomerRegisterModal(true).then((modalDialogInstance: ModalDialogRef<CustomerDO[]>) => {
@@ -54,7 +62,7 @@ export class CustomerSelectorComponent extends BaseComponent {
         this.onCustomerRemoved.next(reomovedCustomer);
     }
     private canAddMoreCustomers(): boolean {
-        return this.customerIdList.length < CustomerSelectorComponent.MaxCustomers;
+        return this.customerIdList.length < this.maxCustomers;
     }
 }
 
