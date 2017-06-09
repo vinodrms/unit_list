@@ -28,7 +28,8 @@ export class BackUpReportGroupGenerator extends AReportGeneratorStrategy {
 		]);
 	}
 	protected loadParameters(params: any) {
-		this._date = params.date;
+		this._date = new ThDateDO();
+		this._date.buildFromObject(params.date);
 	}
 
 	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
@@ -50,9 +51,13 @@ export class BackUpReportGroupGenerator extends AReportGeneratorStrategy {
 	}
 
 	protected getMeta(): ReportGroupMeta {
+		var dateKey: string = this._appContext.thTranslate.translate("Date");
+		var displayParams = {};
+		displayParams[dateKey] = this._date
 		return {
 			name: "BackUp Report",
-			pageOrientation: PageOrientation.Landscape
+			pageOrientation: PageOrientation.Landscape,
+			displayParams: displayParams
 		}
 	}
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
