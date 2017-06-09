@@ -11,6 +11,7 @@ import { ReportGroupMeta } from "../common/result/ReportGroup";
 import { PageOrientation } from "../../../services/pdf-reports/PageOrientation";
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 import { IReportSectionGeneratorStrategy } from "../common/report-section-generator/IReportSectionGeneratorStrategy";
+import { InvoicesReportSectionGenerator } from "./InvoicesReportSectionGenerator";
 
 export class InvoicesReportGroupGenerator extends AReportGeneratorStrategy {
 	private _startDate: ThDateDO;
@@ -65,9 +66,9 @@ export class InvoicesReportGroupGenerator extends AReportGeneratorStrategy {
 
 		displayParams[customerListKey] = '';
 		this._customerList.forEach((customer: CustomerDO, index) => {
-            displayParams[customerListKey] += customer.customerDetails.getName();
-            displayParams[customerListKey] += (index != (this._customerList.length -1)) ? ", ": "";
-        });
+			displayParams[customerListKey] += customer.customerDetails.getName();
+			displayParams[customerListKey] += (index != (this._customerList.length - 1)) ? ", " : "";
+		});
 
 		return {
 			name: "Invoices Report",
@@ -77,6 +78,9 @@ export class InvoicesReportGroupGenerator extends AReportGeneratorStrategy {
 	}
 
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
-		return [];
+		let sectionGenerator =
+			new InvoicesReportSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				this._customerIdList, this._startDate, this._endDate);
+		return [sectionGenerator];
 	}
 }
