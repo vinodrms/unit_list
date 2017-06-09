@@ -9,13 +9,44 @@ import { GuestsArrivingReportSectionGeneratorStrategy } from './strategies/Guest
 import { GuestsInHouseReportSectionGeneratorStrategy } from './strategies/GuestsInHouseReportSectionGeneratorStrategy';
 import { GuestsDepartingReportSectionGeneratorStrategy } from './strategies/GuestsDepartingReportSectionGeneratorStrategy';
 import { PageOrientation } from '../../../services/pdf-reports/PageOrientation';
+import { CommonValidationStructures } from "../../common/CommonValidations";
+import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
+import { ThError } from "../../../utils/th-responses/ThError";
+import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
+import { HotelDetailsBuilder, HotelDetailsDO } from "../../hotel-details/utils/HotelDetailsBuilder";
 
 export class BackUpReportGroupGenerator extends AReportGeneratorStrategy {
+	private _date: ThDateDO;
+	private _includeInHouseReport: boolean = true;
 
 	protected getParamsValidationStructure(): IValidationStructure {
-		return new ObjectValidationStructure([]);
+		return new ObjectValidationStructure([
+			{
+				key: "date",
+				validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
+			},
+		]);
 	}
 	protected loadParameters(params: any) {
+		this._date = params.date;
+	}
+
+	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
+		let hotelRepo = this._appContext.getRepositoryFactory().getHotelRepository();
+		hotelRepo.getHotelById(this._sessionContext.sessionDO.hotel.id)
+			.then((hotelDO: HotelDO) => {
+				var hotelDetailsBuilder = new HotelDetailsBuilder(this._sessionContext, hotelDO);
+			return hotelDetailsBuilder.build();
+			})
+			.then((details: HotelDetailsDO) => {
+				var currentHotelDate = details.currentThTimestamp.thDateDO.buildPrototype();
+				if (!currentHotelDate.isSame(this._date)) {
+					this._includeInHouseReport = false;
+				}
+				resolve(true);
+			}).catch(e => {
+				reject(e);
+			})
 	}
 
 	protected getMeta(): ReportGroupMeta {
@@ -25,10 +56,18 @@ export class BackUpReportGroupGenerator extends AReportGeneratorStrategy {
 		}
 	}
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
-		return [
-			new GuestsArrivingReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary),
-			new GuestsInHouseReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary),
-			new GuestsDepartingReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary),
-		];
+		if (this._includeInHouseReport) {
+			return [
+				new GuestsArrivingReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary, this._date),
+				new GuestsInHouseReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary),
+				new GuestsDepartingReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary, this._date),
+			];
+		} else {
+			return [
+				new GuestsArrivingReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary, this._date),
+				new GuestsDepartingReportSectionGeneratorStrategy(this._appContext, this._sessionContext, this._globalSummary, this._date),
+			];
+		}
+		
 	}
 }

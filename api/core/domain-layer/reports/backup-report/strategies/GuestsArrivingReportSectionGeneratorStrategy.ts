@@ -5,6 +5,7 @@ import { ReportArrivalsReader } from '../arrivals/ReportArrivalsReader';
 import { ReportArrivalItemInfo } from '../arrivals/utils/ReportArrivalsInfo';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
+import { ThDateDO } from "../../../../utils/th-dates/data-objects/ThDateDO";
 
 export class GuestsArrivingReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
 
@@ -13,6 +14,10 @@ export class GuestsArrivingReportSectionGeneratorStrategy extends AReportSection
 	private _totalChildren: number = 0;
 	private _totalBabies: number = 0;
 	private _totalBabyBeds: number = 0;
+
+    constructor(_appContext: AppContext, _sessionContext: SessionContext, _globalSummary: Object, private _date: ThDateDO) {
+		super(_appContext, _sessionContext, _globalSummary);
+	}
 
 	protected getHeader(): ReportSectionHeader {
 		return {
@@ -53,7 +58,7 @@ export class GuestsArrivingReportSectionGeneratorStrategy extends AReportSection
 	}
 
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
-		let arrivalsReader = new ReportArrivalsReader(this._appContext, this._sessionContext);
+		let arrivalsReader = new ReportArrivalsReader(this._appContext, this._sessionContext, this._date);
 		arrivalsReader.read().then((reportItems: ReportArrivalItemInfo[]) => {
 			this._totalArrivals = reportItems.length;
 			var data = [];

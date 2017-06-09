@@ -19,12 +19,14 @@ import { HotelOperationsDeparturesInfo, DeparturelItemInfo } from '../../../../.
 import { RoomCategoryDO } from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import { RoomDO } from '../../../../../core/data-layer/rooms/data-objects/RoomDO';
 import { ThUtils } from "../../../../utils/ThUtils";
+import { ThDateDO } from "../../../../utils/th-dates/data-objects/ThDateDO";
+import { HotelOperationsQueryDO } from "../../../hotel-operations/dashboard/utils/HotelOperationsQueryDO";
 
 
 export class ReportDepartureReader {
 		private _thUtils: ThUtils;
 
-	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _date: ThDateDO) {
 		this._thUtils = new ThUtils();
 	}
 
@@ -37,12 +39,14 @@ export class ReportDepartureReader {
 	private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
 		var departureInfoBuilder = new ReportDepartureInfoBuilder();
 		var departureReader = new HotelOperationsDeparturesReader(this._appContext, this._sessionContext);
-		var emptyDateRefParam: any = {};
 		var meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 
 		var departureInfo: DeparturelItemInfo = null;
-
-		departureReader.read(emptyDateRefParam)
+		var hotelOperationsQueryDO = new HotelOperationsQueryDO();
+		if (this._date) {
+			hotelOperationsQueryDO.referenceDate = this._date;
+		 }
+		departureReader.read(hotelOperationsQueryDO)
 			.then((result: HotelOperationsDeparturesInfo) => {
 				let promiseList = [];
 				result.departureInfoList.forEach((departureInfo: DeparturelItemInfo) => {
