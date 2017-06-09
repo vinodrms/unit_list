@@ -34,6 +34,12 @@
 					</customer-selector>
         		</div>
 			</div>
+			<div class="row" *ngIf="!atLeastOneCustomerWasSelected()">
+				<div class="col-xs-12 col-md-6 form-group">
+					<small>* {{ 'You have to select at least a customer' | translate }}</small>
+				</div>
+			</div>
+
 			<div class="row">
 				<div class="col-xs-12 col-md-6 form-group">
 					<label>{{ 'File Format' | translate }}</label>
@@ -41,7 +47,7 @@
 				</div>
 
 				<div *ngIf="!isLoading" class="col-xs-12 col-md-offset-9 col-md-3">
-					<a class="btn btn-primary btn-block" [href]="reportCSVUrl()" target="_blank">{{ 'Generate' | translate }}</a>
+					<a class="btn btn-primary btn-block" [class.disabled]="!atLeastOneCustomerWasSelected()" [href]="reportCSVUrl()" target="_blank">{{ 'Generate' | translate }}</a>
 				</div>
 			</div>
 		</div>

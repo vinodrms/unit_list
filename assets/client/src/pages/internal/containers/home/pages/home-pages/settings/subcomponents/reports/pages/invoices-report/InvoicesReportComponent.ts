@@ -66,12 +66,17 @@ export class InvoicesReportComponent extends BaseComponent {
 		this.customerIdList.push(customer.id);
 		this.customerIdList = _.uniq(this.customerIdList);
     }
+
     public didRemoveCustomer(customer: CustomerDO) {
 		this.customerIdList = _.filter(this.customerIdList, (customerId: string) => {
 			return customerId != customer.id;
 		});
     }
 
+	public atLeastOneCustomerWasSelected(): boolean {
+		return !_.isEmpty(this.customerIdList);
+	}
+	
 	public get maxCustomers(): number {
         return InvoicesReportComponent.MaxCustomers;
     }
