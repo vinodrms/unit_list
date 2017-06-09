@@ -28,6 +28,6 @@ export class ConfirmedRevenueBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "Room Revenue Confirmed";
+        return "Room Revenue Confirmed" + ((this._excludeCommission) ? AMetricBuilderStrategy.WithoutCommissionSuffixDisplayString : "");
     }
 }

@@ -16,9 +16,9 @@ import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 	providers: [SettingsReportsService]
 })
 export class SettingsBackUpReportComponent extends BaseComponent {
-	private startDate: ThDateDO;
-	private endDate: ThDateDO;
 	private format: ReportOutputFormatType;
+	private isLoading: boolean = false;
+	private date: ThDateDO;
 
 	constructor(
 		private _appContext: AppContext,
@@ -29,10 +29,24 @@ export class SettingsBackUpReportComponent extends BaseComponent {
 		this._pagesService.bootstrapSelectedTab(ReportGroupType.Backup);
 	}
 	ngOnInit() {
+		this.isLoading = true;
+
+		this._hotelService.getHotelDetailsDO()
+		.subscribe((result: HotelDetailsDO) => {
+			this.date = result.currentThTimestamp.thDateDO.buildPrototype();
+			this.isLoading = false;
+		}, (error: ThError) => {
+			this.isLoading = false;
+			this._appContext.toaster.error(error.message);
+		});
 	}
 
 	public didSelectFormat(format: ReportOutputFormatType) {
 		this.format = format;
+	}
+
+	public didSelectDate(date) {
+		this.date = date;
 	}
 
 	public reportCSVUrl(): string {
@@ -40,6 +54,7 @@ export class SettingsBackUpReportComponent extends BaseComponent {
 			reportType: ReportGroupType.Backup,
 			format: this.format,
 			properties: {
+				date: this.date
 			}
 		}
 

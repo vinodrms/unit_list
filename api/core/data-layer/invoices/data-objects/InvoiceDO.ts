@@ -171,6 +171,19 @@ export class InvoiceDO extends BaseDO {
         return thUtils.roundNumberToTwoDecimals(totalPrice);
     }
 
+    public getPricePaidByCustomerId(customerId: string) {
+        let payerDO = _.find(this.payerList, (payer: InvoicePayerDO) => {
+            return payer.customerId === customerId;
+        });
+
+        var thUtils = new ThUtils();
+        if(thUtils.isUndefinedOrNull(payerDO)) {
+            return 0;
+        }
+        
+        return payerDO.priceToPay;
+    }
+
     public isPaid(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.Paid;
     }

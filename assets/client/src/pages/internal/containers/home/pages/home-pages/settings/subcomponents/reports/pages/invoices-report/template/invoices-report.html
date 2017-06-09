@@ -1,0 +1,55 @@
+<div class="container full-height" customScroll>
+	<div class="row basic-info-form">
+		<div class="col-xs-12 col-md-6">
+			<label class="control-label">
+				<h3>{{ 'Invoices Report' | translate }}</h3><small>{{ 'The invoices report on customers and paid date interval' | translate }}</small>
+			</label>
+			<hr>
+			<div class="row">
+				<div class="col-xs-12 col-md-6 form-group">
+					<th-date-picker
+						[initialThDate]="startDate"
+						[label]="'Start date'"
+						(didSelectThDate)="didSelectStartDate($event)"
+						>
+					</th-date-picker>
+				</div>
+
+				<div class="col-xs-12 col-md-6 form-group">
+					<th-date-picker
+						[initialThDate]="endDate"
+						[label]="'End date'"
+						(didSelectThDate)="didSelectEndDate($event)"
+						>
+					</th-date-picker>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'Select customers' | translate }}</label>
+					<customer-selector
+						(onCustomerAdded)="didAddCustomer($event)"
+						(onCustomerRemoved)="didRemoveCustomer($event)"
+						[maxCustomers]="maxCustomers">
+					</customer-selector>
+        		</div>
+			</div>
+			<div class="row" *ngIf="!atLeastOneCustomerWasSelected()">
+				<div class="col-xs-12 col-md-6 form-group">
+					<small>* {{ 'You have to select at least a customer' | translate }}</small>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'File Format' | translate }}</label>
+					<report-output-format (onFormatSelected)="didSelectFormat($event)"></report-output-format>
+				</div>
+
+				<div *ngIf="!isLoading" class="col-xs-12 col-md-offset-9 col-md-3">
+					<a class="btn btn-primary btn-block" [class.disabled]="!atLeastOneCustomerWasSelected()" [href]="reportCSVUrl()" target="_blank">{{ 'Generate' | translate }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
