@@ -7,6 +7,7 @@ import { SettingsBackUpReportComponent } from './pages/backup-report/SettingsBac
 import { SettingsKeyMetricsReportComponent } from './pages/key-metrics-report/SettingsKeyMetricsReportComponent';
 import { SettingsHousekeepingReportComponent } from "./pages/housekeeping-report/SettingsHousekeepingReportComponent";
 import { BookingsReportComponent } from "./pages/bookings-report/BookingsReportComponent";
+import { InvoicesReportComponent } from "./pages/invoices-report/InvoicesReportComponent";
 
 const settingsReportsRoutes: Routes = [
     {
@@ -18,7 +19,8 @@ const settingsReportsRoutes: Routes = [
             { path: 'key-metrics', component: SettingsKeyMetricsReportComponent },
             { path: 'housekeeping', component: SettingsHousekeepingReportComponent },
             { path: 'bookings', component: BookingsReportComponent },
-
+            { path: 'invoices', component: InvoicesReportComponent },
+            
         ]
     }
 ];

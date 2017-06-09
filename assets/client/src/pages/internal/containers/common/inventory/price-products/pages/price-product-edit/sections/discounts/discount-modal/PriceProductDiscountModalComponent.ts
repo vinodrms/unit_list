@@ -6,7 +6,6 @@ import { ModalDialogRef } from '../../../../../../../../../../../common/utils/mo
 import { PriceProductDiscountDO } from "../../../../../../../../../services/price-products/data-objects/discount/PriceProductDiscountDO";
 import { PriceProductConstraintWrapperDO } from "../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintWrapperDO";
 import { PriceProductConstraintFactory } from "../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintFactory";
-import { CustomerRegisterModalService } from "../../../../../../customer-register/modal/services/CustomerRegisterModalService";
 import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
 import { PriceProductDiscountModalResult } from "./services/utils/PriceProductDiscountModalResult";
 import { ThDateIntervalDO } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO";
@@ -16,7 +15,6 @@ import { PriceProductDiscountIntervalWrapperDO } from "../../../../../../../../.
 @Component({
     selector: 'price-product-discount-modal',
     templateUrl: "/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/discounts/discount-modal/template/price-product-discount-modal.html",
-    providers: [CustomerRegisterModalService]
 })
 export class PriceProductDiscountModalComponent extends BaseComponent implements ICustomModalComponent {
     public static MaxCustomers = 10;
@@ -29,8 +27,7 @@ export class PriceProductDiscountModalComponent extends BaseComponent implements
     constraintIdList: number[] = [];
 
     constructor(private _appContext: AppContext,
-        private _modalDialogRef: ModalDialogRef<PriceProductDiscountModalResult>,
-        private _customerRegisterModalService: CustomerRegisterModalService) {
+        private _modalDialogRef: ModalDialogRef<PriceProductDiscountModalResult>) {
         super();
         this._constraintFactory = new PriceProductConstraintFactory();
         this.discount = new PriceProductDiscountDO();
@@ -52,30 +49,25 @@ export class PriceProductDiscountModalComponent extends BaseComponent implements
     public getSize(): ModalSize {
         return ModalSize.Medium;
     }
-
+    public get maxCustomers(): number {
+        return PriceProductDiscountModalComponent.MaxCustomers;
+    }
     public isPublic() {
         return this.discount.isPublic();
     }
     public getNameForCustomer(customerId: string): string {
         return this.customerMap[customerId].customerNameAndEmailString;
     }
-    public openCustomerSelectModal() {
-        this._customerRegisterModalService.openCustomerRegisterModal(true).then((modalDialogInstance: ModalDialogRef<CustomerDO[]>) => {
-            modalDialogInstance.resultObservable.subscribe((selectedCustomerList: CustomerDO[]) => {
-                _.forEach(selectedCustomerList, customer => {
-                    this.discount.customerIdList.push(customer.id);
-                    this.customerMap[customer.id] = customer;
-                });
-                this.discount.customerIdList = _.uniq(this.discount.customerIdList);
-            });
-        }).catch((e: any) => { });
+    public didAddCustomer(customer: CustomerDO) {
+
+        this.discount.customerIdList.push(customer.id);
+        this.customerMap[customer.id] = customer;
+        
+        this.discount.customerIdList = _.uniq(this.discount.customerIdList);
     }
-    public removeCustomer(customerId: string) {
-        this.discount.customerIdList = _.filter(this.discount.customerIdList, existingId => { return existingId != customerId; });
-        delete this.customerMap[customerId];
-    }
-    private canAddMoreCustomers(): boolean {
-        return this.discount.customerIdList.length < PriceProductDiscountModalComponent.MaxCustomers;
+    public didRemoveCustomer(customer: CustomerDO) {
+        this.discount.customerIdList = _.filter(this.discount.customerIdList, existingId => { return existingId != customer.id; });
+        delete this.customerMap[customer.id];
     }
 
     public createNewConstraint() {
