@@ -10,7 +10,7 @@
 	<div customScroll class="table-body">
 		<div class="key-metrics-row flex-row" *ngFor="let metric of metricsResults.currentItemVM.metricVMList">
 			<div class="key-metrics-col flex-jc-start wide">
-				<span class="clickable" (click)="openKeyMetricModal(metric)">
+				<span class="clickable ellipsis-text" (click)="openKeyMetricModal(metric)">
 					<span class="unitpal-font dark-gray-color f-14">{{metric.meta.fontName}}</span> 
 					<span class="dark-gray-color f-14" title="{{ metric.keyMetricDO.displayName }}">{{ metric.keyMetricDO.displayName }}</span>
 				</span>

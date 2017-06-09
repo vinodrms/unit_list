@@ -1,4 +1,4 @@
-import { KeyMetricsReaderInput } from "./KeyMetricsReaderInput";
+import { KeyMetricsReaderInput, CommissionOption } from "./KeyMetricsReaderInput";
 import { YieldManagerPeriodDO } from "../../utils/YieldManagerPeriodDO";
 import { ThPeriodType } from "../../../reports/key-metrics/period-converter/ThPeriodDO";
 
@@ -8,7 +8,7 @@ export class KeyMetricsReaderInputBuilder {
     constructor() {
         this._input = new KeyMetricsReaderInput();
         this._input.includePreviousPeriod = true;
-        this._input.excludeCommission = false;
+        this._input.commissionOption = CommissionOption.INCLUDE;
         this._input.excludeVat = false;    
     }
 
@@ -27,8 +27,8 @@ export class KeyMetricsReaderInputBuilder {
         return this;
     }
 
-    public excludeCommission(excludeCommission: boolean): KeyMetricsReaderInputBuilder {
-        this._input.excludeCommission = excludeCommission;
+    public setCommissionOption(commissionOption: CommissionOption): KeyMetricsReaderInputBuilder {
+        this._input.commissionOption = commissionOption;
         return this;
     }
 

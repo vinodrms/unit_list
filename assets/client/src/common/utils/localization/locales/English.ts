@@ -947,4 +947,21 @@ export var EnglishTranslations: Object = {
 	"Booking Created From" : "Booking Created From",
 	"Booking Created Until" : "Booking Created Until",
 	"Date" : "Date",
+	"Include Commission": "Include Commission",
+	"W/ and W/O Commission": "W/ and W/O Commission",
+	"Room Revenue Confirmed": "Room Revenue Confirmed",
+	"Room Revenue Confirmed W/O Commission": "Room Revenue Confirmed W/O Commission",
+	"Other Revenue Total W/O Commission": "Other Revenue Total W/O Commission",
+	"Room Revenue Total W/O Commission": "Room Revenue Total W/O Commission",
+	"AvgRate Total W/O Commission": "AvgRate Total W/O Commission",
+	"RevPar Total W/O Commission": "RevPar Total W/O Commission",
+	"Exclude": "Exclude",
+	"Include": "Include",
+	"Show Both": "Show Both",
+	"Invoices": "Invoices",
+	"Invoices Report": "Invoices Report",
+	"The invoices report on customers and paid date interval": "The invoices report on customers and paid date interval",
+	"Select customers": "Select customers",
+
+	
 };

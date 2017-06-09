@@ -100,8 +100,8 @@ export class YieldKeyMetricsComponent implements OnInit {
 	}
 
 	public openKeyMetricModal(keyMetricVM: KeyMetricVM) {
-		var keyMetricType = keyMetricVM.keyMetricDO.type;
-		this._keyMetricModalService.openKeyMetricModal(this.metricsResults, keyMetricType).then((modalDialogRef: ModalDialogRef<boolean>) => {
+		var keyMetricDO = keyMetricVM.keyMetricDO;
+		this._keyMetricModalService.openKeyMetricModal(this.metricsResults, keyMetricDO).then((modalDialogRef: ModalDialogRef<boolean>) => {
 			modalDialogRef.resultObservable.subscribe((result: boolean) => {
 			}, (err: any) => { });
 		}).catch((err: any) => { });
