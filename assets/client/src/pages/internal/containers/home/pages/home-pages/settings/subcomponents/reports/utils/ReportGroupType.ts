@@ -3,6 +3,7 @@ export enum ReportGroupType {
 	KeyMetrics,
 	Shift,
 	Housekeeping,
-	Bookings
-
+	Bookings,
+	Invoices,
+	
 }
