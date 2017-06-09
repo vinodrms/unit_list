@@ -231,6 +231,9 @@
 	"Nights Billed": "Nights Billed",
 	"Reservation number": "Reservation number",
 	"Paid/Lost by Management at": "Paid/Lost by Management at",
+	"Paid invoices": "Paid invoices",
+	"Custome Name": "Custome Name",
+	"Total Amount": "Total Amount",
 	
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
