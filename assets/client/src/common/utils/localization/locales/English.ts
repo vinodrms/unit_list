@@ -957,5 +957,10 @@ export var EnglishTranslations: Object = {
 	"Exclude": "Exclude",
 	"Include": "Include",
 	"Show Both": "Show Both",
+	"Invoices": "Invoices",
+	"Invoices Report": "Invoices Report",
+	"The invoices report on customers and paid date interval": "The invoices report on customers and paid date interval",
+	"Select customers": "Select customers",
+
 	
 };
