@@ -949,5 +949,6 @@ export var EnglishTranslations: Object = {
 	"Invoices": "Invoices",
 	"Invoices Report": "Invoices Report",
 	"The invoices report on customers and paid date interval": "The invoices report on customers and paid date interval",
+	"Select customers": "Select customers",
 	
 };

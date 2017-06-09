@@ -14,6 +14,7 @@ import { ThDateDO } from '../../../../../../../../../services/common/data-object
 import { ThHourDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThHourDO';
 import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
+import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
 
 @Component({
 	selector: 'invoices-report',
@@ -21,8 +22,11 @@ import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 	providers: [SettingsReportsService]
 })
 export class InvoicesReportComponent extends BaseComponent {
+	public static MaxCustomers = 10;
+
 	private startDate: ThDateDO;
 	private endDate: ThDateDO;
+	private customerIdList: string[];
 	private format: ReportOutputFormatType;
 
 	isSaving: boolean = false;
@@ -35,6 +39,8 @@ export class InvoicesReportComponent extends BaseComponent {
 		private _pagesService: SettingsReportsPagesService) {
 		super();
 		this._pagesService.bootstrapSelectedTab(ReportGroupType.Invoices);
+
+		this.customerIdList = [];
 	}
 
 	ngOnInit() {
@@ -56,6 +62,20 @@ export class InvoicesReportComponent extends BaseComponent {
 		this.endDate = endDate;
 	}
 
+	public didAddCustomer(customer: CustomerDO) {
+		this.customerIdList.push(customer.id);
+		this.customerIdList = _.uniq(this.customerIdList);
+    }
+    public didRemoveCustomer(customer: CustomerDO) {
+		this.customerIdList = _.filter(this.customerIdList, (customerId: string) => {
+			return customerId != customer.id;
+		});
+    }
+
+	public get maxCustomers(): number {
+        return InvoicesReportComponent.MaxCustomers;
+    }
+
 	public didSelectFormat(format: ReportOutputFormatType) {
 		this.format = format;
 	}
@@ -67,6 +87,8 @@ export class InvoicesReportComponent extends BaseComponent {
 			properties: {
 				startDate: this.startDate,
 				endDate: this.endDate,
+				customerIdList: this.customerIdList,
+				
 			}
 		}
 

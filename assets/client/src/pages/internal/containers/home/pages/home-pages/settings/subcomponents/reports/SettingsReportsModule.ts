@@ -17,6 +17,7 @@ import { BookingsReportComponent } from "./pages/bookings-report/BookingsReportC
 import { InvoicesReportComponent } from "./pages/invoices-report/InvoicesReportComponent";
 
 import { TimezoneService } from '../../../../../../../services/timezones/TimezoneService';
+import { CustomerSelectorModule } from "../../../../../../common/inventory/customer-register/utils/CustomerSelectorModule";
 
 
 var settingsReportsComponents = [
@@ -31,7 +32,7 @@ var settingsReportsComponents = [
     
 ];
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedPipesModule, SharedComponentsModule, SharedDirectivesModule, settingsReportsRouting],
+    imports: [CommonModule, FormsModule, SharedPipesModule, SharedComponentsModule, SharedDirectivesModule, settingsReportsRouting, CustomerSelectorModule],
     declarations: [settingsReportsComponents],
     providers: [TimezoneService]
 })
