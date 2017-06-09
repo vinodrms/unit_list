@@ -56,7 +56,9 @@ describe("Reports", function () {
 			let generator = new ReportGenerator(testContext.appContext, testContext.sessionContext);
 
 			let generatorDO = new ReportGeneratorDO();
-			generatorDO.properties = {};
+			generatorDO.properties = {
+				date: ThDateDO.buildThDateDO(2018, ThMonth.January, 22)
+			};
 			generatorDO.reportType = ReportGroupType.Backup;
 			generatorDO.format = ReportOutputFormat.Csv;
 
