@@ -36,6 +36,6 @@ export class TotalAvgRateBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "AvgRate Total" + ((this._excludeCommission) ? " W/O Commission" : "");
+        return "AvgRate Total" + ((this._excludeCommission) ? AMetricBuilderStrategy.WithoutCommissionSuffixDisplayString: "");
     }
 }

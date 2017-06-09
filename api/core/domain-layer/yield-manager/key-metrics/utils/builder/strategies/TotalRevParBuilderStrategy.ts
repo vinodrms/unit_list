@@ -36,6 +36,6 @@ export class TotalRevParBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "RevPar Total" + ((this._excludeCommission) ? " W/O Commission" : "");
+        return "RevPar Total" + ((this._excludeCommission) ? AMetricBuilderStrategy.WithoutCommissionSuffixDisplayString: "");
     }
 }
