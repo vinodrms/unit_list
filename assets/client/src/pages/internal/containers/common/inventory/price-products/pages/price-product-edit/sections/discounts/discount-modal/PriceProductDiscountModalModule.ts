@@ -5,9 +5,10 @@ import { SharedPipesModule } from '../../../../../../../../../../../common/utils
 import { SharedComponentsModule } from '../../../../../../../../../../../common/utils/components/modules/SharedComponentsModule';
 import { PriceProductConstraintSelectorModule } from "../../constraints/constraint-selector/PriceProductConstraintSelectorModule";
 import { PriceProductDiscountModalComponent } from './PriceProductDiscountModalComponent';
+import { CustomerSelectorModule } from "../../../../../../customer-register/utils/CustomerSelectorModule";
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedPipesModule, SharedComponentsModule, PriceProductConstraintSelectorModule],
+    imports: [CommonModule, FormsModule, SharedPipesModule, SharedComponentsModule, PriceProductConstraintSelectorModule, CustomerSelectorModule],
     declarations: [PriceProductDiscountModalComponent],
     exports: [PriceProductDiscountModalComponent],
 })
