@@ -21,25 +21,23 @@ import { ThDateDO } from "../../../../utils/th-dates/data-objects/ThDateDO";
 import { HotelOperationsQueryDO } from "../../../hotel-operations/dashboard/utils/HotelOperationsQueryDO";
 
 export class ReportArrivalsReader {
-	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _date?: ThDateDO) {
+	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
 	}
 
-	public read(): Promise<ReportArrivalItemInfo[]> {
+	public read(date: ThDateDO): Promise<ReportArrivalItemInfo[]> {
 		return new Promise<ReportArrivalItemInfo[]>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
-			this.readCore(resolve, reject);
+			this.readCore(resolve, reject, date);
 		});
 	}
 
-	private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
+	private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }, date: ThDateDO) {
 		var arrivalsInfoBuilder = new ReportArrivalsItemInfoBuilder();
 		var arrivalsReader = new HotelOperationsArrivalsReader(this._appContext, this._sessionContext);
 		var meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 
 		var arrivalInfo: ArrivalItemInfo = null;
 		var hotelOperationsQueryDO = new HotelOperationsQueryDO();
-		if (this._date) {
-			hotelOperationsQueryDO.referenceDate = this._date;
-		 }
+		hotelOperationsQueryDO.referenceDate = date;
 		arrivalsReader.read(hotelOperationsQueryDO)
 			.then((result: HotelOperationsArrivalsInfo) => {
 				let promiseList = [];

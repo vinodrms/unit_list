@@ -55,8 +55,8 @@ export class GuestsDepartingReportSectionGeneratorStrategy extends AReportSectio
 	}
 
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
-		let departureReader = new ReportDepartureReader(this._appContext, this._sessionContext, this._date);
-		departureReader.read().then((reportItems: ReportDepartureInfo[]) => {
+		let departureReader = new ReportDepartureReader(this._appContext, this._sessionContext);
+		departureReader.read(this._date).then((reportItems: ReportDepartureInfo[]) => {
 			this._totalDepartures = reportItems.length;
 			var data = [];
 			reportItems.forEach((item: ReportDepartureInfo) => {

@@ -58,8 +58,8 @@ export class GuestsArrivingReportSectionGeneratorStrategy extends AReportSection
 	}
 
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
-		let arrivalsReader = new ReportArrivalsReader(this._appContext, this._sessionContext, this._date);
-		arrivalsReader.read().then((reportItems: ReportArrivalItemInfo[]) => {
+		let arrivalsReader = new ReportArrivalsReader(this._appContext, this._sessionContext);
+		arrivalsReader.read(this._date).then((reportItems: ReportArrivalItemInfo[]) => {
 			this._totalArrivals = reportItems.length;
 			var data = [];
 			reportItems.forEach((item: ReportArrivalItemInfo) => {
