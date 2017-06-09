@@ -34,8 +34,8 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
 
     protected getGlobalSummary(): Object {
         return {
-			"Total Amount" : this._totalAmount
-		}
+            "Total Amount": this._totalAmount
+        }
     }
 
     protected getHeader(): ReportSectionHeader {
@@ -45,6 +45,8 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                 "Invoice No",
                 "Custome Name",
                 "Amount",
+                "Paid Date",
+
             ]
         };
     }
@@ -77,7 +79,8 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                     return invoiceGroup.invoiceList;
                 }).flatten().value();
 
-                var data: any[] = [];
+                let data: any[] = [];
+                let rawData: any[] = [];
 
                 _.forEach(invoiceList, (invoice: InvoiceDO) => {
                     let payerCustomerIdList = _.filter(invoice.getPayerCustomerIdList(), (customerId: string) => {
@@ -87,21 +90,51 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                     _.forEach(payerCustomerIdList, (customerId: string) => {
                         let customer = this._customerMap[customerId];
                         let row = [
-                            invoice.invoiceReference,
-                            customer.customerDetails.getName(),
-                            invoice.getPricePaidByCustomerId(customerId)
+                            invoice,
+                            customer
                         ];
-
-                        data.push(row);
+                        rawData.push(row);
                     });
-                })
+                });
+
+                rawData = rawData.sort((a: any, b: any) => {
+                    let customer1: CustomerDO = a[1];
+                    let customer2: CustomerDO = b[1];
+                    if (customer1.customerDetails.getName() !== customer2.customerDetails.getName()) {
+                        return customer1.customerDetails.getName() > customer2.customerDetails.getName() ? 1 : -1;
+                    }
+
+                    let invoice1: InvoiceDO = a[0];
+                    let invoice2: InvoiceDO = b[0];
+                    if (invoice1.paidDateTimeUtcTimestamp != invoice2.paidDateTimeUtcTimestamp) {
+                        return invoice1.paidDateTimeUtcTimestamp > invoice2.paidDateTimeUtcTimestamp ? 1 : -1;
+                    }
+
+                    if (invoice1.invoiceReference !== invoice2.invoiceReference) {
+                        return invoice1.invoiceReference > invoice2.invoiceReference ? 1 : -1;
+                    }
+
+                    return 0;
+                });
+
+                data = _.map(rawData, (row: any) => {
+                    let invoice: InvoiceDO = row[0];
+                    let customer: CustomerDO = row[1];
+
+                    return [
+                        invoice.invoiceReference,
+                        customer.customerDetails.getName(),
+                        invoice.getPricePaidByCustomerId(customer.id),
+                        invoice.paidTimestamp.toString()
+                    ];
+                });
 
                 _.forEach(data, (row) => {
                     this._totalAmount += row[2];
                 });
-                var thUtils = new ThUtils();
+                let thUtils = new ThUtils();
                 this._totalAmount = thUtils.roundNumberToTwoDecimals(this._totalAmount);
-                
+
                 resolve(data);
             }).catch(e => {
                 reject(e);
