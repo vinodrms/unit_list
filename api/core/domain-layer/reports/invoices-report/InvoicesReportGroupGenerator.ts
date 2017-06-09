@@ -63,6 +63,7 @@ export class InvoicesReportGroupGenerator extends AReportGeneratorStrategy {
 		displayParams[startDateKey] = this._startDate;
 		displayParams[endDateKey] = this._endDate;
 
+		displayParams[customerListKey] = '';
 		this._customerList.forEach((customer: CustomerDO, index) => {
             displayParams[customerListKey] += customer.customerDetails.getName();
             displayParams[customerListKey] += (index != (this._customerList.length -1)) ? ", ": "";
