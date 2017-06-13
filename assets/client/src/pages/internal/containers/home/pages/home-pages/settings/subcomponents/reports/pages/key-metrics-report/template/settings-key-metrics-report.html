@@ -25,23 +25,27 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-6 form-group">
-					<label>{{ 'Exclude commission' | translate }} </label>
+				<div class="col-xs-8 form-group">
+					<label>{{ 'Deducted Commission' | translate }} </label>
 					<div class="input-group">
 						<div class="btn-group" data-toggle="buttons">
-							<button class="btn btn-default" (click)="excludeCommission=true" [ngClass]="{'active': excludeCommission}"
+							<button class="btn btn-default" (click)="setSelectedCommissionOptionExclude()" [ngClass]="{'active': isSelectedCommissionOptionExclude()}"
 								[disabled]="_readonly">
-								{{ 'Yes' | translate }}
+								{{ 'Exclude' | translate }}
 							</button>
-							<button class="btn btn-default" (click)="excludeCommission=false" [ngClass]="{'active': !excludeCommission}"
+							<button class="btn btn-default" (click)="setSelectedCommissionOptionInclude()" [ngClass]="{'active': isSelectedCommissionOptionInclude()}"
 								[disabled]="_readonly">
-								{{ 'No' | translate }}
+								{{ 'Include' | translate }}
+							</button>
+							<button class="btn btn-default" (click)="setSelectedCommissionOptionBoth()" [ngClass]="{'active': isSelectedCommissionOptionBoth()}"
+								[disabled]="_readonly">
+								{{ 'Show Both' | translate }}
 							</button>
 						</div>
 					</div>
 				</div>
 
-				<div class="col-xs-6 form-group">
+				<div class="col-xs-4 form-group">
 					<label>{{ 'Exclude VAT' | translate }} </label>
 					<div class="input-group">
 						<div class="btn-group" data-toggle="buttons">

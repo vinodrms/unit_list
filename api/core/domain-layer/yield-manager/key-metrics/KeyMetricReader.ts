@@ -150,7 +150,7 @@ export class KeyMetricReader {
             resultItem.aggregationPeriodList = aggregationPeriodList;
 
             resultItem.metricList = [];
-            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedRoomCategoryStatsList, this._input.excludeCommission);
+            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedRoomCategoryStatsList, this._input.commissionOption);
             var metricBuilderStrategyList: IMetricBuilderStrategy[] = metricFactory.getMetricStrategies();
 
             _.forEach(metricBuilderStrategyList, (metricBuilderStrategy: IMetricBuilderStrategy) => {

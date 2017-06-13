@@ -12,6 +12,7 @@ import { ThDateIntervalDO } from "../../../../../utils/th-dates/data-objects/ThD
 import _ = require('underscore');
 
 export abstract class AMetricBuilderStrategy implements IMetricBuilderStrategy {
+    protected static WithoutCommissionSuffixDisplayString = " W/O Deducted Commission"; 
     private _thUtils: ThUtils;
 
     constructor(private _hotelInventoryStats: IHotelInventoryStats) {

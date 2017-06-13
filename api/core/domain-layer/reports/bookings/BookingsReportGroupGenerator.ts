@@ -52,8 +52,10 @@ export class BookingsReportGroupGenerator extends AReportGeneratorStrategy {
     protected loadParameters(params: any) {
         this._priceProductIdList = params.priceProductIdList;
         this._confirmationStatusList = params.confirmationStatusList;
-        this._startDate = params.startDate;
-        this._endDate = params.endDate;
+        this._startDate = new ThDateDO();
+        this._startDate.buildFromObject(params.startDate);
+        this._endDate = new ThDateDO();
+        this._endDate.buildFromObject(params.endDate);
         this.loadOptionalParameters(params);
     }
 
@@ -75,9 +77,13 @@ export class BookingsReportGroupGenerator extends AReportGeneratorStrategy {
     }
 
     protected getMeta(): ReportGroupMeta {
+        var startDateKey: string = this._appContext.thTranslate.translate("Start Date");
+        var endDateKey: string = this._appContext.thTranslate.translate("End Date");        
         var priceProductListKey: string = this._appContext.thTranslate.translate("Price Products");
         var bookingStatusesKey: string = this._appContext.thTranslate.translate("Booking Statuses");
         var displayParams = {};
+        displayParams[startDateKey] = this._startDate;
+        displayParams[endDateKey] = this._endDate;
         displayParams[priceProductListKey] = "";
         this._priceProductList.forEach((pp, index) => {
             displayParams[priceProductListKey] += pp.name;
@@ -88,6 +94,15 @@ export class BookingsReportGroupGenerator extends AReportGeneratorStrategy {
             displayParams[bookingStatusesKey] += BookingConfirmationStatusDisplayString[bookingStatus];
             displayParams[bookingStatusesKey] += (index != (this._confirmationStatusList.length -1)) ? ", ": "";
         });
+
+        if (this._bookingCreationStartDate) {
+            var bookingCreationStartDateKey = this._appContext.thTranslate.translate("Booking Created From");
+            displayParams[bookingCreationStartDateKey] = this._bookingCreationStartDate;
+        }
+        if (this._bookingCreationEndDate) {
+            var bookingCreationEndDateKey = this._appContext.thTranslate.translate("Booking Created Until");
+            displayParams[bookingCreationEndDateKey] = this._bookingCreationEndDate;
+        }
         return {
             name: "Bookings Report",
             pageOrientation: PageOrientation.Landscape,

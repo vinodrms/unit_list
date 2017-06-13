@@ -15,6 +15,7 @@ export class ChartComponent implements AfterViewInit {
     private static Subset1Color = "#fb6708";
     private static Subset2Color = "#36ce8d";
     private chartHtmlIdName = "chart-component-id";
+    private static MaxCharsOnTitleFirstRow = 22;
 
     private _htmlElement: HTMLElement;
 
@@ -31,7 +32,7 @@ export class ChartComponent implements AfterViewInit {
     private generateChart() {
         var chart = this.initChart();
         chart.setOption({
-            title: this.getChartOptionTitle(this.chartDetails),
+            // title: this.getChartOptionTitle(this.chartDetails),
             tooltip: { trigger: 'axis' },
             legend: this.getChartLegend(this.chartDetails),
             toolbox: { show: false },
@@ -53,7 +54,7 @@ export class ChartComponent implements AfterViewInit {
     }
     private getChartOptionTitle(chatDO: ChartComponentDO): Object {
         return {
-            text: chatDO.title,
+            text: (chatDO.title.length > ChartComponent.MaxCharsOnTitleFirstRow) ? (chatDO.title.substr(0, ChartComponent.MaxCharsOnTitleFirstRow) + "\n" + chatDO.title.substr(ChartComponent.MaxCharsOnTitleFirstRow)) : chatDO.title,
             subtext: chatDO.subtitle
         };
     }

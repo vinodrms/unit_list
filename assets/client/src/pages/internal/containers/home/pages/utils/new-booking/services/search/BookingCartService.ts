@@ -52,10 +52,8 @@ export class BookingCartService extends ABookingService {
 
     public getFirstNewBookingFromCart(): BookingCartItemVM {
         let foundBookingCartItemVM: BookingCartItemVM;
-        _.forEach(this._bookingCartItemVMList, (bookingCartItem: BookingCartItemVM) => {
-            if(bookingCartItem.isNew()) {
-                foundBookingCartItemVM = bookingCartItem;
-            }
+        foundBookingCartItemVM = _.find(this._bookingCartItemVMList, (bookingCartItem: BookingCartItemVM) => {
+            return bookingCartItem.isNew();
         });
 
         return foundBookingCartItemVM;
