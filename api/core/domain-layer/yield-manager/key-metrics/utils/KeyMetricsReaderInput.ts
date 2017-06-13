@@ -9,10 +9,10 @@ export enum CommissionOption {
 }
 
 export var CommissionOptionDisplayNames: { [index: number]: string; } = {};
-CommissionOptionDisplayNames[CommissionOption.INCLUDE] = "Include Commission";
-CommissionOptionDisplayNames[CommissionOption.EXCLUDE] = "Exclude Commission";
-CommissionOptionDisplayNames[CommissionOption.BOTH] = "W/ and W/O Commission";
-CommissionOptionDisplayNames[CommissionOption.INCLUDE_AND_BOTH_FOR_ROOM_REVENUE] = "Include Commission"; 
+CommissionOptionDisplayNames[CommissionOption.INCLUDE] = "Include Deducted Commission";
+CommissionOptionDisplayNames[CommissionOption.EXCLUDE] = "Exclude Deducted Commission";
+CommissionOptionDisplayNames[CommissionOption.BOTH] = "W/ and W/O Deducted Commission";
+CommissionOptionDisplayNames[CommissionOption.INCLUDE_AND_BOTH_FOR_ROOM_REVENUE] = "Include Deducted Commission"; 
 
 
 export class KeyMetricsReaderInput {

@@ -81,7 +81,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		var startDateKey: string = this._appContext.thTranslate.translate("Start Date");
 		var endDateKey: string = this._appContext.thTranslate.translate("End Date");
 		var groupValuesByKey: string = this._appContext.thTranslate.translate("Group Values By");
-		var commission: string = this._appContext.thTranslate.translate("Commission");
+		var commission: string = this._appContext.thTranslate.translate("Deducted Commission");
 		var excludeVat: string = this._appContext.thTranslate.translate("Exclude VAT");
 		
 		var displayParams = {};
