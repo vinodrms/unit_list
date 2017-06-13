@@ -52,18 +52,18 @@ export class MetricBuilderStrategyFactory {
                 break;
             case CommissionOption.BOTH:
                 metricList = [
-                    new TotalRevParBuilderStrategy(this._hotelInventoryStats, true),
                     new TotalRevParBuilderStrategy(this._hotelInventoryStats, false),
-                    new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, true),
+                    new TotalRevParBuilderStrategy(this._hotelInventoryStats, true),
                     new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, false),
+                    new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, true),
                     new TotalOccupancyBuilderStrategy(this._hotelInventoryStats),
                     new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats),
-                    new RoomRevenueBuilderStrategy(this._hotelInventoryStats, true),
                     new RoomRevenueBuilderStrategy(this._hotelInventoryStats, false),
-                    new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, true),
+                    new RoomRevenueBuilderStrategy(this._hotelInventoryStats, true),
                     new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, false),
-                    new OtherRevenueBuilderStrategy(this._hotelInventoryStats, true),
+                    new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, true),
                     new OtherRevenueBuilderStrategy(this._hotelInventoryStats, false),
+                    new OtherRevenueBuilderStrategy(this._hotelInventoryStats, true),
                     new AllotmentsBuilderStrategy(this._hotelInventoryStats),
                     new RoomsBuilderStrategy(this._hotelInventoryStats)
                 ];
