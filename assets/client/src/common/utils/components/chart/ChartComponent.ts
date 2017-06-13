@@ -32,7 +32,7 @@ export class ChartComponent implements AfterViewInit {
     private generateChart() {
         var chart = this.initChart();
         chart.setOption({
-            title: this.getChartOptionTitle(this.chartDetails),
+            // title: this.getChartOptionTitle(this.chartDetails),
             tooltip: { trigger: 'axis' },
             legend: this.getChartLegend(this.chartDetails),
             toolbox: { show: false },
