@@ -48,6 +48,12 @@ export class ThUtils {
 	public roundNumberToNearestInteger(inputNumber: number): number {
 		return Math.round(inputNumber);
 	}
+	public formatNumberToTwoDecimals(value: number): any {
+		if (!value) {
+			return value;
+		}
+		return value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+	}
 	public getArrayAverage(array: INumber[]): number {
 		if (!_.isArray(array) || array.length == 0) {
 			return 0.0;

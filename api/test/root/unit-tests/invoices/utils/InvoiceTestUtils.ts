@@ -67,19 +67,7 @@ export class InvoiceTestUtils {
     }
 
     private getTotalPriceFromItemMetaListCore(invoiceItemMetaList: IInvoiceItemMeta[], resolve: { (result: number): void }, reject: { (err: any): void }) {
-        var totalPrice = 0;
-        var getPricePromiseList = [];
-        _.forEach(invoiceItemMetaList, (invoiceItemMeta: IInvoiceItemMeta) => {
-            getPricePromiseList.push(invoiceItemMeta.getUnitPrice());
-        });
-        Promise.all(getPricePromiseList).then((pricePerItemList: number[]) => {
-            for (var i = 0; i < pricePerItemList.length; ++i) {
-                totalPrice += pricePerItemList[i] * invoiceItemMetaList[i].getNumberOfItems();
-            }
-            resolve(totalPrice);
-        }).catch((error: any) => {
-            reject(error);
-        });
+        resolve(_.reduce(invoiceItemMetaList, function (sum, invoiceItemMeta: IInvoiceItemMeta) { return sum + invoiceItemMeta.getTotalPrice(); }, 0));
     }
 
     public testInvoiceGroupEquality(invoiceGroup: InvoiceGroupDO, saveInvoiceGroupDO: SaveInvoiceGroupDO) {

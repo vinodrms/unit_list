@@ -62,7 +62,7 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
         }));
         var defaultInvoicePayer =
             InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(defaultBillingCustomer, booking.defaultBillingDetails.paymentMethod);
-        defaultInvoicePayer.priceToPay = booking.price.getUnitPrice() * booking.price.getNumberOfItems();
+        defaultInvoicePayer.priceToPay = booking.price.getTotalPrice();
         defaultInvoicePayer.priceToPayPlusTransactionFee = defaultInvoicePayer.priceToPay;
         defaultInvoicePayer.transactionFeeSnapshot = TransactionFeeDO.getDefaultTransactionFee();
         invoice.payerList.push(defaultInvoicePayer);

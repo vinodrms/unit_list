@@ -121,11 +121,9 @@ export class DepartureItemInfoVM {
     public get numberOfNights(): number {
         return this.bookingDepartureItem.bookingInterval.getNumberOfDays();
     }
-
-    public get priceString(): string {
-        return this.totalPrice + this.currency.nativeSymbol;
+    public get ccy(): string {
+        return this.currency.nativeSymbol;
     }
-
     public set totalPrice(totalPrice: number) {
         this._totalPrice = totalPrice;
     }

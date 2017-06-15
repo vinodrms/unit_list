@@ -77,9 +77,12 @@ export class InvoiceConfirmationVMContainer {
     transactionFeeValue: string;
 
     subtotalValue: number;
+    subtotalValueFormatted: string;
     totalVat: number;
+    totalVatFormatted: string;
     totalLabel: string;
     totalValue: number;
+    totalValueFormatted: string;
 
     hotelVatLabel: string;
     hotelVatValue: string;
@@ -253,6 +256,9 @@ export class InvoiceConfirmationVMContainer {
         if (this.itemVMList.length > 0) {
             this.itemVMList[this.itemVMList.length - 1].isLastOne = true;
         }
+
+        this.subtotalValueFormatted = this._thUtils.formatNumberToTwoDecimals(this.subtotalValue);
+        this.totalVatFormatted = this._thUtils.formatNumberToTwoDecimals(this.totalVat);
     }
     private getTransactonFeeInvoiceItem(): InvoiceItemVM {
         let transactionFee = this._thUtils.roundNumberToTwoDecimals(this.invoicePayer.priceToPayPlusTransactionFee - this.invoicePayer.priceToPay);
@@ -266,6 +272,7 @@ export class InvoiceConfirmationVMContainer {
         invoiceItemVM.subtotal = invoiceItemVM.netUnitPrice;
         invoiceItemVM.vatPercentage = this._thUtils.roundNumberToTwoDecimals(vatValue * 100);
 
+        invoiceItemVM.formatPrices();
         return invoiceItemVM;
     }
     private displayBookingDateBreakdown(invoiceItemDO: InvoiceItemDO): boolean {
@@ -338,6 +345,7 @@ export class InvoiceConfirmationVMContainer {
     private initTotalValues() {
         this.totalLabel = this._thTranslation.translate('Total');
         this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.invoicePayer.priceToPayPlusTransactionFee);
+        this.totalValueFormatted = this._thUtils.formatNumberToTwoDecimals(this.totalValue);
     }
 
     private initAdditionalFields() {

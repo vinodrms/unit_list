@@ -12,7 +12,7 @@
 		<div class="booking-quick-details" >
 			<div class="stats orange-color f-12">
 				<div *ngIf="departureItemVM.hasInvoice">
-					<span class="unitpal-font ellipsis-text f-12 p-r-6">-</span><span>{{departureItemVM.priceString}}</span>
+					<span class="unitpal-font ellipsis-text f-12 p-r-6">-</span><span>{{departureItemVM.totalPrice | price}} {{departureItemVM.ccy}}</span>
 				</div>
 			</div>
 			<div class="other-details gray-color f-12" *ngIf="departureItemVM.hasBooking">
@@ -32,7 +32,7 @@
 			<div [ngClass]="getPayDropdownClasses()">
 				<div *ngFor="let invoiceInfo of departureItemVM.departureItemInvoiceInfoVMList" class="clickable p-6" (click)="openInvoiceModal(invoiceInfo)">
 					<span class="unitpal-font f-12 p-r-6">-</span>
-					<span class="ellipsis-text f-12" >{{ invoiceInfo.price }}{{ departureItemVM.currency.nativeSymbol }} - </span>
+					<span class="ellipsis-text f-12" >{{ invoiceInfo.price | price }}{{ departureItemVM.currency.nativeSymbol }} - </span>
 					<span class="ellipsis-text ellipsis-text f-12" >{{ invoiceInfo.customerName }}</span>
 				</div>
 			</div>

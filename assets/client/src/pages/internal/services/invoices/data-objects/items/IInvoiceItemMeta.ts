@@ -7,5 +7,6 @@ export interface IInvoiceItemMeta extends BaseDO {
     isMovableByDefault(): boolean;
     isDerivedFromBooking(): boolean;
     getUnitPrice(): number;
+    getTotalPrice(): number;
     getVatId(): string;
 }

@@ -77,7 +77,7 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 			ig.invoiceList.forEach((invoice) => {
 				invoice.itemList.forEach((item) => {
 					let details = this.getDisplayNameAndIdForItem(item);
-					let price = item.meta.getUnitPrice() * item.meta.getNumberOfItems();
+					let price = item.meta.getTotalPrice();
 
 					let itemVM = new InvoiceItemVM(this._appContext.thTranslate);
 					itemVM.buildFromInvoiceItemDO(item, ig.vatTaxListSnapshot);

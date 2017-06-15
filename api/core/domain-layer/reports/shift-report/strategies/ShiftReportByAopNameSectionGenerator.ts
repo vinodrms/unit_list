@@ -80,7 +80,7 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
                 invoice.itemList.forEach((item) => {
                     if (item.type == InvoiceItemType.AddOnProduct) {
                         let displayName = this.getDisplayNameForItem(item);
-                        let price = item.meta.getUnitPrice() * item.meta.getNumberOfItems();
+                        let price = item.meta.getTotalPrice();
                         let transactions = this.getQuantityForItem(item);
                         let aopId = item.id;
 
