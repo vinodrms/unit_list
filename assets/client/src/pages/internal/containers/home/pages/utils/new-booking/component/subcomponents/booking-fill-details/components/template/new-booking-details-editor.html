@@ -120,6 +120,16 @@
             </div>
             <div class="row">
                 <div class="col-md-12 col-xs-12 form-group">
+                    <label>{{ 'Travel Activity Type' | translate }}</label>
+                    <div class="input-group">
+                        <select class="form-control" [ngModel]="travelActivityType" (ngModelChange)="setTravelActivityType($event)" name="travelActivityType">
+                            <option *ngFor="let travelActivityTypeOption of travelActivityTypeOptionList" [value]="travelActivityTypeOption.type">{{ travelActivityTypeOption.displayName | translate }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12 form-group">
                     <label>{{ 'External Booking No' | translate }}</label>
                     <div class="input-group">
                         <input type="text" class="form-control" [(ngModel)]="externalBookingReference" name="externalBookingReference" />
@@ -130,16 +140,16 @@
                 <div class="col-md-12 col-xs-12 form-group">
                     <label>{{ 'Booking Notes' | translate }}</label>
                     <div class="input-group">
-		                <textarea class="form-control" [(ngModel)]="bookingNotes" name="bookingNotes"></textarea>
-	                </div>
+                        <textarea class="form-control" [(ngModel)]="bookingNotes" name="bookingNotes"></textarea>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 col-xs-12 form-group">
                     <label>{{ 'Invoice Notes' | translate }}</label>
                     <div class="input-group">
-		                <textarea class="form-control" [(ngModel)]="invoiceNotes" name="invoiceNotes"></textarea>
-	                </div>
+                        <textarea class="form-control" [(ngModel)]="invoiceNotes" name="invoiceNotes"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
