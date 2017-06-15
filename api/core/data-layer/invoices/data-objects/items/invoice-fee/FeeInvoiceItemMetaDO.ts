@@ -21,6 +21,9 @@ export class FeeInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
     public getNumberOfItems(): number {
         return this.numberOfItems;
     }
+    public getTotalPrice(): number {
+        return this.getUnitPrice() * this.getNumberOfItems();
+    }
     public getDisplayName(thTranslation: ThTranslation): string {
         return thTranslation.translate(this.displayName);
     }

@@ -19,6 +19,9 @@ export class RoomCommissionItemMetaDO extends BaseDO implements IInvoiceItemMeta
     public getNumberOfItems(): number {
         return this.numberOfItems;
     }
+    public getTotalPrice(): number {
+        return this.getNumberOfItems() * this.getUnitPrice();
+    }
     public getDisplayName(thTranslation: ThTranslation): string {
         return thTranslation.translate(this.displayName);
     }

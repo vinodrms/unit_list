@@ -68,7 +68,7 @@ export class InvoiceItemDO extends BaseDO {
     public getTotalPrice(): number {
         let thUtils = new ThUtils();
         let factor = (this.accountingType === InvoiceItemAccountingType.Credit)? -1 : 1;
-        return thUtils.roundNumberToTwoDecimals(this.meta.getUnitPrice() * this.meta.getNumberOfItems() * factor);
+        return thUtils.roundNumberToTwoDecimals(this.meta.getTotalPrice() * factor);
     }
 
     public isOfTypeCredit(): boolean {

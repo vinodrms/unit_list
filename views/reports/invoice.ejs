@@ -232,13 +232,13 @@
                         <%= itemVM.qty %>
                     </td>
                     <td>
-                        <%= ccySymbol %><%= itemVM.netUnitPrice %>
+                        <%= ccySymbol %><%= itemVM.netUnitPriceFormatted %>
                     </td>
                     <td>
-                        <%= ccySymbol %><%= itemVM.subtotal %>
+                        <%= ccySymbol %><%= itemVM.subtotalFormatted %>
                     </td>
                     <td>
-                        <%= ccySymbol %><%= itemVM.vat %> / <%= itemVM.vatPercentage %>%
+                        <%= ccySymbol %><%= itemVM.vatFormatted %> / <%= itemVM.vatPercentageFormatted %>%
                     </td>
                 </tr>
             <% }); %>
@@ -249,9 +249,9 @@
                    <%= paymentMethodLabel %>: <%= paymentMethodValue %> 
                    <%if (hasTransactionFee > 0) {%>(<%= transactionFeeLabel %>: <%if (transactionFeeIsFlat) {%><%= ccySymbol %><%}%><%= transactionFeeValue %><%if (!transactionFeeIsFlat) {%>%<%}%>)<%}%>
                    <br>
-                   <%= subtotalLabel %>: <%= ccySymbol %><%= subtotalValue %> <br>
-                   <%= vatLabel %>: <%= ccySymbol %><%= totalVat %> <br>
-                   <%= totalLabel %>: <%= ccySymbol %><%= totalValue %>
+                   <%= subtotalLabel %>: <%= ccySymbol %><%= subtotalValueFormatted %> <br>
+                   <%= vatLabel %>: <%= ccySymbol %><%= totalVatFormatted %> <br>
+                   <%= totalLabel %>: <%= ccySymbol %><%= totalValueFormatted %>
                 </td>
             </tr>
             <tr class="information">

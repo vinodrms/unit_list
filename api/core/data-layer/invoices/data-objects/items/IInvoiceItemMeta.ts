@@ -6,5 +6,6 @@ export interface IInvoiceItemMeta extends BaseDO {
     getDisplayName(thTranslation: ThTranslation): string;
     isDerivedFromBooking(): boolean;
     getUnitPrice(): number;
+    getTotalPrice(): number;
     getVatId(): string;
 }
