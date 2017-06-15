@@ -32,13 +32,13 @@
 
             <div *ngIf="!editMode" class="form-group m-0">
                 <div class="input-group">
-                    <span><b>Total</b> (transaction fee not included): <b>{{ccySymbol}} {{invoicePayerVM.invoicePayerDO.priceToPay | price}}</b></span>
+                    <span><b>Total</b> (transaction fee not included): <b>{{ccySymbol}} {{invoicePayerVM.invoicePayerDO.priceToPay | twodecimalsprice}}</b></span>
                 </div>
             </div>
 
             <div class="form-group m-t-0 m-r-12 m-b-0 m-l-0">
                 <div class="input-group">
-                    <span>{{ 'of' | translate }} <b>{{ccySymbol}} {{totalAmount | price}}</b></span>
+                    <span>{{ 'of' | translate }} <b>{{ccySymbol}} {{totalAmount | twodecimalsprice}}</b></span>
                 </div>
             </div>
 
@@ -106,7 +106,7 @@
                         <span><b>To pay </b>
                             <span *ngIf="shouldApplyTransacationFee">(transaction fee included)</span>
                             <span *ngIf="!shouldApplyTransacationFee"> (no transaction fee)</span>
-                            : <b>{{ccySymbol}} {{totalAmountWithTransactionFee | price}}</b>
+                            : <b>{{ccySymbol}} {{totalAmountWithTransactionFee | twodecimalsprice}}</b>
                         </span>
                     </span>
                 </div>

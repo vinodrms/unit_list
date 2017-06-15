@@ -12,7 +12,7 @@
                                 </span>
                             </td>
                             <td width="70%">
-                                {{ 'Amount paid' | translate }}: <b>{{ invoicePayerStats.amountPaid | price }}{{ ccySymbol }}</b> {{ 'from' | translate }}: <b>{{invoicePayerStats.totalAmountToPay | price}}{{ ccySymbol }}</b> / {{ 'Invoice group payment status' | translate }}:  
+                                {{ 'Amount paid' | translate }}: <b>{{ invoicePayerStats.amountPaid | twodecimalsprice }}{{ ccySymbol }}</b> {{ 'from' | translate }}: <b>{{invoicePayerStats.totalAmountToPay | twodecimalsprice}}{{ ccySymbol }}</b> / {{ 'Invoice group payment status' | translate }}:  
                                 <span *ngIf="invoicePayerStats.invoiceGroupPaid">
                                     <b>{{ 'PAID' | translate }}</b>
                                 </span>
