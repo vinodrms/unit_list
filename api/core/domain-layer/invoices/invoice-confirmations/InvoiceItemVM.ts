@@ -9,10 +9,19 @@ export class InvoiceItemVM {
 
     name: string;
     qty: number;
+    
     netUnitPrice: number;
+    netUnitPriceFormatted: string;
+    
     vat: number;
+    vatFormatted: string;
+    
     vatPercentage: number;
+    vatPercentageFormatted: string;
+    
     subtotal: number;
+    subtotalFormatted: string;
+
     isLastOne: boolean;
 
     constructor(private _thTranslation: ThTranslation) {
@@ -30,6 +39,15 @@ export class InvoiceItemVM {
         var unitVat = this._thUtils.roundNumberToTwoDecimals(invoiceItemDO.meta.getUnitPrice() - this.netUnitPrice);
         this.vat = this._thUtils.roundNumberToTwoDecimals(unitVat * this.qty);
         this.subtotal = this._thUtils.roundNumberToTwoDecimals(this.qty * this.netUnitPrice);
+
+        this.formatPrices();
+    }
+
+    public formatPrices() {
+        this.vatPercentageFormatted = this._thUtils.formatNumberToTwoDecimals(this.vatPercentage);
+        this.netUnitPriceFormatted = this._thUtils.formatNumberToTwoDecimals(this.netUnitPrice);
+        this.vatFormatted = this._thUtils.formatNumberToTwoDecimals(this.vat);
+        this.subtotalFormatted = this._thUtils.formatNumberToTwoDecimals(this.subtotal);
     }
 
     private getVatValue(vatId: string, vatTaxList: TaxDO[]): number {
