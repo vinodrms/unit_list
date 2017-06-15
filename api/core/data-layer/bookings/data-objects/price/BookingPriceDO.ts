@@ -17,24 +17,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     priceType: BookingPriceType;
 
     roomPricePerNightAvg: number;
-    public getInvoicedRoomPricePerNightAvg(accountingType: InvoiceItemAccountingType): number {
-        return (accountingType === InvoiceItemAccountingType.Credit)? this.roomPricePerNightAvg * -1 : this.roomPricePerNightAvg;
-    }
-
     roomPricePerNightList: PricePerDayDO[];
-    public getInvoicedRoomPricePerNightList(accountingType: InvoiceItemAccountingType): PricePerDayDO[] {
-        let invoicedRoomPricePerNightList = [];
-
-        _.forEach(this.roomPricePerNightList, (pricePerDay: PricePerDayDO) => {
-            let invoicedPricePerDay = new PricePerDayDO();
-            invoicedPricePerDay.buildFromObject(pricePerDay);
-            invoicedPricePerDay.price = (accountingType === InvoiceItemAccountingType.Credit)? invoicedPricePerDay.price * -1: invoicedPricePerDay.price;
-
-            invoicedRoomPricePerNightList.push(invoicedPricePerDay)
-        });  
-
-        return invoicedRoomPricePerNightList;
-    }
     numberOfNights: number;
     totalRoomPrice: number;
     totalOtherPrice: number;
@@ -91,6 +74,12 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     }
     public getNumberOfItems(): number {
         return this.numberOfNights;
+    }
+    public getTotalPrice(): number {
+        if(this.priceType === BookingPriceType.Penalty) {
+            return this.roomPricePerNightAvg;
+        }
+        return _.reduce(this.roomPricePerNightList, function(sum, pricePerDay: PricePerDayDO){ return sum + pricePerDay.price; }, 0);
     }
     public getDisplayName(thTranslation: ThTranslation): string {
         return thTranslation.translate(this.getDisplayNameCore(thTranslation));

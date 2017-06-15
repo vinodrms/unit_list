@@ -90,6 +90,12 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     public getNumberOfItems(): number {
         return this.numberOfNights;
     }
+    public getTotalPrice(): number {
+        if(this.priceType === BookingPriceType.Penalty) {
+            return this.roomPricePerNightAvg;
+        }
+        return _.reduce(this.roomPricePerNightList, function(sum, pricePerDay: PricePerDayDO){ return sum + pricePerDay.price; }, 0);
+    }
     public getDisplayName(thTranslation: ThTranslation): string {
         return thTranslation.translate(this.getDisplayNameCore(thTranslation));
     }

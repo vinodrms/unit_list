@@ -18,7 +18,9 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
     protected getPrimitivePropertyKeys(): string[] {
         return ["pricePerItem", "vatId", "numberOfItems", "aopDisplayName", "includedInBooking"];
     }
-
+    public getTotalPrice(): number {
+        return this.getUnitPrice() * this.getNumberOfItems();
+    }
     public getUnitPrice(): number {
         return this.pricePerItem;
     }

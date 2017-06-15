@@ -165,7 +165,7 @@ export class InvoiceDO extends BaseDO {
         let totalPrice = 0;
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
             let factor = item.accountingType === InvoiceItemAccountingType.Credit ? -1 : 1;
-            totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice() * factor;
+            totalPrice += item.meta.getTotalPrice() * factor;
         });
         var thUtils = new ThUtils();
         return thUtils.roundNumberToTwoDecimals(totalPrice);
@@ -198,7 +198,7 @@ export class InvoiceDO extends BaseDO {
         for (var i = 0; i < this.payerList.length; ++i) {
             if (this.payerList[i].paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
                 return true;
-            }
+            } 
         }
         return false;
     }
