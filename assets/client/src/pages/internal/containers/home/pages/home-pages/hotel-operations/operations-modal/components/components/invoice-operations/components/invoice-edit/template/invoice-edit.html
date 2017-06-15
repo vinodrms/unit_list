@@ -63,7 +63,7 @@
                     <td><b>{{ 'Total' | translate }}</b></td>
                     <td></td>
                     <td></td>
-                    <td>{{ ccySymbol }} <b>{{ totalPrice | twodecimalsprice }}</b></td>
+                    <td>{{ ccySymbol }} <b>{{ totalPrice | price }}</b></td>
                     <td></td>
                 </tr>
             </tfoot>
@@ -107,26 +107,26 @@
                     </td>
                     <td width="15%">
                         <span *ngIf="!invoiceItemVM.displayBookingDateBreakdown()">
-                            {{ ccySymbol }} <b>{{ invoiceItemVM.price | twodecimalsprice}}</b>
+                            {{ ccySymbol }} <b>{{ invoiceItemVM.price | price}}</b>
                         </span>
 
                         <!-- Booking price -->
                         <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
                             <p *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.roomPricePerNightList" class="invoice-item-small">
-                                {{ ccySymbol }} <b>{{ roomPricePerNight.price | twodecimalsprice }}</b>
+                                {{ ccySymbol }} <b>{{ roomPricePerNight.price | price }}</b>
                             </p>
                         </span>
                         <!-- END Booking price -->    
                     </td>
                     <td width="15%">
                         <span *ngIf="!invoiceItemVM.displayBookingDateBreakdown()">
-                            {{ ccySymbol }} <b>{{ invoiceItemVM.totalPrice | twodecimalsprice }}</b>
+                            {{ ccySymbol }} <b>{{ invoiceItemVM.totalPrice | price }}</b>
                         </span>
                         
                         <!-- Booking price -->
                         <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
                             <p *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.getInvoicedRoomPricePerNightList(invoiceItemVM.invoiceItemDO.accountingType)" class="invoice-item-small">
-                                {{ ccySymbol }} <b>{{ roomPricePerNight.price | twodecimalsprice }}</b>
+                                {{ ccySymbol }} <b>{{ roomPricePerNight.price | price }}</b>
                             </p>
                         </span>
                         <!-- END Booking price -->  

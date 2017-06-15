@@ -54,7 +54,7 @@
 								</span>
 					<span *ngIf="isPrice(columnMeta.valueMeta)">
 									{{ getDependentItemValue(item, columnMeta.valueMeta) }}
-									{{ getItemValue(item, columnMeta.valueMeta) | twodecimalsprice }}
+									{{ getItemValue(item, columnMeta.valueMeta) | price }}
 								</span>
 					<span *ngIf="isStringOrNumber(columnMeta.valueMeta)" title="{{ getItemValue(item, columnMeta.valueMeta) | translate }}">
 									{{ getItemValue(item, columnMeta.valueMeta) | translate }}

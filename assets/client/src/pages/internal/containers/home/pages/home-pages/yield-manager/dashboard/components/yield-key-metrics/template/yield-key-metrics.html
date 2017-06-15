@@ -17,7 +17,7 @@
 			</div>
 			<div class="key-metrics-col" *ngFor="let value of metric.keyMetricDO.valueList">
 				<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 0">
-					<span class="key-metric-value oneline-text f-14 w-100" title="{{ value.price }}">{{ value.price | price}}</span> 
+					<span class="key-metric-value oneline-text f-14 w-100" title="{{ value.price }}">{{ value.price | price : {minimumFractionDigits: 0} }}</span> 
 				</span>
 				<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 1">
 					<span class="percentage-metric key-metric-value oneline-text f-14" [ngStyle]="getPercentageStyles(normalizeAndReversPercentage(value.percentage))" title="{{ value.percentage }}%">{{ value.percentage | percentage }}</span> 

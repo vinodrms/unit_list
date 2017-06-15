@@ -9,12 +9,10 @@ import { ThTimestampDistanceFromNowPipe } from '../ThTimestampDistanceFromNowPip
 import { ThTimestampPipe } from '../ThTimestampPipe';
 import { ThTrimPipe } from '../ThTrimPipe';
 import { TranslationPipe } from '../../localization/TranslationPipe';
-import { PriceWithMinTwoDecimalsPipe } from "../PriceWithMinTwoDecimalsPipe";
 
 const SharedPipes = [
     PercentagePipe,
     PricePipe,
-    PriceWithMinTwoDecimalsPipe,
     ThDateIntervalPipe,
     ThDatePipe,
     ThHourPipe,
