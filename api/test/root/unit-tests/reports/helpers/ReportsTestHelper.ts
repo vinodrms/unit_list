@@ -22,6 +22,7 @@ import { AddOnProductDO } from '../../../../../core/data-layer/add-on-products/d
 import { TransientBookingItemDO } from '../../../../../core/domain-layer/bookings/search-bookings/TransientBookingItemDO';
 
 import _ = require('underscore');
+import { TravelActivityType } from "../../../../../core/data-layer/bookings/data-objects/BookingDO";
 
 export class ReportsTestHelper {
     public static NoBookingGroups = 10;
@@ -103,7 +104,8 @@ export class ReportsTestHelper {
             allotmentId: allotmentId,
             externalBookingReference: "",
             notes: "This is an automatic booking",
-            invoiceNotes: "This is an automatic booking - invoice notes"
+            invoiceNotes: "This is an automatic booking - invoice notes",
+            travelActivityType: TravelActivityType.Leisure
         }
 
     }

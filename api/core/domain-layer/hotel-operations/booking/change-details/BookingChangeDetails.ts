@@ -122,6 +122,7 @@ export class BookingChangeDetails {
         this._bookingWithDependencies.bookingDO.notes = this._changeDetailsDO.notes;
         this._bookingWithDependencies.bookingDO.invoiceNotes = this._changeDetailsDO.invoiceNotes;
         this._bookingWithDependencies.bookingDO.fileAttachmentList = this._changeDetailsDO.fileAttachmentList;
+        this._bookingWithDependencies.bookingDO.travelActivityType = this._changeDetailsDO.travelActivityType;
         this._bookingWithDependencies.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {},
             actionString: "The details of the booking have been changed",

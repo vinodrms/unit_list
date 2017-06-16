@@ -29,6 +29,10 @@ export enum BookingConfirmationStatus {
 export enum GroupBookingInputChannel {
     PropertyManagementSystem
 }
+export enum TravelActivityType {
+    Business,
+    Leisure
+}
 
 export var BookingConfirmationStatusDisplayString: { [index: number]: string; } = {};
 BookingConfirmationStatusDisplayString[BookingConfirmationStatus.Confirmed] = "Confirmed";
@@ -86,11 +90,12 @@ export class BookingDO extends BaseDO {
     fileAttachmentList: FileAttachmentDO[];
     bookingHistory: DocumentHistoryDO;
     indexedSearchTerms: string[];
+    travelActivityType: TravelActivityType;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "id", "bookingReference", "externalBookingReference", "confirmationStatus",
             "customerIdList", "displayCustomerId", "corporateDisplayCustomerId", "creationDateUtcTimestamp", "startUtcTimestamp", "endUtcTimestamp", "checkInUtcTimestamp", "checkOutUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
-            "reservedAddOnProductIdList", "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms"];
+            "reservedAddOnProductIdList", "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType"];
     }
 
     public buildFromObject(object: Object) {
