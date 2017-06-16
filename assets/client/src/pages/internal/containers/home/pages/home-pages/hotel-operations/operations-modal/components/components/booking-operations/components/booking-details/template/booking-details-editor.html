@@ -8,7 +8,7 @@
         </div>
         <div class="col-xs-12 col-sm-8 form-group" *ngIf="!readonly">
             <div class="input-group">
-                <select class="form-control" [ngModel]="bookingDO.travelActivityType" (ngModelChange)="setTravelActivityType($event)" name="travelActivityType">
+                <select class="form-control travel-activity-type" [ngModel]="bookingDO.travelActivityType" (ngModelChange)="setTravelActivityType($event)" name="travelActivityType">
                     <option *ngFor="let travelActivityTypeOption of travelActivityTypeOptionList" [value]="travelActivityTypeOption.type">{{ travelActivityTypeOption.displayName | translate }}</option>
                 </select>
             </div>

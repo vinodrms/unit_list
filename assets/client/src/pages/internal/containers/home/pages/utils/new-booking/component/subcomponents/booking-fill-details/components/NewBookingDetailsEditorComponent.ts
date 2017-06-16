@@ -210,7 +210,6 @@ export class NewBookingDetailsEditorComponent extends BaseComponent {
         return this._bookingCartItem.transientBookingItem.travelActivityType;
     }
     public setTravelActivityType(travelActivityType: string) {
-        debugger
         this._bookingCartItem.transientBookingItem.travelActivityType = parseInt(travelActivityType);
     }
 }
