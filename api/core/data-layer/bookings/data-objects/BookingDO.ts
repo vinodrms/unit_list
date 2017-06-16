@@ -33,6 +33,10 @@ export enum TravelActivityType {
     Business,
     Leisure
 }
+export enum TravelType {
+    Individual,
+    Group
+}
 
 export var BookingConfirmationStatusDisplayString: { [index: number]: string; } = {};
 BookingConfirmationStatusDisplayString[BookingConfirmationStatus.Confirmed] = "Confirmed";
@@ -91,11 +95,12 @@ export class BookingDO extends BaseDO {
     bookingHistory: DocumentHistoryDO;
     indexedSearchTerms: string[];
     travelActivityType: TravelActivityType;
+    travelType: TravelType;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "id", "bookingReference", "externalBookingReference", "confirmationStatus",
             "customerIdList", "displayCustomerId", "corporateDisplayCustomerId", "creationDateUtcTimestamp", "startUtcTimestamp", "endUtcTimestamp", "checkInUtcTimestamp", "checkOutUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
-            "reservedAddOnProductIdList", "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType"];
+            "reservedAddOnProductIdList", "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType", "travelType"];
     }
 
     public buildFromObject(object: Object) {

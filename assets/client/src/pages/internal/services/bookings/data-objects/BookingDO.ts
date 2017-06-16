@@ -33,6 +33,11 @@ export enum TravelActivityType {
     Leisure
 }
 
+export enum TravelType {
+    Individual,
+    Group
+}
+
 export class TravelActivityTypeOption {
     type: TravelActivityType;
     displayName: string;
@@ -47,6 +52,17 @@ export class TravelActivityTypeOption {
             new TravelActivityTypeOption(TravelActivityType.Business, "Business"),
             new TravelActivityTypeOption(TravelActivityType.Leisure, "Leisure"),
         ];
+    }
+}
+
+class TravelTypeDisplayedNameContainer {
+    private static _TravelTypeDisplayedNames: { [type: number] : string } = {
+        [TravelType.Individual] : "Individual",
+        [TravelType.Group] : "Group",
+    };
+
+    public static getDisplayedName(travelType: TravelType) {
+        return this._TravelTypeDisplayedNames[travelType];
     }
 }
 
@@ -90,11 +106,12 @@ export class BookingDO extends BaseDO {
     bookingHistory: DocumentHistoryDO;
     indexedSearchTerms: string[];
     travelActivityType: TravelActivityType;
+    travelType: TravelType;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "versionId", "status", "inputChannel", "noOfRooms", "id", "bookingReference", "externalBookingReference", "confirmationStatus",
             "customerIdList", "displayCustomerId",  "corporateDisplayCustomerId", "creationDateUtcTimestamp", "startUtcTimestamp", "endUtcTimestamp", "checkInUtcTimestamp", "checkOutUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
-            "reservedAddOnProductIdList", "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType"];
+            "reservedAddOnProductIdList", "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType", "travelType"];
     }
 
     public buildFromObject(object: Object) {
@@ -157,5 +174,9 @@ export class BookingDO extends BaseDO {
             return option.type == this.travelActivityType;
         });
         return option.displayName;
+    }
+
+    public get travelTypeDisplayedName(): string {
+       return TravelTypeDisplayedNameContainer.getDisplayedName(this.travelType);
     }
 }

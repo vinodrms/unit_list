@@ -964,6 +964,7 @@ export var EnglishTranslations: Object = {
 	"Travel Activity Type": "Travel Activity Type",
 	"Business": "Business",
 	"Leisure": "Leisure",
-
+	"Travel As": "Travel As",
+	"Group": "Group",
 	
 };

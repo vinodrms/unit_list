@@ -12,7 +12,7 @@ import { StringValidationRule } from '../../../utils/th-validation/rules/StringV
 import { BooleanValidationRule } from '../../../utils/th-validation/rules/BooleanValidationRule';
 import { NumberInListValidationRule } from '../../../utils/th-validation/rules/NumberInListValidationRule';
 import { CommonValidationStructures } from "../../common/CommonValidations";
-import { BookingDO, TravelActivityType } from "../../../data-layer/bookings/data-objects/BookingDO";
+import { BookingDO, TravelActivityType, TravelType } from "../../../data-layer/bookings/data-objects/BookingDO";
 import { EmailDistributionDO } from "../../hotel-operations/common/email-confirmations/utils/data-objects/EmailDistributionDO";
 import { NumberValidationRule } from "../../../utils/th-validation/rules/NumberValidationRule";
 
@@ -28,6 +28,7 @@ export class BookingItemDO {
     notes: string;
     invoiceNotes: string;
     travelActivityType: TravelActivityType;
+    travelType: TravelType;
 
     public static buildFromBookingDO(bookingDO: BookingDO): BookingItemDO {
         let bookingItemDO = new BookingItemDO();
@@ -42,6 +43,7 @@ export class BookingItemDO {
         bookingItemDO.notes = bookingDO.notes;
         bookingItemDO.invoiceNotes = bookingDO.invoiceNotes;
         bookingItemDO.travelActivityType = bookingDO.travelActivityType;
+        bookingItemDO.travelType = bookingDO.travelType;
         return bookingItemDO;
     }
 }
@@ -125,6 +127,10 @@ export class AddBookingItemsDO {
                     {
                         key: "travelActivityType",
                         validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([TravelActivityType.Business, TravelActivityType.Leisure]))
+                    },
+                    {
+                        key: "travelType",
+                        validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([TravelType.Individual, TravelType.Group]))
                     }
                 ]))
             },

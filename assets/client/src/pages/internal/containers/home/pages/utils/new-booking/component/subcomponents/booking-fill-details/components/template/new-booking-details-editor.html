@@ -130,6 +130,21 @@
             </div>
             <div class="row">
                 <div class="col-md-12 col-xs-12 form-group">
+                    <label>{{ 'Travel As' | translate }}</label>
+                    <div class="input-group">
+                        <div class="btn-group" data-toggle="buttons">
+                            <button class="btn btn-default" (click)="isIndividualTravelType=true" [ngClass]="{'active': isIndividualTravelType}">
+                                {{ 'Individual' | translate }}
+                            </button>
+                            <button class="btn btn-default" (click)="isIndividualTravelType=false" [ngClass]="{'active': !isIndividualTravelType}">
+                                {{ 'Group' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12 form-group">
                     <label>{{ 'External Booking No' | translate }}</label>
                     <div class="input-group">
                         <input type="text" class="form-control" [(ngModel)]="externalBookingReference" name="externalBookingReference" />

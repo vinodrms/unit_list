@@ -3,5 +3,5 @@ export enum MongoPatchType {
     PopulateCountriesAndCurrencyCodes,
     AddCreationDateUtcTimestampToBookings,
     AddTravelActivityTypeToBookings,
-
+    AddTravelTypeToBookings,
 }
