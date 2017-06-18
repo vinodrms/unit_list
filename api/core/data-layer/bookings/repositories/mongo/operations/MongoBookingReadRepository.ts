@@ -111,8 +111,11 @@ export class MongoBookingReadRepository extends MongoRepository {
         }
 
         this.appendTriggerParamsIfNecessary(mongoQueryBuilder, searchCriteria);
+
         this.appendDateParamsIfNecessary(mongoQueryBuilder, searchCriteria);
-        this.appendBeforeStartDateParamIfNecessary(mongoQueryBuilder, searchCriteria);
+        this.appendStartDateLtParamIfNecessary(mongoQueryBuilder, searchCriteria);
+        this.appendEndDateGtParamIfNecessary(mongoQueryBuilder, searchCriteria);
+
         this.appendCheckOutUtcTimestampNullOrGreaterThanIfNecessary(mongoQueryBuilder, searchCriteria);
         this.appendCreationDateTimestampParamsIfNecessary(mongoQueryBuilder, searchCriteria);
         mongoQueryBuilder.addMultipleSelectOptionList("confirmationStatus", searchCriteria.confirmationStatusList);
@@ -128,13 +131,13 @@ export class MongoBookingReadRepository extends MongoRepository {
     }
     private appendCreationDateTimestampParamsIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
         if (!this._thUtils.isUndefinedOrNull(searchCriteria.creationInterval)) {
-            var andQuery: Object[] = (mongoQueryBuilder.processedQuery["$and"]) ? mongoQueryBuilder.processedQuery["$and"]: [];
+            var andQuery: Object[] = (mongoQueryBuilder.processedQuery["$and"]) ? mongoQueryBuilder.processedQuery["$and"] : [];
             andQuery.push({ "creationDateUtcTimestamp": { $gte: searchCriteria.creationInterval.start.getUtcTimestamp() } });
-            andQuery.push({ "creationDateUtcTimestamp": { $lte: searchCriteria.creationInterval.end.getUtcTimestamp()  } });
+            andQuery.push({ "creationDateUtcTimestamp": { $lte: searchCriteria.creationInterval.end.getUtcTimestamp() } });
 
             mongoQueryBuilder.addCustomQuery(
-                    "$and", andQuery
-            ); 
+                "$and", andQuery
+            );
         }
     }
     private appendTriggerParamsIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
@@ -167,8 +170,8 @@ export class MongoBookingReadRepository extends MongoRepository {
         };
     }
     private appendDateParamsIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
-        this.appendDateParamsIfNecessaryCore(mongoQueryBuilder, BookingDO.StartUtcTimestampName, searchCriteria.startDate);
-        this.appendDateParamsIfNecessaryCore(mongoQueryBuilder, BookingDO.EndUtcTimestampName, searchCriteria.endDate);
+        this.appendDateParamsIfNecessaryCore(mongoQueryBuilder, BookingDO.StartUtcTimestampName, searchCriteria.startDateEq);
+        this.appendDateParamsIfNecessaryCore(mongoQueryBuilder, BookingDO.EndUtcTimestampName, searchCriteria.endDateEq);
     }
     private appendDateParamsIfNecessaryCore(mongoQueryBuilder: MongoQueryBuilder, utcTimestampFieldName: string, possibleThDate: ThDateDO) {
         if (this._thUtils.isUndefinedOrNull(possibleThDate)) {
@@ -189,17 +192,45 @@ export class MongoBookingReadRepository extends MongoRepository {
 
         mongoQueryBuilder.addCustomQuery("$and", [maxTimestampValue, minTimestampValue]);
     }
-    private appendBeforeStartDateParamIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
-        if (this._thUtils.isUndefinedOrNull(searchCriteria.beforeStartDate)) {
+    private appendStartDateLtParamIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
+        if (this._thUtils.isUndefinedOrNull(searchCriteria.startDateLte) && this._thUtils.isUndefinedOrNull(searchCriteria.startDateLt)) {
             return;
         }
+
+        let lte = this._thUtils.isUndefinedOrNull(searchCriteria.startDateLt);
         var maxThDate = new ThDateDO();
-        maxThDate.buildFromObject(searchCriteria.beforeStartDate);
+        maxThDate.buildFromObject(lte ? searchCriteria.startDateLte : searchCriteria.startDateLt);
         if (!maxThDate.isValid()) {
             return;
         }
-        var overlappingUtcTimestampInterval = IndexedBookingInterval.getOverlappingUtcTimestampIntervalForDate(maxThDate);
-        mongoQueryBuilder.addCustomQuery("startUtcTimestamp", { $lte: overlappingUtcTimestampInterval.maxUtcTimestamp });
+
+        let maxUtcTimestamp = IndexedBookingInterval.getOverlappingUtcTimestampIntervalForDate(maxThDate).minUtcTimestamp;
+        let query = {};
+        query["startUtcTimestamp"] = lte? { $lte: maxUtcTimestamp } : { $lt: maxUtcTimestamp };
+
+        var andQuery: Object[] = (mongoQueryBuilder.processedQuery["$and"]) ? mongoQueryBuilder.processedQuery["$and"] : [];
+        andQuery.push(query);
+        mongoQueryBuilder.addCustomQuery("$and", andQuery);
+    }
+    private appendEndDateGtParamIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
+        if (this._thUtils.isUndefinedOrNull(searchCriteria.endDateGt) && this._thUtils.isUndefinedOrNull(searchCriteria.endDateGte)) {
+            return;
+        }
+
+        let gte = this._thUtils.isUndefinedOrNull(searchCriteria.endDateGt);
+        var minThDate = new ThDateDO();
+        minThDate.buildFromObject(gte ? searchCriteria.endDateGte : searchCriteria.endDateGt);
+        if (!minThDate.isValid()) {
+            return;
+        }
+
+        let minUtcTimestamp = IndexedBookingInterval.getOverlappingUtcTimestampIntervalForDate(minThDate).maxUtcTimestamp;
+        let query = {};
+        query["endUtcTimestamp"] = gte? { $gte: minUtcTimestamp } : { $gt: minUtcTimestamp };
+
+        var andQuery: Object[] = (mongoQueryBuilder.processedQuery["$and"]) ? mongoQueryBuilder.processedQuery["$and"] : [];
+        andQuery.push(query);
+        mongoQueryBuilder.addCustomQuery("$and", andQuery);
     }
     private appendCheckOutUtcTimestampNullOrGreaterThanIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
         if (this._thUtils.isUndefinedOrNull(searchCriteria.checkOutDateNullOrGreaterOrEqualThan)) {

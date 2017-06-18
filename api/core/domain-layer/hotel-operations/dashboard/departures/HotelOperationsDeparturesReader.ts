@@ -101,13 +101,13 @@ export class HotelOperationsDeparturesReader {
             case HotelOperationsQueryType.FixedForTheDay:
                 return {
                     confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_FixedDepartures,
-                    endDate: this._parsedQuery.referenceDate,
+                    endDateEq: this._parsedQuery.referenceDate,
                     checkOutDateNullOrGreaterOrEqualThan: this._parsedQuery.referenceDate
                 }
             default:
                 return {
                     confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_ShowInDepartures,
-                    endDate: this._parsedQuery.referenceDate
+                    endDateEq: this._parsedQuery.referenceDate
                 }
         }
     }

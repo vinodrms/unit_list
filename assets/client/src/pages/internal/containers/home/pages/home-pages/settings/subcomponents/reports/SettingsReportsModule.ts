@@ -18,6 +18,7 @@ import { InvoicesReportComponent } from "./pages/invoices-report/InvoicesReportC
 
 import { TimezoneService } from '../../../../../../../services/timezones/TimezoneService';
 import { CustomerSelectorModule } from "../../../../../../common/inventory/customer-register/utils/CustomerSelectorModule";
+import { SettingsGuestsReportComponent } from "./pages/guests-report/SettingsGuestsReportComponent";
 
 
 var settingsReportsComponents = [
@@ -25,6 +26,7 @@ var settingsReportsComponents = [
     ReportOutputFormatComponent,
     SettingsShiftReportComponent,
     SettingsBackUpReportComponent,
+    SettingsGuestsReportComponent,
     SettingsKeyMetricsReportComponent,
     SettingsHousekeepingReportComponent,
     BookingsReportComponent,

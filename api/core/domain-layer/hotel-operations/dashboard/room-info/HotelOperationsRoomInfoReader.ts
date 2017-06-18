@@ -43,7 +43,7 @@ export class HotelOperationsRoomInfoReader {
             var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
             return bookingRepository.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                 confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_CanBeCheckedIn,
-                startDate: this._currentHotelTimestamp.thDateDO
+                startDateEq: this._currentHotelTimestamp.thDateDO
             });
         }).then((canBeCheckedInSearchResult: BookingSearchResultRepoDO) => {
             var canBeCheckedInBookingList: BookingDO[] = canBeCheckedInSearchResult.bookingList;

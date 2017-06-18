@@ -12,13 +12,14 @@ import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 
 @Component({
 	selector: 'settings-backup-report',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/backup-report/template/settings-backup-report.html',
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/guests-report/template/settings-guests-report.html',
 	providers: [SettingsReportsService]
 })
-export class SettingsBackUpReportComponent extends BaseComponent {
+export class SettingsGuestsReportComponent extends BaseComponent {
 	private format: ReportOutputFormatType;
 	private isLoading: boolean = false;
-	private date: ThDateDO;
+	private startDate: ThDateDO;
+	private endDate: ThDateDO;
 
 	constructor(
 		private _appContext: AppContext,
@@ -26,14 +27,16 @@ export class SettingsBackUpReportComponent extends BaseComponent {
 		private _backendService: SettingsReportsService,
 		private _pagesService: SettingsReportsPagesService) {
 		super();
-		this._pagesService.bootstrapSelectedTab(ReportGroupType.Backup);
+		this._pagesService.bootstrapSelectedTab(ReportGroupType.Guests);
 	}
 	ngOnInit() {
 		this.isLoading = true;
 
 		this._hotelService.getHotelDetailsDO()
-		.subscribe((result: HotelDetailsDO) => {
-			this.date = result.currentThTimestamp.thDateDO.buildPrototype();
+		.subscribe((details: HotelDetailsDO) => {
+			this.startDate = details.currentThTimestamp.thDateDO.buildPrototype();
+			this.endDate = this.startDate.buildPrototype();
+			this.endDate.addDays(1);
 			this.isLoading = false;
 		}, (error: ThError) => {
 			this.isLoading = false;
@@ -45,16 +48,22 @@ export class SettingsBackUpReportComponent extends BaseComponent {
 		this.format = format;
 	}
 
-	public didSelectDate(date) {
-		this.date = date;
+	public didSelectStartDate(startDate) {
+		this.startDate = startDate;
+	}
+
+	public didSelectEndDate(endDate) {
+		this.endDate = endDate;
 	}
 
 	public reportCSVUrl(): string {
 		let params = {
-			reportType: ReportGroupType.Backup,
+			reportType: ReportGroupType.Guests,
 			format: this.format,
 			properties: {
-				date: this.date
+				startDate: this.startDate,
+				endDate: this.endDate,
+				
 			}
 		}
 

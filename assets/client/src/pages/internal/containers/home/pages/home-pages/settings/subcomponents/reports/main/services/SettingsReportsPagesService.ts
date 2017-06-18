@@ -13,6 +13,7 @@ export class SettingsReportsPagesService {
 		this._reportsPageList = [
 			new SettingsReportsPageVM("shift", ReportGroupType.Shift, "Shift"),
 			new SettingsReportsPageVM("backup", ReportGroupType.Backup, "Backup"),
+			new SettingsReportsPageVM("guests", ReportGroupType.Guests, "Guests"),
 			new SettingsReportsPageVM("key-metrics", ReportGroupType.KeyMetrics, "Key Metrics"),
 			new SettingsReportsPageVM("housekeeping", ReportGroupType.Housekeeping, "Housekeeping"),
 			new SettingsReportsPageVM("bookings", ReportGroupType.Bookings, "Bookings"),
