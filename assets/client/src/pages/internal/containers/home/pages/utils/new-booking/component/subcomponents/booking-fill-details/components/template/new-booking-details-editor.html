@@ -119,12 +119,25 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 col-xs-12 form-group">
+                <div class="col-md-6 col-xs-6 form-group">
                     <label>{{ 'Travel Activity Type' | translate }}</label>
                     <div class="input-group">
                         <select class="form-control travel-activity-type" [ngModel]="travelActivityType" (ngModelChange)="setTravelActivityType($event)" name="travelActivityType">
                             <option *ngFor="let travelActivityTypeOption of travelActivityTypeOptionList" [value]="travelActivityTypeOption.type">{{ travelActivityTypeOption.displayName | translate }}</option>
                         </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-6 form-group">
+                    <label>{{ 'Travel As' | translate }}</label>
+                    <div class="input-group">
+                        <div class="btn-group" data-toggle="buttons">
+                            <button class="btn btn-default" (click)="isIndividualTravelType=true" [ngClass]="{'active': isIndividualTravelType}">
+                                {{ 'Individual' | translate }}
+                            </button>
+                            <button class="btn btn-default" (click)="isIndividualTravelType=false" [ngClass]="{'active': !isIndividualTravelType}">
+                                {{ 'Group' | translate }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
