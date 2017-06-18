@@ -239,6 +239,7 @@
 	"Departures": "Departures",
 	"Arrivals": "Arrivals",
 	"Stayovers": "Stayovers",
+	"Monthly Stats Report": "Monthly Stats Report",
 	
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
