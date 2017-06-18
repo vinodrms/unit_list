@@ -101,9 +101,9 @@
                     <h3> <%= section.meta.title %> </h3>
                 <% } %>
                 
-                <% if (section.localSummary) { %>
-                    <% for (key in section.localSummary) { %>
-                        <h4><b><%= key %>: </b><%= section.localSummary[key] %></h4>
+                <% if (section.summary) { %>
+                    <% for (key in section.summary) { %>
+                        <h4><b><%= key %>: </b><%= section.summary[key] %></h4>
                     <% } %>
                 <% } %>
 
