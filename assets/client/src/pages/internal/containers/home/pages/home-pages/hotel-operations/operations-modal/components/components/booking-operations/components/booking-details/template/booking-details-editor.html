@@ -26,6 +26,26 @@
     </div>
     <div class="row">
         <div class="col-xs-12 col-sm-1">
+            <p>{{'Travel As' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 field-value text-field" *ngIf="readonly">
+            <p>{{bookingDO.travelTypeDisplayedName}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 form-group" *ngIf="!readonly">
+            <div class="input-group">
+                <div class="btn-group" data-toggle="buttons">
+                    <button class="btn btn-default" (click)="isIndividualTravelType=true" [ngClass]="{'active': isIndividualTravelType}">
+                        {{ 'Individual' | translate }}
+                    </button>
+                    <button class="btn btn-default" (click)="isIndividualTravelType=false" [ngClass]="{'active': !isIndividualTravelType}">
+                        {{ 'Group' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-1">
             <p>{{'External Booking No' | translate}}</p>
         </div>
         <div class="col-xs-12 col-sm-8 field-value text-field" *ngIf="readonly">

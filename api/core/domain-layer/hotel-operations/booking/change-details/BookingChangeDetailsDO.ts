@@ -4,7 +4,7 @@ import { PrimitiveValidationStructure } from '../../../../utils/th-validation/st
 import { ArrayValidationStructure } from '../../../../utils/th-validation/structure/ArrayValidationStructure';
 import { StringValidationRule } from '../../../../utils/th-validation/rules/StringValidationRule';
 import { FileAttachmentDO } from '../../../../data-layer/common/data-objects/file/FileAttachmentDO';
-import { TravelActivityType } from "../../../../data-layer/bookings/data-objects/BookingDO";
+import { TravelActivityType, TravelType } from "../../../../data-layer/bookings/data-objects/BookingDO";
 import { NumberInListValidationRule } from "../../../../utils/th-validation/rules/NumberInListValidationRule";
 
 export class BookingChangeDetailsDO {
@@ -15,6 +15,7 @@ export class BookingChangeDetailsDO {
     invoiceNotes: string;
     fileAttachmentList: FileAttachmentDO[];
     travelActivityType: TravelActivityType;
+    travelType: TravelType;
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
@@ -54,6 +55,10 @@ export class BookingChangeDetailsDO {
             {
                 key: "travelActivityType",
                 validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([TravelActivityType.Business, TravelActivityType.Leisure]))
+            },
+            {
+                key: "travelType",
+                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([TravelType.Individual, TravelType.Group]))
             },
         ]);
     }

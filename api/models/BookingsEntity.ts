@@ -135,6 +135,10 @@ class BookingsEntity extends BasePersistentEntity {
             travelActivityType: {
                 type: 'integer',
                 required: true
+            },
+            travelType: {
+                type: 'integer',
+                required: true
             }
         }
     }
