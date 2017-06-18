@@ -963,6 +963,9 @@ export var EnglishTranslations: Object = {
 	"Select customers": "Select customers",
 	"Guests Report": "Guests Report",
 	"Get guests stats for a defined interval": "Get guests stats for a defined interval",
+	"Travel Activity Type": "Travel Activity Type",
+	"Business": "Business",
+	"Leisure": "Leisure",
 
 	
 };

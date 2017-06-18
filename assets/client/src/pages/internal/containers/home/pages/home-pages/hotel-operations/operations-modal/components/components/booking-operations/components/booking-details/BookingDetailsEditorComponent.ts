@@ -2,7 +2,7 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {BookingDetailsEditRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
-import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { BookingDO, TravelActivityTypeOption } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
 import {FileAttachmentDO} from '../../../../../../../../../../../services/common/data-objects/file/FileAttachmentDO';
 import {HotelOperationsBookingService} from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 
@@ -97,5 +97,13 @@ export class BookingDetailsEditorComponent implements OnInit {
             this.isSaving = false;
             this._appContext.toaster.error(error.message);
         });
+    }
+
+    public get travelActivityTypeOptionList(): TravelActivityTypeOption[] {
+        return TravelActivityTypeOption.getValues();
+    }
+
+    public setTravelActivityType(travelActivityType: string) {
+        this.bookingDO.travelActivityType = parseInt(travelActivityType);  
     }
 }

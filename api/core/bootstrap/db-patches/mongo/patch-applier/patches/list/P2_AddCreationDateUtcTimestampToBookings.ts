@@ -1,10 +1,9 @@
 import { APaginatedTransactionalMongoPatch } from "../../utils/APaginatedTransactionalMongoPatch";
 import { MongoRepository } from "../../../../../../data-layer/common/base/MongoRepository";
 import { MongoPatchType } from "../MongoPatchType";
-import { ThError } from "../../../../../../utils/th-responses/ThError";
+import { ThDateDO } from "../../../../../../utils/th-dates/data-objects/ThDateDO";
 
 import _ = require('underscore');
-import { ThDateDO } from "../../../../../../utils/th-dates/data-objects/ThDateDO";
 
 export class P2_AddCreationDateUtcTimestampToBookings extends APaginatedTransactionalMongoPatch {
 
