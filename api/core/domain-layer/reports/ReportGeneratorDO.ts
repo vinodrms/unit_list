@@ -10,6 +10,7 @@ export enum ReportGroupType {
     Housekeeping,
     Bookings,
     Invoices,
+    Guests,
 
 }
 
@@ -20,6 +21,7 @@ var SupportedReportGroupTypes: ReportGroupType[] = [
     ReportGroupType.Housekeeping,
     ReportGroupType.Bookings,
     ReportGroupType.Invoices,
+    ReportGroupType.Guests,
     
 ]
 
