@@ -15,11 +15,11 @@ import { SettingsKeyMetricsReportComponent } from './pages/key-metrics-report/Se
 import { SettingsHousekeepingReportComponent } from "./pages/housekeeping-report/SettingsHousekeepingReportComponent";
 import { BookingsReportComponent } from "./pages/bookings-report/BookingsReportComponent";
 import { InvoicesReportComponent } from "./pages/invoices-report/InvoicesReportComponent";
+import { SettingsGuestsReportComponent } from "./pages/guests-report/SettingsGuestsReportComponent";
+import { MonthlyStatsReportComponent } from "./pages/monthly-stats-report/MonthlyStatsReportComponent";
 
 import { TimezoneService } from '../../../../../../../services/timezones/TimezoneService';
 import { CustomerSelectorModule } from "../../../../../../common/inventory/customer-register/utils/CustomerSelectorModule";
-import { SettingsGuestsReportComponent } from "./pages/guests-report/SettingsGuestsReportComponent";
-
 
 var settingsReportsComponents = [
     SettingsReportsComponent,
@@ -31,6 +31,7 @@ var settingsReportsComponents = [
     SettingsHousekeepingReportComponent,
     BookingsReportComponent,
     InvoicesReportComponent,
+    MonthlyStatsReportComponent,
     
 ];
 @NgModule({

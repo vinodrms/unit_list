@@ -1,0 +1,28 @@
+<div class="container full-height" customScroll>
+	<div class="row basic-info-form">
+		<div class="col-xs-12 col-md-6">
+			<label class="control-label">
+				<h3>{{ 'Monthly Stats Report' | translate }}</h3><small>{{ 'Contains general hotel stats for a month' | translate }}</small>
+			</label>
+			<hr>
+			<loading-component [isLoading]="isLoading"></loading-component>
+			<div class="row">
+				<div class="col-xs-12 col-md-6 form-group">
+					<th-date-picker
+						[initialThDate]="date"
+						[label]="'Date'"
+						(didSelectThDate)="didSelectDate($event)"
+						>
+					</th-date-picker>
+				</div>
+				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'File Format' | translate }}</label>
+					<report-output-format (onFormatSelected)="didSelectFormat($event)"></report-output-format>
+				</div>
+				<div *ngIf="!isLoading" class="col-xs-12 col-md-offset-9 col-md-3">
+					<a class="btn btn-primary btn-block" [href]="reportCSVUrl()" target="_blank">{{ 'Generate' | translate }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
