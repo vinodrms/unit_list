@@ -30,21 +30,20 @@ export class ReportDepartureReader {
 		this._thUtils = new ThUtils();
 	}
 
-	public read(date: ThDateDO): Promise<ReportDepartureInfo[]> {
+	public read(): Promise<ReportDepartureInfo[]> {
 		return new Promise<ReportDepartureInfo[]>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
-			this.readCore(resolve, reject, date);
+			this.readCore(resolve, reject);
 		});
 	}
 
-	private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }, date: ThDateDO) {
+	private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
 		var departureInfoBuilder = new ReportDepartureInfoBuilder();
 		var departureReader = new HotelOperationsDeparturesReader(this._appContext, this._sessionContext);
+		var emptyDateRefParam: any = {};
 		var meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 
 		var departureInfo: DeparturelItemInfo = null;
-		var hotelOperationsQueryDO = new HotelOperationsQueryDO();
-		hotelOperationsQueryDO.referenceDate = date;
-		departureReader.read(hotelOperationsQueryDO)
+		departureReader.read(emptyDateRefParam)
 			.then((result: HotelOperationsDeparturesInfo) => {
 				let promiseList = [];
 				result.departureInfoList.forEach((departureInfo: DeparturelItemInfo) => {
