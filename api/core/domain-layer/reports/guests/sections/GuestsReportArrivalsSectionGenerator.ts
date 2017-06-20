@@ -8,6 +8,8 @@ import { BookingDOConstraints } from "../../../../data-layer/bookings/data-objec
 import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repositories/IBookingRepository";
 import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingDO";
 
+import _ = require('underscore');
+
 export class GuestsReportArrivalsSectionGenerator extends AReportSectionGeneratorStrategy {
     private _totalBookings: number = 0;
     private _totalAdults: number = 0;
