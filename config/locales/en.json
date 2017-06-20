@@ -240,6 +240,16 @@
 	"Arrivals": "Arrivals",
 	"Stayovers": "Stayovers",
 	"Monthly Stats Report": "Monthly Stats Report",
+	"Total guest nights": "Total guest nights",
+	"Guest nights divided by the purpose of the stay": "Guest nights divided by the purpose of the stay",
+	"Individual - Business guest nigths": "Individual - Business guest nigths",
+	"Individual - Leisure guest nigths": "Individual - Leisure guest nigths",
+	"Group - Business guest nigths": "Group - Business guest nigths",
+	"Group - Leisure guest nigths": "Group - Leisure guest nigths",
+	"Guest nights divided by nationality": "Guest nights divided by nationality",
+	"Total number of arrivals": "Total number of arrivals",
+	"Total room nigths": "Total room nigths",
+	"Capacity": "Capacity",
 	
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
