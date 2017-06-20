@@ -4,7 +4,7 @@ import { IThDateToThPeriodConverter } from './IThDateToThPeriodConverter';
 import { ThDateUtils } from '../../../../utils/th-dates/ThDateUtils';
 
 export class ThDateToThPeriodConverterFactory {
-    public getConverter(type: ThPeriodType): IThDateToThPeriodConverter {
+    public static getConverter(type: ThPeriodType): IThDateToThPeriodConverter {
         switch (type) {
             case ThPeriodType.Month:
                 return new ThDateToMonthThPeriodConverter();

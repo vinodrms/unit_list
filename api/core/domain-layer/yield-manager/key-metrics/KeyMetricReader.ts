@@ -164,8 +164,7 @@ export class KeyMetricReader {
     }
 
     public getAggregationPeriodList(thDateList: ThDateDO[], aggregationType: ThPeriodType): ThPeriodDO[] {
-        let converterFactory = new ThDateToThPeriodConverterFactory();
-        let periodConverter = converterFactory.getConverter(aggregationType);
+        let periodConverter = ThDateToThPeriodConverterFactory.getConverter(aggregationType);
         
         let periodIdToPeriodMap: { [index: string]: ThPeriodDO; } = {};
         let periodIdList = [];
