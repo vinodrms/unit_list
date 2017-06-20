@@ -15,7 +15,7 @@ import { PriceProductDO } from '../../../../../core/data-layer/price-products/da
 import { AddBookingItems } from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
 import { BookingItemDO } from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
 import { CustomerDO, CustomerType } from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
-import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
+import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus, TravelActivityType, TravelType } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
 import { BookingChangeDates } from '../../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
 import { BookingChangeDatesDO } from '../../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDatesDO';
 import { BookingChangeNoShowTime } from '../../../../../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTime';
@@ -208,6 +208,8 @@ describe("Hotel Booking Operations Tests", function () {
             bookingChangeDetailsDO.groupBookingId = bookingToChange.groupBookingId;
             bookingChangeDetailsDO.id = bookingToChange.id;
             bookingChangeDetailsDO.notes = "test test test!";
+            bookingChangeDetailsDO.travelActivityType = TravelActivityType.Leisure;
+            bookingChangeDetailsDO.travelType = TravelType.Individual;
             var fileAttachment: FileAttachmentDO = new FileAttachmentDO();
             fileAttachment.name = "Supra File";
             fileAttachment.url = "3angle.tech/suprafile";

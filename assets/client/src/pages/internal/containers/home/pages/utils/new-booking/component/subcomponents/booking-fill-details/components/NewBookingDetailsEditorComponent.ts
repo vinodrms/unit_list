@@ -8,7 +8,8 @@ import {BookingDOConstraints} from '../../../../../../../../../services/bookings
 import {IBookingCustomerRegisterSelector} from '../../utils/IBookingCustomerRegister';
 import {InvoicePaymentMethodVMGenerator} from '../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
 import {InvoicePaymentMethodVM} from '../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
-import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { TravelActivityType, TravelActivityTypeOption, TravelType } from "../../../../../../../../../services/bookings/data-objects/BookingDO";
 
 @Component({
     selector: 'new-booking-details-editor',
@@ -199,5 +200,23 @@ export class NewBookingDetailsEditorComponent extends BaseComponent {
 
     private triggerBookingCartItemChange() {
         this.onBookingItemChanged.next(this._bookingCartItem);
+    }
+
+    public get travelActivityTypeOptionList(): TravelActivityTypeOption[] {
+        return TravelActivityTypeOption.getValues();
+    }
+
+    public get travelActivityType() : TravelActivityType {
+        return this._bookingCartItem.transientBookingItem.travelActivityType;
+    }
+    public setTravelActivityType(travelActivityType: string) {
+        this._bookingCartItem.transientBookingItem.travelActivityType = parseInt(travelActivityType);
+    }
+
+    public get isIndividualTravelType(): boolean {
+        return this._bookingCartItem.transientBookingItem.travelType === TravelType.Individual;
+    }
+    public set isIndividualTravelType(isIndividual: boolean) {
+        this._bookingCartItem.transientBookingItem.travelType = (isIndividual) ? TravelType.Individual : TravelType.Group;
     }
 }

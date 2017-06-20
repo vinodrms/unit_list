@@ -129,6 +129,8 @@ export class MongoBookingEditRepository extends MongoRepository {
                 "fileAttachmentList": booking.fileAttachmentList,
                 "bookingHistory": booking.bookingHistory,
                 "indexedSearchTerms": booking.indexedSearchTerms,
+                "travelActivityType": booking.travelActivityType,
+                "travelType": booking.travelType
             });
     }
 

@@ -961,6 +961,12 @@ export var EnglishTranslations: Object = {
 	"Invoices Report": "Invoices Report",
 	"The invoices report on customers and paid date interval": "The invoices report on customers and paid date interval",
 	"Select customers": "Select customers",
-
+	"Guests Report": "Guests Report",
+	"Get guests stats for a defined interval": "Get guests stats for a defined interval",
+	"Travel Activity Type": "Travel Activity Type",
+	"Business": "Business",
+	"Leisure": "Leisure",
+	"Travel As": "Travel As",
+	"Group": "Group",
 	
 };

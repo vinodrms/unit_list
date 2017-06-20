@@ -49,7 +49,7 @@ export class HotelOperationsArrivalsReader {
             var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
             return bookingRepository.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                 confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_NoShow,
-                beforeStartDate: this._parsedQuery.referenceDate
+                startDateLte: this._parsedQuery.referenceDate
             });
         }).then((noShowSearchResult: BookingSearchResultRepoDO) => {
             var noShowBookingList = noShowSearchResult.bookingList;
@@ -78,12 +78,12 @@ export class HotelOperationsArrivalsReader {
             case HotelOperationsQueryType.FixedForTheDay:
                 return {
                     confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_FixedArrivals,
-                    startDate: this._parsedQuery.referenceDate
+                    startDateEq: this._parsedQuery.referenceDate
                 }
             default:
                 return {
                     confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_CanBeCheckedIn,
-                    startDate: this._parsedQuery.referenceDate
+                    startDateEq: this._parsedQuery.referenceDate
                 }
         }
     }

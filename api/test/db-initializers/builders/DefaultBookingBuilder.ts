@@ -1,6 +1,6 @@
 import { ThError } from '../../../core/utils/th-responses/ThError';
 import { TestContext } from '../../helpers/TestContext';
-import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus, BookingStatus } from '../../../core/data-layer/bookings/data-objects/BookingDO';
+import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus, BookingStatus, TravelActivityType, TravelType } from '../../../core/data-layer/bookings/data-objects/BookingDO';
 import { BookingPriceDO, BookingPriceType } from '../../../core/data-layer/bookings/data-objects/price/BookingPriceDO';
 import { HotelDO } from '../../../core/data-layer/hotel/data-objects/HotelDO';
 import { CustomerDO } from '../../../core/data-layer/customers/data-objects/CustomerDO';
@@ -98,6 +98,8 @@ export class DefaultBookingBuilder implements IBookingDataSource {
 
         booking.fileAttachmentList = [];
         booking.notes = "This is an automatic booking";
+        booking.travelActivityType = TravelActivityType.Leisure;
+        booking.travelType = TravelType.Individual;
 
         let billedCustomer = _.find(customerList, customer => { return customer.id === customerId });
         this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(booking, roomCategoryStatsList, priceProduct, billedCustomer);

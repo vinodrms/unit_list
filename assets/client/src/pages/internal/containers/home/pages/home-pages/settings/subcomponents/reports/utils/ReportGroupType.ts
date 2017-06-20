@@ -5,5 +5,6 @@ export enum ReportGroupType {
 	Housekeeping,
 	Bookings,
 	Invoices,
+	Guests,
 	
 }

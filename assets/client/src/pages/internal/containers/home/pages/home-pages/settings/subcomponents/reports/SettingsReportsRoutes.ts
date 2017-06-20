@@ -8,6 +8,7 @@ import { SettingsKeyMetricsReportComponent } from './pages/key-metrics-report/Se
 import { SettingsHousekeepingReportComponent } from "./pages/housekeeping-report/SettingsHousekeepingReportComponent";
 import { BookingsReportComponent } from "./pages/bookings-report/BookingsReportComponent";
 import { InvoicesReportComponent } from "./pages/invoices-report/InvoicesReportComponent";
+import { SettingsGuestsReportComponent } from "./pages/guests-report/SettingsGuestsReportComponent";
 
 const settingsReportsRoutes: Routes = [
     {
@@ -16,6 +17,7 @@ const settingsReportsRoutes: Routes = [
             { path: '', redirectTo: 'shift', pathMatch: 'prefix' },
             { path: 'shift', component: SettingsShiftReportComponent },
             { path: 'backup', component: SettingsBackUpReportComponent },
+            { path: 'guests', component: SettingsGuestsReportComponent },
             { path: 'key-metrics', component: SettingsKeyMetricsReportComponent },
             { path: 'housekeeping', component: SettingsHousekeepingReportComponent },
             { path: 'bookings', component: BookingsReportComponent },

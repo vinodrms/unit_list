@@ -169,4 +169,12 @@ export class BookingDOConstraints {
         BookingConfirmationStatus.NoShowWithPenalty,
         BookingConfirmationStatus.CheckedIn
     ];
+
+    public static ConfirmationStatuses_CountedInInventory: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed,
+        BookingConfirmationStatus.CheckedIn,
+        BookingConfirmationStatus.CheckedOut,
+        
+    ]
 }

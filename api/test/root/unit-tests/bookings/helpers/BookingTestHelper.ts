@@ -20,6 +20,7 @@ import { BookingSearchDO } from '../../../../../core/domain-layer/bookings/searc
 import { CustomerDO } from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
 import { AddOnProductDO } from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 import { TransientBookingItemDO } from '../../../../../core/domain-layer/bookings/search-bookings/TransientBookingItemDO';
+import { TravelActivityType, TravelType } from "../../../../../core/data-layer/bookings/data-objects/BookingDO";
 
 import _ = require('underscore');
 
@@ -103,7 +104,9 @@ export class BookingTestHelper {
             allotmentId: allotmentId,
             externalBookingReference: "",
             notes: "This is an automatic booking",
-            invoiceNotes: "This is an automatic booking - invoice notes"
+            invoiceNotes: "This is an automatic booking - invoice notes",
+            travelActivityType: TravelActivityType.Leisure,
+            travelType: TravelType.Individual
         }
 
     }

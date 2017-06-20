@@ -112,6 +112,8 @@ export class BookingItemsConverter {
                 bookingDO.externalBookingReference = bookingItem.externalBookingReference;
                 bookingDO.notes = bookingItem.notes;
                 bookingDO.invoiceNotes = bookingItem.invoiceNotes;
+                bookingDO.travelActivityType = bookingItem.travelActivityType;
+                bookingDO.travelType = bookingItem.travelType;
                 bookingDO.interval = bookingInterval;
                 bookingDO.creationDate = this._converterParams.currentHotelTimestamp.thDateDO;
                 bookingDO.creationDateUtcTimestamp = bookingDO.creationDate.getUtcTimestamp();

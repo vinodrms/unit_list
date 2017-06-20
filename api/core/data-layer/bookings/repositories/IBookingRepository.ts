@@ -30,9 +30,12 @@ export interface BookingSearchCriteriaRepoDO {
         cancellationHour: ThHourDO;
         currentHotelTimestamp: ThTimestampDO;
     };
-    startDate?: ThDateDO;
-    endDate?: ThDateDO;
-    beforeStartDate?: ThDateDO;
+    startDateEq?: ThDateDO;
+    endDateEq?: ThDateDO;
+    startDateLt?: ThDateDO;
+    startDateLte?: ThDateDO;
+    endDateGt?: ThDateDO;
+    endDateGte?: ThDateDO;
     roomId?: string;
     customerId?: string;
     descendentSortOrder?: boolean;

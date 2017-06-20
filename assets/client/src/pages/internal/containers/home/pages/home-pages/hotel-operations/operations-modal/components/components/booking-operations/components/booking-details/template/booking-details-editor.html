@@ -1,15 +1,16 @@
 <div class="col-xs-12">
     <div class="row">
         <div class="col-xs-12 col-sm-1">
-            <p>{{'External Booking No' | translate}}</p>
+            <p>{{'Travel Activity Type' | translate}}</p>
         </div>
         <div class="col-xs-12 col-sm-8 field-value text-field" *ngIf="readonly">
-            <p class="externalBookingReference" *ngIf="!externalBookingReferenceIsEmpty">{{bookingDO.externalBookingReference}}</p>
-            <p class="placeholder" *ngIf="externalBookingReferenceIsEmpty">{{'None' | translate}}</p>
+            <p>{{bookingDO.travelActivityTypeDisplayedName}}</p>
         </div>
         <div class="col-xs-12 col-sm-8 form-group" *ngIf="!readonly">
             <div class="input-group">
-                <input type="text" class="form-control" [(ngModel)]="bookingDO.externalBookingReference" name="externalBookingReference" />
+                <select class="form-control travel-activity-type" [ngModel]="bookingDO.travelActivityType" (ngModelChange)="setTravelActivityType($event)" name="travelActivityType">
+                    <option *ngFor="let travelActivityTypeOption of travelActivityTypeOptionList" [value]="travelActivityTypeOption.type">{{ travelActivityTypeOption.displayName | translate }}</option>
+                </select>
             </div>
         </div>
         <div class="col-xs-12 col-sm-3" *ngIf="hasDetailsEditRight">
@@ -21,6 +22,40 @@
                 [isEditing]="!readonly"
                 >
             </edit-save-button-group>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-1">
+            <p>{{'Travel As' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 field-value text-field" *ngIf="readonly">
+            <p>{{bookingDO.travelTypeDisplayedName}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 form-group" *ngIf="!readonly">
+            <div class="input-group">
+                <div class="btn-group" data-toggle="buttons">
+                    <button class="btn btn-default" (click)="isIndividualTravelType=true" [ngClass]="{'active': isIndividualTravelType}">
+                        {{ 'Individual' | translate }}
+                    </button>
+                    <button class="btn btn-default" (click)="isIndividualTravelType=false" [ngClass]="{'active': !isIndividualTravelType}">
+                        {{ 'Group' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-1">
+            <p>{{'External Booking No' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 field-value text-field" *ngIf="readonly">
+            <p class="externalBookingReference" *ngIf="!externalBookingReferenceIsEmpty">{{bookingDO.externalBookingReference}}</p>
+            <p class="placeholder" *ngIf="externalBookingReferenceIsEmpty">{{'None' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 form-group" *ngIf="!readonly">
+            <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="bookingDO.externalBookingReference" name="externalBookingReference" />
+            </div>
         </div>
     </div>     
     
