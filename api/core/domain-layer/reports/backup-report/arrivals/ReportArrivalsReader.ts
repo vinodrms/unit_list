@@ -24,21 +24,21 @@ export class ReportArrivalsReader {
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
 	}
 
-	public read(date: ThDateDO): Promise<ReportArrivalItemInfo[]> {
+	public read(): Promise<ReportArrivalItemInfo[]> {
 		return new Promise<ReportArrivalItemInfo[]>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
-			this.readCore(resolve, reject, date);
+			this.readCore(resolve, reject);
 		});
 	}
 
-	private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }, date: ThDateDO) {
+	private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
 		var arrivalsInfoBuilder = new ReportArrivalsItemInfoBuilder();
 		var arrivalsReader = new HotelOperationsArrivalsReader(this._appContext, this._sessionContext);
+		var emptyDateRefParam: any = {};
 		var meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 
 		var arrivalInfo: ArrivalItemInfo = null;
-		var hotelOperationsQueryDO = new HotelOperationsQueryDO();
-		hotelOperationsQueryDO.referenceDate = date;
-		arrivalsReader.read(hotelOperationsQueryDO)
+
+		arrivalsReader.read(emptyDateRefParam)
 			.then((result: HotelOperationsArrivalsInfo) => {
 				let promiseList = [];
 				result.arrivalInfoList.forEach(arrivalInfo => {

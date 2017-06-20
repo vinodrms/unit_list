@@ -15,7 +15,7 @@ export class GuestsDepartingReportSectionGeneratorStrategy extends AReportSectio
 	private _totalBabies: number = 0;
 	private _totalBabyBeds: number = 0;
 
-    constructor(_appContext: AppContext, _sessionContext: SessionContext, _globalSummary: Object, private _date: ThDateDO) {
+    constructor(_appContext: AppContext, _sessionContext: SessionContext, _globalSummary: Object) {
 		super(_appContext, _sessionContext, _globalSummary);
 	}
 
@@ -56,7 +56,7 @@ export class GuestsDepartingReportSectionGeneratorStrategy extends AReportSectio
 
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
 		let departureReader = new ReportDepartureReader(this._appContext, this._sessionContext);
-		departureReader.read(this._date).then((reportItems: ReportDepartureInfo[]) => {
+		departureReader.read().then((reportItems: ReportDepartureInfo[]) => {
 			this._totalDepartures = reportItems.length;
 			var data = [];
 			reportItems.forEach((item: ReportDepartureInfo) => {
