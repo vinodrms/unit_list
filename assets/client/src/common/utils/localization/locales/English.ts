@@ -970,5 +970,6 @@ export var EnglishTranslations: Object = {
 	"Group": "Group",
 	"Monthly Stats Report": "Monthly Stats Report",
 	"Contains general hotel stats for a month": "Contains general hotel stats for a month",
+	"General Stats Report": "General Stats Report",
 	
 };

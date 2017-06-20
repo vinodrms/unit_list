@@ -8,6 +8,7 @@ import { BookingDOConstraints } from "../../../../data-layer/bookings/data-objec
 import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repositories/IBookingRepository";
 import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingDO";
 import { HotelDetailsDO } from "../../../hotel-details/utils/HotelDetailsBuilder";
+import { CountryDO } from "../../../../data-layer/common/data-objects/country/CountryDO";
 
 import _ = require('underscore');
 
@@ -16,7 +17,8 @@ export class MonthlyStatsReportArrivalsSectionGenerator extends AReportSectionGe
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
         private _hotelDetails: HotelDetailsDO, private _bookingList: BookingDO[], 
-        private _customerIdToCountryMap: { [index: string]: string; }) {
+        private _customerIdToCountryMap: { [index: string]: CountryDO; }, 
+        private _countryCodeToCountryMap: { [index: string]: CountryDO; }) {
         super(appContext, sessionContext, globalSummary);
 
         this._localSummary = {};
@@ -49,19 +51,20 @@ export class MonthlyStatsReportArrivalsSectionGenerator extends AReportSectionGe
         this._localSummary["Total number of arrivals"] = 
             this.getTotalNumberOfArrivalsFromBookingList(this._bookingList);
 
+        let hotelsHomeCountry = this._hotelDetails.hotel.contactDetails.address.country;
         let totalNoOfArrivalsFromHotelsHomeCountryLabel = 
             this._appContext.thTranslate.translate("Out of which from") + " " 
-                + this._hotelDetails.hotel.contactDetails.address.country.name;
+                + hotelsHomeCountry.name;
 
-        let danishBookings = _.filter(this._bookingList, (booking: BookingDO) => {
+        let localCountryBookings = _.filter(this._bookingList, (booking: BookingDO) => {
             let firstCustomerId = booking.customerIdList[0];
-            let countryName = this._customerIdToCountryMap[firstCustomerId];
+            let country = this._customerIdToCountryMap[firstCustomerId];
 
-            return countryName === "Denmark";
+            return country.code === hotelsHomeCountry.code;
         });
 
         this._localSummary[totalNoOfArrivalsFromHotelsHomeCountryLabel] = 
-            this.getTotalNumberOfArrivalsFromBookingList(danishBookings);
+            this.getTotalNumberOfArrivalsFromBookingList(localCountryBookings);
 
         resolve([]);
     }

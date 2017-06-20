@@ -2,16 +2,25 @@
 	<div class="row basic-info-form">
 		<div class="col-xs-12 col-md-6">
 			<label class="control-label">
-				<h3>{{ 'Monthly Stats Report' | translate }}</h3><small>{{ 'Contains general hotel stats for a month' | translate }}</small>
+				<h3>{{ 'General Stats Report' | translate }}</h3><small>{{ 'Contains general hotel stats' | translate }}</small>
 			</label>
 			<hr>
 			<loading-component [isLoading]="isLoading"></loading-component>
 			<div class="row">
 				<div class="col-xs-12 col-md-6 form-group">
 					<th-date-picker
-						[initialThDate]="date"
-						[label]="'Date'"
-						(didSelectThDate)="didSelectDate($event)"
+						[initialThDate]="startDate"
+						[label]="'Start date'"
+						(didSelectThDate)="didSelectStartDate($event)"
+						>
+					</th-date-picker>
+				</div>
+
+				<div class="col-xs-12 col-md-6 form-group">
+					<th-date-picker
+						[initialThDate]="endDate"
+						[label]="'End date'"
+						(didSelectThDate)="didSelectEndDate($event)"
 						>
 					</th-date-picker>
 				</div>

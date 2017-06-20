@@ -9,14 +9,18 @@ import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repos
 import { BookingDO, TravelType, TravelActivityType } from "../../../../data-layer/bookings/data-objects/BookingDO";
 import { CustomerSearchResultRepoDO } from "../../../../data-layer/customers/repositories/ICustomerRepository";
 import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
+import { CountryDO } from "../../../../data-layer/common/data-objects/country/CountryDO";
+import { MonthlyStatsReportGroupGenerator } from "../MonthlyStatsReportGroupGenerator";
+import { HotelDetailsDO } from "../../../hotel-details/utils/HotelDetailsBuilder";
 
 import _ = require('underscore');
 
 export class MonthlyStatsReportNightsDividedByNationalitySectionGenerator extends AReportSectionGeneratorStrategy {
     private _countryNameToGuestNights: { [countryName: string]: number; };
 
-    constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
-        private _bookingList: BookingDO[], private _customerIdToCountryMap: { [index: string]: string; }) {
+    constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object, private _hotelDetails: HotelDetailsDO,
+        private _bookingList: BookingDO[], private _customerIdToCountryMap: { [index: string]: CountryDO; }, 
+        private _countryCodeToCountryMap: { [index: string]: CountryDO; }) {
         super(appContext, sessionContext, globalSummary);
 
         this._countryNameToGuestNights = {};
@@ -46,75 +50,81 @@ export class MonthlyStatsReportNightsDividedByNationalitySectionGenerator extend
     }
 
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
+        debugger
         let unsortedCountryNameToGuestNights = {};
         _.forEach(this._bookingList, (booking: BookingDO) => {
             let noOfBookedGuests = booking.configCapacity.getTotalNumberOfGuests();
             let noOfUnknownGuests = noOfBookedGuests - booking.customerIdList.length;
             let noOfUnknownGuestNights = booking.getNumberOfNights() * noOfUnknownGuests;
 
-            let defaultCountryName = this.getDefaultCountryName(booking);
+            let defaultCountryCode = this.getDefaultCountryCode(booking);
 
-            _.forEach(booking.customerIdList, (cusotmerId: string) => {
-                let countryName = this._customerIdToCountryMap[cusotmerId];
-                if (!_.isString(countryName)) {
-                    countryName = "Other";
+            _.forEach(booking.customerIdList, (customerId: string) => {
+                if(_.isUndefined(this._customerIdToCountryMap[customerId])) {
+                    debugger
+                }
+                let countryCode = this._customerIdToCountryMap[customerId].code;
+                if (!_.isString(countryCode)) {
+                    countryCode = MonthlyStatsReportGroupGenerator.OtherCountryCode;
                 }
 
-                unsortedCountryNameToGuestNights[countryName] =
-                    _.isNumber(unsortedCountryNameToGuestNights[countryName]) ?
-                        unsortedCountryNameToGuestNights[countryName] + booking.getNumberOfNights() :
+                unsortedCountryNameToGuestNights[countryCode] =
+                    _.isNumber(unsortedCountryNameToGuestNights[countryCode]) ?
+                        unsortedCountryNameToGuestNights[countryCode] + booking.getNumberOfNights() :
                         booking.getNumberOfNights();
 
             });
 
-            unsortedCountryNameToGuestNights[defaultCountryName] =
-                _.isNumber(unsortedCountryNameToGuestNights[defaultCountryName]) ?
-                    unsortedCountryNameToGuestNights[defaultCountryName] + noOfUnknownGuestNights :
+            unsortedCountryNameToGuestNights[defaultCountryCode] =
+                _.isNumber(unsortedCountryNameToGuestNights[defaultCountryCode]) ?
+                    unsortedCountryNameToGuestNights[defaultCountryCode] + noOfUnknownGuestNights :
                     noOfUnknownGuestNights;
 
         });
 
-        let dkGuestNights = unsortedCountryNameToGuestNights['Denmark'];
-        let otherGuestNights = unsortedCountryNameToGuestNights['Other'];
-        delete unsortedCountryNameToGuestNights['Denmark'];
-        delete unsortedCountryNameToGuestNights['Other'];
+        let hotelsHomeCountryCode = this._hotelDetails.hotel.contactDetails.address.country.code;
 
-        let countryNames = Object.keys(unsortedCountryNameToGuestNights);
-        countryNames.sort();
+        let guestNightsFromHomeCountry = unsortedCountryNameToGuestNights[hotelsHomeCountryCode];
+        let otherGuestNights = unsortedCountryNameToGuestNights[MonthlyStatsReportGroupGenerator.OtherCountryCode];
+        delete unsortedCountryNameToGuestNights[hotelsHomeCountryCode];
+        delete unsortedCountryNameToGuestNights[MonthlyStatsReportGroupGenerator.OtherCountryCode];
+
+        let countryCodes = Object.keys(unsortedCountryNameToGuestNights);
+        countryCodes.sort();
 
         this._countryNameToGuestNights = {};
-        this._countryNameToGuestNights['Denmark'] = dkGuestNights;
-        _.forEach(countryNames, (countryName: string) => {
+        
+        let homeCountryName = this._countryCodeToCountryMap[hotelsHomeCountryCode].name;
+        this._countryNameToGuestNights[homeCountryName] = guestNightsFromHomeCountry;
+        
+        _.forEach(countryCodes, (countryCode: string) => {
+            let countryName = this._countryCodeToCountryMap[countryCode].name;
             this._countryNameToGuestNights[countryName] = unsortedCountryNameToGuestNights[countryName];
         });
-        this._countryNameToGuestNights['Other'] = otherGuestNights;
 
-        let counter = 0;
-        let keys = Object.keys(this._countryNameToGuestNights);
-        _.forEach(keys, (key: string) => {
-            counter += this._countryNameToGuestNights[key];
-        });
-        debugger
+        let otherCountryName = this._countryCodeToCountryMap[MonthlyStatsReportGroupGenerator.OtherCountryCode];
+        this._countryNameToGuestNights[MonthlyStatsReportGroupGenerator.OtherCountryCode] = otherGuestNights;
+
         resolve([]);
 
     }
 
-    private getDefaultCountryName(booking: BookingDO): string {
-        let defaultCountryName = 'Other';
+    private getDefaultCountryCode(booking: BookingDO): string {
+        let defaultCountryCode = MonthlyStatsReportGroupGenerator.OtherCountryCode;
 
-        _.forEach(booking.customerIdList, (cusotmerId: string) => {
-            if (defaultCountryName != 'Other') {
+        _.forEach(booking.customerIdList, (customerId: string) => {
+            if (defaultCountryCode != MonthlyStatsReportGroupGenerator.OtherCountryCode) {
                 return;
             }
 
-            let countryName = this._customerIdToCountryMap[cusotmerId];
-            if (!_.isString(countryName)) {
+            let country = this._customerIdToCountryMap[customerId];
+            if (_.isUndefined(country) || !_.isString(country.code)) {
                 return;
             }
 
-            defaultCountryName = countryName;
+            defaultCountryCode = country.code;
         });
 
-        return defaultCountryName;
+        return defaultCountryCode;
     }
 }

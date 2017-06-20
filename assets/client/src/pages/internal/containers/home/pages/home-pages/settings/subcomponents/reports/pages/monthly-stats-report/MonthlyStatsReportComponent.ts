@@ -17,7 +17,8 @@ import { HotelDetailsDO } from "../../../../../../../../../services/hotel/data-o
 export class MonthlyStatsReportComponent extends BaseComponent {
     private format: ReportOutputFormatType;
 	private isLoading: boolean = false;
-	private date: ThDateDO;
+	private startDate: ThDateDO;
+	private endDate: ThDateDO;
     
     constructor(
 		private _appContext: AppContext,
@@ -31,8 +32,10 @@ export class MonthlyStatsReportComponent extends BaseComponent {
 		this.isLoading = true;
 
 		this._hotelService.getHotelDetailsDO()
-		.subscribe((result: HotelDetailsDO) => {
-			this.date = result.currentThTimestamp.thDateDO.buildPrototype();
+		.subscribe((details: HotelDetailsDO) => {
+			this.startDate = details.currentThTimestamp.thDateDO.buildPrototype();
+			this.endDate = this.startDate.buildPrototype();
+			this.endDate.addDays(1);
 			this.isLoading = false;
 		}, (error: ThError) => {
 			this.isLoading = false;
@@ -44,8 +47,12 @@ export class MonthlyStatsReportComponent extends BaseComponent {
 		this.format = format;
 	}
 
-	public didSelectDate(date) {
-		this.date = date;
+	public didSelectStartDate(startDate) {
+		this.startDate = startDate;
+	}
+
+	public didSelectEndDate(endDate) {
+		this.endDate = endDate;
 	}
 
 	public reportCSVUrl(): string {
@@ -53,7 +60,9 @@ export class MonthlyStatsReportComponent extends BaseComponent {
 			reportType: ReportGroupType.MonthlyStats,
 			format: this.format,
 			properties: {
-				date: this.date
+				startDate: this.startDate,
+				endDate: this.endDate,
+				
 			}
 		}
 
