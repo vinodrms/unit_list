@@ -9,6 +9,7 @@ import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repos
 import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingDO";
 import { HotelDetailsDO } from "../../../hotel-details/utils/HotelDetailsBuilder";
 import { CountryDO } from "../../../../data-layer/common/data-objects/country/CountryDO";
+import { CountryContainer } from "../utils/CountryContainer";
 
 import _ = require('underscore');
 
@@ -17,8 +18,7 @@ export class MonthlyStatsReportArrivalsSectionGenerator extends AReportSectionGe
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
         private _hotelDetails: HotelDetailsDO, private _bookingList: BookingDO[], 
-        private _customerIdToCountryMap: { [index: string]: CountryDO; }, 
-        private _countryCodeToCountryMap: { [index: string]: CountryDO; }) {
+        private _countryContainer: CountryContainer) {
         super(appContext, sessionContext, globalSummary);
 
         this._localSummary = {};
@@ -58,7 +58,7 @@ export class MonthlyStatsReportArrivalsSectionGenerator extends AReportSectionGe
 
         let localCountryBookings = _.filter(this._bookingList, (booking: BookingDO) => {
             let firstCustomerId = booking.customerIdList[0];
-            let country = this._customerIdToCountryMap[firstCustomerId];
+            let country = this._countryContainer.getCountryByCustomerId(firstCustomerId);
 
             return country.code === hotelsHomeCountry.code;
         });

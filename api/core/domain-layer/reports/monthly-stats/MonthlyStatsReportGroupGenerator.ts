@@ -19,7 +19,6 @@ import { BookingDOConstraints } from "../../../data-layer/bookings/data-objects/
 import { BookingDO, BookingConfirmationStatus } from "../../../data-layer/bookings/data-objects/BookingDO";
 import { ThDateToThPeriodConverterFactory } from "../key-metrics/period-converter/ThDateToThPeriodConverterFactory";
 import { ThPeriodType, ThPeriodDO } from "../key-metrics/period-converter/ThPeriodDO";
-import { MonthlyStatsReportNoOfNightsSectionGenerator } from "./sections/MonthlyStatsReportNoOfNightsSectionGenerator";
 import { MonthlyStatsReportNightsDividedByPurposeSectionGenerator } from "./sections/MonthlyStatsReportNightsDividedByPurposeSectionGenerator";
 import { MonthlyStatsReportNightsDividedByNationalitySectionGenerator } from "./sections/MonthlyStatsReportNightsDividedByNationalitySectionGenerator";
 import { MonthlyStatsReportArrivalsSectionGenerator } from "./sections/MonthlyStatsReportArrivalsSectionGenerator";
@@ -32,23 +31,25 @@ import { RoomSearchResultRepoDO } from "../../../data-layer/rooms/repositories/I
 import { RoomCategoryStatsAggregator } from "../../room-categories/aggregators/RoomCategoryStatsAggregator";
 import { RoomCategoryStatsDO } from "../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
 import { CountryDO } from "../../../data-layer/common/data-objects/country/CountryDO";
+import { CountryContainer } from "./utils/CountryContainer";
+import { MonthlyStatsReportNoOfGuestNightsSectionGenerator } from "./sections/MonthlyStatsReportNoOfGuestNightsSectionGenerator";
+import { TaxResponseRepoDO } from "../../../data-layer/taxes/repositories/ITaxRepository";
+import { TaxDO } from "../../../data-layer/taxes/data-objects/TaxDO";
 
 export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
-	public static OtherCountryCode = "other";
-	public static OtherCountryName = "Other";
-
 	private static MaxBookings = 2000;
 
 	private _startDate: ThDateDO;
 	private _endDate: ThDateDO;
 
+	private _interval: ThDateIntervalDO;
 	private _roomList: RoomDO[];
 	private _roomCategoryStatsList: RoomCategoryStatsDO[];
 	private _bookingList: BookingDO[];
 	private _hotelDetails: HotelDetailsDO;
+	private _vatTaxList: TaxDO[];
 
-	private _customerIdToCountryMap: { [index: string]: CountryDO; };
-	private _countryCodeToCountryMap: { [index: string]: CountryDO; };
+	private _countryContainer: CountryContainer;
 
 	protected getParamsValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -87,13 +88,13 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 			.then((details: HotelDetailsDO) => {
 				this._hotelDetails = details;
 
-				let interval = new ThDateIntervalDO();
-				interval.start = this._startDate;
-				interval.end = this._endDate;
+				this._interval = new ThDateIntervalDO();
+				this._interval.start = this._startDate;
+				this._interval.end = this._endDate;
 
 				let bookingSearchCriteria: BookingSearchCriteriaRepoDO = {
 					confirmationStatusList: [BookingConfirmationStatus.CheckedOut],
-					interval: interval
+					interval: this._interval
 				};
 
 				return bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
@@ -110,24 +111,7 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 			}).then((result: CustomerSearchResultRepoDO) => {
 				let customerList = result.customerList;
 
-				this._customerIdToCountryMap = {};
-				this._countryCodeToCountryMap = {};
-
-				_.forEach(customerList, (customer: CustomerDO) => {
-					let country = customer.customerDetails.getAddress().country;
-					if (!_.isString(this._customerIdToCountryMap[customer.id]) && _.isString(country.name)) {
-						this._customerIdToCountryMap[customer.id] = country;
-
-						if(!_.isObject(this._countryCodeToCountryMap[country.code])) {
-							this._countryCodeToCountryMap[country.code] = country;
-						}
-					}
-				});
-				
-				let otherCountry = new CountryDO();
-				otherCountry.code = MonthlyStatsReportGroupGenerator.OtherCountryCode;
-				otherCountry.name = MonthlyStatsReportGroupGenerator.OtherCountryName;
-				this._countryCodeToCountryMap[MonthlyStatsReportGroupGenerator.OtherCountryCode] = otherCountry;
+				this._countryContainer = new CountryContainer(customerList);
 
 				return roomsRepository.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id });
 			}).then((result: RoomSearchResultRepoDO) => {
@@ -179,17 +163,17 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
 
 		return [
-			new MonthlyStatsReportNoOfNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, 
+			new MonthlyStatsReportNoOfGuestNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, 
 				this._bookingList),
 			
 			new MonthlyStatsReportNightsDividedByPurposeSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, 
 				this._bookingList),
 			
 			new MonthlyStatsReportNightsDividedByNationalitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary, 
-				this._hotelDetails, this._bookingList, this._customerIdToCountryMap, this._countryCodeToCountryMap),
+				this._hotelDetails, this._bookingList, this._countryContainer),
 			
 			new MonthlyStatsReportArrivalsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, 
-				this._hotelDetails, this._bookingList, this._customerIdToCountryMap, this._countryCodeToCountryMap),
+				this._hotelDetails, this._bookingList, this._countryContainer),
 			
 			new MonthlyStatsReportRoomNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, 
 				this._bookingList),
