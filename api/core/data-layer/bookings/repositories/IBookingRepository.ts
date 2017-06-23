@@ -38,6 +38,7 @@ export interface BookingSearchCriteriaRepoDO {
     endDateGte?: ThDateDO;
     roomId?: string;
     customerId?: string;
+    billedCustomerIdList?: string[];
     descendentSortOrder?: boolean;
     reservedAddOnProductId?: string;
     priceProductId?: string;

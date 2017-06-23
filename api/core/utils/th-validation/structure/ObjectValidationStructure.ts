@@ -4,7 +4,7 @@ import {ObjectValidationRule} from '../rules/ObjectValidationRule';
 import {ValidationResult} from '../rules/core/ValidationResult';
 
 export class ObjectValidationStructure extends AValidationStructure {
-	constructor(private _structure: { key: string, validationStruct: IValidationStructure }[]) {
+	constructor(private _structure: { key: string, validationStruct: IValidationStructure }[], private _optionalStructure?:  { key: string, validationStruct: IValidationStructure }[]) {
 		super(new ObjectValidationRule);
 	}
 	protected validateStructureCore(object: any): ValidationResult {
@@ -13,6 +13,14 @@ export class ObjectValidationStructure extends AValidationStructure {
 			var childStructureResult = childStructure.validationStruct.validateStructure(object[childStructure.key], childStructure.key);
 			validationResult.appendValidationResult(childStructureResult);
 		}));
+		if (this._optionalStructure) {
+			this._optionalStructure.forEach(((childStructure: { key: string, validationStruct: IValidationStructure }) => {
+				if (object[childStructure.key]) {
+					var childStructureResult = childStructure.validationStruct.validateStructure(object[childStructure.key], childStructure.key);
+					validationResult.appendValidationResult(childStructureResult);
+				}
+			}));
+		}
 		return validationResult;
 	}
 }
