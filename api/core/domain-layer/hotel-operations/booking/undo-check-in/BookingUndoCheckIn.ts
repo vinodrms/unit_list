@@ -102,11 +102,6 @@ export class BookingUndoCheckIn {
         else {
             this._bookingWithDependencies.bookingDO.confirmationStatus = BookingConfirmationStatus.Confirmed;
         }
-        this._bookingWithDependencies.bookingDO.noShowTime = new BookingStateChangeTriggerTimeDO();
-        this._bookingWithDependencies.bookingDO.noShowTime.type = BookingStateChangeTriggerType.ExactTimestamp;
-        var noShowTimestamp = this.getNewNoShowTimestamp();
-        this._bookingWithDependencies.bookingDO.noShowTime.thTimestamp = noShowTimestamp;
-        this._bookingWithDependencies.bookingDO.noShowTime.utcTimestamp = noShowTimestamp.getUtcTimestamp();
         this._bookingWithDependencies.bookingDO.roomId = null;
         this._bookingWithDependencies.bookingDO.checkInUtcTimestamp = null;
 
@@ -121,13 +116,5 @@ export class BookingUndoCheckIn {
             cancellationHour: this._loadedHotel.operationHours.cancellationHour,
             currentHotelTimestamp: this._currentHotelTimestamp
         });
-    }
-    private getNewNoShowTimestamp(): ThTimestampDO {
-        var noShowTimestamp = ThTimestampDO.buildThTimestampDO(this._currentHotelTimestamp.thDateDO, ThHourDO.buildThHourDO(this._currentHotelTimestamp.thHourDO.hour, 0));
-        noShowTimestamp = this._thDateUtils.addThirtyMinutesToThTimestampDO(noShowTimestamp);
-        noShowTimestamp = this._thDateUtils.addThirtyMinutesToThTimestampDO(noShowTimestamp);
-        noShowTimestamp = this._thDateUtils.addThirtyMinutesToThTimestampDO(noShowTimestamp);
-        noShowTimestamp = this._thDateUtils.addThirtyMinutesToThTimestampDO(noShowTimestamp);
-        return noShowTimestamp;
     }
 }
