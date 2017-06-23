@@ -102,6 +102,7 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
             mongoQueryBuilder.addExactMatch("invoiceList.bookingId", searchCriteria.bookingId);
             mongoQueryBuilder.addMultipleSelectOptionList("indexedCustomerIdList", searchCriteria.customerIdList);
             mongoQueryBuilder.addMultipleSelectOptionList("invoiceList.bookingId", searchCriteria.bookingIdList);
+            mongoQueryBuilder.addMultipleSelectOptionList("invoiceList.payerList.customerId", searchCriteria.payerCustomerIdList);
 
             if (!this._thUtils.isUndefinedOrNull(searchCriteria.paidInterval)) {
                 mongoQueryBuilder.addCustomQuery("$and",

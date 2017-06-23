@@ -20,6 +20,8 @@ import { PageOrientation } from '../../../services/pdf-reports/PageOrientation';
 import { CommonValidationStructures } from "../../common/CommonValidations";
 import { KeyMetricsReaderInputBuilder } from "../../yield-manager/key-metrics/utils/KeyMetricsReaderInputBuilder";
 import { CommissionOption, CommissionOptionDisplayNames } from "../../yield-manager/key-metrics/utils/KeyMetricsReaderInput";
+import { ArrayValidationStructure } from "../../../utils/th-validation/structure/ArrayValidationStructure";
+import { StringValidationRule } from "../../../utils/th-validation/rules/StringValidationRule";
 
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _period: YieldManagerPeriodDO;
@@ -29,6 +31,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _commissionOption: CommissionOption;
 	private _excludeVat: boolean;
 	private _keyMetricItem: KeyMetricsResultItem;
+	private _customerIdList: string[];
 
 	protected getParamsValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -43,7 +46,13 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 			{
 				key: "periodType",
 				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([ThPeriodType.Day, ThPeriodType.Month, ThPeriodType.Week]))
-			}
+			},
+		],
+		[
+			{
+                key: "customerIdList",
+                validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
+            },
 		]);
 	}
 
@@ -59,6 +68,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		this._periodType = params.periodType;
 		this._commissionOption = params.commissionOption;
 		this._excludeVat = params.excludeVat;
+		this._customerIdList = params.customerIdList;
 	}
 
 	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
@@ -70,6 +80,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 				.setDataAggregationType(this._periodType)
 				.excludeVat(this._excludeVat)
 				.setCommissionOption(this._commissionOption)
+				.setCustomerIdList(this._customerIdList)
 				.build()
 		).then((reportItems: KeyMetricsResult) => {
 			this._keyMetricItem = reportItems.currentItem;

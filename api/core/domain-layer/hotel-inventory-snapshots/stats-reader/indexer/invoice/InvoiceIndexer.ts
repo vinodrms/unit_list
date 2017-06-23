@@ -17,11 +17,13 @@ import { TaxDO } from "../../../../../data-layer/taxes/data-objects/TaxDO";
 import { ThUtils } from "../../../../../utils/ThUtils";
 
 import _ = require('underscore');
+import { InvoicePayerDO } from "../../../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
 
 export class InvoiceIndexer {
     private _bookingIdList: string[];
     private _indexedVatById: { [id: string]: TaxDO; };
     private _excludeVat: boolean;
+    private _payerCustomerIdList: string[];
 
     private _invoicesPaidInIndexedInterval: InvoiceGroupDO[];
     private _invoicesLossByManagement: InvoiceGroupDO[];
@@ -29,10 +31,11 @@ export class InvoiceIndexer {
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
     }
 
-    public getInvoiceStats(indexedInterval: IndexedBookingInterval, bookingIdList: string[], indexedVatById: { [id: string]: TaxDO; }, excludeVat: boolean): Promise<IInvoiceStats> {
+    public getInvoiceStats(indexedInterval: IndexedBookingInterval, bookingIdList: string[], indexedVatById: { [id: string]: TaxDO; }, excludeVat: boolean, payerCustomerIdList?: string[]): Promise<IInvoiceStats> {
         this._indexedVatById = indexedVatById;
         this._bookingIdList = bookingIdList;
         this._excludeVat = excludeVat;
+        this._payerCustomerIdList = payerCustomerIdList;
 
         return new Promise<IInvoiceStats>((resolve: { (result: IInvoiceStats): void }, reject: { (err: ThError): void }) => {
             this.getInvoiceStatsCore(resolve, reject, indexedInterval);
@@ -46,7 +49,8 @@ export class InvoiceIndexer {
                 paidInterval: ThDateIntervalDO.buildThDateIntervalDO(
                     _.first(indexedInterval.bookingDateList).buildPrototype(),
                     _.last(indexedInterval.bookingDateList).buildPrototype()
-                )
+                ),
+                payerCustomerIdList: this._payerCustomerIdList
             }).then((invoiceSearchResult: InvoiceGroupSearchResultRepoDO) => {
                 this._invoicesPaidInIndexedInterval = invoiceSearchResult.invoiceGroupList;
 
@@ -93,13 +97,28 @@ export class InvoiceIndexer {
         var thDateUtcTimestamp = thDate.getUtcTimestamp();
         _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
             _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-                if (thDateUtcTimestamp === invoice.paidDateUtcTimestamp && invoice.isPaid()) {
+                if (thDateUtcTimestamp === invoice.paidDateUtcTimestamp && invoice.isPaid() && this.invoicePayerInPayerCustomerIdList(invoice)) {
                     revenue.otherRevenue += this.getOtherRevenueFrom(invoice);
                 }
             });
         });
         return revenue;
     }
+
+    private invoicePayerInPayerCustomerIdList(invoice: InvoiceDO) {
+        let thUtils = new ThUtils();
+        if (thUtils.isUndefinedOrNull(this._payerCustomerIdList) || this._payerCustomerIdList.length == 0) {
+            return true;
+        }
+        var payersInPayerCustomerIdList = _.filter(invoice.payerList, (payer: InvoicePayerDO) =>{
+            var found: string = _.find(this._payerCustomerIdList, (payerId: string) => {
+                return payerId === payer.customerId;
+            });
+            return (found) ? true: false;
+        });
+        return payersInPayerCustomerIdList.length > 0;
+    }
+
     private getOtherRevenueFrom(invoice: InvoiceDO): number {
         var otherRevenue = 0.0;
         _.forEach(invoice.itemList, (item: InvoiceItemDO) => {
@@ -108,7 +127,26 @@ export class InvoiceIndexer {
                     this.getNetValue(item.meta.getVatId(), item.getTotalPrice()) : item.getTotalPrice();
             }
         });
-        return otherRevenue;
+        return this.getRevenueGeneratedByPayerCustomerIdList(invoice, otherRevenue);
+    }
+
+    private getRevenueGeneratedByPayerCustomerIdList(invoice: InvoiceDO, revenue: number) {
+        let thUtils = new ThUtils();
+        if (thUtils.isUndefinedOrNull(this._payerCustomerIdList) || this._payerCustomerIdList.length == 0) {
+            return revenue;
+        }
+        var totalRevenueGeneratedByPayerCustomerIdList = 0.0;
+        var totalRevenue = 0.0;
+        _.forEach(invoice.payerList, (payer: InvoicePayerDO) =>{
+            totalRevenue += payer.priceToPay;
+            var found: string = _.find(this._payerCustomerIdList, (payerId: string) => {
+                return payerId === payer.customerId;
+            });
+            if (found) {
+                totalRevenueGeneratedByPayerCustomerIdList += payer.priceToPay;
+            }
+        });
+        return totalRevenueGeneratedByPayerCustomerIdList/totalRevenue * revenue;
     }
 
     private getNetValue(vatId: string, price: number): number {
