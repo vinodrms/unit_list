@@ -106,7 +106,7 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 		this.commissionOption = CommissionOption.INCLUDE;
 	}
 
-		public setSelectedCommissionOptionBoth() {
+	public setSelectedCommissionOptionBoth() {
 		this.commissionOption = CommissionOption.BOTH;
 	}
 }

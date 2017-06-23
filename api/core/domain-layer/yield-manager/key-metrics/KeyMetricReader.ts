@@ -137,7 +137,8 @@ export class KeyMetricReader {
             cancellationHour: this._cancellationHour,
             checkOutHour: this._checkOutHour,
             currentHotelTimestamp: this._currentHotelTimestamp,
-            configurationCompletedTimestamp: this._configurationCompletedTimestamp
+            configurationCompletedTimestamp: this._configurationCompletedTimestamp,
+            customerIdList: this._input.customerIdList
         }, this._input.excludeVat);
         statsReader.readInventoryForInterval(indexedInterval).then((inventoryStats: IHotelInventoryStats) => {
             var resultItem: KeyMetricsResultItem = new KeyMetricsResultItem();
