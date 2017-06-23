@@ -241,6 +241,9 @@
 	"Stayovers": "Stayovers",
 	"Monthly Stats Report": "Monthly Stats Report",
 	"Total guest nights": "Total guest nights",
+	"Total guest nights weekdays": "Total guest nights weekdays",
+	"Total guest nights weekend": "Total guest nights weekend",
+	"Guest nights": "Guest nights",
 	"Guest nights divided by the purpose of the stay": "Guest nights divided by the purpose of the stay",
 	"Individual - Business guest nigths": "Individual - Business guest nigths",
 	"Individual - Leisure guest nigths": "Individual - Leisure guest nigths",
@@ -250,6 +253,9 @@
 	"Total number of arrivals": "Total number of arrivals",
 	"Total room nigths": "Total room nigths",
 	"Capacity": "Capacity",
+	"Total breakfast (excluding VAT)": "Total breakfast (excluding VAT)",
+	"Total breakfast internal cost (excluding VAT)": "Total breakfast internal cost (excluding VAT)",
+	"Breakfast": "Breakfast",
 	
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
