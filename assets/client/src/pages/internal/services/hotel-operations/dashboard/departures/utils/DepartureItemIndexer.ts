@@ -39,7 +39,7 @@ export class DepartureItemIndexer {
 
         let indexedBookingsByCustomerId = this.getIndexedBookingsByCustomerId();
          _.forEach(this._departureItemList, (departureItemDO: DepartureItemInfoDO) => {
-            if (this._thUtils.isUndefinedOrNull(departureItemDO.bookingId)) {
+            if (this._thUtils.isUndefinedOrNull(departureItemDO.bookingId) && !this._thUtils.isUndefinedOrNull(departureItemDO.isBookingBilledToCompany) && !departureItemDO.isBookingBilledToCompany) {
                 let bookingId = indexedBookingsByCustomerId[departureItemDO.customerId];
                 if(!this._thUtils.isUndefinedOrNull(bookingId)) {
                     departureItemsByBookingId[bookingId].push(departureItemDO);
