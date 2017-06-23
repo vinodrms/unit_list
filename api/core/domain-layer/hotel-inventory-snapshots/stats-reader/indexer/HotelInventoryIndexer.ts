@@ -37,6 +37,7 @@ export interface HotelInventoryIndexerParams {
     currentHotelTimestamp: ThTimestampDO;
     roomList: RoomSnapshotDO[];
     vatTaxList: TaxDO[];
+    customerIdList: string[];
 }
 export class HotelInventoryIndexer {
     private _bookingUtils: BookingUtils;
@@ -79,7 +80,8 @@ export class HotelInventoryIndexer {
                 interval: ThDateIntervalDO.buildThDateIntervalDO(
                     this._indexedInterval.getArrivalDate().buildPrototype(),
                     this._indexedInterval.getDepartureDate().buildPrototype()
-                )
+                ),
+                billedCustomerIdList: this._indexerParams.customerIdList
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 this._bookingIdList = _.map(bookingSearchResult.bookingList, (booking: BookingDO) => {
                     return booking.id;
@@ -88,7 +90,7 @@ export class HotelInventoryIndexer {
                 return this.indexBookingsByType(bookingSearchResult.bookingList);
             }).then(indexResult => {
                 var invoiceIndexer = new InvoiceIndexer(this._appContext, this._sessionContext);
-                return invoiceIndexer.getInvoiceStats(this._indexedInterval, this._bookingIdList, this._indexedVatById, this._excludeVat);
+                return invoiceIndexer.getInvoiceStats(this._indexedInterval, this._bookingIdList, this._indexedVatById, this._excludeVat, this._indexerParams.customerIdList);
             }).then((invoiceStats: IInvoiceStats) => {
                 this._invoiceStats = invoiceStats;
 

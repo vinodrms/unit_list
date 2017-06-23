@@ -20,6 +20,7 @@ export interface InvoiceGroupSearchCriteriaRepoDO {
     customerIdList?: string[];
     invoicePaymentStatus?: InvoicePaymentStatus;
     paidInterval?: ThDateIntervalDO;
+    payerCustomerIdList?: string[];
 }
 
 export interface InvoiceSearchCriteriaRepoDO {
