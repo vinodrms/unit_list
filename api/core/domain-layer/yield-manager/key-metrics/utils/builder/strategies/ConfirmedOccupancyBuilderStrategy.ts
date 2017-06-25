@@ -3,12 +3,13 @@ import { AMetricBuilderStrategy } from '../AMetricBuilderStrategy';
 import { KeyMetricType } from '../../KeyMetricType';
 import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
 import { PercentageKeyMetric } from '../../values/PercentageKeyMetric';
+import { IMetricBuilderInput } from "../IMetricBuilderStrategy";
 
 import _ = require('underscore');
 
 export class ConfirmedOccupancyBuilderStrategy extends AMetricBuilderStrategy {
-    constructor(hotelInventoryStats: IHotelInventoryStats) {
-        super(hotelInventoryStats);
+    constructor(hotelInventoryStats: IHotelInventoryStats, input: IMetricBuilderInput) {
+        super(hotelInventoryStats, input);
     }
 
     protected getType(): KeyMetricType {
@@ -31,7 +32,7 @@ export class ConfirmedOccupancyBuilderStrategy extends AMetricBuilderStrategy {
         metric.percentage = this.roundValue(metric.percentage) / statsForDateList.length;
         return metric;
     }
-    protected getKeyMetricDisplayName(): string {
+    protected getKeyMetricName(): string {
         return "Occupancy Confirmed";
     }
 }

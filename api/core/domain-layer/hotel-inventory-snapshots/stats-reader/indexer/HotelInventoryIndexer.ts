@@ -6,7 +6,7 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { ConfigCapacityDO } from "../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO";
 import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import { BookingDO, BookingConfirmationStatus, BookingStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingDO, BookingConfirmationStatus, BookingStatus, TravelActivityType, TravelType } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { BookingPriceDO } from "../../../../data-layer/bookings/data-objects/price/BookingPriceDO";
 import { BookingSearchResultRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
 import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
@@ -28,8 +28,27 @@ import { IRoom } from "../../../../data-layer/rooms/data-objects/IRoom";
 import { CommissionType, CommissionDO } from "../../../../data-layer/common/data-objects/commission/CommissionDO";
 import { TaxDO } from "../../../../data-layer/taxes/data-objects/TaxDO";
 import { ThUtils } from "../../../../utils/ThUtils";
+import { ISegmentedRevenueForDate, RevenueSegment } from "../data-objects/revenue/ISegmentedRevenueForDate";
 
 import _ = require('underscore');
+
+export class IndexedRevenueSegments {
+
+    public static AllSegments: RevenueSegment[] = [
+        RevenueSegment.All,
+        RevenueSegment.BusinessGroup,
+        RevenueSegment.BusinessIndividual,
+        RevenueSegment.LeisureGroup,
+        RevenueSegment.LeisureIndividual
+    ];
+}
+
+export interface RevenueCalculatorInput {
+    thDate: ThDateDO;
+    excludeCommission: boolean;
+    excludeVat: boolean;
+    revenueSegment: RevenueSegment;
+}
 
 export interface HotelInventoryIndexerParams {
     cancellationHour: ThHourDO;
@@ -53,6 +72,7 @@ export class HotelInventoryIndexer {
     private _guaranteedOccupyingRoomsFromInventoryBookingsContainer: BookingsContainer;
     private _penaltyBookingsContainer: BookingsContainer;
     private _invoiceStats: IInvoiceStats;
+    private _indexedRevenueSegmentList: RevenueSegment[];
 
     constructor(private _appContext: AppContext,
         private _sessionContext: SessionContext,
@@ -64,6 +84,8 @@ export class HotelInventoryIndexer {
 
         this._indexedRoomsById = _.indexBy(this._indexerParams.roomList, (room: IRoom) => { return room.id });
         this._indexedVatById = _.indexBy(this._indexerParams.vatTaxList, (tax: TaxDO) => { return tax.id });
+
+        this._indexedRevenueSegmentList = IndexedRevenueSegments.AllSegments;
     }
 
     public indexInventory(indexedInterval: IndexedBookingInterval): Promise<boolean> {
@@ -190,28 +212,86 @@ export class HotelInventoryIndexer {
         return bookingOccupancy;
     }
 
-    public getConfirmedRevenue(thDate: ThDateDO, excludeCommission: boolean): IRevenueForDate {
-        return this.getRevenue(this._confirmedBookingsContainer, thDate, excludeCommission, this._excludeVat);
+    public getConfirmedRevenue(thDate: ThDateDO, excludeCommission: boolean): { [index: number]: ISegmentedRevenueForDate; } {
+        let segmentedRevenue: { [index: number]: ISegmentedRevenueForDate; } = {};
+
+        _.forEach(this._indexedRevenueSegmentList, (segment: RevenueSegment) => {
+            let confirmedRevenue = this.getRevenue(this._confirmedBookingsContainer, {
+                thDate: thDate,
+                excludeCommission: excludeCommission,
+                excludeVat: this._excludeVat,
+                revenueSegment: segment
+            });
+
+            segmentedRevenue[segment] = {
+                segment: segment,
+                revenue: confirmedRevenue
+            }
+        });
+
+        return segmentedRevenue;
     }
-    public getGuaranteedRevenue(thDate: ThDateDO, excludeCommission: boolean): IRevenueForDate {
-        var guaranteedRev = this.getRevenue(this._guaranteedBookingsContainer, thDate, excludeCommission, this._excludeVat);
-        var penaltyRev = this.getRevenue(this._penaltyBookingsContainer, thDate, excludeCommission, this._excludeVat);
-        guaranteedRev.addRevenue(penaltyRev);
-        var invoiceRevenue = this._invoiceStats.getRevenueForDate(thDate);
-        guaranteedRev.addRevenue(invoiceRevenue);
-        return guaranteedRev;
+    public getGuaranteedRevenue(thDate: ThDateDO, excludeCommission: boolean): { [index: number]: ISegmentedRevenueForDate; } {
+        let segmentedRevenue: { [index: number]: ISegmentedRevenueForDate; } = {};
+
+        _.forEach(this._indexedRevenueSegmentList, (segment: RevenueSegment) => {
+            let guaranteedRev = this.getRevenue(this._guaranteedBookingsContainer, {
+                thDate: thDate,
+                excludeCommission: excludeCommission,
+                excludeVat: this._excludeVat,
+                revenueSegment: segment
+            });
+
+            let penaltyRev = this.getRevenue(this._penaltyBookingsContainer, {
+                thDate: thDate,
+                excludeCommission: excludeCommission,
+                excludeVat: this._excludeVat,
+                revenueSegment: segment
+            });
+
+            guaranteedRev.addRevenue(penaltyRev);
+            let invoiceRevenue = this._invoiceStats.getRevenueForDate(thDate);
+            guaranteedRev.addRevenue(invoiceRevenue);
+
+            segmentedRevenue[segment] = {
+                segment: segment,
+                revenue: guaranteedRev
+            };
+        });
+
+        return segmentedRevenue;
     }
-    private getRevenue(bookingsContainer: BookingsContainer, thDate: ThDateDO, excludeCommission: boolean, excludeVat: boolean): RevenueForDate {
-        var indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(thDate);
-        var filteredBookingItemList: BookingItemContainer[] = bookingsContainer.getBookingItemContainersFilteredByInterval(indexedSingleDayInterval);
-        var revenue = new RevenueForDate(0.0, 0.0);
-        _.forEach(filteredBookingItemList, (bookingItem: BookingItemContainer) => {
-            var noNights = bookingItem.indexedBookingInterval.getLengthOfStay();
+    private getRevenue(bookingsContainer: BookingsContainer, input: RevenueCalculatorInput): RevenueForDate {
+        let indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(input.thDate);
+        let filteredBookingItemList: BookingItemContainer[] = bookingsContainer.getBookingItemContainersFilteredByInterval(indexedSingleDayInterval);
+
+        let segmentedBookingItemList = _.filter(filteredBookingItemList, (bookingItem: BookingItemContainer) => {
+            switch (input.revenueSegment) {
+                case RevenueSegment.BusinessGroup:
+                    return bookingItem.booking.travelActivityType === TravelActivityType.Business
+                        && bookingItem.booking.travelType === TravelType.Group;
+                case RevenueSegment.BusinessIndividual:
+                    return bookingItem.booking.travelActivityType === TravelActivityType.Business
+                        && bookingItem.booking.travelType === TravelType.Individual;
+                case RevenueSegment.LeisureGroup:
+                    return bookingItem.booking.travelActivityType === TravelActivityType.Leisure
+                        && bookingItem.booking.travelType === TravelType.Group;
+                case RevenueSegment.LeisureIndividual:
+                    return bookingItem.booking.travelActivityType === TravelActivityType.Leisure
+                        && bookingItem.booking.travelType === TravelType.Individual;
+                default:
+                    return true;
+            }
+        });
+
+        let revenue = new RevenueForDate(0.0, 0.0);
+        _.forEach(segmentedBookingItemList, (bookingItem: BookingItemContainer) => {
+            let noNights = bookingItem.indexedBookingInterval.getLengthOfStay();
             if (noNights > 0 && !this._invoiceStats.bookingHasInvoiceWithLossAcceptedByManagement(bookingItem.booking.id)) {
                 revenue.roomRevenue += this.getBookingRoomPriceForDate(bookingItem.booking,
-                    noNights, thDate, excludeCommission, excludeVat);
+                    noNights, input.thDate, input.excludeCommission, input.excludeVat);
                 revenue.otherRevenue += this.getBookingOtherPriceAvgPerNight(bookingItem.booking,
-                    noNights, excludeCommission);
+                    noNights, input.excludeCommission);
             }
         });
         return revenue;
