@@ -22,6 +22,5 @@ export class KeyMetricsReaderInput {
     dataAggregationType: ThPeriodType;
     excludeVat: boolean;
     customerIdList: string[];
-    revenueSegmentList: RevenueSegment[];
     commissionOption: CommissionOption;
 }
