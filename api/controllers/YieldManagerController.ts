@@ -9,6 +9,7 @@ import { KeyMetricsResult } from '../core/domain-layer/yield-manager/key-metrics
 import { DynamicPriceYielding } from "../core/domain-layer/yield-manager/dynamic-price-yielding/DynamicPriceYielding";
 import { KeyMetricsReaderInputBuilder } from "../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsReaderInputBuilder";
 import { CommissionOption } from "../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsReaderInput";
+import { KeyMetricOutputType } from "../core/domain-layer/yield-manager/key-metrics/utils/builder/MetricBuilderStrategyFactory";
 
 export class YieldManagerController extends BaseController {
 	public yieldPriceProducts(req: Express.Request, res: Express.Response) {
@@ -47,7 +48,8 @@ export class YieldManagerController extends BaseController {
 				.setYieldManagerPeriodDO(req.body.yieldParams)
 				.setCommissionOption(CommissionOption.INCLUDE_AND_BOTH_FOR_ROOM_REVENUE)
 				.excludeVat(false)
-				.build()
+				.build(),
+			KeyMetricOutputType.YieldManager
 		).then((keyMetricsResult: KeyMetricsResult) => {
 			this.returnSuccesfulResponse(req, res, { keyMetricsResult: keyMetricsResult });
 		}).catch((err: any) => {

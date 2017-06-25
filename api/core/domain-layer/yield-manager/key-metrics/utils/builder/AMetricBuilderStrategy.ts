@@ -1,4 +1,4 @@
-import { IMetricBuilderStrategy } from './IMetricBuilderStrategy';
+import { IMetricBuilderStrategy, IMetricBuilderInput } from './IMetricBuilderStrategy';
 import { KeyMetric, IKeyMetricValueGroup } from '../KeyMetricsResult';
 import { IKeyMetricValue, KeyMetricValueType } from '../values/IKeyMetricValue';
 import { KeyMetricType } from '../KeyMetricType';
@@ -8,14 +8,20 @@ import { IHotelInventoryStats, HotelInventoryStatsForDate } from '../../../../ho
 import { ThPeriodType, ThPeriodDO } from "../../../../reports/key-metrics/period-converter/ThPeriodDO";
 import { ThDateToThPeriodConverterFactory } from "../../../../reports/key-metrics/period-converter/ThDateToThPeriodConverterFactory";
 import { ThDateIntervalDO } from "../../../../../utils/th-dates/data-objects/ThDateIntervalDO";
+import { RevenueSegment } from "../../../../hotel-inventory-snapshots/stats-reader/data-objects/revenue/ISegmentedRevenueForDate";
 
 import _ = require('underscore');
 
 export abstract class AMetricBuilderStrategy implements IMetricBuilderStrategy {
+    protected static BusinessIndividualSuffixDisplayString = " Business Individual";
+    protected static BusinessGroupSuffixDisplayString = " Business Group";
+    protected static LeisureIndividualSuffixDisplayString = " Leisure Individual";
+    protected static LeisureGroupSuffixDisplayString = " Leisure Group";
     protected static WithoutCommissionSuffixDisplayString = " W/O Deducted Commission"; 
+    
     private _thUtils: ThUtils;
 
-    constructor(private _hotelInventoryStats: IHotelInventoryStats) {
+    constructor(private _hotelInventoryStats: IHotelInventoryStats, protected _input: IMetricBuilderInput) {
         this._thUtils = new ThUtils();
     }
 
@@ -68,8 +74,33 @@ export abstract class AMetricBuilderStrategy implements IMetricBuilderStrategy {
         return this._thUtils.roundNumberToNearestInteger(value);
     }
 
+    private getCommissionSuffixDisplayString(): string {
+        return this._input.excludeCommission ? AMetricBuilderStrategy.WithoutCommissionSuffixDisplayString: "";
+    }
+
+    private getRevenueSegmentSuffixDisplayString(): string {
+        switch(this._input.revenueSegment) {
+            case RevenueSegment.BusinessGroup:
+                return AMetricBuilderStrategy.BusinessGroupSuffixDisplayString;
+            case RevenueSegment.BusinessIndividual:
+                return AMetricBuilderStrategy.BusinessIndividualSuffixDisplayString;
+            case RevenueSegment.LeisureGroup:
+                return AMetricBuilderStrategy.LeisureGroupSuffixDisplayString;
+            case RevenueSegment.LeisureIndividual:
+                return AMetricBuilderStrategy.LeisureIndividualSuffixDisplayString;
+            default: return "";
+
+        }
+    }
+
     protected abstract getType(): KeyMetricType;
     protected abstract getValueType(): KeyMetricValueType;
     protected abstract getKeyMetricValueCore(statsForDateList: HotelInventoryStatsForDate[]): IKeyMetricValue;
-    protected abstract getKeyMetricDisplayName(): string;
+    protected abstract getKeyMetricName(): string;
+
+    protected getKeyMetricDisplayName(): string {
+        return this.getKeyMetricName() 
+            + this.getCommissionSuffixDisplayString() 
+            + this.getRevenueSegmentSuffixDisplayString();
+    }
 }
