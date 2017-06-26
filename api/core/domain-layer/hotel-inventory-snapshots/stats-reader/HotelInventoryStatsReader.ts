@@ -21,6 +21,8 @@ import { SnapshotUtils } from '../utils/SnapshotUtils';
 import { HotelInventoryIndexer } from './indexer/HotelInventoryIndexer';
 import { TaxResponseRepoDO } from "../../../data-layer/taxes/repositories/ITaxRepository";
 import { TaxDO } from "../../../data-layer/taxes/data-objects/TaxDO";
+import { TotalGuestsForDate } from "./data-objects/total-guests/TotalGuestsForDate";
+import { CountryDO } from "../../../data-layer/common/data-objects/country/CountryDO";
 
 import _ = require('underscore');
 
@@ -28,6 +30,7 @@ export interface HotelInventoryStatsParams {
     currentVatTaxList: TaxDO[];
     currentRoomList: RoomDO[];
     currentAllotmentList: AllotmentDO[];
+    homeCountry: CountryDO;
     cancellationHour: ThHourDO;
     checkOutHour: ThHourDO;
     currentHotelTimestamp: ThTimestampDO;
@@ -77,6 +80,7 @@ export class HotelInventoryStatsReader {
             this._loadedSnapshotList = searchResult.snapshotList;
 
             this._inventoryIndexer = new HotelInventoryIndexer(this._appContext, this._sessionContext, {
+                homeCountry: this._readerParams.homeCountry,
                 cancellationHour: this._readerParams.cancellationHour,
                 checkOutHour: this._readerParams.checkOutHour,
                 currentHotelTimestamp: this._readerParams.currentHotelTimestamp,
@@ -102,7 +106,10 @@ export class HotelInventoryStatsReader {
         var hotelInventory = new HotelInventoryStats();
         _.forEach(this._indexedInterval.bookingDateList, (date: ThDateDO) => {
             var inventoryForDate: HotelInventoryStatsForDate = {
+                date: date,
                 totalInventory: this.getTotalInventoryForDate(date),
+                confirmedGuestNights: this._inventoryIndexer.getConfirmedGuestNights(date),
+                guaranteedGuestNights: this._inventoryIndexer.getGuaranteedGuestNights(date),
                 confirmedOccupancy: this._inventoryIndexer.getConfirmedOccupancy(date),
                 guaranteedOccupancy: this._inventoryIndexer.getGuaranteedOccupancy(date),
                 guaranteedOccupancyOccupyingRoomsFromInventory: this._inventoryIndexer.getGuaranteedOccupyingRoomsFromInventoryOccupancy(date),

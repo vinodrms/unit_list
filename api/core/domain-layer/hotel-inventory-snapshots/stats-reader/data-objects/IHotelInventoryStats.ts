@@ -3,9 +3,13 @@ import { ThDateDO } from '../../../../utils/th-dates/data-objects/ThDateDO';
 import { IBookingOccupancy } from '../../../bookings/search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
 import { IRevenueForDate } from './revenue/IRevenueForDate';
 import { ISegmentedRevenueForDate, RevenueSegment } from "./revenue/ISegmentedRevenueForDate";
+import { ITotalGuestsForDate } from "./total-guests/ITotalGuestsForDate";
 
 export interface HotelInventoryStatsForDate {
+    date: ThDateDO;
     totalInventory: ITotalInventoryForDate;
+    confirmedGuestNights: ITotalGuestsForDate;
+    guaranteedGuestNights: ITotalGuestsForDate;
     confirmedOccupancy: IBookingOccupancy;
     guaranteedOccupancy: IBookingOccupancy;
     guaranteedOccupancyOccupyingRoomsFromInventory: IBookingOccupancy;

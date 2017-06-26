@@ -1,7 +1,5 @@
-import { CountryDO } from "../../../../data-layer/common/data-objects/country/CountryDO";
-import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
-
-import _ = require('underscore');
+import { CountryDO } from "../../../../../data-layer/common/data-objects/country/CountryDO";
+import { CustomerDO } from "../../../../../data-layer/customers/data-objects/CustomerDO";
 
 export class CountryContainer {
     public static OtherCountryCode = "other";
@@ -39,4 +37,4 @@ export class CountryContainer {
     public getCountryByCountryCode(countryCode: string): CountryDO  {
         return this._countryCodeToCountryMap[countryCode];
     }
-}				
+}	

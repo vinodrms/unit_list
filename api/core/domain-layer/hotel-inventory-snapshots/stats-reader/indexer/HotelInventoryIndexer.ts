@@ -29,6 +29,12 @@ import { CommissionType, CommissionDO } from "../../../../data-layer/common/data
 import { TaxDO } from "../../../../data-layer/taxes/data-objects/TaxDO";
 import { ThUtils } from "../../../../utils/ThUtils";
 import { ISegmentedRevenueForDate, RevenueSegment } from "../data-objects/revenue/ISegmentedRevenueForDate";
+import { ITotalGuestsForDate } from "../data-objects/total-guests/ITotalGuestsForDate";
+import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
+import { CustomerSearchResultRepoDO } from "../../../../data-layer/customers/repositories/ICustomerRepository";
+import { CountryContainer } from "./utils/CountryContainer";
+import { TotalGuestsForDate } from "../data-objects/total-guests/TotalGuestsForDate";
+import { CountryDO } from "../../../../data-layer/common/data-objects/country/CountryDO";
 
 import _ = require('underscore');
 
@@ -51,6 +57,7 @@ export interface RevenueCalculatorInput {
 }
 
 export interface HotelInventoryIndexerParams {
+    homeCountry: CountryDO;
     cancellationHour: ThHourDO;
     checkOutHour: ThHourDO;
     currentHotelTimestamp: ThTimestampDO;
@@ -73,7 +80,8 @@ export class HotelInventoryIndexer {
     private _penaltyBookingsContainer: BookingsContainer;
     private _invoiceStats: IInvoiceStats;
     private _indexedRevenueSegmentList: RevenueSegment[];
-
+    private _countryContainer: CountryContainer;
+    
     constructor(private _appContext: AppContext,
         private _sessionContext: SessionContext,
         private _indexerParams: HotelInventoryIndexerParams,
@@ -95,7 +103,10 @@ export class HotelInventoryIndexer {
         });
     }
     private indexInventoryCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-        var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+        let customerIdListOnBookings = [];
+        let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
+
+        let bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
         bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
             {
                 confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_BookingsConsideredInYieldManager,
@@ -108,6 +119,10 @@ export class HotelInventoryIndexer {
                 this._bookingIdList = _.map(bookingSearchResult.bookingList, (booking: BookingDO) => {
                     return booking.id;
                 });
+                
+                customerIdListOnBookings = _.chain(bookingSearchResult.bookingList).map((booking: BookingDO) => {
+					return booking.customerIdList;
+				}).flatten().uniq().value();
 
                 return this.indexBookingsByType(bookingSearchResult.bookingList);
             }).then(indexResult => {
@@ -115,6 +130,10 @@ export class HotelInventoryIndexer {
                 return invoiceIndexer.getInvoiceStats(this._indexedInterval, this._bookingIdList, this._indexedVatById, this._excludeVat, this._indexerParams.customerIdList);
             }).then((invoiceStats: IInvoiceStats) => {
                 this._invoiceStats = invoiceStats;
+
+                return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, customerIdListOnBookings);
+            }).then((result: CustomerSearchResultRepoDO) => {
+				this._countryContainer = new CountryContainer(result.customerList);
 
                 resolve(true);
             }).catch((error: any) => {
@@ -193,6 +212,69 @@ export class HotelInventoryIndexer {
         return _.filter(bookingList, (booking: BookingDO) => {
             return _.contains(confirmationStatusList, booking.confirmationStatus);
         });
+    }
+    public getConfirmedGuestNights(thDate: ThDateDO): ITotalGuestsForDate {
+       return this.getGuestNights(this._confirmedBookingsContainer, thDate);
+    }
+    public getGuaranteedGuestNights(thDate: ThDateDO): ITotalGuestsForDate {
+       return this.getGuestNights(this._guaranteedBookingsContainer, thDate);
+    }
+    public getGuestNights(bookingsContainer: BookingsContainer, thDate: ThDateDO): ITotalGuestsForDate {
+        var indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(thDate);
+        var filteredBookingList: BookingDO[] = bookingsContainer.getBookingsFilteredByInterval(indexedSingleDayInterval);
+        
+        let totalGuestsForDate = new TotalGuestsForDate();
+        totalGuestsForDate.noOfGuests = _.reduce(filteredBookingList, (sum, booking: BookingDO) => {
+            return sum + booking.getNumberOfGuestNights();
+        }, 0);
+        
+        let guestsByNationality = {};
+        _.forEach(filteredBookingList, (booking: BookingDO) => {
+            let noOfBookedGuests = booking.configCapacity.getTotalNumberOfGuests();
+            let noOfUnknownGuests = noOfBookedGuests - booking.customerIdList.length;
+            let noOfUnknownGuestNights = booking.getNumberOfNights() * noOfUnknownGuests;
+
+            let defaultCountryCode = this.getDefaultCountryCode(booking);
+
+            _.forEach(booking.customerIdList, (customerId: string) => {
+                let countryCode = this._countryContainer.getCountryByCustomerId(customerId).code;
+                if (!_.isString(countryCode)) {
+                    countryCode = CountryContainer.OtherCountryCode;
+                }
+                guestsByNationality[countryCode] =
+                    _.isNumber(guestsByNationality[countryCode]) ?
+                        guestsByNationality[countryCode] + booking.getNumberOfNights() :
+                        booking.getNumberOfNights();
+
+            });
+
+            guestsByNationality[defaultCountryCode] =
+                _.isNumber(guestsByNationality[defaultCountryCode]) ?
+                    guestsByNationality[defaultCountryCode] + noOfUnknownGuestNights :
+                    noOfUnknownGuestNights;
+
+        });
+        
+        totalGuestsForDate.guestsByNationality = guestsByNationality;
+        return totalGuestsForDate;
+    }
+    private getDefaultCountryCode(booking: BookingDO): string {
+        let defaultCountryCode = CountryContainer.OtherCountryCode;
+
+        _.forEach(booking.customerIdList, (customerId: string) => {
+            if (defaultCountryCode != CountryContainer.OtherCountryCode) {
+                return;
+            }
+
+            let country = this._countryContainer.getCountryByCustomerId(customerId);
+            if (_.isUndefined(country) || !_.isString(country.code)) {
+                return;
+            }
+
+            defaultCountryCode = country.code;
+        });
+
+        return defaultCountryCode;
     }
 
     public getConfirmedOccupancy(thDate: ThDateDO): IBookingOccupancy {
