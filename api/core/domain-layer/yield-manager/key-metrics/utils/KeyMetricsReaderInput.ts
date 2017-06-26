@@ -1,5 +1,6 @@
 import { ThPeriodType } from "../../../reports/key-metrics/period-converter/ThPeriodDO";
 import { YieldManagerPeriodDO } from "../../utils/YieldManagerPeriodDO";
+import { RevenueSegment } from "../../../hotel-inventory-snapshots/stats-reader/data-objects/revenue/ISegmentedRevenueForDate";
 
 export enum CommissionOption {
     INCLUDE,
@@ -19,7 +20,7 @@ export class KeyMetricsReaderInput {
     yieldManagerPeriodDO: YieldManagerPeriodDO;
     includePreviousPeriod: boolean;
     dataAggregationType: ThPeriodType;
-    commissionOption: CommissionOption;
     excludeVat: boolean;
     customerIdList: string[];
+    commissionOption: CommissionOption;
 }

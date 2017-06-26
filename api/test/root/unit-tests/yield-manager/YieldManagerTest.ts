@@ -24,6 +24,7 @@ import { KeyMetricsResult, KeyMetric } from '../../../../core/domain-layer/yield
 import { DynamicPriceYielding } from "../../../../core/domain-layer/yield-manager/dynamic-price-yielding/DynamicPriceYielding";
 import { DynamicPriceYieldingDO } from "../../../../core/domain-layer/yield-manager/dynamic-price-yielding/DynamicPriceYieldingDO";
 import { KeyMetricsReaderInputBuilder } from "../../../../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsReaderInputBuilder";
+import { KeyMetricOutputType } from "../../../../core/domain-layer/yield-manager/key-metrics/utils/builder/MetricBuilderStrategyFactory";
 
 function testPriceProductOpenInterval(priceProduct: PriceProductDO, firstIntervalEnd: ThDateDO, secondIntervalStart: ThDateDO) {
 	should.equal(priceProduct.openIntervalList.length >= 2, true);
@@ -567,7 +568,8 @@ describe("Price Products Interval Tests", function () {
 			keyMetricReader.getKeyMetrics(
 				new KeyMetricsReaderInputBuilder()
 					.setYieldManagerPeriodDO(yieldPeriodDO)
-					.build()
+					.build(),
+					KeyMetricOutputType.YieldManager
 			).then((keyMetricsResult: KeyMetricsResult) => {
 				should.equal(keyMetricsResult.currentItem.dateList.length, 14);
 				keyMetricsResult.currentItem.metricList.forEach((metric: KeyMetric) => {

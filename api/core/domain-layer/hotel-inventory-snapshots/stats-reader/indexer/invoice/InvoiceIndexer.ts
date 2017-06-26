@@ -111,10 +111,7 @@ export class InvoiceIndexer {
             return true;
         }
         var payersInPayerCustomerIdList = _.filter(invoice.payerList, (payer: InvoicePayerDO) =>{
-            var found: string = _.find(this._payerCustomerIdList, (payerId: string) => {
-                return payerId === payer.customerId;
-            });
-            return (found) ? true: false;
+            return  _.contains(this._payerCustomerIdList, payer.customerId);
         });
         return payersInPayerCustomerIdList.length > 0;
     }
@@ -130,7 +127,7 @@ export class InvoiceIndexer {
         return this.getRevenueGeneratedByPayerCustomerIdList(invoice, otherRevenue);
     }
 
-    private getRevenueGeneratedByPayerCustomerIdList(invoice: InvoiceDO, revenue: number) {
+    private getRevenueGeneratedByPayerCustomerIdList(invoice: InvoiceDO, revenue: number): number {
         let thUtils = new ThUtils();
         if (thUtils.isUndefinedOrNull(this._payerCustomerIdList) || this._payerCustomerIdList.length == 0) {
             return revenue;
