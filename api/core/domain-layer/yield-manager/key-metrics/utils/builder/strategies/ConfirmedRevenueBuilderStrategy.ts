@@ -3,12 +3,13 @@ import { AMetricBuilderStrategy } from '../AMetricBuilderStrategy';
 import { KeyMetricType } from '../../KeyMetricType';
 import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
 import { PriceKeyMetric } from '../../values/PriceKeyMetric';
+import { IMetricBuilderInput } from "../IMetricBuilderStrategy";
 
 import _ = require('underscore');
 
 export class ConfirmedRevenueBuilderStrategy extends AMetricBuilderStrategy {
-    constructor(hotelInventoryStats: IHotelInventoryStats,  private _excludeCommission  ) {
-        super(hotelInventoryStats);
+    constructor(hotelInventoryStats: IHotelInventoryStats, private input: IMetricBuilderInput) {
+        super(hotelInventoryStats, input);
     }
 
     protected getType(): KeyMetricType {
@@ -21,13 +22,14 @@ export class ConfirmedRevenueBuilderStrategy extends AMetricBuilderStrategy {
         let metric = new PriceKeyMetric();
         metric.price = 0;
         _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
-            let confirmedRevenue = this._excludeCommission? statsForDate.confirmedRevenueWithoutCommission : statsForDate.confirmedRevenue;
-            metric.price += confirmedRevenue.roomRevenue + confirmedRevenue.otherRevenue;
+            let confirmedRevenue = this._input.excludeCommission? statsForDate.confirmedRevenueWithoutCommission : statsForDate.confirmedRevenue;
+            metric.price += confirmedRevenue[this._input.revenueSegment].revenue.roomRevenue 
+                + confirmedRevenue[this._input.revenueSegment].revenue.otherRevenue;
         });
         metric.price = this.roundValueToNearestInteger(metric.price);
         return metric;
     }
-    protected getKeyMetricDisplayName(): string {
-        return "Room Revenue Confirmed" + ((this._excludeCommission) ? AMetricBuilderStrategy.WithoutCommissionSuffixDisplayString : "");
+    protected getKeyMetricName(): string {
+        return "Room Revenue Confirmed";
     }
 }

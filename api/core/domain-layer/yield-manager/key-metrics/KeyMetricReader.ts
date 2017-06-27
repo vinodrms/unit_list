@@ -20,7 +20,7 @@ import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
 import { HotelInventoryStatsReader } from '../../hotel-inventory-snapshots/stats-reader/HotelInventoryStatsReader';
 import { IHotelInventoryStats } from '../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
 import { IMetricBuilderStrategy } from './utils/builder/IMetricBuilderStrategy';
-import { MetricBuilderStrategyFactory } from './utils/builder/MetricBuilderStrategyFactory';
+import { MetricBuilderStrategyFactory, KeyMetricOutputType } from './utils/builder/MetricBuilderStrategyFactory';
 import { ThPeriodType, ThPeriodDO } from "../../reports/key-metrics/period-converter/ThPeriodDO";
 import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
 import { ThDateToThPeriodConverterFactory } from "../../reports/key-metrics/period-converter/ThDateToThPeriodConverterFactory";
@@ -48,14 +48,17 @@ export class KeyMetricReader {
     private _configurationCompletedTimestamp: ThTimestampDO;
 
     private _input: KeyMetricsReaderInput;
+    private _outputType: KeyMetricOutputType;
     private _keyMetricsResult: KeyMetricsResult;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
     }
 
-    public getKeyMetrics(input: KeyMetricsReaderInput): Promise<KeyMetricsResult> {
+    public getKeyMetrics(input: KeyMetricsReaderInput, outputType: KeyMetricOutputType): Promise<KeyMetricsResult> {
         this._input = input;
+        this._outputType = outputType;
+
         return new Promise<KeyMetricsResult>((resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }) => {
             this.getKeyMetricsCore(resolve, reject);
         });
@@ -137,7 +140,8 @@ export class KeyMetricReader {
             cancellationHour: this._cancellationHour,
             checkOutHour: this._checkOutHour,
             currentHotelTimestamp: this._currentHotelTimestamp,
-            configurationCompletedTimestamp: this._configurationCompletedTimestamp
+            configurationCompletedTimestamp: this._configurationCompletedTimestamp,
+            customerIdList: this._input.customerIdList
         }, this._input.excludeVat);
         statsReader.readInventoryForInterval(indexedInterval).then((inventoryStats: IHotelInventoryStats) => {
             var resultItem: KeyMetricsResultItem = new KeyMetricsResultItem();
@@ -151,7 +155,7 @@ export class KeyMetricReader {
 
             resultItem.metricList = [];
             var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedRoomCategoryStatsList, this._input.commissionOption);
-            var metricBuilderStrategyList: IMetricBuilderStrategy[] = metricFactory.getMetricStrategies();
+            var metricBuilderStrategyList: IMetricBuilderStrategy[] = metricFactory.getMetricStrategies(this._outputType);
 
             _.forEach(metricBuilderStrategyList, (metricBuilderStrategy: IMetricBuilderStrategy) => {
                 var keyMetric = metricBuilderStrategy.buildKeyMetric(indexedInterval.bookingDateList, aggregationPeriodList);

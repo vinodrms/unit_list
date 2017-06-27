@@ -70,6 +70,23 @@
 						</select>
 					</div>
 				</div>
+				<div class="col-xs-6 checkbox">
+					<label>
+						<input type="checkbox" 
+							[(ngModel)]="filterByCustomers" 
+							name="filterByCustomers"> {{'Filter by Customers' | translate}}
+					</label>
+				</div>
+			</div>
+			<div *ngIf="filterByCustomers" class="row">
+				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'Select customers' | translate }}</label>
+					<customer-selector
+						(onCustomerAdded)="didAddCustomer($event)"
+						(onCustomerRemoved)="didRemoveCustomer($event)"
+						[maxCustomers]="maxCustomers">
+					</customer-selector>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-6 form-group">

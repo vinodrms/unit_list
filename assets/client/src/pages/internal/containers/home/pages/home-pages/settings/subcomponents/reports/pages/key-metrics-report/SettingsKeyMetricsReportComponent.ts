@@ -10,11 +10,12 @@ import { SettingsReportsService } from '../../main/services/SettingsReportsServi
 import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ThPeriodType, ThPeriodOption } from '../../utils/ThPeriodType';
 import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
+import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
 
 export enum CommissionOption {
-    INCLUDE,
-    EXCLUDE,
-    BOTH
+	INCLUDE,
+	EXCLUDE,
+	BOTH
 }
 
 @Component({
@@ -23,6 +24,7 @@ export enum CommissionOption {
 	providers: [SettingsReportsService]
 })
 export class SettingsKeyMetricsReportComponent extends BaseComponent {
+	private static MaxCustomers = 10;
 	private static CommissionOption = CommissionOption;
 	private startDate: ThDateDO;
 	private endDate: ThDateDO;
@@ -32,6 +34,8 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 	private excludeVat: boolean;
 	private selectedPeriodType: ThPeriodType;
 	private format: ReportOutputFormatType;
+	private filterByCustomers: boolean = false;
+	private customerIdList: string[] = [];
 
 	constructor(
 		private _appContext: AppContext,
@@ -79,8 +83,11 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 				endDate: this.endDate,
 				periodType: this.selectedPeriodType,
 				commissionOption: this.commissionOption,
-				excludeVat: this.excludeVat
+				excludeVat: this.excludeVat,
 			}
+		}
+		if (this.filterByCustomers && this.customerIdList.length > 0) {
+			params.properties["customerIdList"] = this.customerIdList;
 		}
 		var encodedParams = encodeURI(JSON.stringify(params));
 		return 'api/reports/report?params=' + encodedParams;
@@ -106,7 +113,19 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 		this.commissionOption = CommissionOption.INCLUDE;
 	}
 
-		public setSelectedCommissionOptionBoth() {
+	public setSelectedCommissionOptionBoth() {
 		this.commissionOption = CommissionOption.BOTH;
+	}
+
+	public get maxCustomers(): number {
+		return SettingsKeyMetricsReportComponent.MaxCustomers;
+	}
+
+	public didAddCustomer(customer: CustomerDO) {
+		this.customerIdList.push(customer.id);
+		this.customerIdList = _.uniq(this.customerIdList);
+	}
+	public didRemoveCustomer(customer: CustomerDO) {
+		this.customerIdList = _.filter(this.customerIdList, existingId => { return existingId != customer.id; });
 	}
 }

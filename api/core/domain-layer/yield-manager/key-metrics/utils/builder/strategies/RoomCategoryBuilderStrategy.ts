@@ -4,12 +4,14 @@ import { KeyMetricType } from '../../KeyMetricType';
 import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
 import { InventoryKeyMetric } from '../../values/InventoryKeyMetric';
 import { RoomCategoryStatsDO } from '../../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { IMetricBuilderInput } from "../IMetricBuilderStrategy";
 
 import _ = require('underscore');
 
 export class RoomCategoryBuilderStrategy extends AMetricBuilderStrategy {
-    constructor(hotelInventoryStats: IHotelInventoryStats, private _roomCategoryStats: RoomCategoryStatsDO) {
-        super(hotelInventoryStats);
+    constructor(hotelInventoryStats: IHotelInventoryStats, private _roomCategoryStats: RoomCategoryStatsDO, 
+        input: IMetricBuilderInput) {
+        super(hotelInventoryStats, input);
     }
 
     protected getType(): KeyMetricType {
@@ -32,7 +34,7 @@ export class RoomCategoryBuilderStrategy extends AMetricBuilderStrategy {
         });
         return metric;
     }
-    protected getKeyMetricDisplayName(): string {
+    protected getKeyMetricName(): string {
         return this._roomCategoryStats.roomCategory.displayName;
     }
 }

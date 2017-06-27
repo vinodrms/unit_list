@@ -32,6 +32,7 @@ export interface HotelInventoryStatsParams {
     checkOutHour: ThHourDO;
     currentHotelTimestamp: ThTimestampDO;
     configurationCompletedTimestamp: ThTimestampDO;
+    customerIdList: string[];
 }
 export class HotelInventoryStatsReader {
     private _thUtils: ThUtils;
@@ -80,7 +81,8 @@ export class HotelInventoryStatsReader {
                 checkOutHour: this._readerParams.checkOutHour,
                 currentHotelTimestamp: this._readerParams.currentHotelTimestamp,
                 roomList: this._currentRoomSnapshots,
-                vatTaxList: this._readerParams.currentVatTaxList 
+                vatTaxList: this._readerParams.currentVatTaxList,
+                customerIdList: this._readerParams.customerIdList
             }, this._exludeVat);
             return this._inventoryIndexer.indexInventory(this._indexedInterval);
         }).then((result: boolean) => {

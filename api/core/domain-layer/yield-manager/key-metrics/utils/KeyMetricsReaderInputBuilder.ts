@@ -1,6 +1,7 @@
 import { KeyMetricsReaderInput, CommissionOption } from "./KeyMetricsReaderInput";
 import { YieldManagerPeriodDO } from "../../utils/YieldManagerPeriodDO";
 import { ThPeriodType } from "../../../reports/key-metrics/period-converter/ThPeriodDO";
+import { RevenueSegment } from "../../../hotel-inventory-snapshots/stats-reader/data-objects/revenue/ISegmentedRevenueForDate";
 
 export class KeyMetricsReaderInputBuilder {
     private _input: KeyMetricsReaderInput;
@@ -9,7 +10,7 @@ export class KeyMetricsReaderInputBuilder {
         this._input = new KeyMetricsReaderInput();
         this._input.includePreviousPeriod = true;
         this._input.commissionOption = CommissionOption.INCLUDE;
-        this._input.excludeVat = false;    
+        this._input.excludeVat = false;
     }
 
     public setYieldManagerPeriodDO(yieldManagerPeriodDO: YieldManagerPeriodDO): KeyMetricsReaderInputBuilder {
@@ -34,6 +35,11 @@ export class KeyMetricsReaderInputBuilder {
 
     public excludeVat(excludeVat: boolean): KeyMetricsReaderInputBuilder {
         this._input.excludeVat = excludeVat;
+        return this;
+    }
+
+    public setCustomerIdList(customerIdList: string[]): KeyMetricsReaderInputBuilder {
+        this._input.customerIdList = customerIdList;
         return this;
     }
 
