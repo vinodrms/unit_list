@@ -36,10 +36,12 @@ import { CountryContainer } from "./utils/CountryContainer";
 import { TotalGuestsForDate } from "../data-objects/total-guests/TotalGuestsForDate";
 import { CountryDO } from "../../../../data-layer/common/data-objects/country/CountryDO";
 import { BookingSegment } from "../data-objects/utils/BookingSegment";
-
-import _ = require('underscore');
 import { ITotalArrivalsForDate } from "../data-objects/total-arrivals/ITotalArrivalsForDate";
 import { TotalArrivalsForDate } from "../data-objects/total-arrivals/TotalArrivalsForDate";
+import { ITotalRoomNights } from "../data-objects/total-room-nights/ITotalRoomNights";
+import { TotalRoomNightsForDate } from "../data-objects/total-room-nights/TotalRoomNights";
+
+import _ = require('underscore');
 
 export class IndexedRevenueSegments {
 
@@ -323,10 +325,10 @@ export class HotelInventoryIndexer {
         let bookingList: BookingDO[] = bookingsContainer.getBookingsFilteredByInterval(indexedSingleDayInterval);
 
         let totalArrivalsForDate = new TotalArrivalsForDate();
-        totalArrivalsForDate.totalNoOfArrivals = 
+        totalArrivalsForDate.totalNoOfArrivals =
             this.getTotalNumberOfArrivalsFromBookingList(bookingList, thDate);
         totalArrivalsForDate.arrivalsByNationality = this.getArrivalsByNationality(bookingList, thDate);
-        
+
         return totalArrivalsForDate;
     }
     private getArrivalsByNationality(bookingList: BookingDO[], arrivalDate: ThDateDO): { [countryCode: string]: number; } {
@@ -336,7 +338,7 @@ export class HotelInventoryIndexer {
             return booking.interval.start.isSame(arrivalDate);
         });
 
-         _.forEach(arrivalBookings, (booking: BookingDO) => {
+        _.forEach(arrivalBookings, (booking: BookingDO) => {
             let noOfArrivals = booking.configCapacity.getTotalNumberOfGuests();
 
             let defaultCountryCode = this.getDefaultCountryCode(booking);
@@ -354,9 +356,55 @@ export class HotelInventoryIndexer {
             return booking.interval.start.isSame(arrivalDate);
         });
 
-        return _.reduce(bookingList, (sum, booking: BookingDO) => { 
-            return sum + booking.configCapacity.getTotalNumberOfGuests(); 
+        return _.reduce(bookingList, (sum, booking: BookingDO) => {
+            return sum + booking.configCapacity.getTotalNumberOfGuests();
         }, 0);
+    }
+
+    public getConfirmedRoomNights(thDate: ThDateDO): ITotalRoomNights {
+        return this.getRoomNights(this._confirmedBookingsContainer, thDate);
+    }
+    public getGuaranteedRoomNights(thDate: ThDateDO): ITotalRoomNights {
+        return this.getRoomNights(this._guaranteedBookingsContainer, thDate);
+    }
+    private getRoomNights(bookingsContainer: BookingsContainer, thDate: ThDateDO): ITotalRoomNights {
+        let indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(thDate);
+        let bookingList: BookingDO[] = bookingsContainer.getBookingsFilteredByInterval(indexedSingleDayInterval);
+
+        let totalRoomNights = new TotalRoomNightsForDate();
+        totalRoomNights.totalRoomNights = bookingList.length;
+        totalRoomNights.roomNightsByBookingSegment = this.getRoomNightsByBookingSegment(bookingList);
+
+        return totalRoomNights;
+    }
+    private getRoomNightsByBookingSegment(bookingList: BookingDO[]): { [bookingSegment: number]: number; } {
+        let roomNightsByBookingSegment = {};
+
+        let individualBookings = _.filter(bookingList, (booking: BookingDO) => {
+            return booking.travelType === TravelType.Individual;
+        });
+        let groupBookings = _.filter(bookingList, (booking: BookingDO) => {
+            return booking.travelType === TravelType.Group;
+        });
+
+        roomNightsByBookingSegment[BookingSegment.BusinessGroup] =
+            _.filter(groupBookings, (booking: BookingDO) => {
+                return booking.travelActivityType === TravelActivityType.Business;
+            }).length;
+        roomNightsByBookingSegment[BookingSegment.BusinessIndividual] =
+            _.filter(individualBookings, (booking: BookingDO) => {
+                return booking.travelActivityType === TravelActivityType.Business;
+            }).length;
+        roomNightsByBookingSegment[BookingSegment.LeisureGroup] =
+            _.filter(groupBookings, (booking: BookingDO) => {
+                return booking.travelActivityType === TravelActivityType.Leisure;
+            }).length;
+        roomNightsByBookingSegment[BookingSegment.LeisureIndividual] =
+            _.filter(individualBookings, (booking: BookingDO) => {
+                return booking.travelActivityType === TravelActivityType.Leisure;
+            }).length;
+
+        return roomNightsByBookingSegment;
     }
 
     public getConfirmedOccupancy(thDate: ThDateDO): IBookingOccupancy {

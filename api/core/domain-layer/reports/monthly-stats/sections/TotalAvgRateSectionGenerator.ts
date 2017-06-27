@@ -13,8 +13,8 @@ import { ThPeriodType } from "../../key-metrics/period-converter/ThPeriodDO";
 
 import _ = require('underscore');
 
-export class RoomNightsSectionGenerator extends AReportSectionGeneratorStrategy {
-    private static KeyMetricList = [KeyMetricType.RoomNights];
+export class TotalAvgRateSectionGenerator extends AReportSectionGeneratorStrategy {
+    private static KeyMetricList = [KeyMetricType.TotalAvgRate];
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
         private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem) {
@@ -23,7 +23,7 @@ export class RoomNightsSectionGenerator extends AReportSectionGeneratorStrategy 
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Total room nights"
+            title: "Total average rate"
         }
     }
 
@@ -45,7 +45,7 @@ export class RoomNightsSectionGenerator extends AReportSectionGeneratorStrategy 
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
         var data: any[] = [];
         _.filter(this._kmResultItem.metricList, (metric: KeyMetric) => {
-            return _.contains(RoomNightsSectionGenerator.KeyMetricList, metric.type);
+            return _.contains(TotalAvgRateSectionGenerator.KeyMetricList, metric.type);
         }).forEach((metric: KeyMetric) => {
             let typeStr = this._appContext.thTranslate.translate(metric.displayName);
             let row: any = [typeStr];

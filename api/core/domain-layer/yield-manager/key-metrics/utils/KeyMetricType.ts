@@ -16,5 +16,7 @@ export enum KeyMetricType {
     GuestNightsWeekend,
     Arrivals,
     ArrivalsByNationality,
-
+    RoomNights,
+    RoomNightsByBookingSegment,
+    
 }

@@ -22,6 +22,8 @@ import { GuestNightsByBookingSegmentBuilderStrategy } from "./strategies/GuestNi
 import { CountryContainer } from "../../../../reports/monthly-stats/utils/CountryContainer";
 import { ArrivalsBuilderStrategy } from "./strategies/ArrivalsBuilderStrategy";
 import { ArrivalsByNationalityBuilderStrategy } from "./strategies/ArrivalsByNationalityBuilderStrategy";
+import { RoomNightsByBookingSegmentBuilderStrategy } from "./strategies/RoomNightsByBookingSegmentBuilderStrategy";
+import { RoomNightsBuilderStrategy } from "./strategies/RoomNightsBuilderStrategy";
 
 import _ = require('underscore');
 
@@ -209,6 +211,12 @@ export class MetricBuilderStrategyFactory {
                 new GuestNightsWeekdaysBuilderStrategy(this._hotelInventoryStats, {}),
                 new GuestNightsWeekendBuilderStrategy(this._hotelInventoryStats, {}),
                 new ArrivalsBuilderStrategy(this._hotelInventoryStats, {}),
+                new RoomNightsBuilderStrategy(this._hotelInventoryStats, {}),
+                new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
+                    excludeCommission: true,
+                    revenueSegment: BookingSegment.All
+                }),
+
             ]
 
             let bookingSegments = [BookingSegment.BusinessGroup, BookingSegment.BusinessIndividual,
@@ -217,6 +225,14 @@ export class MetricBuilderStrategyFactory {
             _.forEach(bookingSegments, (bookingSegment: BookingSegment) => {
                 metricList.push(new GuestNightsByBookingSegmentBuilderStrategy(this._hotelInventoryStats, bookingSegment,
                     {}));
+                metricList.push(new RoomNightsByBookingSegmentBuilderStrategy(this._hotelInventoryStats, bookingSegment,
+                    {}));
+                metricList.push(
+                    new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
+                        excludeCommission: true,
+                        revenueSegment: bookingSegment
+                    })
+                );
             });
 
             this._countryList.push(CountryContainer.buildOtherCountryDO());
@@ -224,7 +240,7 @@ export class MetricBuilderStrategyFactory {
                 metricList.push(new GuestNightsByNationalityBuilderStrategy(this._hotelInventoryStats, country, {}));
                 metricList.push(new ArrivalsByNationalityBuilderStrategy(this._hotelInventoryStats, country, {}));
             });
-            
+
         }
 
         return metricList;

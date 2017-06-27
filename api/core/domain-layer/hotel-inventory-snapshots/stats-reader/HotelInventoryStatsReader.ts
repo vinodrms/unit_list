@@ -112,6 +112,8 @@ export class HotelInventoryStatsReader {
                 guaranteedGuestNights: this._inventoryIndexer.getGuaranteedGuestNights(date),
                 confirmedArrivals: this._inventoryIndexer.getConfirmedArrivals(date),
                 guaranteedArrivals: this._inventoryIndexer.getGuaranteedArrivals(date),
+                confirmedRoomNights: this._inventoryIndexer.getConfirmedRoomNights(date),
+                guaranteedRoomNights: this._inventoryIndexer.getGuaranteedRoomNights(date),
                 confirmedOccupancy: this._inventoryIndexer.getConfirmedOccupancy(date),
                 guaranteedOccupancy: this._inventoryIndexer.getGuaranteedOccupancy(date),
                 guaranteedOccupancyOccupyingRoomsFromInventory: this._inventoryIndexer.getGuaranteedOccupyingRoomsFromInventoryOccupancy(date),

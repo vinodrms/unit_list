@@ -1,20 +1,16 @@
 import { AReportSectionGeneratorStrategy } from "../../common/report-section-generator/AReportSectionGeneratorStrategy";
-import { SessionContext } from "../../../../utils/SessionContext";
-import { AppContext } from "../../../../utils/AppContext";
-import { ThDateDO } from "../../../../utils/th-dates/data-objects/ThDateDO";
-import { ReportSectionMeta, ReportSectionHeader } from "../../common/result/ReportSection";
-import { ThError } from "../../../../utils/th-responses/ThError";
-import { BookingDOConstraints } from "../../../../data-layer/bookings/data-objects/BookingDOConstraints";
-import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repositories/IBookingRepository";
-import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingDO";
 import { KeyMetricType } from "../../../yield-manager/key-metrics/utils/KeyMetricType";
+import { AppContext } from "../../../../utils/AppContext";
+import { SessionContext } from "../../../../utils/SessionContext";
 import { KeyMetricsResultItem, KeyMetric } from "../../../yield-manager/key-metrics/utils/KeyMetricsResult";
 import { ThPeriodType } from "../../key-metrics/period-converter/ThPeriodDO";
+import { ReportSectionMeta, ReportSectionHeader } from "../../common/result/ReportSection";
+import { ThError } from "../../../../utils/th-responses/ThError";
 
 import _ = require('underscore');
 
-export class RoomNightsSectionGenerator extends AReportSectionGeneratorStrategy {
-    private static KeyMetricList = [KeyMetricType.RoomNights];
+export class RoomNightsDividedByBookingSegmentSectionGenerator extends AReportSectionGeneratorStrategy {
+    private static KeyMetricList = [KeyMetricType.RoomNightsByBookingSegment];
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
         private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem) {
@@ -23,7 +19,7 @@ export class RoomNightsSectionGenerator extends AReportSectionGeneratorStrategy 
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Total room nights"
+            title: "Room nights divided by the purpose of the stay"
         }
     }
 
@@ -32,20 +28,23 @@ export class RoomNightsSectionGenerator extends AReportSectionGeneratorStrategy 
     }
 
     protected getLocalSummary(): Object {
-        return {}
+        return {
+        }
     }
 
     protected getHeader(): ReportSectionHeader {
         return {
-            display: false,
-            values: []
+            display: true,
+            values: [
+
+            ]
         };
     }
 
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
         var data: any[] = [];
         _.filter(this._kmResultItem.metricList, (metric: KeyMetric) => {
-            return _.contains(RoomNightsSectionGenerator.KeyMetricList, metric.type);
+            return _.contains(RoomNightsDividedByBookingSegmentSectionGenerator.KeyMetricList, metric.type);
         }).forEach((metric: KeyMetric) => {
             let typeStr = this._appContext.thTranslate.translate(metric.displayName);
             let row: any = [typeStr];

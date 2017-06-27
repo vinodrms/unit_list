@@ -42,6 +42,9 @@ import { GuestNightsDividedByNationalitySectionGenerator } from "./sections/Gues
 import { HotelGetDetails } from "../../hotel-details/get-details/HotelGetDetails";
 import { ArrivalsSectionGenerator } from "./sections/ArrivalsSectionGenerator";
 import { ArrivalsFromHomeCountrySectionGenerator } from "./sections/ArrivalsFromHomeCountrySectionGenerator";
+import { RoomNightsSectionGenerator } from "./sections/RoomNightsSectionGenerator";
+import { RoomNightsDividedByBookingSegmentSectionGenerator } from "./sections/RoomNightsDividedByBookingSegmentSectionGenerator";
+import { TotalAvgRateSectionGenerator } from "./sections/TotalAvgRateSectionGenerator";
 
 export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 	private static MaxBookings = 2000;
@@ -102,9 +105,9 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 				KeyMetricOutputType.MonthlyStatsReport
 			);
 		}).then((reportItems: KeyMetricsResult) => {
-				this._keyMetricItem = reportItems.currentItem;
-				resolve(true);
-			}).catch((e) => { reject(e); })
+			this._keyMetricItem = reportItems.currentItem;
+			resolve(true);
+		}).catch((e) => { reject(e); })
 	}
 
 	protected getMeta(): ReportGroupMeta {
@@ -141,24 +144,6 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
 		let homeCountry = this._hotelDetails.hotel.contactDetails.address.country;
 		return [
-			// new MonthlyStatsReportNoOfGuestNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-			// 	this._bookingList),
-
-			// new MonthlyStatsReportNightsDividedByPurposeSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-			// 	this._bookingList),
-
-			// new MonthlyStatsReportNightsDividedByNationalitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-			// 	this._hotelDetails, this._bookingList, this._countryContainer),
-
-			// new MonthlyStatsReportArrivalsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-			// 	this._hotelDetails, this._bookingList, this._countryContainer),
-
-			// new MonthlyStatsReportRoomNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-			// 	this._bookingList),
-
-			// new MonthlyStatsReportCapacitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-			// 	this._roomList, this._roomCategoryStatsList),
-
 			new GuestNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
 				ThPeriodType.Month, this._keyMetricItem),
 			new GuestNightsDividedByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
@@ -169,6 +154,12 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 				ThPeriodType.Month, this._keyMetricItem),
 			new ArrivalsFromHomeCountrySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
 				ThPeriodType.Month, this._keyMetricItem, homeCountry),
+			new RoomNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				ThPeriodType.Month, this._keyMetricItem),
+			new RoomNightsDividedByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				ThPeriodType.Month, this._keyMetricItem),
+			new TotalAvgRateSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				ThPeriodType.Month, this._keyMetricItem),
 		];
 	}
 }
