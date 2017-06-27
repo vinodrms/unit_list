@@ -46,6 +46,7 @@ import { RoomNightsSectionGenerator } from "./sections/RoomNightsSectionGenerato
 import { RoomNightsDividedByBookingSegmentSectionGenerator } from "./sections/RoomNightsDividedByBookingSegmentSectionGenerator";
 import { TotalAvgRateSectionGenerator } from "./sections/TotalAvgRateSectionGenerator";
 import { BreakfastSectionGenerator } from "./sections/BreakfastSectionGenerator";
+import { HotelInventorySnapshotSearchResultRepoDO } from "../../../data-layer/hotel-inventory-snapshots/repositories/IHotelInventorySnapshotRepository";
 
 export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _startDate: ThDateDO;
@@ -84,6 +85,14 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 		this._period = new YieldManagerPeriodDO();
 		this._period.referenceDate = dateInterval.start;
 		this._period.noDays = dateInterval.getNumberOfDays() + 1;
+
+		let snapshotRepo = this._appContext.getRepositoryFactory().getSnapshotRepository();
+		snapshotRepo.getSnapshotList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+			thDateUtcTimestamp: dateInterval.end.getUtcTimestamp()
+		}).then((result: HotelInventorySnapshotSearchResultRepoDO) => {
+			let snapshotList = result.snapshotList;
+			if(_.isEmpty(snapshotList))
+		})
 
 		let hotelGetDetails = new HotelGetDetails(this._appContext, this._sessionContext);
 		hotelGetDetails.getDetails().then((hotelDetails: HotelDetailsDO) => {

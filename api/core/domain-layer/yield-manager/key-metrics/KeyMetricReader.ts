@@ -41,7 +41,7 @@ export class KeyMetricReader {
 
     private _loadedRoomList: RoomDO[];
     private _loadedAllotmentList: AllotmentDO[];
-    private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
+    // private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
     private _loadedVatTaxList: TaxDO[];
     private _loadedCountries: CountryDO[];
 
@@ -108,7 +108,7 @@ export class KeyMetricReader {
                 var roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
                 return roomCategStatsAggregator.getUsedRoomCategoryStatsList()
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
-                this._loadedRoomCategoryStatsList = roomCategoryStatsList;
+                // this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
                 let settingsRepo = this._appContext.getRepositoryFactory().getSettingsRepository();
                 return settingsRepo.getCountries();
@@ -165,7 +165,7 @@ export class KeyMetricReader {
             resultItem.aggregationPeriodList = aggregationPeriodList;
 
             resultItem.metricList = [];
-            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedRoomCategoryStatsList, this._loadedCountries, 
+            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedCountries, 
                 this._input.commissionOption);
             var metricBuilderStrategyList: IMetricBuilderStrategy[] = metricFactory.getMetricStrategies(this._outputType);
 

@@ -37,7 +37,6 @@ export enum KeyMetricOutputType {
 
 export class MetricBuilderStrategyFactory {
     constructor(private _hotelInventoryStats: IHotelInventoryStats,
-        private _roomCategoryStatsList: RoomCategoryStatsDO[],
         private _countryList: CountryDO[],
         private _commissionOption: CommissionOption) {
     }
