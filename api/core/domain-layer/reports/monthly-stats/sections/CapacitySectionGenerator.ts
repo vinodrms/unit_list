@@ -11,6 +11,8 @@ import { RoomDO } from "../../../../data-layer/rooms/data-objects/RoomDO";
 import { RoomCategoryStatsDO } from "../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
 import { BedStatsDO } from "../../../../data-layer/room-categories/data-objects/bed-stats/BedStatsDO";
 import { BedStorageType } from "../../../../data-layer/common/data-objects/bed/BedDO";
+import { KeyMetricsResultItem } from "../../../yield-manager/key-metrics/utils/KeyMetricsResult";
+import { ThPeriodType } from "../../key-metrics/period-converter/ThPeriodDO";
 
 import _ = require('underscore');
 
@@ -19,6 +21,7 @@ export class CapacitySectionGenerator extends AReportSectionGeneratorStrategy {
     private _numberOfRooms: number = 0;
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
+        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem,
         private _roomList: RoomDO[], private _roomCategoryStatsList: RoomCategoryStatsDO[]) {
         super(appContext, sessionContext, globalSummary);
     }

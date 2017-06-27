@@ -47,6 +47,8 @@ import { RoomNightsDividedByBookingSegmentSectionGenerator } from "./sections/Ro
 import { TotalAvgRateSectionGenerator } from "./sections/TotalAvgRateSectionGenerator";
 import { BreakfastSectionGenerator } from "./sections/BreakfastSectionGenerator";
 import { HotelInventorySnapshotSearchResultRepoDO } from "../../../data-layer/hotel-inventory-snapshots/repositories/IHotelInventorySnapshotRepository";
+import { RoomSnapshotDO } from "../../../data-layer/hotel-inventory-snapshots/data-objects/room/RoomSnapshotDO";
+import { CapacitySectionGenerator } from "./sections/CapacitySectionGenerator";
 
 export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _startDate: ThDateDO;
@@ -56,6 +58,9 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 
 	private _hotelDetails: HotelDetailsDO;
 	private _keyMetricItem: KeyMetricsResultItem;
+
+	private _loadedRoomList: RoomDO[];
+	private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
 
 	protected getParamsValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -85,14 +90,12 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 		this._period = new YieldManagerPeriodDO();
 		this._period.referenceDate = dateInterval.start;
 		this._period.noDays = dateInterval.getNumberOfDays() + 1;
+		
+		let roomSnapshotIdList: string[] = [];
+		let roomCategorySnapshotIdList: string[] = [];
 
-		let snapshotRepo = this._appContext.getRepositoryFactory().getSnapshotRepository();
-		snapshotRepo.getSnapshotList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-			thDateUtcTimestamp: dateInterval.end.getUtcTimestamp()
-		}).then((result: HotelInventorySnapshotSearchResultRepoDO) => {
-			let snapshotList = result.snapshotList;
-			if(_.isEmpty(snapshotList))
-		})
+		let roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
+		let roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
 
 		let hotelGetDetails = new HotelGetDetails(this._appContext, this._sessionContext);
 		hotelGetDetails.getDetails().then((hotelDetails: HotelDetailsDO) => {
@@ -111,6 +114,45 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 			);
 		}).then((reportItems: KeyMetricsResult) => {
 			this._keyMetricItem = reportItems.currentItem;
+
+			return roomRepo.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+				maintenanceStatusList: RoomDO.inInventoryMaintenanceStatusList
+			});
+		}).then((roomSearchResult: RoomSearchResultRepoDO) => {
+			this._loadedRoomList = roomSearchResult.roomList;
+
+			return roomCategStatsAggregator.getUsedRoomCategoryStatsList()
+		}).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+			this._loadedRoomCategoryStatsList = roomCategoryStatsList;
+
+			let snapshotRepo = this._appContext.getRepositoryFactory().getSnapshotRepository();
+			return snapshotRepo.getSnapshotList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+				thDateUtcTimestamp: dateInterval.end.getUtcTimestamp()
+			});
+		}).then((result: HotelInventorySnapshotSearchResultRepoDO) => {
+			let snapshotList = result.snapshotList;
+			if (_.isEmpty(snapshotList)) {
+				resolve(true);
+				return;
+			}
+
+			let hotelInventorySnapshotList = snapshotList[0];
+
+			roomSnapshotIdList = _.map(hotelInventorySnapshotList.roomList, (roomSnapshot: RoomSnapshotDO) => {
+				return roomSnapshot.id
+			});
+			roomCategorySnapshotIdList = _.chain(hotelInventorySnapshotList.roomList).map((roomSnapshotDO: RoomSnapshotDO) => {
+				return roomSnapshotDO.categoryId;
+			}).uniq().value();
+
+			return roomRepo.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {roomIdList: roomSnapshotIdList});
+		}).then((roomSearchResult: RoomSearchResultRepoDO) => {
+			this._loadedRoomList = roomSearchResult.roomList;
+
+			return roomCategStatsAggregator.getRoomCategoryStatsList(roomCategorySnapshotIdList);
+		}).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+			this._loadedRoomCategoryStatsList = roomCategoryStatsList;
+
 			resolve(true);
 		}).catch((e) => { reject(e); })
 	}
@@ -123,8 +165,8 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 		var displayParams = {};
 		displayParams[startDateKey] = this._startDate;
 		displayParams[endDateKey] = this._endDate;
-		displayParams[excludeVat] = 
-			this._excludeVat? this._appContext.thTranslate.translate("Yes") : this._appContext.thTranslate.translate("No");
+		displayParams[excludeVat] =
+			this._excludeVat ? this._appContext.thTranslate.translate("Yes") : this._appContext.thTranslate.translate("No");
 
 		return {
 			name: "Monthly Stats Report",
@@ -170,7 +212,9 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 			new TotalAvgRateSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
 				ThPeriodType.Month, this._keyMetricItem),
 			new BreakfastSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem)
+				ThPeriodType.Month, this._keyMetricItem),
+			new CapacitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				ThPeriodType.Month, this._keyMetricItem, this._loadedRoomList, this._loadedRoomCategoryStatsList)
 		];
 	}
 }
