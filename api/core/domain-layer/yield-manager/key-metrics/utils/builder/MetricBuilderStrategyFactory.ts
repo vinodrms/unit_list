@@ -24,6 +24,7 @@ import { ArrivalsBuilderStrategy } from "./strategies/ArrivalsBuilderStrategy";
 import { ArrivalsByNationalityBuilderStrategy } from "./strategies/ArrivalsByNationalityBuilderStrategy";
 import { RoomNightsByBookingSegmentBuilderStrategy } from "./strategies/RoomNightsByBookingSegmentBuilderStrategy";
 import { RoomNightsBuilderStrategy } from "./strategies/RoomNightsBuilderStrategy";
+import { BreakfastRevenueBuilderStrategy } from "./strategies/BreakfastRevenueBuilderStrategy";
 
 import _ = require('underscore');
 
@@ -216,7 +217,10 @@ export class MetricBuilderStrategyFactory {
                     excludeCommission: true,
                     revenueSegment: BookingSegment.All
                 }),
-
+                new BreakfastRevenueBuilderStrategy(this._hotelInventoryStats, {
+                    excludeCommission: true,
+                    revenueSegment: BookingSegment.All
+                })
             ]
 
             let bookingSegments = [BookingSegment.BusinessGroup, BookingSegment.BusinessIndividual,

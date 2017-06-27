@@ -45,23 +45,16 @@ import { ArrivalsFromHomeCountrySectionGenerator } from "./sections/ArrivalsFrom
 import { RoomNightsSectionGenerator } from "./sections/RoomNightsSectionGenerator";
 import { RoomNightsDividedByBookingSegmentSectionGenerator } from "./sections/RoomNightsDividedByBookingSegmentSectionGenerator";
 import { TotalAvgRateSectionGenerator } from "./sections/TotalAvgRateSectionGenerator";
+import { BreakfastSectionGenerator } from "./sections/BreakfastSectionGenerator";
 
 export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
-	private static MaxBookings = 2000;
-
 	private _startDate: ThDateDO;
 	private _endDate: ThDateDO;
-
 	private _period: YieldManagerPeriodDO;
-	private _roomList: RoomDO[];
-	private _roomCategoryStatsList: RoomCategoryStatsDO[];
-	private _bookingList: BookingDO[];
+	private _excludeVat: boolean;
+
 	private _hotelDetails: HotelDetailsDO;
-	private _vatTaxList: TaxDO[];
-
 	private _keyMetricItem: KeyMetricsResultItem;
-
-	private _countryContainer: CountryContainer;
 
 	protected getParamsValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -82,6 +75,8 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 		this._startDate.buildFromObject(params.startDate);
 		this._endDate = new ThDateDO();
 		this._endDate.buildFromObject(params.endDate);
+
+		this._excludeVat = true;
 	}
 
 	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
@@ -101,6 +96,7 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 					.includePreviousPeriod(false)
 					.setDataAggregationType(ThPeriodType.Month)
 					.setCommissionOption(CommissionOption.EXCLUDE)
+					.excludeVat(this._excludeVat)
 					.build(),
 				KeyMetricOutputType.MonthlyStatsReport
 			);
@@ -113,9 +109,13 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 	protected getMeta(): ReportGroupMeta {
 		var startDateKey: string = this._appContext.thTranslate.translate("Start Date");
 		var endDateKey: string = this._appContext.thTranslate.translate("End Date");
+		var excludeVat: string = this._appContext.thTranslate.translate("Exclude VAT");
+
 		var displayParams = {};
 		displayParams[startDateKey] = this._startDate;
 		displayParams[endDateKey] = this._endDate;
+		displayParams[excludeVat] = 
+			this._excludeVat? this._appContext.thTranslate.translate("Yes") : this._appContext.thTranslate.translate("No");
 
 		return {
 			name: "Monthly Stats Report",
@@ -160,6 +160,8 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 				ThPeriodType.Month, this._keyMetricItem),
 			new TotalAvgRateSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
 				ThPeriodType.Month, this._keyMetricItem),
+			new BreakfastSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				ThPeriodType.Month, this._keyMetricItem)
 		];
 	}
 }

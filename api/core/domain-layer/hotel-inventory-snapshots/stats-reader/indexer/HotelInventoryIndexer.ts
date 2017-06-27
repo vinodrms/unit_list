@@ -496,7 +496,7 @@ export class HotelInventoryIndexer {
             }
         });
 
-        let revenue = new RevenueForDate(0.0, 0.0);
+        let revenue = new RevenueForDate(0.0, 0.0, 0.0);
         _.forEach(segmentedBookingItemList, (bookingItem: BookingItemContainer) => {
             let noNights = bookingItem.indexedBookingInterval.getLengthOfStay();
             if (noNights > 0 && !this._invoiceStats.bookingHasInvoiceWithLossAcceptedByManagement(bookingItem.booking.id)) {
@@ -504,6 +504,8 @@ export class HotelInventoryIndexer {
                     noNights, input.thDate, input.excludeCommission, input.excludeVat);
                 revenue.otherRevenue += this.getBookingOtherPriceAvgPerNight(bookingItem.booking,
                     noNights, input.excludeCommission);
+                revenue.breakfastRevenue += this.getBookingBreakfastPriceForDate(bookingItem.booking,
+                    noNights, input.thDate, input.excludeCommission, input.excludeVat);
             }
         });
         return revenue;
@@ -578,7 +580,41 @@ export class HotelInventoryIndexer {
         }
         return otherPrice;
     }
+    private getBookingBreakfastPriceForDate(booking: BookingDO, totalNoNights: number,
+        thDate: ThDateDO, excludeCommission: boolean, excludeVat: boolean): number {
 
+        let breakfastPricePerDay = 0;
+
+        let bookingPrice = booking.price;
+        let bookingCapacity = booking.configCapacity;
+
+        if (bookingPrice.isPenalty()) {
+            return breakfastPricePerDay;
+        }
+
+        var roomPriceForNight = bookingPrice.roomPricePerNightAvg;
+        // now we try to find the actual price for the specific date
+        for (var i = 0; i < bookingPrice.roomPricePerNightList.length; i++) {
+            let priceForNight = bookingPrice.roomPricePerNightList[i];
+            if (priceForNight.thDate.isSame(thDate)) {
+                roomPriceForNight = priceForNight.price;
+                break;
+            }
+        }
+        
+        if (!bookingPrice.hasBreakfast()) {
+            return breakfastPricePerDay;
+        }
+
+        breakfastPricePerDay = bookingPrice.breakfast.meta.getUnitPrice() * bookingCapacity.getNoAdultsAndChildren();
+        
+        if (excludeCommission) {
+            breakfastPricePerDay = this.getPriceWithoutCommission(breakfastPricePerDay, bookingPrice.commissionSnapshot, totalNoNights);
+        }
+        
+        // commission has vat included
+        return this._excludeVat ? this.getNetValue(bookingPrice.breakfast.meta.getVatId(), breakfastPricePerDay) : breakfastPricePerDay;
+    }
     private getPriceWithoutCommission(price: number, commission: CommissionDO, totalNoNights: number) {
         let commissionAmount = commission.getCommissionFor(price);
 
