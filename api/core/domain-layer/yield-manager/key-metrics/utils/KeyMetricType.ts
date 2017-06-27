@@ -10,8 +10,11 @@ export enum KeyMetricType {
     ConfirmedRevenue,
     RoomCategory,
     GuestNights,
+    GuestNightsByBookingSegment,
     GuestNightsByNationality,
     GuestNightsWeekdays,
     GuestNightsWeekend,
-    
+    Arrivals,
+    ArrivalsByNationality,
+
 }

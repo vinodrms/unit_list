@@ -19,22 +19,29 @@ import { BookingDOConstraints } from "../../../data-layer/bookings/data-objects/
 import { BookingDO, BookingConfirmationStatus } from "../../../data-layer/bookings/data-objects/BookingDO";
 import { ThDateToThPeriodConverterFactory } from "../key-metrics/period-converter/ThDateToThPeriodConverterFactory";
 import { ThPeriodType, ThPeriodDO } from "../key-metrics/period-converter/ThPeriodDO";
-import { MonthlyStatsReportNightsDividedByPurposeSectionGenerator } from "./sections/MonthlyStatsReportNightsDividedByPurposeSectionGenerator";
-import { MonthlyStatsReportNightsDividedByNationalitySectionGenerator } from "./sections/MonthlyStatsReportNightsDividedByNationalitySectionGenerator";
-import { MonthlyStatsReportArrivalsSectionGenerator } from "./sections/MonthlyStatsReportArrivalsSectionGenerator";
 import { CustomerSearchResultRepoDO } from "../../../data-layer/customers/repositories/ICustomerRepository";
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
-import { MonthlyStatsReportRoomNightsSectionGenerator } from "./sections/MonthlyStatsReportRoomNightsSectionGenerator";
-import { MonthlyStatsReportCapacitySectionGenerator } from "./sections/MonthlyStatsReportCapacitySectionGenerator";
 import { RoomDO } from "../../../data-layer/rooms/data-objects/RoomDO";
 import { RoomSearchResultRepoDO } from "../../../data-layer/rooms/repositories/IRoomRepository";
 import { RoomCategoryStatsAggregator } from "../../room-categories/aggregators/RoomCategoryStatsAggregator";
 import { RoomCategoryStatsDO } from "../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
 import { CountryDO } from "../../../data-layer/common/data-objects/country/CountryDO";
 import { CountryContainer } from "./utils/CountryContainer";
-import { MonthlyStatsReportNoOfGuestNightsSectionGenerator } from "./sections/MonthlyStatsReportNoOfGuestNightsSectionGenerator";
 import { TaxResponseRepoDO } from "../../../data-layer/taxes/repositories/ITaxRepository";
 import { TaxDO } from "../../../data-layer/taxes/data-objects/TaxDO";
+import { KeyMetricReader } from "../../yield-manager/key-metrics/KeyMetricReader";
+import { KeyMetricsReaderInputBuilder } from "../../yield-manager/key-metrics/utils/KeyMetricsReaderInputBuilder";
+import { YieldManagerPeriodDO } from "../../yield-manager/utils/YieldManagerPeriodDO";
+import { CommissionOption } from "../../yield-manager/key-metrics/utils/KeyMetricsReaderInput";
+import { KeyMetricOutputType } from "../../yield-manager/key-metrics/utils/builder/MetricBuilderStrategyFactory";
+import { KeyMetricsResult, KeyMetricsResultItem, KeyMetric } from "../../yield-manager/key-metrics/utils/KeyMetricsResult";
+import { KeyMetricType } from "../../yield-manager/key-metrics/utils/KeyMetricType";
+import { GuestNightsDividedByBookingSegmentSectionGenerator } from "./sections/GuestNightsDividedByBookingSegmentSectionGenerator";
+import { GuestNightsSectionGenerator } from "./sections/GuestNightsSectionGenerator";
+import { GuestNightsDividedByNationalitySectionGenerator } from "./sections/GuestNightsDividedByNationalitySectionGenerator";
+import { HotelGetDetails } from "../../hotel-details/get-details/HotelGetDetails";
+import { ArrivalsSectionGenerator } from "./sections/ArrivalsSectionGenerator";
+import { ArrivalsFromHomeCountrySectionGenerator } from "./sections/ArrivalsFromHomeCountrySectionGenerator";
 
 export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 	private static MaxBookings = 2000;
@@ -42,12 +49,14 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _startDate: ThDateDO;
 	private _endDate: ThDateDO;
 
-	private _interval: ThDateIntervalDO;
+	private _period: YieldManagerPeriodDO;
 	private _roomList: RoomDO[];
 	private _roomCategoryStatsList: RoomCategoryStatsDO[];
 	private _bookingList: BookingDO[];
 	private _hotelDetails: HotelDetailsDO;
 	private _vatTaxList: TaxDO[];
+
+	private _keyMetricItem: KeyMetricsResultItem;
 
 	private _countryContainer: CountryContainer;
 
@@ -73,60 +82,29 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 	}
 
 	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-		let roomsRepository = this._appContext.getRepositoryFactory().getRoomRepository();
-		let customerRepository = this._appContext.getRepositoryFactory().getCustomerRepository();
-		let bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-		let hotelRepo = this._appContext.getRepositoryFactory().getHotelRepository();
+		let dateInterval = ThDateIntervalDO.buildThDateIntervalDO(this._startDate, this._endDate);
+		this._period = new YieldManagerPeriodDO();
+		this._period.referenceDate = dateInterval.start;
+		this._period.noDays = dateInterval.getNumberOfDays() + 1;
 
-		let roomCategoryStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
+		let hotelGetDetails = new HotelGetDetails(this._appContext, this._sessionContext);
+		hotelGetDetails.getDetails().then((hotelDetails: HotelDetailsDO) => {
+			this._hotelDetails = hotelDetails;
 
-		hotelRepo.getHotelById(this._sessionContext.sessionDO.hotel.id)
-			.then((hotelDO: HotelDO) => {
-				var hotelDetailsBuilder = new HotelDetailsBuilder(this._sessionContext, hotelDO);
-				return hotelDetailsBuilder.build();
-			})
-			.then((details: HotelDetailsDO) => {
-				this._hotelDetails = details;
-
-				this._interval = new ThDateIntervalDO();
-				this._interval.start = this._startDate;
-				this._interval.end = this._endDate;
-
-				let bookingSearchCriteria: BookingSearchCriteriaRepoDO = {
-					confirmationStatusList: [BookingConfirmationStatus.CheckedOut],
-					interval: this._interval
-				};
-
-				return bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
-					bookingSearchCriteria);
-
-			}).then((bookingMetaRsp: BookingSearchResultRepoDO) => {
-				this._bookingList = bookingMetaRsp.bookingList;
-
-				let customerIdList = _.chain(this._bookingList).map((booking: BookingDO) => {
-					return booking.customerIdList;
-				}).flatten().uniq();
-
-				return customerRepository.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, customerIdList);
-			}).then((result: CustomerSearchResultRepoDO) => {
-				let customerList = result.customerList;
-
-				this._countryContainer = new CountryContainer(customerList);
-
-				return roomsRepository.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id });
-			}).then((result: RoomSearchResultRepoDO) => {
-				this._roomList = result.roomList;
-
-				return roomCategoryStatsAggregator.getRoomCategoryStatsList();
-			}).then((result: RoomCategoryStatsDO[]) => {
-				this._roomCategoryStatsList = result;
-
+			let reader = new KeyMetricReader(this._appContext, this._sessionContext);
+			return reader.getKeyMetrics(
+				new KeyMetricsReaderInputBuilder()
+					.setYieldManagerPeriodDO(this._period)
+					.includePreviousPeriod(false)
+					.setDataAggregationType(ThPeriodType.Month)
+					.setCommissionOption(CommissionOption.EXCLUDE)
+					.build(),
+				KeyMetricOutputType.MonthlyStatsReport
+			);
+		}).then((reportItems: KeyMetricsResult) => {
+				this._keyMetricItem = reportItems.currentItem;
 				resolve(true);
-			}).catch(e => {
-				reject(e);
-			});
-
-
+			}).catch((e) => { reject(e); })
 	}
 
 	protected getMeta(): ReportGroupMeta {
@@ -161,26 +139,36 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 	}
 
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
-
+		let homeCountry = this._hotelDetails.hotel.contactDetails.address.country;
 		return [
-			new MonthlyStatsReportNoOfGuestNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, 
-				this._bookingList),
-			
-			new MonthlyStatsReportNightsDividedByPurposeSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, 
-				this._bookingList),
-			
-			new MonthlyStatsReportNightsDividedByNationalitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary, 
-				this._hotelDetails, this._bookingList, this._countryContainer),
-			
-			new MonthlyStatsReportArrivalsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, 
-				this._hotelDetails, this._bookingList, this._countryContainer),
-			
-			new MonthlyStatsReportRoomNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, 
-				this._bookingList),
-			
-			new MonthlyStatsReportCapacitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary, 
-				this._roomList, this._roomCategoryStatsList),
+			// new MonthlyStatsReportNoOfGuestNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+			// 	this._bookingList),
 
+			// new MonthlyStatsReportNightsDividedByPurposeSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+			// 	this._bookingList),
+
+			// new MonthlyStatsReportNightsDividedByNationalitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+			// 	this._hotelDetails, this._bookingList, this._countryContainer),
+
+			// new MonthlyStatsReportArrivalsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+			// 	this._hotelDetails, this._bookingList, this._countryContainer),
+
+			// new MonthlyStatsReportRoomNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+			// 	this._bookingList),
+
+			// new MonthlyStatsReportCapacitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+			// 	this._roomList, this._roomCategoryStatsList),
+
+			new GuestNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				ThPeriodType.Month, this._keyMetricItem),
+			new GuestNightsDividedByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				ThPeriodType.Month, this._keyMetricItem),
+			new GuestNightsDividedByNationalitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				ThPeriodType.Month, this._keyMetricItem, homeCountry),
+			new ArrivalsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				ThPeriodType.Month, this._keyMetricItem),
+			new ArrivalsFromHomeCountrySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				ThPeriodType.Month, this._keyMetricItem, homeCountry),
 		];
 	}
 }

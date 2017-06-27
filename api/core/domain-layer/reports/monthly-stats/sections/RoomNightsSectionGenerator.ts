@@ -10,7 +10,7 @@ import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingD
 
 import _ = require('underscore');
 
-export class MonthlyStatsReportRoomNightsSectionGenerator extends AReportSectionGeneratorStrategy {
+export class RoomNightsSectionGenerator extends AReportSectionGeneratorStrategy {
     private _totalRoomNights: number = 0;
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,

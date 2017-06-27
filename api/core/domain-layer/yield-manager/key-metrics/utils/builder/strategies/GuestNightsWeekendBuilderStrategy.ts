@@ -29,7 +29,7 @@ export class GuestNightsWeekendBuilderStrategy extends AMetricBuilderStrategy {
                 return;
             }
 
-            let total = statsForDate.confirmedGuestNights.noOfGuests + statsForDate.guaranteedGuestNights.noOfGuests;
+            let total = statsForDate.confirmedGuestNights.totalNoOfGuests + statsForDate.guaranteedGuestNights.totalNoOfGuests;
             metric.total += total;
         });
         

@@ -14,7 +14,7 @@ export class GuestNightsBuilderStrategy extends AMetricBuilderStrategy {
     }
 
     protected getType(): KeyMetricType {
-        return KeyMetricType.GuestNightsByNationality;
+        return KeyMetricType.GuestNights;
     }
     protected getValueType(): KeyMetricValueType {
         return KeyMetricValueType.Counter;
@@ -23,7 +23,7 @@ export class GuestNightsBuilderStrategy extends AMetricBuilderStrategy {
         var metric = new CounterKeyMetric();
         metric.total = 0;
         _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
-            let total = statsForDate.confirmedGuestNights.noOfGuests + statsForDate.guaranteedGuestNights.noOfGuests;
+            let total = statsForDate.confirmedGuestNights.totalNoOfGuests + statsForDate.guaranteedGuestNights.totalNoOfGuests;
             metric.total += total;
         });
         
@@ -31,6 +31,6 @@ export class GuestNightsBuilderStrategy extends AMetricBuilderStrategy {
     }
 
     protected getKeyMetricName(): string {
-        return "Guest nights";
+        return "Total guest nights";
     }
 }

@@ -8,7 +8,7 @@ import { IHotelInventoryStats, HotelInventoryStatsForDate } from '../../../../ho
 import { ThPeriodType, ThPeriodDO } from "../../../../reports/key-metrics/period-converter/ThPeriodDO";
 import { ThDateToThPeriodConverterFactory } from "../../../../reports/key-metrics/period-converter/ThDateToThPeriodConverterFactory";
 import { ThDateIntervalDO } from "../../../../../utils/th-dates/data-objects/ThDateIntervalDO";
-import { RevenueSegment } from "../../../../hotel-inventory-snapshots/stats-reader/data-objects/revenue/ISegmentedRevenueForDate";
+import { BookingSegment } from "../../../../hotel-inventory-snapshots/stats-reader/data-objects/utils/BookingSegment";
 
 import _ = require('underscore');
 
@@ -80,13 +80,13 @@ export abstract class AMetricBuilderStrategy implements IMetricBuilderStrategy {
 
     private getRevenueSegmentSuffixDisplayString(): string {
         switch(this._input.revenueSegment) {
-            case RevenueSegment.BusinessGroup:
+            case BookingSegment.BusinessGroup:
                 return AMetricBuilderStrategy.BusinessGroupSuffixDisplayString;
-            case RevenueSegment.BusinessIndividual:
+            case BookingSegment.BusinessIndividual:
                 return AMetricBuilderStrategy.BusinessIndividualSuffixDisplayString;
-            case RevenueSegment.LeisureGroup:
+            case BookingSegment.LeisureGroup:
                 return AMetricBuilderStrategy.LeisureGroupSuffixDisplayString;
-            case RevenueSegment.LeisureIndividual:
+            case BookingSegment.LeisureIndividual:
                 return AMetricBuilderStrategy.LeisureIndividualSuffixDisplayString;
             default: return "";
 

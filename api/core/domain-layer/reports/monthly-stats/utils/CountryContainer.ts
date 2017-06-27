@@ -26,17 +26,20 @@ export class CountryContainer {
             }
         });
         
-        let otherCountry = new CountryDO();
-        otherCountry.code = CountryContainer.OtherCountryCode;
-        otherCountry.name = CountryContainer.OtherCountryName;
-        this._customerIdToCountryMap[CountryContainer.OtherCountryCode] = otherCountry;
-
+        this._customerIdToCountryMap[CountryContainer.OtherCountryCode] = CountryContainer.buildOtherCountryDO();
     }
-
+    
     public getCountryByCustomerId(customerId: string): CountryDO  {
         return this._customerIdToCountryMap[customerId];
     }
     public getCountryByCountryCode(countryCode: string): CountryDO  {
         return this._countryCodeToCountryMap[countryCode];
+    }
+
+    public static buildOtherCountryDO(): CountryDO {
+        let otherCountry = new CountryDO();
+        otherCountry.code = CountryContainer.OtherCountryCode;
+        otherCountry.name = CountryContainer.OtherCountryName;
+        return otherCountry;
     }
 }				

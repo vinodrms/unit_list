@@ -5,17 +5,18 @@ import { IMetricBuilderInput } from "../IMetricBuilderStrategy";
 import { KeyMetricType } from "../../KeyMetricType";
 import { KeyMetricValueType, IKeyMetricValue } from "../../values/IKeyMetricValue";
 import { CounterKeyMetric } from "../../values/CounterKeyMetric";
+import { BookingSegment } from "../../../../../hotel-inventory-snapshots/stats-reader/data-objects/utils/BookingSegment";
 
 import _ = require('underscore');
 
-export class GuestNightsByNationalityBuilderStrategy extends AMetricBuilderStrategy {
-    constructor(hotelInventoryStats: IHotelInventoryStats, private _country: CountryDO,
+export class GuestNightsByBookingSegmentBuilderStrategy extends AMetricBuilderStrategy {
+    constructor(hotelInventoryStats: IHotelInventoryStats, private _segment: BookingSegment, 
         input: IMetricBuilderInput) {
         super(hotelInventoryStats, input);
     }
 
     protected getType(): KeyMetricType {
-        return KeyMetricType.GuestNightsByNationality;
+        return KeyMetricType.GuestNightsByBookingSegment;
     }
     protected getValueType(): KeyMetricValueType {
         return KeyMetricValueType.Counter;
@@ -25,17 +26,23 @@ export class GuestNightsByNationalityBuilderStrategy extends AMetricBuilderStrat
         metric.total = 0;
 
         _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
-            let confirmedGuestNights = statsForDate.confirmedGuestNights.guestsByNationality[this._country.code];
-            let guaranteedGuestNights = statsForDate.guaranteedGuestNights.guestsByNationality[this._country.code];
+            let confirmedGuestNights = statsForDate.confirmedGuestNights.guestsByBookingSegment[this._segment];
+            let guaranteedGuestNights = statsForDate.guaranteedGuestNights.guestsByBookingSegment[this._segment];
 
-            let total = (_.isNumber(confirmedGuestNights) ? confirmedGuestNights : 0)
-                + (_.isNumber(guaranteedGuestNights) ? guaranteedGuestNights : 0);
+            let total = (_.isNumber(confirmedGuestNights)? confirmedGuestNights : 0) 
+                + (_.isNumber(guaranteedGuestNights)? guaranteedGuestNights : 0);
 
             metric.total += total;
         });
         return metric;
     }
     protected getKeyMetricName(): string {
-        return this._country.name;
+        switch(this._segment) {
+            case BookingSegment.BusinessGroup: return "Business Group";
+            case BookingSegment.BusinessIndividual: return "Business Individual";
+            case BookingSegment.LeisureGroup: return "Leisure Group";
+            case BookingSegment.LeisureIndividual: return "Leisure Individual";
+            default: return "";
+        }
     }
 }

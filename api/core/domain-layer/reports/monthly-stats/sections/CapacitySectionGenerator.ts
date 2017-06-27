@@ -14,7 +14,7 @@ import { BedStorageType } from "../../../../data-layer/common/data-objects/bed/B
 
 import _ = require('underscore');
 
-export class MonthlyStatsReportCapacitySectionGenerator extends AReportSectionGeneratorStrategy {
+export class CapacitySectionGenerator extends AReportSectionGeneratorStrategy {
     private _numberOfFixedBeds: number = 0;
     private _numberOfRooms: number = 0;
 

@@ -10,18 +10,18 @@ import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingD
 import { HotelDetailsDO } from "../../../hotel-details/utils/HotelDetailsBuilder";
 import { CountryDO } from "../../../../data-layer/common/data-objects/country/CountryDO";
 import { CountryContainer } from "../utils/CountryContainer";
+import { KeyMetricType } from "../../../yield-manager/key-metrics/utils/KeyMetricType";
+import { ThPeriodType } from "../../key-metrics/period-converter/ThPeriodDO";
+import { KeyMetricsResultItem, KeyMetric } from "../../../yield-manager/key-metrics/utils/KeyMetricsResult";
 
 import _ = require('underscore');
 
-export class MonthlyStatsReportArrivalsSectionGenerator extends AReportSectionGeneratorStrategy {
-    private _localSummary: Object;
+export class ArrivalsSectionGenerator extends AReportSectionGeneratorStrategy {
+    private static KeyMetricList = [KeyMetricType.Arrivals];
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
-        private _hotelDetails: HotelDetailsDO, private _bookingList: BookingDO[], 
-        private _countryContainer: CountryContainer) {
+        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem) {
         super(appContext, sessionContext, globalSummary);
-
-        this._localSummary = {};
     }
 
     protected getMeta(): ReportSectionMeta {
@@ -35,43 +35,30 @@ export class MonthlyStatsReportArrivalsSectionGenerator extends AReportSectionGe
     }
 
     protected getLocalSummary(): Object {
-        return this._localSummary;
+        return {}
     }
 
     protected getHeader(): ReportSectionHeader {
         return {
-            display: true,
-            values: [
-
-            ]
+            display: false,
+            values: []
         };
     }
 
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
-        this._localSummary["Total number of arrivals"] = 
-            this.getTotalNumberOfArrivalsFromBookingList(this._bookingList);
-
-        let hotelsHomeCountry = this._hotelDetails.hotel.contactDetails.address.country;
-        let totalNoOfArrivalsFromHotelsHomeCountryLabel = 
-            this._appContext.thTranslate.translate("Out of which from") + " " 
-                + hotelsHomeCountry.name;
-
-        let localCountryBookings = _.filter(this._bookingList, (booking: BookingDO) => {
-            let firstCustomerId = booking.customerIdList[0];
-            let country = this._countryContainer.getCountryByCustomerId(firstCustomerId);
-
-            return country.code === hotelsHomeCountry.code;
+        var data: any[] = [];
+        _.filter(this._kmResultItem.metricList, (metric: KeyMetric) => {
+            return _.contains(ArrivalsSectionGenerator.KeyMetricList, metric.type);
+        }).forEach((metric: KeyMetric) => {
+            let displayValue = this._appContext.thTranslate.translate(metric.displayName);
+            let row: any = [displayValue];
+            for (var i = 0; i < metric.aggregatedValueList.length; i++) {
+                row.push(metric.aggregatedValueList[i].metricValue.getDisplayValue(this._periodType));
+            }
+            data.push(row);
+            row = [];
         });
 
-        this._localSummary[totalNoOfArrivalsFromHotelsHomeCountryLabel] = 
-            this.getTotalNumberOfArrivalsFromBookingList(localCountryBookings);
-
-        resolve([]);
-    }
-
-    private getTotalNumberOfArrivalsFromBookingList(bookingList: BookingDO[]): number {
-        return _.reduce(bookingList, (sum, booking: BookingDO) => { 
-            return sum + booking.configCapacity.getTotalNumberOfGuests(); 
-        }, 0);
+        resolve(data);
     }
 }

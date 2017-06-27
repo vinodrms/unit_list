@@ -4,7 +4,6 @@ import { KeyMetricType } from '../../KeyMetricType';
 import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
 import { PriceKeyMetric } from '../../values/PriceKeyMetric';
 import { IMetricBuilderInput } from "../IMetricBuilderStrategy";
-import { RevenueSegment } from "../../../../../hotel-inventory-snapshots/stats-reader/data-objects/revenue/ISegmentedRevenueForDate";
 
 import _ = require('underscore');
 

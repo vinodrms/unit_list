@@ -1,4 +1,6 @@
 export interface ITotalGuestsForDate {
-    noOfGuests: number;
-    guestsByNationality: { [countryCode: string]: number; }
+    totalNoOfGuests: number;
+    
+    guestsByBookingSegment: { [bookingSegment: number]: number; };
+    guestsByNationality: { [countryCode: string]: number; };
 }
