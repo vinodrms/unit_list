@@ -38,172 +38,163 @@ export enum KeyMetricOutputType {
 export class MetricBuilderStrategyFactory {
     constructor(private _hotelInventoryStats: IHotelInventoryStats,
         private _countryList: CountryDO[],
-        private _commissionOption: CommissionOption) {
+        private _commissionOption: CommissionOption,
+        private _roomCategoryStatsList: RoomCategoryStatsDO[]) {
     }
 
     public getMetricStrategies(outputType: KeyMetricOutputType): IMetricBuilderStrategy[] {
         var metricList: IMetricBuilderStrategy[] = [];
 
         if (outputType === KeyMetricOutputType.YieldManager || outputType === KeyMetricOutputType.KeyMetricReport) {
-            metricList = [
-                new GuestNightsBuilderStrategy(this._hotelInventoryStats, {}),
-                new GuestNightsWeekdaysBuilderStrategy(this._hotelInventoryStats, {}),
-                new GuestNightsWeekendBuilderStrategy(this._hotelInventoryStats, {})
-            ]
+            switch (this._commissionOption) {
+                case CommissionOption.INCLUDE:
+                    metricList = [
+                        new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new TotalOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
+                        new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
+                        new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new AllotmentsBuilderStrategy(this._hotelInventoryStats, {}),
+                        new RoomsBuilderStrategy(this._hotelInventoryStats, {})
+                    ];
+                    break;
+                case CommissionOption.EXCLUDE:
+                    metricList = [
+                        new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: true,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: true,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new TotalOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
+                        new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
+                        new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: true,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: true,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: true,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new AllotmentsBuilderStrategy(this._hotelInventoryStats, {}),
+                        new RoomsBuilderStrategy(this._hotelInventoryStats, {})
+                    ];
+                    break;
+                case CommissionOption.BOTH:
+                    metricList = [
+                        new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: true,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: true,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new TotalOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
+                        new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
+                        new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: true,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: true,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: true,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new AllotmentsBuilderStrategy(this._hotelInventoryStats, {}),
+                        new RoomsBuilderStrategy(this._hotelInventoryStats, {})
+                    ];
+                    break;
+                case CommissionOption.INCLUDE_AND_BOTH_FOR_ROOM_REVENUE:
+                    metricList = [
+                        new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new TotalOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
+                        new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
+                        new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: true,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
+                            excludeCommission: false,
+                            revenueSegment: BookingSegment.All
+                        }),
+                        new AllotmentsBuilderStrategy(this._hotelInventoryStats, {}),
+                        new RoomsBuilderStrategy(this._hotelInventoryStats, {})
+                    ];
+                    break;
+            }
 
-            _.forEach(this._countryList, (country: CountryDO) => {
-                metricList.push(new GuestNightsByNationalityBuilderStrategy(this._hotelInventoryStats, country, {}));
+            this._roomCategoryStatsList = _.sortBy(this._roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
+                return roomCategoryStats.roomCategory.displayName;
             });
 
-            // switch (this._commissionOption) {
-            //     case CommissionOption.INCLUDE:
-            //         metricList = [
-            //             new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new TotalOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
-            //             new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
-            //             new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new AllotmentsBuilderStrategy(this._hotelInventoryStats, {}),
-            //             new RoomsBuilderStrategy(this._hotelInventoryStats, {})
-            //         ];
-            //         break;
-            //     case CommissionOption.EXCLUDE:
-            //         metricList = [
-            //             new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: true,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: true,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new TotalOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
-            //             new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
-            //             new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: true,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: true,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: true,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new AllotmentsBuilderStrategy(this._hotelInventoryStats, {}),
-            //             new RoomsBuilderStrategy(this._hotelInventoryStats, {})
-            //         ];
-            //         break;
-            //     case CommissionOption.BOTH:
-            //         metricList = [
-            //             new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: true,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: true,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new TotalOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
-            //             new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
-            //             new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: true,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: true,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: true,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new AllotmentsBuilderStrategy(this._hotelInventoryStats, {}),
-            //             new RoomsBuilderStrategy(this._hotelInventoryStats, {})
-            //         ];
-            //         break;
-            //     case CommissionOption.INCLUDE_AND_BOTH_FOR_ROOM_REVENUE:
-            //         metricList = [
-            //             new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new TotalOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
-            //             new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
-            //             new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: true,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
-            //                 excludeCommission: false,
-            //                 revenueSegment: RevenueSegment.All
-            //             }),
-            //             new AllotmentsBuilderStrategy(this._hotelInventoryStats, {}),
-            //             new RoomsBuilderStrategy(this._hotelInventoryStats, {})
-            //         ];
-            //         break;
+            _.forEach(this._roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
+                metricList.push(
+                    new RoomCategoryBuilderStrategy(this._hotelInventoryStats, roomCategoryStats, {})
+                );
+            });
         }
-
-        // this._roomCategoryStatsList = _.sortBy(this._roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
-        //     return roomCategoryStats.roomCategory.displayName;
-        // });
-
-        // _.forEach(this._roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
-        //     metricList.push(
-        //         new RoomCategoryBuilderStrategy(this._hotelInventoryStats, roomCategoryStats, {})
-        //     );
-        // });
-        // }
 
         else if (outputType === KeyMetricOutputType.MonthlyStatsReport) {
             metricList = [

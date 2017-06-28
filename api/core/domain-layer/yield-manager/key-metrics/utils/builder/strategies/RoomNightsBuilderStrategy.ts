@@ -31,6 +31,6 @@ export class RoomNightsBuilderStrategy extends AMetricBuilderStrategy {
     }
 
     protected getKeyMetricName(): string {
-        return "Total room nights";
+        return "Room Nights Total";
     }
 }

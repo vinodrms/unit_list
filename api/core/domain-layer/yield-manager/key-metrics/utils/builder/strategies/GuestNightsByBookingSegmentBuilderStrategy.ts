@@ -5,7 +5,7 @@ import { IMetricBuilderInput } from "../IMetricBuilderStrategy";
 import { KeyMetricType } from "../../KeyMetricType";
 import { KeyMetricValueType, IKeyMetricValue } from "../../values/IKeyMetricValue";
 import { CounterKeyMetric } from "../../values/CounterKeyMetric";
-import { BookingSegment } from "../../../../../hotel-inventory-snapshots/stats-reader/data-objects/utils/BookingSegment";
+import { BookingSegment, BookingSegmentDisplayName } from "../../../../../hotel-inventory-snapshots/stats-reader/data-objects/utils/BookingSegment";
 
 import _ = require('underscore');
 
@@ -38,10 +38,10 @@ export class GuestNightsByBookingSegmentBuilderStrategy extends AMetricBuilderSt
     }
     protected getKeyMetricName(): string {
         switch(this._segment) {
-            case BookingSegment.BusinessGroup: return "Business Group";
-            case BookingSegment.BusinessIndividual: return "Business Individual";
-            case BookingSegment.LeisureGroup: return "Leisure Group";
-            case BookingSegment.LeisureIndividual: return "Leisure Individual";
+            case BookingSegment.BusinessGroup: return BookingSegmentDisplayName.BusinessGroup;
+            case BookingSegment.BusinessIndividual: return BookingSegmentDisplayName.BusinessIndividual;
+            case BookingSegment.LeisureGroup: return BookingSegmentDisplayName.LeisureGroup;
+            case BookingSegment.LeisureIndividual: return BookingSegmentDisplayName.LeisureIndividual;
             default: return "";
         }
     }

@@ -37,6 +37,6 @@ export class GuestNightsWeekendBuilderStrategy extends AMetricBuilderStrategy {
     }
 
     protected getKeyMetricName(): string {
-        return "Guest nights on weekend";
+        return "Guest Nights Weekend Total";
     }
 }

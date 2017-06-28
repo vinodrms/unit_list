@@ -19,7 +19,7 @@ export class RoomNightsDividedByBookingSegmentSectionGenerator extends AReportSe
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Room nights divided by the purpose of the stay"
+            title: "Room Nights by Purpose of Stay"
         }
     }
 

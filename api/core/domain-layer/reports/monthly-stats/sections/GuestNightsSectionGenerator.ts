@@ -22,7 +22,7 @@ export class GuestNightsSectionGenerator extends AReportSectionGeneratorStrategy
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Guest nights"
+            title: "Guest Nights"
         }
     }
 

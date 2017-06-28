@@ -23,7 +23,7 @@ export class RoomNightsSectionGenerator extends AReportSectionGeneratorStrategy 
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Total room nights"
+            title: "Room Nights Total"
         }
     }
 

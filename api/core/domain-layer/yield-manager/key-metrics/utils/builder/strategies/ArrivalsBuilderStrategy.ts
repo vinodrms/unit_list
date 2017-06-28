@@ -32,6 +32,6 @@ export class ArrivalsBuilderStrategy extends AMetricBuilderStrategy {
     }
 
     protected getKeyMetricName(): string {
-        return "Total arrivals";
+        return "Arrivals Total";
     }
 }
