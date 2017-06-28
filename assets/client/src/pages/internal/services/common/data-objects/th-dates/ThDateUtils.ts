@@ -28,6 +28,21 @@ export class ThDateUtils {
 		return newDateInterval;
 	}
 
+	public getPreviousMonthInterval(inDate: ThDateDO): ThDateIntervalDO {
+		let inMoment = this.convertThDateDOToMoment(inDate);
+		inMoment.subtract(1, "months");
+		inMoment.startOf("month");
+
+		let firstDayInMonth = inMoment;
+		let lastDayInMonth = inMoment.clone().endOf("month");
+		
+		let previousMonthInterval = new ThDateIntervalDO();
+		previousMonthInterval.start = this.convertMomentToThDateDO(firstDayInMonth);
+		previousMonthInterval.end = this.convertMomentToThDateDO(lastDayInMonth);
+
+		return previousMonthInterval;
+	}
+
 	public addDaysToThDateDO(inDate: ThDateDO, days: number): ThDateDO {
 		var inMoment = this.convertThDateDOToMoment(inDate);
 		inMoment = inMoment.add(days, "day");
