@@ -22,6 +22,7 @@ import { KeyMetricsReaderInputBuilder } from "../../yield-manager/key-metrics/ut
 import { CommissionOption, CommissionOptionDisplayNames } from "../../yield-manager/key-metrics/utils/KeyMetricsReaderInput";
 import { ArrayValidationStructure } from "../../../utils/th-validation/structure/ArrayValidationStructure";
 import { StringValidationRule } from "../../../utils/th-validation/rules/StringValidationRule";
+import { KeyMetricOutputType } from "../../yield-manager/key-metrics/utils/builder/MetricBuilderStrategyFactory";
 
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _period: YieldManagerPeriodDO;
@@ -81,7 +82,8 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 				.excludeVat(this._excludeVat)
 				.setCommissionOption(this._commissionOption)
 				.setCustomerIdList(this._customerIdList)
-				.build()
+				.build(),
+			KeyMetricOutputType.KeyMetricReport
 		).then((reportItems: KeyMetricsResult) => {
 			this._keyMetricItem = reportItems.currentItem;
 			resolve(true);
@@ -119,8 +121,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		}
 	}
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
-		let converterFactory = new ThDateToThPeriodConverterFactory();
-		let periodConverter = converterFactory.getConverter(this._periodType);
+		let periodConverter = ThDateToThPeriodConverterFactory.getConverter(this._periodType);
 		return [
 			new KeyMetricsReportSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._keyMetricItem, periodConverter, this._periodType)
 		];

@@ -20,7 +20,7 @@ import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
 import { HotelInventoryStatsReader } from '../../hotel-inventory-snapshots/stats-reader/HotelInventoryStatsReader';
 import { IHotelInventoryStats } from '../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
 import { IMetricBuilderStrategy } from './utils/builder/IMetricBuilderStrategy';
-import { MetricBuilderStrategyFactory } from './utils/builder/MetricBuilderStrategyFactory';
+import { MetricBuilderStrategyFactory, KeyMetricOutputType } from './utils/builder/MetricBuilderStrategyFactory';
 import { ThPeriodType, ThPeriodDO } from "../../reports/key-metrics/period-converter/ThPeriodDO";
 import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
 import { ThDateToThPeriodConverterFactory } from "../../reports/key-metrics/period-converter/ThDateToThPeriodConverterFactory";
@@ -28,6 +28,8 @@ import { ThUtils } from "../../../utils/ThUtils";
 import { KeyMetricsReaderInput } from "./utils/KeyMetricsReaderInput";
 import { TaxDO } from "../../../data-layer/taxes/data-objects/TaxDO";
 import { TaxResponseRepoDO } from "../../../data-layer/taxes/repositories/ITaxRepository";
+import { CountryDO } from "../../../data-layer/common/data-objects/country/CountryDO";
+import { KeyMetricType } from "./utils/KeyMetricType";
 
 import _ = require('underscore');
 
@@ -41,21 +43,26 @@ export class KeyMetricReader {
     private _loadedAllotmentList: AllotmentDO[];
     private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
     private _loadedVatTaxList: TaxDO[];
+    private _loadedCountries: CountryDO[];
 
+    private _homeCountry: CountryDO;
     private _cancellationHour: ThHourDO;
     private _checkOutHour: ThHourDO;
     private _currentHotelTimestamp: ThTimestampDO;
     private _configurationCompletedTimestamp: ThTimestampDO;
 
     private _input: KeyMetricsReaderInput;
+    private _outputType: KeyMetricOutputType;
     private _keyMetricsResult: KeyMetricsResult;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
     }
 
-    public getKeyMetrics(input: KeyMetricsReaderInput): Promise<KeyMetricsResult> {
+    public getKeyMetrics(input: KeyMetricsReaderInput, outputType: KeyMetricOutputType): Promise<KeyMetricsResult> {
         this._input = input;
+        this._outputType = outputType;
+
         return new Promise<KeyMetricsResult>((resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }) => {
             this.getKeyMetricsCore(resolve, reject);
         });
@@ -73,6 +80,7 @@ export class KeyMetricReader {
 
         this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id)
             .then((loadedHotel: HotelDO) => {
+                this._homeCountry = loadedHotel.contactDetails.address.country;
                 this._cancellationHour = loadedHotel.operationHours.cancellationHour;
                 this._checkOutHour = loadedHotel.operationHours.checkOutTo;
                 this._currentHotelTimestamp = ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone);
@@ -102,6 +110,11 @@ export class KeyMetricReader {
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
+                let settingsRepo = this._appContext.getRepositoryFactory().getSettingsRepository();
+                return settingsRepo.getCountries();
+            }).then((countryList: CountryDO[]) => {
+                this._loadedCountries = countryList;
+                
                 this._keyMetricsResult = new KeyMetricsResult();
                 return this.getKeyMetricsResultItem(this._currentIndexedInterval, this._input.dataAggregationType);
             }).then((currentItem: KeyMetricsResultItem) => {
@@ -134,6 +147,7 @@ export class KeyMetricReader {
             currentVatTaxList: this._loadedVatTaxList,
             currentRoomList: this._loadedRoomList,
             currentAllotmentList: this._loadedAllotmentList,
+            homeCountry: this._homeCountry,
             cancellationHour: this._cancellationHour,
             checkOutHour: this._checkOutHour,
             currentHotelTimestamp: this._currentHotelTimestamp,
@@ -151,8 +165,9 @@ export class KeyMetricReader {
             resultItem.aggregationPeriodList = aggregationPeriodList;
 
             resultItem.metricList = [];
-            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedRoomCategoryStatsList, this._input.commissionOption);
-            var metricBuilderStrategyList: IMetricBuilderStrategy[] = metricFactory.getMetricStrategies();
+            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedCountries, 
+                this._input.commissionOption, this._loadedRoomCategoryStatsList);
+            var metricBuilderStrategyList: IMetricBuilderStrategy[] = metricFactory.getMetricStrategies(this._outputType);
 
             _.forEach(metricBuilderStrategyList, (metricBuilderStrategy: IMetricBuilderStrategy) => {
                 var keyMetric = metricBuilderStrategy.buildKeyMetric(indexedInterval.bookingDateList, aggregationPeriodList);
@@ -165,8 +180,7 @@ export class KeyMetricReader {
     }
 
     public getAggregationPeriodList(thDateList: ThDateDO[], aggregationType: ThPeriodType): ThPeriodDO[] {
-        let converterFactory = new ThDateToThPeriodConverterFactory();
-        let periodConverter = converterFactory.getConverter(aggregationType);
+        let periodConverter = ThDateToThPeriodConverterFactory.getConverter(aggregationType);
         
         let periodIdToPeriodMap: { [index: string]: ThPeriodDO; } = {};
         let periodIdList = [];

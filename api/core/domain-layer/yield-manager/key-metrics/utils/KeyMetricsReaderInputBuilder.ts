@@ -9,8 +9,7 @@ export class KeyMetricsReaderInputBuilder {
         this._input = new KeyMetricsReaderInput();
         this._input.includePreviousPeriod = true;
         this._input.commissionOption = CommissionOption.INCLUDE;
-        this._input.excludeVat = false;    
-        this._input.customerIdList = [];
+        this._input.excludeVat = false;
     }
 
     public setYieldManagerPeriodDO(yieldManagerPeriodDO: YieldManagerPeriodDO): KeyMetricsReaderInputBuilder {

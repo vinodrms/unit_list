@@ -3,12 +3,13 @@ import { AMetricBuilderStrategy } from '../AMetricBuilderStrategy';
 import { KeyMetricType } from '../../KeyMetricType';
 import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
 import { InventoryKeyMetric } from '../../values/InventoryKeyMetric';
+import { IMetricBuilderInput } from "../IMetricBuilderStrategy";
 
 import _ = require('underscore');
 
 export class RoomsBuilderStrategy extends AMetricBuilderStrategy {
-    constructor(hotelInventoryStats: IHotelInventoryStats) {
-        super(hotelInventoryStats);
+    constructor(hotelInventoryStats: IHotelInventoryStats, input: IMetricBuilderInput) {
+        super(hotelInventoryStats, input);
     }
 
     protected getType(): KeyMetricType {
@@ -30,7 +31,7 @@ export class RoomsBuilderStrategy extends AMetricBuilderStrategy {
         });
         return metric;
     }
-    protected getKeyMetricDisplayName(): string {
+    protected getKeyMetricName(): string {
         return "Rooms";
     }
 }

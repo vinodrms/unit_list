@@ -19,7 +19,7 @@ export class KeyMetricsReaderInput {
     yieldManagerPeriodDO: YieldManagerPeriodDO;
     includePreviousPeriod: boolean;
     dataAggregationType: ThPeriodType;
-    commissionOption: CommissionOption;
     excludeVat: boolean;
     customerIdList: string[];
+    commissionOption: CommissionOption;
 }

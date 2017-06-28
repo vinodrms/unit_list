@@ -3,12 +3,13 @@ import { AMetricBuilderStrategy } from '../AMetricBuilderStrategy';
 import { KeyMetricType } from '../../KeyMetricType';
 import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
 import { PriceKeyMetric } from '../../values/PriceKeyMetric';
+import { IMetricBuilderInput } from "../IMetricBuilderStrategy";
 
 import _ = require('underscore');
 
 export class TotalRevParBuilderStrategy extends AMetricBuilderStrategy {
-    constructor(hotelInventoryStats: IHotelInventoryStats, private _excludeCommission) {
-        super(hotelInventoryStats);
+    constructor(hotelInventoryStats: IHotelInventoryStats, input: IMetricBuilderInput) {
+        super(hotelInventoryStats, input);
     }
 
     protected getType(): KeyMetricType {
@@ -22,11 +23,12 @@ export class TotalRevParBuilderStrategy extends AMetricBuilderStrategy {
         let totalNoOfRooms = 0;
         let totalRoomRevenue = 0;
         _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
-            let confirmedRevenue = this._excludeCommission? statsForDate.confirmedRevenueWithoutCommission : statsForDate.confirmedRevenue;
-            let guaranteedRevenue = this._excludeCommission? statsForDate.guaranteedRevenueWithoutCommission : statsForDate.guaranteedRevenue;
+            let confirmedRevenue = this._input.excludeCommission? statsForDate.confirmedRevenueWithoutCommission : statsForDate.confirmedRevenue;
+            let guaranteedRevenue = this._input.excludeCommission? statsForDate.guaranteedRevenueWithoutCommission : statsForDate.guaranteedRevenue;
 
             totalNoOfRooms += statsForDate.totalInventory.noOfRooms;
-            totalRoomRevenue += confirmedRevenue.roomRevenue + guaranteedRevenue.roomRevenue;
+            totalRoomRevenue += confirmedRevenue[this._input.revenueSegment].revenue.roomRevenue 
+                + guaranteedRevenue[this._input.revenueSegment].revenue.roomRevenue;
         });
         if (totalNoOfRooms == 0) {
             metric.price = 0.0;
@@ -35,7 +37,7 @@ export class TotalRevParBuilderStrategy extends AMetricBuilderStrategy {
         metric.price = this.roundValueToNearestInteger(totalRoomRevenue / totalNoOfRooms);
         return metric;
     }
-    protected getKeyMetricDisplayName(): string {
-        return "RevPar Total" + ((this._excludeCommission) ? AMetricBuilderStrategy.WithoutCommissionSuffixDisplayString: "");
+    protected getKeyMetricName(): string {
+        return "RevPar Total";
     }
 }

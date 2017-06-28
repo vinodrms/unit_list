@@ -171,4 +171,13 @@ export class BookingDO extends BaseDO {
             return this.groupBookingReference + '/' + this.bookingReference;
         }
     }
+
+    public getNumberOfGuestNights(): number {
+        let numberOfGuests = this.configCapacity.noAdults + this.configCapacity.noChildren + this.configCapacity.noBabies;
+        return numberOfGuests * this.getNumberOfNights();
+    }
+
+    public getNumberOfNights(): number {
+        return this.price.numberOfNights;
+    }
 }

@@ -15,9 +15,9 @@ import { InvoiceItemDO, InvoiceItemType } from '../../../../../data-layer/invoic
 import { RevenueForDate } from '../../data-objects/revenue/RevenueForDate';
 import { TaxDO } from "../../../../../data-layer/taxes/data-objects/TaxDO";
 import { ThUtils } from "../../../../../utils/ThUtils";
+import { InvoicePayerDO } from "../../../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
 
 import _ = require('underscore');
-import { InvoicePayerDO } from "../../../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
 
 export class InvoiceIndexer {
     private _bookingIdList: string[];
@@ -93,7 +93,7 @@ export class InvoiceIndexer {
     }
 
     private getRevenueForDate(thDate: ThDateDO, invoiceGroupList: InvoiceGroupDO[]): RevenueForDate {
-        var revenue = new RevenueForDate(0.0, 0.0);
+        var revenue = new RevenueForDate(0.0, 0.0, 0.0);
         var thDateUtcTimestamp = thDate.getUtcTimestamp();
         _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
             _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {

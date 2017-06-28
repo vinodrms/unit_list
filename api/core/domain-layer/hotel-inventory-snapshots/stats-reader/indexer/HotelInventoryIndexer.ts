@@ -6,7 +6,7 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { ConfigCapacityDO } from "../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO";
 import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import { BookingDO, BookingConfirmationStatus, BookingStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingDO, BookingConfirmationStatus, BookingStatus, TravelActivityType, TravelType } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { BookingPriceDO } from "../../../../data-layer/bookings/data-objects/price/BookingPriceDO";
 import { BookingSearchResultRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
 import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
@@ -28,10 +28,41 @@ import { IRoom } from "../../../../data-layer/rooms/data-objects/IRoom";
 import { CommissionType, CommissionDO } from "../../../../data-layer/common/data-objects/commission/CommissionDO";
 import { TaxDO } from "../../../../data-layer/taxes/data-objects/TaxDO";
 import { ThUtils } from "../../../../utils/ThUtils";
+import { ISegmentedRevenueForDate } from "../data-objects/revenue/ISegmentedRevenueForDate";
+import { ITotalGuestsForDate } from "../data-objects/total-guests/ITotalGuestsForDate";
+import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
+import { CustomerSearchResultRepoDO } from "../../../../data-layer/customers/repositories/ICustomerRepository";
+import { CountryContainer } from "./utils/CountryContainer";
+import { TotalGuestsForDate } from "../data-objects/total-guests/TotalGuestsForDate";
+import { CountryDO } from "../../../../data-layer/common/data-objects/country/CountryDO";
+import { BookingSegment } from "../data-objects/utils/BookingSegment";
+import { ITotalArrivalsForDate } from "../data-objects/total-arrivals/ITotalArrivalsForDate";
+import { TotalArrivalsForDate } from "../data-objects/total-arrivals/TotalArrivalsForDate";
+import { ITotalRoomNights } from "../data-objects/total-room-nights/ITotalRoomNights";
+import { TotalRoomNightsForDate } from "../data-objects/total-room-nights/TotalRoomNights";
 
 import _ = require('underscore');
 
+export class IndexedRevenueSegments {
+
+    public static AllSegments: BookingSegment[] = [
+        BookingSegment.All,
+        BookingSegment.BusinessGroup,
+        BookingSegment.BusinessIndividual,
+        BookingSegment.LeisureGroup,
+        BookingSegment.LeisureIndividual
+    ];
+}
+
+export interface RevenueCalculatorInput {
+    thDate: ThDateDO;
+    excludeCommission: boolean;
+    excludeVat: boolean;
+    revenueSegment: BookingSegment;
+}
+
 export interface HotelInventoryIndexerParams {
+    homeCountry: CountryDO;
     cancellationHour: ThHourDO;
     checkOutHour: ThHourDO;
     currentHotelTimestamp: ThTimestampDO;
@@ -53,6 +84,8 @@ export class HotelInventoryIndexer {
     private _guaranteedOccupyingRoomsFromInventoryBookingsContainer: BookingsContainer;
     private _penaltyBookingsContainer: BookingsContainer;
     private _invoiceStats: IInvoiceStats;
+    private _indexedRevenueSegmentList: BookingSegment[];
+    private _countryContainer: CountryContainer;
 
     constructor(private _appContext: AppContext,
         private _sessionContext: SessionContext,
@@ -64,6 +97,8 @@ export class HotelInventoryIndexer {
 
         this._indexedRoomsById = _.indexBy(this._indexerParams.roomList, (room: IRoom) => { return room.id });
         this._indexedVatById = _.indexBy(this._indexerParams.vatTaxList, (tax: TaxDO) => { return tax.id });
+
+        this._indexedRevenueSegmentList = IndexedRevenueSegments.AllSegments;
     }
 
     public indexInventory(indexedInterval: IndexedBookingInterval): Promise<boolean> {
@@ -73,7 +108,10 @@ export class HotelInventoryIndexer {
         });
     }
     private indexInventoryCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-        var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+        let customerIdListOnBookings = [];
+        let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
+
+        let bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
         bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
             {
                 confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_BookingsConsideredInYieldManager,
@@ -87,12 +125,20 @@ export class HotelInventoryIndexer {
                     return booking.id;
                 });
 
+                customerIdListOnBookings = _.chain(bookingSearchResult.bookingList).map((booking: BookingDO) => {
+                    return booking.customerIdList;
+                }).flatten().uniq().value();
+
                 return this.indexBookingsByType(bookingSearchResult.bookingList);
             }).then(indexResult => {
                 var invoiceIndexer = new InvoiceIndexer(this._appContext, this._sessionContext);
                 return invoiceIndexer.getInvoiceStats(this._indexedInterval, this._bookingIdList, this._indexedVatById, this._excludeVat, this._indexerParams.customerIdList);
             }).then((invoiceStats: IInvoiceStats) => {
                 this._invoiceStats = invoiceStats;
+
+                return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, customerIdListOnBookings);
+            }).then((result: CustomerSearchResultRepoDO) => {
+                this._countryContainer = new CountryContainer(result.customerList);
 
                 resolve(true);
             }).catch((error: any) => {
@@ -172,6 +218,194 @@ export class HotelInventoryIndexer {
             return _.contains(confirmationStatusList, booking.confirmationStatus);
         });
     }
+    public getConfirmedGuestNights(thDate: ThDateDO): ITotalGuestsForDate {
+        return this.getGuestNights(this._confirmedBookingsContainer, thDate);
+    }
+    public getGuaranteedGuestNights(thDate: ThDateDO): ITotalGuestsForDate {
+        return this.getGuestNights(this._guaranteedBookingsContainer, thDate);
+    }
+    public getGuestNights(bookingsContainer: BookingsContainer, thDate: ThDateDO): ITotalGuestsForDate {
+        var indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(thDate);
+        var filteredBookingList: BookingDO[] = bookingsContainer.getBookingsFilteredByInterval(indexedSingleDayInterval);
+
+        let totalGuestsForDate = new TotalGuestsForDate();
+        totalGuestsForDate.totalNoOfGuests = _.reduce(filteredBookingList, (sum, booking: BookingDO) => {
+            return sum + booking.getNumberOfGuestNights();
+        }, 0);
+
+        totalGuestsForDate.guestsByNationality = this.getGuestsByNationality(filteredBookingList);
+        totalGuestsForDate.guestsByBookingSegment = this.getGuestsByBookingSegment(filteredBookingList);
+
+        return totalGuestsForDate;
+    }
+    private getGuestsByBookingSegment(bookingList: BookingDO[]): { [bookingSegment: number]: number; } {
+        let guestsByBookingSegment = {};
+
+        let individualBookings = _.filter(bookingList, (booking: BookingDO) => {
+            return booking.travelType === TravelType.Individual;
+        });
+        let groupBookings = _.filter(bookingList, (booking: BookingDO) => {
+            return booking.travelType === TravelType.Group;
+        });
+
+        guestsByBookingSegment[BookingSegment.BusinessGroup] =
+            this.getTotalGuestsByBookingSegment(groupBookings, TravelActivityType.Business);
+        guestsByBookingSegment[BookingSegment.BusinessIndividual] =
+            this.getTotalGuestsByBookingSegment(individualBookings, TravelActivityType.Business);
+        guestsByBookingSegment[BookingSegment.LeisureGroup] =
+            this.getTotalGuestsByBookingSegment(groupBookings, TravelActivityType.Leisure);
+        guestsByBookingSegment[BookingSegment.LeisureIndividual] =
+            this.getTotalGuestsByBookingSegment(individualBookings, TravelActivityType.Leisure);
+
+        return guestsByBookingSegment;
+    }
+    private getTotalGuestsByBookingSegment(bookingList: BookingDO[], travelActivityType: TravelActivityType): number {
+        return _.chain(bookingList).filter((booking: BookingDO) => {
+            return booking.travelActivityType === travelActivityType;
+        }).reduce((sum, booking: BookingDO) => {
+            return sum + booking.getNumberOfGuestNights();
+        }, 0).value();
+    }
+    private getGuestsByNationality(bookingList: BookingDO[]): { [countryCode: string]: number; } {
+        let guestsByNationality = {};
+        _.forEach(bookingList, (booking: BookingDO) => {
+            let noOfBookedGuests = booking.configCapacity.getTotalNumberOfGuests();
+            let noOfUnknownGuests = noOfBookedGuests - booking.customerIdList.length;
+            let noOfUnknownGuestNights = booking.getNumberOfNights() * noOfUnknownGuests;
+
+            let defaultCountryCode = this.getDefaultCountryCode(booking);
+
+            _.forEach(booking.customerIdList, (customerId: string) => {
+                let countryCode = this._countryContainer.getCountryByCustomerId(customerId).code;
+                if (!_.isString(countryCode)) {
+                    countryCode = CountryContainer.OtherCountryCode;
+                }
+                guestsByNationality[countryCode] =
+                    _.isNumber(guestsByNationality[countryCode]) ?
+                        guestsByNationality[countryCode] + booking.getNumberOfNights() :
+                        booking.getNumberOfNights();
+
+            });
+
+            guestsByNationality[defaultCountryCode] =
+                _.isNumber(guestsByNationality[defaultCountryCode]) ?
+                    guestsByNationality[defaultCountryCode] + noOfUnknownGuestNights :
+                    noOfUnknownGuestNights;
+
+        });
+        return guestsByNationality;
+    }
+    private getDefaultCountryCode(booking: BookingDO): string {
+        let defaultCountryCode = CountryContainer.OtherCountryCode;
+
+        _.forEach(booking.customerIdList, (customerId: string) => {
+            if (defaultCountryCode != CountryContainer.OtherCountryCode) {
+                return;
+            }
+
+            let country = this._countryContainer.getCountryByCustomerId(customerId);
+            if (_.isUndefined(country) || !_.isString(country.code)) {
+                return;
+            }
+
+            defaultCountryCode = country.code;
+        });
+
+        return defaultCountryCode;
+    }
+
+    public getConfirmedArrivals(thDate: ThDateDO): ITotalArrivalsForDate {
+        return this.getArrivals(this._confirmedBookingsContainer, thDate);
+    }
+    public getGuaranteedArrivals(thDate: ThDateDO): ITotalArrivalsForDate {
+        return this.getArrivals(this._guaranteedBookingsContainer, thDate);
+    }
+    private getArrivals(bookingsContainer: BookingsContainer, thDate: ThDateDO): ITotalArrivalsForDate {
+        let indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(thDate);
+        let bookingList: BookingDO[] = bookingsContainer.getBookingsFilteredByInterval(indexedSingleDayInterval);
+
+        let totalArrivalsForDate = new TotalArrivalsForDate();
+        totalArrivalsForDate.totalNoOfArrivals =
+            this.getTotalNumberOfArrivalsFromBookingList(bookingList, thDate);
+        totalArrivalsForDate.arrivalsByNationality = this.getArrivalsByNationality(bookingList, thDate);
+
+        return totalArrivalsForDate;
+    }
+    private getArrivalsByNationality(bookingList: BookingDO[], arrivalDate: ThDateDO): { [countryCode: string]: number; } {
+        let arrivalsByNationality = {};
+
+        let arrivalBookings = _.filter(bookingList, (booking: BookingDO) => {
+            return booking.interval.start.isSame(arrivalDate);
+        });
+
+        _.forEach(arrivalBookings, (booking: BookingDO) => {
+            let noOfArrivals = booking.configCapacity.getTotalNumberOfGuests();
+
+            let defaultCountryCode = this.getDefaultCountryCode(booking);
+            arrivalsByNationality[defaultCountryCode] =
+                _.isNumber(arrivalsByNationality[defaultCountryCode]) ?
+                    arrivalsByNationality[defaultCountryCode] + noOfArrivals :
+                    noOfArrivals;
+
+        });
+
+        return arrivalsByNationality;
+    }
+    private getTotalNumberOfArrivalsFromBookingList(bookingList: BookingDO[], arrivalDate: ThDateDO): number {
+        let arrivalBookings = _.filter(bookingList, (booking: BookingDO) => {
+            return booking.interval.start.isSame(arrivalDate);
+        });
+
+        return _.reduce(bookingList, (sum, booking: BookingDO) => {
+            return sum + booking.configCapacity.getTotalNumberOfGuests();
+        }, 0);
+    }
+
+    public getConfirmedRoomNights(thDate: ThDateDO): ITotalRoomNights {
+        return this.getRoomNights(this._confirmedBookingsContainer, thDate);
+    }
+    public getGuaranteedRoomNights(thDate: ThDateDO): ITotalRoomNights {
+        return this.getRoomNights(this._guaranteedBookingsContainer, thDate);
+    }
+    private getRoomNights(bookingsContainer: BookingsContainer, thDate: ThDateDO): ITotalRoomNights {
+        let indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(thDate);
+        let bookingList: BookingDO[] = bookingsContainer.getBookingsFilteredByInterval(indexedSingleDayInterval);
+
+        let totalRoomNights = new TotalRoomNightsForDate();
+        totalRoomNights.totalRoomNights = bookingList.length;
+        totalRoomNights.roomNightsByBookingSegment = this.getRoomNightsByBookingSegment(bookingList);
+
+        return totalRoomNights;
+    }
+    private getRoomNightsByBookingSegment(bookingList: BookingDO[]): { [bookingSegment: number]: number; } {
+        let roomNightsByBookingSegment = {};
+
+        let individualBookings = _.filter(bookingList, (booking: BookingDO) => {
+            return booking.travelType === TravelType.Individual;
+        });
+        let groupBookings = _.filter(bookingList, (booking: BookingDO) => {
+            return booking.travelType === TravelType.Group;
+        });
+
+        roomNightsByBookingSegment[BookingSegment.BusinessGroup] =
+            _.filter(groupBookings, (booking: BookingDO) => {
+                return booking.travelActivityType === TravelActivityType.Business;
+            }).length;
+        roomNightsByBookingSegment[BookingSegment.BusinessIndividual] =
+            _.filter(individualBookings, (booking: BookingDO) => {
+                return booking.travelActivityType === TravelActivityType.Business;
+            }).length;
+        roomNightsByBookingSegment[BookingSegment.LeisureGroup] =
+            _.filter(groupBookings, (booking: BookingDO) => {
+                return booking.travelActivityType === TravelActivityType.Leisure;
+            }).length;
+        roomNightsByBookingSegment[BookingSegment.LeisureIndividual] =
+            _.filter(individualBookings, (booking: BookingDO) => {
+                return booking.travelActivityType === TravelActivityType.Leisure;
+            }).length;
+
+        return roomNightsByBookingSegment;
+    }
 
     public getConfirmedOccupancy(thDate: ThDateDO): IBookingOccupancy {
         return this.getOccupancy(this._confirmedBookingsContainer, thDate);
@@ -190,28 +424,88 @@ export class HotelInventoryIndexer {
         return bookingOccupancy;
     }
 
-    public getConfirmedRevenue(thDate: ThDateDO, excludeCommission: boolean): IRevenueForDate {
-        return this.getRevenue(this._confirmedBookingsContainer, thDate, excludeCommission, this._excludeVat);
+    public getConfirmedRevenue(thDate: ThDateDO, excludeCommission: boolean): { [index: number]: ISegmentedRevenueForDate; } {
+        let segmentedRevenue: { [index: number]: ISegmentedRevenueForDate; } = {};
+
+        _.forEach(this._indexedRevenueSegmentList, (segment: BookingSegment) => {
+            let confirmedRevenue = this.getRevenue(this._confirmedBookingsContainer, {
+                thDate: thDate,
+                excludeCommission: excludeCommission,
+                excludeVat: this._excludeVat,
+                revenueSegment: segment
+            });
+
+            segmentedRevenue[segment] = {
+                segment: segment,
+                revenue: confirmedRevenue
+            }
+        });
+
+        return segmentedRevenue;
     }
-    public getGuaranteedRevenue(thDate: ThDateDO, excludeCommission: boolean): IRevenueForDate {
-        var guaranteedRev = this.getRevenue(this._guaranteedBookingsContainer, thDate, excludeCommission, this._excludeVat);
-        var penaltyRev = this.getRevenue(this._penaltyBookingsContainer, thDate, excludeCommission, this._excludeVat);
-        guaranteedRev.addRevenue(penaltyRev);
-        var invoiceRevenue = this._invoiceStats.getRevenueForDate(thDate);
-        guaranteedRev.addRevenue(invoiceRevenue);
-        return guaranteedRev;
+    public getGuaranteedRevenue(thDate: ThDateDO, excludeCommission: boolean): { [index: number]: ISegmentedRevenueForDate; } {
+        let segmentedRevenue: { [index: number]: ISegmentedRevenueForDate; } = {};
+
+        _.forEach(this._indexedRevenueSegmentList, (segment: BookingSegment) => {
+            let guaranteedRev = this.getRevenue(this._guaranteedBookingsContainer, {
+                thDate: thDate,
+                excludeCommission: excludeCommission,
+                excludeVat: this._excludeVat,
+                revenueSegment: segment
+            });
+
+            let penaltyRev = this.getRevenue(this._penaltyBookingsContainer, {
+                thDate: thDate,
+                excludeCommission: excludeCommission,
+                excludeVat: this._excludeVat,
+                revenueSegment: segment
+            });
+
+            guaranteedRev.addRevenue(penaltyRev);
+            let invoiceRevenue = this._invoiceStats.getRevenueForDate(thDate);
+            guaranteedRev.addRevenue(invoiceRevenue);
+
+            segmentedRevenue[segment] = {
+                segment: segment,
+                revenue: guaranteedRev
+            };
+        });
+
+        return segmentedRevenue;
     }
-    private getRevenue(bookingsContainer: BookingsContainer, thDate: ThDateDO, excludeCommission: boolean, excludeVat: boolean): RevenueForDate {
-        var indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(thDate);
-        var filteredBookingItemList: BookingItemContainer[] = bookingsContainer.getBookingItemContainersFilteredByInterval(indexedSingleDayInterval);
-        var revenue = new RevenueForDate(0.0, 0.0);
-        _.forEach(filteredBookingItemList, (bookingItem: BookingItemContainer) => {
-            var noNights = bookingItem.indexedBookingInterval.getLengthOfStay();
+    private getRevenue(bookingsContainer: BookingsContainer, input: RevenueCalculatorInput): RevenueForDate {
+        let indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(input.thDate);
+        let filteredBookingItemList: BookingItemContainer[] = bookingsContainer.getBookingItemContainersFilteredByInterval(indexedSingleDayInterval);
+
+        let segmentedBookingItemList = _.filter(filteredBookingItemList, (bookingItem: BookingItemContainer) => {
+            switch (input.revenueSegment) {
+                case BookingSegment.BusinessGroup:
+                    return bookingItem.booking.travelActivityType === TravelActivityType.Business
+                        && bookingItem.booking.travelType === TravelType.Group;
+                case BookingSegment.BusinessIndividual:
+                    return bookingItem.booking.travelActivityType === TravelActivityType.Business
+                        && bookingItem.booking.travelType === TravelType.Individual;
+                case BookingSegment.LeisureGroup:
+                    return bookingItem.booking.travelActivityType === TravelActivityType.Leisure
+                        && bookingItem.booking.travelType === TravelType.Group;
+                case BookingSegment.LeisureIndividual:
+                    return bookingItem.booking.travelActivityType === TravelActivityType.Leisure
+                        && bookingItem.booking.travelType === TravelType.Individual;
+                default:
+                    return true;
+            }
+        });
+
+        let revenue = new RevenueForDate(0.0, 0.0, 0.0);
+        _.forEach(segmentedBookingItemList, (bookingItem: BookingItemContainer) => {
+            let noNights = bookingItem.indexedBookingInterval.getLengthOfStay();
             if (noNights > 0 && !this._invoiceStats.bookingHasInvoiceWithLossAcceptedByManagement(bookingItem.booking.id)) {
                 revenue.roomRevenue += this.getBookingRoomPriceForDate(bookingItem.booking,
-                    noNights, thDate, excludeCommission, excludeVat);
+                    noNights, input.thDate, input.excludeCommission, input.excludeVat);
                 revenue.otherRevenue += this.getBookingOtherPriceAvgPerNight(bookingItem.booking,
-                    noNights, excludeCommission);
+                    noNights, input.excludeCommission);
+                revenue.breakfastRevenue += this.getBookingBreakfastPriceForDate(bookingItem.booking,
+                    noNights, input.thDate, input.excludeCommission, input.excludeVat);
             }
         });
         return revenue;
@@ -286,7 +580,41 @@ export class HotelInventoryIndexer {
         }
         return otherPrice;
     }
+    private getBookingBreakfastPriceForDate(booking: BookingDO, totalNoNights: number,
+        thDate: ThDateDO, excludeCommission: boolean, excludeVat: boolean): number {
 
+        let breakfastPricePerDay = 0;
+
+        let bookingPrice = booking.price;
+        let bookingCapacity = booking.configCapacity;
+
+        if (bookingPrice.isPenalty()) {
+            return breakfastPricePerDay;
+        }
+
+        var roomPriceForNight = bookingPrice.roomPricePerNightAvg;
+        // now we try to find the actual price for the specific date
+        for (var i = 0; i < bookingPrice.roomPricePerNightList.length; i++) {
+            let priceForNight = bookingPrice.roomPricePerNightList[i];
+            if (priceForNight.thDate.isSame(thDate)) {
+                roomPriceForNight = priceForNight.price;
+                break;
+            }
+        }
+        
+        if (!bookingPrice.hasBreakfast()) {
+            return breakfastPricePerDay;
+        }
+
+        breakfastPricePerDay = bookingPrice.breakfast.meta.getUnitPrice() * bookingCapacity.getNoAdultsAndChildren();
+        
+        if (excludeCommission) {
+            breakfastPricePerDay = this.getPriceWithoutCommission(breakfastPricePerDay, bookingPrice.commissionSnapshot, totalNoNights);
+        }
+        
+        // commission has vat included
+        return this._excludeVat ? this.getNetValue(bookingPrice.breakfast.meta.getVatId(), breakfastPricePerDay) : breakfastPricePerDay;
+    }
     private getPriceWithoutCommission(price: number, commission: CommissionDO, totalNoNights: number) {
         let commissionAmount = commission.getCommissionFor(price);
 
