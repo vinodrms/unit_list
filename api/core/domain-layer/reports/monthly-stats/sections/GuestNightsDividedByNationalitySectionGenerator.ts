@@ -82,8 +82,12 @@ export class GuestNightsDividedByNationalitySectionGenerator extends AReportSect
             return 0;
         })
 
-        data.unshift(homeCountryRow);
-        data.push(otherCountryRow);
+        if (homeCountryRow) {
+            data.unshift(homeCountryRow);
+        }
+        if (otherCountryRow) {
+            data.push(otherCountryRow);
+        }
 
         resolve(data);
 
