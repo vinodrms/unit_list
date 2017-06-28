@@ -9,6 +9,7 @@ import { SettingsHousekeepingReportComponent } from "./pages/housekeeping-report
 import { BookingsReportComponent } from "./pages/bookings-report/BookingsReportComponent";
 import { InvoicesReportComponent } from "./pages/invoices-report/InvoicesReportComponent";
 import { SettingsGuestsReportComponent } from "./pages/guests-report/SettingsGuestsReportComponent";
+import { MonthlyStatsReportComponent } from "./pages/monthly-stats-report/MonthlyStatsReportComponent";
 
 const settingsReportsRoutes: Routes = [
     {
@@ -22,7 +23,8 @@ const settingsReportsRoutes: Routes = [
             { path: 'housekeeping', component: SettingsHousekeepingReportComponent },
             { path: 'bookings', component: BookingsReportComponent },
             { path: 'invoices', component: InvoicesReportComponent },
-            
+            { path: 'monthly-stats', component: MonthlyStatsReportComponent },
+
         ]
     }
 ];

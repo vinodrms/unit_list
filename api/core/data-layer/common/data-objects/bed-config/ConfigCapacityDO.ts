@@ -26,4 +26,8 @@ export class ConfigCapacityDO extends BaseDO {
     public getNoAdultsAndChildren(): number {
         return this.noAdults + this.noChildren;
     }
+
+    public getTotalNumberOfGuests(): number {
+        return this.noAdults + this.noChildren + this.noBabies;
+    }
 }

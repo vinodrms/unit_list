@@ -12,7 +12,19 @@ import { RoomCategoryBuilderStrategy } from './strategies/RoomCategoryBuilderStr
 import { ConfirmedRevenueBuilderStrategy } from './strategies/ConfirmedRevenueBuilderStrategy';
 import { IMetricBuilderStrategy } from './IMetricBuilderStrategy';
 import { CommissionOption } from "../KeyMetricsReaderInput";
-import { RevenueSegment } from "../../../../hotel-inventory-snapshots/stats-reader/data-objects/revenue/ISegmentedRevenueForDate";
+import { CountryDO } from "../../../../../data-layer/common/data-objects/country/CountryDO";
+import { GuestNightsBuilderStrategy } from "./strategies/GuestNightsBuilderStrategy";
+import { GuestNightsWeekdaysBuilderStrategy } from "./strategies/GuestNightsWeekdaysBuilderStrategy";
+import { GuestNightsWeekendBuilderStrategy } from "./strategies/GuestNightsWeekendBuilderStrategy";
+import { GuestNightsByNationalityBuilderStrategy } from "./strategies/GuestNightsByNationalityBuilderStrategy";
+import { BookingSegment } from "../../../../hotel-inventory-snapshots/stats-reader/data-objects/utils/BookingSegment";
+import { GuestNightsByBookingSegmentBuilderStrategy } from "./strategies/GuestNightsByBookingSegmentBuilderStrategy";
+import { CountryContainer } from "../../../../reports/monthly-stats/utils/CountryContainer";
+import { ArrivalsBuilderStrategy } from "./strategies/ArrivalsBuilderStrategy";
+import { ArrivalsByNationalityBuilderStrategy } from "./strategies/ArrivalsByNationalityBuilderStrategy";
+import { RoomNightsByBookingSegmentBuilderStrategy } from "./strategies/RoomNightsByBookingSegmentBuilderStrategy";
+import { RoomNightsBuilderStrategy } from "./strategies/RoomNightsBuilderStrategy";
+import { BreakfastRevenueBuilderStrategy } from "./strategies/BreakfastRevenueBuilderStrategy";
 
 import _ = require('underscore');
 
@@ -25,8 +37,9 @@ export enum KeyMetricOutputType {
 
 export class MetricBuilderStrategyFactory {
     constructor(private _hotelInventoryStats: IHotelInventoryStats,
-        private _roomCategoryStatsList: RoomCategoryStatsDO[],
-        private _commissionOption: CommissionOption) {
+        private _countryList: CountryDO[],
+        private _commissionOption: CommissionOption,
+        private _roomCategoryStatsList: RoomCategoryStatsDO[]) {
     }
 
     public getMetricStrategies(outputType: KeyMetricOutputType): IMetricBuilderStrategy[] {
@@ -38,25 +51,25 @@ export class MetricBuilderStrategyFactory {
                     metricList = [
                         new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new TotalOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
                         new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
                         new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new AllotmentsBuilderStrategy(this._hotelInventoryStats, {}),
                         new RoomsBuilderStrategy(this._hotelInventoryStats, {})
@@ -66,25 +79,25 @@ export class MetricBuilderStrategyFactory {
                     metricList = [
                         new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: true,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: true,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new TotalOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
                         new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
                         new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: true,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: true,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: true,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new AllotmentsBuilderStrategy(this._hotelInventoryStats, {}),
                         new RoomsBuilderStrategy(this._hotelInventoryStats, {})
@@ -94,45 +107,45 @@ export class MetricBuilderStrategyFactory {
                     metricList = [
                         new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: true,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: true,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new TotalOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
                         new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
                         new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: true,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: true,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: true,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new AllotmentsBuilderStrategy(this._hotelInventoryStats, {}),
                         new RoomsBuilderStrategy(this._hotelInventoryStats, {})
@@ -142,29 +155,29 @@ export class MetricBuilderStrategyFactory {
                     metricList = [
                         new TotalRevParBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new TotalOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
                         new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats, {}),
                         new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new RoomRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: true,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new OtherRevenueBuilderStrategy(this._hotelInventoryStats, {
                             excludeCommission: false,
-                            revenueSegment: RevenueSegment.All
+                            revenueSegment: BookingSegment.All
                         }),
                         new AllotmentsBuilderStrategy(this._hotelInventoryStats, {}),
                         new RoomsBuilderStrategy(this._hotelInventoryStats, {})
@@ -183,29 +196,45 @@ export class MetricBuilderStrategyFactory {
             });
         }
 
-        else if(outputType === KeyMetricOutputType.MonthlyStatsReport) {
-            switch (this._commissionOption) {
-                case CommissionOption.INCLUDE:
-                    metricList = [
-                        
-                    ];
-                    break;
-                case CommissionOption.EXCLUDE:
-                    metricList = [
-                        
-                    ];
-                    break;
-                case CommissionOption.BOTH:
-                    metricList = [
-                        
-                    ];
-                    break;
-                case CommissionOption.INCLUDE_AND_BOTH_FOR_ROOM_REVENUE:
-                    metricList = [
-                        
-                    ];
-                    break;
-            }
+        else if (outputType === KeyMetricOutputType.MonthlyStatsReport) {
+            metricList = [
+                new GuestNightsBuilderStrategy(this._hotelInventoryStats, {}),
+                new GuestNightsWeekdaysBuilderStrategy(this._hotelInventoryStats, {}),
+                new GuestNightsWeekendBuilderStrategy(this._hotelInventoryStats, {}),
+                new ArrivalsBuilderStrategy(this._hotelInventoryStats, {}),
+                new RoomNightsBuilderStrategy(this._hotelInventoryStats, {}),
+                new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
+                    excludeCommission: true,
+                    revenueSegment: BookingSegment.All
+                }),
+                new BreakfastRevenueBuilderStrategy(this._hotelInventoryStats, {
+                    excludeCommission: true,
+                    revenueSegment: BookingSegment.All
+                })
+            ]
+
+            let bookingSegments = [BookingSegment.BusinessGroup, BookingSegment.BusinessIndividual,
+            BookingSegment.LeisureGroup, BookingSegment.LeisureIndividual]
+
+            _.forEach(bookingSegments, (bookingSegment: BookingSegment) => {
+                metricList.push(new GuestNightsByBookingSegmentBuilderStrategy(this._hotelInventoryStats, bookingSegment,
+                    {}));
+                metricList.push(new RoomNightsByBookingSegmentBuilderStrategy(this._hotelInventoryStats, bookingSegment,
+                    {}));
+                metricList.push(
+                    new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
+                        excludeCommission: true,
+                        revenueSegment: bookingSegment
+                    })
+                );
+            });
+
+            this._countryList.push(CountryContainer.buildOtherCountryDO());
+            _.forEach(this._countryList, (country: CountryDO) => {
+                metricList.push(new GuestNightsByNationalityBuilderStrategy(this._hotelInventoryStats, country, {}));
+                metricList.push(new ArrivalsByNationalityBuilderStrategy(this._hotelInventoryStats, country, {}));
+            });
+
         }
 
         return metricList;

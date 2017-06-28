@@ -8,15 +8,11 @@ import { IHotelInventoryStats, HotelInventoryStatsForDate } from '../../../../ho
 import { ThPeriodType, ThPeriodDO } from "../../../../reports/key-metrics/period-converter/ThPeriodDO";
 import { ThDateToThPeriodConverterFactory } from "../../../../reports/key-metrics/period-converter/ThDateToThPeriodConverterFactory";
 import { ThDateIntervalDO } from "../../../../../utils/th-dates/data-objects/ThDateIntervalDO";
-import { RevenueSegment } from "../../../../hotel-inventory-snapshots/stats-reader/data-objects/revenue/ISegmentedRevenueForDate";
+import { BookingSegment, BookingSegmentDisplayName } from "../../../../hotel-inventory-snapshots/stats-reader/data-objects/utils/BookingSegment";
 
 import _ = require('underscore');
 
 export abstract class AMetricBuilderStrategy implements IMetricBuilderStrategy {
-    protected static BusinessIndividualSuffixDisplayString = " Business Individual";
-    protected static BusinessGroupSuffixDisplayString = " Business Group";
-    protected static LeisureIndividualSuffixDisplayString = " Leisure Individual";
-    protected static LeisureGroupSuffixDisplayString = " Leisure Group";
     protected static WithoutCommissionSuffixDisplayString = " W/O Deducted Commission"; 
     
     private _thUtils: ThUtils;
@@ -79,18 +75,21 @@ export abstract class AMetricBuilderStrategy implements IMetricBuilderStrategy {
     }
 
     private getRevenueSegmentSuffixDisplayString(): string {
+        let suffix = "";
         switch(this._input.revenueSegment) {
-            case RevenueSegment.BusinessGroup:
-                return AMetricBuilderStrategy.BusinessGroupSuffixDisplayString;
-            case RevenueSegment.BusinessIndividual:
-                return AMetricBuilderStrategy.BusinessIndividualSuffixDisplayString;
-            case RevenueSegment.LeisureGroup:
-                return AMetricBuilderStrategy.LeisureGroupSuffixDisplayString;
-            case RevenueSegment.LeisureIndividual:
-                return AMetricBuilderStrategy.LeisureIndividualSuffixDisplayString;
-            default: return "";
-
+            case BookingSegment.BusinessGroup:
+                suffix = BookingSegmentDisplayName.BusinessGroup; break;
+            case BookingSegment.BusinessIndividual:
+                suffix = BookingSegmentDisplayName.BusinessIndividual; break;
+            case BookingSegment.LeisureGroup:
+                suffix = BookingSegmentDisplayName.LeisureGroup; break;
+            case BookingSegment.LeisureIndividual:
+                suffix = BookingSegmentDisplayName.LeisureIndividual; break;
         }
+        if(suffix.length > 0) {
+            suffix = " " + suffix;
+        }
+        return suffix
     }
 
     protected abstract getType(): KeyMetricType;

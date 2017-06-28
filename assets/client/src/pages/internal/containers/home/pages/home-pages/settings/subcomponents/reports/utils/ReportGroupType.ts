@@ -6,5 +6,6 @@ export enum ReportGroupType {
 	Bookings,
 	Invoices,
 	Guests,
+	MonthlyStats,
 	
 }
