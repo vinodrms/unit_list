@@ -28,6 +28,8 @@ import { ThUtils } from "../../../utils/ThUtils";
 import { KeyMetricsReaderInput } from "./utils/KeyMetricsReaderInput";
 import { TaxDO } from "../../../data-layer/taxes/data-objects/TaxDO";
 import { TaxResponseRepoDO } from "../../../data-layer/taxes/repositories/ITaxRepository";
+import { CountryDO } from "../../../data-layer/common/data-objects/country/CountryDO";
+import { KeyMetricType } from "./utils/KeyMetricType";
 
 import _ = require('underscore');
 
@@ -41,7 +43,9 @@ export class KeyMetricReader {
     private _loadedAllotmentList: AllotmentDO[];
     private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
     private _loadedVatTaxList: TaxDO[];
+    private _loadedCountries: CountryDO[];
 
+    private _homeCountry: CountryDO;
     private _cancellationHour: ThHourDO;
     private _checkOutHour: ThHourDO;
     private _currentHotelTimestamp: ThTimestampDO;
@@ -76,6 +80,7 @@ export class KeyMetricReader {
 
         this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id)
             .then((loadedHotel: HotelDO) => {
+                this._homeCountry = loadedHotel.contactDetails.address.country;
                 this._cancellationHour = loadedHotel.operationHours.cancellationHour;
                 this._checkOutHour = loadedHotel.operationHours.checkOutTo;
                 this._currentHotelTimestamp = ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone);
@@ -105,6 +110,11 @@ export class KeyMetricReader {
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
+                let settingsRepo = this._appContext.getRepositoryFactory().getSettingsRepository();
+                return settingsRepo.getCountries();
+            }).then((countryList: CountryDO[]) => {
+                this._loadedCountries = countryList;
+                
                 this._keyMetricsResult = new KeyMetricsResult();
                 return this.getKeyMetricsResultItem(this._currentIndexedInterval, this._input.dataAggregationType);
             }).then((currentItem: KeyMetricsResultItem) => {
@@ -137,6 +147,7 @@ export class KeyMetricReader {
             currentVatTaxList: this._loadedVatTaxList,
             currentRoomList: this._loadedRoomList,
             currentAllotmentList: this._loadedAllotmentList,
+            homeCountry: this._homeCountry,
             cancellationHour: this._cancellationHour,
             checkOutHour: this._checkOutHour,
             currentHotelTimestamp: this._currentHotelTimestamp,
@@ -154,7 +165,8 @@ export class KeyMetricReader {
             resultItem.aggregationPeriodList = aggregationPeriodList;
 
             resultItem.metricList = [];
-            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedRoomCategoryStatsList, this._input.commissionOption);
+            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedCountries, 
+                this._input.commissionOption, this._loadedRoomCategoryStatsList);
             var metricBuilderStrategyList: IMetricBuilderStrategy[] = metricFactory.getMetricStrategies(this._outputType);
 
             _.forEach(metricBuilderStrategyList, (metricBuilderStrategy: IMetricBuilderStrategy) => {
@@ -168,8 +180,7 @@ export class KeyMetricReader {
     }
 
     public getAggregationPeriodList(thDateList: ThDateDO[], aggregationType: ThPeriodType): ThPeriodDO[] {
-        let converterFactory = new ThDateToThPeriodConverterFactory();
-        let periodConverter = converterFactory.getConverter(aggregationType);
+        let periodConverter = ThDateToThPeriodConverterFactory.getConverter(aggregationType);
         
         let periodIdToPeriodMap: { [index: string]: ThPeriodDO; } = {};
         let periodIdList = [];

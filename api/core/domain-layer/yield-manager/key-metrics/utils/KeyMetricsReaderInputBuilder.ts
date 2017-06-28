@@ -1,7 +1,6 @@
 import { KeyMetricsReaderInput, CommissionOption } from "./KeyMetricsReaderInput";
 import { YieldManagerPeriodDO } from "../../utils/YieldManagerPeriodDO";
 import { ThPeriodType } from "../../../reports/key-metrics/period-converter/ThPeriodDO";
-import { RevenueSegment } from "../../../hotel-inventory-snapshots/stats-reader/data-objects/revenue/ISegmentedRevenueForDate";
 
 export class KeyMetricsReaderInputBuilder {
     private _input: KeyMetricsReaderInput;

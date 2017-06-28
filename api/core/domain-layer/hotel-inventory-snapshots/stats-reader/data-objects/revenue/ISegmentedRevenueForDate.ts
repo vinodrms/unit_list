@@ -1,15 +1,7 @@
 import { IRevenueForDate } from "./IRevenueForDate";
-
-export enum RevenueSegment {
-    BusinessIndividual,
-    BusinessGroup,
-    LeisureIndividual,
-    LeisureGroup,
-    All,
-    
-}
+import { BookingSegment } from "../utils/BookingSegment";
 
 export interface ISegmentedRevenueForDate {
-    segment: RevenueSegment;
+    segment: BookingSegment;
     revenue: IRevenueForDate;    
 }

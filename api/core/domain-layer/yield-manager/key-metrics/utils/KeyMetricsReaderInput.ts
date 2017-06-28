@@ -1,6 +1,5 @@
 import { ThPeriodType } from "../../../reports/key-metrics/period-converter/ThPeriodDO";
 import { YieldManagerPeriodDO } from "../../utils/YieldManagerPeriodDO";
-import { RevenueSegment } from "../../../hotel-inventory-snapshots/stats-reader/data-objects/revenue/ISegmentedRevenueForDate";
 
 export enum CommissionOption {
     INCLUDE,

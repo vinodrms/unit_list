@@ -1,10 +1,12 @@
 export class RevenueForDate {
     private _roomRevenue: number;
     private _otherRevenue: number;
+    private _breakfastRevenue: number;
 
-    constructor(roomRevenue: number, otherRevenue: number) {
+    constructor(roomRevenue: number, otherRevenue: number, breakfastRevenue: number) {
         this._roomRevenue = roomRevenue;
         this._otherRevenue = otherRevenue;
+        this._breakfastRevenue = breakfastRevenue;
     }
 
     public get roomRevenue(): number {
@@ -19,9 +21,15 @@ export class RevenueForDate {
     public set otherRevenue(otherRevenue: number) {
         this._otherRevenue = otherRevenue;
     }
-
-    public addRevenue(otherRevenue: RevenueForDate) {
-        this._roomRevenue += otherRevenue.roomRevenue;
-        this._otherRevenue += otherRevenue.otherRevenue;
+    public get breakfastRevenue(): number {
+        return this._breakfastRevenue;
+    }
+    public set breakfastRevenue(breakfastRevenue: number) {
+        this._breakfastRevenue = breakfastRevenue;
+    }
+    public addRevenue(revenue: RevenueForDate) {
+        this._roomRevenue += revenue.roomRevenue;
+        this._otherRevenue += revenue.otherRevenue;
+        this._breakfastRevenue += revenue.breakfastRevenue;
     }
 }

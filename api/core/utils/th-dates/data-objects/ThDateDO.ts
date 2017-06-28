@@ -63,7 +63,10 @@ export class ThDateDO extends BaseDO {
 	public getUtcTimestamp(): number {
 		return Date.UTC(this.year, this.month, this.day);
 	}
-
+	public isWeekendDay(): boolean {
+		let weekendDays = [ISOWeekDay.Saturday, ISOWeekDay.Sunday];
+		return _.contains(weekendDays, this.getISOWeekDay());
+	}
 	public buildPrototype(): ThDateDO {
 		return ThDateDO.buildThDateDO(this.year, this.month, this.day);
 	}

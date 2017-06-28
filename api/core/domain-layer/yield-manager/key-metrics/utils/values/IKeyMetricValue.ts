@@ -3,7 +3,9 @@ import { ThPeriodType } from '../../../../reports/key-metrics/period-converter/T
 export enum KeyMetricValueType {
     Price,
     Percentage,
-    Inventory
+    Inventory,
+    Counter,
+    
 }
 
 export interface IKeyMetricValue {

@@ -18,6 +18,7 @@ export class SettingsReportsPagesService {
 			new SettingsReportsPageVM("housekeeping", ReportGroupType.Housekeeping, "Housekeeping"),
 			new SettingsReportsPageVM("bookings", ReportGroupType.Bookings, "Bookings"),
 			new SettingsReportsPageVM("invoices", ReportGroupType.Invoices, "Invoices"),
+			new SettingsReportsPageVM("monthly-stats", ReportGroupType.MonthlyStats, "Monthly Stats"),
 		];
 	}
 

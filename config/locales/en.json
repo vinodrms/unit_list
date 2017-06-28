@@ -239,7 +239,34 @@
 	"Departures": "Departures",
 	"Arrivals": "Arrivals",
 	"Stayovers": "Stayovers",
-	
+	"Monthly Stats Report": "Monthly Stats Report",
+	"Guest Nights Total": "Guest Nights Total",
+	"Guest Nights Weekdays Total": "Guest Nights Weekdays Total",
+	"Guest Nights Weekend Total": "Guest Nights Weekend Total",
+	"Guest nights divided by the purpose of the stay": "Guest nights divided by the purpose of the stay",
+	"Individual - Business guest nigths": "Individual - Business guest nigths",
+	"Individual - Leisure guest nigths": "Individual - Leisure guest nigths",
+	"Total number of arrivals": "Total number of arrivals",
+	"Total room nigths": "Total room nigths",
+	"Capacity": "Capacity",
+	"Total breakfast (excluding VAT)": "Total breakfast (excluding VAT)",
+	"Total breakfast internal cost (excluding VAT)": "Total breakfast internal cost (excluding VAT)",
+	"Breakfast": "Breakfast",
+	"Arrivals Total": "Arrivals Total",
+	"Breakfast Revenue Total": "Breakfast Revenue Total",
+	"Business Group": "Business Group",
+	"Business Individual": "Business Individual",
+	"Leisure Group": "Leisure Group",
+	"Leisure Individual": "Leisure Individual",
+	"Room Nights Total": "Room Nights Total",
+	"Arrivals Home Country": "Arrivals Home Country",
+	"Guest Nights by Purpose of Stay": "Guest Nights by Purpose of Stay",
+	"Guest Nights by Nationality": "Guest Nights by Nationality",
+	"Guest Nights": "Guest Nights",
+	"Room Nights by Purpose of Stay": "Room Nights by Purpose of Stay",
+	"Avg Rate Total": "Avg Rate Total",
+
+
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
 	
