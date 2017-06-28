@@ -12,6 +12,8 @@ import { ThDateDO } from "../../../../utils/th-dates/data-objects/ThDateDO";
 import { ThDateToThPeriodConverterFactory } from "../../key-metrics/period-converter/ThDateToThPeriodConverterFactory";
 import { IThDateToThPeriodConverter } from "../../key-metrics/period-converter/IThDateToThPeriodConverter";
 
+import _ = require('underscore');
+
 export class GuestNightsSectionGenerator extends AReportSectionGeneratorStrategy {
     private static KeyMetricList = [KeyMetricType.GuestNights, KeyMetricType.GuestNightsWeekdays, KeyMetricType.GuestNightsWeekend];
 

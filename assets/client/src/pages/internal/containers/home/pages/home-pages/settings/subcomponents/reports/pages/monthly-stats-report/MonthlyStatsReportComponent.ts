@@ -8,6 +8,8 @@ import { ReportGroupType } from "../../utils/ReportGroupType";
 import { ReportOutputFormatType } from "../../utils/ReportOutputFormatType";
 import { ThDateDO } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateDO";
 import { HotelDetailsDO } from "../../../../../../../../../services/hotel/data-objects/HotelDetailsDO";
+import { ThDateUtils } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateUtils";
+import { ThDateIntervalDO } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO";
 
 @Component({
     selector: 'settings-key-metrics-report',
@@ -34,8 +36,14 @@ export class MonthlyStatsReportComponent extends BaseComponent {
 		this._hotelService.getHotelDetailsDO()
 		.subscribe((details: HotelDetailsDO) => {
 			this.startDate = details.currentThTimestamp.thDateDO.buildPrototype();
-			this.endDate = this.startDate.buildPrototype();
-			this.endDate.addDays(1);
+			// this.endDate = this.startDate.buildPrototype();
+			// this.endDate.addDays(1);
+			debugger
+			let thDateUtils = new ThDateUtils();
+			let interval: ThDateIntervalDO = thDateUtils.getPreviousMonthInterval(this.startDate);
+			this.startDate = interval.start;
+			this.endDate = interval.end;
+
 			this.isLoading = false;
 		}, (error: ThError) => {
 			this.isLoading = false;
