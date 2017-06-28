@@ -23,7 +23,7 @@ export class GuestNightsDividedByNationalitySectionGenerator extends AReportSect
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Guest nights divided by nationality"
+            title: "Guest Nights by Nationality"
         }
     }
 
