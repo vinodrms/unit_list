@@ -23,7 +23,7 @@ export class TotalAvgRateSectionGenerator extends AReportSectionGeneratorStrateg
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Total average rate"
+            title: "Avg Rate Total"
         }
     }
 
