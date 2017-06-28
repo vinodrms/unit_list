@@ -36,9 +36,7 @@ export class MonthlyStatsReportComponent extends BaseComponent {
 		this._hotelService.getHotelDetailsDO()
 		.subscribe((details: HotelDetailsDO) => {
 			this.startDate = details.currentThTimestamp.thDateDO.buildPrototype();
-			// this.endDate = this.startDate.buildPrototype();
-			// this.endDate.addDays(1);
-			debugger
+			
 			let thDateUtils = new ThDateUtils();
 			let interval: ThDateIntervalDO = thDateUtils.getPreviousMonthInterval(this.startDate);
 			this.startDate = interval.start;
