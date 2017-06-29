@@ -125,7 +125,7 @@ export class MongoBookingReadRepository extends MongoRepository {
         mongoQueryBuilder.addRegex("indexedSearchTerms", searchCriteria.searchTerm);
         mongoQueryBuilder.addExactMatch("roomId", searchCriteria.roomId);
         mongoQueryBuilder.addMultipleSelectOption("customerIdList", searchCriteria.customerId);
-        mongoQueryBuilder.addMultipleSelectOptionList("defaultBillingDetails.customerId", searchCriteria.billedCustomerIdList);
+        mongoQueryBuilder.addMultipleSelectOptionList("customerIdList", searchCriteria.customerIdList);
         mongoQueryBuilder.addMultipleSelectOption("reservedAddOnProductIdList", searchCriteria.reservedAddOnProductId);
         mongoQueryBuilder.addExactMatch("priceProductId", searchCriteria.priceProductId);
         return mongoQueryBuilder.processedQuery;
