@@ -172,9 +172,8 @@ export class BookingDO extends BaseDO {
         }
     }
 
-    public getNumberOfGuestNights(): number {
-        let numberOfGuests = this.configCapacity.noAdults + this.configCapacity.noChildren + this.configCapacity.noBabies;
-        return numberOfGuests * this.getNumberOfNights();
+    public getNoOfGuests(): number {
+        return this.configCapacity.getTotalNumberOfGuests();
     }
 
     public getNumberOfNights(): number {
