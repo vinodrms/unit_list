@@ -119,7 +119,7 @@ export class HotelInventoryIndexer {
                     this._indexedInterval.getArrivalDate().buildPrototype(),
                     this._indexedInterval.getDepartureDate().buildPrototype()
                 ),
-                billedCustomerIdList: this._indexerParams.customerIdList
+                customerIdList: this._indexerParams.customerIdList
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 this._bookingIdList = _.map(bookingSearchResult.bookingList, (booking: BookingDO) => {
                     return booking.id;
