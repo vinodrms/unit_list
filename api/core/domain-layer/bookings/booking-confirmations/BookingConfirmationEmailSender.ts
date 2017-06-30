@@ -64,7 +64,8 @@ export class BookingConfirmationEmailSender {
                 sendEmailPromiseList.push(emailService.sendEmail({
                     to: [emailDistribution.email],
                     subject: emailSubject,
-                    attachments: [generatedPdfAbsolutePath]
+                    attachments: [generatedPdfAbsolutePath],
+                    fromName: this._hotelDO.contactDetails.name
                 }, this.getBookingConfirmationEmailTemplateDO(this._hotelDO, emailDistribution)));
             });
             return Promise.all(sendEmailPromiseList);
