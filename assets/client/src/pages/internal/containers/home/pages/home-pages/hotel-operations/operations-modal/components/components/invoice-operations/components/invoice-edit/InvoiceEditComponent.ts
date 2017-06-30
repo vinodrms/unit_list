@@ -1,8 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
-import { AddOnProductsModalService } from '../../../../../../../../../../common/inventory/add-on-products/modal/services/AddOnProductsModalService';
-import { NumberOfAddOnProductsModalService } from './modals/services/NumberOfAddOnProductsModalService';
-import { NumberOfAddOnProductsModalOutput } from './modals/services/utils/NumberOfAddOnProductsModalOutput';
 import { AddOnProductDO } from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
 import { ModalDialogRef } from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import { CustomerRegisterModalService } from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
@@ -20,6 +17,9 @@ import { InvoiceGroupControllerService } from '../../services/InvoiceGroupContro
 import { InvoiceGroupsService } from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
 import { HotelOperationsResultService } from '../../../../../services/HotelOperationsResultService';
 import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
+import { AddOnProductsModalService } from "../../../../../../../../../../common/inventory/add-on-products/modals/services/AddOnProductsModalService";
+import { NumberOfAddOnProductsModalService } from "../../../../../../../../../../common/inventory/add-on-products/modals/services/NumberOfAddOnProductsModalService";
+import { NumberOfAddOnProductsModalOutput } from "../../../../../../../../../../common/inventory/add-on-products/modals/services/utils/NumberOfAddOnProductsModalOutput";
 
 @Component({
     selector: 'invoice-edit',

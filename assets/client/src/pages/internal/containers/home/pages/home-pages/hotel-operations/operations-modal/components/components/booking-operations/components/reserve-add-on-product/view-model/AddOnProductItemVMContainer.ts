@@ -16,16 +16,16 @@ export class AddOnProductItemVMContainer {
         _.forEach(addOnProductIdList, (addOnProductId: string) => {
             var foundAddOnProduct: AddOnProductDO = addOnProductContainer.getAddOnProductById(addOnProductId);
             if (!this._thUtils.isUndefinedOrNull(foundAddOnProduct)) {
-                this.addAddOnProduct(foundAddOnProduct);
+                this.addAddOnProduct(foundAddOnProduct, 1);
             }
         });
     }
 
-    public addAddOnProduct(addOnProduct: AddOnProductDO) {
+    public addAddOnProduct(addOnProduct: AddOnProductDO, noOfItems: number) {
         var exists: boolean = false;
         _.forEach(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => {
             if (itemVM.addOnProduct.id === addOnProduct.id) {
-                itemVM.noAdded++;
+                itemVM.noAdded += noOfItems;
                 itemVM.updateTotalPrice(this._ccySymbol);
                 exists = true;
             }
@@ -33,7 +33,7 @@ export class AddOnProductItemVMContainer {
         if (exists) { return; }
         var itemVM = new AddOnProductItemVM();
         itemVM.addOnProduct = addOnProduct;
-        itemVM.noAdded = 1;
+        itemVM.noAdded = noOfItems;
         itemVM.updateTotalPrice(this._ccySymbol);
         this._addOnProductVMList.push(itemVM);
     }

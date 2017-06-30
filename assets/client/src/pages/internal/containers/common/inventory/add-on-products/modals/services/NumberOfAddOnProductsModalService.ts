@@ -1,9 +1,9 @@
 import {Injectable, ReflectiveInjector} from '@angular/core';
-import {AppContext} from '../../../../../../../../../../../../../../../common/utils/AppContext';
+import { AppContext } from "../../../../../../../../common/utils/AppContext";
 
 import {NumberOfAddOnProductsModalInput} from './utils/NumberOfAddOnProductsModalInput';
 import {NumberOfAddOnProductsModalComponent} from '../NumberOfAddOnProductsModalComponent';
-import {NumberOfAddOnProductsModalModule} from '../NumberOfAddOnProductsModalModule';
+import { NumberOfAddOnProductsModalModule } from '../NumberOfAddOnProductsModalModule';
 
 @Injectable()
 export class NumberOfAddOnProductsModalService {
