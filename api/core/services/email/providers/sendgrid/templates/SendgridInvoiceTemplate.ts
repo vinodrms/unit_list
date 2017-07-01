@@ -9,7 +9,7 @@ export class SendgridInvoiceTemplate implements ISendgridTemplate {
         return {
             id: '995db70f-5c6c-4ea6-98be-558cfbd26239',
             subs: {
-                
+
             }
         };
     }
