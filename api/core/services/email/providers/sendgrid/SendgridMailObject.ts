@@ -41,7 +41,12 @@ export class SendgridMailObjectBuilder {
         var content = new this._sendgridMailHelper.Content(SendgridMailObjectBuilder.MAIL_CONTENT_TYPE, 'content');
         this._sendgridMailObject.addContent(content);
         
-        var fromEmail = new this._sendgridMailHelper.Email(this._emailProviderSettings.from);
+        var fromEmail: any;
+        if (this._emailHeaderDO.fromName) {
+            fromEmail = new this._sendgridMailHelper.Email(this._emailProviderSettings.from, this._emailHeaderDO.fromName);
+        } else {
+            fromEmail = new this._sendgridMailHelper.Email(this._emailProviderSettings.from);
+        }
         this._sendgridMailObject.setFrom(fromEmail);
         this._sendgridMailObject.setTemplateId(this._emailTemplateMetadata.id);
 
