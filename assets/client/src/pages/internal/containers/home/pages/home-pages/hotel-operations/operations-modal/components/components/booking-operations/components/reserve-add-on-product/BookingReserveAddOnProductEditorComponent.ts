@@ -110,7 +110,6 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
     }
 
     public saveAddOnProducts() {
-        debugger
         if (!this.hasAddOnProductEditRight || !this._didMakeChanges) {
             this.endEdit();
             return;

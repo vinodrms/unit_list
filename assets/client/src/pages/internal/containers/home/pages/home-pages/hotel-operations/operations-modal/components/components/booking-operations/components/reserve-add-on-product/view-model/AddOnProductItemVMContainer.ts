@@ -24,13 +24,23 @@ export class AddOnProductItemVMContainer {
 
     public addAddOnProduct(addOnProduct: AddOnProductDO, noOfItems: number) {
         var exists: boolean = false;
+        var zeroItems: boolean = false;
         _.forEach(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => {
             if (itemVM.addOnProduct.id === addOnProduct.id) {
                 itemVM.noAdded += noOfItems;
-                itemVM.updateTotalPrice(this._ccySymbol);
+                if (itemVM.noAdded == 0) {
+                    zeroItems = true;
+                } else {
+                    itemVM.updateTotalPrice(this._ccySymbol);
+                }
                 exists = true;
             }
         });
+        if (zeroItems) {
+            this._addOnProductVMList = _.filter(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => {
+                return itemVM.addOnProduct.id !== addOnProduct.id;
+            });
+        }
         if (exists) { return; }
         var itemVM = new AddOnProductItemVM();
         itemVM.addOnProduct = addOnProduct;
