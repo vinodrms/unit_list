@@ -119,7 +119,7 @@ export class MongoBookingEditRepository extends MongoRepository {
                 "roomId": booking.roomId,
                 "priceProductId": booking.priceProductId,
                 "priceProductSnapshot": booking.priceProductSnapshot,
-                "reservedAddOnProductIdList": booking.reservedAddOnProductIdList,
+                "reservedAddOnProductList": booking.reservedAddOnProductList,
                 "price": booking.price,
                 "allotmentId": booking.allotmentId,
                 "guaranteedTime": booking.guaranteedTime,

@@ -3,7 +3,7 @@ import {ThError} from '../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../../utils/AppContext';
 import {SessionContext} from '../../../../utils/SessionContext';
-import {BookingDO} from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingDO, AddOnProductBookingReservedItem } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import {ValidationResultParser} from '../../../common/ValidationResultParser';
@@ -39,7 +39,7 @@ export class BookingReserveAddOnProducts {
             parser.logAndReject("Error validating reserve add on products", reject);
             return;
         }
-        var uniqueAddOnProductIdList = _.uniq(this._reserveAddOnProductsDO.reservedAddOnProductIdList);
+        var uniqueAddOnProductIdList = _.map(this._reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => {return addOnProduct.aopId;});
         var addOnProductValidator = new AddOnProductIdValidator(this._appContext, this._sessionContext);
         addOnProductValidator.validateAddOnProductIdList(uniqueAddOnProductIdList).then((addOnProductsContainer: AddOnProductsContainer) => {
             this._loadedAddOnProductsContainer = addOnProductsContainer;
@@ -77,9 +77,9 @@ export class BookingReserveAddOnProducts {
         return _.contains(BookingDOConstraints.ConfirmationStatuses_CanReserveAddOnProducts, this._loadedBooking.confirmationStatus);
     }
     private updateBooking() {
-        this._loadedBooking.reservedAddOnProductIdList = this._reserveAddOnProductsDO.reservedAddOnProductIdList;
+        this._loadedBooking.reservedAddOnProductList = this._reserveAddOnProductsDO.reservedAddOnProductList;
         this._loadedBooking.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
-            actionParameterMap: { noReservedAddOnProducts: this._reserveAddOnProductsDO.reservedAddOnProductIdList.length },
+            actionParameterMap: { noReservedAddOnProducts: this._reserveAddOnProductsDO.reservedAddOnProductList.length },
             actionString: "%noReservedAddOnProducts% add on product(s) have been reserved for the booking",
             userId: this._sessionContext.sessionDO.user.id
         }));
