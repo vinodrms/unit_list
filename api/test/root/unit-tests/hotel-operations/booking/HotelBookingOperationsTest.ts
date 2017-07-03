@@ -15,7 +15,7 @@ import { PriceProductDO } from '../../../../../core/data-layer/price-products/da
 import { AddBookingItems } from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
 import { BookingItemDO } from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
 import { CustomerDO, CustomerType } from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
-import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus, TravelActivityType, TravelType } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
+import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus, TravelActivityType, TravelType, AddOnProductBookingReservedItem } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
 import { BookingChangeDates } from '../../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
 import { BookingChangeDatesDO } from '../../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDatesDO';
 import { BookingChangeNoShowTime } from '../../../../../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTime';
@@ -284,12 +284,15 @@ describe("Hotel Booking Operations Tests", function () {
             var reserveAddOnProductsDO = new BookingReserveAddOnProductsDO();
             reserveAddOnProductsDO.groupBookingId = bookingToChange.groupBookingId;
             reserveAddOnProductsDO.id = bookingToChange.id;
-            reserveAddOnProductsDO.reservedAddOnProductIdList = _.map(testDataBuilder.addOnProductList, (addOnProduct: AddOnProductDO) => {
-                return addOnProduct.id;
+            reserveAddOnProductsDO.reservedAddOnProductList = _.map(testDataBuilder.addOnProductList, (addOnProduct: AddOnProductDO) => {
+                var reservedAop = new AddOnProductBookingReservedItem();
+                reservedAop.aopId = addOnProduct.id;
+                reservedAop.noOfItems = 1;
+                return reservedAop;
             });
             var reserveAddOnProducts = new BookingReserveAddOnProducts(testContext.appContext, testContext.sessionContext);
             reserveAddOnProducts.reserve(reserveAddOnProductsDO).then((updatedBooking: BookingDO) => {
-                var equality = testUtils.stringArraysAreEqual(updatedBooking.reservedAddOnProductIdList, reserveAddOnProductsDO.reservedAddOnProductIdList);
+                var equality = testUtils.stringArraysAreEqual(updatedBooking.reservedAddOnProductIdList, _.map(reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => {return addOnProduct.aopId;}));
                 should.equal(equality, true);
                 bookingToChange = updatedBooking;
                 done();
@@ -318,10 +321,10 @@ describe("Hotel Booking Operations Tests", function () {
             var reserveAddOnProductsDO = new BookingReserveAddOnProductsDO();
             reserveAddOnProductsDO.groupBookingId = bookingToChange.groupBookingId;
             reserveAddOnProductsDO.id = bookingToChange.id;
-            reserveAddOnProductsDO.reservedAddOnProductIdList = [];
+            reserveAddOnProductsDO.reservedAddOnProductList = [];
             var reserveAddOnProducts = new BookingReserveAddOnProducts(testContext.appContext, testContext.sessionContext);
             reserveAddOnProducts.reserve(reserveAddOnProductsDO).then((updatedBooking: BookingDO) => {
-                var equality = testUtils.stringArraysAreEqual(updatedBooking.reservedAddOnProductIdList, reserveAddOnProductsDO.reservedAddOnProductIdList);
+                var equality = testUtils.stringArraysAreEqual(updatedBooking.reservedAddOnProductIdList, _.map(reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => {return addOnProduct.aopId;}));
                 should.equal(equality, true);
                 bookingToChange = updatedBooking;
                 done();

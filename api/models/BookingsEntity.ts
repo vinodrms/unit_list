@@ -98,7 +98,7 @@ class BookingsEntity extends BasePersistentEntity {
                 type: 'json',
                 required: true
             },
-            reservedAddOnProductIdList: {
+            reservedAddOnProductList: {
                 type: 'array',
                 defaultsTo: []
             },

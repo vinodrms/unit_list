@@ -47,6 +47,15 @@ BookingConfirmationStatusDisplayString[BookingConfirmationStatus.Cancelled] = "C
 BookingConfirmationStatusDisplayString[BookingConfirmationStatus.CheckedIn] = "CheckedIn";
 BookingConfirmationStatusDisplayString[BookingConfirmationStatus.CheckedOut] = "CheckedOut";
 
+export class AddOnProductBookingReservedItem extends BaseDO {
+    aopId: string;
+    noOfItems: number;
+
+    protected getPrimitivePropertyKeys(): string[] {
+        return ["aopId", "noOfItems"];
+    }
+}
+
 export class BookingDO extends BaseDO {
     public static GuaranteedTriggerName: string = "guaranteedTime";
     public static NoShowTriggerName: string = "noShowTime";
@@ -84,7 +93,7 @@ export class BookingDO extends BaseDO {
     roomId: string;
     priceProductId: string;
     priceProductSnapshot: PriceProductDO;
-    reservedAddOnProductIdList: string[];
+    reservedAddOnProductList: AddOnProductBookingReservedItem[];
     price: BookingPriceDO;
     allotmentId: string;
     guaranteedTime: BookingStateChangeTriggerTimeDO;
@@ -100,7 +109,7 @@ export class BookingDO extends BaseDO {
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "id", "bookingReference", "externalBookingReference", "confirmationStatus",
             "customerIdList", "displayCustomerId", "corporateDisplayCustomerId", "creationDateUtcTimestamp", "startUtcTimestamp", "endUtcTimestamp", "checkInUtcTimestamp", "checkOutUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
-            "reservedAddOnProductIdList", "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType", "travelType"];
+            "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType", "travelType"];
     }
 
     public buildFromObject(object: Object) {
@@ -139,6 +148,12 @@ export class BookingDO extends BaseDO {
 
         this.bookingHistory = new DocumentHistoryDO();
         this.bookingHistory.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "bookingHistory"));
+        this.reservedAddOnProductList = [];
+        this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "reservedAddOnProductList"), (reservedAddOnProductObject: Object) => {
+            var addOnProductBookingReservedItem = new AddOnProductBookingReservedItem();
+            addOnProductBookingReservedItem.buildFromObject(reservedAddOnProductObject);
+            this.reservedAddOnProductList.push(addOnProductBookingReservedItem);
+        });
     }
 
     public isMadeThroughAllotment(): boolean {
@@ -178,5 +193,11 @@ export class BookingDO extends BaseDO {
 
     public getNumberOfNights(): number {
         return this.price.numberOfNights;
+    }
+
+    public get reservedAddOnProductIdList(): string[] {
+        return _.map(this.reservedAddOnProductList, (item: AddOnProductBookingReservedItem) => {
+            return item.aopId;
+        });
     }
 }

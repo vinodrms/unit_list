@@ -1,4 +1,4 @@
-import {AddOnProductDO} from '../../../../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
+import { AddOnProductDO } from "../../../../../../../services/add-on-products/data-objects/AddOnProductDO";
 
 export class NumberOfAddOnProductsModalOutput {
     private _aop: AddOnProductDO;
