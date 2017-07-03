@@ -6,6 +6,7 @@ export interface EmailHeaderDO {
 	bcc?: string[];
 	subject: string;
     attachments: string[];
+	fromName?: string;
 }
 
 export interface IEmailService {

@@ -23,6 +23,7 @@ import { CommissionOption, CommissionOptionDisplayNames } from "../../yield-mana
 import { ArrayValidationStructure } from "../../../utils/th-validation/structure/ArrayValidationStructure";
 import { StringValidationRule } from "../../../utils/th-validation/rules/StringValidationRule";
 import { KeyMetricOutputType } from "../../yield-manager/key-metrics/utils/builder/MetricBuilderStrategyFactory";
+import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _period: YieldManagerPeriodDO;
@@ -33,6 +34,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _excludeVat: boolean;
 	private _keyMetricItem: KeyMetricsResultItem;
 	private _customerIdList: string[];
+	private _customerList: CustomerDO[];
 
 	protected getParamsValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -49,12 +51,12 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([ThPeriodType.Day, ThPeriodType.Month, ThPeriodType.Week]))
 			},
 		],
-		[
-			{
-                key: "customerIdList",
-                validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
-            },
-		]);
+			[
+				{
+					key: "customerIdList",
+					validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
+				},
+			]);
 	}
 
 	protected loadParameters(params: any) {
@@ -86,8 +88,21 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 			KeyMetricOutputType.KeyMetricReport
 		).then((reportItems: KeyMetricsResult) => {
 			this._keyMetricItem = reportItems.currentItem;
+
+			if (_.isUndefined(this._customerIdList) || _.isEmpty(this._customerIdList)) {
+				resolve(true);
+				return;
+			}
+
+			let customersRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
+			return customersRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { customerIdList: this._customerIdList });
+
+		}).then(result => {
+			this._customerList = result.customerList;
 			resolve(true);
-		}).catch((e) => { reject(e); })
+		}).catch(e => {
+			reject(e);
+		});
 	}
 
 	protected getMeta(): ReportGroupMeta {
@@ -96,15 +111,24 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		var groupValuesByKey: string = this._appContext.thTranslate.translate("Group Values By");
 		var commission: string = this._appContext.thTranslate.translate("Deducted Commission");
 		var excludeVat: string = this._appContext.thTranslate.translate("Exclude VAT");
-		
+		var customerListKey: string = this._appContext.thTranslate.translate("Customers");
+
 		var displayParams = {};
 		displayParams[startDateKey] = this._startDate;
 		displayParams[endDateKey] = this._endDate;
 		displayParams[groupValuesByKey] = this.getDisplayStringFromPeriodType();
 		displayParams[commission] = this._appContext.thTranslate.translate(CommissionOptionDisplayNames[this._commissionOption]);
-		displayParams[excludeVat] = 
-			this._excludeVat? this._appContext.thTranslate.translate("Yes") : this._appContext.thTranslate.translate("No");
-		
+		displayParams[excludeVat] =
+			this._excludeVat ? this._appContext.thTranslate.translate("Yes") : this._appContext.thTranslate.translate("No");
+
+		if (!_.isUndefined(this._customerList) && !_.isEmpty(this._customerList)) {
+			displayParams[customerListKey] = '';
+			this._customerList.forEach((customer: CustomerDO, index) => {
+				displayParams[customerListKey] += customer.customerDetails.getName();
+				displayParams[customerListKey] += (index != (this._customerList.length - 1)) ? ", " : "";
+			});
+		}
+
 		return {
 			name: "Key Metrics",
 			displayParams: displayParams,

@@ -119,7 +119,7 @@ export class HotelInventoryIndexer {
                     this._indexedInterval.getArrivalDate().buildPrototype(),
                     this._indexedInterval.getDepartureDate().buildPrototype()
                 ),
-                billedCustomerIdList: this._indexerParams.customerIdList
+                customerIdList: this._indexerParams.customerIdList
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 this._bookingIdList = _.map(bookingSearchResult.bookingList, (booking: BookingDO) => {
                     return booking.id;
@@ -230,7 +230,7 @@ export class HotelInventoryIndexer {
 
         let totalGuestsForDate = new TotalGuestsForDate();
         totalGuestsForDate.totalNoOfGuests = _.reduce(filteredBookingList, (sum, booking: BookingDO) => {
-            return sum + booking.getNumberOfGuestNights();
+            return sum + booking.getNoOfGuests();
         }, 0);
 
         totalGuestsForDate.guestsByNationality = this.getGuestsByNationality(filteredBookingList);
@@ -263,7 +263,7 @@ export class HotelInventoryIndexer {
         return _.chain(bookingList).filter((booking: BookingDO) => {
             return booking.travelActivityType === travelActivityType;
         }).reduce((sum, booking: BookingDO) => {
-            return sum + booking.getNumberOfGuestNights();
+            return sum + booking.getNoOfGuests();
         }, 0).value();
     }
     private getGuestsByNationality(bookingList: BookingDO[]): { [countryCode: string]: number; } {
@@ -271,7 +271,6 @@ export class HotelInventoryIndexer {
         _.forEach(bookingList, (booking: BookingDO) => {
             let noOfBookedGuests = booking.configCapacity.getTotalNumberOfGuests();
             let noOfUnknownGuests = noOfBookedGuests - booking.customerIdList.length;
-            let noOfUnknownGuestNights = booking.getNumberOfNights() * noOfUnknownGuests;
 
             let defaultCountryCode = this.getDefaultCountryCode(booking);
 
@@ -282,15 +281,14 @@ export class HotelInventoryIndexer {
                 }
                 guestsByNationality[countryCode] =
                     _.isNumber(guestsByNationality[countryCode]) ?
-                        guestsByNationality[countryCode] + booking.getNumberOfNights() :
-                        booking.getNumberOfNights();
+                        guestsByNationality[countryCode] + 1 : 1;
 
             });
 
             guestsByNationality[defaultCountryCode] =
                 _.isNumber(guestsByNationality[defaultCountryCode]) ?
-                    guestsByNationality[defaultCountryCode] + noOfUnknownGuestNights :
-                    noOfUnknownGuestNights;
+                    guestsByNationality[defaultCountryCode] + noOfUnknownGuests :
+                    noOfUnknownGuests;
 
         });
         return guestsByNationality;
@@ -356,7 +354,7 @@ export class HotelInventoryIndexer {
             return booking.interval.start.isSame(arrivalDate);
         });
 
-        return _.reduce(bookingList, (sum, booking: BookingDO) => {
+        return _.reduce(arrivalBookings, (sum, booking: BookingDO) => {
             return sum + booking.configCapacity.getTotalNumberOfGuests();
         }, 0);
     }

@@ -9,6 +9,7 @@ import { InvoiceDataAggregator, InvoiceDataAggregatorQuery } from '../aggregator
 import { InvoiceConfirmationVMContainer } from './InvoiceConfirmationVMContainer';
 import { ReportType, PdfReportsServiceResponse } from '../../../services/pdf-reports/IPdfReportsService';
 import { BaseEmailTemplateDO, EmailTemplateTypes } from '../../../services/email/data-objects/BaseEmailTemplateDO'
+import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
 
 import fs = require('fs');
 import path = require('path');
@@ -28,13 +29,18 @@ export class InvoiceConfirmationEmailSender {
     }
 
     private sendInvoiceConfirmationCore(resolve: { (emailSent: boolean): void }, reject: { (err: ThError): void }, query: InvoiceDataAggregatorQuery, emailDistributionList: string[]) {
-        var pdfReportsService = this._appContext.getServiceFactory().getPdfReportsService();
-        var invoiceDataAggregator = new InvoiceDataAggregator(this._appContext, this._sessionContext);
         var generatedPdfAbsolutePath: string;
+        var hotelName: string;
 
-        invoiceDataAggregator.getInvoiceAggregatedData(query).then((invoiceAggregatedData: InvoiceAggregatedData) => {
+        this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id).then((loadedHotel: HotelDO) => {
+        hotelName = loadedHotel.contactDetails.name;
+        var invoiceDataAggregator = new InvoiceDataAggregator(this._appContext, this._sessionContext);
+
+        return invoiceDataAggregator.getInvoiceAggregatedData(query);
+        }).then((invoiceAggregatedData: InvoiceAggregatedData) => {
             var invoiceConfirmationVMContainer = new InvoiceConfirmationVMContainer(this._thTranslation);
             invoiceConfirmationVMContainer.buildFromInvoiceAggregatedDataContainer(invoiceAggregatedData);
+            var pdfReportsService = this._appContext.getServiceFactory().getPdfReportsService();
 
             return pdfReportsService.generatePdfReport({
                 reportType: ReportType.Invoice,
@@ -52,7 +58,8 @@ export class InvoiceConfirmationEmailSender {
                 sendEmailPromiseList.push(emailService.sendEmail({
                     to: [emailAddress],
                     subject: emailSubject,
-                    attachments: [generatedPdfAbsolutePath]
+                    attachments: [generatedPdfAbsolutePath],
+                    fromName: hotelName
                 }, new BaseEmailTemplateDO(EmailTemplateTypes.Invoice)));
             });
             return Promise.all(sendEmailPromiseList);
