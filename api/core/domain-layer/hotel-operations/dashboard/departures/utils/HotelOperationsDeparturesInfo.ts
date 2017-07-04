@@ -37,6 +37,8 @@ export interface DeparturelItemInfo {
     invoiceId?: string;
     invoicePrice?: number;
     bookingNotes?: string;
+    billedCustomerId?: string;
+    isBookingBilledToCompany?: boolean;
 }
 
 export class HotelOperationsDeparturesInfo {

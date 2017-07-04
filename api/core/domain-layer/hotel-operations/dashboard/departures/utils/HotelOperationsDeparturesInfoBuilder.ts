@@ -47,6 +47,7 @@ export class HotelOperationsDeparturesInfoBuilder {
             roomCategoryId: booking.roomCategoryId,
             roomId: booking.roomId,
             bookingNotes: booking.notes,
+            billedCustomerId: booking.defaultBillingDetails.customerId
         }
         this._departuresInfo.departureInfoList.push(departureItemInfo);
     }
@@ -156,7 +157,10 @@ export class HotelOperationsDeparturesInfoBuilder {
                 var corporateCustomer = customersContainer.getCustomerById(departureInfoItem.corporateCustomerId);
                 departureInfoItem.corporateCustomerName = corporateCustomer.customerDetails.getName();
             }
-
+            if (departureInfoItem.billedCustomerId && departureInfoItem.billedCustomerId.length > 0) {
+                var billedCustomer = customersContainer.getCustomerById(departureInfoItem.billedCustomerId);
+                departureInfoItem.isBookingBilledToCompany = billedCustomer.isCompanyOrTravelAgency();
+            }
             _.forEach(departureInfoItem.guestCustomerInfoList, (customerInfo: DepartureItemCustomerInfo) => {
                 let customer = customersContainer.getCustomerById(customerInfo.customerId);
                 customerInfo.customerName = customer.customerDetails.getName();
