@@ -12,14 +12,14 @@ export class DepartureItemIndexer {
 
     constructor(private _departureItemList: DepartureItemInfoDO[]) {
         this._thUtils = new ThUtils();
-        
+
         this._indexedDepartures = {};
     }
 
     public getIndexedDepartures(): IndexedDepartures {
         this.indexDepartureItemsByBookingId();
         this.indexDepartureItemsByCustomerId();
-        
+
         return this._indexedDepartures;
     }
 
@@ -38,13 +38,18 @@ export class DepartureItemIndexer {
         });
 
         let indexedBookingsByCustomerId = this.getIndexedBookingsByCustomerId();
-         _.forEach(this._departureItemList, (departureItemDO: DepartureItemInfoDO) => {
-            if (this._thUtils.isUndefinedOrNull(departureItemDO.bookingId)) {
-                let bookingId = indexedBookingsByCustomerId[departureItemDO.customerId];
-                if(!this._thUtils.isUndefinedOrNull(bookingId)) {
-                    departureItemsByBookingId[bookingId].push(departureItemDO);
-                    departureItemsAttachedToBookings.push(departureItemDO);
-                }
+        this._departureItemList = _.difference(this._departureItemList, departureItemsAttachedToBookings);
+
+        _.forEach(this._departureItemList, (departureItemDO: DepartureItemInfoDO) => {
+            if (!this._thUtils.isUndefinedOrNull(departureItemDO.isBookingBilledToCompany)
+                && departureItemDO.isBookingBilledToCompany) {
+                return;
+            }
+
+            let bookingId = indexedBookingsByCustomerId[departureItemDO.customerId];
+            if (!this._thUtils.isUndefinedOrNull(bookingId)) {
+                departureItemsByBookingId[bookingId].push(departureItemDO);
+                departureItemsAttachedToBookings.push(departureItemDO);
             }
         });
 
@@ -61,7 +66,7 @@ export class DepartureItemIndexer {
                     (customerInfo: DepartureItemCustomerInfoDO) => {
                         return customerInfo.customerId;
                     });
-                
+
                 _.forEach(customerIdList, (customerId: string) => {
                     indexedBookingsByCustomerId[customerId] = departureItemDO.bookingId;
                 });
@@ -75,12 +80,12 @@ export class DepartureItemIndexer {
         let departureItemsByCustomerId: { [customerId: string]: DepartureItemInfoDO[] } = {};
 
         _.forEach(this._departureItemList, (departureItemDO: DepartureItemInfoDO) => {
-            if(this._thUtils.isUndefinedOrNull(departureItemsByCustomerId[departureItemDO.customerId])) {
+            if (this._thUtils.isUndefinedOrNull(departureItemsByCustomerId[departureItemDO.customerId])) {
                 departureItemsByCustomerId[departureItemDO.customerId] = [];
             }
-             departureItemsByCustomerId[departureItemDO.customerId].push(departureItemDO);
+            departureItemsByCustomerId[departureItemDO.customerId].push(departureItemDO);
         });
-        
+
         this._indexedDepartures.departuresIndexedByCustomers = departureItemsByCustomerId;
     }
 }
