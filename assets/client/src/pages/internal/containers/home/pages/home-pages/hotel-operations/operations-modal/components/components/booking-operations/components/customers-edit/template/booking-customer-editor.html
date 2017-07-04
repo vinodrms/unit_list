@@ -16,7 +16,6 @@
             <tr>
                 <th width="10%"> </th>
                 <th width="60%"> </th>
-                <th width="10%"> <span class="unitpal-font clickable-item" title="{{ 'Billed customer' | translate }}">D</span> </th>
                 <th width="10%"> <span class="unitpal-font clickable-item" title="{{ 'Guest on invoice' | translate }}">-</span> </th>
                 <th width="10%"> </th>
             </tr>
@@ -27,7 +26,6 @@
                 <td class="clickable-item name-field" (click)="goToCustomer(customer)">
                     {{ customer.customerName }}
                 </td>
-                <td> <input type="radio" [checked]="isBilledCustomer(customer)" [disabled]="true"/> </td>
                 <td> <input type="radio" name="test" [checked]="isDisplayedOnInvoiceAsGuest(customer)" [value]="customer.id" (change)="onSelectionChange(customer)" /> </td>
                 <td> <span class="unitpal-font clickable-item" *ngIf="!isBilledCustomer(customer) && !isDisplayedOnInvoiceAsGuest(customer) && !readonly" (click)="removeCustomer(customer)">\</span>  </td>
             </tr>
