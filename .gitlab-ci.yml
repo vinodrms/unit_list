@@ -1,14 +1,34 @@
-build_test_run:
-  script:
-   - npm run forever-stop
-   - npm run install-deps
-   - npm run build-all
-   - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run server-tests
-   - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
-   - echo "Finished the build for the Production Branch"
+stages:
+  - test
+  - deploy
 
-deploy:
+test on demo3AT:
+  stage: test
   script:
-   - ./ansible/azure_install.sh
+    - npm run forever-stop
+    - npm run install-deps
+    - npm run build-all
+    - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run server-tests
+    - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
+    - echo "Finished the build for the Production Branch"
+  environment:
+    name: demo
+
+deploy on staging:
+  stage: deploy
+  script:
+    - echo "This should be replaced with deployment script"
+  environment:
+    name: staging
   only:
-   - master
+    - development
+
+deploy on production:
+  stage: deploy
+  script:
+    - ./ansible/azure_install.sh
+  environment:
+    name: production
+  when: manual
+  only:
+    - master
