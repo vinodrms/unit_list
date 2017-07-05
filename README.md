@@ -128,4 +128,5 @@ We use Azure for server deployment. The following are some steps you should foll
  8. On the "Size" tab, choose the appropriate resources for the machine. DS2_V2 can be a good option.
 
  9. On the "Settings" tab, make sure you create a new Public IP address, a static one should be more suitable. Also, in case we need, make sure the private IP address of the VM is in the same virtual network as the other VMs it needs to connect with.
-*Hint: VMs deployed with different deployment models (Resource Manager and Classic) can't be in the same vnet.*
+
+*VMs deployed with different deployment models (Resource Manager and Classic) can't be in the same vnet.*
