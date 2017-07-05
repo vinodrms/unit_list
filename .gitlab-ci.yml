@@ -1,6 +1,7 @@
 stages:
   - test
   - deploy
+  - run
 
 test on demo3AT:
   stage: test
@@ -9,8 +10,6 @@ test on demo3AT:
     - npm run install-deps
     - npm run build-all
     - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run server-tests
-    - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
-    - echo "Finished the build for the Production Branch"
   environment:
     name: demo
 
@@ -32,3 +31,10 @@ deploy on production:
   when: manual
   only:
     - master
+
+run on demo3AT:
+  stage: run
+  script:
+    - npm run install-deps
+    - npm run build-all
+    - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
