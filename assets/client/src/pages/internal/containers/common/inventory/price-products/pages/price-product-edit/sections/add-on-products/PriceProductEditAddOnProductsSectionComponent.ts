@@ -4,7 +4,6 @@ import {AppContext} from '../../../../../../../../../../common/utils/AppContext'
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
 import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {AddOnProductsModalService} from '../../../../../add-on-products/modal/services/AddOnProductsModalService';
 import {AddOnProductDO} from '../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
 import {AddOnProductSnapshotDO} from '../../../../../../../../services/add-on-products/data-objects/AddOnProductSnapshotDO';
 import {PriceProductIncludedItemsDO} from '../../../../../../../../services/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
@@ -12,7 +11,8 @@ import {AttachedAddOnProductItemDO} from '../../../../../../../../services/price
 import {AttachedAddOnProductItemFactory} from '../../../../../../../../services/price-products/data-objects/included-items/AttachedAddOnProductItemFactory';
 import {IAttachedAddOnProductItemStrategy} from '../../../../../../../../services/price-products/data-objects/included-items/IAttachedAddOnProductItemStrategy';
 import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
-import {AddOnProductCategoriesDO} from '../../../../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
+import { AddOnProductCategoriesDO } from '../../../../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
+import { AddOnProductsModalService } from "../../../../../add-on-products/modals/services/AddOnProductsModalService";
 
 @Component({
 	selector: 'price-product-edit-add-on-products-section',

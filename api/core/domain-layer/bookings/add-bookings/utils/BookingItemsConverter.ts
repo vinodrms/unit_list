@@ -107,7 +107,7 @@ export class BookingItemsConverter {
 
                 bookingDO.roomCategoryId = bookingItem.roomCategoryId;
                 bookingDO.priceProductId = bookingItem.priceProductId;
-                bookingDO.reservedAddOnProductIdList = [];
+                bookingDO.reservedAddOnProductList = [];
                 bookingDO.allotmentId = bookingItem.allotmentId;
                 bookingDO.externalBookingReference = bookingItem.externalBookingReference;
                 bookingDO.notes = bookingItem.notes;

@@ -7,7 +7,7 @@ import { SessionContext } from '../../../utils/SessionContext';
 import { ValidationResultParser } from '../../common/ValidationResultParser';
 import { GenerateBookingInvoiceDO, GenerateBookingInvoiceAopMeta } from './GenerateBookingInvoiceDO';
 import { InvoiceGroupDO } from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { BookingDO } from '../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingDO, AddOnProductBookingReservedItem } from '../../../data-layer/bookings/data-objects/BookingDO';
 import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { InvoicePayerDO } from '../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
@@ -94,23 +94,23 @@ export class GenerateBookingInvoice {
         var addOnProductLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
         addOnProductLoader.load(this._loadedBooking.reservedAddOnProductIdList)
             .then((addOnProductItemContainer: AddOnProductItemContainer) => {
-                let initialAddOnProducts = this.getGenerateBookingInvoiceAop(this._loadedBooking.reservedAddOnProductIdList, addOnProductItemContainer);
+                let initialAddOnProducts = this.getGenerateBookingInvoiceAop(this._loadedBooking.reservedAddOnProductList, addOnProductItemContainer);
                 resolve(initialAddOnProducts);
             }).catch((error: ThError) => {
                 reject(error);
             });
     }
-    private getGenerateBookingInvoiceAop(addOnProductIdList: string[], addOnProductsContainer: AddOnProductItemContainer): GenerateBookingInvoiceAopMeta[] {
+    private getGenerateBookingInvoiceAop(addOnProductList: AddOnProductBookingReservedItem[], addOnProductsContainer: AddOnProductItemContainer): GenerateBookingInvoiceAopMeta[] {
         var initialAddOnProducts: GenerateBookingInvoiceAopMeta[] = [];
-        if (this._thUtils.isUndefinedOrNull(addOnProductIdList) || !_.isArray(addOnProductIdList)) {
+        if (this._thUtils.isUndefinedOrNull(addOnProductList) || !_.isArray(addOnProductList)) {
             return initialAddOnProducts;
         }
-        var aopCountMap: { [id: string]: number; } = _.countBy(addOnProductIdList, (aopId: string) => { return aopId });
-        var aopIdList: string[] = Object.keys(aopCountMap);
+        var reservedAopMap: { [id: string]: AddOnProductBookingReservedItem } = _.indexBy(addOnProductList, reservedAop => {return reservedAop.aopId});
+        var aopIdList: string[] = Object.keys(reservedAopMap);
         _.forEach(aopIdList, (aopId: string) => {
             var addOnProductItem: AddOnProductItem = addOnProductsContainer.getAddOnProductItemById(aopId);
             if (!this._thUtils.isUndefinedOrNull(addOnProductItem)) {
-                var noOfItems = aopCountMap[aopId];
+                var noOfItems = reservedAopMap[aopId].noOfItems;
                 initialAddOnProducts.push({
                     addOnProductDO: addOnProductItem.addOnProduct,
                     noOfItems: noOfItems

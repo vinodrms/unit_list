@@ -1,7 +1,8 @@
 import {AddOnProductDO} from '../../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
 import {AddOnProductsDO} from '../../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
 import {ThUtils} from '../../../../../../../../../../../../../../common/utils/ThUtils';
-import {AddOnProductItemVM} from './AddOnProductItemVM';
+import { AddOnProductItemVM } from './AddOnProductItemVM';
+import { AddOnProductBookingReservedItem } from "../../../../../../../../../../../../services/bookings/data-objects/BookingDO";
 
 export class AddOnProductItemVMContainer {
     private _thUtils: ThUtils;
@@ -12,28 +13,38 @@ export class AddOnProductItemVMContainer {
         this._addOnProductVMList = [];
     }
 
-    public initItemList(addOnProductContainer: AddOnProductsDO, addOnProductIdList: string[]) {
-        _.forEach(addOnProductIdList, (addOnProductId: string) => {
-            var foundAddOnProduct: AddOnProductDO = addOnProductContainer.getAddOnProductById(addOnProductId);
+    public initItemList(addOnProductContainer: AddOnProductsDO, aopBookingReservedItemList: AddOnProductBookingReservedItem[]) {
+        _.forEach(aopBookingReservedItemList, (addOnProduct: AddOnProductBookingReservedItem) => {
+            var foundAddOnProduct: AddOnProductDO = addOnProductContainer.getAddOnProductById(addOnProduct.aopId);
             if (!this._thUtils.isUndefinedOrNull(foundAddOnProduct)) {
-                this.addAddOnProduct(foundAddOnProduct);
+                this.addAddOnProduct(foundAddOnProduct, addOnProduct.noOfItems);
             }
         });
     }
 
-    public addAddOnProduct(addOnProduct: AddOnProductDO) {
+    public addAddOnProduct(addOnProduct: AddOnProductDO, noOfItems: number) {
         var exists: boolean = false;
+        var zeroItems: boolean = false;
         _.forEach(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => {
             if (itemVM.addOnProduct.id === addOnProduct.id) {
-                itemVM.noAdded++;
-                itemVM.updateTotalPrice(this._ccySymbol);
+                itemVM.noAdded += noOfItems;
+                if (itemVM.noAdded == 0) {
+                    zeroItems = true;
+                } else {
+                    itemVM.updateTotalPrice(this._ccySymbol);
+                }
                 exists = true;
             }
         });
+        if (zeroItems) {
+            this._addOnProductVMList = _.filter(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => {
+                return itemVM.addOnProduct.id !== addOnProduct.id;
+            });
+        }
         if (exists) { return; }
         var itemVM = new AddOnProductItemVM();
         itemVM.addOnProduct = addOnProduct;
-        itemVM.noAdded = 1;
+        itemVM.noAdded = noOfItems;
         itemVM.updateTotalPrice(this._ccySymbol);
         this._addOnProductVMList.push(itemVM);
     }
@@ -42,14 +53,15 @@ export class AddOnProductItemVMContainer {
         this._addOnProductVMList = _.filter(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => { return itemVM.addOnProduct.id != addOnProduct.id });
     }
 
-    public getAddOnProductIdList(): string[] {
-        var addOnProductIdList: string[] = [];
+    public getAddOnProductBookingReservedItemList(): AddOnProductBookingReservedItem[] {
+        var addOnProductBookingReservedItemList: AddOnProductBookingReservedItem[] = [];
         _.forEach(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => {
-            for (var index = 0; index < itemVM.noAdded; index++) {
-                addOnProductIdList.push(itemVM.addOnProduct.id);
-            }
+            var addonProductReservedItem = new AddOnProductBookingReservedItem();
+            addonProductReservedItem.aopId = itemVM.addOnProduct.id;
+            addonProductReservedItem.noOfItems = itemVM.noAdded;
+            addOnProductBookingReservedItemList.push(addonProductReservedItem);
         });
-        return addOnProductIdList;
+        return addOnProductBookingReservedItemList;
     }
     public getAddOnProductList(): AddOnProductDO[] {
         return _.map(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => {

@@ -1,17 +1,16 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../../../../../../../common/base/BaseComponent';
-import {EagerAddOnProductsService} from '../../../../../../../../../../../../services/add-on-products/EagerAddOnProductsService';
-import {AddOnProductsDO} from '../../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
-import {AddOnProductDO} from '../../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
-import {ThError, AppContext} from '../../../../../../../../../../../../../../common/utils/AppContext';
-import {ICustomModalComponent, ModalSize} from '../../../../../../../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogRef} from '../../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {NumberOfAddOnProductsModalInput} from './services/utils/NumberOfAddOnProductsModalInput';
-import {NumberOfAddOnProductsModalOutput} from './services/utils/NumberOfAddOnProductsModalOutput';
+import { NumberOfAddOnProductsModalOutput } from './services/utils/NumberOfAddOnProductsModalOutput';
+import { EagerAddOnProductsService } from "../../../../../services/add-on-products/EagerAddOnProductsService";
+import { BaseComponent } from "../../../../../../../common/base/BaseComponent";
+import { ICustomModalComponent, ModalSize } from "../../../../../../../common/utils/modals/utils/ICustomModalComponent";
+import { AppContext } from "../../../../../../../common/utils/AppContext";
+import { ModalDialogRef } from "../../../../../../../common/utils/modals/utils/ModalDialogRef";
+import { AddOnProductsDO } from "../../../../../services/add-on-products/data-objects/AddOnProductsDO";
 
 @Component({
 	selector: 'number-of-aop-modal',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-edit/modals/template/number-of-aop-modal.html',
+	templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/modals/templates/number-of-aop-modal.html',
 	providers: [EagerAddOnProductsService]
 })
 export class NumberOfAddOnProductsModalComponent extends BaseComponent implements ICustomModalComponent, OnInit {

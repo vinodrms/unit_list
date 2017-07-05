@@ -20,7 +20,7 @@ import { AddOnProductsModalInput } from './services/utils/AddOnProductsModalInpu
 
 @Component({
 	selector: 'add-on-products-modal',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/modal/template/add-on-products-modal.html',
+	templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/modals/templates/add-on-products-modal.html',
 	providers: [SETTINGS_PROVIDERS, TaxService, HotelService, HotelAggregatorService, AddOnProductsService, AddOnProductTableMetaBuilderService]
 })
 export class AddOnProductsModalComponent extends BaseComponent implements ICustomModalComponent, AfterViewInit {

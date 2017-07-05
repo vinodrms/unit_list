@@ -4,4 +4,5 @@ export enum MongoPatchType {
     AddCreationDateUtcTimestampToBookings,
     AddTravelActivityTypeToBookings,
     AddTravelTypeToBookings,
+    ChangeReservedAddOnProductListStructureForBookings,
 }

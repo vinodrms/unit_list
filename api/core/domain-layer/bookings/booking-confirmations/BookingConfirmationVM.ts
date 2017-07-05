@@ -14,6 +14,7 @@ import { InvoiceItemDO } from '../../../data-layer/invoices/data-objects/items/I
 import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
 import { PriceProductCancellationPenaltyType } from "../../../data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty";
 import { PriceProductCancellationPolicyType } from "../../../data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy";
+import { AddOnProductBookingReservedItem } from "../../../data-layer/bookings/data-objects/BookingDO";
 
 import _ = require('underscore');
 
@@ -171,15 +172,15 @@ export class BookingConfirmationVM {
         this.reservedAopsDescription = '';
         this.reservedAops = '';
 
-        var reservedAddOnProductIdList: string[] = this._bookingAggregatedData.booking.reservedAddOnProductIdList;
-        var reservedAopMap: { [id: string]: number; } = _.countBy(reservedAddOnProductIdList, (aopId: string) => { return aopId });
+        var reservedAddOnProductList = this._bookingAggregatedData.booking.reservedAddOnProductList;
+        var reservedAopMap: { [id: string]: AddOnProductBookingReservedItem } = _.indexBy(reservedAddOnProductList, reservedAop => {return reservedAop.aopId});
         var aopIdList: string[] = Object.keys(reservedAopMap);
         _.forEach(aopIdList, (aopId: string) => {
             var addOnProduct: AddOnProductDO = _.find(this._bookingAggregatedData.addOnProductList, (aop: AddOnProductDO) => {
                 return aop.id === aopId;
             });
             if (!this._thUtils.isUndefinedOrNull(addOnProduct)) {
-                var noReserved = reservedAopMap[aopId];
+                var noReserved = reservedAopMap[aopId].noOfItems;
                 var totalPrice = Math.round(noReserved * addOnProduct.price);
                 if (this.reservedAops.length > 0) { this.reservedAops += '; '; }
                 this.reservedAops += noReserved + " x " + addOnProduct.name + ' (' + this.ccyCode + ' ' + totalPrice + ')';
