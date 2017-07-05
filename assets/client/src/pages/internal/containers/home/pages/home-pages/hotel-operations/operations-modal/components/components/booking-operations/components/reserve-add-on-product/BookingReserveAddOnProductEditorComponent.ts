@@ -50,6 +50,13 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
     ngOnInit() {
         this._didInit = true;
         this.loadDependentData();
+        this.setNoReserveAddOnProductRightIfBookingHasInvoice();
+    }
+
+    private setNoReserveAddOnProductRightIfBookingHasInvoice() {
+        if (this._bookingOperationsPageData.hasInvoice) {
+            this._bookingOperationsPageData.bookingMeta.reserveAddOnProductRight = BookingReserveAddOnProductRight.None;
+        }
     }
 
     private loadDependentData() {
