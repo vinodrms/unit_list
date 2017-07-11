@@ -1,16 +1,18 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {MongoRepository, MongoErrorCodes} from '../../../common/base/MongoRepository';
-import {ITaxRepository, TaxResponseRepoDO, TaxMetaRepoDO, TaxItemMetaRepoDO} from '../ITaxRepository';
-import {TaxDO, TaxStatus, TaxType} from '../../data-objects/TaxDO';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { MongoRepository, MongoErrorCodes } from '../../../common/base/MongoRepository';
+import { ITaxRepository, TaxResponseRepoDO, TaxMetaRepoDO, TaxItemMetaRepoDO } from '../ITaxRepository';
+import { TaxDO, TaxStatus, TaxType } from '../../data-objects/TaxDO';
 
 import _ = require('underscore');
 
+declare var sails: any;
+
 export class MongoTaxRepository extends MongoRepository implements ITaxRepository {
 	constructor() {
-        super(sails.models.taxesentity);
-    }
+		super(sails.models.taxesentity);
+	}
 
 	public getTaxList(taxMeta: TaxMetaRepoDO): Promise<TaxResponseRepoDO> {
 		return new Promise<TaxResponseRepoDO>((resolve: { (result: TaxResponseRepoDO): void }, reject: { (err: ThError): void }) => {
@@ -30,7 +32,7 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 				resolve(resultDO);
 			}
 		);
-    }
+	}
 	private getQueryResultDO(dbTaxList: Array<Object>): TaxResponseRepoDO {
 		var taxList: TaxDO[] = [];
 		dbTaxList.forEach((dbTax: Object) => {

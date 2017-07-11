@@ -1,15 +1,18 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThUtils} from '../../../../utils/ThUtils';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {BaseDO} from '../../../common/base/BaseDO';
-import {MongoRepository, MongoErrorCodes} from '../../../common/base/MongoRepository';
-import {HotelConfigurationType, HotelConfigurationMetadataDO} from '../../data-objects/common/HotelConfigurationMetadataDO';
-import {YieldFilterConfigurationDO} from '../../data-objects/yield-filter/YieldFilterConfigurationDO';
-import {HotelConfigurationDO} from '../../data-objects/HotelConfigurationDO';
-import {YieldFilterDO} from '../../../common/data-objects/yield-filter/YieldFilterDO';
-import {YieldFilterValueDO} from '../../../common/data-objects/yield-filter/YieldFilterValueDO';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThUtils } from '../../../../utils/ThUtils';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { BaseDO } from '../../../common/base/BaseDO';
+import { MongoRepository, MongoErrorCodes } from '../../../common/base/MongoRepository';
+import { HotelConfigurationType, HotelConfigurationMetadataDO } from '../../data-objects/common/HotelConfigurationMetadataDO';
+import { YieldFilterConfigurationDO } from '../../data-objects/yield-filter/YieldFilterConfigurationDO';
+import { HotelConfigurationDO } from '../../data-objects/HotelConfigurationDO';
+import { YieldFilterDO } from '../../../common/data-objects/yield-filter/YieldFilterDO';
+import { YieldFilterValueDO } from '../../../common/data-objects/yield-filter/YieldFilterValueDO';
+
 import _ = require('underscore');
+
+declare var sails: any;
 
 export interface HotelConfigurationMetaRepoDO {
     hotelId: string;
@@ -17,7 +20,7 @@ export interface HotelConfigurationMetaRepoDO {
 
 export interface HotelConfigurationItemMetaRepoDO {
     type: HotelConfigurationType;
-	versionId: number;
+    versionId: number;
 }
 
 export abstract class AMongoHotelConfigurationRepository extends MongoRepository {
@@ -26,13 +29,13 @@ export abstract class AMongoHotelConfigurationRepository extends MongoRepository
         var hotelConfigurationsEntity = sails.models.hotelconfigurationsentity;
         super(hotelConfigurationsEntity);
     }
-    
+
     protected getHotelConfigurationByType(meta: HotelConfigurationMetaRepoDO, configurationType: HotelConfigurationType): Promise<HotelConfigurationDO> {
         return new Promise<HotelConfigurationDO>((resolve, reject) => {
             this.getHotelConfigurationCore(meta, configurationType, resolve, reject);
         });
     }
-    
+
     private getHotelConfigurationCore(meta: HotelConfigurationMetaRepoDO, configurationType: HotelConfigurationType, resolve: { (result: any): void }, reject: { (err: ThError): void }) {
         this.findOneDocument({ "hotelId": meta.hotelId, "metadata.type": configurationType },
             () => {
@@ -104,9 +107,9 @@ export abstract class AMongoHotelConfigurationRepository extends MongoRepository
             }
         );
     }
-    
+
     protected abstract getHotelConfigurationQueryResultDO(queryResult: Object): HotelConfigurationDO;
-    
+
     private logAndReject(err: Error, reject: { (err: ThError): void }, context: Object, defaultStatusCode: ThStatusCode) {
         var errorCode = this.getMongoErrorCode(err);
         if (errorCode == MongoErrorCodes.DuplicateKeyError) {

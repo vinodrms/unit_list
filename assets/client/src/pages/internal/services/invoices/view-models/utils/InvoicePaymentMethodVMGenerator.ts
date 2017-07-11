@@ -6,6 +6,8 @@ import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../data-obj
 import { HotelAggregatedPaymentMethodsDO } from "../../../settings/data-objects/HotelAggregatedPaymentMethodsDO";
 import { AggregatedPaymentMethodDO } from "../../../common/data-objects/payment-method/AggregatedPaymentMethodDO";
 
+import * as _ from "underscore";
+
 export class InvoicePaymentMethodVMGenerator {
     private _allowedPaymentMethodVMList: InvoicePaymentMethodVM[];
 

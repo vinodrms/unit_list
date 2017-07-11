@@ -1,11 +1,13 @@
-import {Pipe, PipeTransform} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
+
+import * as _ from "underscore";
 
 @Pipe({
-    name: 'thtrim'
+	name: 'thtrim'
 })
 
 export class ThTrimPipe implements PipeTransform {
-    transform(displayValue: string, trimCount: number): any {
+	transform(displayValue: string, trimCount: number): any {
 		if (!_.isString(displayValue)) {
 			return displayValue;
 		}
@@ -13,5 +15,5 @@ export class ThTrimPipe implements PipeTransform {
 			return displayValue;
 		}
 		return displayValue.substring(0, Math.min(trimCount, displayValue.length));
-    }
+	}
 }

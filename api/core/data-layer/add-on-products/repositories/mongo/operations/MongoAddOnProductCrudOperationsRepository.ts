@@ -9,7 +9,7 @@ import {AddOnProductRepositoryHelper} from './helpers/AddOnProductRepositoryHelp
 export class MongoAddOnProductCrudOperationsRepository extends MongoRepository {
 	private _helper: AddOnProductRepositoryHelper;
 
-    constructor(addOnProdEntity: Sails.Model) {
+    constructor(addOnProdEntity: any) {
         super(addOnProdEntity);
 		this._helper = new AddOnProductRepositoryHelper();
     }

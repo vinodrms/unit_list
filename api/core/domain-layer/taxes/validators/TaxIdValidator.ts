@@ -7,6 +7,8 @@ import {ThUtils} from '../../../utils/ThUtils';
 import {TaxResponseRepoDO} from '../../../data-layer/taxes/repositories/ITaxRepository';
 import {TaxDO} from '../../../data-layer/taxes/data-objects/TaxDO';
 
+import _ = require("underscore");
+
 export class TaxIdValidator {
 	private _thUtils: ThUtils;
 	private _taxIdList: string[];

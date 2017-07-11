@@ -30,7 +30,7 @@ export class PassportLoginService implements ILoginServiceInitializer, ILoginSer
 			passReqToCallback: true,
 			usernameField: "email",
 			passwordField: "password"
-		}, function(req: Express.Request, email: string, password: string, done: { (err?: Error, result?: { user: UserDO, hotel: HotelDO }): void; }) {
+		}, function(req: any, email: string, password: string, done: { (err?: Error, result?: { user: UserDO, hotel: HotelDO }): void; }) {
 			var hotelAuthentication: IHotelAuthentication = req.basicHotelAuthentication;
 			hotelAuthentication.checkCredentials(email, password).then((result: { user: UserDO, hotel: HotelDO }) => {
 				return done(null, result);
@@ -40,7 +40,7 @@ export class PassportLoginService implements ILoginServiceInitializer, ILoginSer
 		}));
 	}
 
-	public logIn(loginType: LoginType, req: Express.Request): Promise<{ user: UserDO, hotel: HotelDO }> {
+	public logIn(loginType: LoginType, req: any): Promise<{ user: UserDO, hotel: HotelDO }> {
 		return new Promise<{ user: UserDO, hotel: HotelDO }>((resolve, reject) => {
 			this.logInCore(loginType, req, resolve, reject);
 		});

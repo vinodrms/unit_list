@@ -7,8 +7,10 @@ import {AppContext} from '../core/utils/AppContext';
 import {IVatProvider, VatDetailsDO} from '../core/services/vat/IVatProvider';
 import {ITimeZonesService, TimeZoneDO} from '../core/services/time-zones/ITimeZonesService';
 
+import _ = require("underscore");
+
 class ServiceController extends BaseController {
-    public uploadFile(req: Express.Request, res: Express.Response) {
+    public uploadFile(req: any, res: any) {
         var _ctrlContext = this;
         try {
             req.file('file').upload(function(err, uploadedFiles) {
@@ -41,7 +43,7 @@ class ServiceController extends BaseController {
         }
     }
 
-    public checkVAT(req: Express.Request, res: Express.Response) {
+    public checkVAT(req: any, res: any) {
         if (!this.precheckGETParameters(req, res, ['countryCode', 'vatNumber'])) { return };
 
         var appContext: AppContext = req.appContext;
@@ -57,7 +59,7 @@ class ServiceController extends BaseController {
         });
     }
 
-    public getAvailableTimeZones(req: Express.Request, res: Express.Response) {
+    public getAvailableTimeZones(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var timeZonesService: ITimeZonesService = appContext.getServiceFactory().getTimeZonesService();
 

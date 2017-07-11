@@ -1,4 +1,6 @@
-import {LazyLoadTableMeta, TableRowCommand} from './LazyLoadTableMeta';
+import { LazyLoadTableMeta, TableRowCommand } from './LazyLoadTableMeta';
+
+import * as _ from "underscore";
 
 export class TableOptions {
 	public static CollapsedClass = 'up-col-30p';

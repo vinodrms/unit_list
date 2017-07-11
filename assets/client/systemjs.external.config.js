@@ -4,6 +4,8 @@ var config = {
     },
 	map: {
 		'external': 'client/src',
+		'underscore': 'node_modules/underscore/underscore.js',
+		'moment': 'node_modules/moment/moment.js',
 		'rxjs': 'node_modules/rxjs',
 		'@angular/core': 'npm:@angular/core/bundles/core.umd.js',
 		'@angular/common': 'npm:@angular/common/bundles/common.umd.js',

@@ -17,6 +17,8 @@ import { TaxType } from '../../../../../services/taxes/data-objects/TaxDO';
 import { TaxContainerDO } from '../../../../../services/taxes/data-objects/TaxContainerDO';
 import { CurrencyDO } from "../../../../../services/common/data-objects/currency/CurrencyDO";
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'basic-info-payments-policies-edit',
 	templateUrl: '/client/src/pages/internal/containers/common/basic-info/payments-policies/main/template/basic-info-payments-policies-edit.html'

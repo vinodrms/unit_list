@@ -1,5 +1,7 @@
-import {RoomCategoryDO} from '../../../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
-import {PriceProductDO} from '../../../../../../../../../../services/price-products/data-objects/PriceProductDO';
+import { RoomCategoryDO } from '../../../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
+import { PriceProductDO } from '../../../../../../../../../../services/price-products/data-objects/PriceProductDO';
+
+import * as _ from "underscore";
 
 export class CustomerIndexedDetails {
 	private _roomCategoryList: RoomCategoryDO[];

@@ -1,14 +1,16 @@
-import {Component, OnChanges, Input, SimpleChange, Output, EventEmitter, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import { Component, OnChanges, Input, SimpleChange, Output, EventEmitter, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
-import {BaseComponent} from '../../../common/base/BaseComponent';
-import {AppContext, ThError, ThServerApi} from '../AppContext';
-import {UploadedFileResponse} from '../http/IThHttp';
-import {CountriesService} from '../../../pages/internal/services/settings/CountriesService';
-import {CountriesDO} from '../../../pages/internal/services/settings/data-objects/CountriesDO';
-import {CountryDO} from '../../../pages/internal/services/common/data-objects/country/CountryDO';
+import { BaseComponent } from '../../../common/base/BaseComponent';
+import { AppContext, ThError, ThServerApi } from '../AppContext';
+import { UploadedFileResponse } from '../http/IThHttp';
+import { CountriesService } from '../../../pages/internal/services/settings/CountriesService';
+import { CountriesDO } from '../../../pages/internal/services/settings/data-objects/CountriesDO';
+import { CountryDO } from '../../../pages/internal/services/common/data-objects/country/CountryDO';
+
+import * as _ from "underscore";
 
 export interface VatDetails {
 	countryCode: string;

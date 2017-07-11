@@ -10,6 +10,8 @@ import {BedDO, BedAccommodationType} from '../../data-layer/common/data-objects/
 import {BedTemplateDO} from '../../data-layer/common/data-objects/bed-template/BedTemplateDO';
 import {BedItemActionFactory} from './actions/BedItemActionFactory';
 
+import _ = require("underscore");
+
 export class SaveBedItem {
     private _thUtils: ThUtils;
     private _bedItemDO: SaveBedItemDO;

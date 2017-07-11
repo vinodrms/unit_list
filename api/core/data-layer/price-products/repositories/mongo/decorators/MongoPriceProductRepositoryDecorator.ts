@@ -3,6 +3,8 @@ import { IPriceProductRepository, PriceProductMetaRepoDO, PriceProductSearchCrit
 import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from "../../../../common/repo-data-objects/LazyLoadRepoDO";
 import { PriceProductDO } from "../../../data-objects/PriceProductDO";
 
+declare var sails: any;
+
 export class MongoPriceProductRepositoryDecorator extends MongoRepository implements IPriceProductRepository {
     private _basePPRepo: IPriceProductRepository;
 

@@ -1,13 +1,17 @@
-import {Injectable, ReflectiveInjector, ViewContainerRef, Type, ComponentRef, ResolvedReflectiveProvider} from '@angular/core';
-import {IModalService} from './IModalService';
-import {ModuleLoaderService} from '../module-loader/ModuleLoaderService';
-import {ModalDialogRef} from './utils/ModalDialogRef';
-import {ICustomModalComponent} from './utils/ICustomModalComponent';
-import {ModalBackdropModule, ModalBackdropComponent} from './utils/components/ModalBackdropComponent';
-import {ModalContainerModule, ModalContainerComponent} from './utils/components/ModalContainerComponent';
-import {ThError} from '../responses/ThError';
-import {ConfirmationModalModule, ConfirmationModalComponent} from './modals/confirmation/ConfirmationModalComponent';
-import {ConfirmationModalInput, ConfirmationModalButtons} from './modals/confirmation/utils/ConfirmationModalInput';
+import { Injectable, ReflectiveInjector, ViewContainerRef, Type, ComponentRef, ResolvedReflectiveProvider } from '@angular/core';
+import { IModalService } from './IModalService';
+import { ModuleLoaderService } from '../module-loader/ModuleLoaderService';
+import { ModalDialogRef } from './utils/ModalDialogRef';
+import { ICustomModalComponent } from './utils/ICustomModalComponent';
+import { ModalBackdropModule, ModalBackdropComponent } from './utils/components/ModalBackdropComponent';
+import { ModalContainerModule, ModalContainerComponent } from './utils/components/ModalContainerComponent';
+import { ThError } from '../responses/ThError';
+import { ConfirmationModalModule, ConfirmationModalComponent } from './modals/confirmation/ConfirmationModalComponent';
+import { ConfirmationModalInput, ConfirmationModalButtons } from './modals/confirmation/utils/ConfirmationModalInput';
+
+import * as _ from "underscore";
+
+declare var $: any;
 
 @Injectable()
 export class ModalService implements IModalService {
@@ -62,7 +66,7 @@ export class ModalService implements IModalService {
 		var confirmationModalInput = new ConfirmationModalInput();
 		confirmationModalInput.title = title;
 		confirmationModalInput.content = content;
-        confirmationModalInput.buttons = confirmationButtons;
+		confirmationModalInput.buttons = confirmationButtons;
 
 		this.open<any>(ConfirmationModalModule, ConfirmationModalComponent, ReflectiveInjector.resolve([
 			{ provide: ConfirmationModalInput, useValue: confirmationModalInput }

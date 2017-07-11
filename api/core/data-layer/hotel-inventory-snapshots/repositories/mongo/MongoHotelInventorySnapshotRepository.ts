@@ -8,6 +8,8 @@ import {HotelInventorySnapshotMetaRepoDO, HotelInventorySnapshotSearchCriteriaRe
     HotelInventorySnapshotSearchResultRepoDO, IHotelInventorySnapshotRepository} from '../IHotelInventorySnapshotRepository';
 import {HotelInventorySnapshotDO} from '../../data-objects/HotelInventorySnapshotDO';
 
+declare var sails: any;
+
 export class MongoHotelInventorySnapshotRepository extends MongoRepository implements IHotelInventorySnapshotRepository {
     constructor() {
         var snapshotEntity = sails.models.hotelinventorysnapshotentity;

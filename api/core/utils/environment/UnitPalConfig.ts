@@ -36,6 +36,8 @@ export interface LoggerChannel {
     options: Object;
 }
 
+declare var sails: any;
+
 export class UnitPalConfig {
     private _appEnvironment: AppEnvironmentType;
     private _databaseType: DatabaseType;

@@ -4,8 +4,10 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AMongoDBPatch} from './AMongoDBPatch';
 import {MongoRepository} from '../../../data-layer/common/base/MongoRepository';
 
+declare var sails: any;
+
 export class SailsMongoDBPatch extends AMongoDBPatch {
-    private _systemPatchesEntity: Sails.Model;
+    private _systemPatchesEntity: any;
     constructor() {
         super();
         this._systemPatchesEntity = sails.models.systempatchesentity;

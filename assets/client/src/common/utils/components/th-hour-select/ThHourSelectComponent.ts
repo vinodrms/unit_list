@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import {BaseComponent} from '../../../../common/base/BaseComponent';
-import {ThHourDO} from '../../../../pages/internal/services/common/data-objects/th-dates/ThHourDO';
-import {ThHourVM} from './utils/ThHourVM';
-import {OperationHoursBuilder} from './utils/OperationHoursBuilder';
+import { BaseComponent } from '../../../../common/base/BaseComponent';
+import { ThHourDO } from '../../../../pages/internal/services/common/data-objects/th-dates/ThHourDO';
+import { ThHourVM } from './utils/ThHourVM';
+import { OperationHoursBuilder } from './utils/OperationHoursBuilder';
+
+import * as _ from "underscore";
 
 @Component({
     selector: 'th-hour-select',
@@ -19,37 +21,37 @@ import {OperationHoursBuilder} from './utils/OperationHoursBuilder';
         `
 })
 export class ThHourSelectComponent extends BaseComponent implements OnInit {
-	private _hoursBuilder: OperationHoursBuilder = new OperationHoursBuilder();
-    
+    private _hoursBuilder: OperationHoursBuilder = new OperationHoursBuilder();
+
     hoursList: ThHourVM[];
     initialHourIndex: number = -1;
-	
-	@Input() readonly: boolean;
-	@Input() initialHour: ThHourDO;
+
+    @Input() readonly: boolean;
+    @Input() initialHour: ThHourDO;
     @Input() isRequired: boolean = false;
-	@Input() didSubmitForm: boolean = false;
+    @Input() didSubmitForm: boolean = false;
     @Input() errorMessage: string;
-    
+
     @Output() onHourSelected = new EventEmitter();
-    
-    constructor() { 
+
+    constructor() {
         super();
-		this.hoursList = this._hoursBuilder.operationHoursList;
+        this.hoursList = this._hoursBuilder.operationHoursList;
     }
-    
+
     ngOnInit() {
-		this.initialHourIndex = this._hoursBuilder.getInitialIndexFor(this.initialHour);
+        this.initialHourIndex = this._hoursBuilder.getInitialIndexFor(this.initialHour);
     }
-    
+
     onHourChanged(hourIndex: number) {
         this.initialHourIndex = hourIndex;
-        var selectedHourVM: ThHourVM = _.find(this.hoursList, ((hourVM: ThHourVM)=>{
-            return hourVM.index == hourIndex;            
+        var selectedHourVM: ThHourVM = _.find(this.hoursList, ((hourVM: ThHourVM) => {
+            return hourVM.index == hourIndex;
         }));
-		this.onHourSelected.next(selectedHourVM.thHour);
-	}
-    
+        this.onHourSelected.next(selectedHourVM.thHour);
+    }
+
     public displayError(): boolean {
-		return this.didSubmitForm && (!this.initialHourIndex || this.initialHourIndex == -1) && this.isRequired;
-	}
+        return this.didSubmitForm && (!this.initialHourIndex || this.initialHourIndex == -1) && this.isRequired;
+    }
 }

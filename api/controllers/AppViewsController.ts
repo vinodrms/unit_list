@@ -5,12 +5,12 @@ import {LoginStatusCode} from '../core/utils/th-responses/LoginStatusCode';
 import {UnitPalConfig, GoogleAnalyticsSettings} from '../core/utils/environment/UnitPalConfig';
 
 class AppViewsController extends BaseController {
-	public getExternalView(req: Express.Request, res: Express.Response) {
+	public getExternalView(req: any, res: any) {
 		var unitPalConfig: UnitPalConfig = req.appContext.getUnitPalConfig();
         res.view("external", this.getViewParameters(unitPalConfig));
 	}
 
-	public getInternalView(req: Express.Request, res: Express.Response) {
+	public getInternalView(req: any, res: any) {
 		var unitPalConfig: UnitPalConfig = req.appContext.getUnitPalConfig();
 		var sessionManager = new SessionManager(req);
 

@@ -11,7 +11,7 @@ import {RoomCategoryRepositoryHelper} from "../helpers/RoomCategoryRepositoryHel
 export class MongoRoomCategoryEditOperationsRepository extends MongoRepository {
     private _helper: RoomCategoryRepositoryHelper;
     
-    constructor(roomCategoriesEntity: Sails.Model) {
+    constructor(roomCategoriesEntity: any) {
         super(roomCategoriesEntity);
         this._helper = new RoomCategoryRepositoryHelper();
     }

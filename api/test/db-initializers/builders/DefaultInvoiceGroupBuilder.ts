@@ -10,6 +10,8 @@ import { TestContext } from '../../helpers/TestContext';
 import { HotelDO } from "../../../core/data-layer/hotel/data-objects/HotelDO";
 import { TransactionFeeDO } from "../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
+import _ = require("underscore");
+
 export interface IInvoiceGroupDataSource {
     getInvoiceGroupList(hotel: HotelDO, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]): InvoiceGroupDO[];
 }

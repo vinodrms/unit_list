@@ -1,16 +1,18 @@
-import {MongoInvoiceGroupsRepository} from '../MongoInvoiceGroupsRepository';
-import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO, InvoiceSearchCriteriaRepoDO} from '../../IInvoiceGroupsRepository'
-import {InvoiceGroupDO} from '../../../data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../../data-objects/InvoiceDO';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
-import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
+import { MongoInvoiceGroupsRepository } from '../MongoInvoiceGroupsRepository';
+import { IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO, InvoiceSearchCriteriaRepoDO } from '../../IInvoiceGroupsRepository'
+import { InvoiceGroupDO } from '../../../data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../data-objects/InvoiceDO';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+import { MongoRepository, MongoErrorCodes, MongoSearchCriteria } from '../../../../common/base/MongoRepository';
+
+declare var sails: any;
 
 export class MongoInvoiceGroupsRepositoryDecorator extends MongoRepository implements IInvoiceGroupsRepository {
     protected _invoiceGroupsRepo: MongoInvoiceGroupsRepository;
 
     constructor(invoiceGroupsRepo: MongoInvoiceGroupsRepository) {
         super(sails.models.invoicegroupsentity);
-        
+
         this._invoiceGroupsRepo = invoiceGroupsRepo;
     }
 
@@ -26,10 +28,10 @@ export class MongoInvoiceGroupsRepositoryDecorator extends MongoRepository imple
     public addInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         return this._invoiceGroupsRepo.addInvoiceGroup(invoidGroupMeta, invoiceGroup);
     }
-	public updateInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
+    public updateInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         return this._invoiceGroupsRepo.updateInvoiceGroup(invoidGroupMeta, invoiceGroupItemMeta, invoiceGroup);
     }
-	public deleteInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO): Promise<InvoiceGroupDO> {
+    public deleteInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO): Promise<InvoiceGroupDO> {
         return this._invoiceGroupsRepo.deleteInvoiceGroup(invoidGroupMeta, invoiceGroupItemMeta);
     }
 }

@@ -2,6 +2,8 @@ import {InvoiceGroupDO} from '../InvoiceGroupDO';
 import {InvoiceDO, InvoicePaymentStatus} from '../InvoiceDO';
 import {InvoicePayerDO} from '../payers/InvoicePayerDO';
 
+import * as _ from "underscore";
+
 export class InvoiceGroupPayerStatsDO {
     invoiceGroupId: string;
     groupBookingId: string;

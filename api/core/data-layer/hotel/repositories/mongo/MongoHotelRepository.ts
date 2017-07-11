@@ -13,6 +13,8 @@ import {
 import { LazyLoadRepoDO } from '../../../common/repo-data-objects/LazyLoadRepoDO';
 import { HotelSequenceType } from '../../data-objects/sequences/HotelSequencesDO';
 
+declare var sails: any;
+
 export class MongoHotelRepository extends MongoRepository implements IHotelRepository {
 	private _accountActionsRepository: MongoHotelAccountRepository;
 	private _hotelDetailsRepository: MongoHotelDetailsRepository;

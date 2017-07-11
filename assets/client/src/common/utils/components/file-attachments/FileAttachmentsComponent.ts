@@ -1,8 +1,10 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {BaseComponent} from '../../../base/BaseComponent';
-import {AppContext, ThError} from '../../AppContext';
-import {FileAttachmentDO} from '../../../../pages/internal/services/common/data-objects/file/FileAttachmentDO';
-import {UploadedFileResponse} from '../../http/IThHttp';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { BaseComponent } from '../../../base/BaseComponent';
+import { AppContext, ThError } from '../../AppContext';
+import { FileAttachmentDO } from '../../../../pages/internal/services/common/data-objects/file/FileAttachmentDO';
+import { UploadedFileResponse } from '../../http/IThHttp';
+
+import * as _ from "underscore";
 
 @Component({
 	selector: 'file-attachments',

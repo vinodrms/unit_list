@@ -18,6 +18,8 @@ import { YieldManagerFilters } from './P1_data-sets/YieldManagerFilters';
 
 import async = require('async');
 
+declare var sails: any;
+
 export class P1_PopulateCountriesAndCurrencyCodes extends ATransactionalMongoPatch {
     private _settingsToAdd: Object[] = [
         (new RoomAmenities()).getAmenitySettingDO(),
@@ -31,7 +33,7 @@ export class P1_PopulateCountriesAndCurrencyCodes extends ATransactionalMongoPat
         (new YieldManagerFilters()).getYieldManagerFilterSettingDO()
     ];
 
-    private _settingsEntity: Sails.Model;
+    private _settingsEntity: any;
     private _mongoSettingsRepository: MongoSettingsRepository;
 
     constructor() {

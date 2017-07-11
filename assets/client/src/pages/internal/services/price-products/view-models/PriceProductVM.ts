@@ -12,6 +12,8 @@ import { YieldFilterValueDO } from '../../common/data-objects/yield-filter/Yield
 import { PriceProductYieldFilterMetaDO } from '../data-objects/yield-filter/PriceProductYieldFilterDO';
 import { CurrencyDO } from '../../common/data-objects/currency/CurrencyDO';
 
+import * as _ from "underscore";
+
 export class PriceProductVM {
 	private _thUtils: ThUtils;
 	private _priceProduct: PriceProductDO;

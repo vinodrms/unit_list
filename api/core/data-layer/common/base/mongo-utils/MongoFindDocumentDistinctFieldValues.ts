@@ -10,7 +10,7 @@ export class MongoFindDocumentDistinctFieldValues {
 	errorCallback: { (err: Error): void };
 	successCallback: { (distinctValues: Array<Object>): void };
 
-	constructor(private _sailsEntity: Sails.Model) {
+	constructor(private _sailsEntity: any) {
 		this._mongoUtils = new MongoUtils();
 	}
 	public findDistinctDocumentFieldValues(fieldName: string, searchCriteria: Object) {

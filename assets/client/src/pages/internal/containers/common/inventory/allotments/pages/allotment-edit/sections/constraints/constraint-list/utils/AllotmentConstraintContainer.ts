@@ -1,8 +1,10 @@
-import {ThTranslation} from '../../../../../../../../../../../../common/utils/localization/ThTranslation';
-import {AllotmentConstraintFactory} from '../../../../../../../../../../services/allotments/data-objects/constraint/AllotmentConstraintFactory';
-import {AllotmentConstraintMeta} from '../../../../../../../../../../services/allotments/data-objects/constraint/IAllotmentConstraint';
-import {AllotmentConstraintDO} from '../../../../../../../../../../services/allotments/data-objects/constraint/AllotmentConstraintDO';
-import {AllotmentConstraintVM} from './AllotmentConstraintVM';
+import { ThTranslation } from '../../../../../../../../../../../../common/utils/localization/ThTranslation';
+import { AllotmentConstraintFactory } from '../../../../../../../../../../services/allotments/data-objects/constraint/AllotmentConstraintFactory';
+import { AllotmentConstraintMeta } from '../../../../../../../../../../services/allotments/data-objects/constraint/IAllotmentConstraint';
+import { AllotmentConstraintDO } from '../../../../../../../../../../services/allotments/data-objects/constraint/AllotmentConstraintDO';
+import { AllotmentConstraintVM } from './AllotmentConstraintVM';
+
+import * as _ from "underscore";
 
 export class AllotmentConstraintContainer {
 	private _constraintMetaList: AllotmentConstraintMeta[];

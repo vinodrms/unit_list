@@ -6,6 +6,8 @@ import { PriceProductYieldFilterMetaDO } from './yield-filter/PriceProductYieldF
 import { PriceProductIncludedItemsDO } from './included-items/PriceProductIncludedItemsDO';
 import { PriceProductDiscountWrapperDO } from "./discount/PriceProductDiscountWrapperDO";
 
+import * as _ from "underscore";
+
 export enum PriceProductStatus {
 	Draft,
 	Deleted,

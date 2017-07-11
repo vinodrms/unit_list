@@ -4,6 +4,8 @@ import { IPriceProductConstraint } from '../IPriceProductConstraint';
 import { IAllotmentConstraint } from '../../../../allotments/data-objects/constraint/IAllotmentConstraint';
 import { ThTranslation } from '../../../../../../../common/utils/localization/ThTranslation';
 
+import * as _ from "underscore";
+
 export class DaysFromWeekConstraintDO extends BaseDO implements IPriceProductConstraint, IAllotmentConstraint {
 	private static MaxWeekDayStringLength: number = 3;
 	daysFromWeek: ISOWeekDay[];

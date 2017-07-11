@@ -1,6 +1,8 @@
 import {BaseDO} from '../../../../../../../common/base/BaseDO';
 import {IPriceProductCancellationPenalty, CancellationPenaltyDescription} from './IPriceProductCancellationPenalty';
 
+import * as _ from "underscore";
+
 export class PercentageFromBookingCancellationPenaltyDO extends BaseDO implements IPriceProductCancellationPenalty {
 	percentage: number;
 

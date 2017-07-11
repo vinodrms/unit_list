@@ -10,6 +10,8 @@ import {BedsDO} from './data-objects/BedsDO';
 import {BedDO} from './data-objects/BedDO';
 import {BedVM} from './view-models/BedVM';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class BedsEagerService extends ARequestService<BedsDO> {
 

@@ -4,6 +4,8 @@ import { PriceForFixedNumberOfPersonsDO } from './PriceForFixedNumberOfPersonsDO
 import { RoomCategoryStatsDO } from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
 import { ThDataValidators } from '../../../../../../../common/utils/form-utils/utils/ThDataValidators';
 
+import * as _ from "underscore";
+
 export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 	adultsPriceList: PriceForFixedNumberOfPersonsDO[];
 	childrenPriceList: PriceForFixedNumberOfPersonsDO[];

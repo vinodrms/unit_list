@@ -1,5 +1,7 @@
 import {HeaderPageType} from './HeaderPageType';
 
+import * as _ from "underscore";
+
 export class HeaderPage {
 	private _headerPageType: HeaderPageType;
 	private _componentPath: string;

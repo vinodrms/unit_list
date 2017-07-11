@@ -1,5 +1,7 @@
 import {AssignableRoomVM} from './AssignableRoomVM';
 
+import * as _ from "underscore";
+
 export class AssignableRoomVMContainer {
     private _assignableRoomVMList: AssignableRoomVM[];
 

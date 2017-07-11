@@ -1,6 +1,8 @@
-import {BaseDO} from '../../../../../../common/base/BaseDO';
-import {ISOWeekDay} from '../../../common/data-objects/th-dates/ISOWeekDay';
-import {ThDataValidators} from '../../../../../../common/utils/form-utils/utils/ThDataValidators';
+import { BaseDO } from '../../../../../../common/base/BaseDO';
+import { ISOWeekDay } from '../../../common/data-objects/th-dates/ISOWeekDay';
+import { ThDataValidators } from '../../../../../../common/utils/form-utils/utils/ThDataValidators';
+
+import * as _ from "underscore";
 
 export class AllotmentAvailabilityForDayDO extends BaseDO {
 	isoWeekDay: ISOWeekDay;

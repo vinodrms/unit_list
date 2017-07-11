@@ -18,6 +18,8 @@ import { InvoicePaymentMethodType } from '../../../../../../api/core/data-layer/
 import { InvoiceTestUtils } from '../utils/InvoiceTestUtils';
 import { TransactionFeeDO } from "../../../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
+import _ = require("underscore");
+
 export class CustomerInvoicesTestHelper {
 
     private _testUtils: TestUtils;

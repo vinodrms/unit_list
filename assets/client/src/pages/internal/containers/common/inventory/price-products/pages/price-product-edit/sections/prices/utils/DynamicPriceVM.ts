@@ -11,6 +11,8 @@ import { SinglePriceDO } from "../../../../../../../../../services/price-product
 import { AppContext } from "../../../../../../../../../../../common/utils/AppContext";
 import { ThUtils } from "../../../../../../../../../../../common/utils/ThUtils";
 
+import * as _ from "underscore";
+
 export class DynamicPriceVM {
     private _thUtils: ThUtils;
 

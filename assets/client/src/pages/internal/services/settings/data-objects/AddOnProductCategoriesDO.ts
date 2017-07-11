@@ -1,6 +1,8 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
 import {AddOnProductCategoryDO, AddOnProductCategoryType} from '../../common/data-objects/add-on-product/AddOnProductCategoryDO';
 
+import * as _ from "underscore";
+
 export class AddOnProductCategoriesDO extends BaseDO {
 	addOnProductCategoryList: AddOnProductCategoryDO[];
 

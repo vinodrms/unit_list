@@ -23,6 +23,8 @@ import { AddOnProductsDO } from '../../../../../../../../../../services/add-on-p
 import { BookingOperationsPageData } from './utils/BookingOperationsPageData';
 import { HotelBookingOperationsPageParam } from '../utils/HotelBookingOperationsPageParam';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class BookingOperationsPageService {
 

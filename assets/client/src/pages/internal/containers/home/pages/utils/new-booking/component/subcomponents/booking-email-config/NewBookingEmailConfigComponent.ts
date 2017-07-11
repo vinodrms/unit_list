@@ -11,6 +11,8 @@ import {BookingEmailConfigStepService} from './services/BookingEmailConfigStepSe
 import { CustomerDO } from '../../../../../../../../services/customers/data-objects/CustomerDO';
 import { EmailDistributionDO } from "../../../services/data-objects/AddBookingItemsDO";
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'new-booking-email-config',
     templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-email-config/template/new-booking-email-config.html',

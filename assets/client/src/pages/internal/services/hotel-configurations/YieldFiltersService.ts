@@ -6,6 +6,8 @@ import {YieldFiltersDO} from './data-objects/YieldFiltersDO';
 import {YieldFilterDO} from '../common/data-objects/yield-filter/YieldFilterDO';
 import {YieldFilterValueDO} from '../common/data-objects/yield-filter/YieldFilterValueDO';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class YieldFiltersService extends ARequestService<YieldFiltersDO> {
 	constructor(private _appContext: AppContext) {

@@ -6,6 +6,8 @@ import {PriceProductItemDO} from './price-product-item/PriceProductItemDO';
 import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
 import {SearchParametersDO} from './search-parameters/SearchParametersDO';
 
+import * as _ from "underscore";
+
 export class BookingSearchResultDO extends BaseDO {
     roomCategoryItemList: RoomCategoryItemDO[];
     allotmentItemList: AllotmentItemDO[];

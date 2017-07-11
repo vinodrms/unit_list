@@ -6,6 +6,8 @@ import { BookingDO, TravelActivityTypeOption, TravelType } from '../../../../../
 import {FileAttachmentDO} from '../../../../../../../../../../../services/common/data-objects/file/FileAttachmentDO';
 import {HotelOperationsBookingService} from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'booking-details-editor',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/booking-details/template/booking-details-editor.html'

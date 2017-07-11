@@ -11,7 +11,7 @@ import { PriceProductPriceDO } from "../../../data-objects/price/PriceProductPri
 export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 	private _helper: PriceProductRepositoryHelper;
 
-	constructor(priceProdEntity: Sails.Model) {
+	constructor(priceProdEntity: any) {
 		super(priceProdEntity);
 		this._helper = new PriceProductRepositoryHelper();
 	}

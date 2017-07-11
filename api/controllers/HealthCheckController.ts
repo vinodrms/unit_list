@@ -1,6 +1,8 @@
 import {BaseController} from './base/BaseController';
 import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 
+declare var sails: any;
+
 class HealthCheckController extends BaseController {
 	
     public getHealth(req, res) {
