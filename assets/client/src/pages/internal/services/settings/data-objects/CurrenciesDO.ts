@@ -1,6 +1,8 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
 import {CurrencyDO} from '../../common/data-objects/currency/CurrencyDO';
 
+import * as _ from "underscore";
+
 export class CurrenciesDO extends BaseDO {
 	currencyList: CurrencyDO[];
 

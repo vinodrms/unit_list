@@ -8,6 +8,8 @@ import {AmenityDO} from '../../common/data-objects/amenity/AmenityDO';
 import {RoomAttributeDO} from '../../common/data-objects/room-attribute/RoomAttributeDO';
 import {RoomCategoryStatsDO} from '../../room-categories/data-objects/RoomCategoryStatsDO';
 
+import * as _ from 'underscore';
+
 export class RoomVMBuilder {
     private _thUtils: ThUtils;
 

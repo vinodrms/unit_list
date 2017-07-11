@@ -1,12 +1,14 @@
-import {Component} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../../../../common/base/BaseComponent';
-import {ThError, AppContext} from '../../../../../../../../../../../common/utils/AppContext';
-import {ICustomModalComponent, ModalSize} from '../../../../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogRef} from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {ISOWeekDayUtils, ISOWeekDayVM} from '../../../../../../../../../services/common/data-objects/th-dates/ISOWeekDay';
-import {AllotmentConstraintDO} from '../../../../../../../../../services/allotments/data-objects/constraint/AllotmentConstraintDO';
-import {IAllotmentConstraint, AllotmentConstraintMeta, AllotmentConstraintType} from '../../../../../../../../../services/allotments/data-objects/constraint/IAllotmentConstraint';
-import {AllotmentConstraintFactory} from '../../../../../../../../../services/allotments/data-objects/constraint/AllotmentConstraintFactory';
+import { Component } from '@angular/core';
+import { BaseComponent } from '../../../../../../../../../../../common/base/BaseComponent';
+import { ThError, AppContext } from '../../../../../../../../../../../common/utils/AppContext';
+import { ICustomModalComponent, ModalSize } from '../../../../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
+import { ModalDialogRef } from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { ISOWeekDayUtils, ISOWeekDayVM } from '../../../../../../../../../services/common/data-objects/th-dates/ISOWeekDay';
+import { AllotmentConstraintDO } from '../../../../../../../../../services/allotments/data-objects/constraint/AllotmentConstraintDO';
+import { IAllotmentConstraint, AllotmentConstraintMeta, AllotmentConstraintType } from '../../../../../../../../../services/allotments/data-objects/constraint/IAllotmentConstraint';
+import { AllotmentConstraintFactory } from '../../../../../../../../../services/allotments/data-objects/constraint/AllotmentConstraintFactory';
+
+import * as _ from "underscore";
 
 @Component({
 	selector: 'allotment-constraint-modal',

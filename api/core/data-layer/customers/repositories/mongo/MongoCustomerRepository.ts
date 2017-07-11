@@ -5,6 +5,8 @@ import {MongoRepository} from '../../../common/base/MongoRepository';
 import {MongoCustomerCrudOperationsRepository} from './operations/MongoCustomerCrudOperationsRepository';
 import {MongoCustomerReadOperationsRepository} from './operations/MongoCustomerReadOperationsRepository';
 
+declare var sails: any;
+
 export class MongoCustomerRepository extends MongoRepository implements ICustomerRepository {
 	private _crudRepository: MongoCustomerCrudOperationsRepository;
 	private _readRepository: MongoCustomerReadOperationsRepository;

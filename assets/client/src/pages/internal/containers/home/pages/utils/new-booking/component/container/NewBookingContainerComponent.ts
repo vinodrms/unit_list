@@ -16,6 +16,8 @@ import { BookingControllerService } from '../subcomponents/utils/BookingControll
 import { BookingDO } from "../../../../../../../services/bookings/data-objects/BookingDO";
 import { NewBookingModalInput } from "../../modal/services/utils/NewBookingModalInput";
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'new-booking-container',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/container/template/new-booking-container.html',

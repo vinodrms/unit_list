@@ -10,7 +10,7 @@ import {UserAccountActivationRepoDO, RequestResetPasswordRepoDO, ResetPasswordRe
 import _ = require('underscore');
 
 export class MongoHotelAccountRepository extends MongoRepository {
-	constructor(hotelsEntity: Sails.Model) {
+	constructor(hotelsEntity: any) {
 		super(hotelsEntity);
 	}
 	public addHotel(hotel: HotelDO): Promise<HotelDO> {

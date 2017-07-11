@@ -6,6 +6,8 @@ import { AddOnProductsContainer } from '../../../add-on-products/validators/resu
 import { AttachedAddOnProductItemDO } from '../../../../data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
 import { DynamicPriceDO } from "../../../../data-layer/price-products/data-objects/price/DynamicPriceDO";
 
+import _ = require("underscore");
+
 export class PriceProductActionUtils {
 	private _thDateUtils: ThDateUtils;
 	private _thUtils: ThUtils;

@@ -8,6 +8,8 @@ import { InvoiceOperationsPageData } from '../../../containers/home/pages/home-p
 import { ThTranslation } from '../../../../../common/utils/localization/ThTranslation';
 import { ThUtils } from '../../../../../common/utils/ThUtils';
 
+import * as _ from "underscore";
+
 export class InvoiceGroupVM {
     invoiceGroupDO: InvoiceGroupDO;
     private _thUtils: ThUtils;

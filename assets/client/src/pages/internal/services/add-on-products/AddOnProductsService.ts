@@ -15,6 +15,8 @@ import {HotelAggregatorService} from '../hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../hotel/utils/HotelAggregatedInfo';
 import {AddOnProductCategoryDO} from '../common/data-objects/add-on-product/AddOnProductCategoryDO';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class AddOnProductsService extends ALazyLoadRequestService<AddOnProductVM> {
 	constructor(appContext: AppContext,

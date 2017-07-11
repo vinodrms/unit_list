@@ -2,6 +2,8 @@ import {BaseDO} from '../../../../../../../common/base/BaseDO';
 import {ThDateDO} from '../../../../common/data-objects/th-dates/ThDateDO';
 import {RoomItemInfoDO} from './RoomItemInfoDO';
 
+import * as _ from "underscore";
+
 export class RoomsInfoDO extends BaseDO {
     roomInfoList: RoomItemInfoDO[];
     referenceDate: ThDateDO;

@@ -22,7 +22,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
     private static TemporaryInvoiceReferencePrefix = 'TEMP';
     private static RefMaxLength = 7;
 
-    constructor(invoiceGroupsEntity: Sails.Model, private _hotelRepo: IHotelRepository,
+    constructor(invoiceGroupsEntity: any, private _hotelRepo: IHotelRepository,
         private _invoiceReadRepository: MongoInvoiceGroupsReadOperationsRepository) {
         super(invoiceGroupsEntity);
         this._helper = new InvoiceGroupsRepositoryHelper();

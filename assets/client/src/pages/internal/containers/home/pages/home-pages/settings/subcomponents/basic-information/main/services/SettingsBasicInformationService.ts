@@ -4,6 +4,8 @@ import {SettingsNavbarService} from '../../../navbar/services/SettingsNavbarServ
 import {SettingsBasicInfoPageVM} from './utils/SettingsBasicInfoPageVM';
 import {SettingsBasicInfoPageType} from './utils/SettingsBasicInfoPageType';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class SettingsBasicInformationService {
 	public static BaseSettingsBasicInfoPath = SettingsNavbarService.BaseSettingsPath + "basic-info/";

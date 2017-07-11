@@ -1,21 +1,23 @@
-import {Component, AfterViewInit, ViewChild} from '@angular/core';
-import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
-import {LazyLoadTableMeta, TableRowCommand} from '../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
-import {AppContext} from '../../../../../../../common/utils/AppContext';
-import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {PriceProductTableMetaBuilderService} from '../main/services/PriceProductTableMetaBuilderService';
-import {TaxService} from '../../../../../services/taxes/TaxService';
-import {RoomCategoriesService} from '../../../../../services/room-categories/RoomCategoriesService';
-import {YieldFiltersService} from '../../../../../services/hotel-configurations/YieldFiltersService';
-import {PriceProductDO, PriceProductAvailability} from '../../../../../services/price-products/data-objects/PriceProductDO';
-import {PriceProductVM} from '../../../../../services/price-products/view-models/PriceProductVM';
-import {PriceProductsService} from '../../../../../services/price-products/PriceProductsService';
-import {PriceProductsModalInput} from './services/utils/PriceProductsModalInput';
-import {SETTINGS_PROVIDERS} from '../../../../../services/settings/SettingsProviders';
-import {HotelAggregatorService} from '../../../../../services/hotel/HotelAggregatorService';
-import {HotelService} from '../../../../../services/hotel/HotelService';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { BaseComponent } from '../../../../../../../common/base/BaseComponent';
+import { LazyLoadingTableComponent } from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
+import { LazyLoadTableMeta, TableRowCommand } from '../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
+import { AppContext } from '../../../../../../../common/utils/AppContext';
+import { ICustomModalComponent, ModalSize } from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
+import { ModalDialogRef } from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { PriceProductTableMetaBuilderService } from '../main/services/PriceProductTableMetaBuilderService';
+import { TaxService } from '../../../../../services/taxes/TaxService';
+import { RoomCategoriesService } from '../../../../../services/room-categories/RoomCategoriesService';
+import { YieldFiltersService } from '../../../../../services/hotel-configurations/YieldFiltersService';
+import { PriceProductDO, PriceProductAvailability } from '../../../../../services/price-products/data-objects/PriceProductDO';
+import { PriceProductVM } from '../../../../../services/price-products/view-models/PriceProductVM';
+import { PriceProductsService } from '../../../../../services/price-products/PriceProductsService';
+import { PriceProductsModalInput } from './services/utils/PriceProductsModalInput';
+import { SETTINGS_PROVIDERS } from '../../../../../services/settings/SettingsProviders';
+import { HotelAggregatorService } from '../../../../../services/hotel/HotelAggregatorService';
+import { HotelService } from '../../../../../services/hotel/HotelService';
+
+import * as _ from "underscore";
 
 @Component({
 	selector: 'price-products-modal',

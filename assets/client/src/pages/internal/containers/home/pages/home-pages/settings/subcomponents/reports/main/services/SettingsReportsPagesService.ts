@@ -4,6 +4,8 @@ import { SettingsNavbarService } from '../../../navbar/services/SettingsNavbarSe
 import { SettingsReportsPageVM } from './utils/SettingsReportsPageVM';
 import { ReportGroupType } from "../../utils/ReportGroupType";
 
+import * as _ from "underscore";
+
 @Injectable()
 export class SettingsReportsPagesService {
 	public static BaseSettingsReportsPath = SettingsNavbarService.BaseSettingsPath + "reports/";

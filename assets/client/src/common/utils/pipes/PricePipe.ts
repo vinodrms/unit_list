@@ -1,5 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import * as _ from "underscore";
+
 @Pipe({
 	name: 'price'
 })

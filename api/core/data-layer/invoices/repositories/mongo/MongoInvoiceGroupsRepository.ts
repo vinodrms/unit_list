@@ -7,6 +7,8 @@ import { MongoInvoiceGroupsEditOperationsRepository } from './operations/MongoIn
 import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../common/repo-data-objects/LazyLoadRepoDO';
 import { IHotelRepository } from '../../../hotel/repositories/IHotelRepository';
 
+declare var sails: any;
+
 export class MongoInvoiceGroupsRepository extends MongoRepository implements IInvoiceGroupsRepository {
     private _readRepository: MongoInvoiceGroupsReadOperationsRepository;
     private _editRepository: MongoInvoiceGroupsEditOperationsRepository;

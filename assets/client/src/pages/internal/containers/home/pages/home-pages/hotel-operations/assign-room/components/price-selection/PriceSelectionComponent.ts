@@ -6,6 +6,8 @@ import {HotelOperationsBookingService} from '../../../../../../../../services/ho
 import {PriceSelectionService, PriceSelectionType} from './services/PriceSelectionService';
 import {PriceSelectionVM} from './services/view-models/PriceSelectionVM';
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'price-selection',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/assign-room/components/price-selection/template/price-selection.html',

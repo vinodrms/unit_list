@@ -1,17 +1,19 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {ModalDialogRef} from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
-import {BookingReserveAddOnProductRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
-import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import {AddOnProductDO} from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
-import {AddOnProductsDO} from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
-import {AddOnProductItemVMContainer} from './view-model/AddOnProductItemVMContainer';
-import {AddOnProductItemVM} from './view-model/AddOnProductItemVM';
-import {HotelOperationsBookingService} from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
+import { ModalDialogRef } from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { BookingOperationsPageData } from '../../services/utils/BookingOperationsPageData';
+import { BookingReserveAddOnProductRight } from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
+import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { AddOnProductDO } from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
+import { AddOnProductsDO } from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
+import { AddOnProductItemVMContainer } from './view-model/AddOnProductItemVMContainer';
+import { AddOnProductItemVM } from './view-model/AddOnProductItemVM';
+import { HotelOperationsBookingService } from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 import { AddOnProductsModalService } from '../../../../../../../../../../common/inventory/add-on-products/modals/services/AddOnProductsModalService';
 import { NumberOfAddOnProductsModalOutput } from '../../../../../../../../../../common/inventory/add-on-products/modals/services/utils/NumberOfAddOnProductsModalOutput';
 import { NumberOfAddOnProductsModalService } from '../../../../../../../../../../common/inventory/add-on-products/modals/services/NumberOfAddOnProductsModalService';
+
+import * as _ from "underscore";
 
 @Component({
     selector: 'booking-reserve-add-on-product',

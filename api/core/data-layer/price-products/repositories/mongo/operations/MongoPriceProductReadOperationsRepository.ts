@@ -14,7 +14,7 @@ import _ = require("underscore");
 export class MongoPriceProductReadOperationsRepository extends MongoRepository {
 	private _helper: PriceProductRepositoryHelper;
 
-	constructor(priceProdEntity: Sails.Model) {
+	constructor(priceProdEntity: any) {
 		super(priceProdEntity);
 		this._helper = new PriceProductRepositoryHelper();
 	}

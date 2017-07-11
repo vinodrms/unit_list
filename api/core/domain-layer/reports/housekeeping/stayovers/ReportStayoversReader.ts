@@ -15,6 +15,8 @@ import { RoomCategoryStatsAggregator } from "../../../room-categories/aggregator
 import { RoomCategoryStatsDO } from "../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
 import { BookingCustomers } from "../common/BookingCustomers";
 
+import _ = require("underscore");
+
 export class ReportStayoversReader {
     private _bookingUtils: BookingUtils;
 	private _hotelDO: HotelDO;

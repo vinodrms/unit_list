@@ -6,6 +6,8 @@ import {ModalDialogRef} from "../../../../../../../../../../../common/utils/moda
 import {RoomCategoryItemDO} from '../../../../services/search/data-objects/room-category-item/RoomCategoryItemDO';
 import {RoomAvailabilityModalInput} from './util/RoomAvailabilityModalInput';
 
+import * as _ from "underscore";
+
 @Component({
     selector: "room-availability-modal",
     templateUrl: "/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-search/modal/template/room-availability-modal.html"

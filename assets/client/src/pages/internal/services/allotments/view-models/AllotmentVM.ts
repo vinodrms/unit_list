@@ -7,6 +7,8 @@ import {RoomCategoryDO} from '../../room-categories/data-objects/RoomCategoryDO'
 import {AllotmentConstraintDO} from '../data-objects/constraint/AllotmentConstraintDO';
 import {AllotmentConstraintMeta} from '../data-objects/constraint/IAllotmentConstraint';
 
+import * as _ from "underscore";
+
 export class AllotmentVM {
 	private _thUtils: ThUtils;
 	private _allotment: AllotmentDO;

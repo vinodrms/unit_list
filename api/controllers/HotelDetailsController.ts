@@ -11,7 +11,7 @@ import {HotelUpdatePropertyDetails} from '../core/domain-layer/hotel-details/pro
 import {HotelConfigurations} from '../core/domain-layer/hotel-details/config-completed/HotelConfigurations';
 
 class HotelDetailsController extends BaseController {
-	public getDetails(req: Express.Request, res: Express.Response) {
+	public getDetails(req: any, res: any) {
 		var hotelDetails = new HotelGetDetails(req.appContext, req.sessionContext);
 		hotelDetails.getDetails().then((details: { user: UserDO, hotel: HotelDO }) => {
 			this.returnSuccesfulResponse(req, res, { details: details });
@@ -19,7 +19,7 @@ class HotelDetailsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.HotelDetailsControllerErrorGettingDetails);
 		});
 	}
-	public updateBasicInfo(req: Express.Request, res: Express.Response) {
+	public updateBasicInfo(req: any, res: any) {
 		var updateBasicInfo = new HotelUpdateBasicInfo(req.appContext, req.sessionContext, req.body.basicInfo);
 		updateBasicInfo.update().then((details: { user: UserDO, hotel: HotelDO }) => {
 			this.returnSuccesfulResponse(req, res, { details: details });
@@ -27,7 +27,7 @@ class HotelDetailsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.HotelDetailsControllerErrorUpdatingBasicInfo);
 		});
 	}
-	public updatePaymentsAndPolicies(req: Express.Request, res: Express.Response) {
+	public updatePaymentsAndPolicies(req: any, res: any) {
 		var updatePaymPolicies = new HotelUpdatePaymentsPolicies(req.appContext, req.sessionContext);
 		updatePaymPolicies.update(req.body.paymentsAndPolicies).then((details: { user: UserDO, hotel: HotelDO }) => {
 			this.returnSuccesfulResponse(req, res, { details: details });
@@ -35,7 +35,7 @@ class HotelDetailsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.HotelDetailsControllerErrorAddingPaymentsAndPolicies);
 		});
 	}
-	public updatePropertyDetails(req: Express.Request, res: Express.Response) {
+	public updatePropertyDetails(req: any, res: any) {
 		var updatePropDetails = new HotelUpdatePropertyDetails(req.appContext, req.sessionContext, req.body.propertyDetails);
 		updatePropDetails.update().then((result: { user: UserDO, hotel: HotelDO }) => {
 			this.returnSuccesfulResponse(req, res, { details: result });
@@ -43,7 +43,7 @@ class HotelDetailsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.HotelDetailsControllerErrorUpdatingPropertyDetails);
 		});
 	}
-	public markConfigurationCompleted(req: Express.Request, res: Express.Response) {
+	public markConfigurationCompleted(req: any, res: any) {
 		var hotelConfigurationStatus = new HotelConfigurations(req.appContext, req.sessionContext);
 		hotelConfigurationStatus.markAsCompleted().then((updatedHotel: HotelDO) => {
 			this.returnSuccesfulResponse(req, res, { configurationCompleted: updatedHotel.configurationCompleted });

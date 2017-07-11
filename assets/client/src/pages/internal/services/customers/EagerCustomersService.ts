@@ -5,6 +5,8 @@ import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
 import { CustomerDO } from './data-objects/CustomerDO';
 import { CustomersDO } from './data-objects/CustomersDO';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class EagerCustomersService {
 	constructor(private _appContext: AppContext) {

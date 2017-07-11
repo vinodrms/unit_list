@@ -13,6 +13,7 @@ import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
 
 import fs = require('fs');
 import path = require('path');
+import _ = require("underscore");
 
 export class InvoiceConfirmationEmailSender {
     private static INVOICE_EMAIL_SUBJECT = 'Invoice';

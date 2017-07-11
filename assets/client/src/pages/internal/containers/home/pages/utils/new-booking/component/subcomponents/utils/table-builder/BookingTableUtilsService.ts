@@ -5,6 +5,8 @@ import { BookingCartItemVM, BookingCartItemVMType } from '../../../../services/s
 import { BookingCartService } from '../../../../services/search/BookingCartService';
 import { ConfigCapacityDO } from '../../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class BookingTableUtilsService {
     public static TotalsClass = "lazy-loading-table-totals";

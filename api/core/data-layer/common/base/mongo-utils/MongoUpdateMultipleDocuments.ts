@@ -22,7 +22,7 @@ export class MongoUpdateMultipleDocuments {
 	errorCallback: { (err: any): void };
 	successCallback: { (numUpdated: number): void };
 
-	constructor(private _sailsEntity: Sails.Model) {
+	constructor(private _sailsEntity: any) {
 		this._thUtils = new ThUtils();
 		this._mongoUtils = new MongoUtils();
 	}

@@ -1,8 +1,10 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ThDataValidators} from '../form-utils/utils/ThDataValidators';
-import {ThDateDO} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateDO';
-import {ThDateIntervalDO} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateIntervalDO';
-import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateUtils';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ThDataValidators } from '../form-utils/utils/ThDataValidators';
+import { ThDateDO } from '../../../pages/internal/services/common/data-objects/th-dates/ThDateDO';
+import { ThDateIntervalDO } from '../../../pages/internal/services/common/data-objects/th-dates/ThDateIntervalDO';
+import { ThDateUtils } from '../../../pages/internal/services/common/data-objects/th-dates/ThDateUtils';
+
+import * as _ from "underscore";
 
 @Component({
 	selector: 'th-date-interval-picker',

@@ -3,6 +3,8 @@ import {ThDateDO} from './ThDateDO';
 import {ThHourDO} from './ThHourDO';
 import {ThDateUtils} from './ThDateUtils';
 
+import moment from "moment";
+
 export class ThTimestampDO extends BaseDO {
 	thDateDO: ThDateDO;
 	thHourDO: ThHourDO;

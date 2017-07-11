@@ -1,16 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
-import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
-import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {TaxService} from '../../../../../services/taxes/TaxService';
-import {TaxDO, TaxType} from '../../../../../services/taxes/data-objects/TaxDO';
-import {TaxContainerDO} from '../../../../../services/taxes/data-objects/TaxContainerDO';
-import {TaxListModalInput} from './services/utils/TaxListModalInput';
-import {HotelService} from '../../../../../services/hotel/HotelService';
-import {HotelDetailsDO} from '../../../../../services/hotel/data-objects/HotelDetailsDO';
+import { BaseComponent } from '../../../../../../../common/base/BaseComponent';
+import { ThError, AppContext } from '../../../../../../../common/utils/AppContext';
+import { ICustomModalComponent, ModalSize } from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
+import { ModalDialogRef } from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { TaxService } from '../../../../../services/taxes/TaxService';
+import { TaxDO, TaxType } from '../../../../../services/taxes/data-objects/TaxDO';
+import { TaxContainerDO } from '../../../../../services/taxes/data-objects/TaxContainerDO';
+import { TaxListModalInput } from './services/utils/TaxListModalInput';
+import { HotelService } from '../../../../../services/hotel/HotelService';
+import { HotelDetailsDO } from '../../../../../services/hotel/data-objects/HotelDetailsDO';
+
+import * as _ from "underscore";
 
 @Component({
 	selector: 'tax-list-modal',

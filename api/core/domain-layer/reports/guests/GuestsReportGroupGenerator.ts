@@ -11,6 +11,8 @@ import { GuestsReportArrivalsSectionGenerator } from "./sections/GuestsReportArr
 import { GuestsReportStayoversSectionGenerator } from "./sections/GuestsReportStayoversSectionGenerator";
 import { GuestsReportDeparturesSectionGenerator } from "./sections/GuestsReportDeparturesSectionGenerator";
 
+import _ = require("underscore");
+
 export class GuestsReportGroupGenerator extends AReportGeneratorStrategy {
     private _startDate: ThDateDO;
     private _endDate: ThDateDO;

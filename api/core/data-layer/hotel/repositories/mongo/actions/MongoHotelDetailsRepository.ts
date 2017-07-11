@@ -16,7 +16,7 @@ import _ = require("underscore");
 export class MongoHotelDetailsRepository extends MongoRepository {
 	private static PrefixLength = 3;
 
-	constructor(hotelsEntity: Sails.Model) {
+	constructor(hotelsEntity: any) {
 		super(hotelsEntity);
 	}
 	public getHotelById(id: string): Promise<HotelDO> {

@@ -8,6 +8,8 @@ import {AddOnProductSearchResultRepoDO} from '../../../data-layer/add-on-product
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import {AddOnProductsContainer} from './results/AddOnProductsContainer';
 
+import _ = require("underscore");
+
 export class AddOnProductIdValidator {
 	private _thUtils: ThUtils;
 	private _addOnProductIdList: string[];

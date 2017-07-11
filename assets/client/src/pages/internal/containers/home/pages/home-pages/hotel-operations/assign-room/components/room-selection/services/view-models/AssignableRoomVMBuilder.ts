@@ -8,6 +8,8 @@ import {RoomMaintenanceStatus} from '../../../../../../../../../../services/room
 import {AssignableRoomVMContainer} from './AssignableRoomVMContainer';
 import {AssignableRoomVM} from './AssignableRoomVM';
 
+import * as _ from "underscore";
+
 export interface RoomVMBuilderParams {
     roomList: RoomVM[];
     booking: BookingDO;

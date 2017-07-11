@@ -23,6 +23,8 @@ import {BookingAggregatedDataContainer} from './BookingAggregatedDataContainer';
 import {BookingAggregatedData} from './BookingAggregatedData';
 import {AddOnProductLoader, AddOnProductItemContainer} from '../../add-on-products/validators/AddOnProductLoader';
 
+import _ = require("underscore");
+
 export interface BookingDataAggregatorQuery {
     groupBookingId?: string;
     bookingIdList?: string[];

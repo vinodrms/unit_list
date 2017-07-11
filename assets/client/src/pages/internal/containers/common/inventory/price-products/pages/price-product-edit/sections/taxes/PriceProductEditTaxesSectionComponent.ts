@@ -9,6 +9,8 @@ import {TaxContainerDO} from '../../../../../../../../services/taxes/data-object
 import {TaxDO, TaxType} from '../../../../../../../../services/taxes/data-objects/TaxDO';
 import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'price-product-edit-taxes-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/taxes/template/price-product-edit-taxes-section.html',

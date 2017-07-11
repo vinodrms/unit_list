@@ -1,20 +1,20 @@
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {MongoRepository, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
-import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
-import {AddOnProductMetaRepoDO, AddOnProductSearchCriteriaRepoDO, AddOnProductSearchResultRepoDO} from '../../IAddOnProductRepository';
-import {AddOnProductDO, AddOnProductStatus} from '../../../data-objects/AddOnProductDO';
-import {AddOnProductRepositoryHelper} from './helpers/AddOnProductRepositoryHelper';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { MongoRepository, MongoSearchCriteria } from '../../../../common/base/MongoRepository';
+import { MongoQueryBuilder } from '../../../../common/base/MongoQueryBuilder';
+import { AddOnProductMetaRepoDO, AddOnProductSearchCriteriaRepoDO, AddOnProductSearchResultRepoDO } from '../../IAddOnProductRepository';
+import { AddOnProductDO, AddOnProductStatus } from '../../../data-objects/AddOnProductDO';
+import { AddOnProductRepositoryHelper } from './helpers/AddOnProductRepositoryHelper';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
 
 export class MongoAddOnProductReadOperationsRepository extends MongoRepository {
 	private _helper: AddOnProductRepositoryHelper;
 
-    constructor(addOnProdEntity: Sails.Model) {
-        super(addOnProdEntity);
+	constructor(addOnProdEntity: any) {
+		super(addOnProdEntity);
 		this._helper = new AddOnProductRepositoryHelper();
-    }
+	}
 
 	public getAddOnProductCategoryIdList(meta: AddOnProductMetaRepoDO): Promise<string[]> {
 		return new Promise<string[]>((resolve: { (result: string[]): void }, reject: { (err: ThError): void }) => {

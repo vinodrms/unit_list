@@ -3,6 +3,8 @@ import {AppContext} from '../../../../../../../../../../common/utils/AppContext'
 import {SettingsPageVM} from './utils/SettingsPageVM';
 import {SettingsPageType} from './utils/SettingsPageType';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class SettingsNavbarService {
 	private _numberOfItems: number;

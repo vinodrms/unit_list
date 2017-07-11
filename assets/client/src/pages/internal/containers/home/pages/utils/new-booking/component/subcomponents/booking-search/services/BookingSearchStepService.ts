@@ -8,6 +8,8 @@ import {PriceProductValidationRuleDataDO, PriceProductValidationRuleResult} from
 import {BookingCartItemVM} from '../../../../services/search/view-models/BookingCartItemVM';
 import {BookingCartService} from '../../../../services/search/BookingCartService';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class BookingSearchStepService implements IBookingStepService {
 	private _stepPath: string[];

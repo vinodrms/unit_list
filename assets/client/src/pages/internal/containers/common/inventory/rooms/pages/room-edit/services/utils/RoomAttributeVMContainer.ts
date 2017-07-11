@@ -1,6 +1,8 @@
 import {RoomAttributeDO} from '../../../../../../../../services/common/data-objects/room-attribute/RoomAttributeDO';
 import {RoomAttributesDO} from '../../../../../../../../services/settings/data-objects/RoomAttributesDO';
 
+import * as _ from "underscore";
+
 export class RoomAttributeVM {
     roomAttribute: RoomAttributeDO;
     isSelected: boolean;

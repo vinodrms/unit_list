@@ -11,6 +11,8 @@ import { BookingPriceDO } from './price/BookingPriceDO';
 import { IInvoiceItemMeta } from '../../invoices/data-objects/items/IInvoiceItemMeta';
 import { ThDateDO } from "../../common/data-objects/th-dates/ThDateDO";
 
+import * as _ from "underscore";
+
 export enum BookingStatus {
     Active,
     Deleted

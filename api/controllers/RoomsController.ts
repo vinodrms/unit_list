@@ -14,7 +14,7 @@ import _ = require('underscore');
 
 class RoomsController extends BaseController {
 
-    public getRoomList(req: Express.Request, res: Express.Response) {
+    public getRoomList(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -34,7 +34,7 @@ class RoomsController extends BaseController {
 		});
 	}
 
-    public getRoomListCount(req: Express.Request, res: Express.Response) {
+    public getRoomListCount(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 
@@ -47,7 +47,7 @@ class RoomsController extends BaseController {
 		});
 	}
 
-    public saveRoomItem(req: Express.Request, res: Express.Response) {
+    public saveRoomItem(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -60,7 +60,7 @@ class RoomsController extends BaseController {
 		});
 	}
 
-    public deleteRoomItem(req: Express.Request, res: Express.Response) {
+    public deleteRoomItem(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -73,7 +73,7 @@ class RoomsController extends BaseController {
 		});
 	}
 
-    public getRoomById(req: Express.Request, res: Express.Response) {
+    public getRoomById(req: any, res: any) {
 		if (!this.precheckGETParameters(req, res, ['id'])) { return };
 
         var appContext: AppContext = req.appContext;
@@ -91,7 +91,7 @@ class RoomsController extends BaseController {
 		});
 	}
 
-    public getUsedRoomCategoryList(req: Express.Request, res: Express.Response) {
+    public getUsedRoomCategoryList(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 

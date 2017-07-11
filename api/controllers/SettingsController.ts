@@ -9,7 +9,7 @@ RoomAttributeSearchCriteriaRepoDO} from '../core/data-layer/settings/repositorie
 
 export class SettingsController extends BaseController {
     
-    public getRoomAttributes(req: Express.Request, res: Express.Response) {
+    public getRoomAttributes(req: any, res: any) {
         var roomAttributeID: string = req.query.id;
         var thUtils = new ThUtils();
         var criteria: AmenitySearchCriteriaRepoDO = {};
@@ -27,7 +27,7 @@ export class SettingsController extends BaseController {
 
     }
     
-    public getRoomAmenities(req: Express.Request, res: Express.Response) {
+    public getRoomAmenities(req: any, res: any) {
         var amenityID: string = req.query.id;
         var thUtils = new ThUtils();
         var criteria: AmenitySearchCriteriaRepoDO = {};
@@ -44,7 +44,7 @@ export class SettingsController extends BaseController {
         });
 
     }
-    public getHotelAmenities(req: Express.Request, res: Express.Response) {
+    public getHotelAmenities(req: any, res: any) {
         var amenityID: string = req.query.id;
         var thUtils = new ThUtils();
         var criteria: AmenitySearchCriteriaRepoDO = {};
@@ -61,7 +61,7 @@ export class SettingsController extends BaseController {
         });
 
     }
-    public getCountries(req: Express.Request, res: Express.Response) {
+    public getCountries(req: any, res: any) {
         var countryCode = req.query.code;
         var thUtils = new ThUtils();
         var criteria: CountrySearchCriteriaRepoDO = {};
@@ -78,7 +78,7 @@ export class SettingsController extends BaseController {
         });
 
     }
-    public getCurrencies(req: Express.Request, res: Express.Response) {
+    public getCurrencies(req: any, res: any) {
         var currencyCode = req.query.code;
         var thUtils = new ThUtils();
         var criteria: CurrencySearchCriteriaRepoDO = {};
@@ -95,7 +95,7 @@ export class SettingsController extends BaseController {
         });
 
     }
-    public getPaymentMethods(req: Express.Request, res: Express.Response) {
+    public getPaymentMethods(req: any, res: any) {
         var paymentMethodId = req.query.id;
         var thUtils = new ThUtils();
         var criteria: PaymentMethodSearchCriteriaRepoDO = {};
@@ -111,7 +111,7 @@ export class SettingsController extends BaseController {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
     }
-	public getAddOnProductCategories(req: Express.Request, res: Express.Response) {
+	public getAddOnProductCategories(req: any, res: any) {
         var addOnProductId = req.query.id;
         var thUtils = new ThUtils();
         var criteria: AddOnProductCategoryCriteriaRepoDO = {};
@@ -127,7 +127,7 @@ export class SettingsController extends BaseController {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
     }
-    public getBedTemplates(req: Express.Request, res: Express.Response) {
+    public getBedTemplates(req: any, res: any) {
         var thUtils = new ThUtils();
         var settingsRepository: ISettingsRepository = req.appContext.getRepositoryFactory().getSettingsRepository();
         settingsRepository.getBedTemplates().then((bedTemplateList: any) => {

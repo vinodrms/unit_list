@@ -23,6 +23,8 @@ import { ShiftReportPaidInvoicesSectionGenerator } from './strategies/ShiftRepor
 import { CommonValidationStructures } from "../../common/CommonValidations";
 import { ShiftReportPaidByAgreementSectionGenerator } from "./strategies/ShiftReportPaidByAgreementSectionGenerator";
 
+import _ = require("underscore");
+
 export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	private _shiftReportParams: ShiftReportParams;
 	private _allInvoiceGroupList: InvoiceGroupDO[];

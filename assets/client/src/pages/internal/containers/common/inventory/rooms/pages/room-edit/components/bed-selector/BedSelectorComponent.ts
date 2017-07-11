@@ -10,6 +10,8 @@ import {BedVM} from '../../../../../../../../services/beds/view-models/BedVM';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {RoomCategoryDO} from '../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'bed-selector',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/pages/room-edit/components/bed-selector/template/bed-selector.html',

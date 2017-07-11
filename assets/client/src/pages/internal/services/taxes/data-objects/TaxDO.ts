@@ -1,5 +1,7 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
 
+import * as _ from 'underscore';
+
 export enum TaxType {
 	Vat,
 	OtherTax

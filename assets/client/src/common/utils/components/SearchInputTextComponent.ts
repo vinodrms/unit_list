@@ -1,7 +1,11 @@
-import {Component, AfterViewInit, Inject, Output, EventEmitter, ElementRef, Input} from '@angular/core';
-import {AppContext} from '../AppContext';
-import {LazyLoadData} from '../../../pages/internal/services/common/ILazyLoadRequestService';
-import {ITextSearchRequestService} from '../../../pages/internal/services/common/ITextSearchRequestService';
+import { Component, AfterViewInit, Inject, Output, EventEmitter, ElementRef, Input } from '@angular/core';
+import { AppContext } from '../AppContext';
+import { LazyLoadData } from '../../../pages/internal/services/common/ILazyLoadRequestService';
+import { ITextSearchRequestService } from '../../../pages/internal/services/common/ITextSearchRequestService';
+
+import * as _ from "underscore";
+
+declare var $: any;
 
 export interface SearchInputTextParams {
 	objectPropertyId: string;

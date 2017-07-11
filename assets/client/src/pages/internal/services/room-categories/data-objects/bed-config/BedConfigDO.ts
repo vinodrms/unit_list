@@ -1,6 +1,8 @@
 import {BaseDO} from '../../../../../../common/base/BaseDO';
 import {BedMetaDO} from './BedMetaDO';
 
+import * as _ from 'underscore';
+
 export class BedConfigDO extends BaseDO {
     bedMetaList: BedMetaDO[];
 

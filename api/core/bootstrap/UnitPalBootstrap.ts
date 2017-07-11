@@ -10,6 +10,8 @@ import { ThStatusCode } from '../utils/th-responses/ThResponse';
 import { CronJobInitializer } from '../cron-jobs/CronJobInitializer';
 import { SocketsInitializer } from './sockets/SocketsInitializer';
 
+declare var sails: any;
+
 export class UnitPalBootstrap {
 	private _unitPalConfig: UnitPalConfig;
 	private _serviceBootstrapFactory: ServiceBootstrapFactory;
