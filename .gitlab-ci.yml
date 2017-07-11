@@ -10,8 +10,6 @@ test on demo3AT:
     - npm run install-deps
     - npm run build-all
     - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run server-tests
-  allow_failure: false
-  when: manual
   environment:
     name: demo
 
@@ -30,6 +28,7 @@ deploy on production:
     - ./ansible/azure_install.sh
   environment:
     name: production
+  allow_failure: false
   when: manual
   only:
     - master
