@@ -12,8 +12,7 @@ build on demo3AT:
     - npm run build-all
   cache:
     key: ${CI_BUILD_REF_NAME}
-    cache:
-      untracked: true
+    untracked: true
   allow_failure: false
   environment:
     name: demo
