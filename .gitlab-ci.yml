@@ -1,3 +1,7 @@
+cache:
+  key: "PIPELINE-$CI_PIPELINE_ID"
+  untracked: true
+
 stages:
   - build
   - test
@@ -10,11 +14,6 @@ build on demo3AT:
     - npm run forever-stop
     - npm run install-deps
     - npm run build-all
-  cache:
-    key: ${CI_BUILD_REF_NAME}
-    paths:
-      - node_modules/
-      - assets/node_modules/
   allow_failure: false
   environment:
     name: demo
