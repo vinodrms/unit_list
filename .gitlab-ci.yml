@@ -49,8 +49,6 @@ deploy on production:
 run on demo3AT:
   stage: run
   script:
-    - npm run install-deps
-    - npm run build-all
     - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
   environment:
     name: demo
