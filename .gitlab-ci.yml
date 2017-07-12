@@ -12,7 +12,9 @@ build on demo3AT:
     - npm run build-all
   cache:
     key: ${CI_BUILD_REF_NAME}
-    untracked: true
+    paths:
+      - node_modules/
+      - assets/node_modules/
   allow_failure: false
   environment:
     name: demo
@@ -20,7 +22,8 @@ build on demo3AT:
 test on demo3AT:
   stage: test
   script:
-    - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run server-tests
+    - npm run build-all
+    - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run test-server
   allow_failure: false
   environment:
     name: demo

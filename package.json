@@ -72,6 +72,7 @@
     "build-server": "gulp clean-server && tsc --project api",
     "build-client": "gulp clean-client && (tsc --project assets/client) && (cd assets && npm run build-client && cd ..)",
     "build-all": "npm run build-server && npm run build-client",
+    "test-server": "gulp run-server-tests",
     "server-tests": "npm run build-server && gulp run-server-tests",
     "e2e-tests": "npm run server-tests && cd assets && npm run e2e && cd ..",
     "dev": "node app.js",
