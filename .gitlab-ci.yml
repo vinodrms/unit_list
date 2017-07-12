@@ -21,7 +21,6 @@ build on demo3AT:
 test on demo3AT:
   stage: test
   script:
-    - npm run build-all
     - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run test-server
   allow_failure: false
   environment:
