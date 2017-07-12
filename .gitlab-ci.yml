@@ -41,7 +41,6 @@ deploy on production:
     - ./ansible/azure_install.sh
   environment:
     name: production
-  allow_failure: false
   when: manual
   only:
     - master
