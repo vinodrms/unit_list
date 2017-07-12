@@ -12,6 +12,8 @@ import {RoomCategoryDO} from '../../../../../services/room-categories/data-objec
 import {RoomCategoryVM} from './services/view-models/RoomCategoryVM';
 import {RoomCategoryStatsDO} from '../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'room-categories-modal',
 	templateUrl: "/client/src/pages/internal/containers/common/inventory/modals/room-categories/template/room-categories-modal.html",

@@ -4,6 +4,8 @@ import {PriceProductYieldFilterMetaDO} from '../data-objects/yield-filter/PriceP
 import {YieldFiltersDO} from '../../hotel-configurations/data-objects/YieldFiltersDO';
 import {YieldFilterDO} from '../../common/data-objects/yield-filter/YieldFilterDO';
 
+import * as _ from "underscore";
+
 export class YieldFilterValueVM {
 	private _yieldFilterValue: YieldFilterValueDO;
 	private _filterId: string;

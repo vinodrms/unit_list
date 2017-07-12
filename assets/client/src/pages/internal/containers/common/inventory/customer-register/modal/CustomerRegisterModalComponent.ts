@@ -17,6 +17,8 @@ import { HotelService } from '../../../../../services/hotel/HotelService';
 import { HotelAggregatorService } from '../../../../../services/hotel/HotelAggregatorService';
 import { CustomerRegisterComponent } from '../main/CustomerRegisterComponent';
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'customer-register-modal',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/modal/template/customer-register-modal.html',

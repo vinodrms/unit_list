@@ -9,7 +9,7 @@ import { AllotmentRepositoryHelper } from './helpers/AllotmentRepositoryHelper';
 export class MongoAllotmentCrudOperationsRepository extends MongoRepository {
 	private _helper: AllotmentRepositoryHelper;
 
-	constructor(allotmentEntity: Sails.Model) {
+	constructor(allotmentEntity: any) {
 		super(allotmentEntity);
 		this._helper = new AllotmentRepositoryHelper();
 	}

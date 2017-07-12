@@ -10,6 +10,8 @@ import {KeyMetricVM} from '../../../../../../../services/yield-manager/dashboard
 import { KeyMetricType } from '../../../../../../../services/yield-manager/dashboard/key-metrics/data-objects/result-item/KeyMetricType';
 import { KeyMetricDO } from "../../../../../../../services/yield-manager/dashboard/key-metrics/data-objects/result-item/KeyMetricDO";
 
+import * as _ from "underscore";
+
 @Injectable()
 export class KeyMetricModalService {
     constructor(private _appContext: AppContext) { }

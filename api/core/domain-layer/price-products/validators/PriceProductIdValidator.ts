@@ -8,6 +8,8 @@ import {PriceProductDO, PriceProductStatus} from '../../../data-layer/price-prod
 import {PriceProductSearchResultRepoDO} from '../../../data-layer/price-products/repositories/IPriceProductRepository';
 import {PriceProductsContainer} from './results/PriceProductsContainer';
 
+import _ = require("underscore");
+
 export class PriceProductIdValidator {
 	private _thUtils: ThUtils;
 	private _priceProductIdList: string[];

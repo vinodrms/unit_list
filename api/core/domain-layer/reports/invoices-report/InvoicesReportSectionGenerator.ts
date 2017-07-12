@@ -14,6 +14,8 @@ import { CustomerSearchResultRepoDO } from "../../../data-layer/customers/reposi
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 import { ThUtils } from "../../../utils/ThUtils";
 
+import _ = require("underscore");
+
 export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrategy {
     private _totalAmount: number;
     private _customerMap: { [index: string]: CustomerDO };

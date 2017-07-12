@@ -1,6 +1,8 @@
 import mongodb = require('mongodb');
 import ObjectID = mongodb.ObjectID;
 
+import _ = require("underscore");
+
 export class MongoQueryUtils {
 	private convertToNativeObjectId(idStr: string): ObjectID {
 		return new ObjectID(idStr);

@@ -10,6 +10,8 @@ import { MongoPriceProductCrudOperationsRepository } from './operations/MongoPri
 import { MongoPriceProductReadOperationsRepository } from './operations/MongoPriceProductReadOperationsRepository';
 import { PriceProductPriceDO } from "../../data-objects/price/PriceProductPriceDO";
 
+declare var sails: any;
+
 export class MongoPriceProductRepository extends MongoRepository implements IPriceProductRepository {
 	private _crudRepository: MongoPriceProductCrudOperationsRepository;
 	private _readRepository: MongoPriceProductReadOperationsRepository;

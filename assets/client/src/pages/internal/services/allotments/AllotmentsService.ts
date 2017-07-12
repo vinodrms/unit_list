@@ -19,6 +19,8 @@ import {AllotmentDO, AllotmentStatus} from './data-objects/AllotmentDO';
 import {AllotmentConstraintMeta} from './data-objects/constraint/IAllotmentConstraint';
 import {AllotmentConstraintFactory} from './data-objects/constraint/AllotmentConstraintFactory';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class AllotmentsService extends ALazyLoadRequestService<AllotmentVM> {
 	constructor(appContext: AppContext,

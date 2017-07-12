@@ -1,6 +1,8 @@
 import { AThValidator } from './AThValidator';
 import { ThDataValidators } from '../utils/ThDataValidators';
 
+import * as _ from "underscore";
+
 export class PercentageValidator extends AThValidator {
 	private _minValue: number = 0;
 	private _maxValue: number = 100;

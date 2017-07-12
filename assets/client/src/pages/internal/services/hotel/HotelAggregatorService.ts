@@ -20,6 +20,8 @@ import { HotelAggregatedPaymentMethodsDO } from "../settings/data-objects/HotelA
 import { PaymentMethodInstanceDO } from "../common/data-objects/payment-method/PaymentMethodInstanceDO";
 import { AggregatedPaymentMethodDO } from "../common/data-objects/payment-method/AggregatedPaymentMethodDO";
 
+import * as _ from "underscore";
+
 @Injectable()
 export class HotelAggregatorService extends ARequestService<HotelAggregatedInfo> {
 	constructor(

@@ -56,7 +56,7 @@ export interface MongoAggregationOptions {
 export class MongoRepository implements IRepositoryCleaner {
 	protected _thUtils: ThUtils;
 
-	constructor(private _sailsEntity: Sails.Model) {
+	constructor(private _sailsEntity: any) {
 		this._thUtils = new ThUtils();
 	}
 

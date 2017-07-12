@@ -1,3 +1,5 @@
+import * as _ from "underscore";
+
 export enum ISOWeekDay {
 	Monday = 1,
 	Tuesday,

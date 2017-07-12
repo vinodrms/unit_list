@@ -1,9 +1,11 @@
-import {Injectable, Inject, EventEmitter} from '@angular/core';
-import {ThUtils} from '../ThUtils';
-import {ThCookie} from '../cookies/ThCookie';
-import {DanishTranslations} from './locales/Danish';
-import {EnglishTranslations} from './locales/English';
-import {IThCookie} from '../cookies/IThCookie';
+import { Injectable, Inject, EventEmitter } from '@angular/core';
+import { ThUtils } from '../ThUtils';
+import { ThCookie } from '../cookies/ThCookie';
+import { DanishTranslations } from './locales/Danish';
+import { EnglishTranslations } from './locales/English';
+import { IThCookie } from '../cookies/IThCookie';
+
+import * as _ from "underscore";
 
 export enum Locales {
 	English,

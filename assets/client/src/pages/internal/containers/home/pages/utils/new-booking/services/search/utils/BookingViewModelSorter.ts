@@ -2,6 +2,8 @@ import { SortOptions, SortOrder } from '../../../../../../../../services/common/
 import { BookingCartItemVM } from '../view-models/BookingCartItemVM';
 import { ConfigCapacityDO } from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
 
+import * as _ from "underscore";
+
 export class BookingViewModelSorter {
     constructor() {
     }

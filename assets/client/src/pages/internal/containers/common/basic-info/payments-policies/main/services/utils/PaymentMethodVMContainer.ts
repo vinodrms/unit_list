@@ -10,6 +10,8 @@ import { PriceValidator } from "../../../../../../../../../common/utils/form-uti
 import { AThValidator } from "../../../../../../../../../common/utils/form-utils/validators/AThValidator";
 import { ThDataValidators } from "../../../../../../../../../common/utils/form-utils/utils/ThDataValidators";
 
+import * as _ from "underscore";
+
 export class PaymentMethodVM {
 	aggregatedPaymentMethod: AggregatedPaymentMethodDO;
 	_isSelected: boolean;

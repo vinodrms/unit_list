@@ -8,6 +8,8 @@ import { RoomCategoryStatsDO } from '../../room-categories/data-objects/RoomCate
 import { ConfigCapacityDO } from '../../common/data-objects/bed-config/ConfigCapacityDO';
 import { ThUtils } from '../../../../../common/utils/ThUtils';
 
+import * as _ from "underscore";
+
 export class RoomVM {
     private _thUtils: ThUtils;
 

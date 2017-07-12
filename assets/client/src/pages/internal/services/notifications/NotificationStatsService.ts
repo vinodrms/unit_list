@@ -6,6 +6,8 @@ import {NotificationStatsDO} from './data-objects/NotificationStatsDO';
 import {ThNotificationDO} from './data-objects/ThNotificationDO';
 import {TotalCountDO} from '../common/data-objects/lazy-load/TotalCountDO';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class NotificationStatsService extends ARequestService<NotificationStatsDO> {
     private static NUM_LAST_ITEMS = 5;

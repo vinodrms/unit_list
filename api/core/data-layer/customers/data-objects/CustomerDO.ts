@@ -7,6 +7,8 @@ import {TravelAgencyDetailsDO} from './customer-details/corporate/TravelAgencyDe
 import {ICustomerDetailsDO} from './customer-details/ICustomerDetailsDO';
 import {PriceProductDO, PriceProductAvailability} from '../../price-products/data-objects/PriceProductDO';
 
+import _ = require("underscore");
+
 export enum CustomerType {
 	Individual,
 	Company,

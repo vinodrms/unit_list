@@ -12,6 +12,8 @@ import { ThPeriodType, ThPeriodOption } from '../../utils/ThPeriodType';
 import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
 
+import * as _ from "underscore";
+
 export enum CommissionOption {
 	INCLUDE,
 	EXCLUDE,

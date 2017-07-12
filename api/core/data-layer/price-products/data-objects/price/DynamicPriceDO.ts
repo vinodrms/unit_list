@@ -8,6 +8,8 @@ import { ThUtils } from "../../../../utils/ThUtils";
 import { ThDateDO } from "../../../../utils/th-dates/data-objects/ThDateDO";
 import { RoomCategoryStatsDO } from "../../../room-categories/data-objects/RoomCategoryStatsDO";
 
+import _ = require("underscore");
+
 export class DynamicPriceDO extends BaseDO {
     id: string;
     name: string;

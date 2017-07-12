@@ -7,6 +7,8 @@ import {RoomCategoriesModalService} from '../../../../../modals/room-categories/
 import {RoomCategoryDO} from '../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'price-product-edit-room-categories-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/room-categories/template/price-product-edit-room-categories-section.html',

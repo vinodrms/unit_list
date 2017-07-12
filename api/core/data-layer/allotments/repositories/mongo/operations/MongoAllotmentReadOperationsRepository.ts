@@ -1,20 +1,22 @@
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {MongoRepository, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
-import {MongoQueryBuilder, QueryComparisonOperator} from '../../../../common/base/MongoQueryBuilder';
-import {AllotmentMetaRepoDO, AllotmentSearchCriteriaRepoDO, AllotmentSearchResultRepoDO} from '../../IAllotmentRepository';
-import {AllotmentDO, AllotmentStatus} from '../../../data-objects/AllotmentDO';
-import {AllotmentRepositoryHelper} from './helpers/AllotmentRepositoryHelper';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { MongoRepository, MongoSearchCriteria } from '../../../../common/base/MongoRepository';
+import { MongoQueryBuilder, QueryComparisonOperator } from '../../../../common/base/MongoQueryBuilder';
+import { AllotmentMetaRepoDO, AllotmentSearchCriteriaRepoDO, AllotmentSearchResultRepoDO } from '../../IAllotmentRepository';
+import { AllotmentDO, AllotmentStatus } from '../../../data-objects/AllotmentDO';
+import { AllotmentRepositoryHelper } from './helpers/AllotmentRepositoryHelper';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+
+import _ = require("underscore");
 
 export class MongoAllotmentReadOperationsRepository extends MongoRepository {
 	private _helper: AllotmentRepositoryHelper;
 
-	constructor(allotmentEntity: Sails.Model) {
-        super(allotmentEntity);
+	constructor(allotmentEntity: any) {
+		super(allotmentEntity);
 		this._helper = new AllotmentRepositoryHelper();
-    }
+	}
 
 	public getAllotmentListCount(meta: AllotmentMetaRepoDO, searchCriteria: AllotmentSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
 		return new Promise<LazyLoadMetaResponseRepoDO>((resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }) => {

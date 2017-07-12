@@ -9,6 +9,8 @@ import {IPriceProductValidationRule} from './validation/IPriceProductValidationR
 import {GenericPriceProductValidationRuleStrategy} from './validation/GenericPriceProductValidationRuleStrategy';
 import {MinNoRoomsPriceProductValidationRuleStrategy} from './validation/MinNoRoomsPriceProductValidationRuleStrategy';
 
+import * as _ from "underscore";
+
 export class PriceProductConstraintFactory {
 	public getConstraintDOByType(constraintType: PriceProductConstraintType): PriceProductConstraintDO {
 		var constraintDO: PriceProductConstraintDO = new PriceProductConstraintDO();

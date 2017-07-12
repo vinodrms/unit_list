@@ -9,7 +9,7 @@ import {CustomerDO, CustomerStatus} from '../../../data-objects/CustomerDO';
 export class MongoCustomerCrudOperationsRepository extends MongoRepository {
 	private _helper: CustomerRepositoryHelper;
 
-    constructor(customerEntity: Sails.Model) {
+    constructor(customerEntity: any) {
         super(customerEntity);
 		this._helper = new CustomerRepositoryHelper();
     }

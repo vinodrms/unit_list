@@ -4,10 +4,11 @@ import { MongoSearchCriteria } from '../MongoRepository';
 import { IValidationStructure } from '../../../../utils/th-validation/structure/core/IValidationStructure';
 import { LazyLoadRepoDO } from '../../repo-data-objects/LazyLoadRepoDO';
 
-import _ = require('underscore');
 import mongodb = require('mongodb');
 import Collection = mongodb.Collection;
 import Cursor = mongodb.Cursor;
+
+import _ = require('underscore');
 
 export class MongoFindMultipleDocuments {
 	private _thUtils: ThUtils;
@@ -16,7 +17,7 @@ export class MongoFindMultipleDocuments {
 	errorCallback: { (err: Error): void };
 	successCallback: { (foundDocumentList: Array<Object>): void };
 
-	constructor(private _sailsEntity: Sails.Model) {
+	constructor(private _sailsEntity: any) {
 		this._thUtils = new ThUtils();
 		this._mongoUtils = new MongoUtils();
 	}

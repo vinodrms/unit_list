@@ -17,6 +17,8 @@ import {RoomItemsIndexer} from '../utils/RoomItemsIndexer';
 
 import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class HotelOperationsDashboardArrivalsService extends ARequestService<ArrivalItemInfoVM[]> {
     private _referenceDate: ThDateDO;

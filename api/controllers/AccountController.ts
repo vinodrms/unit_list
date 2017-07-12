@@ -13,7 +13,7 @@ import {UserAccountResetPassword} from '../core/domain-layer/hotel-account/reset
 import {LoginStatusCode} from '../core/utils/th-responses/LoginStatusCode';
 
 class AccountController extends BaseController {
-	public signUp(req: Express.Request, res: Express.Response) {
+	public signUp(req: any, res: any) {
 		var hotelSignUp = new HotelSignUp(req.appContext, req.sessionContext, req.body.accountData);
 		hotelSignUp.signUp().then((result: ActionTokenDO) => {
 			this.returnSuccesfulResponse(req, res, {});
@@ -21,7 +21,7 @@ class AccountController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.HotelSignUpError);
 		});
 	}
-	public activate(req: Express.Request, res: Express.Response) {
+	public activate(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var hotelActivateAccount = new UserAccountActivation(req.appContext, req.sessionContext, req.query);
 		hotelActivateAccount.activate().then((result: any) => {
@@ -30,7 +30,7 @@ class AccountController extends BaseController {
 			res.redirect(appContext.getUnitPalConfig().getAppContextRoot() + "/login/" + LoginStatusCode.AccountActivationError);
 		});
 	}
-	public logIn(req: Express.Request, res: Express.Response) {
+	public logIn(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var loginService: ILoginService = appContext.getServiceFactory().getLoginService();
 		loginService.logIn(LoginType.Basic, req).then((loginData: { user: UserDO, hotel: HotelDO }) => {
@@ -44,13 +44,13 @@ class AccountController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.HotelLoginError);
 		});
 	}
-	public logOut(req: Express.Request, res: Express.Response) {
+	public logOut(req: any, res: any) {
 		var sessionManager: SessionManager = new SessionManager(req);
 		sessionManager.destroySession();
 		this.returnSuccesfulResponse(req, res, {});
 	}
 
-	public requestResetPassword(req: Express.Request, res: Express.Response) {
+	public requestResetPassword(req: any, res: any) {
 		var reqPasswd = new UserAccountRequestResetPassword(req.appContext, req.sessionContext, req.body.requestData);
 		reqPasswd.requestResetPassword().then((resetToken: ActionTokenDO) => {
 			this.returnSuccesfulResponse(req, res, {});
@@ -58,7 +58,7 @@ class AccountController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.AccControllerErrorRequestingResetPassword);
 		});
 	}
-	public resetPassword(req: Express.Request, res: Express.Response) {
+	public resetPassword(req: any, res: any) {
 		var reqPasswd = new UserAccountResetPassword(req.appContext, req.sessionContext, req.body.requestData);
 		reqPasswd.resetPassword().then((user: UserDO) => {
 			this.returnSuccesfulResponse(req, res, {});

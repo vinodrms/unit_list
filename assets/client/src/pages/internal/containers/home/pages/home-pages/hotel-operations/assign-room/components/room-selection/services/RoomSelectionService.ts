@@ -19,6 +19,8 @@ import {AssignableRoomVMContainer} from './view-models/AssignableRoomVMContainer
 import {AssignableRoomVMBuilder} from './view-models/AssignableRoomVMBuilder';
 import {AssignableRoomVM} from './view-models/AssignableRoomVM';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class RoomSelectionService extends ASinglePageRequestService<AssignableRoomVM> {
     private _roomVMList: RoomVM[];

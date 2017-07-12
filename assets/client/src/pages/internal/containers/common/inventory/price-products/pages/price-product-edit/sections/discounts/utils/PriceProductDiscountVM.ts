@@ -3,6 +3,8 @@ import { CustomerDO } from "../../../../../../../../../services/customers/data-o
 import { PriceProductDiscountIntervalWrapperDO } from "../../../../../../../../../services/price-products/data-objects/discount/PriceProductDiscountIntervalWrapperDO";
 import { ThDateIntervalDO } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO";
 
+import * as _ from "underscore";
+
 export class PriceProductDiscountVM {
     private _index: number;
     private _constraintContainer: PriceProductConstraintContainer;

@@ -11,6 +11,8 @@ import {BookingTableUtilsService} from '../utils/table-builder/BookingTableUtils
 import {BookingFillDetailsStepService} from './services/BookingFillDetailsStepService';
 import {LazyLoadTableMeta} from '../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'new-booking-fill-details',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-fill-details/template/new-booking-fill-details.html',

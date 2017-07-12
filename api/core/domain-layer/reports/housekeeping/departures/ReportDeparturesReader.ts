@@ -16,6 +16,8 @@ import { BookingCustomers } from "../common/BookingCustomers";
 import { HotelOperationsQueryType, HotelOperationsQueryDO } from "../../../hotel-operations/dashboard/utils/HotelOperationsQueryDO";
 import { ThDateDO } from "../../../../utils/th-dates/data-objects/ThDateDO";
 
+import _ = require("underscore");
+
 export class ReportDeparturesReader {
 	private _thUtils: ThUtils;
 

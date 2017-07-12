@@ -2,6 +2,8 @@ import {IPriceProductEditSection} from '../../sections/utils/IPriceProductEditSe
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
 import {AddOnProductCategoriesDO} from '../../../../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
 
+import * as _ from "underscore";
+
 export class PriceProductEditSectionContainer implements IPriceProductEditSection {
 	private _priceProductEditSectionList: IPriceProductEditSection[];
 

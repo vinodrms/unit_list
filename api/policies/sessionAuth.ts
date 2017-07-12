@@ -5,7 +5,7 @@ import { UserRoles } from '../core/data-layer/hotel/data-objects/user/UserDO';
 import { AppContext } from "../core/utils/AppContext";
 import { DefaultDataBuilder } from "../test/db-initializers/DefaultDataBuilder";
 
-module.exports = function (req: Express.Request, res: Express.Response, next: any) {
+module.exports = function (req: any, res: any, next: any) {
 	var sessionContext: SessionContext = req["user"];
 	if (req.isAuthenticated() && sessionContext) {
 		req.sessionContext = sessionContext;

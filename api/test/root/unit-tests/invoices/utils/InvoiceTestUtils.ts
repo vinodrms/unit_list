@@ -11,6 +11,7 @@ import { InvoicePayerDO } from '../../../../../core/data-layer/invoices/data-obj
 import { AddOnProductInvoiceItemMetaDO } from '../../../../../core/data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 
 import should = require('should');
+import _ = require("underscore");
 
 export class InvoiceTestUtils {
     private _testUtils: TestUtils;

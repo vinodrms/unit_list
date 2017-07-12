@@ -1,6 +1,8 @@
 import {AmenityDO} from '../../../../../../../../services/common/data-objects/amenity/AmenityDO';
 import {RoomAmenitiesDO} from '../../../../../../../../services/settings/data-objects/RoomAmenitiesDO';
 
+import * as _ from "underscore";
+
 export class RoomAmenityVM {
     roomAmenity: AmenityDO;
     isSelected: boolean;

@@ -8,6 +8,8 @@ import {EmailSenderModalInput} from './services/utils/EmailSenderModalInput';
 import { HotelOperationsCommonService } from '../../../../../../services/hotel-operations/common/HotelOperationsCommonService';
 import { EmailDistributionDO } from "../../../utils/new-booking/services/data-objects/AddBookingItemsDO";
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'email-sender-modal',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/email-sender/template/email-sender-modal.html',

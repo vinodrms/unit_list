@@ -5,7 +5,7 @@ import { ReportGenerator } from '../core/domain-layer/reports/ReportGenerator';
 import { ReportFileResult } from '../core/domain-layer/reports/common/result/ReportFileResult';
 
 export class ReportsController extends BaseController {
-	public getReport(req: Express.Request, res: any) {
+	public getReport(req: any, res: any) {
 		var params: any;
 		try {
 			params = JSON.parse(req.query.params);

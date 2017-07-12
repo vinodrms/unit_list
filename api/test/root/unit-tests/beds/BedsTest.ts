@@ -1,6 +1,7 @@
 require("sails-test-helper");
 import should = require('should');
 import supertest = require('supertest');
+import _ = require("underscore");
 
 import {ThError} from '../../../../core/utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../core/utils/th-responses/ThResponse';

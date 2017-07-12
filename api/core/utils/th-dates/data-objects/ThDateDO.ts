@@ -3,6 +3,7 @@ import {ThDateUtils} from '../ThDateUtils';
 import {ISOWeekDay} from './ISOWeekDay';
 
 import moment = require("moment");
+import _ = require("underscore");
 
 export enum ThMonth {
 	January,

@@ -1,4 +1,6 @@
-import {ThUtils} from '../utils/ThUtils';
+import { ThUtils } from '../utils/ThUtils';
+
+import * as _ from "underscore";
 
 var thUtils: ThUtils = new ThUtils();
 

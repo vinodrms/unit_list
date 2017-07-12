@@ -1,13 +1,15 @@
-import {Component, AfterViewChecked, ViewChild, ElementRef} from '@angular/core';
-import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
-import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {YieldFilterModalInput} from './services/utils/YieldFilterModalInput';
-import {YieldFilterDO, YieldFilterType} from '../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
-import {YieldFilterValueDO} from '../../../../../services/common/data-objects/yield-filter/YieldFilterValueDO';
-import {ColorFilter} from '../../../../../services/common/data-objects/yield-filter/ColorFilter';
-import {YieldFilterValueVM} from './services/view-models/YieldFilterValueVM';
+import { Component, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
+import { BaseComponent } from '../../../../../../../common/base/BaseComponent';
+import { ThError, AppContext } from '../../../../../../../common/utils/AppContext';
+import { ICustomModalComponent, ModalSize } from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
+import { ModalDialogRef } from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { YieldFilterModalInput } from './services/utils/YieldFilterModalInput';
+import { YieldFilterDO, YieldFilterType } from '../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
+import { YieldFilterValueDO } from '../../../../../services/common/data-objects/yield-filter/YieldFilterValueDO';
+import { ColorFilter } from '../../../../../services/common/data-objects/yield-filter/ColorFilter';
+import { YieldFilterValueVM } from './services/view-models/YieldFilterValueVM';
+
+import * as _ from "underscore";
 
 @Component({
 	selector: 'yield-filter-modal',
@@ -42,10 +44,10 @@ export class YieldFilterModalComponent extends BaseComponent implements ICustomM
 		}
 	}
 	private scrollToBottom(): void {
-        try {
-            this.tableScrollContainer.nativeElement.scrollTop = this.tableScrollContainer.nativeElement.scrollHeight;
-        } catch (err) { }
-    }
+		try {
+			this.tableScrollContainer.nativeElement.scrollTop = this.tableScrollContainer.nativeElement.scrollHeight;
+		} catch (err) { }
+	}
 
 	public closeDialog() {
 		this._modalDialogRef.closeForced();

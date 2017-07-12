@@ -20,6 +20,8 @@ import { BookingWithDependenciesLoader } from '../utils/BookingWithDependenciesL
 import { BookingWithDependencies } from '../utils/BookingWithDependencies';
 import { BookingUndoCheckInDO } from './BookingUndoCheckInDO';
 
+import _ = require("underscore");
+
 export class BookingUndoCheckIn {
     private _bookingUtils: BookingUtils;
     private _thDateUtils: ThDateUtils;

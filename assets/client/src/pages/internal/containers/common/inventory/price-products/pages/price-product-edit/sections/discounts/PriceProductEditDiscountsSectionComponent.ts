@@ -14,6 +14,8 @@ import { EagerCustomersService } from "../../../../../../../../services/customer
 import { CustomersDO } from "../../../../../../../../services/customers/data-objects/CustomersDO";
 import { CustomerDO } from "../../../../../../../../services/customers/data-objects/CustomerDO";
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'price-product-edit-discounts-section',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/discounts/template/price-product-edit-discounts-section.html',

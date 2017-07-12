@@ -1,8 +1,10 @@
-import {Injectable} from '@angular/core';
-import {Router, Event, NavigationEnd} from '@angular/router';
-import {Location} from '@angular/common';
-import {ThUtils} from '../ThUtils';
-import {IAnalytics} from './IAnalytics';
+import { Injectable } from '@angular/core';
+import { Router, Event, NavigationEnd } from '@angular/router';
+import { Location } from '@angular/common';
+import { ThUtils } from '../ThUtils';
+import { IAnalytics } from './IAnalytics';
+
+declare var ga: any;
 
 @Injectable()
 export class GoogleAnalytics implements IAnalytics {

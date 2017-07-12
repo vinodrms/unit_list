@@ -3,6 +3,7 @@ import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
 import { ThError } from '../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
 import { UnitPalConfig, LoggerChannel, LoggerChannelType } from "../../../utils/environment/UnitPalConfig";
+import { ThUtils } from "../../../utils/ThUtils";
 
 import winston = require('winston');
 
@@ -10,7 +11,6 @@ require('winston-mongodb').MongoDB;
 require('winston-papertrail').Papertrail;
 
 import _ = require('underscore');
-import { ThUtils } from "../../../utils/ThUtils";
 
 export class WinstonLogInitializer implements ILogInitializer {
     private _loggerChannels: LoggerChannel[];
@@ -31,15 +31,17 @@ export class WinstonLogInitializer implements ILogInitializer {
     }
 
     private getWinstonTransport(loggerChannelType: LoggerChannelType): any {
+        let transports: any = winston.transports;
+
         switch (loggerChannelType) {
             case LoggerChannelType.Console:
-                return winston.transports.Console;
+                return transports.Console;
             case LoggerChannelType.File:
-                return winston.transports.File;
+                return transports.File;
             case LoggerChannelType.Papertrail:
-                return winston.transports.Papertrail;
+                return transports.Papertrail;
             case LoggerChannelType.Mongo:
-                return winston.transports.MongoDB;
+                return transports.MongoDB;
         }
     }
 }

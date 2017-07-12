@@ -17,6 +17,7 @@ import {AllotmentConstraintType} from '../../../../../core/data-layer/allotments
 import {ReleaseTimeInDaysConstraintDO} from '../../../../../core/data-layer/allotments/data-objects/constraint/constraints/ReleaseTimeInDaysConstraintDO';
 
 import moment = require("moment");
+import _ = require("underscore");
 
 export class AllotmentsHelper {
 	public static IntervalNumberOfDays: number = 300;
