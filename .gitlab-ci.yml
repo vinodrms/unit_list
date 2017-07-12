@@ -1,15 +1,28 @@
 stages:
+  - build
   - test
   - deploy
   - run
 
-test on demo3AT:
-  stage: test
+build on demo3AT:
+  stage: build
   script:
     - npm run forever-stop
     - npm run install-deps
     - npm run build-all
+  cache:
+    key: ${CI_BUILD_REF_NAME}
+    cache:
+      untracked: true
+  allow_failure: false
+  environment:
+    name: demo
+
+test on demo3AT:
+  stage: test
+  script:
     - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run server-tests
+  allow_failure: false
   environment:
     name: demo
 
