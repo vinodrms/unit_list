@@ -11,10 +11,13 @@ import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/Repo
 import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingDO";
 import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repositories/IBookingRepository";
 import { PaymentMethodDO } from "../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO";
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
 
 import _ = require('underscore');
 
 export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGeneratorStrategy {
+    private static PaidInvoiceByAgreementDisplayName = "Paid by Agreement";
+
     private _indexedCustomersById: { [id: string]: CustomerDO };
     private _indexedBookingById: { [id: string]: BookingDO };
     private _paymentMethodList: PaymentMethodDO[];
@@ -108,7 +111,7 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                         });
                     }
 
-                    let paymentMethodString = (invoice.isPaid && invoice.payerList.length == 1) ? this.getPaymentMethodName(invoice.payerList[0].paymentMethod.value) : "";
+                    let paymentMethodString = (invoice.isPaid && invoice.payerList.length == 1) ? this.getPaymentMethodName(invoice.payerList[0].paymentMethod) : "";
 
                     let row = [invoiceRefDisplayString, payerString, priceToPay, transactionFee, priceToPayPlusTransactionFee, bookingRef, paidTimestampStr, paymentMethodString];
 
@@ -135,11 +138,14 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
         });
     }
 
-    private getPaymentMethodName(invoicePaymentMethodValue: string): string {
-        var paymentMethod = _.find(this._paymentMethodList, (paymentMethod: PaymentMethodDO) => {
-            return paymentMethod.id === invoicePaymentMethodValue;
+    private getPaymentMethodName(inputInvoicePaymentMethodDO: InvoicePaymentMethodDO): string {
+        if(inputInvoicePaymentMethodDO.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+            return this._appContext.thTranslate.translate(ShiftReportPaidInvoicesSectionGenerator.PaidInvoiceByAgreementDisplayName);
+        }
+        var result = _.find(this._paymentMethodList, (paymentMethod: PaymentMethodDO) => {
+            return paymentMethod.id === inputInvoicePaymentMethodDO.value;
         });
-        return (paymentMethod) ? paymentMethod.name : "";
+        return (result) ? result.name : "";
     }
 
     private getBookingIdList(): string[] {
