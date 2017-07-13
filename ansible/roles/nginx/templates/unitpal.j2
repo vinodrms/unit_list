@@ -8,11 +8,9 @@ server {
     listen 443;
     listen [::]:443;
 
-{% if ssl is defined %}
     ssl on;
     ssl_certificate {{ ssl_cert_chain_path }};
     ssl_certificate_key {{ ssl_private_key_path }};
-{% endif %}
 
     location / {
         proxy_pass http://localhost:{{ port }};
