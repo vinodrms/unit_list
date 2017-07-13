@@ -3,7 +3,7 @@ inventory: staging
 
 app_name: unitpal
 env: azure
-host: 52.174.61.55
+host: staging.unitpal.com
 port: 8001
 app_context_root: 'https://{{ host }}/'
 
