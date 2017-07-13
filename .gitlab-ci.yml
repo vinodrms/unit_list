@@ -29,7 +29,7 @@ test on demo3AT:
 deploy on staging:
   stage: deploy
   script:
-    - echo "This should be replaced with deployment script"
+    - ./ansible/deploy.sh staging
   environment:
     name: staging
   only:
@@ -38,7 +38,7 @@ deploy on staging:
 deploy on production:
   stage: deploy
   script:
-    - ./ansible/azure_install.sh
+    - ./ansible/deploy.sh production
   environment:
     name: production
   when: manual
