@@ -10,9 +10,9 @@ import { CustomerDO } from '../../../../data-layer/customers/data-objects/Custom
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingDO";
 import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repositories/IBookingRepository";
+import { PaymentMethodDO } from "../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO";
 
 import _ = require('underscore');
-import { PaymentMethodDO } from "../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO";
 
 export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGeneratorStrategy {
     private _indexedCustomersById: { [id: string]: CustomerDO };
