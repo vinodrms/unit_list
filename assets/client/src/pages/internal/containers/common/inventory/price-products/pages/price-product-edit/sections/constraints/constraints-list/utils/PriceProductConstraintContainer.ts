@@ -4,6 +4,8 @@ import { PriceProductConstraintMeta } from '../../../../../../../../../../servic
 import { PriceProductConstraintDO } from '../../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintDO';
 import { PriceProductConstraintVM } from './PriceProductConstraintVM';
 
+import * as _ from "underscore";
+
 export class PriceProductConstraintContainer {
 	private _constraintMetaList: PriceProductConstraintMeta[];
 	private _currentIndex: number;

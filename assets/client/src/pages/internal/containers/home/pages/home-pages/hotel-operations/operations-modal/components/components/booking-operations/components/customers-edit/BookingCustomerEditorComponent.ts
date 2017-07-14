@@ -10,6 +10,8 @@ import { CustomersDO } from '../../../../../../../../../../../services/customers
 import { HotelOperationsBookingService } from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 import { CustomerRegisterModalService } from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'booking-customer-editor',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/customers-edit/template/booking-customer-editor.html',

@@ -4,6 +4,8 @@ import {ThUtils} from '../../../../../../../../../../../../../../common/utils/Th
 import { AddOnProductItemVM } from './AddOnProductItemVM';
 import { AddOnProductBookingReservedItem } from "../../../../../../../../../../../../services/bookings/data-objects/BookingDO";
 
+import * as _ from "underscore";
+
 export class AddOnProductItemVMContainer {
     private _thUtils: ThUtils;
     private _addOnProductVMList: AddOnProductItemVM[];

@@ -11,7 +11,7 @@ import {ThNotificationCode} from '../core/data-layer/common/data-objects/notific
 
 class NotificationsController extends BaseController {
 
-    public getNotificationList(req: Express.Request, res: Express.Response) {
+    public getNotificationList(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 
@@ -28,7 +28,7 @@ class NotificationsController extends BaseController {
 		});
 	}
 
-    public getNotificationListCount(req: Express.Request, res: Express.Response) {
+    public getNotificationListCount(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 
@@ -42,7 +42,7 @@ class NotificationsController extends BaseController {
 		});
 	}
 
-	public markNotificationsAsRead(req: Express.Request, res: Express.Response) {
+	public markNotificationsAsRead(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 

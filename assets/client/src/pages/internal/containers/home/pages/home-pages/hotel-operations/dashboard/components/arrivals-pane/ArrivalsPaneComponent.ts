@@ -12,6 +12,8 @@ import {AppContext} from '../../../../../../../../../../common/utils/AppContext'
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'arrivals-pane',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/arrivals-pane/template/arrivals-pane.html',

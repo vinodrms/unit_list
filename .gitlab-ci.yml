@@ -1,22 +1,35 @@
+cache:
+  key: "PIPELINE-$CI_PIPELINE_ID"
+  untracked: true
+
 stages:
+  - build
   - test
   - deploy
   - run
 
-test on demo3AT:
-  stage: test
+build on demo3AT:
+  stage: build
   script:
     - npm run forever-stop
     - npm run install-deps
     - npm run build-all
-    - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run server-tests
+  allow_failure: false
+  environment:
+    name: demo
+
+test on demo3AT:
+  stage: test
+  script:
+    - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run test-server
+  allow_failure: false
   environment:
     name: demo
 
 deploy on staging:
   stage: deploy
   script:
-    - echo "This should be replaced with deployment script"
+    - ./ansible/deploy.sh staging
   environment:
     name: staging
   only:
@@ -25,7 +38,7 @@ deploy on staging:
 deploy on production:
   stage: deploy
   script:
-    - ./ansible/azure_install.sh
+    - ./ansible/deploy.sh production
   environment:
     name: production
   when: manual
@@ -35,8 +48,6 @@ deploy on production:
 run on demo3AT:
   stage: run
   script:
-    - npm run install-deps
-    - npm run build-all
     - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
   environment:
     name: demo

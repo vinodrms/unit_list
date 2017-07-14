@@ -3,6 +3,8 @@ import {AppContext} from '../../../../../../../../../common/utils/AppContext';
 import {HeaderPage} from './HeaderPage';
 import {HeaderPageType} from './HeaderPageType';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class HeaderPageService {
 	private static NavigationBasePath = "/";

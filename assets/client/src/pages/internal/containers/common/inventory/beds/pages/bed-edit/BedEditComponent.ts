@@ -1,15 +1,17 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {FormGroup} from '@angular/forms';
-import {Observable} from 'rxjs/Observable';
-import {BedEditService} from './services/BedEditService';
-import {BaseFormComponent} from '../../../../../../../../common/base/BaseFormComponent';
-import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
-import {BedTemplateDO} from '../../../../../../services/common/data-objects/bed-template/BedTemplateDO';
-import {BedVM} from '../../../../../../services/beds/view-models/BedVM';
-import {BedDO, BedStorageType, BedAccommodationType, BedCapacityDO} from '../../../../../../services/beds/data-objects/BedDO';
-import {BedsService} from '../../../../../../services/beds/BedsService';
-import {BedTemplatesService} from '../../../../../../services/settings/BedTemplatesService';
-import {BedTemplatesDO} from '../../../../../../services/settings/data-objects/BedTemplatesDO';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { BedEditService } from './services/BedEditService';
+import { BaseFormComponent } from '../../../../../../../../common/base/BaseFormComponent';
+import { AppContext, ThError } from '../../../../../../../../common/utils/AppContext';
+import { BedTemplateDO } from '../../../../../../services/common/data-objects/bed-template/BedTemplateDO';
+import { BedVM } from '../../../../../../services/beds/view-models/BedVM';
+import { BedDO, BedStorageType, BedAccommodationType, BedCapacityDO } from '../../../../../../services/beds/data-objects/BedDO';
+import { BedsService } from '../../../../../../services/beds/BedsService';
+import { BedTemplatesService } from '../../../../../../services/settings/BedTemplatesService';
+import { BedTemplatesDO } from '../../../../../../services/settings/data-objects/BedTemplatesDO';
+
+import * as _ from "underscore";
 
 @Component({
     selector: 'bed-edit',

@@ -10,6 +10,7 @@ import { DefaultDataBuilder } from '../../../../db-initializers/DefaultDataBuild
 import { TestUtils } from '../../../../helpers/TestUtils';
 
 import should = require('should');
+import _ = require("underscore");
 
 export class RoomCategoriesTestHelper {
     private _testUtils: TestUtils;

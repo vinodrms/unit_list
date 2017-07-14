@@ -21,7 +21,7 @@ import { GenerateBookingInvoice } from "../core/domain-layer/invoices/generate-b
 import { InvoiceGroupDO } from "../core/data-layer/invoices/data-objects/InvoiceGroupDO";
 
 class HotelBookingOperationsController extends BaseController {
-    public getPossiblePrices(req: Express.Request, res: Express.Response) {
+    public getPossiblePrices(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -32,7 +32,7 @@ class HotelBookingOperationsController extends BaseController {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorGettingPossiblePrices);
         });
     }
-    public changeDates(req: Express.Request, res: Express.Response) {
+    public changeDates(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -45,7 +45,7 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public changeNoShowTime(req: Express.Request, res: Express.Response) {
+    public changeNoShowTime(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -58,7 +58,7 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public changeCapacity(req: Express.Request, res: Express.Response) {
+    public changeCapacity(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -71,7 +71,7 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public addPaymentGuarantee(req: Express.Request, res: Express.Response) {
+    public addPaymentGuarantee(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -84,7 +84,7 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public changeDetails(req: Express.Request, res: Express.Response) {
+    public changeDetails(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -97,7 +97,7 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public changeGuestCustomerDisplayedOnInvoice(req: Express.Request, res: Express.Response) {
+    public changeGuestCustomerDisplayedOnInvoice(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -110,7 +110,7 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public changeCustomers(req: Express.Request, res: Express.Response) {
+    public changeCustomers(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -123,7 +123,7 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public cancel(req: Express.Request, res: Express.Response) {
+    public cancel(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -136,7 +136,7 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public reactivate(req: Express.Request, res: Express.Response) {
+    public reactivate(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -149,7 +149,7 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public reserveAddOnProducts(req: Express.Request, res: Express.Response) {
+    public reserveAddOnProducts(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -162,7 +162,7 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public changePriceProduct(req: Express.Request, res: Express.Response) {
+    public changePriceProduct(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -175,7 +175,7 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public undoCheckIn(req: Express.Request, res: Express.Response) {
+    public undoCheckIn(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -188,7 +188,7 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public generateInvoice(req: Express.Request, res: Express.Response) {
+    public generateInvoice(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 

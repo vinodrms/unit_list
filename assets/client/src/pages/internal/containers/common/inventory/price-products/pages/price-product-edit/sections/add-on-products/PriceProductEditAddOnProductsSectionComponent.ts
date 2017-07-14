@@ -1,18 +1,20 @@
-import {Component, Input} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
-import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
-import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
-import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {AddOnProductDO} from '../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
-import {AddOnProductSnapshotDO} from '../../../../../../../../services/add-on-products/data-objects/AddOnProductSnapshotDO';
-import {PriceProductIncludedItemsDO} from '../../../../../../../../services/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
-import {AttachedAddOnProductItemDO} from '../../../../../../../../services/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
-import {AttachedAddOnProductItemFactory} from '../../../../../../../../services/price-products/data-objects/included-items/AttachedAddOnProductItemFactory';
-import {IAttachedAddOnProductItemStrategy} from '../../../../../../../../services/price-products/data-objects/included-items/IAttachedAddOnProductItemStrategy';
-import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+import { Component, Input } from '@angular/core';
+import { BaseComponent } from '../../../../../../../../../../common/base/BaseComponent';
+import { AppContext } from '../../../../../../../../../../common/utils/AppContext';
+import { IPriceProductEditSection } from '../utils/IPriceProductEditSection';
+import { PriceProductVM } from '../../../../../../../../services/price-products/view-models/PriceProductVM';
+import { ModalDialogRef } from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { AddOnProductDO } from '../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
+import { AddOnProductSnapshotDO } from '../../../../../../../../services/add-on-products/data-objects/AddOnProductSnapshotDO';
+import { PriceProductIncludedItemsDO } from '../../../../../../../../services/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
+import { AttachedAddOnProductItemDO } from '../../../../../../../../services/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
+import { AttachedAddOnProductItemFactory } from '../../../../../../../../services/price-products/data-objects/included-items/AttachedAddOnProductItemFactory';
+import { IAttachedAddOnProductItemStrategy } from '../../../../../../../../services/price-products/data-objects/included-items/IAttachedAddOnProductItemStrategy';
+import { CurrencyDO } from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 import { AddOnProductCategoriesDO } from '../../../../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
 import { AddOnProductsModalService } from "../../../../../add-on-products/modals/services/AddOnProductsModalService";
+
+import * as _ from "underscore";
 
 @Component({
 	selector: 'price-product-edit-add-on-products-section',

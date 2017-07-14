@@ -12,6 +12,8 @@ import { GenerateBookingInvoiceByAddingGroupStrategy } from './strategies/Genera
 import { IGenerateBookingInvoiceActionStrategy } from './IGenerateBookingInvoiceActionStrategy';
 import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingDO";
 
+import _ = require("underscore");
+
 export class GenerateBookingInvoiceActionFactory {
     private _thUtils: ThUtils;
     private _booking: BookingDO;

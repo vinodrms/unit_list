@@ -252,6 +252,7 @@
 	"Total breakfast (excluding VAT)": "Total breakfast (excluding VAT)",
 	"Total breakfast internal cost (excluding VAT)": "Total breakfast internal cost (excluding VAT)",
 	"Breakfast": "Breakfast",
+	"Breakfast Included in the Price Product": "Breakfast Included in the Price Product",
 	"Arrivals Total": "Arrivals Total",
 	"Breakfast Revenue Total": "Breakfast Revenue Total",
 	"Business Group": "Business Group",
@@ -265,7 +266,7 @@
 	"Guest Nights": "Guest Nights",
 	"Room Nights by Purpose of Stay": "Room Nights by Purpose of Stay",
 	"Avg Rate Total": "Avg Rate Total",
-
+	"Paid by Agreement": "Paid by Agreement",
 
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."

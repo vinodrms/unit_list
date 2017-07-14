@@ -12,6 +12,8 @@ import {CheckOutRoomParam} from '../../../../../../../../../../../services/hotel
 import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
 import {RoomOperationsPageData} from '../../services/utils/RoomOperationsPageData';
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'room-booking-preview',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/room-operations/components/booking-preview/template/room-booking-preview.html'

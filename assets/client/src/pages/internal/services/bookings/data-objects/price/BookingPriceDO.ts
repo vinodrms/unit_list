@@ -6,6 +6,8 @@ import { InvoiceItemDO, InvoiceItemAccountingType } from '../../../invoices/data
 import { PricePerDayDO } from './PricePerDayDO';
 import { CommissionDO } from "../../../common/data-objects/commission/CommissionDO";
 
+import * as _ from "underscore";
+
 export enum BookingPriceType {
     BookingStay,
     Penalty

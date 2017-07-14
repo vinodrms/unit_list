@@ -4,6 +4,8 @@ import {CustomerDetailsFactory} from '../data-objects/customer-details/CustomerD
 import {CustomerDetailsMeta} from '../data-objects/customer-details/ICustomerDetailsDO';
 import {AllotmentDO} from '../../allotments/data-objects/AllotmentDO';
 
+import * as _ from "underscore";
+
 export class CustomerVM {
 	private _customer: CustomerDO;
 	private _priceProductList: PriceProductDO[];

@@ -3,6 +3,8 @@ import {TaxDO, TaxType} from '../../taxes/data-objects/TaxDO';
 import {AddOnProductCategoryDO} from '../../common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {CurrencyDO} from '../../common/data-objects/currency/CurrencyDO';
 
+import * as _ from "underscore";
+
 export class AddOnProductVM {
 	private _addOnProduct: AddOnProductDO;
 	private _taxList: TaxDO[];

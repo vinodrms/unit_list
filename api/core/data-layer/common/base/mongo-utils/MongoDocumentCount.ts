@@ -11,7 +11,7 @@ export class MongoDocumentCount {
 	errorCallback: { (err: Error): void };
 	successCallback: { (meta: LazyLoadMetaResponseRepoDO): void };
 
-	constructor(private _sailsEntity: Sails.Model) {
+	constructor(private _sailsEntity: any) {
 		this._mongoUtils = new MongoUtils();
 	}
 

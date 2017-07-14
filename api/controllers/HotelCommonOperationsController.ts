@@ -5,7 +5,7 @@ import {SessionContext} from '../core/utils/SessionContext';
 import {EmailConfirmation} from '../core/domain-layer/hotel-operations/common/email-confirmations/EmailConfirmation';
 
 class HotelCommonOperationsController extends BaseController {
-    public sendEmail(req: Express.Request, res: Express.Response) {
+    public sendEmail(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 

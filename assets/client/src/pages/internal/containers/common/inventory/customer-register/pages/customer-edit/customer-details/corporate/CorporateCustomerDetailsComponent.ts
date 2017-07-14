@@ -10,6 +10,8 @@ import { CommissionDO } from "../../../../../../../../services/common/data-objec
 import { ContactDetailsDO } from "../../../../../../../../services/customers/data-objects/customer-details/ContactDetailsDO";
 import { AppContext } from "../../../../../../../../../../common/utils/AppContext";
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'corporate-customer-details',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-edit/customer-details/corporate/template/corporate-customer-details.html',

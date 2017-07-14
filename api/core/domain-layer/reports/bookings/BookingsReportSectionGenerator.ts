@@ -11,6 +11,8 @@ import { BookingMeta, BookingDOConstraints } from "../../../data-layer/bookings/
 import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
 import { ThDateIntervalDO } from "../../../utils/th-dates/data-objects/ThDateIntervalDO";
 
+import _ = require("underscore");
+
 export class BookingsReportSectionGenerator extends AReportSectionGeneratorStrategy {
     public static MaxBookings = 2000;
     private _bookingMetaByStatus: { [id: number]: BookingMeta };

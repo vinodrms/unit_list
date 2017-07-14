@@ -8,6 +8,8 @@ import { RoomCategoryStatsDO } from "../../../../../../../../../services/room-ca
 import { RoomCategoryDO } from "../../../../../../../../../services/room-categories/data-objects/RoomCategoryDO";
 import { ThUtils } from "../../../../../../../../../../../common/utils/ThUtils";
 
+import * as _ from "underscore";
+
 export class DynamicPriceVMContainer {
     private _thUtils: ThUtils;
 

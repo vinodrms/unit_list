@@ -3,6 +3,8 @@ import { YieldItemStateDO } from './YieldItemStateDO';
 import { PriceProductYieldFilterMetaDO } from '../../../../price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
 import { DynamicPriceYieldItemDO } from './DynamicPriceYieldItemDO';
 
+import * as _ from 'underscore';
+
 export class PriceProductYieldItemDO extends BaseDO {
     priceProductId: string;
     priceProductName: string;

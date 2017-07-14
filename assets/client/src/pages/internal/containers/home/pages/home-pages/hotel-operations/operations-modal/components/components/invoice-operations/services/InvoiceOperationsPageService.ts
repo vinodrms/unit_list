@@ -18,6 +18,8 @@ import { InvoicePaymentMethodDO } from '../../../../../../../../../../services/i
 import { EagerBookingsService } from '../../../../../../../../../../services/bookings/EagerBookingsService';
 import { BookingsDO } from '../../../../../../../../../../services/bookings/data-objects/BookingsDO';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class InvoiceOperationsPageService {
     private _pageData: InvoiceOperationsPageData;

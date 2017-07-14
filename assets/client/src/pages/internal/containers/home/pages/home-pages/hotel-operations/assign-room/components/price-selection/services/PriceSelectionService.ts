@@ -1,23 +1,25 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
-import {AppContext} from '../../../../../../../../../../../common/utils/AppContext';
-import {ASinglePageRequestService} from '../../../../../../../../../services/common/ASinglePageRequestService';
-import {RoomCategoriesStatsService} from '../../../../../../../../../services/room-categories/RoomCategoriesStatsService';
-import {RoomCategoryStatsDO} from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
-import {EagerBookingsService} from '../../../../../../../../../services/bookings/EagerBookingsService';
-import {RoomsService} from '../../../../../../../../../services/rooms/RoomsService';
-import {RoomVM} from '../../../../../../../../../services/rooms/view-models/RoomVM';
-import {HotelAggregatorService} from '../../../../../../../../../services/hotel/HotelAggregatorService';
-import {HotelAggregatedInfo} from '../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
-import {CurrencyDO} from '../../../../../../../../../services/common/data-objects/currency/CurrencyDO';
-import {HotelOperationsBookingService} from '../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
-import {BookingPossiblePriceItemsDO, BookingPriceItemDO} from '../../../../../../../../../services/hotel-operations/booking/data-objects/BookingPossiblePriceItemsDO';
-import {AssignRoomModalInput} from '../../../services/utils/AssignRoomModalInput';
-import {BookingDO} from '../../../../../../../../../services/bookings/data-objects/BookingDO';
-import {PriceSelectionVM} from './view-models/PriceSelectionVM';
+import { AppContext } from '../../../../../../../../../../../common/utils/AppContext';
+import { ASinglePageRequestService } from '../../../../../../../../../services/common/ASinglePageRequestService';
+import { RoomCategoriesStatsService } from '../../../../../../../../../services/room-categories/RoomCategoriesStatsService';
+import { RoomCategoryStatsDO } from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
+import { EagerBookingsService } from '../../../../../../../../../services/bookings/EagerBookingsService';
+import { RoomsService } from '../../../../../../../../../services/rooms/RoomsService';
+import { RoomVM } from '../../../../../../../../../services/rooms/view-models/RoomVM';
+import { HotelAggregatorService } from '../../../../../../../../../services/hotel/HotelAggregatorService';
+import { HotelAggregatedInfo } from '../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
+import { CurrencyDO } from '../../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+import { HotelOperationsBookingService } from '../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
+import { BookingPossiblePriceItemsDO, BookingPriceItemDO } from '../../../../../../../../../services/hotel-operations/booking/data-objects/BookingPossiblePriceItemsDO';
+import { AssignRoomModalInput } from '../../../services/utils/AssignRoomModalInput';
+import { BookingDO } from '../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { PriceSelectionVM } from './view-models/PriceSelectionVM';
+
+import * as _ from "underscore";
 
 export enum PriceSelectionType {
     RoomHasSameRoomCategoryLikeTheBooking,

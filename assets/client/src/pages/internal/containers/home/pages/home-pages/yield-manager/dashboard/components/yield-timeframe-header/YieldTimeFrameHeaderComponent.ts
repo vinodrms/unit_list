@@ -6,6 +6,12 @@ import {IYieldManagerDashboardFilter} from '../../YieldManagerDashboardComponent
 import {HotelService} from '../../../../../../../../services/hotel/HotelService';
 import {HotelDetailsDO} from '../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 
+import * as _ from "underscore";
+
+import moment from "moment";
+
+declare var $: any;
+
 interface ITimeFrameOption {
 	noDays: number,
 	label: string,

@@ -16,7 +16,7 @@ import { UnreserveRoom } from "../core/domain-layer/hotel-operations/room/unrese
 
 class HotelRoomOperationsController extends BaseController {
 
-    public checkIn(req: Express.Request, res: Express.Response) {
+    public checkIn(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -29,7 +29,7 @@ class HotelRoomOperationsController extends BaseController {
         });
     }
 
-    public reserveRoom(req: Express.Request, res: Express.Response) {
+    public reserveRoom(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -42,7 +42,7 @@ class HotelRoomOperationsController extends BaseController {
         });
     }
 
-    public unreserveRoom(req: Express.Request, res: Express.Response) {
+    public unreserveRoom(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -55,7 +55,7 @@ class HotelRoomOperationsController extends BaseController {
         });
     }
 
-    public changeRoom(req: Express.Request, res: Express.Response) {
+    public changeRoom(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -68,7 +68,7 @@ class HotelRoomOperationsController extends BaseController {
         });
     }
 
-    public checkOut(req: Express.Request, res: Express.Response) {
+    public checkOut(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -81,7 +81,7 @@ class HotelRoomOperationsController extends BaseController {
         });
     }
 
-    public changeMaintenanceStatus(req: Express.Request, res: Express.Response) {
+    public changeMaintenanceStatus(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -94,7 +94,7 @@ class HotelRoomOperationsController extends BaseController {
         });
     }
 
-    public changeRollawayBedStatus(req: Express.Request, res: Express.Response) {
+    public changeRollawayBedStatus(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -107,7 +107,7 @@ class HotelRoomOperationsController extends BaseController {
         });
     }
 
-    public getAttachedBooking(req: Express.Request, res: Express.Response) {
+    public getAttachedBooking(req: any, res: any) {
         if (!this.precheckGETParameters(req, res, ['roomId'])) { return };
 
         var appContext: AppContext = req.appContext;

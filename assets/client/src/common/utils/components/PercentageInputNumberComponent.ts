@@ -1,5 +1,7 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ThDataValidators} from '../form-utils/utils/ThDataValidators';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ThDataValidators } from '../form-utils/utils/ThDataValidators';
+
+import * as _ from "underscore";
 
 @Component({
 	selector: 'percentage-input-number',

@@ -11,6 +11,8 @@ import { BookingCartItemVM } from '../../../../services/search/view-models/Booki
 import { AddBookingItemsDO, EmailDistributionDO } from '../../../../services/data-objects/AddBookingItemsDO';
 import { BookingDO } from "../../../../../../../../../services/bookings/data-objects/BookingDO";
 
+import * as _ from "underscore";
+
 @Injectable()
 export class BookingEmailConfigStepService implements IBookingStepService, ILastBookingStepService {
     emailRecipientList: EmailDistributionDO[] = [];

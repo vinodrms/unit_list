@@ -21,6 +21,8 @@ import { AddOnProductsModalService } from "../../../../../../../../../../common/
 import { NumberOfAddOnProductsModalService } from "../../../../../../../../../../common/inventory/add-on-products/modals/services/NumberOfAddOnProductsModalService";
 import { NumberOfAddOnProductsModalOutput } from "../../../../../../../../../../common/inventory/add-on-products/modals/services/utils/NumberOfAddOnProductsModalOutput";
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'invoice-edit',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-edit/template/invoice-edit.html',

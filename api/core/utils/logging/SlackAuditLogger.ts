@@ -1,10 +1,12 @@
-import {ThError} from '../th-responses/ThError';
-import {IThAuditLogger, ThAuditMessage} from './ThAuditLogger';
-import {ThStatusCode, ThResponse} from '../th-responses/ThResponse';
-import {ThLogger, ThLogLevel} from './ThLogger';
+import { ThError } from '../th-responses/ThError';
+import { IThAuditLogger, ThAuditMessage } from './ThAuditLogger';
+import { ThStatusCode, ThResponse } from '../th-responses/ThResponse';
+import { ThLogger, ThLogLevel } from './ThLogger';
 
 import util = require('util');
 var Slack = require('slack-node');
+
+declare var sails: any;
 
 export class SlackAuditLogger implements IThAuditLogger {
     private _paramsInitialized: boolean = false;

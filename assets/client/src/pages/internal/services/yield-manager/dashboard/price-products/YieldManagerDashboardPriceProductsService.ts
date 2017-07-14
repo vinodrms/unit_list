@@ -22,6 +22,8 @@ import { PriceProductYieldItemDO } from './data-objects/PriceProductYieldItemDO'
 import { ThDateIntervalDO } from "../../../common/data-objects/th-dates/ThDateIntervalDO";
 import { DynamicPriceYieldParam } from "../common/DynamicPriceYieldParam";
 
+import * as _ from 'underscore';
+
 @Injectable()
 export class YieldManagerDashboardPriceProductsService extends ARequestService<PriceProductYieldResultVM> {
     private _yieldManagerPeriodParam: YieldManagerPeriodParam;

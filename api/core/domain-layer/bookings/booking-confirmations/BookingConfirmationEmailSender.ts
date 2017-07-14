@@ -12,6 +12,7 @@ import { BookingAggregatedDataContainer } from '../aggregators/BookingAggregated
 
 import fs = require('fs');
 import path = require('path');
+import _ = require("underscore");
 import { BookingAggregatedData } from "../aggregators/BookingAggregatedData";
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";

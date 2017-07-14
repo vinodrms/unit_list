@@ -1,27 +1,26 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {RoomItemInfoDO, RoomItemStatus} from '../../../../../../../../../services/hotel-operations/dashboard/rooms/data-objects/RoomItemInfoDO';
+import { RoomItemInfoDO, RoomItemStatus } from '../../../../../../../../../services/hotel-operations/dashboard/rooms/data-objects/RoomItemInfoDO';
+import { RoomItemInfoVM, RoomItemInfoVM_UI_Properties } from '../../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
+import { FilterValueType, IDragStyles, IFilterNotificationProperties, IFilterNotification, IFilterValue } from './RoomsCanvasInterfaces';
+import { ThTranslation } from '../../../../../../../../../../../common/utils/localization/ThTranslation';
 
-import {RoomItemInfoVM, RoomItemInfoVM_UI_Properties} from '../../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
-
-import {FilterValueType, IDragStyles, IFilterNotificationProperties, IFilterNotification, IFilterValue} from './RoomsCanvasInterfaces';
-
-import {ThTranslation} from '../../../../../../../../../../../common/utils/localization/ThTranslation';
+import * as _ from "underscore";
 
 @Injectable()
-export class RoomsCanvasUtils{
-	public get dragStyles(): IDragStyles{
+export class RoomsCanvasUtils {
+	public get dragStyles(): IDragStyles {
 		var dragStyles = {
-			canCheckIn : new RoomItemInfoVM_UI_Properties(true, false, true),
-			canUpgrade : new RoomItemInfoVM_UI_Properties(false,true,false),
-			canNotCheckIn : new RoomItemInfoVM_UI_Properties(false,true,false),
-			default: new RoomItemInfoVM_UI_Properties(false,false,false)
+			canCheckIn: new RoomItemInfoVM_UI_Properties(true, false, true),
+			canUpgrade: new RoomItemInfoVM_UI_Properties(false, true, false),
+			canNotCheckIn: new RoomItemInfoVM_UI_Properties(false, true, false),
+			default: new RoomItemInfoVM_UI_Properties(false, false, false)
 		}
-		
+
 		return dragStyles;
 	}
 
-	public getfilterNotificationProperties(filterType: FilterValueType, translator: ThTranslation):IFilterNotificationProperties{
+	public getfilterNotificationProperties(filterType: FilterValueType, translator: ThTranslation): IFilterNotificationProperties {
 		var properties: IFilterNotificationProperties;
 		switch (filterType) {
 			case FilterValueType.All:
@@ -76,9 +75,9 @@ export class RoomsCanvasUtils{
 		return properties;
 	}
 
-	public filterRoomsByStateType(filterType: FilterValueType, rooms:RoomItemInfoVM[]):any{
-		if (filterType != FilterValueType.All){
-			var filteredRooms = _.filter(rooms, function(room:RoomItemInfoVM){
+	public filterRoomsByStateType(filterType: FilterValueType, rooms: RoomItemInfoVM[]): any {
+		if (filterType != FilterValueType.All) {
+			var filteredRooms = _.filter(rooms, function (room: RoomItemInfoVM) {
 				switch (filterType) {
 					case FilterValueType.Free:
 						return room.isFree();
@@ -96,15 +95,15 @@ export class RoomsCanvasUtils{
 			});
 			return filteredRooms;
 		}
-		
+
 		return rooms;
 	}
 
-	public setRoomsUIHighlight(rooms: RoomItemInfoVM[], value:RoomItemInfoVM_UI_Properties) {
+	public setRoomsUIHighlight(rooms: RoomItemInfoVM[], value: RoomItemInfoVM_UI_Properties) {
 		rooms.forEach(room => {
 			room.UI.tickBorder = value.tickBorder;
 			room.UI.ghost = value.ghost;
 			room.UI.highlightForDrop = value.highlightForDrop;
 		});
-	}	
+	}
 }

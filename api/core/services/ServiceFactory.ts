@@ -25,6 +25,8 @@ import { MockPdfReportsService } from './pdf-reports/providers/MockPdfReportsSer
 import { IFileService } from './file-service/IFileService'
 import { FileService } from './file-service/FileService'
 
+declare var sails: any;
+
 export class ServiceFactory {
     constructor(private _unitPalConfig: UnitPalConfig) {
     }

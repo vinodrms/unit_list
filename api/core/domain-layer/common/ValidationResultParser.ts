@@ -4,6 +4,8 @@ import {ThError} from '../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../utils/th-responses/ThResponse';
 import { IntermediateValidationResult } from "../../utils/th-validation/rules/core/AValidationRule";
 
+import _ = require("underscore");
+
 export class ValidationResultParser {
 	constructor(private _validationResult: ValidationResult, private _inputDO: Object) {
 	}

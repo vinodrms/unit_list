@@ -8,6 +8,8 @@ import { RoomCategoryDO } from './data-objects/RoomCategoryDO';
 import { RoomCategoryStatsDO } from './data-objects/RoomCategoryStatsDO';
 import { RoomCategoriesType } from './RoomCategoriesType';
 
+import * as _ from 'underscore';
+
 @Injectable()
 export class RoomCategoriesStatsService extends ARequestService<RoomCategoryStatsDO[]> {
 	private _categoriesType: RoomCategoriesType;

@@ -1,17 +1,19 @@
-import {Observable} from 'rxjs/Observable';
-import {Observer} from "rxjs/Observer";
-import {Injectable, Inject} from '@angular/core';
-import {Http, Response, URLSearchParams} from '@angular/http';
-import {IThHttp, UploadedFileResponse} from './IThHttp';
-import {IBrowserLocation} from '../browser-location/IBrowserLocation';
-import {LoginStatusCode} from '../responses/LoginStatusCode';
-import {ThUtils} from '../ThUtils';
-import {ThError} from '../responses/ThError';
-import {ThTranslation} from '../localization/ThTranslation';
-import {ThServerApi, ServerApiBuilder} from './ThServerApi';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from "rxjs/Observer";
+import { Injectable, Inject } from '@angular/core';
+import { Http, Response, URLSearchParams } from '@angular/http';
+import { IThHttp, UploadedFileResponse } from './IThHttp';
+import { IBrowserLocation } from '../browser-location/IBrowserLocation';
+import { LoginStatusCode } from '../responses/LoginStatusCode';
+import { ThUtils } from '../ThUtils';
+import { ThError } from '../responses/ThError';
+import { ThTranslation } from '../localization/ThTranslation';
+import { ThServerApi, ServerApiBuilder } from './ThServerApi';
+
+import * as _ from "underscore";
 
 enum ThStatusCode {
-    Ok
+	Ok
 }
 
 @Injectable()
@@ -81,7 +83,7 @@ export class ThHttp implements IThHttp {
 	public uploadFile(file: File): Observable<UploadedFileResponse> {
 		let url = this.getApiUrl(ThServerApi.ServiceUploadFile);
 		return new Observable<UploadedFileResponse>((observer: Observer<UploadedFileResponse>) => {
-			if(file.size > ThHttp.MaxFileSizeBytes) {
+			if (file.size > ThHttp.MaxFileSizeBytes) {
 				var thError = new ThError(this._thTranslation.translate("The maximum file size is 16MB"));
 				observer.error(thError);
 				observer.complete();

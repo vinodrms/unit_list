@@ -1,17 +1,17 @@
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThUtils} from '../../../../../utils/ThUtils';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
-import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
-import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO, InvoiceSearchCriteriaRepoDO} from'../../IInvoiceGroupsRepository';
-import {InvoiceGroupDO, InvoiceGroupStatus} from '../../../data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../../data-objects/InvoiceDO';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThUtils } from '../../../../../utils/ThUtils';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { MongoRepository, MongoErrorCodes, MongoSearchCriteria } from '../../../../common/base/MongoRepository';
+import { MongoQueryBuilder } from '../../../../common/base/MongoQueryBuilder';
+import { IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO, InvoiceSearchCriteriaRepoDO } from '../../IInvoiceGroupsRepository';
+import { InvoiceGroupDO, InvoiceGroupStatus } from '../../../data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../data-objects/InvoiceDO';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
 
 export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository {
 
-    constructor(invoiceGroupsEntity: Sails.Model) {
+    constructor(invoiceGroupsEntity: any) {
         super(invoiceGroupsEntity);
     }
 

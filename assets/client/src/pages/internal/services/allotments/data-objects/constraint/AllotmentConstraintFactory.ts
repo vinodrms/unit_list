@@ -3,6 +3,8 @@ import {AllotmentConstraintDO} from './AllotmentConstraintDO';
 import {ReleaseTimeInDaysConstraintDO} from './constraints/ReleaseTimeInDaysConstraintDO';
 import {DaysFromWeekConstraintDO} from '../../../price-products/data-objects/constraint/constraints/DaysFromWeekConstraintDO';
 
+import * as _ from "underscore";
+
 export class AllotmentConstraintFactory {
 	public getConstraintDOByType(constraintType: AllotmentConstraintType): AllotmentConstraintDO {
 		var constraintDO: AllotmentConstraintDO = new AllotmentConstraintDO();

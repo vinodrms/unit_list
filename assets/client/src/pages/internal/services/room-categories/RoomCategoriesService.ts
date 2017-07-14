@@ -5,6 +5,8 @@ import {ARequestService} from '../common/ARequestService';
 import {RoomCategoryDO} from './data-objects/RoomCategoryDO';
 import {RoomCategoriesType} from './RoomCategoriesType';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class RoomCategoriesService extends ARequestService<RoomCategoryDO[]> {
 	private _categoriesType: RoomCategoriesType;

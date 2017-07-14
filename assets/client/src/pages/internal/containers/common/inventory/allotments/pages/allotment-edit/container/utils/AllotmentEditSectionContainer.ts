@@ -1,5 +1,7 @@
-import {IAllotmentEditSection} from '../../sections/utils/IAllotmentEditSection';
-import {AllotmentVM} from '../../../../../../../../services/allotments/view-models/AllotmentVM';
+import { IAllotmentEditSection } from '../../sections/utils/IAllotmentEditSection';
+import { AllotmentVM } from '../../../../../../../../services/allotments/view-models/AllotmentVM';
+
+import * as _ from "underscore";
 
 export class AllotmentEditSectionContainer implements IAllotmentEditSection {
 	private _allotmentEditSectionList: IAllotmentEditSection[];

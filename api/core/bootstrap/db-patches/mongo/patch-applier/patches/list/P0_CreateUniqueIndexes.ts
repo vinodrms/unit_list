@@ -7,13 +7,15 @@ import { MongoRepository } from '../../../../../../data-layer/common/base/MongoR
 
 import _ = require('underscore');
 
+declare var sails: any;
+
 enum IndexType {
     Unique,
     Text
 }
 
 interface IndexMetadataDO {
-    entity: Sails.Model;
+    entity: any;
     fields: Object;
     type: IndexType;
 }

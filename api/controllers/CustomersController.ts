@@ -8,7 +8,7 @@ import {CustomerMetaRepoDO, CustomerSearchResultRepoDO} from '../core/data-layer
 import {SaveCustomerItem} from '../core/domain-layer/customers/SaveCustomerItem';
 
 export class CustomersController extends BaseController {
-	public getCustomerById(req: Express.Request, res: Express.Response) {
+	public getCustomerById(req: any, res: any) {
 		if (!this.precheckGETParameters(req, res, ['id'])) { return };
 
 		var appContext: AppContext = req.appContext;
@@ -25,7 +25,7 @@ export class CustomersController extends BaseController {
 		});
 	}
 
-	public saveCustomerItem(req: Express.Request, res: Express.Response) {
+	public saveCustomerItem(req: any, res: any) {
 		var saveCustItem = new SaveCustomerItem(req.appContext, req.sessionContext);
 		saveCustItem.save(req.body.customer).then((savedCustomer: CustomerDO) => {
 			this.returnSuccesfulResponse(req, res, { customer: savedCustomer });
@@ -34,7 +34,7 @@ export class CustomersController extends BaseController {
 		});
 	}
 
-	public getCustomerListCount(req: Express.Request, res: Express.Response) {
+	public getCustomerListCount(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 
@@ -47,7 +47,7 @@ export class CustomersController extends BaseController {
 		});
 	}
 
-	public getCustomerList(req: Express.Request, res: Express.Response) {
+	public getCustomerList(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 
