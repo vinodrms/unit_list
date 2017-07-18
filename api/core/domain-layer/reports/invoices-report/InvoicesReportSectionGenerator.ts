@@ -6,19 +6,23 @@ import { ReportSectionMeta, ReportSectionHeader } from "../common/result/ReportS
 import { ThError } from "../../../utils/th-responses/ThError";
 import { LazyLoadRepoDO } from "../../../data-layer/common/repo-data-objects/LazyLoadRepoDO";
 import { ThDateIntervalDO } from "../../../utils/th-dates/data-objects/ThDateIntervalDO";
-import { BookingSearchCriteriaRepoDO } from "../../../data-layer/bookings/repositories/IBookingRepository";
+import { BookingSearchCriteriaRepoDO, BookingSearchResultRepoDO } from "../../../data-layer/bookings/repositories/IBookingRepository";
 import { InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO } from "../../../data-layer/invoices/repositories/IInvoiceGroupsRepository";
 import { InvoiceGroupDO } from "../../../data-layer/invoices/data-objects/InvoiceGroupDO";
 import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 import { CustomerSearchResultRepoDO } from "../../../data-layer/customers/repositories/ICustomerRepository";
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 import { ThUtils } from "../../../utils/ThUtils";
+import { BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
 
 import _ = require("underscore");
 
 export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrategy {
     private _totalAmount: number;
     private _customerMap: { [index: string]: CustomerDO };
+    private _bookingGuestCustomerMap: { [index: string]: CustomerDO };
+    private _invoiceList: InvoiceDO[];
+    private _bookingList: BookingDO[];
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
         private _customerIdList: string[], private _startDate: ThDateDO, private _endDate: ThDateDO) {
@@ -26,6 +30,7 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
 
         this._totalAmount = 0;
         this._customerMap = {};
+        this._bookingGuestCustomerMap = {};
     }
 
     protected getMeta(): ReportSectionMeta {
@@ -48,6 +53,7 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                 "Custome Name",
                 "Amount",
                 "Paid Date",
+                "Booking Guest"
 
             ]
         };
@@ -77,14 +83,31 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                 return invoicesRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, invoiceSearchCriteria);
             }).then((result: InvoiceGroupSearchResultRepoDO) => {
                 let invoiceGroupsList = result.invoiceGroupList;
-                let invoiceList = _.chain(invoiceGroupsList).map((invoiceGroup: InvoiceGroupDO) => {
+                this._invoiceList = _.chain(invoiceGroupsList).map((invoiceGroup: InvoiceGroupDO) => {
                     return invoiceGroup.invoiceList;
                 }).flatten().value();
 
+                let bookingIdList = _.filter(this._invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.bookingId;
+                }).map((invoice: InvoiceDO) => {
+                    return invoice.bookingId;
+                });
+
+                return this._appContext.getRepositoryFactory().getBookingRepository().getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { bookingIdList: bookingIdList});
+            }).then((value: BookingSearchResultRepoDO) => {
+                this._bookingList = value.bookingList;
+                let bookingsGuestCustomerIdList = _.map(this._bookingList, (booking: BookingDO) => { return booking.defaultBillingDetails.customerIdDisplayedAsGuest; });
+
+                return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { customerIdList: bookingsGuestCustomerIdList });
+            }).then((result: CustomerSearchResultRepoDO) => {
+                let bookingsGuestCustomerList = result.customerList;
+                _.forEach(bookingsGuestCustomerList, (customer: CustomerDO) => {
+                    this._bookingGuestCustomerMap[customer.id] = customer;
+                });
                 let data: any[] = [];
                 let rawData: any[] = [];
 
-                _.forEach(invoiceList, (invoice: InvoiceDO) => {
+                _.forEach(this._invoiceList, (invoice: InvoiceDO) => {
                     let payerCustomerIdList = _.filter(invoice.getPayerCustomerIdList(), (customerId: string) => {
                         return _.contains(this._customerIdList, customerId);
                     });
@@ -122,12 +145,14 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                 data = _.map(rawData, (row: any) => {
                     let invoice: InvoiceDO = row[0];
                     let customer: CustomerDO = row[1];
+                    let bookingGuest = (invoice.bookingId) ? this.getBookingGuestNameForInvoice(invoice) : "";
 
                     return [
                         invoice.invoiceReference,
                         customer.customerDetails.getName(),
                         invoice.getPricePaidByCustomerId(customer.id),
-                        invoice.paidTimestamp.toString()
+                        invoice.paidTimestamp.toString(),
+                        bookingGuest
                     ];
                 });
 
@@ -141,5 +166,16 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
             }).catch(e => {
                 reject(e);
             })
+    }
+
+    private getBookingGuestNameForInvoice(invoice: InvoiceDO): string {
+        var associatedBooking: BookingDO = _.find(this._bookingList, (booking: BookingDO) => {
+            return invoice.bookingId === booking.id;
+        });
+        if (associatedBooking && associatedBooking.displayCustomerId) {
+            return this._bookingGuestCustomerMap[associatedBooking.defaultBillingDetails.customerIdDisplayedAsGuest].customerDetails.getName();
+        } else {
+            return "";
+        }
     }
 }
