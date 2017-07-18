@@ -15,10 +15,14 @@ import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerD
 import { ThUtils } from "../../../utils/ThUtils";
 import { PaymentMethodDO } from "../../../data-layer/common/data-objects/payment-method/PaymentMethodDO";
 import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
+import { ShiftReportPaidInvoicesSectionGenerator } from "../shift-report/strategies/ShiftReportPaidInvoicesSectionGenerator";
 
 import _ = require("underscore");
 
 export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrategy {
+    private static PaidInvoiceByAgreementDisplayName = "Paid by Agreement";
+    
     private _totalAmount: number;
     private _customerMap: { [index: string]: CustomerDO };
     private _paymentMethodList: PaymentMethodDO[];
@@ -134,7 +138,7 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                         return invoicePayer.customerId === customer.id;
                     });
 
-                    let paymentMethodString = (invoicePayerDO) ? this.getPaymentMethodName(invoicePayerDO.paymentMethod.value) : "";
+                    let paymentMethodString = (invoicePayerDO) ? this.getPaymentMethodName(invoicePayerDO.paymentMethod) : "";
                     
                     return [
                         invoice.invoiceReference,
@@ -157,11 +161,14 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
             })
     }
 
-    private getPaymentMethodName(invoicePaymentMethodValue: string): string {
-        var paymentMethod = _.find(this._paymentMethodList, (paymentMethod: PaymentMethodDO) => {
-            return paymentMethod.id === invoicePaymentMethodValue;
+    private getPaymentMethodName(inputInvoicePaymentMethodDO: InvoicePaymentMethodDO): string {
+        if(inputInvoicePaymentMethodDO.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+            return this._appContext.thTranslate.translate(InvoicesReportSectionGenerator.PaidInvoiceByAgreementDisplayName);
+        }
+        var result = _.find(this._paymentMethodList, (paymentMethod: PaymentMethodDO) => {
+            return paymentMethod.id === inputInvoicePaymentMethodDO.value;
         });
-        return (paymentMethod) ? paymentMethod.name : "";
+        return (result) ? result.name : "";
     }
 
 }
