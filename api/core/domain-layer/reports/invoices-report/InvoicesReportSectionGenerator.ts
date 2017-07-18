@@ -13,13 +13,20 @@ import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 import { CustomerSearchResultRepoDO } from "../../../data-layer/customers/repositories/ICustomerRepository";
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 import { ThUtils } from "../../../utils/ThUtils";
+import { PaymentMethodDO } from "../../../data-layer/common/data-objects/payment-method/PaymentMethodDO";
+import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
+import { ShiftReportPaidInvoicesSectionGenerator } from "../shift-report/strategies/ShiftReportPaidInvoicesSectionGenerator";
 import { BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
 
 import _ = require("underscore");
 
 export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrategy {
+    private static PaidInvoiceByAgreementDisplayName = "Paid by Agreement";
+    
     private _totalAmount: number;
     private _customerMap: { [index: string]: CustomerDO };
+    private _paymentMethodList: PaymentMethodDO[];
     private _bookingGuestCustomerMap: { [index: string]: CustomerDO };
     private _invoiceList: InvoiceDO[];
     private _bookingList: BookingDO[];
@@ -53,34 +60,39 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                 "Custome Name",
                 "Amount",
                 "Paid Date",
-                "Booking Guest"
-
+                "Booking Guest",
+                "Payment Method",
+                
             ]
         };
     }
 
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
-        let invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
         let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
 
-        let interval = new ThDateIntervalDO();
-        interval.start = this._startDate;
-        interval.end = this._endDate;
+        this._appContext.getRepositoryFactory().getSettingsRepository().getPaymentMethods().then((result: PaymentMethodDO[]) => {
+            this._paymentMethodList = result;
 
-        let invoiceSearchCriteria: InvoiceGroupSearchCriteriaRepoDO = {
-            customerIdList: this._customerIdList,
-            paidInterval: interval
-        }
+            return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { customerIdList: this._customerIdList });
+        }).then((result: CustomerSearchResultRepoDO) => {
+            let invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
 
-        let customerList = [];
-        customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { customerIdList: this._customerIdList })
-            .then((result: CustomerSearchResultRepoDO) => {
-                customerList = result.customerList;
-                _.forEach(customerList, (customer: CustomerDO) => {
-                    this._customerMap[customer.id] = customer;
-                });
+            let interval = new ThDateIntervalDO();
+            interval.start = this._startDate;
+            interval.end = this._endDate;
 
-                return invoicesRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, invoiceSearchCriteria);
+            let invoiceSearchCriteria: InvoiceGroupSearchCriteriaRepoDO = {
+                customerIdList: this._customerIdList,
+                paidInterval: interval
+            }
+
+            let customerList = [];
+            customerList = result.customerList;
+            _.forEach(customerList, (customer: CustomerDO) => {
+                this._customerMap[customer.id] = customer;
+            });
+
+            return invoicesRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, invoiceSearchCriteria);
             }).then((result: InvoiceGroupSearchResultRepoDO) => {
                 let invoiceGroupsList = result.invoiceGroupList;
                 this._invoiceList = _.chain(invoiceGroupsList).map((invoiceGroup: InvoiceGroupDO) => {
@@ -145,14 +157,20 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                 data = _.map(rawData, (row: any) => {
                     let invoice: InvoiceDO = row[0];
                     let customer: CustomerDO = row[1];
+                    let invoicePayerDO = _.find(invoice.payerList, (invoicePayer: InvoicePayerDO) => {
+                        return invoicePayer.customerId === customer.id;
+                    });
                     let bookingGuest = (invoice.bookingId) ? this.getBookingGuestNameForInvoice(invoice) : "";
 
+                    let paymentMethodString = (invoicePayerDO) ? this.getPaymentMethodName(invoicePayerDO.paymentMethod) : "";
+                    
                     return [
                         invoice.invoiceReference,
                         customer.customerDetails.getName(),
                         invoice.getPricePaidByCustomerId(customer.id),
                         invoice.paidTimestamp.toString(),
-                        bookingGuest
+                        bookingGuest,
+                        paymentMethodString
                     ];
                 });
 
@@ -166,6 +184,16 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
             }).catch(e => {
                 reject(e);
             })
+    }
+
+    private getPaymentMethodName(inputInvoicePaymentMethodDO: InvoicePaymentMethodDO): string {
+        if(inputInvoicePaymentMethodDO.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+            return this._appContext.thTranslate.translate(InvoicesReportSectionGenerator.PaidInvoiceByAgreementDisplayName);
+        }
+        var result = _.find(this._paymentMethodList, (paymentMethod: PaymentMethodDO) => {
+            return paymentMethod.id === inputInvoicePaymentMethodDO.value;
+        });
+        return (result) ? result.name : "";
     }
 
     private getBookingGuestNameForInvoice(invoice: InvoiceDO): string {
