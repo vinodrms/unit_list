@@ -26,7 +26,7 @@ export class ArrivalsSectionGenerator extends AReportSectionGeneratorStrategy {
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Arrivals"
+            title: "Guest Arrivals"
         }
     }
 

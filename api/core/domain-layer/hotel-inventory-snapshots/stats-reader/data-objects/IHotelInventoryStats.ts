@@ -6,6 +6,7 @@ import { ISegmentedRevenueForDate } from "./revenue/ISegmentedRevenueForDate";
 import { ITotalGuestsForDate } from "./total-guests/ITotalGuestsForDate";
 import { ITotalArrivalsForDate } from "./total-arrivals/ITotalArrivalsForDate";
 import { ITotalRoomNights } from "./total-room-nights/ITotalRoomNights";
+import { ISegmentedCostForDate } from "./cost/ISegmentedCostForDate";
 
 export interface HotelInventoryStatsForDate {
     date: ThDateDO;
@@ -23,6 +24,7 @@ export interface HotelInventoryStatsForDate {
     confirmedRevenueWithoutCommission: { [index: number]: ISegmentedRevenueForDate; };
     guaranteedRevenue: { [index: number]: ISegmentedRevenueForDate; };
     guaranteedRevenueWithoutCommission: { [index: number]: ISegmentedRevenueForDate; };
+    breakfastInternalCost:  { [index: number]: ISegmentedCostForDate };
 }
 
 export interface IHotelInventoryStats {

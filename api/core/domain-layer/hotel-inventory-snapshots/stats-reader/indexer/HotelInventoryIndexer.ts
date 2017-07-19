@@ -40,6 +40,7 @@ import { ITotalArrivalsForDate } from "../data-objects/total-arrivals/ITotalArri
 import { TotalArrivalsForDate } from "../data-objects/total-arrivals/TotalArrivalsForDate";
 import { ITotalRoomNights } from "../data-objects/total-room-nights/ITotalRoomNights";
 import { TotalRoomNightsForDate } from "../data-objects/total-room-nights/TotalRoomNights";
+import { ISegmentedCostForDate } from "../data-objects/cost/ISegmentedCostForDate";
 
 import _ = require('underscore');
 
@@ -59,6 +60,11 @@ export interface RevenueCalculatorInput {
     excludeCommission: boolean;
     excludeVat: boolean;
     revenueSegment: BookingSegment;
+}
+
+export interface CostCalculatorInput {
+    thDate: ThDateDO;
+    segment: BookingSegment;
 }
 
 export interface HotelInventoryIndexerParams {
@@ -475,24 +481,7 @@ export class HotelInventoryIndexer {
         let indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(input.thDate);
         let filteredBookingItemList: BookingItemContainer[] = bookingsContainer.getBookingItemContainersFilteredByInterval(indexedSingleDayInterval);
 
-        let segmentedBookingItemList = _.filter(filteredBookingItemList, (bookingItem: BookingItemContainer) => {
-            switch (input.revenueSegment) {
-                case BookingSegment.BusinessGroup:
-                    return bookingItem.booking.travelActivityType === TravelActivityType.Business
-                        && bookingItem.booking.travelType === TravelType.Group;
-                case BookingSegment.BusinessIndividual:
-                    return bookingItem.booking.travelActivityType === TravelActivityType.Business
-                        && bookingItem.booking.travelType === TravelType.Individual;
-                case BookingSegment.LeisureGroup:
-                    return bookingItem.booking.travelActivityType === TravelActivityType.Leisure
-                        && bookingItem.booking.travelType === TravelType.Group;
-                case BookingSegment.LeisureIndividual:
-                    return bookingItem.booking.travelActivityType === TravelActivityType.Leisure
-                        && bookingItem.booking.travelType === TravelType.Individual;
-                default:
-                    return true;
-            }
-        });
+        let segmentedBookingItemList = this.getSegmentedBookingItemList(filteredBookingItemList, input.revenueSegment);
 
         let revenue = new RevenueForDate(0.0, 0.0, 0.0);
         _.forEach(segmentedBookingItemList, (bookingItem: BookingItemContainer) => {
@@ -613,6 +602,60 @@ export class HotelInventoryIndexer {
         // commission has vat included
         return this._excludeVat ? this.getNetValue(bookingPrice.breakfast.meta.getVatId(), breakfastPricePerDay) : breakfastPricePerDay;
     }
+
+    public getBreakfastInternalCost(thDate: ThDateDO): { [index: number]: ISegmentedCostForDate; } {
+        let segmentedInternalCost: { [index: number]: ISegmentedCostForDate; } = {};
+
+        _.forEach(this._indexedRevenueSegmentList, (segment: BookingSegment) => {
+            let breakfastInternalCost = this.getBreakfastInternalCostPerSegment(this._guaranteedBookingsContainer, {
+                thDate: thDate,
+                segment: segment
+            });
+
+            segmentedInternalCost[segment] = {
+                segment: segment,
+                cost: breakfastInternalCost
+            };
+        });
+
+        return segmentedInternalCost;
+    }
+
+    private getSegmentedBookingItemList(bookingItemList: BookingItemContainer[], segment: BookingSegment): BookingItemContainer[] {
+        return _.filter(bookingItemList, (bookingItem: BookingItemContainer) => {
+            switch (segment) {
+                case BookingSegment.BusinessGroup:
+                    return bookingItem.booking.travelActivityType === TravelActivityType.Business
+                        && bookingItem.booking.travelType === TravelType.Group;
+                case BookingSegment.BusinessIndividual:
+                    return bookingItem.booking.travelActivityType === TravelActivityType.Business
+                        && bookingItem.booking.travelType === TravelType.Individual;
+                case BookingSegment.LeisureGroup:
+                    return bookingItem.booking.travelActivityType === TravelActivityType.Leisure
+                        && bookingItem.booking.travelType === TravelType.Group;
+                case BookingSegment.LeisureIndividual:
+                    return bookingItem.booking.travelActivityType === TravelActivityType.Leisure
+                        && bookingItem.booking.travelType === TravelType.Individual;
+                default:
+                    return true;
+            }
+        });
+    }
+
+    private getBreakfastInternalCostPerSegment(bookingsContainer: BookingsContainer, input: CostCalculatorInput): number {
+        let indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(input.thDate);
+        let filteredBookingItemList: BookingItemContainer[] = bookingsContainer.getBookingItemContainersFilteredByInterval(indexedSingleDayInterval);
+
+        let segmentedBookingItemList = this.getSegmentedBookingItemList(filteredBookingItemList, input.segment);
+
+        let breakfastInternalCost = 0;
+        _.forEach(segmentedBookingItemList, (bookingItem: BookingItemContainer) => {
+            let noAdultsAndChildren = bookingItem.booking.configCapacity.getNoAdultsAndChildren();
+            breakfastInternalCost += !this._thUtils.isUndefinedOrNull(bookingItem.booking, "priceProductSnapshot.includedItems.includedBreakfastAddOnProductSnapshot.internalCost") ? bookingItem.booking.priceProductSnapshot.includedItems.includedBreakfastAddOnProductSnapshot.internalCost * noAdultsAndChildren: 0;
+        });
+        return breakfastInternalCost;
+    }
+
     private getPriceWithoutCommission(price: number, commission: CommissionDO, totalNoNights: number) {
         let commissionAmount = commission.getCommissionFor(price);
 
