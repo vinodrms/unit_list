@@ -21,6 +21,9 @@ export class IncludedBookingItems {
     public getNetTotalPrice(indexedVatById: { [id: string]: TaxDO; }): number {
         var netTotalPrice: number = 0.0;
         _.forEach(this._includedInvoiceItemList, (includedInvoiceItem: InvoiceItemDO) => {
+            if (!includedInvoiceItem.meta.getVatId()) {
+                return;
+            }
             netTotalPrice = netTotalPrice + indexedVatById[includedInvoiceItem.meta.getVatId()].getNetValue(includedInvoiceItem.getTotalPrice());
         });
         return netTotalPrice;
