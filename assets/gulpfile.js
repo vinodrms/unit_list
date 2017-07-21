@@ -117,7 +117,7 @@ gulp.task('rev-css', ['clean-rev-replace'], function() {
 		.pipe(gulp.dest('.'));
 });
 
-gulp.task('rev-js', function() {
+gulp.task('rev-js', ['rev-css'], function() {
 	var files = ['client/build/unitpal-external.min.js', 'client/build/unitpal-internal.min.js'];
 	var revvedFilesOutputFolder = 'revved-files/';
 	
@@ -133,7 +133,7 @@ gulp.task('clean-rev-replace', function () {
                 .pipe(clean());
 });
 
-gulp.task('rev-replace', ['rev-css', 'rev-js'], function() {
+gulp.task('rev-replace', ['rev-js'], function() {
     var manifest = gulp.src("rev/rev-manifest.json");
     var source = ['../views/external.ejs', '../views/internal.ejs'];
 

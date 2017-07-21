@@ -80,7 +80,7 @@
     "prod": "npm run build-client && gulp run-prod",
     "forever-stop": "forever stop UnitPalProduction || echo 'No process named UnitPalProduction found. Continuing with the rest of the build.'",
     "forever-start": "NODE_ENV=production forever -a -l /dev/null --uid \"UnitPalProduction\" start app.js",
-    "rev-replace": "cd assets && nom run rev-replace && cd .."
+    "rev-replace": "cd assets && gulp rev-replace && cd .."
   },
   "main": "app.js",
   "repository": {
