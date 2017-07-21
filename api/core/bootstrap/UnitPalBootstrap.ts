@@ -9,6 +9,7 @@ import { ThError } from '../utils/th-responses/ThError';
 import { ThStatusCode } from '../utils/th-responses/ThResponse';
 import { CronJobInitializer } from '../cron-jobs/CronJobInitializer';
 import { SocketsInitializer } from './sockets/SocketsInitializer';
+import { OAuthServerInitializer } from "./oauth/OAuthServerInitializer";
 
 declare var sails: any;
 
@@ -69,6 +70,10 @@ export class UnitPalBootstrap {
 	private initializeSockets() {
 		var socketsInitializer = new SocketsInitializer();
 		socketsInitializer.register();
+	}
+	private initializeOauthServer() {
+		var oauthServerInitializer = new OAuthServerInitializer();
+		oauthServerInitializer.register();
 	}
 	private logDefaultClientSessionIfNecessary() {
 		if (this._unitPalConfig.defaultClientSessionIsEnabled()) {
