@@ -29,7 +29,17 @@
       command: npm run build-all
       args: 
         chdir: "{{ unitpal_root }}"
-        
+
+    - name: Create revved files and replace their names
+      command: npm run rev-replace
+      args: 
+        chdir: "{{ unitpal_root }}"
+
+    - name: Copy revved files
+      command: cp assets/revved-files/*.css assets/client/static-assets/css/ && cp assets/revved-files/*.js assets/client/build
+      args: 
+        chdir: "{{ unitpal_root }}"
+
     - name: Create UnitPal environment files
       template: src={{ item }}
                 dest={{ unitpal_root }}/config/env/{{ item | regex_replace('\.j2$', '') }}
