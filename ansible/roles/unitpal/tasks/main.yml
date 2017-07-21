@@ -19,7 +19,7 @@
         force=yes
 
       become_user: unitpal
-    
+
     - name: Install npm dependencies
       command: npm run install-deps
       args: 
@@ -34,11 +34,49 @@
       command: npm run rev-replace
       args: 
         chdir: "{{ unitpal_root }}"
+      become: yes
 
-    - name: Copy revved files
-      command: cp assets/revved-files/*.css assets/client/static-assets/css/ && cp assets/revved-files/*.js assets/client/build
-      args: 
-        chdir: "{{ unitpal_root }}"
+    - name: Get css file names
+      command: "find {{ unitpal_root }}/assets/revved-css-files/ -type f"
+      register: css_files_to_copy
+
+    - name: Copy revved css files
+      copy:
+        src: "{{ unitpal_root }}/assets/revved-css-files/"
+        dest: "{{ unitpal_root }}/assets/client/static-assets/css/"
+        remote_src: true
+      with_items: "{{css_files_to_copy.stdout_lines }}"
+      become: yes
+
+    - name: Get js file names
+      command: "find {{ unitpal_root }}/assets/revved-js-files/ -type f"
+      register: js_files_to_copy
+
+    - name: Copy revved js files
+      copy:
+        src: "{{ unitpal_root }}/assets/revved-js-files/"
+        dest: "{{ unitpal_root }}/assets/client/build/"
+        remote_src: true
+      with_items: "{{js_files_to_copy.stdout_lines }}"
+      become: yes
+
+    - name: Delete original views
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - "{{ unitpal_root }}/views/internal.ejs"
+        - "{{ unitpal_root }}/views/external.ejs"
+
+    - name: Replace modified views
+      copy:
+        src: "{{ item }}"
+        dest: "{{ unitpal_root }}/views/"
+        remote_src: true
+      with_items:
+        - "{{ unitpal_root }}/assets/rev-replace-output/internal.ejs"
+        - "{{ unitpal_root }}/assets/rev-replace-output/external.ejs"
+      become: yes
 
     - name: Create UnitPal environment files
       template: src={{ item }}
