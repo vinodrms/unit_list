@@ -34,28 +34,28 @@
       command: npm run rev-replace
       args: 
         chdir: "{{ unitpal_root }}"
-      become: yes
+      become_user: unitpal
 
-    - name: Get css file names
+    - name: Get revved css file names
       command: "find {{ unitpal_root }}/assets/revved-css-files/ -type f"
       register: css_files_to_copy
 
     - name: Copy revved css files
       copy:
-        src: "{{ unitpal_root }}/assets/revved-css-files/"
-        dest: "{{ unitpal_root }}/assets/client/static-assets/css/"
+        src: "{{ item }}"
+        dest: "{{ unitpal_root }}/assets/dist/client/static-assets/css/"
         remote_src: true
       with_items: "{{css_files_to_copy.stdout_lines }}"
       become: yes
 
-    - name: Get js file names
+    - name: Get revved js file names
       command: "find {{ unitpal_root }}/assets/revved-js-files/ -type f"
       register: js_files_to_copy
 
     - name: Copy revved js files
       copy:
-        src: "{{ unitpal_root }}/assets/revved-js-files/"
-        dest: "{{ unitpal_root }}/assets/client/build/"
+        src: "{{ item }}"
+        dest: "{{ unitpal_root }}/assets/dist/client/build/"
         remote_src: true
       with_items: "{{js_files_to_copy.stdout_lines }}"
       become: yes
@@ -76,7 +76,12 @@
       with_items:
         - "{{ unitpal_root }}/assets/rev-replace-output/internal.ejs"
         - "{{ unitpal_root }}/assets/rev-replace-output/external.ejs"
-      become: yes
+      become_user: unitpal
+
+    - name: Clean rev-replace process
+      command: npm run clean-rev-replace
+      args: 
+        chdir: "{{ unitpal_root }}"
 
     - name: Create UnitPal environment files
       template: src={{ item }}
