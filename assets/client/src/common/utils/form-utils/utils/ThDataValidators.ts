@@ -1,3 +1,5 @@
+import * as _ from "underscore";
+
 export class ThDataValidators {
 	public static isValidPrice(value: any): boolean {
 		if (!_.isNumber(value)) {

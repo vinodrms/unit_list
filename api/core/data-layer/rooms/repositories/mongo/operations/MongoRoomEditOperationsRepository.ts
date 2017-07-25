@@ -1,17 +1,17 @@
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
-import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
-import {IRoomRepository, RoomMetaRepoDO, RoomItemMetaRepoDO, RoomSearchCriteriaRepoDO, RoomSearchResultRepoDO} from '../../IRoomRepository';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
-import {RoomDO, RoomStatus} from '../../../data-objects/RoomDO';
-import {RoomRepositoryHelper} from '../helpers/RoomRepositoryHelper';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { MongoRepository, MongoErrorCodes, MongoSearchCriteria } from '../../../../common/base/MongoRepository';
+import { MongoQueryBuilder } from '../../../../common/base/MongoQueryBuilder';
+import { IRoomRepository, RoomMetaRepoDO, RoomItemMetaRepoDO, RoomSearchCriteriaRepoDO, RoomSearchResultRepoDO } from '../../IRoomRepository';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+import { RoomDO, RoomStatus } from '../../../data-objects/RoomDO';
+import { RoomRepositoryHelper } from '../helpers/RoomRepositoryHelper';
 
 export class MongoRoomEditOperationsRepository extends MongoRepository {
     private _helper: RoomRepositoryHelper;
 
-    constructor(roomsEntity: Sails.Model) {
+    constructor(roomsEntity: any) {
         super(roomsEntity);
         this._helper = new RoomRepositoryHelper();
     }

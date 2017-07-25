@@ -8,17 +8,17 @@ import {ThTranslation} from '../../core/utils/localization/ThTranslation';
 import _ = require("underscore");
 
 export class BaseController {
-	protected precheckPOSTParameters(req: Express.Request, res: Express.Response, rootParameter: string, parameters: string[]): boolean {
+	protected precheckPOSTParameters(req: any, res: any, rootParameter: string, parameters: string[]): boolean {
 		var parameterArray = [rootParameter];
 		parameters.forEach((parameter: string) => {
 			parameterArray.push(rootParameter + "." + parameter);
 		});
 		return this.precheckParameters(req, res, "body", parameterArray);
 	}
-	protected precheckGETParameters(req: Express.Request, res: Express.Response, parameters: string[]): boolean {
+	protected precheckGETParameters(req: any, res: any, parameters: string[]): boolean {
 		return this.precheckParameters(req, res, "query", parameters);
 	}
-	private precheckParameters(req: Express.Request, res: Express.Response, reqField: string, parameters: string[]): boolean {
+	private precheckParameters(req: any, res: any, reqField: string, parameters: string[]): boolean {
 		var result = true;
 		var thUtils: ThUtils = new ThUtils();
 		parameters.forEach((parameter: string) => {
@@ -36,11 +36,11 @@ export class BaseController {
 		return true;
 	}
 
-	protected returnSuccesfulResponse(req: Express.Request, res: Express.Response, data: any) {
+	protected returnSuccesfulResponse(req: any, res: any, data: any) {
 		var thResponse = new ThResponse(ThStatusCode.Ok, data);
 		this.returnResponse(req, res, thResponse);
 	}
-	protected returnErrorResponse(req: Express.Request, res: Express.Response, error: any, defaultErrorCode: ThStatusCode) {
+	protected returnErrorResponse(req: any, res: any, error: any, defaultErrorCode: ThStatusCode) {
 		var thError = new ThError(defaultErrorCode, error);
 		if (thError.isNativeError()) {
 			ThLogger.getInstance().logError(ThLogLevel.Error, "Native Uncaught Error", { url: req.url, body: req.body, query: req.query }, thError);
@@ -48,7 +48,7 @@ export class BaseController {
 		this.returnResponse(req, res, new ThResponse(thError.getThStatusCode()));
 	}
 
-	private returnResponse(req: Express.Request, res: Express.Response, thResponse: ThResponse) {
+	private returnResponse(req: any, res: any, thResponse: ThResponse) {
 		var sessionContext: SessionContext = req.sessionContext;
 		return res.json(thResponse.buildJson(sessionContext.language));
 	}

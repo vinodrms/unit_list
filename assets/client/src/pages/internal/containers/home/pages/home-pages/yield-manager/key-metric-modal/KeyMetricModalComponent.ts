@@ -9,6 +9,8 @@ import {KeyMetricModalInput, KeyMetricItem} from './services/utils/KeyMetricModa
 import {IKeyMetricValue} from '../../../../../../services/yield-manager/dashboard/key-metrics/data-objects/metric-value/IKeyMetricValue';
 import {ThDateDO} from '../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'key-metric-modal',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/key-metric-modal/template/key-metric-modal.html'

@@ -5,6 +5,8 @@ import { ICustomerDetailsDO } from './customer-details/ICustomerDetailsDO';
 import { CustomerDetailsFactory } from './customer-details/CustomerDetailsFactory';
 import { PriceProductDO, PriceProductAvailability } from '../../price-products/data-objects/PriceProductDO';
 
+import * as _ from "underscore";
+
 export enum CustomerType {
 	Individual,
 	Company,

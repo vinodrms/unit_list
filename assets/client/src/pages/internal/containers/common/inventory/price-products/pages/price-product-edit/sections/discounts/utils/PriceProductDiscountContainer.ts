@@ -5,6 +5,8 @@ import { PriceProductConstraintWrapperDO } from "../../../../../../../../../serv
 import { PriceProductDiscountVM } from "./PriceProductDiscountVM";
 import { PriceProductDiscountIntervalWrapperDO } from "../../../../../../../../../services/price-products/data-objects/discount/PriceProductDiscountIntervalWrapperDO";
 
+import * as _ from "underscore";
+
 export class PriceProductDiscountContainer {
     private _currentIndex: number;
     private _discountVMList: PriceProductDiscountVM[];

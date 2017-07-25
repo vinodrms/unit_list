@@ -12,6 +12,8 @@ import { CustomerDO } from "../../../../../../../../../../../services/customers/
 import { ModalDialogRef } from "../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
 import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'booking-payment-guarantee-editor',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/payment-guarantee-edit/template/booking-payment-guarantee-editor.html'

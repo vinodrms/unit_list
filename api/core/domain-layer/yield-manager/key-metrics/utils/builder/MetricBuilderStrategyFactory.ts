@@ -204,11 +204,11 @@ export class MetricBuilderStrategyFactory {
                 new ArrivalsBuilderStrategy(this._hotelInventoryStats, {}),
                 new RoomNightsBuilderStrategy(this._hotelInventoryStats, {}),
                 new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
-                    excludeCommission: true,
+                    excludeCommission: false,
                     revenueSegment: BookingSegment.All
                 }),
                 new BreakfastRevenueBuilderStrategy(this._hotelInventoryStats, {
-                    excludeCommission: true,
+                    excludeCommission: false,
                     revenueSegment: BookingSegment.All
                 })
             ]
@@ -223,7 +223,7 @@ export class MetricBuilderStrategyFactory {
                     {}));
                 metricList.push(
                     new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
-                        excludeCommission: true,
+                        excludeCommission: false,
                         revenueSegment: bookingSegment
                     })
                 );

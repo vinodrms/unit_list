@@ -18,6 +18,8 @@ import { AddOnProductCategoriesDO } from '../../../../../services/settings/data-
 import { AddOnProductCategoryDO } from '../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import { AddOnProductsModalInput } from './services/utils/AddOnProductsModalInput';
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'add-on-products-modal',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/modals/templates/add-on-products-modal.html',

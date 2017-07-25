@@ -6,6 +6,8 @@ import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerD
 import { CustomersContainer } from '../../../domain-layer/customers/validators/results/CustomersContainer';
 import { InvoicePayerDO } from '../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
 
+import _ = require("underscore");
+
 export class InvoicePayersValidator {
     private _invoice: InvoiceDO;
 

@@ -5,6 +5,8 @@ import { BookingDO } from '../../data-objects/BookingDO';
 import { MongoBookingEditRepository } from "./operations/MongoBookingEditRepository";
 import { MongoBookingReadRepository } from "./operations/MongoBookingReadRepository";
 
+declare var sails: any;
+
 export class MongoBookingRepository extends MongoRepository implements IBookingRepository {
     private editRepository: MongoBookingEditRepository;
     private readRepository: MongoBookingReadRepository;

@@ -1,10 +1,12 @@
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
-import {Injectable} from '@angular/core';
-import {ISocketsService} from './ISocketsService';
-import {SocketEvent} from './utils/SocketEvent';
-import {SocketMessage} from './utils/SocketMessage';
-import {AppContext} from '../AppContext';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import { Injectable } from '@angular/core';
+import { ISocketsService } from './ISocketsService';
+import { SocketEvent } from './utils/SocketEvent';
+import { SocketMessage } from './utils/SocketMessage';
+import { AppContext } from '../AppContext';
+
+import io from 'socket.io-client';
 
 @Injectable()
 export class SocketsService implements ISocketsService {
@@ -46,6 +48,6 @@ export class SocketsService implements ISocketsService {
     }
 
     public release() {
-        this._socket.disconnect();        
+        this._socket.disconnect();
     }
 }

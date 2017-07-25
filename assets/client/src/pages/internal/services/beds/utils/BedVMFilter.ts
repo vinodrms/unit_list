@@ -3,6 +3,8 @@ import {RoomCategoryDO} from '../../room-categories/data-objects/RoomCategoryDO'
 import {BedMetaDO} from '../../room-categories/data-objects/bed-config/BedMetaDO';
 import {ThUtils} from '../../../../../common/utils/ThUtils';
 
+import * as _ from "underscore";
+
 export class BedVMFilter {
     private _thUtils: ThUtils;
 

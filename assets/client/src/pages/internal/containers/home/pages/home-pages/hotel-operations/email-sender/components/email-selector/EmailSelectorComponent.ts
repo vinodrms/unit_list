@@ -5,6 +5,8 @@ import {CustomerDO} from '../../../../../../../../services/customers/data-object
 import {EmailRecipientBuilder} from './utils/EmailRecipientBuilder';
 import {EmailRecipientVM} from './utils/EmailRecipientVM';
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'email-selector',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/email-sender/components/email-selector/template/email-selector.html'

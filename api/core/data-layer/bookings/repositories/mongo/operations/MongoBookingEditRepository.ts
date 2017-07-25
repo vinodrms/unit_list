@@ -10,7 +10,7 @@ import { BookingRepositoryHelper } from "./helpers/BookingRepositoryHelper";
 export class MongoBookingEditRepository extends MongoRepository {
     private helper: BookingRepositoryHelper;
 
-    constructor(bookingsEntity: Sails.Model) {
+    constructor(bookingsEntity: any) {
         super(bookingsEntity);
         this.helper = new BookingRepositoryHelper();
     }

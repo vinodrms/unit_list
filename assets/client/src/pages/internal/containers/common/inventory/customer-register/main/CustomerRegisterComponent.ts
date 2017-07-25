@@ -15,6 +15,8 @@ import { CustomerPriceProductDetailsDO } from '../../../../../services/customers
 import { CustomerDetailsFactory } from '../../../../../services/customers/data-objects/customer-details/CustomerDetailsFactory';
 import { CustomerDetailsMeta } from '../../../../../services/customers/data-objects/customer-details/ICustomerDetailsDO';
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'customer-register',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/main/template/customer-register.html',

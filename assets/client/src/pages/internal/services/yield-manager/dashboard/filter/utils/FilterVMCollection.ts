@@ -1,5 +1,7 @@
 import {IFilterVM} from '../view-models/IFilterVM';
 
+import * as _ from "underscore";
+
 export class FilterVMCollection<T extends IFilterVM> {
     private _filterVMList: T[];
 

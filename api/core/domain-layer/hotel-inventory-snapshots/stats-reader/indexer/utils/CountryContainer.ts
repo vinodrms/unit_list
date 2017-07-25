@@ -1,6 +1,8 @@
 import { CountryDO } from "../../../../../data-layer/common/data-objects/country/CountryDO";
 import { CustomerDO } from "../../../../../data-layer/customers/data-objects/CustomerDO";
 
+import _ = require("underscore");
+
 export class CountryContainer {
     public static OtherCountryCode = "other";
 	public static OtherCountryName = "Other";

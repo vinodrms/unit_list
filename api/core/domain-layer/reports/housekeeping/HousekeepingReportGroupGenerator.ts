@@ -11,6 +11,8 @@ import { ThError } from "../../../utils/th-responses/ThError";
 import { RoomSearchResultRepoDO } from "../../../data-layer/rooms/repositories/IRoomRepository";
 import { RoomDO } from "../../../data-layer/rooms/data-objects/RoomDO";
 
+import _ = require("underscore");
+
 enum HousekeepingReportGroupByType {
     NOTHING,
     FLOOR

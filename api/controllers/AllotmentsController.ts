@@ -9,7 +9,7 @@ import {SaveAllotmentItem} from '../core/domain-layer/allotments/SaveAllotmentIt
 import {ArchiveAllotmentItem} from '../core/domain-layer/allotments/ArchiveAllotmentItem';
 
 export class AllotmentsController extends BaseController {
-	public getAllotmentById(req: Express.Request, res: Express.Response) {
+	public getAllotmentById(req: any, res: any) {
 		if (!this.precheckGETParameters(req, res, ['id'])) { return };
 
 		var appContext: AppContext = req.appContext;
@@ -25,7 +25,7 @@ export class AllotmentsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.AllotmentsControllerErrorGettingAllotment);
 		});
 	}
-	public saveAllotmentItem(req: Express.Request, res: Express.Response) {
+	public saveAllotmentItem(req: any, res: any) {
 		var saveAllItem = new SaveAllotmentItem(req.appContext, req.sessionContext);
 		saveAllItem.save(req.body.allotment).then((updatedAllotment: AllotmentDO) => {
 			this.returnSuccesfulResponse(req, res, { allotment: updatedAllotment });
@@ -33,7 +33,7 @@ export class AllotmentsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.AllotmentsControllerErrorSavingAllotment);
 		});
 	}
-	public archiveAllotmentItem(req: Express.Request, res: Express.Response) {
+	public archiveAllotmentItem(req: any, res: any) {
 		var archiveAllItem = new ArchiveAllotmentItem(req.appContext, req.sessionContext);
 		archiveAllItem.archive(req.body.allotment).then((archivedAllotment: AllotmentDO) => {
 			this.returnSuccesfulResponse(req, res, { allotment: archivedAllotment });
@@ -41,7 +41,7 @@ export class AllotmentsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.AllotmentsControllerErrorArchivingAllotment);
 		});
 	}
-	public getAllotmentListCount(req: Express.Request, res: Express.Response) {
+	public getAllotmentListCount(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 
@@ -53,7 +53,7 @@ export class AllotmentsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.AllotmentsControllerErrorGettingCount);
 		});
 	}
-	public getAllotmentList(req: Express.Request, res: Express.Response) {
+	public getAllotmentList(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 

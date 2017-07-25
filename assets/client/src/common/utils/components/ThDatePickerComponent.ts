@@ -1,10 +1,14 @@
-import {Component, Input, Output, EventEmitter, ElementRef, AfterViewInit, Inject} from '@angular/core';
-import {ThDateDO, ThMonth} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateDO';
-import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateUtils';
+import { Component, Input, Output, EventEmitter, ElementRef, AfterViewInit, Inject } from '@angular/core';
+import { ThDateDO, ThMonth } from '../../../pages/internal/services/common/data-objects/th-dates/ThDateDO';
+import { ThDateUtils } from '../../../pages/internal/services/common/data-objects/th-dates/ThDateUtils';
+
+import moment from "moment";
+
+declare var $: any;
 
 @Component({
-    selector: 'th-date-picker',
-    template: `   
+	selector: 'th-date-picker',
+	template: `   
 		<div class="form-group">
 			<label *ngIf="showLabel">{{ label | translate }} 
 				<span *ngIf="labelFont" class="unitpal-font" style="font-size: 18px;">{{labelFont}}</span>
@@ -58,13 +62,13 @@ export class ThDatePickerComponent implements AfterViewInit {
 		this.didSelectThDate.next(this.selectedThDate);
 	}
 	private _selectedThDate: ThDateDO;
-	public get selectedThDate() : ThDateDO {
+	public get selectedThDate(): ThDateDO {
 		return this._selectedThDate;
 	}
 	@Input()
 	public set selectedThDate(date: ThDateDO) {
 		this._selectedThDate = date;
-		if (this.getJQueryElement() && this.getJQueryElement().data('daterangepicker')){
+		if (this.getJQueryElement() && this.getJQueryElement().data('daterangepicker')) {
 			this.getJQueryElement().data('daterangepicker').setStartDate(date);
 			this.getJQueryElement().data('daterangepicker').setEndDate(date);
 		}

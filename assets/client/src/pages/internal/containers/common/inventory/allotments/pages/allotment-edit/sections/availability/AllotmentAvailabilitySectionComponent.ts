@@ -1,9 +1,11 @@
-import {Component, Input} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {IAllotmentEditSection} from '../utils/IAllotmentEditSection';
-import {AllotmentVM} from '../../../../../../../../services/allotments/view-models/AllotmentVM';
-import {AllotmentAvailabilityDO} from '../../../../../../../../services/allotments/data-objects/availability/AllotmentAvailabilityDO';
-import {ISOWeekDayUtils, ISOWeekDayVM, ISOWeekDay}  from '../../../../../../../../services/common/data-objects/th-dates/ISOWeekDay';
+import { Component, Input } from '@angular/core';
+import { BaseComponent } from '../../../../../../../../../../common/base/BaseComponent';
+import { IAllotmentEditSection } from '../utils/IAllotmentEditSection';
+import { AllotmentVM } from '../../../../../../../../services/allotments/view-models/AllotmentVM';
+import { AllotmentAvailabilityDO } from '../../../../../../../../services/allotments/data-objects/availability/AllotmentAvailabilityDO';
+import { ISOWeekDayUtils, ISOWeekDayVM, ISOWeekDay } from '../../../../../../../../services/common/data-objects/th-dates/ISOWeekDay';
+
+import * as _ from "underscore";
 
 @Component({
 	selector: 'allotment-availability-section',

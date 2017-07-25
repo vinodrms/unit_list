@@ -6,6 +6,8 @@ import {BookingSendConfirmationRight} from '../../../../../../../../../../../ser
 import {EmailSenderModalService} from '../../../../../../email-sender/services/EmailSenderModalService';
 import {CustomerDO} from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'booking-send-confirmation',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/send-confirmation/template/booking-send-confirmation.html',

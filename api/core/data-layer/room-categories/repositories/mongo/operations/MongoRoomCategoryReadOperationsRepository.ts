@@ -1,21 +1,21 @@
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
-import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
-import {IRoomCategoryRepository, RoomCategoryMetaRepoDO, RoomCategoryItemMetaRepoDO, RoomCategorySearchResultRepoDO, RoomCategorySearchCriteriaMetaRepoDO} from '../../IRoomCategoryRepository';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
-import {RoomCategoryDO, RoomCategoryStatus} from '../../../data-objects/RoomCategoryDO';
-import {RoomCategoryRepositoryHelper} from "../helpers/RoomCategoryRepositoryHelper";
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { MongoRepository, MongoErrorCodes, MongoSearchCriteria } from '../../../../common/base/MongoRepository';
+import { MongoQueryBuilder } from '../../../../common/base/MongoQueryBuilder';
+import { IRoomCategoryRepository, RoomCategoryMetaRepoDO, RoomCategoryItemMetaRepoDO, RoomCategorySearchResultRepoDO, RoomCategorySearchCriteriaMetaRepoDO } from '../../IRoomCategoryRepository';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+import { RoomCategoryDO, RoomCategoryStatus } from '../../../data-objects/RoomCategoryDO';
+import { RoomCategoryRepositoryHelper } from "../helpers/RoomCategoryRepositoryHelper";
 
 export class MongoRoomCategoryReadOperationsRepository extends MongoRepository {
     private _helper: RoomCategoryRepositoryHelper;
-    
-    constructor(roomCategoriesEntity: Sails.Model) {
+
+    constructor(roomCategoriesEntity: any) {
         super(roomCategoriesEntity);
         this._helper = new RoomCategoryRepositoryHelper();
     }
-    
+
     public getRoomCategoryList(roomMeta: RoomCategoryMetaRepoDO, searchCriteria?: RoomCategorySearchCriteriaMetaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomCategorySearchResultRepoDO> {
         return new Promise<RoomCategorySearchResultRepoDO>((resolve: { (result: RoomCategorySearchResultRepoDO): void }, reject: { (err: ThError): void }) => {
             this.getRoomCategoryListCore(resolve, reject, roomMeta, searchCriteria, lazyLoad);
@@ -46,19 +46,19 @@ export class MongoRoomCategoryReadOperationsRepository extends MongoRepository {
         var mongoQueryBuilder = new MongoQueryBuilder();
         mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
         mongoQueryBuilder.addExactMatch("status", RoomCategoryStatus.Active);
-        
-        if(searchCriteria) {
-            if(searchCriteria.displayName) {
+
+        if (searchCriteria) {
+            if (searchCriteria.displayName) {
                 mongoQueryBuilder.addExactMatch("displayName", searchCriteria.displayName);
             }
-            if(searchCriteria.categoryIdList) {
+            if (searchCriteria.categoryIdList) {
                 mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.categoryIdList);
             }
             if (!this._thUtils.isUndefinedOrNull(searchCriteria.bedIdList)) {
-                mongoQueryBuilder.addMultipleSelectOptionList("bedConfig.bedMetaList.bedId", searchCriteria.bedIdList);    
+                mongoQueryBuilder.addMultipleSelectOptionList("bedConfig.bedMetaList.bedId", searchCriteria.bedIdList);
             }
         }
-        
+
         return mongoQueryBuilder.processedQuery;
     }
 

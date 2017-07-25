@@ -2,6 +2,8 @@ import {BaseDO} from '../../../../../../common/base/BaseDO';
 import {AllotmentAvailabilityForDayDO} from './AllotmentAvailabilityForDayDO';
 import {ISOWeekDay, ISOWeekDayUtils} from '../../../common/data-objects/th-dates/ISOWeekDay';
 
+import * as _ from "underscore";
+
 export class AllotmentAvailabilityDO extends BaseDO {
 	availabilityForDayList: AllotmentAvailabilityForDayDO[];
 

@@ -17,6 +17,8 @@ import { PriceProductsDO } from './data-objects/PriceProductsDO';
 import { PriceProductDO, PriceProductStatus, PriceProductAvailability } from './data-objects/PriceProductDO';
 import { PriceProductVM } from './view-models/PriceProductVM';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM> {
 	constructor(appContext: AppContext,

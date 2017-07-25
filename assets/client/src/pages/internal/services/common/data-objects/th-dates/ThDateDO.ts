@@ -3,6 +3,8 @@ import {ThDateUtils} from './ThDateUtils';
 import {ISOWeekDay, ISOWeekDayUtils} from './ISOWeekDay';
 import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
 
+import * as _ from "underscore";
+
 export enum ThMonth {
 	January,
 	February,

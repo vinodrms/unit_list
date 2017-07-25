@@ -1,6 +1,8 @@
-import {ReflectiveInjector, ComponentFactoryResolver, ModuleWithComponentFactories, ComponentFactory, ViewContainerRef, Type, ComponentRef, ResolvedReflectiveProvider} from '@angular/core';
-import {Injectable, Compiler} from '@angular/core';
-import {ThUtils} from '../ThUtils';
+import { ReflectiveInjector, ComponentFactoryResolver, ModuleWithComponentFactories, ComponentFactory, ViewContainerRef, Type, ComponentRef, ResolvedReflectiveProvider } from '@angular/core';
+import { Injectable, Compiler } from '@angular/core';
+import { ThUtils } from '../ThUtils';
+
+import * as _ from "underscore";
 
 @Injectable()
 export class ModuleLoaderService {
@@ -22,7 +24,7 @@ export class ModuleLoaderService {
             let componentFactory: ComponentFactory<any> = _.find(moduleWithFactories.componentFactories, (factory: ComponentFactory<any>) => {
                 return factory.componentType === componentTypeToInject;
             });
-            if(this._thUtils.isUndefinedOrNull(componentFactory)) {
+            if (this._thUtils.isUndefinedOrNull(componentFactory)) {
                 reject(new Error("Component to inject in module was not found"));
                 return;
             }

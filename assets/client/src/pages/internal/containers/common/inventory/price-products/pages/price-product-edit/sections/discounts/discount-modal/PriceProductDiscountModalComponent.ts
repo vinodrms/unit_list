@@ -12,6 +12,8 @@ import { ThDateIntervalDO } from "../../../../../../../../../services/common/dat
 import { ThDateUtils } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateUtils";
 import { PriceProductDiscountIntervalWrapperDO } from "../../../../../../../../../services/price-products/data-objects/discount/PriceProductDiscountIntervalWrapperDO";
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'price-product-discount-modal',
     templateUrl: "/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/discounts/discount-modal/template/price-product-discount-modal.html",

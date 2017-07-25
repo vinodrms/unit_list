@@ -20,6 +20,8 @@ import { DynamicPriceModalService } from "./dynamic-price-modal/services/Dynamic
 import { PricingContainer } from "./utils/PricingContainer";
 import { CopyPriceProductValuesModalService } from './copy-price-product-values-modal/services/CopyPriceProductValuesModalService';
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'price-product-edit-prices-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/prices/template/price-product-edit-prices-section.html',
@@ -254,15 +256,15 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	public openCopyPriceProductValuesModal(destinationRoomCategoryId: string) {
 		var roomCategories: RoomCategoryDO[] = new Array<RoomCategoryDO>();
 		this._currentRoomCategoryStatsList.map((roomCategoryStats: RoomCategoryStatsDO) => {
- 			if (roomCategoryStats.roomCategory.id !== destinationRoomCategoryId) {
- 				roomCategories.push(roomCategoryStats.roomCategory);
- 			}
+			if (roomCategoryStats.roomCategory.id !== destinationRoomCategoryId) {
+				roomCategories.push(roomCategoryStats.roomCategory);
+			}
 		});
 		this._copyPriceProductValuesModalService.openCopyPriceProductValuesModal(roomCategories)
-		.then((modalDialogInstance: ModalDialogRef<RoomCategoryDO>) => {
+			.then((modalDialogInstance: ModalDialogRef<RoomCategoryDO>) => {
 				modalDialogInstance.resultObservable.subscribe((sourceRoomCategory: RoomCategoryDO) => {
 					this.selectedDynamicPriceVM.copyPrices(sourceRoomCategory.id, destinationRoomCategoryId);
 				})
-		}).catch((e: any) => { });
+			}).catch((e: any) => { });
 	}
 }

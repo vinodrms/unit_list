@@ -8,6 +8,8 @@ import { RoomVM } from "../../../../rooms/view-models/RoomVM";
 import { RoomItemsIndexer } from "../../utils/RoomItemsIndexer";
 import { DepartureItemIndexer } from "./DepartureItemIndexer";
 
+import * as _ from "underscore";
+
 export class DepartureItemContainer {
     private _departureItemInfoVMList: DepartureItemInfoVM[];
 

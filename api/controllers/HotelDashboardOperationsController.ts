@@ -11,7 +11,7 @@ import {HotelOperationsRoomInfo} from '../core/domain-layer/hotel-operations/das
 
 class HotelDashboardOperationsController extends BaseController {
 
-	public getArrivals(req: Express.Request, res: Express.Response) {
+	public getArrivals(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -23,7 +23,7 @@ class HotelDashboardOperationsController extends BaseController {
 		});
     }
 
-	public getDepartures(req: Express.Request, res: Express.Response) {
+	public getDepartures(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -35,7 +35,7 @@ class HotelDashboardOperationsController extends BaseController {
 		});
     }
 
-	public getRooms(req: Express.Request, res: Express.Response) {
+	public getRooms(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 

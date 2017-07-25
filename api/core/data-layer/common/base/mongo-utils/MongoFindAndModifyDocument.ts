@@ -12,7 +12,7 @@ export class MongoFindAndModifyDocument {
 	errorCallback: { (err: Error): void };
 	successCallback: { (updatedDocument: Object): void };
 
-	constructor(private _sailsEntity: Sails.Model) {
+	constructor(private _sailsEntity: any) {
 		this._thUtils = new ThUtils;
 		this._mongoUtils = new MongoUtils();
 	}

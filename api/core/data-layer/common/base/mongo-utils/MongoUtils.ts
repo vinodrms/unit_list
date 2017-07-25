@@ -5,6 +5,8 @@ import mongodb = require('mongodb');
 import ObjectID = mongodb.ObjectID;
 import Collection = mongodb.Collection;
 
+declare var Sails: any;
+
 export class MongoUtils {
 	public static DefaultDocumentIdAttribute = "_id";
 	private _thUtils: ThUtils;
@@ -13,7 +15,7 @@ export class MongoUtils {
 		this._thUtils = new ThUtils();
 	}
 
-	public getNativeMongoCollection(sailsEntity: Sails.Model): Promise<Collection> {
+	public getNativeMongoCollection(sailsEntity: any): Promise<Collection> {
 		return new Promise<Collection>((resolve, reject) => {
 			sailsEntity.native((err, nativeEntity: any) => {
 				if (err || !nativeEntity) {

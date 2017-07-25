@@ -16,6 +16,8 @@ import { DefaultBillingDetailsDO } from "../../../../../../../../services/bookin
 import { ThTranslation } from "../../../../../../../../../../common/utils/localization/ThTranslation";
 import { PricePerDayDO } from "../../../../../../../../services/bookings/data-objects/price/PricePerDayDO";
 
+import * as _ from "underscore";
+
 export interface BillingValidationResult {
     valid: boolean;
     errorMessage?: string;

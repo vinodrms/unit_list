@@ -3,6 +3,8 @@ import { PriceProductConstraintWrapperDO } from "../constraint/PriceProductConst
 import { ThDateIntervalDO } from "../../../common/data-objects/th-dates/ThDateIntervalDO";
 import { PriceProductDiscountIntervalWrapperDO } from "./PriceProductDiscountIntervalWrapperDO";
 
+import * as _ from "underscore";
+
 export class PriceProductDiscountDO extends BaseDO {
     name: string;
     value: number;

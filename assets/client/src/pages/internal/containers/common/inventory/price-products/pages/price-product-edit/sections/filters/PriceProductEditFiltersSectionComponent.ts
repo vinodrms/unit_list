@@ -12,6 +12,8 @@ import {YieldFilterValueDO} from '../../../../../../../../services/common/data-o
 import {YieldFiltersService} from '../../../../../../../../services/hotel-configurations/YieldFiltersService';
 import {YieldFiltersDO} from '../../../../../../../../services/hotel-configurations/data-objects/YieldFiltersDO';
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'price-product-edit-filters-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/filters/template/price-product-edit-filters-section.html',

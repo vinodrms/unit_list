@@ -14,6 +14,8 @@ import {KeyMetricsResultItemVM} from './view-models/KeyMetricsResultItemVM';
 import {KeyMetricVM} from './view-models/key-metric/KeyMetricVM';
 import {KeyMetricMetaFactory} from './view-models/key-metric/KeyMetricMetaFactory';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class YieldManagerDashboardKeyMetricsService extends ARequestService<KeyMetricsResultVM> {
     private _yieldManagerPeriodParam: YieldManagerPeriodParam;

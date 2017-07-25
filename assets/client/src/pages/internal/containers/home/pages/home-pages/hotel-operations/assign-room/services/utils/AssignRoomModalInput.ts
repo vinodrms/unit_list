@@ -1,6 +1,8 @@
 import {IAssignRoomStrategy} from '../strategies/IAssignRoomStrategy';
 import {AssignRoomParam} from './AssignRoomParam';
 
+import * as _ from "underscore";
+
 export class AssignRoomModalInput {
     private _assignRoomStrategy: IAssignRoomStrategy;
     private _assignRoomParam: AssignRoomParam;

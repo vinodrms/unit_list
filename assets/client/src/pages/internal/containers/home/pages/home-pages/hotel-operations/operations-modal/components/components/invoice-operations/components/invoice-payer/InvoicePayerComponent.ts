@@ -19,6 +19,8 @@ import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../..
 import { EmailSenderModalService } from '../../../../../../email-sender/services/EmailSenderModalService';
 import { TransactionFeeDO, TransactionFeeType } from "../../../../../../../../../../../services/common/data-objects/payment-method/TransactionFeeDO";
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'invoice-payer',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-payer/template/invoice-payer.html',

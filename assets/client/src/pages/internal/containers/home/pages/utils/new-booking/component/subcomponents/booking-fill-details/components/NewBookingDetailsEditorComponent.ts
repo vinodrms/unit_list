@@ -11,6 +11,8 @@ import {InvoicePaymentMethodVM} from '../../../../../../../../../services/invoic
 import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { TravelActivityType, TravelActivityTypeOption, TravelType } from "../../../../../../../../../services/bookings/data-objects/BookingDO";
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'new-booking-details-editor',
     templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-fill-details/components/template/new-booking-details-editor.html'

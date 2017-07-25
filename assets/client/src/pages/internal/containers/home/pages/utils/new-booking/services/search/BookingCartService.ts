@@ -6,6 +6,8 @@ import {BookingCartItemVM} from './view-models/BookingCartItemVM';
 import {TransientBookingItem} from '../data-objects/TransientBookingItem';
 import {BookingDOConstraints} from '../../../../../../../services/bookings/data-objects/BookingDOConstraints';
 
+import * as _ from "underscore";
+
 export interface AddBookingResult {
     success: boolean;
     errorMessage?: string;

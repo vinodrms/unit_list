@@ -8,6 +8,8 @@ import {CustomerDO, CustomerStatus} from '../../../data-layer/customers/data-obj
 import {CustomerSearchResultRepoDO} from '../../../data-layer/customers/repositories/ICustomerRepository';
 import {CustomersContainer} from './results/CustomersContainer';
 
+import _ = require("underscore");
+
 export class CustomerIdValidator {
     private _thUtils: ThUtils;
     private _customerIdList: string[];

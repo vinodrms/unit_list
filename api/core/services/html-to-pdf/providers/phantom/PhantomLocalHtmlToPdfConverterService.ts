@@ -15,10 +15,10 @@ export class PhantomLocalHtmlToPdfConverterService extends AHtmlToPdfConverterSe
         format: 'A4',
         margin: {
             top: '30px',
-            bottom: '30px',
+            bottom: '10px',
             left: '10px',
             right: '10px'
-        }
+        }  
     };
     private static VIEWPORT_SIZE = {
         width: 1920,
@@ -75,7 +75,14 @@ export class PhantomLocalHtmlToPdfConverterService extends AHtmlToPdfConverterSe
                     }
                 }
             }));
-            return sitepage.property('paperSize', this.getPaperOptions());
+            var paperOptions = this.getPaperOptions();
+            paperOptions["footer"] = {
+                height: "30px",
+                contents: phInstance.callback((pageNum, numPages) => {
+                return "<span style=\"font-size: 9px; width: 100%; text-align: center; font-family: sans-serif; color: #555;\"><div style=\"margin: auto;\">" + pageNum + " / " + numPages + "</div></span>";
+        })
+        }
+            return sitepage.property('paperSize', paperOptions);
         }).then(() => {
             return sitepage.property('viewportSize', PhantomLocalHtmlToPdfConverterService.VIEWPORT_SIZE);
         }).then(() => {

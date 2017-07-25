@@ -9,7 +9,7 @@ import {SaveAddOnProductItem} from '../core/domain-layer/add-on-products/SaveAdd
 import {DeleteAddOnProductItem} from '../core/domain-layer/add-on-products/DeleteAddOnProductItem';
 
 export class AddOnProductsController extends BaseController {
-	public getAddOnProductById(req: Express.Request, res: Express.Response) {
+	public getAddOnProductById(req: any, res: any) {
 		if (!this.precheckGETParameters(req, res, ['id'])) { return };
 
 		var appContext: AppContext = req.appContext;
@@ -26,7 +26,7 @@ export class AddOnProductsController extends BaseController {
 		});
 	}
 
-	public saveAddOnProductItem(req: Express.Request, res: Express.Response) {
+	public saveAddOnProductItem(req: any, res: any) {
 		var saveAopItem = new SaveAddOnProductItem(req.appContext, req.sessionContext);
 		saveAopItem.save(req.body.addOnProduct).then((updatedAddOnProduct: AddOnProductDO) => {
 			this.returnSuccesfulResponse(req, res, { addOnProduct: updatedAddOnProduct });
@@ -35,7 +35,7 @@ export class AddOnProductsController extends BaseController {
 		});
 	}
 
-	public deleteAddOnProductItem(req: Express.Request, res: Express.Response) {
+	public deleteAddOnProductItem(req: any, res: any) {
 		var deleteAopItem = new DeleteAddOnProductItem(req.appContext, req.sessionContext);
 		deleteAopItem.delete(req.body.addOnProduct).then((deletedAddOnProduct: AddOnProductDO) => {
 			this.returnSuccesfulResponse(req, res, { addOnProduct: deletedAddOnProduct });
@@ -44,7 +44,7 @@ export class AddOnProductsController extends BaseController {
 		});
 	}
 
-	public getAddOnProductCategoryIdList(req: Express.Request, res: Express.Response) {
+	public getAddOnProductCategoryIdList(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 
@@ -58,7 +58,7 @@ export class AddOnProductsController extends BaseController {
 		});
 	}
 
-	public getAddOnProductListCount(req: Express.Request, res: Express.Response) {
+	public getAddOnProductListCount(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 
@@ -71,7 +71,7 @@ export class AddOnProductsController extends BaseController {
 		});
 	}
 
-	public getAddOnProductList(req: Express.Request, res: Express.Response) {
+	public getAddOnProductList(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 

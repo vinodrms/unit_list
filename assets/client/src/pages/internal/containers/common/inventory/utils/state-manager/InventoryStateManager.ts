@@ -7,6 +7,8 @@ import {IInventoryState} from './states/IInventoryState';
 import {EditInventoryState} from './states/EditInventoryState';
 import {ViewInventoryState} from './states/ViewInventoryState';
 
+import * as _ from "underscore";
+
 export class InventoryStateManager<T> implements IInventoryState<T> {
 	private _stateChangedObservable: Observable<InventoryScreenStateType>;
 	private _stateChangedObserver: Observer<InventoryScreenStateType>;

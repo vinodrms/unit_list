@@ -4,6 +4,9 @@ var config = {
     },
 	map: {
 		'internal': 'client/src',
+		'underscore': 'node_modules/underscore/underscore.js',
+		'socket.io-client': 'node_modules/socket.io-client/dist/socket.io.js',
+		'moment': 'node_modules/moment/moment.js',
 		'rxjs': 'node_modules/rxjs',
 		'@angular/core': 'npm:@angular/core/bundles/core.umd.js',
 		'@angular/common': 'npm:@angular/common/bundles/common.umd.js',
