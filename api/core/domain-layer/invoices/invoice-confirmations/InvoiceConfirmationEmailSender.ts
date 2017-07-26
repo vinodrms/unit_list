@@ -10,6 +10,8 @@ import { InvoiceConfirmationVMContainer } from './InvoiceConfirmationVMContainer
 import { ReportType, PdfReportsServiceResponse } from '../../../services/pdf-reports/IPdfReportsService';
 import { BaseEmailTemplateDO, EmailTemplateTypes } from '../../../services/email/data-objects/BaseEmailTemplateDO'
 import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
+import { InvoiceEmailTemplateDO } from "../../../services/email/data-objects/InvoiceEmailTemplateDO";
+import { ThUtils } from "../../../utils/ThUtils";
 
 import fs = require('fs');
 import path = require('path');
@@ -18,9 +20,11 @@ import _ = require("underscore");
 export class InvoiceConfirmationEmailSender {
     private static INVOICE_EMAIL_SUBJECT = 'Invoice';
     private _thTranslation: ThTranslation;
+    private _thUtils: ThUtils;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thTranslation = new ThTranslation(this._sessionContext.language);
+        this._thUtils = new ThUtils();
     }
 
     public sendInvoiceConfirmation(query: InvoiceDataAggregatorQuery, emailDistributionList: string[]): Promise<boolean> {
@@ -31,10 +35,10 @@ export class InvoiceConfirmationEmailSender {
 
     private sendInvoiceConfirmationCore(resolve: { (emailSent: boolean): void }, reject: { (err: ThError): void }, query: InvoiceDataAggregatorQuery, emailDistributionList: string[]) {
         var generatedPdfAbsolutePath: string;
-        var hotelName: string;
+        var hotel: HotelDO;
 
         this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id).then((loadedHotel: HotelDO) => {
-        hotelName = loadedHotel.contactDetails.name;
+        hotel = loadedHotel;
         var invoiceDataAggregator = new InvoiceDataAggregator(this._appContext, this._sessionContext);
 
         return invoiceDataAggregator.getInvoiceAggregatedData(query);
@@ -60,8 +64,8 @@ export class InvoiceConfirmationEmailSender {
                     to: [emailAddress],
                     subject: emailSubject,
                     attachments: [generatedPdfAbsolutePath],
-                    fromName: hotelName
-                }, new BaseEmailTemplateDO(EmailTemplateTypes.Invoice)));
+                    fromName: hotel.contactDetails.name
+                }, this.getInvoiceEmailTemplateDO(hotel)));
             });
             return Promise.all(sendEmailPromiseList);
         }).then((result: any) => {
@@ -74,4 +78,17 @@ export class InvoiceConfirmationEmailSender {
             resolve(false);
         });
     }
+
+    private getInvoiceEmailTemplateDO(hotelDO: HotelDO): InvoiceEmailTemplateDO {
+        var emailTemplateDO = new InvoiceEmailTemplateDO();
+        emailTemplateDO.hotelCountry = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.country.name") ? hotelDO.contactDetails.address.country.name : "";
+        emailTemplateDO.hotelEmail = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.email") ? hotelDO.contactDetails.email : "";
+        emailTemplateDO.hotelPhone = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.phone") ? hotelDO.contactDetails.phone : "";
+        emailTemplateDO.hotelName =  !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.phone") ? hotelDO.contactDetails.name : "";
+        emailTemplateDO.hotelAddressLine1 = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.streetAddress") ? hotelDO.contactDetails.address.streetAddress: "";
+        emailTemplateDO.hotelAddressLine2 = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.postalCode") ? hotelDO.contactDetails.address.postalCode : "";
+        emailTemplateDO.hotelAddressLine2 += !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.city") ? (" " + hotelDO.contactDetails.address.city) : "";
+        return emailTemplateDO;
+    }
+
 }
