@@ -405,21 +405,27 @@ export class HotelInventoryIndexer {
         return roomNightsByBookingSegment;
     }
 
-    public getConfirmedOccupancy(thDate: ThDateDO): IBookingOccupancy {
+    public getConfirmedOccupancy(thDate: ThDateDO): { [index: number]: IBookingOccupancy } {
         return this.getOccupancy(this._confirmedBookingsContainer, thDate);
     }
-    public getGuaranteedOccupancy(thDate: ThDateDO): IBookingOccupancy {
+    public getGuaranteedOccupancy(thDate: ThDateDO): { [index: number]: IBookingOccupancy } {
         return this.getOccupancy(this._guaranteedBookingsContainer, thDate);
     }
-    public getGuaranteedOccupyingRoomsFromInventoryOccupancy(thDate: ThDateDO): IBookingOccupancy {
+    public getGuaranteedOccupyingRoomsFromInventoryOccupancy(thDate: ThDateDO): { [index: number]: IBookingOccupancy } {
         return this.getOccupancy(this._guaranteedOccupyingRoomsFromInventoryBookingsContainer, thDate);
     }
-    private getOccupancy(bookingsContainer: BookingsContainer, thDate: ThDateDO): BookingOccupancy {
-        var indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(thDate);
-        var filteredBookingList: BookingDO[] = bookingsContainer.getBookingsFilteredByInterval(indexedSingleDayInterval);
-        var bookingOccupancy = new BookingOccupancy(this._indexedRoomsById);
-        bookingOccupancy.initializeFromBookings(filteredBookingList);
-        return bookingOccupancy;
+    private getOccupancy(bookingsContainer: BookingsContainer, thDate: ThDateDO): { [index: number]: IBookingOccupancy } {
+        let segmentedOccupancy: { [index: number]: IBookingOccupancy; } = {};
+        let indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(thDate);
+        let filteredBookingList: BookingItemContainer[] = bookingsContainer.getBookingItemContainersFilteredByInterval(indexedSingleDayInterval);
+
+        _.forEach(this._indexedRevenueSegmentList, (segment: BookingSegment) => {
+            let segmentedBookingList = this.getSegmentedBookingItemList(filteredBookingList, segment);
+            let bookingOccupancy = new BookingOccupancy(this._indexedRoomsById);
+            bookingOccupancy.initializeFromBookings(_.map(segmentedBookingList, (item: BookingItemContainer)=> {return item.booking}));
+            segmentedOccupancy[segment] = bookingOccupancy;
+        });
+        return segmentedOccupancy;
     }
 
     public getConfirmedRevenue(thDate: ThDateDO, excludeCommission: boolean): { [index: number]: ISegmentedRevenueForDate; } {
@@ -471,12 +477,10 @@ export class HotelInventoryIndexer {
 
         return segmentedRevenue;
     }
-    private getRevenue(bookingsContainer: BookingsContainer, input: RevenueCalculatorInput): RevenueForDate {
-        let indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(input.thDate);
-        let filteredBookingItemList: BookingItemContainer[] = bookingsContainer.getBookingItemContainersFilteredByInterval(indexedSingleDayInterval);
 
-        let segmentedBookingItemList = _.filter(filteredBookingItemList, (bookingItem: BookingItemContainer) => {
-            switch (input.revenueSegment) {
+    private getSegmentedBookingItemList(bookingItemList: BookingItemContainer[], segment: BookingSegment): BookingItemContainer[] {
+        return _.filter(bookingItemList, (bookingItem: BookingItemContainer) => {
+            switch (segment) {
                 case BookingSegment.BusinessGroup:
                     return bookingItem.booking.travelActivityType === TravelActivityType.Business
                         && bookingItem.booking.travelType === TravelType.Group;
@@ -493,6 +497,13 @@ export class HotelInventoryIndexer {
                     return true;
             }
         });
+    }
+
+    private getRevenue(bookingsContainer: BookingsContainer, input: RevenueCalculatorInput): RevenueForDate {
+        let indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(input.thDate);
+        let filteredBookingItemList: BookingItemContainer[] = bookingsContainer.getBookingItemContainersFilteredByInterval(indexedSingleDayInterval);
+
+        let segmentedBookingItemList = this.getSegmentedBookingItemList(filteredBookingItemList, input.revenueSegment);
 
         let revenue = new RevenueForDate(0.0, 0.0, 0.0);
         _.forEach(segmentedBookingItemList, (bookingItem: BookingItemContainer) => {
