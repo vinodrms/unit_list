@@ -7,13 +7,13 @@ import { IMetricBuilderInput } from "../IMetricBuilderStrategy";
 
 import _ = require('underscore');
 
-export class BreakfastRevenueBuilderStrategy extends AMetricBuilderStrategy {
+export class BreakfastRevenueByBookingSegmentBuilderStrategy extends AMetricBuilderStrategy {
     constructor(hotelInventoryStats: IHotelInventoryStats, private input: IMetricBuilderInput) {
         super(hotelInventoryStats, input);
     }
 
     protected getType(): KeyMetricType {
-        return KeyMetricType.BreakfastRevenue;
+        return KeyMetricType.BreakfastRevenueByBookingSegment;
     }
     protected getValueType(): KeyMetricValueType {
         return KeyMetricValueType.Price;
