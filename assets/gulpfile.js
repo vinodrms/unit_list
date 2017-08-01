@@ -3,6 +3,8 @@ var ts = require('gulp-typescript');
 var minify = require('gulp-minify');
 var embedTemplates = require('gulp-angular-embed-templates');
 var clean = require('gulp-clean');
+var rev = require('gulp-rev');
+var revReplace = require('gulp-rev-replace');
 
 var embedTemplatesOptions = {
     minimize: {
@@ -52,14 +54,14 @@ gulp.task('compile-internal', function () {
 	return compileAppFromDirectory('client/src/pages/internal/**/*.ts');
 });
 gulp.task('pack-internal', ['compile-internal'], function (endCallback) {
-	packCompiledFiles('systemjs.internal.config.js', 'unitpal-internal-1.0.77.min.js', 'internal', endCallback);
+	packCompiledFiles('systemjs.internal.config.js', 'unitpal-internal.min.js', 'internal', endCallback);
 });
 
 gulp.task('compile-external', ['pack-internal'], function () {
 	return compileAppFromDirectory('client/src/pages/external/**/*.ts');
 });
 gulp.task('pack-external', ['compile-external'], function (endCallback) {
-	packCompiledFiles('systemjs.external.config.js', 'unitpal-external-1.0.77.min.js', 'external', endCallback);
+	packCompiledFiles('systemjs.external.config.js', 'unitpal-external.min.js', 'external', endCallback);
 });
 
 gulp.task('clean-dist', function () {
@@ -102,3 +104,40 @@ gulp.task('copy-dist', ['pack-internal', 'pack-external', 'clean-dist'], functio
 });
 
 gulp.task('pack', ['pack-internal', 'pack-external', 'copy-dist']);
+
+
+gulp.task('rev-css', ['clean-rev-replace'], function() {
+	var file = 'client/static-assets/css/unitpal.css';
+	var revvedFilesOutputFolder = 'revved-css-files/';
+	
+	return gulp.src(file)
+		.pipe(rev())
+		.pipe(gulp.dest(revvedFilesOutputFolder))
+		.pipe(rev.manifest({merge: true}))
+		.pipe(gulp.dest('.'));
+});
+
+gulp.task('rev-js', ['rev-css'], function() {
+	var files = ['client/build/unitpal-external.min.js', 'client/build/unitpal-internal.min.js'];
+	var revvedFilesOutputFolder = 'revved-js-files/';
+	
+	return gulp.src(files)
+		.pipe(rev())
+		.pipe(gulp.dest(revvedFilesOutputFolder))
+		.pipe(rev.manifest({merge: true}))
+		.pipe(gulp.dest('.'));
+});
+
+gulp.task('clean-rev-replace', function () {
+        return gulp.src(['revved-css-files/', 'revved-js-files/', 'rev-replace-output/', 'rev-manifest.json'], { read: false })
+                .pipe(clean());
+});
+
+gulp.task('rev-replace', ['rev-js'], function() {
+    var manifest = gulp.src('rev-manifest.json');
+    var source = ['../views/external.ejs', '../views/internal.ejs'];
+
+    return gulp.src(source)
+        .pipe(revReplace({manifest: manifest, replaceInExtensions: ['.ejs']}))
+        .pipe(gulp.dest('rev-replace-output'));
+});
