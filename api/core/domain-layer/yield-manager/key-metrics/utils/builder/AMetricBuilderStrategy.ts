@@ -19,6 +19,9 @@ export abstract class AMetricBuilderStrategy implements IMetricBuilderStrategy {
 
     constructor(private _hotelInventoryStats: IHotelInventoryStats, protected _input: IMetricBuilderInput) {
         this._thUtils = new ThUtils();
+        if (this._thUtils.isUndefinedOrNull(this._input.revenueSegment)) {
+            this._input.revenueSegment = BookingSegment.All;
+        }
     }
 
     public buildKeyMetric(thDateList: ThDateDO[], aggregationPeriodList: ThPeriodDO[]): KeyMetric {
