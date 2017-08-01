@@ -12,6 +12,8 @@ import {BedTemplatesService} from '../settings/BedTemplatesService';
 import {BedTemplateDO} from '../common/data-objects/bed-template/BedTemplateDO';
 import {BedTemplatesDO} from '../settings/data-objects/BedTemplatesDO';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class BedsService extends ALazyLoadRequestService<BedVM> {
     

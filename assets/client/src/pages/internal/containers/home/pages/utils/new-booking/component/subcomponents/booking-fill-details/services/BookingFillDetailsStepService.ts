@@ -7,6 +7,8 @@ import {BookingStepType} from '../../utils/BookingStepType';
 import {BookingCartItemVM, BillingValidationResult} from '../../../../services/search/view-models/BookingCartItemVM';
 import {BookingCartService} from '../../../../services/search/BookingCartService';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class BookingFillDetailsStepService implements IBookingStepService {
 	private _stepPath: string[];

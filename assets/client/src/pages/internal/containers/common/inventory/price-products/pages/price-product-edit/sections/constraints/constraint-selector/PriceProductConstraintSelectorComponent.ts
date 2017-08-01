@@ -7,6 +7,8 @@ import { PriceProductConstraintDO } from "../../../../../../../../../services/pr
 import { PriceProductConstraintMeta, PriceProductConstraintType } from "../../../../../../../../../services/price-products/data-objects/constraint/IPriceProductConstraint";
 import { DaysFromWeekConstraintDO } from "../../../../../../../../../services/price-products/data-objects/constraint/constraints/DaysFromWeekConstraintDO";
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'price-product-constraint-selector',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/constraints/constraint-selector/template/price-product-constraint-selector.html'

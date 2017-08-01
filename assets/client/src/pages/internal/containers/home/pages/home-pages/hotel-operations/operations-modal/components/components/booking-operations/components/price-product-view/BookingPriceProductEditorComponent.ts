@@ -10,6 +10,8 @@ import { ChangePriceProductModalService } from './components/change-pp/services/
 import { BookingCartItemVM } from '../../../../../../../../utils/new-booking/services/search/view-models/BookingCartItemVM';
 import { PricePerDayDO } from "../../../../../../../../../../../services/bookings/data-objects/price/PricePerDayDO";
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'booking-price-product-editor',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/price-product-view/template/booking-price-product-editor.html',

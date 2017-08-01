@@ -5,7 +5,7 @@ import { Locales, ThTranslation } from '../core/utils/localization/ThTranslation
 
 import _ = require("underscore");
 
-module.exports = function (req: Express.Request, res: Express.Response, next: any) {
+module.exports = function (req: any, res: any, next: any) {
 	var unitPalConfig = new UnitPalConfig();
 	let appContext = new AppContext(unitPalConfig);
 	req.appContext = appContext;

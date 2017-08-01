@@ -13,7 +13,7 @@ import {ArchivePriceProductItem} from '../core/domain-layer/price-products/Archi
 import _ = require('underscore');
 
 export class PriceProductsController extends BaseController {
-	public getPriceProductById(req: Express.Request, res: Express.Response) {
+	public getPriceProductById(req: any, res: any) {
 		if (!this.precheckGETParameters(req, res, ['id'])) { return };
 
 		var appContext: AppContext = req.appContext;
@@ -30,7 +30,7 @@ export class PriceProductsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.PriceProductsControllerErrorGettingPriceProduct);
 		});
 	}
-	public savePriceProductItem(req: Express.Request, res: Express.Response) {
+	public savePriceProductItem(req: any, res: any) {
 		var savePpItem = new SavePriceProductItem(req.appContext, req.sessionContext);
 		savePpItem.save(req.body.priceProduct).then((updatedPriceProduct: PriceProductDO) => {
 			updatedPriceProduct.prepareForClient();
@@ -39,7 +39,7 @@ export class PriceProductsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.PriceProductsControllerErrorSavingPriceProduct);
 		});
 	}
-	public archivePriceProductItem(req: Express.Request, res: Express.Response) {
+	public archivePriceProductItem(req: any, res: any) {
 		var archivePpItem = new ArchivePriceProductItem(req.appContext, req.sessionContext);
 		archivePpItem.archive(req.body.priceProduct).then((archivedPriceProduct: PriceProductDO) => {
 			archivedPriceProduct.prepareForClient();
@@ -48,7 +48,7 @@ export class PriceProductsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.PriceProductsControllerErrorArchivingProduct);
 		});
 	}
-	public deletePriceProductItem(req: Express.Request, res: Express.Response) {
+	public deletePriceProductItem(req: any, res: any) {
 		var deletePpItem = new DeletePriceProductItem(req.appContext, req.sessionContext);
 		deletePpItem.delete(req.body.priceProduct).then((deletedPriceProduct: PriceProductDO) => {
 			deletedPriceProduct.prepareForClient();
@@ -57,7 +57,7 @@ export class PriceProductsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.PriceProductsControllerErrorDeletingPriceProduct);
 		});
 	}
-	public draftPriceProductItem(req: Express.Request, res: Express.Response) {
+	public draftPriceProductItem(req: any, res: any) {
 		var draftPpItem = new DraftPriceProductItem(req.appContext, req.sessionContext);
 		draftPpItem.draft(req.body.priceProduct).then((draftPriceProduct: PriceProductDO) => {
 			draftPriceProduct.prepareForClient();
@@ -67,7 +67,7 @@ export class PriceProductsController extends BaseController {
 		});
 	}
 
-	public getPriceProductListCount(req: Express.Request, res: Express.Response) {
+	public getPriceProductListCount(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 
@@ -79,7 +79,7 @@ export class PriceProductsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.PriceProductsControllerErrorGettingCount);
 		});
 	}
-	public getPriceProductList(req: Express.Request, res: Express.Response) {
+	public getPriceProductList(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 

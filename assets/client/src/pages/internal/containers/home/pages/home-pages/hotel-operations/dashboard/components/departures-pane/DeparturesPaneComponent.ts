@@ -13,6 +13,8 @@ import { ThError } from '../../../../../../../../../../common/utils/responses/Th
 
 import { ThDateDO } from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
+import * as _ from "underscore";
+
 declare var $: any;
 @Component({
 	selector: 'departures-pane',

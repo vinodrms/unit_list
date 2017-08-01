@@ -27,6 +27,8 @@ import { YieldDynamicPriceModalService } from "./yield-dynamic-price-modal/servi
 import { ModalDialogRef } from "../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
 import { PriceProductDO } from "../../../../../../../../services/price-products/data-objects/PriceProductDO";
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'yield-price-products',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-price-products/template/yield-price-products.html',

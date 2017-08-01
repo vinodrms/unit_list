@@ -1,6 +1,8 @@
 import { DepartureItemInfoDO, DepartureItemCustomerInfoDO } from "../data-objects/DepartureItemInfoDO";
 import { ThUtils } from "../../../../../../../common/utils/ThUtils";
 
+import * as _ from "underscore";
+
 export interface IndexedDepartures {
     departuresIndexedByBookings?: { [bookingId: string]: DepartureItemInfoDO[] };
     departuresIndexedByCustomers?: { [customerId: string]: DepartureItemInfoDO[] };

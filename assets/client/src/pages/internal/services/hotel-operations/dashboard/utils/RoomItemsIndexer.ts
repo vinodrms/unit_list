@@ -1,6 +1,8 @@
 import {RoomCategoryStatsDO} from '../../../room-categories/data-objects/RoomCategoryStatsDO';
 import {RoomVM} from '../../../rooms/view-models/RoomVM';
 
+import * as _ from "underscore";
+
 export class RoomItemsIndexer {
     private _indexedRoomsById: { [id: string]: RoomVM; };
     private _indexedRoomCategStatsById: { [id: string]: RoomCategoryStatsDO; };

@@ -1,3 +1,5 @@
+import * as _ from "underscore";
+
 export enum ColorCode {
 	Red,
 	Yellow,

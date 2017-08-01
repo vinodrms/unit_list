@@ -10,7 +10,7 @@ import {YieldFilterValueDO} from '../core/data-layer/common/data-objects/yield-f
 
 class HotelConfigurationsController extends BaseController {
 	
-    public getYieldFilterConfiguration(req: Express.Request, res: Express.Response) {
+    public getYieldFilterConfiguration(req: any, res: any) {
 		
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
@@ -24,7 +24,7 @@ class HotelConfigurationsController extends BaseController {
 		});
 	}
 
-    public saveYieldFilterValue(req: Express.Request, res: Express.Response) {
+    public saveYieldFilterValue(req: any, res: any) {
 		
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;

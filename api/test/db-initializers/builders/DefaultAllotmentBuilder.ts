@@ -12,6 +12,7 @@ import {AllotmentAvailabilityForDayDO} from '../../../core/data-layer/allotments
 import {AllotmentConstraintWrapperDO} from '../../../core/data-layer/allotments/data-objects/constraint/AllotmentConstraintWrapperDO';
 
 import moment = require('moment');
+import _ = require("underscore");
 
 export interface IAllotmentDataSource {
 	getAllotmentList(priceProductList: PriceProductDO[], customerList: CustomerDO[]): AllotmentDO[];

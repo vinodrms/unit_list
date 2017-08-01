@@ -1,7 +1,9 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {AppContext} from '../../../../../../../../common/utils/AppContext';
-import {CustomerVM} from '../../../../../../services/customers/view-models/CustomerVM';
-import {PriceProductDO} from '../../../../../../services/price-products/data-objects/PriceProductDO';
+import { Component, OnInit, Input } from '@angular/core';
+import { AppContext } from '../../../../../../../../common/utils/AppContext';
+import { CustomerVM } from '../../../../../../services/customers/view-models/CustomerVM';
+import { PriceProductDO } from '../../../../../../services/price-products/data-objects/PriceProductDO';
+
+import * as _ from "underscore";
 
 @Component({
     selector: 'customer-preview',

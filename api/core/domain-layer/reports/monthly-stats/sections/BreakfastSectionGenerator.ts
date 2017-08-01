@@ -26,7 +26,7 @@ export class BreakfastSectionGenerator extends AReportSectionGeneratorStrategy {
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Breakfast"
+            title: "Breakfast Included in the Price Product"
         }
     }
 

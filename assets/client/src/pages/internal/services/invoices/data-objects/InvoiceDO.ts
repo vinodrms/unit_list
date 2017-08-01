@@ -9,6 +9,8 @@ import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
 import { ThDateDO } from "../../common/data-objects/th-dates/ThDateDO";
 import { ThTimestampDO } from "../../common/data-objects/th-dates/ThTimestampDO";
 
+import * as _ from "underscore";
+
 export enum InvoiceAccountingType {
     Debit, Credit
 }

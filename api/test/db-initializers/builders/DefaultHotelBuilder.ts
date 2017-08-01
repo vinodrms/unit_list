@@ -16,6 +16,8 @@ import { AppContext } from '../../../core/utils/AppContext';
 import { PaymentMethodInstanceDO } from "../../../core/data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 import { TransactionFeeDO, TransactionFeeType } from "../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
+import _ = require("underscore");
+
 export class DefaultHotelBuilder {
 	public static Timezone = "Europe/Bucharest";
 	private _thUtils;

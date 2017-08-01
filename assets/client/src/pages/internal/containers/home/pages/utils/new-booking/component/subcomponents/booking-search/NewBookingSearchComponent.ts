@@ -28,6 +28,8 @@ import { BookingViewModelConverter } from "../../../services/search/utils/Bookin
 import { KeyValueModalService } from "../../../../../../../../../../common/utils/modals/modals/keyvalue/KeyValueModalService";
 import { PricePerDayDO } from "../../../../../../../../services/bookings/data-objects/price/PricePerDayDO";
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'new-booking-search',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-search/template/new-booking-search.html',

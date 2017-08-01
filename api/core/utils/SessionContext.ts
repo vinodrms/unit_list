@@ -21,7 +21,7 @@ export class SessionContext {
 }
 
 export class SessionManager {
-	constructor(private _req: Express.Request) {
+	constructor(private _req: any) {
 	}
 	public initializeSession(loginData: { user: UserDO, hotel: HotelDO }): Promise<SessionContext> {
 		return new Promise<SessionContext>((resolve: { (result: SessionContext): void }, reject: { (err: ThError): void }) => {

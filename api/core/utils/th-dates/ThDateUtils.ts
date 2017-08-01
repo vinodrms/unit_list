@@ -3,6 +3,7 @@ import { ThHourDO } from './data-objects/ThHourDO';
 import { ThTimestampDO } from './data-objects/ThTimestampDO';
 
 import moment = require('moment-timezone');
+import _ = require("underscore");
 
 export type ThUnitOfTime =
 	"isoWeek"

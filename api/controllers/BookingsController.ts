@@ -15,7 +15,7 @@ import {BookingOccupancyDO} from '../core/domain-layer/bookings/search-bookings/
 import _ = require('underscore');
 
 class BookingsController extends BaseController {
-    public getBookingById(req: Express.Request, res: Express.Response) {
+    public getBookingById(req: any, res: any) {
         if (!this.precheckGETParameters(req, res, ['groupBookingId', 'bookingId'])) { return };
 
         var appContext: AppContext = req.appContext;
@@ -34,7 +34,7 @@ class BookingsController extends BaseController {
         });
     }
 
-    public getBookingList(req: Express.Request, res: Express.Response) {
+    public getBookingList(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -48,7 +48,7 @@ class BookingsController extends BaseController {
         });
     }
 
-    public getBookingListCount(req: Express.Request, res: Express.Response) {
+    public getBookingListCount(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -61,7 +61,7 @@ class BookingsController extends BaseController {
         });
     }
 
-    public searchBookings(req: Express.Request, res: Express.Response) {
+    public searchBookings(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -73,7 +73,7 @@ class BookingsController extends BaseController {
         });
     }
 
-    public addBookings(req: Express.Request, res: Express.Response) {
+    public addBookings(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -86,7 +86,7 @@ class BookingsController extends BaseController {
         });
     }
 
-    public getOccupancy(req: Express.Request, res: Express.Response) {
+    public getOccupancy(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 

@@ -1,8 +1,10 @@
-import {Injectable} from '@angular/core';
-import {CustomerType} from '../../../../../../services/customers/data-objects/CustomerDO';
-import {CustomersService} from '../../../../../../services/customers/CustomersService';
-import {CustomerDetailsMeta} from '../../../../../../services/customers/data-objects/customer-details/ICustomerDetailsDO';
-import {CustomerDetailsFactory} from '../../../../../../services/customers/data-objects/customer-details/CustomerDetailsFactory';
+import { Injectable } from '@angular/core';
+import { CustomerType } from '../../../../../../services/customers/data-objects/CustomerDO';
+import { CustomersService } from '../../../../../../services/customers/CustomersService';
+import { CustomerDetailsMeta } from '../../../../../../services/customers/data-objects/customer-details/ICustomerDetailsDO';
+import { CustomerDetailsFactory } from '../../../../../../services/customers/data-objects/customer-details/CustomerDetailsFactory';
+
+import * as _ from "underscore";
 
 @Injectable()
 export class CustomerTableFilterService {
@@ -16,7 +18,7 @@ export class CustomerTableFilterService {
 	}
 	private initFilterList() {
 		var custFactory = new CustomerDetailsFactory();
-		this._filterList= [
+		this._filterList = [
 			{
 				customerTypeName: "All Customers",
 				customerType: CustomerTableFilterService.AllCustomersType,
@@ -29,7 +31,7 @@ export class CustomerTableFilterService {
 
 	public selectFilter(filter: CustomerDetailsMeta) {
 		var customerType = filter.customerType;
-		if(customerType === this._currentFilter.customerType) {
+		if (customerType === this._currentFilter.customerType) {
 			return;
 		}
 		this._currentFilter = this.getFilterByCustomerType(customerType);
@@ -42,18 +44,18 @@ export class CustomerTableFilterService {
 		});
 	}
 	private updateCustomersService() {
-		if(this._currentFilter.customerType === CustomerTableFilterService.AllCustomersType) {
+		if (this._currentFilter.customerType === CustomerTableFilterService.AllCustomersType) {
 			this._customersService.removeCustomerTypeFilter();
 		}
 		else {
-			this._customersService.setCustomerTypeFilter(this._currentFilter.customerType);	
+			this._customersService.setCustomerTypeFilter(this._currentFilter.customerType);
 		}
 		this._customersService.refreshData();
 	}
 	public isFilterSelected(filter: CustomerDetailsMeta): boolean {
 		return filter.customerType === this._currentFilter.customerType;
 	}
-	
+
 	public get filterList(): CustomerDetailsMeta[] {
 		return this._filterList;
 	}

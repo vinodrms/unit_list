@@ -10,7 +10,7 @@ import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../core/data-layer/com
 
 class BedsController extends BaseController {
 	
-    public getBedById(req: Express.Request, res: Express.Response) {
+    public getBedById(req: any, res: any) {
 		if (!this.precheckGETParameters(req, res, ['id'])) { return };
 
 		var appContext: AppContext = req.appContext;
@@ -27,7 +27,7 @@ class BedsController extends BaseController {
 		});
 	}
     
-    public getBedList(req: Express.Request, res: Express.Response) {
+    public getBedList(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
         
@@ -41,7 +41,7 @@ class BedsController extends BaseController {
 		});
 	}
     
-    public getBedListCount(req: Express.Request, res: Express.Response) {
+    public getBedListCount(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 
@@ -54,7 +54,7 @@ class BedsController extends BaseController {
 		});
 	}
     
-	public saveBedItem(req: Express.Request, res: Express.Response) {
+	public saveBedItem(req: any, res: any) {
 		var saveBedItem = new SaveBedItem(req.appContext, req.sessionContext);
 		saveBedItem.save(req.body.bed).then((updatedBed: BedDO) => {
 			this.returnSuccesfulResponse(req, res, { bed: updatedBed });
@@ -63,7 +63,7 @@ class BedsController extends BaseController {
 		});
 	}
 
-	public deleteBedItem(req: Express.Request, res: Express.Response) {
+	public deleteBedItem(req: any, res: any) {
 		var deleteBedItem = new DeleteBedItem(req.appContext, req.sessionContext);
 		deleteBedItem.delete(req.body.bed).then((deletedBed: BedDO) => {
 			this.returnSuccesfulResponse(req, res, { bed: deletedBed });

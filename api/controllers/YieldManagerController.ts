@@ -12,7 +12,7 @@ import { CommissionOption } from "../core/domain-layer/yield-manager/key-metrics
 import { KeyMetricOutputType } from "../core/domain-layer/yield-manager/key-metrics/utils/builder/MetricBuilderStrategyFactory";
 
 export class YieldManagerController extends BaseController {
-	public yieldPriceProducts(req: Express.Request, res: Express.Response) {
+	public yieldPriceProducts(req: any, res: any) {
 		var ppYM = new PriceProductYielding(req.appContext, req.sessionContext);
 		ppYM.yield(req.body.yieldData).then((priceProductList: PriceProductDO[]) => {
 			priceProductList.forEach((priceProduct: PriceProductDO) => { priceProduct.prepareForClient() });
@@ -22,7 +22,7 @@ export class YieldManagerController extends BaseController {
 		});
 	}
 
-	public openDynamicPrice(req: Express.Request, res: Express.Response) {
+	public openDynamicPrice(req: any, res: any) {
 		var dpYielding = new DynamicPriceYielding(req.appContext, req.sessionContext);
 		dpYielding.open(req.body.yieldData).then((priceProduct: PriceProductDO) => {
 			priceProduct.prepareForClient();
@@ -32,7 +32,7 @@ export class YieldManagerController extends BaseController {
 		});
 	}
 
-	public getPriceProductYieldItems(req: Express.Request, res: Express.Response) {
+	public getPriceProductYieldItems(req: any, res: any) {
 		var ppReader = new PriceProductReader(req.appContext, req.sessionContext);
 		ppReader.getYieldItems(req.body.yieldParams).then((yieldResult: PriceProductYieldResult) => {
 			this.returnSuccesfulResponse(req, res, { yieldResult: yieldResult });
@@ -41,7 +41,7 @@ export class YieldManagerController extends BaseController {
 		});
 	}
 
-	public getKeyMetrics(req: Express.Request, res: Express.Response) {
+	public getKeyMetrics(req: any, res: any) {
 		var keyMetricReader = new KeyMetricReader(req.appContext, req.sessionContext);
 		keyMetricReader.getKeyMetrics(
 			new KeyMetricsReaderInputBuilder()

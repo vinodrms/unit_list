@@ -16,6 +16,8 @@ import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'invoices-report',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/invoices-report/template/invoices-report.html',

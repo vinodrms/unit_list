@@ -5,6 +5,8 @@ import { AppContext } from "../../../../../../../../common/utils/AppContext";
 import { CustomerRegisterModalService } from "../../modal/services/CustomerRegisterModalService";
 import { ModalDialogRef } from "../../../../../../../../common/utils/modals/utils/ModalDialogRef";
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'customer-selector',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/utils/customer-selector/template/customer-selector.html',

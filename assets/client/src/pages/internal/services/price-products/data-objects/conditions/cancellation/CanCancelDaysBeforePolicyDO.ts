@@ -2,6 +2,8 @@ import {BaseDO} from '../../../../../../../common/base/BaseDO';
 import {IPriceProductCancellationPolicy, CancellationPolicyDescription} from './IPriceProductCancellationPolicy';
 import {ThDataValidators} from '../../../../../../../common/utils/form-utils/utils/ThDataValidators';
 
+import * as _ from "underscore";
+
 export class CanCancelDaysBeforePolicyDO extends BaseDO implements IPriceProductCancellationPolicy {
 	daysBefore: number;
 

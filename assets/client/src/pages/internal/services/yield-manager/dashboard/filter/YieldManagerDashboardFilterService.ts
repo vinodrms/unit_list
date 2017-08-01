@@ -11,6 +11,8 @@ import {YieldFilterValueDO} from '../../../common/data-objects/yield-filter/Yiel
 import {FilterConverter} from './utils/FilterConverter';
 import {FilterVMCollection} from './utils/FilterVMCollection';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class YieldManagerDashboardFilterService {
 	private _filterConverter: FilterConverter;

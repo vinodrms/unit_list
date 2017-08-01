@@ -6,6 +6,8 @@ import { PriceExceptionDO } from './price-exceptions/PriceExceptionDO';
 import { DynamicPriceDO } from "./DynamicPriceDO";
 import { ThDateDO } from "../../../common/data-objects/th-dates/ThDateDO";
 
+import * as _ from "underscore";
+
 export class PriceProductPriceDO extends BaseDO {
 	type: PriceProductPriceType;
 	dynamicPriceList: DynamicPriceDO[];

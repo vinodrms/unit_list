@@ -8,4 +8,4 @@
       apt: 
         pkg: "{{ item }}"
       with_items:
-        - nodejs=6.9.5-1nodesource1~xenial1
+        - nodejs=6.11.0-1nodesource1~xenial1

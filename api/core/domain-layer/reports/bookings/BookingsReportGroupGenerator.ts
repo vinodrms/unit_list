@@ -17,6 +17,7 @@ import { PageOrientation } from "../../../services/pdf-reports/PageOrientation";
 import { CommonValidationStructures } from "../../common/CommonValidations";
 import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
 
+import _ = require("underscore");
 
 export class BookingsReportGroupGenerator extends AReportGeneratorStrategy {
     private _priceProductIdList: string[];

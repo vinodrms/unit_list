@@ -1,6 +1,8 @@
-import {Pipe, PipeTransform, EventEmitter, OnDestroy} from '@angular/core';
-import {ThUtils} from '../ThUtils';
-import {ThTranslation} from './ThTranslation';
+import { Pipe, PipeTransform, EventEmitter, OnDestroy } from '@angular/core';
+import { ThUtils } from '../ThUtils';
+import { ThTranslation } from './ThTranslation';
+
+import * as _ from "underscore";
 
 @Pipe({
 	name: 'translate',
@@ -10,7 +12,7 @@ export class TranslationPipe implements PipeTransform, OnDestroy {
 	private _onLangChange: EventEmitter<string>;
 
 	private _previousPhrase: string;
-    private _previousParams: Object;
+	private _previousParams: Object;
 	private _pipeValue: string;
 
 	constructor(private _thTranslation: ThTranslation) {
@@ -26,8 +28,8 @@ export class TranslationPipe implements PipeTransform, OnDestroy {
 		this.updatePipeValue();
 		this.destroy();
 		this._onLangChange = this._thTranslation.onLangChange.subscribe((event: any) => {
-            this.updatePipeValue();
-        });
+			this.updatePipeValue();
+		});
 
 		return this._pipeValue;
 	}
@@ -40,13 +42,13 @@ export class TranslationPipe implements PipeTransform, OnDestroy {
 		this._pipeValue = this._thTranslation.translate(this._previousPhrase, parameters);
 	}
 
-    public ngOnDestroy(): void {
-        this.destroy();
-    }
+	public ngOnDestroy(): void {
+		this.destroy();
+	}
 	private destroy(): void {
-        if (this._onLangChange) {
-            this._onLangChange.unsubscribe();
-            this._onLangChange = undefined;
-        }
-    }
+		if (this._onLangChange) {
+			this._onLangChange.unsubscribe();
+			this._onLangChange = undefined;
+		}
+	}
 }

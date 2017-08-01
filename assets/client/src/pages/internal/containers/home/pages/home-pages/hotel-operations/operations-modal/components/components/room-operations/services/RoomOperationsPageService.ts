@@ -22,6 +22,8 @@ import {EagerInvoiceGroupsService} from '../../../../../../../../../../services/
 import {InvoiceGroupDO} from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
 import {InvoiceDO} from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
 
+import * as _ from 'underscore';
+
 @Injectable()
 export class RoomOperationsPageService {
 

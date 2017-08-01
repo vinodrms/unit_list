@@ -8,6 +8,8 @@ import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
 import {PageMetaDO} from './data-objects/lazy-load/PageMetaDO';
 import {TotalCountDO} from './data-objects/lazy-load/TotalCountDO';
 
+import * as _ from "underscore";
+
 export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestService<T> {
 	private static DefaultPageSize = 10;
 

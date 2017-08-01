@@ -4,6 +4,8 @@ import { PriceExceptionDO } from '../../../../../../../../../services/price-prod
 import { PriceProductPriceDO } from '../../../../../../../../../services/price-products/data-objects/price/PriceProductPriceDO';
 import { ISOWeekDay } from '../../../../../../../../../services/common/data-objects/th-dates/ISOWeekDay';
 
+import * as _ from "underscore";
+
 export class PriceVM {
     private _roomCategoryStats: RoomCategoryStatsDO;
     private _priceType: PriceProductPriceType;

@@ -8,6 +8,8 @@ import {AllotmentDO, AllotmentStatus} from '../../../data-layer/allotments/data-
 import {AllotmentSearchCriteriaRepoDO, AllotmentSearchResultRepoDO} from '../../../data-layer/allotments/repositories/IAllotmentRepository';
 import {AllotmentsContainer} from './results/AllotmentsContainer';
 
+import _ = require("underscore");
+
 export class AllotmentIdValidator {
     private _thUtils: ThUtils;
     private _allotmentIdList: string[];

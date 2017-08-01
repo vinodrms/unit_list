@@ -2,6 +2,8 @@ import {BaseDO} from '../../../../../common/base/BaseDO';
 import {YieldFilterDO} from '../../common/data-objects/yield-filter/YieldFilterDO';
 import {YieldFilterValueDO} from '../../common/data-objects/yield-filter/YieldFilterValueDO';
 
+import * as _ from "underscore";
+
 export class YieldFiltersDO extends BaseDO {
 	yieldFilterList: YieldFilterDO[];
 	

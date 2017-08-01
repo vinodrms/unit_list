@@ -58,7 +58,7 @@ export abstract class APaginatedTransactionalMongoPatch extends ATransactionalMo
             });
         }, () => {
             return noUpdatedInCurrentStep > 0;
-        }, (err) => {
+        }, (err: any) => {
             if (err) {
                 reject(err);
             }

@@ -3,6 +3,8 @@ import {AddOnProductSnapshotDO} from './../../../add-on-products/data-objects/Ad
 import {AttachedAddOnProductItemDO} from './AttachedAddOnProductItemDO';
 import {ThUtils} from '../../../../../../common/utils/ThUtils';
 
+import * as _ from "underscore";
+
 export class PriceProductIncludedItemsDO extends BaseDO {
     includedBreakfastAddOnProductSnapshot: AddOnProductSnapshotDO;
     attachedAddOnProductItemList: AttachedAddOnProductItemDO[];

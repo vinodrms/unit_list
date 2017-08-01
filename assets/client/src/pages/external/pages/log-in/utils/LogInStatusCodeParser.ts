@@ -1,4 +1,6 @@
-import {LoginStatusCode} from '../../../../../common/utils/responses/LoginStatusCode';
+import { LoginStatusCode } from '../../../../../common/utils/responses/LoginStatusCode';
+
+import * as _ from "underscore";
 
 export interface LoginStatusResponse {
 	action: LoginStatusAction;

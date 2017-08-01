@@ -1,5 +1,3 @@
-import _ = require('underscore');
-
 import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
@@ -22,6 +20,7 @@ import { ThUtils } from "../../../../utils/ThUtils";
 import { ThDateDO } from "../../../../utils/th-dates/data-objects/ThDateDO";
 import { HotelOperationsQueryDO } from "../../../hotel-operations/dashboard/utils/HotelOperationsQueryDO";
 
+import _ = require("underscore");
 
 export class ReportDepartureReader {
 		private _thUtils: ThUtils;

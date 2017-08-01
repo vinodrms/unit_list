@@ -2,6 +2,8 @@ import {ThTranslation} from '../../../../../../../common/utils/localization/ThTr
 import {RoomCategoryDO} from '../../../../room-categories/data-objects/RoomCategoryDO';
 import {IPriceProductValidationRule, PriceProductValidationRuleResult, PriceProductValidationRuleDataDO} from './IPriceProductValidationRule';
 
+import * as _ from "underscore";
+
 export class MinNoRoomsPriceProductValidationRuleStrategy implements IPriceProductValidationRule {
     constructor(private _noOfRooms: number) {
     }

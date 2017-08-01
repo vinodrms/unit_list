@@ -1,6 +1,8 @@
 import {RoomMaintenanceStatus} from '../data-objects/RoomDO';
 import {RoomMaintenanceMeta} from './RoomMaintenanceMeta';
 
+import * as _ from "underscore";
+
 export class RoomMaintenanceUtils {
     private _maintenanceMetaList: RoomMaintenanceMeta[];
 

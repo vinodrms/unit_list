@@ -1,4 +1,6 @@
-import {AThValidator} from './AThValidator';
+import { AThValidator } from './AThValidator';
+
+import * as _ from "underscore";
 
 export class NumberValidator extends AThValidator {
 	constructor(isNullable?: boolean) {

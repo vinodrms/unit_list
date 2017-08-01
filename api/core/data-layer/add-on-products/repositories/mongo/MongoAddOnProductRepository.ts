@@ -8,6 +8,8 @@ import {IAddOnProductRepository, AddOnProductMetaRepoDO, AddOnProductSearchCrite
 import {MongoAddOnProductCrudOperationsRepository} from './operations/MongoAddOnProductCrudOperationsRepository';
 import {MongoAddOnProductReadOperationsRepository} from './operations/MongoAddOnProductReadOperationsRepository';
 
+declare var sails: any;
+
 export class MongoAddOnProductRepository extends MongoRepository implements IAddOnProductRepository {
 	private _crudRepository: MongoAddOnProductCrudOperationsRepository;
 	private _readRepository: MongoAddOnProductReadOperationsRepository;

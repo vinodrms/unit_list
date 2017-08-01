@@ -4,6 +4,8 @@ import { ThUtils } from '../../../../core/utils/ThUtils';
 import { InvoiceItemDO, InvoiceItemAccountingType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { TaxDO } from '../../../data-layer/taxes/data-objects/TaxDO';
 
+import _ = require("underscore");
+
 export class InvoiceItemVM {
     private _thUtils: ThUtils;
 

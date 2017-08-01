@@ -7,6 +7,8 @@ import {AllotmentDO} from '../../../data-layer/allotments/data-objects/Allotment
 import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
 import {PriceProductDO, PriceProductStatus} from '../../../data-layer/price-products/data-objects/PriceProductDO';
 
+import _ = require("underscore");
+
 export class AllotmentValidator {
 	private _allotment: AllotmentDO;
 

@@ -1,6 +1,8 @@
 import {EmailRecipientVM} from './EmailRecipientVM';
 import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
 
+import * as _ from "underscore";
+
 export class EmailRecipientBuilder {
     private _indexedCustomers: { [id: string]: CustomerDO; };
 

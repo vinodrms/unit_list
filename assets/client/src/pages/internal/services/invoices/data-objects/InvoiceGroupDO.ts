@@ -4,6 +4,8 @@ import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from './Invoic
 import { InvoicePayerDO } from './payers/InvoicePayerDO';
 import { TaxDO } from '../../taxes/data-objects/TaxDO';
 
+import * as _ from "underscore";
+
 export enum InvoiceGroupStatus {
     Active,
     Deleted

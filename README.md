@@ -106,3 +106,27 @@ ansible-playbook -i production --private-key=~/.ssh/unitpal_rsa -u unitpal unitp
 ```
 ansible-playbook -i production --private-key=~/.ssh/unitpal_rsa -u unitpal unitpal_full_deployment.yml
 ```
+
+### VM Deployment
+
+We use Azure for server deployment. The following are some steps you should follow when deploying a new VM:
+
+ 1. Log in into portal.azure.com. Use the Azure credentials from LastPass.
+
+ 2. Choose the "Virtual machines" from the left side menu.
+
+ 3. Choose "Ubuntu server", then "Ubuntu server 16.04LTS"
+
+ 4. Choose the deployment model and hit "Create". We recommend using the new deployment model, not the classic one.
+
+ 5. On the "Basics"tab, choose the name  of the new VM and username we will use to log in. The username can be "unitpal".
+
+ 6. For "authentication type", choose SSH. We should use the key pair from LastPass unitpal_rsa/unitpal_rsa.pub.
+
+ 7. Location should be West Europe, like the rest of our VMs.
+
+ 8. On the "Size" tab, choose the appropriate resources for the machine. DS2_V2 can be a good option.
+
+ 9. On the "Settings" tab, make sure you create a new Public IP address, a static one should be more suitable. Also, in case we need, make sure the private IP address of the VM is in the same virtual network as the other VMs it needs to connect with.
+
+*VMs deployed with different deployment models (Resource Manager and Classic) can't be in the same vnet.*
