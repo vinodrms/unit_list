@@ -16,9 +16,9 @@ export interface HotelInventoryStatsForDate {
     guaranteedArrivals: ITotalArrivalsForDate;
     confirmedRoomNights: ITotalRoomNights;
     guaranteedRoomNights: ITotalRoomNights;
-    confirmedOccupancy: IBookingOccupancy;
-    guaranteedOccupancy: IBookingOccupancy;
-    guaranteedOccupancyOccupyingRoomsFromInventory: IBookingOccupancy;
+    confirmedOccupancy: { [index: number]: IBookingOccupancy };
+    guaranteedOccupancy: { [index: number]: IBookingOccupancy };
+    guaranteedOccupancyOccupyingRoomsFromInventory: { [index: number]: IBookingOccupancy };
     confirmedRevenue: { [index: number]: ISegmentedRevenueForDate; };
     confirmedRevenueWithoutCommission: { [index: number]: ISegmentedRevenueForDate; };
     guaranteedRevenue: { [index: number]: ISegmentedRevenueForDate; };

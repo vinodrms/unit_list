@@ -24,7 +24,7 @@ export class AllotmentsBuilderStrategy extends AMetricBuilderStrategy {
         metric.available = 0; 
         _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
             let total = statsForDate.totalInventory.noOfRoomsWithAllotment;
-            let occupied = statsForDate.confirmedOccupancy.getTotalAllotmentOccupancy() + statsForDate.guaranteedOccupancy.getTotalAllotmentOccupancy();
+            let occupied = statsForDate.confirmedOccupancy[this._input.revenueSegment].getTotalAllotmentOccupancy() + statsForDate.guaranteedOccupancy[this._input.revenueSegment].getTotalAllotmentOccupancy();
             let available = total - occupied;
             metric.total += total;
             metric.available += available;
