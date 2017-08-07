@@ -29,6 +29,9 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 	public didUpdateCcyCode(ccyCode: string) {
 		this._hotel.ccyCode = ccyCode;
 	}
+	public didUpdatePaymentDueInDays(days: number) {
+		this._hotel.paymentDueInDays = days;
+	}
 
 	public didSelectPaymentMethod(): boolean {
 		return this._paymentMethodVMContainer.getSelectedPaymentMethodList().length > 0;

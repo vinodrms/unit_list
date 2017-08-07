@@ -56,6 +56,9 @@ class HotelsEntity extends BasePersistentEntity {
 			},
 			paymentMethodList: {
 				type: 'array',
+			},
+			paymentDueInDays: {
+				type: 'integer'
 			}
 		};
     }

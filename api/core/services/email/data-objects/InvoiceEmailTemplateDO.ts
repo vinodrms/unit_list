@@ -1,4 +1,4 @@
-import {BaseEmailTemplateDO, EmailTemplateTypes} from './BaseEmailTemplateDO';
+import { BaseEmailTemplateDO, EmailTemplateTypes } from './BaseEmailTemplateDO';
 
 export class InvoiceEmailTemplateDO extends BaseEmailTemplateDO {
 
@@ -8,6 +8,9 @@ export class InvoiceEmailTemplateDO extends BaseEmailTemplateDO {
     private _hotelEmail: string;
     private _hotelPhone: string;
     private _hotelCountry: string;
+    
+    private _paymentDueInDays: number;
+    private _paymentDueDateString: string;
 
     constructor() {
         super(EmailTemplateTypes.Invoice);
@@ -61,4 +64,16 @@ export class InvoiceEmailTemplateDO extends BaseEmailTemplateDO {
         this._hotelCountry = hotelCountry;
     }
 
+    public get paymentDueDateString(): string {
+        return this._paymentDueDateString;
+    }
+    public set paymentDueDateString(dateString: string) {
+        this._paymentDueDateString = dateString;
+    }
+    public get paymentDueInDays(): number {
+        return this._paymentDueInDays;
+    }
+    public set paymentDueInDays(days: number) {
+        this._paymentDueInDays = days;
+    }
 }

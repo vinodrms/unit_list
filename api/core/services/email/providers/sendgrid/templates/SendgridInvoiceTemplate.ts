@@ -14,7 +14,9 @@ export class SendgridInvoiceTemplate implements ISendgridTemplate {
                 "%hotelAddressLine2%": this._emailTemplateDO.hotelAddressLine2,
                 "%hotelEmail%": this._emailTemplateDO.hotelEmail,
                 "%hotelPhone%": this._emailTemplateDO.hotelPhone,
-                "%hotelCountry%": this._emailTemplateDO.hotelCountry
+                "%hotelCountry%": this._emailTemplateDO.hotelCountry,
+                "%paymentDueInDays%" : this._emailTemplateDO.paymentDueInDays.toString(),
+                "%paymentDueDate%" : this._emailTemplateDO.paymentDueDateString
             }
         };
     }

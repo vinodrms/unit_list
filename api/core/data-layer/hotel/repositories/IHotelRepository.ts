@@ -35,6 +35,7 @@ export interface PaymentsPoliciesRepoDO {
 	ccyCode: string;
 	paymentMethodList: PaymentMethodInstanceDO[];
 	additionalInvoiceDetails: string;
+	paymentDueInDays: number;
 }
 export interface PropertyDetailsRepoDO {
 	operationHours: OperationHoursDO;
