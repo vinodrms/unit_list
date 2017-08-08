@@ -18,15 +18,16 @@ import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payers
 import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
 import { ShiftReportPaidInvoicesSectionGenerator } from "../shift-report/strategies/ShiftReportPaidInvoicesSectionGenerator";
 import { BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
+import { ThDateIntervalUtils } from "../../../utils/th-dates/ThDateIntervalUtils";
+import { InvoicePaymentMethodsUtils } from "../../invoices/utils/InvoicePaymentMethodsUtils";
 
 import _ = require("underscore");
 
+
 export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrategy {
-    private static PaidInvoiceByAgreementDisplayName = "Paid by Agreement";
-    
     private _totalAmount: number;
     private _customerMap: { [index: string]: CustomerDO };
-    private _paymentMethodList: PaymentMethodDO[];
+    private _invoicePaymentMethodsUtils: InvoicePaymentMethodsUtils;
     private _bookingGuestCustomerMap: { [index: string]: CustomerDO };
     private _invoiceList: InvoiceDO[];
     private _bookingList: BookingDO[];
@@ -62,7 +63,7 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                 "Paid Date",
                 "Booking Guest",
                 "Payment Method",
-                
+
             ]
         };
     }
@@ -70,16 +71,16 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
         let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
 
+        let interval = new ThDateIntervalDO();
+        interval.start = this._startDate;
+        interval.end = this._endDate;
+
         this._appContext.getRepositoryFactory().getSettingsRepository().getPaymentMethods().then((result: PaymentMethodDO[]) => {
-            this._paymentMethodList = result;
+            this._invoicePaymentMethodsUtils = new InvoicePaymentMethodsUtils(result);
 
             return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { customerIdList: this._customerIdList });
         }).then((result: CustomerSearchResultRepoDO) => {
             let invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-
-            let interval = new ThDateIntervalDO();
-            interval.start = this._startDate;
-            interval.end = this._endDate;
 
             let invoiceSearchCriteria: InvoiceGroupSearchCriteriaRepoDO = {
                 customerIdList: this._customerIdList,
@@ -93,107 +94,108 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
             });
 
             return invoicesRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, invoiceSearchCriteria);
-            }).then((result: InvoiceGroupSearchResultRepoDO) => {
-                let invoiceGroupsList = result.invoiceGroupList;
-                this._invoiceList = _.chain(invoiceGroupsList).map((invoiceGroup: InvoiceGroupDO) => {
-                    return invoiceGroup.invoiceList;
-                }).flatten().value();
+        }).then((result: InvoiceGroupSearchResultRepoDO) => {
+            let intervalUtils = new ThDateIntervalUtils([interval]);
+            let invoiceGroupsList = result.invoiceGroupList;
 
-                let bookingIdList = _.filter(this._invoiceList, (invoice: InvoiceDO) => {
-                    return invoice.bookingId;
-                }).map((invoice: InvoiceDO) => {
-                    return invoice.bookingId;
+            this._invoiceList = _.chain(invoiceGroupsList).map((invoiceGroup: InvoiceGroupDO) => {
+                return invoiceGroup.invoiceList;
+            }).flatten().filter((invoice: InvoiceDO) => {
+                return intervalUtils.containsThDateDO(invoice.paidDate);
+            }).value();
+
+            let bookingIdList = _.filter(this._invoiceList, (invoice: InvoiceDO) => {
+                return invoice.bookingId;
+            }).map((invoice: InvoiceDO) => {
+                return invoice.bookingId;
+            });
+
+            return this._appContext.getRepositoryFactory().getBookingRepository().getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { bookingIdList: bookingIdList });
+        }).then((value: BookingSearchResultRepoDO) => {
+            this._bookingList = value.bookingList;
+            let bookingsGuestCustomerIdList = _.map(this._bookingList, (booking: BookingDO) => { return booking.defaultBillingDetails.customerIdDisplayedAsGuest; });
+
+            return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { customerIdList: bookingsGuestCustomerIdList });
+        }).then((result: CustomerSearchResultRepoDO) => {
+            let bookingsGuestCustomerList = result.customerList;
+            _.forEach(bookingsGuestCustomerList, (customer: CustomerDO) => {
+                this._bookingGuestCustomerMap[customer.id] = customer;
+            });
+            let data: any[] = [];
+            let rawData: any[] = [];
+
+            _.forEach(this._invoiceList, (invoice: InvoiceDO) => {
+                let payerCustomerIdList = _.filter(invoice.getPayerCustomerIdList(), (customerId: string) => {
+                    return _.contains(this._customerIdList, customerId);
                 });
 
-                return this._appContext.getRepositoryFactory().getBookingRepository().getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { bookingIdList: bookingIdList});
-            }).then((value: BookingSearchResultRepoDO) => {
-                this._bookingList = value.bookingList;
-                let bookingsGuestCustomerIdList = _.map(this._bookingList, (booking: BookingDO) => { return booking.defaultBillingDetails.customerIdDisplayedAsGuest; });
-
-                return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { customerIdList: bookingsGuestCustomerIdList });
-            }).then((result: CustomerSearchResultRepoDO) => {
-                let bookingsGuestCustomerList = result.customerList;
-                _.forEach(bookingsGuestCustomerList, (customer: CustomerDO) => {
-                    this._bookingGuestCustomerMap[customer.id] = customer;
-                });
-                let data: any[] = [];
-                let rawData: any[] = [];
-
-                _.forEach(this._invoiceList, (invoice: InvoiceDO) => {
-                    let payerCustomerIdList = _.filter(invoice.getPayerCustomerIdList(), (customerId: string) => {
-                        return _.contains(this._customerIdList, customerId);
-                    });
-
-                    _.forEach(payerCustomerIdList, (customerId: string) => {
-                        let customer = this._customerMap[customerId];
-                        let row = [
-                            invoice,
-                            customer
-                        ];
-                        rawData.push(row);
-                    });
-                });
-
-                rawData = rawData.sort((a: any, b: any) => {
-                    let customer1: CustomerDO = a[1];
-                    let customer2: CustomerDO = b[1];
-                    if (customer1.customerDetails.getName() !== customer2.customerDetails.getName()) {
-                        return customer1.customerDetails.getName() > customer2.customerDetails.getName() ? 1 : -1;
-                    }
-
-                    let invoice1: InvoiceDO = a[0];
-                    let invoice2: InvoiceDO = b[0];
-                    if (invoice1.paidDateTimeUtcTimestamp != invoice2.paidDateTimeUtcTimestamp) {
-                        return invoice1.paidDateTimeUtcTimestamp > invoice2.paidDateTimeUtcTimestamp ? 1 : -1;
-                    }
-
-                    if (invoice1.invoiceReference !== invoice2.invoiceReference) {
-                        return invoice1.invoiceReference > invoice2.invoiceReference ? 1 : -1;
-                    }
-
-                    return 0;
-                });
-
-                data = _.map(rawData, (row: any) => {
-                    let invoice: InvoiceDO = row[0];
-                    let customer: CustomerDO = row[1];
-                    let invoicePayerDO = _.find(invoice.payerList, (invoicePayer: InvoicePayerDO) => {
-                        return invoicePayer.customerId === customer.id;
-                    });
-                    let bookingGuest = (invoice.bookingId) ? this.getBookingGuestNameForInvoice(invoice) : "";
-
-                    let paymentMethodString = (invoicePayerDO) ? this.getPaymentMethodName(invoicePayerDO.paymentMethod) : "";
-                    
-                    return [
-                        invoice.invoiceReference,
-                        customer.customerDetails.getName(),
-                        invoice.getPricePaidByCustomerId(customer.id),
-                        invoice.paidTimestamp.toString(),
-                        bookingGuest,
-                        paymentMethodString
+                _.forEach(payerCustomerIdList, (customerId: string) => {
+                    let customer = this._customerMap[customerId];
+                    let row = [
+                        invoice,
+                        customer
                     ];
+                    rawData.push(row);
                 });
+            });
 
-                _.forEach(data, (row) => {
-                    this._totalAmount += row[2];
+            rawData = rawData.sort((a: any, b: any) => {
+                let customer1: CustomerDO = a[1];
+                let customer2: CustomerDO = b[1];
+                if (customer1.customerDetails.getName() !== customer2.customerDetails.getName()) {
+                    return customer1.customerDetails.getName() > customer2.customerDetails.getName() ? 1 : -1;
+                }
+
+                let invoice1: InvoiceDO = a[0];
+                let invoice2: InvoiceDO = b[0];
+                if (invoice1.paidDateTimeUtcTimestamp != invoice2.paidDateTimeUtcTimestamp) {
+                    return invoice1.paidDateTimeUtcTimestamp > invoice2.paidDateTimeUtcTimestamp ? 1 : -1;
+                }
+
+                if (invoice1.invoiceReference !== invoice2.invoiceReference) {
+                    return invoice1.invoiceReference > invoice2.invoiceReference ? 1 : -1;
+                }
+
+                return 0;
+            });
+            
+            data = _.map(rawData, (row: any) => {
+                let invoice: InvoiceDO = row[0];
+                let customer: CustomerDO = row[1];
+                let invoicePayerDO = _.find(invoice.payerList, (invoicePayer: InvoicePayerDO) => {
+                    return invoicePayer.customerId === customer.id;
                 });
-                let thUtils = new ThUtils();
-                this._totalAmount = thUtils.roundNumberToTwoDecimals(this._totalAmount);
+                let bookingGuest = (invoice.bookingId) ? this.getBookingGuestNameForInvoice(invoice) : "";
 
-                resolve(data);
-            }).catch(e => {
-                reject(e);
-            })
-    }
+                let paymentMethodString = "";
+                if (!this._thUtils.isUndefinedOrNull(invoicePayerDO) && !this._thUtils.isUndefinedOrNull(invoicePayerDO.paymentMethod)) {
+                    let pmName = this._invoicePaymentMethodsUtils.getPaymentMethodName(invoicePayerDO.paymentMethod);
+                    if (!this._thUtils.isUndefinedOrNull(pmName)) {
+                        pmName = this._appContext.thTranslate.translate(pmName);
+                    }
+                    paymentMethodString = (pmName) ? pmName : "";
+                }
 
-    private getPaymentMethodName(inputInvoicePaymentMethodDO: InvoicePaymentMethodDO): string {
-        if(inputInvoicePaymentMethodDO.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
-            return this._appContext.thTranslate.translate(InvoicesReportSectionGenerator.PaidInvoiceByAgreementDisplayName);
-        }
-        var result = _.find(this._paymentMethodList, (paymentMethod: PaymentMethodDO) => {
-            return paymentMethod.id === inputInvoicePaymentMethodDO.value;
-        });
-        return (result) ? result.name : "";
+                return [
+                    invoice.invoiceReference,
+                    customer.customerDetails.getName(),
+                    invoice.getPricePaidByCustomerId(customer.id),
+                    invoice.paidTimestamp.toString(),
+                    bookingGuest,
+                    paymentMethodString
+                ];
+            });
+
+            _.forEach(data, (row) => {
+                this._totalAmount += row[2];
+            });
+            let thUtils = new ThUtils();
+            this._totalAmount = thUtils.roundNumberToTwoDecimals(this._totalAmount);
+
+            resolve(data);
+        }).catch(e => {
+            reject(e);
+        })
     }
 
     private getBookingGuestNameForInvoice(invoice: InvoiceDO): string {
