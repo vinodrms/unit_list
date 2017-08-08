@@ -54,7 +54,6 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
     }
 
     protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
-        debugger
         this._appContext.getRepositoryFactory().getSettingsRepository().getPaymentMethods().then((result: PaymentMethodDO[]) => {
             this._invoicePaymentMethodsUtils = new InvoicePaymentMethodsUtils(result);
 
