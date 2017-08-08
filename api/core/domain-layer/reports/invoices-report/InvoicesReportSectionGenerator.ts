@@ -18,9 +18,9 @@ import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payers
 import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
 import { ShiftReportPaidInvoicesSectionGenerator } from "../shift-report/strategies/ShiftReportPaidInvoicesSectionGenerator";
 import { BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
+import { ThDateIntervalUtils } from "../../../utils/th-dates/ThDateIntervalUtils";
 
 import _ = require("underscore");
-import { ThDateIntervalUtils } from "../../../utils/th-dates/ThDateIntervalUtils";
 
 export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrategy {
     private static PaidInvoiceByAgreementDisplayName = "Paid by Agreement";
