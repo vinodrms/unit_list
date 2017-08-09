@@ -2,36 +2,32 @@ import { IHotelInventoryStats, HotelInventoryStatsForDate } from '../../../../..
 import { AMetricBuilderStrategy } from '../AMetricBuilderStrategy';
 import { KeyMetricType } from '../../KeyMetricType';
 import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
-import { InventoryKeyMetric } from '../../values/InventoryKeyMetric';
+import { PriceKeyMetric } from '../../values/PriceKeyMetric';
 import { IMetricBuilderInput } from "../IMetricBuilderStrategy";
 
 import _ = require('underscore');
 
-export class AllotmentsBuilderStrategy extends AMetricBuilderStrategy {
-    constructor(hotelInventoryStats: IHotelInventoryStats, input: IMetricBuilderInput) {
+export class BreakfastInternalCostByBookingSegmentBuilderStrategy extends AMetricBuilderStrategy {
+    constructor(hotelInventoryStats: IHotelInventoryStats, private input: IMetricBuilderInput) {
         super(hotelInventoryStats, input);
     }
 
     protected getType(): KeyMetricType {
-        return KeyMetricType.Allotments;
+        return KeyMetricType.BreakfastInternalCostByBookingSegment;
     }
     protected getValueType(): KeyMetricValueType {
-        return KeyMetricValueType.Inventory;
+        return KeyMetricValueType.Price;
     }
     protected getKeyMetricValueCore(statsForDateList: HotelInventoryStatsForDate[]): IKeyMetricValue {
-        var metric = new InventoryKeyMetric();
-        metric.total = 0;
-        metric.available = 0; 
+        let metric = new PriceKeyMetric();
+        metric.price = 0;
         _.forEach(statsForDateList, (statsForDate: HotelInventoryStatsForDate) => {
-            let total = statsForDate.totalInventory.noOfRoomsWithAllotment;
-            let occupied = statsForDate.confirmedOccupancy[this._input.revenueSegment].getTotalAllotmentOccupancy() + statsForDate.guaranteedOccupancy[this._input.revenueSegment].getTotalAllotmentOccupancy();
-            let available = total - occupied;
-            metric.total += total;
-            metric.available += available;
+            metric.price += statsForDate.breakfastInternalCost[this._input.revenueSegment].cost;
         });
+        metric.price = this.roundValueToNearestInteger(metric.price);
         return metric;
     }
     protected getKeyMetricName(): string {
-        return "Allotments Total";
+        return "Breakfast Internal Cost Total";
     }
 }

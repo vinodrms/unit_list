@@ -34,8 +34,9 @@ import { ArrivalsFromHomeCountrySectionGenerator } from "./sections/ArrivalsFrom
 import { RoomNightsSectionGenerator } from "./sections/RoomNightsSectionGenerator";
 import { RoomNightsDividedByBookingSegmentSectionGenerator } from "./sections/RoomNightsDividedByBookingSegmentSectionGenerator";
 import { TotalAvgRateSectionGenerator } from "./sections/TotalAvgRateSectionGenerator";
-import { BreakfastSectionGenerator } from "./sections/BreakfastSectionGenerator";
+import { BreakfastRevenueByBookingSegmentSectionGenerator } from "./sections/BreakfastRevenueByBookingSegmentSectionGenerator";
 import { CapacitySectionGenerator } from "./sections/CapacitySectionGenerator";
+import { BreakfastInternalCostByBookingSegmentSectionGenerator } from "./sections/BreakfastInternalCostByBookingSegmentSectionGenerator";
 
 import _ = require('underscore');
 
@@ -188,11 +189,11 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 				ThPeriodType.Month, this._keyMetricItem),
 			new GuestNightsDividedByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
 				ThPeriodType.Month, this._keyMetricItem),
-			new GuestNightsDividedByNationalitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem, homeCountry),
 			new ArrivalsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
 				ThPeriodType.Month, this._keyMetricItem),
 			new ArrivalsFromHomeCountrySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				ThPeriodType.Month, this._keyMetricItem, homeCountry),
+			new GuestNightsDividedByNationalitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
 				ThPeriodType.Month, this._keyMetricItem, homeCountry),
 			new RoomNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
 				ThPeriodType.Month, this._keyMetricItem),
@@ -200,7 +201,9 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 				ThPeriodType.Month, this._keyMetricItem),
 			new TotalAvgRateSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
 				ThPeriodType.Month, this._keyMetricItem),
-			new BreakfastSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+			new BreakfastRevenueByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
+				ThPeriodType.Month, this._keyMetricItem),
+			new BreakfastInternalCostByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
 				ThPeriodType.Month, this._keyMetricItem),
 			new CapacitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
 				ThPeriodType.Month, this._keyMetricItem, this._loadedRoomList, this._loadedRoomCategoryStatsList)

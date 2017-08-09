@@ -26,7 +26,7 @@ export class ConfirmedOccupancyBuilderStrategy extends AMetricBuilderStrategy {
             if (totalNoOfRooms == 0) {
                 return;
             }
-            var noOccupiedRooms = statsForDay.confirmedOccupancy.getTotalRoomOccupancy();
+            var noOccupiedRooms = statsForDay.confirmedOccupancy[this._input.revenueSegment].getTotalRoomOccupancy();
             metric.percentage += noOccupiedRooms / totalNoOfRooms;
         });
         metric.percentage = this.roundValue(metric.percentage) / statsForDateList.length;

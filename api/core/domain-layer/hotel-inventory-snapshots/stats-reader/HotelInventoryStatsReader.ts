@@ -120,7 +120,8 @@ export class HotelInventoryStatsReader {
                 confirmedRevenue: this._inventoryIndexer.getConfirmedRevenue(date, false),
                 confirmedRevenueWithoutCommission: this._inventoryIndexer.getConfirmedRevenue(date, true),
                 guaranteedRevenue: this._inventoryIndexer.getGuaranteedRevenue(date, false),
-                guaranteedRevenueWithoutCommission: this._inventoryIndexer.getGuaranteedRevenue(date, true)
+                guaranteedRevenueWithoutCommission: this._inventoryIndexer.getGuaranteedRevenue(date, true),
+                breakfastInternalCost: this._inventoryIndexer.getBreakfastInternalCost(date)
 
             }
             hotelInventory.indexHotelInventoryForDate(inventoryForDate, date);
