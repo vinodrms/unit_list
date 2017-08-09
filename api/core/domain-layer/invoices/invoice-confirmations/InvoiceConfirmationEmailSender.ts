@@ -13,16 +13,19 @@ import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
 import { InvoiceEmailTemplateDO } from "../../../services/email/data-objects/InvoiceEmailTemplateDO";
 import { ThUtils } from "../../../utils/ThUtils";
 import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoicePaymentMethodType } from "../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
+import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
 
 import fs = require('fs');
 import path = require('path');
 import _ = require("underscore");
 
+
 export class InvoiceConfirmationEmailSender {
     private static INVOICE_EMAIL_SUBJECT = 'Invoice';
     private _thTranslation: ThTranslation;
     private _thUtils: ThUtils;
-    private _invoiceDO: InvoiceDO;
+    private _invoiceAggregatedData: InvoiceAggregatedData;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thTranslation = new ThTranslation(this._sessionContext.language);
@@ -45,7 +48,7 @@ export class InvoiceConfirmationEmailSender {
 
         return invoiceDataAggregator.getInvoiceAggregatedData(query);
     }).then((invoiceAggregatedData: InvoiceAggregatedData) => {
-            this._invoiceDO = invoiceAggregatedData.invoice;
+            this._invoiceAggregatedData = invoiceAggregatedData;
             var invoiceConfirmationVMContainer = new InvoiceConfirmationVMContainer(this._thTranslation);
             invoiceConfirmationVMContainer.buildFromInvoiceAggregatedDataContainer(invoiceAggregatedData);
             var pdfReportsService = this._appContext.getServiceFactory().getPdfReportsService();
@@ -92,8 +95,14 @@ export class InvoiceConfirmationEmailSender {
         emailTemplateDO.hotelAddressLine2 = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.postalCode") ? hotelDO.contactDetails.address.postalCode : "";
         emailTemplateDO.hotelAddressLine2 += !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.city") ? (" " + hotelDO.contactDetails.address.city) : "";
         emailTemplateDO.paymentDueInDays = hotelDO.paymentDueInDays;
-        emailTemplateDO.paymentDueDateString = (this._invoiceDO) ? this._invoiceDO.paymentDueDate.toString() : "";
+        emailTemplateDO.paymentDueDateString = (this._invoiceAggregatedData.invoice) ? this._invoiceAggregatedData.invoice.paymentDueDate.toString() : "";
+        emailTemplateDO.shouldSendInvoiceDueDate = this._invoiceAggregatedData.invoice && this.isCorporatePayerWithPayByAgreement();
         return emailTemplateDO;
+    }
+
+    private isCorporatePayerWithPayByAgreement() {
+        return this._invoiceAggregatedData.payerCustomer.isCompanyOrTravelAgency
+                && _.find(this._invoiceAggregatedData.invoice.payerList, (payer: InvoicePayerDO) => {return this._invoiceAggregatedData.payerCustomer.id === payer.customerId}).paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement;
     }
 
 }

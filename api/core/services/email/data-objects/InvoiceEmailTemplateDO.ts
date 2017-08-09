@@ -11,6 +11,7 @@ export class InvoiceEmailTemplateDO extends BaseEmailTemplateDO {
     
     private _paymentDueInDays: number;
     private _paymentDueDateString: string;
+    private _shouldSendInvoiceDueDate: boolean;
 
     constructor() {
         super(EmailTemplateTypes.Invoice);
@@ -75,5 +76,11 @@ export class InvoiceEmailTemplateDO extends BaseEmailTemplateDO {
     }
     public set paymentDueInDays(days: number) {
         this._paymentDueInDays = days;
+    }
+    public get shouldSendInvoiceDueDate(): boolean {
+        return this._shouldSendInvoiceDueDate;
+    }
+    public set shouldSendInvoiceDueDate(should: boolean) {
+        this._shouldSendInvoiceDueDate = should;
     }
 }
