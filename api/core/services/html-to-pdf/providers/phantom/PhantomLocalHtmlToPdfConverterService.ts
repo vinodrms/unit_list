@@ -45,7 +45,6 @@ export class PhantomLocalHtmlToPdfConverterService extends AHtmlToPdfConverterSe
 
         var resourceWait = 3000,
             maxRenderWait = 10000,
-            count = 0,
             renderTimeout = null,
             forcedRenderTimeout = null,
             phInstance = null,
@@ -57,24 +56,9 @@ export class PhantomLocalHtmlToPdfConverterService extends AHtmlToPdfConverterSe
         }).then((page) => {
             sitepage = page;
             sitepage.on('onResourceRequested', ((request) => {
-                count += 1;
                 clearTimeout(renderTimeout);
             }));
-            sitepage.on('onResourceReceived', ((response) => {
-                if (!response.stage || response.stage === 'end') {
-                    count -= 1;
-                    if (count === 0) {
-                        renderTimeout = setTimeout(() => {
-                            sitepage.render(pdfPath).then(() => {
-                                clearTimeout(forcedRenderTimeout);
-                                sitepage.close();
-                                phInstance.exit();
-                                resolve({ filePath: pdfPath });
-                            });
-                        }, resourceWait);
-                    }
-                }
-            }));
+
             var paperOptions = this.getPaperOptions();
             paperOptions["footer"] = {
                 height: "30px",
