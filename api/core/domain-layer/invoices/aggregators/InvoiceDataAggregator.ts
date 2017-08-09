@@ -84,7 +84,7 @@ export class InvoiceDataAggregator {
             this._payerIndexOnInvoice = query.payerIndex;
 
             var addOnProductRepo = this._appContext.getRepositoryFactory().getAddOnProductRepository();
-            return addOnProductRepo.getAddOnProductList({ hotelId: this._hotel.id }, this._invoice.getAddOnProductIdList());
+            return addOnProductRepo.getAddOnProductList({ hotelId: this._hotel.id }, { addOnProductIdList: this._invoice.getAddOnProductIdList() });
         }).then((result: AddOnProductSearchResultRepoDO) => {
             this._addOnProductList = result.addOnProductList;
 

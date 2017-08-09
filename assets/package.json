@@ -63,7 +63,7 @@
     "phantomjs": "2.1.7",
     "systemjs-builder": "0.15.36",
     "protractor": "3.3.0",
-    "typescript": "2.3.4",
+    "typescript": "2.4.2",
     "typings": "2.1.1"
   }
 }

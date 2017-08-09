@@ -142,7 +142,7 @@ export class HotelInventoryIndexer {
             }).then((invoiceStats: IInvoiceStats) => {
                 this._invoiceStats = invoiceStats;
 
-                return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, customerIdListOnBookings);
+                return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { customerIdList: customerIdListOnBookings });
             }).then((result: CustomerSearchResultRepoDO) => {
                 this._countryContainer = new CountryContainer(result.customerList);
 
@@ -428,7 +428,7 @@ export class HotelInventoryIndexer {
         _.forEach(this._indexedRevenueSegmentList, (segment: BookingSegment) => {
             let segmentedBookingList = this.getSegmentedBookingItemList(filteredBookingList, segment);
             let bookingOccupancy = new BookingOccupancy(this._indexedRoomsById);
-            bookingOccupancy.initializeFromBookings(_.map(segmentedBookingList, (item: BookingItemContainer)=> {return item.booking}));
+            bookingOccupancy.initializeFromBookings(_.map(segmentedBookingList, (item: BookingItemContainer) => { return item.booking }));
             segmentedOccupancy[segment] = bookingOccupancy;
         });
         return segmentedOccupancy;
@@ -658,7 +658,7 @@ export class HotelInventoryIndexer {
         let breakfastInternalCost = 0;
         _.forEach(segmentedBookingItemList, (bookingItem: BookingItemContainer) => {
             let noAdultsAndChildren = bookingItem.booking.configCapacity.getNoAdultsAndChildren();
-            breakfastInternalCost += !this._thUtils.isUndefinedOrNull(bookingItem.booking, "priceProductSnapshot.includedItems.includedBreakfastAddOnProductSnapshot.internalCost") ? bookingItem.booking.priceProductSnapshot.includedItems.includedBreakfastAddOnProductSnapshot.internalCost * noAdultsAndChildren: 0;
+            breakfastInternalCost += !this._thUtils.isUndefinedOrNull(bookingItem.booking, "priceProductSnapshot.includedItems.includedBreakfastAddOnProductSnapshot.internalCost") ? bookingItem.booking.priceProductSnapshot.includedItems.includedBreakfastAddOnProductSnapshot.internalCost * noAdultsAndChildren : 0;
         });
         return breakfastInternalCost;
     }
