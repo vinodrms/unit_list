@@ -117,7 +117,8 @@ export class HotelUpdatePaymentsPolicies {
 		return {
 			ccyCode: this._paymentPoliciesDO.ccyCode,
 			paymentMethodList: this._paymentPoliciesDO.paymentMethodList,
-			additionalInvoiceDetails: this._paymentPoliciesDO.additionalInvoiceDetails
+			additionalInvoiceDetails: this._paymentPoliciesDO.additionalInvoiceDetails,
+			paymentDueInDays: this._paymentPoliciesDO.paymentDueInDays
 		};
 	}
 }
