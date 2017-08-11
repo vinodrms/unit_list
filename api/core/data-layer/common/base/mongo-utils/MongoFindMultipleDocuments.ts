@@ -54,9 +54,7 @@ export class MongoFindMultipleDocuments {
 		if (!this._thUtils.isUndefinedOrNull(inputSortCriteria) && _.isObject(inputSortCriteria)) {
 			sortCriteria = _.clone(inputSortCriteria);
 		}
-		else {
-			sortCriteria[MongoUtils.DefaultDocumentIdAttribute] = -1;
-		}
+		sortCriteria[MongoUtils.DefaultDocumentIdAttribute] = -1;
 		return mongoCursor.sort(sortCriteria);
 	}
 	private updateCursorWithLazyLoadParam(mongoCursor: Cursor, lazyLoad: LazyLoadRepoDO): Cursor {
