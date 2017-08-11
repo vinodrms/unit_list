@@ -60,7 +60,8 @@ export class HotelDetailsTestHelper {
 									pmInstance.transactionFee.type = TransactionFeeType.Fixed;
 									return pmInstance;
 								}),
-			additionalInvoiceDetails: "IBAN RO34INGB736137812638"
+			additionalInvoiceDetails: "IBAN RO34INGB736137812638",
+			paymentDueInDays: 4
 		}
 	}
 	public getPaymentMethodIdListFromPaymentMethodList(paymentMethodList: PaymentMethodDO[]): string[] {

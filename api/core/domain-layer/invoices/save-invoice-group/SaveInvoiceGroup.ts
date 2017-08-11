@@ -62,7 +62,7 @@ export class SaveInvoiceGroup {
         this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id)
             .then((loadedHotel: HotelDO) => {
                 this._hotel = loadedHotel;
-
+                
                 var customerIdValidator = new CustomerIdValidator(this._appContext, this._sessionContext);
                 return customerIdValidator.validateCustomerIdList(invoiceGroupDO.getAggregatedCustomerIdList());
             }).then((customersContainer: CustomersContainer) => {

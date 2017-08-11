@@ -37,6 +37,7 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseFormComponent
 
 	private _additionalInvoiceDetailsControl: FormControl;
 	private _formGroup: FormGroup;
+	private _paymentDueInDays: number;
 
 	constructor(private _formBuilder: FormBuilder,
 		private _appContext: AppContext,
@@ -65,6 +66,7 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseFormComponent
 			this.allPaymentMethodsVMContainer = new PaymentMethodVMContainer(hotelAggregatedInfo.allAvailablePaymentMethods, this.hotel.paymentMethodList);
 			this._paymPoliciesEditService.bootstrap(this.allPaymentMethodsVMContainer, this.hotel);
 			this._additionalInvoiceDetailsControl.setValue(this.hotel.additionalInvoiceDetails);
+			this._paymentDueInDays = this.hotel.paymentDueInDays;
 			this.isLoading = false;
 		}, (error: ThError) => {
 			this.isLoading = false;
@@ -86,7 +88,13 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseFormComponent
 	protected allSelectedPaymentMethodsHaveValidTransactionFees(): boolean {
 		return this._paymPoliciesEditService.allSelectedPaymentMethodsHaveValidTransactionFees();
 	}
-
+	public set paymentDueInDays(days: number) {
+		this._paymentDueInDays = days;
+		this._paymPoliciesEditService.didUpdatePaymentDueInDays(days);
+	}
+	public get paymentDueInDays(): number {
+		return this._paymentDueInDays;
+	}
 	public getDefaultFormGroup(): FormGroup {
 		return this._formGroup;
 	}
