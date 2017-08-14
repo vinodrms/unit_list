@@ -33,7 +33,7 @@ export class SendgridEmailService extends AEmailService {
         this._sendgrid.API(request, function (response) {
             if (response.statusCode >= 400) {
 				var thError = new ThError(ThStatusCode.SendGridServiceErrorSendingEmail, response.body);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "Error sending email", this._emailHeaderDO, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "Error sending email", emailHeaderDO, thError);
                 reject(thError);
                 return;
             }

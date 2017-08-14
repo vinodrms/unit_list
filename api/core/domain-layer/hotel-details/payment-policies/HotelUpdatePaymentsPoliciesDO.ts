@@ -12,6 +12,7 @@ export class HotelUpdatePaymentsPoliciesDO {
 	ccyCode: string;
 	paymentMethodList: PaymentMethodInstanceDO[];
 	additionalInvoiceDetails: string;
+	paymentDueInDays: number;
 
 	public static getValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -45,6 +46,10 @@ export class HotelUpdatePaymentsPoliciesDO {
 				key: "additionalInvoiceDetails",
 				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable(2000))
 			},
+			{
+				key: "paymentDueInDays",
+				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
+			}
 		]);
 	}
 }

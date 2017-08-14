@@ -54,7 +54,8 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 		return this.findAndModifyHotel(hotelMeta, {
 			"paymentMethodList": paymPoliciesParams.paymentMethodList,
 			"ccyCode": paymPoliciesParams.ccyCode,
-			"additionalInvoiceDetails": paymPoliciesParams.additionalInvoiceDetails
+			"additionalInvoiceDetails": paymPoliciesParams.additionalInvoiceDetails,
+			"paymentDueInDays": paymPoliciesParams.paymentDueInDays
 		});
 	}
 

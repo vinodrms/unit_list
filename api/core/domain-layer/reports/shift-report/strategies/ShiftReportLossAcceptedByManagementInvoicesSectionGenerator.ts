@@ -10,21 +10,17 @@ import { CustomerDO } from '../../../../data-layer/customers/data-objects/Custom
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingDO";
 import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repositories/IBookingRepository";
-import { PaymentMethodDO } from "../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO";
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
-import { InvoicePaymentMethodsUtils } from "../../../invoices/utils/InvoicePaymentMethodsUtils";
 
 import _ = require('underscore');
 
-export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGeneratorStrategy {
+export class ShiftReportLossAcceptedByManagementInvoicesSectionGenerator extends AReportSectionGeneratorStrategy {
 
     private _indexedCustomersById: { [id: string]: CustomerDO };
     private _indexedBookingById: { [id: string]: BookingDO };
-    private _invoicePaymentMethodsUtils: InvoicePaymentMethodsUtils;
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
         private _allInvoiceGroupList: InvoiceGroupDO[],
-        private _paidInvoiceGroupList: InvoiceGroupDO[]) {
+        private _lostByManagementInvoiceGroupList: InvoiceGroupDO[]) {
         super(appContext, sessionContext, globalSummary);
     }
 
@@ -35,17 +31,14 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                 "Invoice Reference",
                 "Customer",
                 "Amount",
-                "Transaction Fee",
-                "Total",
                 "Reservation number",
-                "Paid at",
-                "Payment method"
+                "Lost by Management at"
             ]
         };
     }
     protected getMeta(): ReportSectionMeta {
         return {
-		    title: "Paid Invoices"
+			title: "Loss Accepted By Management Invoices"
 		}
     }
 
@@ -54,14 +47,10 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
     }
 
     protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
-        this._appContext.getRepositoryFactory().getSettingsRepository().getPaymentMethods().then((result: PaymentMethodDO[]) => {
-            this._invoicePaymentMethodsUtils = new InvoicePaymentMethodsUtils(result);
-
-            let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
-            let customerIdList = this.getCustomerIdList();
-            return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-                customerIdList: customerIdList
-            });
+        let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
+        let customerIdList = this.getCustomerIdList();
+        customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+            customerIdList: customerIdList
         }).then((custSearchResult: CustomerSearchResultRepoDO) => {
             this._indexedCustomersById = _.indexBy(custSearchResult.customerList, (customer: CustomerDO) => {
                 return customer.id
@@ -77,20 +66,16 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
             });
 
             var data = [];
-            var totalPriceToPay = 0.0, totalPriceToPayPlusTransactionFee = 0.0, totalTransactionFee = 0.0;
+            var totalAmountLost = 0.0;
 
-            this._paidInvoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
+            this._lostByManagementInvoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
                 invoiceGroup.invoiceList.forEach((invoice: InvoiceDO) => {
-                    var priceToPay = 0.0, priceToPayPlusTransactionFee = 0.0;
+                    var amountLost = 0.0;
                     invoice.payerList.forEach(payer => {
-                        priceToPay += payer.priceToPay;
-                        priceToPayPlusTransactionFee += payer.priceToPayPlusTransactionFee;
+                        amountLost += payer.priceToPay;
                     });
-                    var transactionFee = priceToPayPlusTransactionFee - priceToPay;
 
-                    priceToPay = this._thUtils.roundNumberToTwoDecimals(priceToPay);
-                    priceToPayPlusTransactionFee = this._thUtils.roundNumberToTwoDecimals(priceToPayPlusTransactionFee);
-                    transactionFee = this._thUtils.roundNumberToTwoDecimals(transactionFee);
+                    amountLost = this._thUtils.roundNumberToTwoDecimals(amountLost);
 
                     let payerString = this.getPayerString(invoice);
                     var bookingRef = '';
@@ -112,15 +97,11 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                         });
                     }
 
-                    let paymentMethodString = (invoice.isPaid) ? this.getPaymentMethodString(invoice.payerList) : "";
-
-                    let row = [invoiceRefDisplayString, payerString, priceToPay, transactionFee, priceToPayPlusTransactionFee, bookingRef, paidTimestampStr, paymentMethodString];
+                    let row = [invoiceRefDisplayString, payerString, amountLost, bookingRef, paidTimestampStr];
 
                     data.push(row);
 
-                    totalPriceToPay += priceToPay;
-                    totalPriceToPayPlusTransactionFee += priceToPayPlusTransactionFee;
-                    totalTransactionFee += transactionFee;
+                    totalAmountLost += amountLost;
                 });
             });
             // sort by invoice reference
@@ -128,38 +109,19 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                 return row1[0].localeCompare(row2[0]);
             });
 
-            totalPriceToPay = this._thUtils.roundNumberToTwoDecimals(totalPriceToPay);
-            totalPriceToPayPlusTransactionFee = this._thUtils.roundNumberToTwoDecimals(totalPriceToPayPlusTransactionFee);
-            totalTransactionFee = this._thUtils.roundNumberToTwoDecimals(totalTransactionFee);
+            totalAmountLost = this._thUtils.roundNumberToTwoDecimals(totalAmountLost);
 
-            data.push([this._appContext.thTranslate.translate('Total'), "", totalPriceToPay, totalTransactionFee, totalPriceToPayPlusTransactionFee]);
+            data.push([this._appContext.thTranslate.translate('Total'), "", totalAmountLost]);
             resolve(data);
         }).catch((e) => {
             reject(e);
         });
     }
 
-    private getPaymentMethodString(invoicePayerList: InvoicePayerDO[]): string {
-        let invoicePaymentMethodList: InvoicePaymentMethodDO = _.map(invoicePayerList, (invoicePayer: InvoicePayerDO) => {
-            return invoicePayer.paymentMethod;
-        });
-
-        return _.reduce(invoicePaymentMethodList, (paymentMethodString: string, invoicePaymentMethod: InvoicePaymentMethodDO) => {
-            let pmName = this._invoicePaymentMethodsUtils.getPaymentMethodName(invoicePaymentMethod);
-            pmName = this._appContext.thTranslate.translate(pmName);
-
-            if (!this._thUtils.isUndefinedOrNull(pmName)) {
-                return paymentMethodString + (paymentMethodString.length > 0 ? ", " : "") + pmName;
-            }
-
-            return paymentMethodString;
-        }, "");
-    }
-
     private getBookingIdList(): string[] {
         let bookingIdList = [];
 
-        this._paidInvoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
+        this._lostByManagementInvoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
             invoiceGroup.invoiceList.forEach((invoice: InvoiceDO) => {
                 if (_.isString(invoice.bookingId) && !_.contains(bookingIdList, invoice.bookingId)) {
                     bookingIdList.push(invoice.bookingId);
@@ -172,7 +134,7 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
 
     private getCustomerIdList(): string[] {
         let customerIdList: string[] = [];
-        this._paidInvoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
+        this._lostByManagementInvoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
             invoiceGroup.invoiceList.forEach((invoice: InvoiceDO) => {
                 customerIdList = customerIdList.concat(_.map(invoice.payerList, (payer: InvoicePayerDO) => {
                     return payer.customerId;

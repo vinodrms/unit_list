@@ -21,7 +21,11 @@ export class IncludedBookingItems {
     public getNetTotalPrice(indexedVatById: { [id: string]: TaxDO; }): number {
         var netTotalPrice: number = 0.0;
         _.forEach(this._includedInvoiceItemList, (includedInvoiceItem: InvoiceItemDO) => {
-            netTotalPrice = netTotalPrice + indexedVatById[includedInvoiceItem.meta.getVatId()].getNetValue(includedInvoiceItem.getTotalPrice());
+            if (!includedInvoiceItem.meta.getVatId()) {
+                netTotalPrice = netTotalPrice + includedInvoiceItem.getTotalPrice();
+            } else {
+                netTotalPrice = netTotalPrice + indexedVatById[includedInvoiceItem.meta.getVatId()].getNetValue(includedInvoiceItem.getTotalPrice());
+            }
         });
         return netTotalPrice;
     }
