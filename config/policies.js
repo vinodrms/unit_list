@@ -26,7 +26,7 @@ module.exports.policies = {
 	*                                                                          *
 	***************************************************************************/
 
-	'*': ['oauth', 'sessionAuth', 'contextBuilder'],
+	'*': ['sessionAuth', 'contextBuilder', 'oauth'],
 
 	/***************************************************************************
 	*                                                                          *
@@ -48,5 +48,8 @@ module.exports.policies = {
 	HealthCheckController: {
 		'getHealth': ['contextBuilder']
 	},
-
+	OAuthTokenController: {
+		'getToken': ['contextBuilder']
+	},
+	
 };

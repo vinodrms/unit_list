@@ -160,6 +160,8 @@ module.exports.routes = {
 
 	'GET /api/health': 'HealthCheckController.getHealth',
 
+	'POST /api/token': 'OAuthTokenController.getToken',
+
 	/*Front End Views	*/
 	'GET /home*': {
 		controller: 'AppViewsController',
