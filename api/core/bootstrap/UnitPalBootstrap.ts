@@ -10,6 +10,7 @@ import { ThStatusCode } from '../utils/th-responses/ThResponse';
 import { CronJobInitializer } from '../cron-jobs/CronJobInitializer';
 import { SocketsInitializer } from './sockets/SocketsInitializer';
 import { OAuthServerInitializer } from "./oauth/OAuthServerInitializer";
+import { RepositoryFactory } from "../data-layer/RepositoryFactory";
 
 declare var sails: any;
 
@@ -26,6 +27,7 @@ export class UnitPalBootstrap {
 		this.initializeSockets();
 		this.initializeDatabase(endCallback);
 		this.initializeCronJobs();
+		this.initializeOauthServer();
 		this.logDefaultClientSessionIfNecessary();
 	}
 	private initializeLogger() {
@@ -72,7 +74,9 @@ export class UnitPalBootstrap {
 		socketsInitializer.register();
 	}
 	private initializeOauthServer() {
-		var oauthServerInitializer = new OAuthServerInitializer();
+		
+		
+		let oauthServerInitializer = new OAuthServerInitializer(this._unitPalConfig);
 		oauthServerInitializer.register();
 	}
 	private logDefaultClientSessionIfNecessary() {
