@@ -536,7 +536,12 @@ export enum ThStatusCode {
 
 	//File service
 	FileServiceErrorWritingFile,
-	FileServiceErrorDeletingFile
+	FileServiceErrorDeletingFile,
+
+	//OAuth tokens
+	OAuthTokenRepositoryOAuthTokenNotFound,
+	OAuthTokenRepositoryErrorGettingOAuthToken,
+
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -1064,6 +1069,10 @@ ThMessage[ThStatusCode.ReportsHKBookingCustomers] = "Error getting compnay/TA fo
 // File service
 ThMessage[ThStatusCode.FileServiceErrorWritingFile] = "Error writing file";
 ThMessage[ThStatusCode.FileServiceErrorDeletingFile] = "Error deleting file";
+
+//OAuth Tokens
+ThMessage[ThStatusCode.OAuthTokenRepositoryOAuthTokenNotFound] = "OAuth token was not found.";
+ThMessage[ThStatusCode.OAuthTokenRepositoryErrorGettingOAuthToken] = "Error retrieving the OAuth token.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;

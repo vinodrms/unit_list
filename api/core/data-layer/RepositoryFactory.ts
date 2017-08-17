@@ -32,6 +32,8 @@ import { IBookingRepository } from './bookings/repositories/IBookingRepository';
 import { MongoBookingRepository } from "./bookings/repositories/mongo/MongoBookingRepository";
 import { IHotelInventorySnapshotRepository } from './hotel-inventory-snapshots/repositories/IHotelInventorySnapshotRepository';
 import { MongoHotelInventorySnapshotRepository } from './hotel-inventory-snapshots/repositories/mongo/MongoHotelInventorySnapshotRepository';
+import { IOAuthTokenRepository } from "./oauth-tokens/IOAuthTokenRepository";
+import { MongoOAuthTokenRepository } from "./oauth-tokens/repositories/MongoOAuthTokenRepository";
 
 export class RepositoryFactory {
     private _databaseType: DatabaseType;
@@ -150,6 +152,13 @@ export class RepositoryFactory {
         switch (this._databaseType) {
             default:
                 return new MongoHotelInventorySnapshotRepository();
+        }
+    }
+
+    getOAuthTokenRepository(): IOAuthTokenRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoOAuthTokenRepository();
         }
     }
 }
