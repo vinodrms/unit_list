@@ -25,8 +25,6 @@ export enum ThStatusCode {
 	HotelRepositoryAccountAlreadyExists,
 	HotelRepositoryErrorAddingHotel,
 	HotelLoginError,
-	PassportLoginServiceInvalidLogin,
-	PassportLoginServiceErrorInvalidLogin,
 	HotelRepositoryErrorFindingAccount,
 	HotelRepositoryAccountNotFound,
 	HotelAuthenticationAccountNotActive,
@@ -568,8 +566,6 @@ ThMessage[ThStatusCode.HotelSignUpError] = "Error signing up. Please try again."
 ThMessage[ThStatusCode.HotelRepositoryAccountAlreadyExists] = "An account with this email already exists.";
 ThMessage[ThStatusCode.HotelRepositoryErrorAddingHotel] = "Error adding the information. Please try again.";
 ThMessage[ThStatusCode.HotelLoginError] = "Error signing in. Please try again.";
-ThMessage[ThStatusCode.PassportLoginServiceInvalidLogin] = "Error signing in. Please try again.";
-ThMessage[ThStatusCode.PassportLoginServiceErrorInvalidLogin] = "Error signing in. Please try again.";
 ThMessage[ThStatusCode.HotelRepositoryErrorFindingAccount] = "Error finding account. Please try again.";
 ThMessage[ThStatusCode.HotelRepositoryAccountNotFound] = "Invalid email or password.";
 ThMessage[ThStatusCode.HotelAuthenticationAccountNotActive] = "The account is not active.";
