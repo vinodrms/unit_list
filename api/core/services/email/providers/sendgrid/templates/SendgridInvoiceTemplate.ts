@@ -14,8 +14,13 @@ export class SendgridInvoiceTemplate implements ISendgridTemplate {
                 "%hotelAddressLine2%": this._emailTemplateDO.hotelAddressLine2,
                 "%hotelEmail%": this._emailTemplateDO.hotelEmail,
                 "%hotelPhone%": this._emailTemplateDO.hotelPhone,
-                "%hotelCountry%": this._emailTemplateDO.hotelCountry
+                "%hotelCountry%": this._emailTemplateDO.hotelCountry,
+                "%invoiceDueDateText%": this._emailTemplateDO.shouldSendInvoiceDueDate ? this.getInvoiceDueDateText(): ""
             }
         };
+    }
+
+    private getInvoiceDueDateText() {
+        return " We really appreciate your business! Please send payment within " + this._emailTemplateDO.paymentDueInDays + " days of receiving this invoice, on or before " + this._emailTemplateDO.paymentDueDateString + " (Date counted by UP)";
     }
 }

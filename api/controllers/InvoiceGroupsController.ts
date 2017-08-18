@@ -4,7 +4,7 @@ import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
 import { AppContext } from '../core/utils/AppContext';
 import { SessionContext } from '../core/utils/SessionContext';
 import { ThTranslation } from '../core/utils/localization/ThTranslation';
-import { InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO } from '../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO } from '../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import { InvoiceGroupDO } from '../core/data-layer/invoices/data-objects/InvoiceGroupDO';
 import { InvoiceDO } from '../core/data-layer/invoices/data-objects/InvoiceDO';
 import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
@@ -41,7 +41,7 @@ export class InvoiceGroupsController extends BaseController {
         var invoiceGroupMeta = this.getInvoiceGroupMetaRepoDOFrom(sessionContext);
         var invoiceGroupRepo = appContext.getRepositoryFactory().getInvoiceGroupsRepository();
 
-        invoiceGroupRepo.getInvoiceGroupList(invoiceGroupMeta, req.body.searchCriteria, req.body.lazyLoad).then((result: InvoiceGroupSearchCriteriaRepoDO) => {
+        invoiceGroupRepo.getInvoiceGroupList(invoiceGroupMeta, req.body.searchCriteria, req.body.lazyLoad).then((result: InvoiceGroupSearchResultRepoDO) => {
             this.returnSuccesfulResponse(req, res, result);
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroups);

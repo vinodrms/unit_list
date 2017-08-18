@@ -12,6 +12,7 @@ import { IHotelRepository, SequenceValue } from '../../../../hotel/repositories/
 import { HotelSequenceType } from '../../../../hotel/data-objects/sequences/HotelSequencesDO';
 import { ThTimestampDO } from "../../../../../utils/th-dates/data-objects/ThTimestampDO";
 import { HotelDO } from "../../../../hotel/data-objects/HotelDO";
+import { ThDateUtils } from "../../../../../utils/th-dates/ThDateUtils";
 
 import _ = require('underscore');
 
@@ -116,6 +117,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
         var group = invoiceGroup;
         var paymentStatusByInvoiceReferenceMap: { [index: string]: InvoicePaymentStatus };
         var timezone: string;
+        var paymentDueInDays: number;
 
         this.getCurrentPaymentStatusByInvoiceIdMap(invoiceGroupMeta, invoiceGroup)
             .then((map: { [index: string]: InvoicePaymentStatus }) => {
@@ -124,13 +126,14 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
                 return this._hotelRepo.getHotelById(invoiceGroupMeta.hotelId);
             }).then((hotel: HotelDO) => {
                 timezone = hotel.timezone;
+                paymentDueInDays = hotel.paymentDueInDays;
 
                 return this.attachInvoiceGroupReferenceIfNecessary(group);
             }).then((updatedGroup: InvoiceGroupDO) => {
                 group = updatedGroup;
                 var promiseList = [];
                 group.invoiceList.forEach((invoice) => {
-                    let promise = this.attachInvoiceItemReferenceIfNecessary(group.hotelId, invoice, timezone, paymentStatusByInvoiceReferenceMap);
+                    let promise = this.attachInvoiceItemReferenceIfNecessary(group.hotelId, invoice, timezone, paymentDueInDays, paymentStatusByInvoiceReferenceMap);
                     promiseList.push(promise);
                 });
                 return Promise.all(promiseList);
@@ -176,7 +179,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
         });
     }
 
-    private attachInvoiceItemReferenceIfNecessary(hotelId: string, invoice: InvoiceDO, timezone: string,
+    private attachInvoiceItemReferenceIfNecessary(hotelId: string, invoice: InvoiceDO, timezone: string, paymentDueInDays: number,
         paymentStatusByInvoiceIdMap: { [index: string]: InvoicePaymentStatus }): Promise<InvoiceDO> {
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
             let oldPaymentStatus: InvoicePaymentStatus;
@@ -190,7 +193,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
                 this._hotelRepo.getNextSequenceValue(hotelId, HotelSequenceType.InvoiceItem)
                     .then((seq: SequenceValue) => {
                         invoice.invoiceReference = seq.hotelPrefix + this.getSequenceString(seq.sequence);
-                        this.setPaidDatesOnInvoice(invoice, timezone);
+                        this.setPaidDatesOnInvoice(invoice, timezone, paymentDueInDays);
                         resolve(invoice);
                     }).catch((e) => {
                         reject(e);
@@ -198,7 +201,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
             }
             //attach paid dates if it's a new invoice and paymentStatus=PAID
             else if(invoice.paymentStatus === InvoicePaymentStatus.Paid && _.isUndefined(oldPaymentStatus)) {
-                this.setPaidDatesOnInvoice(invoice, timezone);
+                this.setPaidDatesOnInvoice(invoice, timezone, paymentDueInDays);
                 resolve(invoice);
             }
             else {
@@ -210,19 +213,20 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
                 // attach the paid date for reporting if it has been marked as loss by management
                 if (oldPaymentStatus !== invoice.paymentStatus
                     && invoice.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement) {
-                    this.setPaidDatesOnInvoice(invoice, timezone);
+                    this.setPaidDatesOnInvoice(invoice, timezone, paymentDueInDays);
                 }
 
                 resolve(invoice);
             }
         });
     }
-    private setPaidDatesOnInvoice(invoice: InvoiceDO, timezone: string) {
+    private setPaidDatesOnInvoice(invoice: InvoiceDO, timezone: string, paymentDueInDays: number) {
         var thTimestamp = ThTimestampDO.buildThTimestampForTimezone(timezone);
         invoice.paidDate = thTimestamp.thDateDO;
         invoice.paidTimestamp = thTimestamp;
         invoice.paidDateUtcTimestamp = invoice.paidDate.getUtcTimestamp();
         invoice.paidDateTimeUtcTimestamp = thTimestamp.getUtcTimestamp();
+        invoice.paymentDueDate = new ThDateUtils().addDaysToThDateDO(thTimestamp.thDateDO, paymentDueInDays);
     }
     private getSequenceString(seq: number): string {
         var seqStr: string = seq + "";
