@@ -25,6 +25,8 @@ import { StringValidationRule } from "../../../utils/th-validation/rules/StringV
 import { KeyMetricOutputType } from "../../yield-manager/key-metrics/utils/builder/MetricBuilderStrategyFactory";
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 
+import _ = require("underscore");
+
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _period: YieldManagerPeriodDO;
 	private _periodType: ThPeriodType;

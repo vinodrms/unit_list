@@ -12,6 +12,8 @@ import {IPriceProductCancellationPenalty, CancellationPenaltyMeta, PriceProductC
 import {PercentageFromBookingCancellationPenaltyDO} from '../../../../../../../../services/price-products/data-objects/conditions/penalty/PercentageFromBookingCancellationPenaltyDO';
 import {PriceProductCancellationPenaltyFactory} from '../../../../../../../../services/price-products/data-objects/conditions/penalty/PriceProductCancellationPenaltyFactory';
 
+import * as _ from "underscore";
+
 @Component({
 	selector: 'price-product-edit-cancellation-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/cancellation/template/price-product-edit-cancellation-section.html'

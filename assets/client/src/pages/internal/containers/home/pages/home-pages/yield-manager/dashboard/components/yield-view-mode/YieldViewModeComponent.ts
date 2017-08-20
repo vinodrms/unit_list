@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 
+import * as _ from "underscore";
+
 export enum YieldViewModeState {
 	Default,
 	ExpandedYieldKeyMetrics,

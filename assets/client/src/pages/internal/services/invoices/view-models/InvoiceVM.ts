@@ -11,6 +11,8 @@ import {AddOnProductInvoiceItemMetaDO} from '../data-objects/items/add-on-produc
 import {ThUtils} from '../../../../../common/utils/ThUtils';
 import {InvoicePaymentMethodType} from '../data-objects/payers/InvoicePaymentMethodDO';
 
+import * as _ from "underscore";
+
 export class InvoiceVM {
     private static NO_ITEMS_ADDED_ERROR = 'Add at least an item.';
     private static NO_PAYERS_ADDED_ERROR = 'Add at least a payer.';

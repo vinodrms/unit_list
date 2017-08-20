@@ -24,7 +24,8 @@ import { ArrivalsBuilderStrategy } from "./strategies/ArrivalsBuilderStrategy";
 import { ArrivalsByNationalityBuilderStrategy } from "./strategies/ArrivalsByNationalityBuilderStrategy";
 import { RoomNightsByBookingSegmentBuilderStrategy } from "./strategies/RoomNightsByBookingSegmentBuilderStrategy";
 import { RoomNightsBuilderStrategy } from "./strategies/RoomNightsBuilderStrategy";
-import { BreakfastRevenueBuilderStrategy } from "./strategies/BreakfastRevenueBuilderStrategy";
+import { BreakfastInternalCostByBookingSegmentBuilderStrategy } from "./strategies/BreakfastInternalCostByBookingSegmentBuilderStrategy";
+import { BreakfastRevenueByBookingSegmentBuilderStrategy } from "./strategies/BreakfastRevenueByBookingSegmentBuilderStrategy";
 
 import _ = require('underscore');
 
@@ -204,11 +205,14 @@ export class MetricBuilderStrategyFactory {
                 new ArrivalsBuilderStrategy(this._hotelInventoryStats, {}),
                 new RoomNightsBuilderStrategy(this._hotelInventoryStats, {}),
                 new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
-                    excludeCommission: true,
+                    excludeCommission: false,
                     revenueSegment: BookingSegment.All
                 }),
-                new BreakfastRevenueBuilderStrategy(this._hotelInventoryStats, {
-                    excludeCommission: true,
+                new BreakfastRevenueByBookingSegmentBuilderStrategy(this._hotelInventoryStats, {
+                    excludeCommission: false,
+                    revenueSegment: BookingSegment.All
+                }),
+                new BreakfastInternalCostByBookingSegmentBuilderStrategy(this._hotelInventoryStats, {
                     revenueSegment: BookingSegment.All
                 })
             ]
@@ -223,9 +227,20 @@ export class MetricBuilderStrategyFactory {
                     {}));
                 metricList.push(
                     new TotalAvgRateBuilderStrategy(this._hotelInventoryStats, {
-                        excludeCommission: true,
+                        excludeCommission: false,
                         revenueSegment: bookingSegment
                     })
+                );
+                metricList.push(
+                    new BreakfastRevenueByBookingSegmentBuilderStrategy(this._hotelInventoryStats, {
+                        excludeCommission: false,
+                        revenueSegment: bookingSegment
+                    }) 
+                );
+                metricList.push(
+                    new BreakfastInternalCostByBookingSegmentBuilderStrategy(this._hotelInventoryStats, {
+                        revenueSegment: bookingSegment
+                    }) 
                 );
             });
 

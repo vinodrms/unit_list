@@ -7,6 +7,8 @@ import { BaseDO } from "../../../../../../common/base/BaseDO";
 import { ISOWeekDay } from "../../../common/data-objects/th-dates/ISOWeekDay";
 import { ThUtils } from "../../../../../../common/utils/ThUtils";
 
+import _ = require("underscore");
+
 export class DynamicPriceDO extends BaseDO {
     id: string;
     name: string;

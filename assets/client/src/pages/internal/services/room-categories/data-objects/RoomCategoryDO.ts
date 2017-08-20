@@ -1,6 +1,8 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
 import {BedConfigDO} from './bed-config/BedConfigDO';
 
+import * as _ from 'underscore';
+
 export enum RoomCategoryStatus {
     Active,
     Deleted

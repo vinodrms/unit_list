@@ -10,17 +10,21 @@ import { CustomerDO } from '../../../../data-layer/customers/data-objects/Custom
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingDO";
 import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repositories/IBookingRepository";
+import { PaymentMethodDO } from "../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO";
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
+import { InvoicePaymentMethodsUtils } from "../../../invoices/utils/InvoicePaymentMethodsUtils";
 
 import _ = require('underscore');
 
 export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGeneratorStrategy {
+
     private _indexedCustomersById: { [id: string]: CustomerDO };
     private _indexedBookingById: { [id: string]: BookingDO };
+    private _invoicePaymentMethodsUtils: InvoicePaymentMethodsUtils;
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
         private _allInvoiceGroupList: InvoiceGroupDO[],
-        private _paidInvoiceGroupList: InvoiceGroupDO[],
-        private _sectionMeta: ReportSectionMeta) {
+        private _paidInvoiceGroupList: InvoiceGroupDO[]) {
         super(appContext, sessionContext, globalSummary);
     }
 
@@ -34,12 +38,15 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                 "Transaction Fee",
                 "Total",
                 "Reservation number",
-                "Paid/Lost by Management at"
+                "Paid at",
+                "Payment method"
             ]
         };
     }
     protected getMeta(): ReportSectionMeta {
-        return this._sectionMeta;
+        return {
+		    title: "Paid Invoices"
+		}
     }
 
     protected getGlobalSummary(): Object {
@@ -47,17 +54,21 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
     }
 
     protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
-        let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        let bookingIdList = this.getBookingIdList();
+        this._appContext.getRepositoryFactory().getSettingsRepository().getPaymentMethods().then((result: PaymentMethodDO[]) => {
+            this._invoicePaymentMethodsUtils = new InvoicePaymentMethodsUtils(result);
 
-        let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
-        let customerIdList = this.getCustomerIdList();
-        customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-            customerIdList: customerIdList
+            let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
+            let customerIdList = this.getCustomerIdList();
+            return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+                customerIdList: customerIdList
+            });
         }).then((custSearchResult: CustomerSearchResultRepoDO) => {
             this._indexedCustomersById = _.indexBy(custSearchResult.customerList, (customer: CustomerDO) => {
                 return customer.id
             });
+
+            let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+            let bookingIdList = this.getBookingIdList();
 
             return bookingRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { bookingIdList: bookingIdList });
         }).then((bookingsResult: BookingSearchResultRepoDO) => {
@@ -101,8 +112,9 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                         });
                     }
 
-                    let row = [invoiceRefDisplayString, payerString, priceToPay, transactionFee, priceToPayPlusTransactionFee, bookingRef, paidTimestampStr];
+                    let paymentMethodString = (invoice.isPaid) ? this.getPaymentMethodString(invoice.payerList) : "";
 
+                    let row = [invoiceRefDisplayString, payerString, priceToPay, transactionFee, priceToPayPlusTransactionFee, bookingRef, paidTimestampStr, paymentMethodString];
 
                     data.push(row);
 
@@ -125,6 +137,23 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
         }).catch((e) => {
             reject(e);
         });
+    }
+
+    private getPaymentMethodString(invoicePayerList: InvoicePayerDO[]): string {
+        let invoicePaymentMethodList: InvoicePaymentMethodDO = _.map(invoicePayerList, (invoicePayer: InvoicePayerDO) => {
+            return invoicePayer.paymentMethod;
+        });
+
+        return _.reduce(invoicePaymentMethodList, (paymentMethodString: string, invoicePaymentMethod: InvoicePaymentMethodDO) => {
+            let pmName = this._invoicePaymentMethodsUtils.getPaymentMethodName(invoicePaymentMethod);
+            pmName = this._appContext.thTranslate.translate(pmName);
+
+            if (!this._thUtils.isUndefinedOrNull(pmName)) {
+                return paymentMethodString + (paymentMethodString.length > 0 ? ", " : "") + pmName;
+            }
+
+            return paymentMethodString;
+        }, "");
     }
 
     private getBookingIdList(): string[] {

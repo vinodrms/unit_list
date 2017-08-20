@@ -4,6 +4,8 @@ import { TestContext } from '../../../../helpers/TestContext';
 import { AddOnProductDO } from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 import { AddOnProductCategoryType } from "../../../../../core/data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO";
 
+import _ = require("underscore");
+
 export class AddOnProductsTestHelper {
 	constructor(private _dataBuilder: DefaultDataBuilder, private _testContext: TestContext) {
 	}

@@ -12,6 +12,8 @@ import {InvoiceConfirmationEmailSender} from '../../../../../invoices/invoice-co
 import { InvoiceDataAggregatorQuery } from '../../../../../invoices/aggregators/InvoiceDataAggregator';
 import { EmailDistributionDO } from "../data-objects/EmailDistributionDO";
 
+import _ = require("underscore");
+
 export interface InvoiceEmailConfirmationParams {
     invoiceGroupId: string;
     invoiceId: string;

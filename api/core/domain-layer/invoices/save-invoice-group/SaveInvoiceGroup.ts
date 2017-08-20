@@ -24,6 +24,8 @@ import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects
 import { InvoicePayersValidator } from '../validators/InvoicePayersValidator';
 import { SaveInvoiceGroupActionFactory } from './actions/SaveInvoiceGroupActionFactory';
 
+import _ = require("underscore");
+
 export class SaveInvoiceGroup {
     private _thUtils: ThUtils;
     private _saveInvoiceGroup: SaveInvoiceGroupDO;
@@ -60,7 +62,7 @@ export class SaveInvoiceGroup {
         this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id)
             .then((loadedHotel: HotelDO) => {
                 this._hotel = loadedHotel;
-
+                
                 var customerIdValidator = new CustomerIdValidator(this._appContext, this._sessionContext);
                 return customerIdValidator.validateCustomerIdList(invoiceGroupDO.getAggregatedCustomerIdList());
             }).then((customersContainer: CustomersContainer) => {
@@ -69,12 +71,11 @@ export class SaveInvoiceGroup {
                 var aopIdValidator = new AddOnProductIdValidator(this._appContext, this._sessionContext);
                 return aopIdValidator.validateAddOnProductIdList(invoiceGroupDO.getAggregatedAddOnProductIdList());
             }).then((aopContainer: AddOnProductsContainer) => {
-                return Promise.all(_.chain(invoiceGroupDO.getAggregatedPayerList())
+
+                this._invoicePaymentMethodList = _.chain(invoiceGroupDO.getAggregatedPayerList())
                     .map((payer: InvoicePayerDO) => {
                         return new InvoicePaymentMethodValidator(this._hotel, this._customersContainer.getCustomerById(payer.customerId)).validate(payer.paymentMethod);
-                    }).value());
-            }).then((validatedPaymentMethods: InvoicePaymentMethodDO[]) => {
-                this._invoicePaymentMethodList = validatedPaymentMethods;
+                    }).value();
 
                 let payersValidators: Promise<InvoiceDO>[] = [];
                 _.forEach(invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {

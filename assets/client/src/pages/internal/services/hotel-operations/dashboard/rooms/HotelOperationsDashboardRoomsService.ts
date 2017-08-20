@@ -14,6 +14,8 @@ import {RoomVM} from '../../../rooms/view-models/RoomVM';
 
 import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class HotelOperationsDashboardRoomsService extends ARequestService<RoomItemInfoVM[]> {
     constructor(

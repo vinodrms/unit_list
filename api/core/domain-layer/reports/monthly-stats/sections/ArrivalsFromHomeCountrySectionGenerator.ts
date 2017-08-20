@@ -23,7 +23,7 @@ export class ArrivalsFromHomeCountrySectionGenerator extends AReportSectionGener
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Arrivals Home Country"
+            title: "Guest Arrivals Home Country"
         }
     }
 

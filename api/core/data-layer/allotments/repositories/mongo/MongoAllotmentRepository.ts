@@ -5,6 +5,8 @@ import {AllotmentDO, AllotmentStatus} from '../../data-objects/AllotmentDO';
 import {MongoAllotmentCrudOperationsRepository} from './operations/MongoAllotmentCrudOperationsRepository';
 import {MongoAllotmentReadOperationsRepository} from './operations/MongoAllotmentReadOperationsRepository';
 
+declare var sails: any;
+
 export class MongoAllotmentRepository extends MongoRepository implements IAllotmentRepository {
 	private _crudRepository: MongoAllotmentCrudOperationsRepository;
 	private _readRepository: MongoAllotmentReadOperationsRepository;

@@ -16,6 +16,8 @@ import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../..
 import { HotelAggregatedInfo } from '../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import { BookingVM } from "../../../../../../../../services/bookings/view-models/BookingVM";
 
+import * as _ from "underscore";
+
 export class BookingViewModelConverter {
     private _thUtils: ThUtils;
 

@@ -39,6 +39,7 @@ export class InvoiceDO extends BaseDO {
     paidTimestamp: ThTimestampDO;
     paidDateUtcTimestamp: number;
     paidDateTimeUtcTimestamp: number;
+    paymentDueDate: ThDateDO;
 
     constructor() {
         super();
@@ -71,6 +72,9 @@ export class InvoiceDO extends BaseDO {
 
         this.paidTimestamp = new ThTimestampDO();
         this.paidTimestamp.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidTimestamp"));
+
+        this.paymentDueDate = new ThDateDO();
+        this.paymentDueDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentDueDate"));
     }
 
     public getPayerCustomerIdList(): string[] {

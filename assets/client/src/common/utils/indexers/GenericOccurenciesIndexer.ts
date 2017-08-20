@@ -1,4 +1,6 @@
-import {ThUtils} from '../ThUtils';
+import { ThUtils } from '../ThUtils';
+
+import * as _ from "underscore";
 
 export class GenericOccurenciesIndexer<T> {
     private _thUtils: ThUtils;

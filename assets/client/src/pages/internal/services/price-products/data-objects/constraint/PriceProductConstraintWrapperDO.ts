@@ -4,6 +4,8 @@ import {PriceProductConstraintDO} from './PriceProductConstraintDO';
 import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
 import {IPriceProductValidationRule, PriceProductValidationRuleDataDO, PriceProductValidationRuleResult} from './validation/IPriceProductValidationRule';
 
+import * as _ from "underscore";
+
 export class PriceProductConstraintWrapperDO extends BaseDO implements IPriceProductConstraint, IPriceProductValidationRule {
 	constraintList: PriceProductConstraintDO[];
 

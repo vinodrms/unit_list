@@ -1,6 +1,8 @@
 import { BaseDO } from '../../../../../common/base/BaseDO';
 import { PriceProductDO } from './PriceProductDO';
 
+import * as _ from "underscore";
+
 export class PriceProductsDO extends BaseDO {
 	priceProductList: PriceProductDO[];
 

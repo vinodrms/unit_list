@@ -15,6 +15,8 @@ import { HotelDetailsDO } from "../../../../../../../../../services/hotel/data-o
 import { HotelService } from "../../../../../../../../../services/hotel/HotelService";
 import { Observable } from "rxjs/Observable";
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'bookings-report',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/bookings-report/template/bookings-report.html',

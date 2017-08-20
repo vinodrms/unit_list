@@ -4,7 +4,7 @@ import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
 import { AppContext } from '../core/utils/AppContext';
 import { SessionContext } from '../core/utils/SessionContext';
 import { ThTranslation } from '../core/utils/localization/ThTranslation';
-import { InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO } from '../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO } from '../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import { InvoiceGroupDO } from '../core/data-layer/invoices/data-objects/InvoiceGroupDO';
 import { InvoiceDO } from '../core/data-layer/invoices/data-objects/InvoiceDO';
 import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
@@ -19,7 +19,7 @@ import path = require("path");
 
 export class InvoiceGroupsController extends BaseController {
 
-    public getInvoiceGroupById(req: Express.Request, res: Express.Response) {
+    public getInvoiceGroupById(req: any, res: any) {
         if (!this.precheckGETParameters(req, res, ['id'])) { return };
 
         var appContext: AppContext = req.appContext;
@@ -35,20 +35,20 @@ export class InvoiceGroupsController extends BaseController {
         });
     }
 
-    public getInvoiceGroupList(req: Express.Request, res: Express.Response) {
+    public getInvoiceGroupList(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
         var invoiceGroupMeta = this.getInvoiceGroupMetaRepoDOFrom(sessionContext);
         var invoiceGroupRepo = appContext.getRepositoryFactory().getInvoiceGroupsRepository();
 
-        invoiceGroupRepo.getInvoiceGroupList(invoiceGroupMeta, req.body.searchCriteria, req.body.lazyLoad).then((result: InvoiceGroupSearchCriteriaRepoDO) => {
+        invoiceGroupRepo.getInvoiceGroupList(invoiceGroupMeta, req.body.searchCriteria, req.body.lazyLoad).then((result: InvoiceGroupSearchResultRepoDO) => {
             this.returnSuccesfulResponse(req, res, result);
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroups);
         });
     }
 
-    public getInvoiceGroupListCount(req: Express.Request, res: Express.Response) {
+    public getInvoiceGroupListCount(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
         var invoiceGroupMeta = this.getInvoiceGroupMetaRepoDOFrom(sessionContext);
@@ -65,7 +65,7 @@ export class InvoiceGroupsController extends BaseController {
         return { hotelId: sessionContext.sessionDO.hotel.id };
     }
 
-    public saveInvoiceGroupItem(req: Express.Request, res: Express.Response) {
+    public saveInvoiceGroupItem(req: any, res: any) {
         var saveInvoiceGroup = new SaveInvoiceGroup(req.appContext, req.sessionContext);
 
         saveInvoiceGroup.save(req.body.invoiceGroup).then((updatedInvoiceGroup: InvoiceGroupDO) => {
@@ -75,7 +75,7 @@ export class InvoiceGroupsController extends BaseController {
         });
     }
 
-    public reinstateInvoice(req: Express.Request, res: Express.Response) {
+    public reinstateInvoice(req: any, res: any) {
         let reinstatementInvoiceGenerator = new ReinstateInvoice(req.appContext, req.sessionContext);
         
         reinstatementInvoiceGenerator.reinstate(req.body.reinstatedInvoiceMeta).then((updatedInvoiceGroup: InvoiceGroupDO) => {
@@ -85,7 +85,7 @@ export class InvoiceGroupsController extends BaseController {
         });
     }
 
-    public downloadInvoicePdf(req: Express.Request, res: any) {
+    public downloadInvoicePdf(req: any, res: any) {
 
         var pdfReportsService = req.appContext.getServiceFactory().getPdfReportsService();
         var invoiceDataAggregator = new InvoiceDataAggregator(req.appContext, req.sessionContext);

@@ -7,6 +7,8 @@ import {CustomerDO, CustomerType} from './data-objects/CustomerDO';
 import {CustomersDO} from './data-objects/CustomersDO';
 import {CustomerVM} from './view-models/CustomerVM';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class CustomersService extends ALazyLoadRequestService<CustomerVM> {
 	constructor(appContext: AppContext) {

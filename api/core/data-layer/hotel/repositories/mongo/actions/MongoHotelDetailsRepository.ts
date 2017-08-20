@@ -16,7 +16,7 @@ import _ = require("underscore");
 export class MongoHotelDetailsRepository extends MongoRepository {
 	private static PrefixLength = 3;
 
-	constructor(hotelsEntity: Sails.Model) {
+	constructor(hotelsEntity: any) {
 		super(hotelsEntity);
 	}
 	public getHotelById(id: string): Promise<HotelDO> {
@@ -54,7 +54,8 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 		return this.findAndModifyHotel(hotelMeta, {
 			"paymentMethodList": paymPoliciesParams.paymentMethodList,
 			"ccyCode": paymPoliciesParams.ccyCode,
-			"additionalInvoiceDetails": paymPoliciesParams.additionalInvoiceDetails
+			"additionalInvoiceDetails": paymPoliciesParams.additionalInvoiceDetails,
+			"paymentDueInDays": paymPoliciesParams.paymentDueInDays
 		});
 	}
 

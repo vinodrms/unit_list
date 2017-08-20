@@ -11,6 +11,8 @@ import { BookingDO } from "../data-objects/BookingDO";
 import { AppContext } from "../../../../../common/utils/AppContext";
 import { BookingMetaFactory } from "../data-objects/BookingMetaFactory";
 
+import * as _ from "underscore";
+
 export class BookingsServiceUtils {
     private _bookingMetaFactory: BookingMetaFactory;
     

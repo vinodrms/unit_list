@@ -8,6 +8,8 @@ import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/Inv
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 
+import _ = require("underscore");
+
 export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGeneratorStrategy {
 
 	constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,

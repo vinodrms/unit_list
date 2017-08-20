@@ -1,6 +1,8 @@
 import {BaseDO} from '../../../../../../common/base/BaseDO';
 import {ThUtils} from '../../../../../../common/utils/ThUtils';
 
+import * as _ from "underscore";
+
 export class BookingPriceItemDO extends BaseDO {
     roomCategoryId: string;
     price: number;

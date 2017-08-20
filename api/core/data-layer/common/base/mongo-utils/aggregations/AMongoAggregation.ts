@@ -13,7 +13,7 @@ export abstract class AMongoAggregation<T> {
     errorCallback: { (err: Error): void };
     successCallback: { (foundDocument: T): void };
 
-    constructor(private _sailsEntity: Sails.Model) {
+    constructor(private _sailsEntity: any) {
         this._thUtils = new ThUtils();
         this._mongoUtils = new MongoUtils();
     }

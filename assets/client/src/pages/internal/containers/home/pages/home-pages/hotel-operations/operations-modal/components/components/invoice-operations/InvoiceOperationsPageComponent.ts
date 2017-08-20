@@ -26,6 +26,8 @@ import { ModalDialogRef } from '../../../../../../../../../../../common/utils/mo
 import { HotelOperationsResult } from '../../../services/utils/HotelOperationsResult';
 import { ItemAdditionMeta } from "../../../../../../../../../../../common/utils/components/item-list-navigator/ItemAdditionMeta";
 
+import * as _ from "underscore";
+
 export enum FilterType {
     Customer,
     InvoiceRef

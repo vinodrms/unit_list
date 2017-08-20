@@ -12,6 +12,8 @@ import { BookingDO } from '../../../../../core/data-layer/bookings/data-objects/
 import { GenerateBookingInvoiceDO } from '../../../../../../api/core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoiceDO';
 import { TransactionFeeDO } from "../../../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
+import _ = require("underscore");
+
 export class BookingInvoicesTestHelper {
 
     private _invoiceTestUtils: InvoiceTestUtils;

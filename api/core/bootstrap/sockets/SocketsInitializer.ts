@@ -1,5 +1,7 @@
 var passportSocketIo = require('passport.socketio');
 
+declare var sails: any;
+
 export class SocketsInitializer {
     public register() {
         var io = require('socket.io')(sails.hooks.http.server);

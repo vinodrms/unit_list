@@ -1,6 +1,8 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
 import {CountryDO} from '../../common/data-objects/country/CountryDO';
 
+import * as _ from "underscore";
+
 export class CountriesDO extends BaseDO {
 	countryList: CountryDO[];
 

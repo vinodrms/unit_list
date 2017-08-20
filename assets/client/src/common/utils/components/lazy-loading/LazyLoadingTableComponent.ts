@@ -1,15 +1,21 @@
-import {Component, OnInit, Output, EventEmitter, Input, Inject, ElementRef,
-	ViewChild, ViewContainerRef, Type, ResolvedReflectiveProvider, ComponentFactoryResolver, OnChanges} from '@angular/core';
-import {AppContext} from '../../AppContext';
-import {LazyLoadTableMeta, TableRowCommand, TableColumnValueMeta, TablePropertyType, TableViewOption, TableColumnMeta} from './utils/LazyLoadTableMeta';
-import {ILazyLoadRequestService, LazyLoadData, PageContent, SortOrder, SortOptions} from '../../../../pages/internal/services/common/ILazyLoadRequestService';
-import {TotalCountDO} from '../../../../pages/internal/services/common/data-objects/lazy-load/TotalCountDO';
-import {PageMetaDO} from '../../../../pages/internal/services/common/data-objects/lazy-load/PageMetaDO';
-import {PaginationIndex} from './utils/PaginationIndex';
-import {TableOptions} from './utils/TableOptions';
-import {CustomScroll} from '../../directives/CustomScroll';
-import {ThUtils} from '../../ThUtils';
-import {ModuleLoaderService} from '../../module-loader/ModuleLoaderService';
+import {
+	Component, OnInit, Output, EventEmitter, Input, Inject, ElementRef,
+	ViewChild, ViewContainerRef, Type, ResolvedReflectiveProvider, ComponentFactoryResolver, OnChanges
+} from '@angular/core';
+import { AppContext } from '../../AppContext';
+import { LazyLoadTableMeta, TableRowCommand, TableColumnValueMeta, TablePropertyType, TableViewOption, TableColumnMeta } from './utils/LazyLoadTableMeta';
+import { ILazyLoadRequestService, LazyLoadData, PageContent, SortOrder, SortOptions } from '../../../../pages/internal/services/common/ILazyLoadRequestService';
+import { TotalCountDO } from '../../../../pages/internal/services/common/data-objects/lazy-load/TotalCountDO';
+import { PageMetaDO } from '../../../../pages/internal/services/common/data-objects/lazy-load/PageMetaDO';
+import { PaginationIndex } from './utils/PaginationIndex';
+import { TableOptions } from './utils/TableOptions';
+import { CustomScroll } from '../../directives/CustomScroll';
+import { ThUtils } from '../../ThUtils';
+import { ModuleLoaderService } from '../../module-loader/ModuleLoaderService';
+
+import * as _ from "underscore";
+
+declare var $: any;
 
 @Component({
 	selector: 'lazy-loading-table',
@@ -106,7 +112,7 @@ export class LazyLoadingTableComponent<T> {
 
 	public bootstrap(lazyLoadingRequest: ILazyLoadRequestService<T>, tableMeta: LazyLoadTableMeta) {
 		//wait for next tick
-        setTimeout(() => {
+		setTimeout(() => {
 			this.lazyLoadingRequest = lazyLoadingRequest;
 			this.tableMeta = tableMeta;
 
@@ -116,7 +122,7 @@ export class LazyLoadingTableComponent<T> {
 	}
 	private attachRequestObservable() {
 		this.lazyLoadingRequest.getDataObservable().subscribe((lazyLoadData: LazyLoadData<T>) => {
-            this.totalCount = lazyLoadData.totalCount;
+			this.totalCount = lazyLoadData.totalCount;
 			this.pageMeta = lazyLoadData.pageContent.pageMeta;
 			this.itemList = lazyLoadData.pageContent.pageItemList;
 
@@ -231,10 +237,10 @@ export class LazyLoadingTableComponent<T> {
 	protected isNotes(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.NotesType;
 	}
-    protected isCapacity(valueMeta: TableColumnValueMeta): boolean {
+	protected isCapacity(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.CapacityType;
 	}
-    protected isFontIcon(valueMeta: TableColumnValueMeta): boolean {
+	protected isFontIcon(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.FontIconType;
 	}
 	protected isDateInterval(valueMeta: TableColumnValueMeta): boolean {

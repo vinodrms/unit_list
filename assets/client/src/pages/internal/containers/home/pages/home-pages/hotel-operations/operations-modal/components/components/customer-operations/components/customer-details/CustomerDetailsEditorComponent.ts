@@ -5,6 +5,8 @@ import {CustomerDO} from '../../../../../../../../../../../services/customers/da
 import {FileAttachmentDO} from '../../../../../../../../../../../services/common/data-objects/file/FileAttachmentDO';
 import {HotelOperationsCustomerService} from '../../../../../../../../../../../services/hotel-operations/customer/HotelOperationsCustomerService';
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'customer-details-editor',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/customer-operations/components/customer-details/template/customer-details-editor.html'

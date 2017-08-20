@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {NumberOfAddOnProductsModalInput} from './services/utils/NumberOfAddOnProductsModalInput';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NumberOfAddOnProductsModalInput } from './services/utils/NumberOfAddOnProductsModalInput';
 import { NumberOfAddOnProductsModalOutput } from './services/utils/NumberOfAddOnProductsModalOutput';
 import { EagerAddOnProductsService } from "../../../../../services/add-on-products/EagerAddOnProductsService";
 import { BaseComponent } from "../../../../../../../common/base/BaseComponent";
@@ -7,6 +7,8 @@ import { ICustomModalComponent, ModalSize } from "../../../../../../../common/ut
 import { AppContext } from "../../../../../../../common/utils/AppContext";
 import { ModalDialogRef } from "../../../../../../../common/utils/modals/utils/ModalDialogRef";
 import { AddOnProductsDO } from "../../../../../services/add-on-products/data-objects/AddOnProductsDO";
+
+import * as _ from "underscore";
 
 @Component({
 	selector: 'number-of-aop-modal',

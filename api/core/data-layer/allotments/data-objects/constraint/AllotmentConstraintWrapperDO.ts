@@ -3,6 +3,8 @@ import {AllotmentConstraintType, IAllotmentConstraint, AllotmentConstraintDataDO
 import {AllotmentConstraintDO} from './AllotmentConstraintDO';
 import {ThTranslation} from '../../../../utils/localization/ThTranslation';
 
+import _ = require("underscore");
+
 export class AllotmentConstraintWrapperDO extends BaseDO implements IAllotmentConstraint {
 	constraintList: AllotmentConstraintDO[];
 

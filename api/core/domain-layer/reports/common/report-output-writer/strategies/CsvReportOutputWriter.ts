@@ -9,6 +9,8 @@ import { ThUtils } from '../../../../../utils/ThUtils';
 let endOfLine = require('os').EOL;
 
 export class CsvReportOutputWriter extends AReportOutputWriter {
+    private static Separator = ",";
+    private static CsvMetadata = "sep=" + CsvReportOutputWriter.Separator;
     private static OutputFolder = "output/reports/report/"
     private _utils: ThUtils;
 
@@ -32,11 +34,15 @@ export class CsvReportOutputWriter extends AReportOutputWriter {
 
     private getReportCSVString(group: ReportGroup): string {
         let csvString = "";
+        csvString += this.getSeparatorMetadata();
         group.sectionList.forEach((item: ReportSection) => {
             let rcsv = this.buildCSVStringForReportItem(item);
             csvString += rcsv + endOfLine + endOfLine;
         });
         return csvString;
+    }
+    private getSeparatorMetadata() {
+         return CsvReportOutputWriter.CsvMetadata + endOfLine;
     }
     private buildCSVStringForReportItem(item: ReportSection) {
         let rCSV = "";
@@ -52,13 +58,20 @@ export class CsvReportOutputWriter extends AReportOutputWriter {
     private buildCSVRowForArray(data: any[]) {
         let rowCSV = "";
         for (let i = 0; i < data.length - 1; i++) {
-            rowCSV += this.transformValue(data[i]) + ',';
+            rowCSV += this.transformValue(data[i]) + CsvReportOutputWriter.Separator;
         }
         rowCSV += this.transformValue(data[data.length - 1]) + endOfLine;
         return rowCSV;
     }
 
-    private transformValue(data) {
-        return !this._utils.isUndefinedOrNull(data) ? data : "";
+    private transformValue(data): string {
+        if (this._utils.isUndefinedOrNull(data)) {
+            return "";
+        }
+        var dataString: string = String(data);
+        if (dataString && dataString.includes('"')) {
+            dataString = dataString.replace(/"/g, '""');
+        }
+        return '"' + dataString + '"';
     }
 }

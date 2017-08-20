@@ -20,6 +20,8 @@ import { BookingUtils } from '../../../core/domain-layer/bookings/utils/BookingU
 import { PaymentMethodInstanceDO } from "../../../core/data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 import { AddOnProductDO } from "../../../core/data-layer/add-on-products/data-objects/AddOnProductDO";
 
+import _ = require("underscore");
+
 export interface IBookingDataSource {
     getBookingList(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryStatsList: RoomCategoryStatsDO[],
         priceProductList: PriceProductDO[], addOnProductList: AddOnProductDO[]): BookingDO[];

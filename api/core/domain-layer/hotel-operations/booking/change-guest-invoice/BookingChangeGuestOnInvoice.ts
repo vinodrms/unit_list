@@ -14,6 +14,8 @@ import { BookingDOConstraints } from "../../../../data-layer/bookings/data-objec
 import { ThStatusCode } from "../../../../utils/th-responses/ThResponse";
 import { ThLogLevel, ThLogger } from "../../../../utils/logging/ThLogger";
 
+import _ = require("underscore");
+
 export class BookingChangeGuestOnInvoice {
     private _bookingUtils: BookingUtils;
 

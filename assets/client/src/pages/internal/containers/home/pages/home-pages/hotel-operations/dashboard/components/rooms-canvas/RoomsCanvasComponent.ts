@@ -15,6 +15,8 @@ import { FilterValueType, IDragStyles, IFilterNotificationProperties, IFilterNot
 import { RoomsCanvasUtils } from './utils/RoomsCanvasUtils';
 import { CustomScroll } from "../../../../../../../../../../common/utils/directives/CustomScroll";
 
+import * as _ from "underscore";
+
 declare var $: any;
 
 @Component({
@@ -89,7 +91,7 @@ export class RoomsCanvasComponent implements OnInit, AfterViewInit {
 					return;
 				}
 				this.scrollableRoomsCanvas.scrollDown();
-				this.lowerScrollInterval = setInterval(() => {
+				this.lowerScrollInterval = window.setInterval(() => {
 					this.scrollableRoomsCanvas.scrollDown();
 				}, RoomsCanvasComponent.scrollTimeout);
 			},
@@ -105,7 +107,7 @@ export class RoomsCanvasComponent implements OnInit, AfterViewInit {
 					return;
 				}
 				this.scrollableRoomsCanvas.scrollUp();
-				this.upperScrollInterval = setInterval(() => {
+				this.upperScrollInterval = window.setInterval(() => {
 					this.scrollableRoomsCanvas.scrollUp();
 				}, RoomsCanvasComponent.scrollTimeout);
 			},

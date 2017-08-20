@@ -24,6 +24,8 @@ import {BedMetaDO} from '../../../../../../services/room-categories/data-objects
 import {BedConfigDO} from '../../../../../../services/room-categories/data-objects/bed-config/BedConfigDO';
 import {RoomCategoriesService} from '../../../../../../services/room-categories/RoomCategoriesService';
 
+import * as _ from "underscore";
+
 @Component({
     selector: 'room-edit',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/pages/room-edit/template/room-edit.html',

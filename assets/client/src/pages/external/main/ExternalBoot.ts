@@ -1,5 +1,3 @@
-/// <reference path="../../../../typings/tsd.d.ts" />
-
 import { NgModule, Compiler, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';

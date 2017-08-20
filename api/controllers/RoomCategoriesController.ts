@@ -13,7 +13,7 @@ import {ThUtils} from '../core/utils/ThUtils';
 
 class RoomCategoriesController extends BaseController {
 
-    public getRoomCategoryList(req: Express.Request, res: Express.Response) {
+    public getRoomCategoryList(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -26,7 +26,7 @@ class RoomCategoriesController extends BaseController {
         });
     }
 
-    public saveRoomCategoryItem(req: Express.Request, res: Express.Response) {
+    public saveRoomCategoryItem(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -38,7 +38,7 @@ class RoomCategoriesController extends BaseController {
         });
     }
 
-    public deleteRoomCategoryItem(req: Express.Request, res: Express.Response) {
+    public deleteRoomCategoryItem(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -50,7 +50,7 @@ class RoomCategoriesController extends BaseController {
         });
     }
 
-    public getRoomCategoryById(req: Express.Request, res: Express.Response) {
+    public getRoomCategoryById(req: any, res: any) {
         if (!this.precheckGETParameters(req, res, ['id'])) { return };
 
         var appContext: AppContext = req.appContext;
@@ -67,7 +67,7 @@ class RoomCategoriesController extends BaseController {
         });
     }
 
-    public getRoomCategoryStatsList(req: Express.Request, res: Express.Response) {
+    public getRoomCategoryStatsList(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
@@ -81,7 +81,7 @@ class RoomCategoriesController extends BaseController {
         });
     }
 
-    public geUsedRoomCategoryStatsList(req: Express.Request, res: Express.Response) {
+    public geUsedRoomCategoryStatsList(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 

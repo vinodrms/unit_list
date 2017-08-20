@@ -8,7 +8,7 @@ import {HotelDeleteTaxItem} from '../core/domain-layer/taxes/HotelDeleteTaxItem'
 import {TaxDO} from '../core/data-layer/taxes/data-objects/TaxDO';
 
 class TaxesController extends BaseController {
-	public getTaxes(req: Express.Request, res: Express.Response) {
+	public getTaxes(req: any, res: any) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
 		var taxRepo = appContext.getRepositoryFactory().getTaxRepository();
@@ -19,7 +19,7 @@ class TaxesController extends BaseController {
 		});
 	}
 
-	public saveTaxItem(req: Express.Request, res: Express.Response) {
+	public saveTaxItem(req: any, res: any) {
 		var saveTaxItem = new HotelSaveTaxItem(req.appContext, req.sessionContext);
 		saveTaxItem.save(req.body.tax).then((updatedTax: TaxDO) => {
 			this.returnSuccesfulResponse(req, res, { tax: updatedTax });
@@ -28,7 +28,7 @@ class TaxesController extends BaseController {
 		});
 	}
 
-	public deleteTaxItem(req: Express.Request, res: Express.Response) {
+	public deleteTaxItem(req: any, res: any) {
 		var deleteTaxItem = new HotelDeleteTaxItem(req.appContext, req.sessionContext);
 		deleteTaxItem.delete(req.body.tax).then((deletedTax: TaxDO) => {
 			this.returnSuccesfulResponse(req, res, { tax: deletedTax });

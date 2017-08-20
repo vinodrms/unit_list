@@ -11,6 +11,8 @@ var SupportedLocales: { [index: number]: string; } = {};
 SupportedLocales[Locales.English] = "en";
 SupportedLocales[Locales.Danish] = "dk";
 
+declare var sails: any;
+
 export class ThTranslation {
 	private static TemplateVariableRegex: RegExp = /%([^{}\s]*)%/g;
 	private _thUtils: ThUtils;

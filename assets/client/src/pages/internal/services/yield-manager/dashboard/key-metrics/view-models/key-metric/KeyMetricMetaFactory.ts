@@ -1,6 +1,8 @@
 import {KeyMetricMeta} from './KeyMetricMeta';
 import {KeyMetricType} from '../../data-objects/result-item/KeyMetricType';
 
+import * as _ from 'underscore';
+
 export class KeyMetricMetaFactory {
     private static KeyMetricMetaList: KeyMetricMeta[] = [
         {

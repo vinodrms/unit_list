@@ -9,7 +9,7 @@ import {BedDO, BedStatus} from '../../../../common/data-objects/bed/BedDO';
 import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
 
 export class MongoBedReadOperationsRepository extends MongoRepository {
-    constructor(bedEntity: Sails.Model) {
+    constructor(bedEntity: any) {
         super(bedEntity);
     }
 

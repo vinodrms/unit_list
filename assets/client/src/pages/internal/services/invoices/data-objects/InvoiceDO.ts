@@ -9,6 +9,8 @@ import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
 import { ThDateDO } from "../../common/data-objects/th-dates/ThDateDO";
 import { ThTimestampDO } from "../../common/data-objects/th-dates/ThTimestampDO";
 
+import * as _ from "underscore";
+
 export enum InvoiceAccountingType {
     Debit, Credit
 }
@@ -32,6 +34,7 @@ export class InvoiceDO extends BaseDO {
     paidTimestamp: ThTimestampDO;
     paidDateUtcTimestamp: number;
     paidDateTimeUtcTimestamp: number;
+    paymentDueDate: ThDateDO;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "reinstatedInvoiceId", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
@@ -58,6 +61,9 @@ export class InvoiceDO extends BaseDO {
 
         this.paidTimestamp = new ThTimestampDO();
         this.paidTimestamp.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidTimestamp"));
+
+        this.paymentDueDate = new ThDateDO();
+        this.paymentDueDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentDueDate"));
     }
 
     public buildCleanInvoice(accountingType: InvoiceAccountingType = InvoiceAccountingType.Debit) {

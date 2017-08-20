@@ -237,7 +237,7 @@
 	"Paid Date": "Paid Date",
 	"Guests Report": "Guests Report",
 	"Departures": "Departures",
-	"Arrivals": "Arrivals",
+	"Guest Arrivals": "Guest Arrivals",
 	"Stayovers": "Stayovers",
 	"Monthly Stats Report": "Monthly Stats Report",
 	"Guest Nights Total": "Guest Nights Total",
@@ -252,6 +252,8 @@
 	"Total breakfast (excluding VAT)": "Total breakfast (excluding VAT)",
 	"Total breakfast internal cost (excluding VAT)": "Total breakfast internal cost (excluding VAT)",
 	"Breakfast": "Breakfast",
+	"Breakfast Price Charged Included in the Price Product": "Breakfast Price Charged Included in the Price Product",
+	"Breakfast Internal Cost Included in the Price Product": "Breakfast Internal Cost Included in the Price Product",
 	"Arrivals Total": "Arrivals Total",
 	"Breakfast Revenue Total": "Breakfast Revenue Total",
 	"Business Group": "Business Group",
@@ -259,13 +261,14 @@
 	"Leisure Group": "Leisure Group",
 	"Leisure Individual": "Leisure Individual",
 	"Room Nights Total": "Room Nights Total",
-	"Arrivals Home Country": "Arrivals Home Country",
+	"Guest Arrivals Home Country": "Guest Arrivals Home Country",
 	"Guest Nights by Purpose of Stay": "Guest Nights by Purpose of Stay",
 	"Guest Nights by Nationality": "Guest Nights by Nationality",
 	"Guest Nights": "Guest Nights",
 	"Room Nights by Purpose of Stay": "Room Nights by Purpose of Stay",
 	"Avg Rate Total": "Avg Rate Total",
-
+	"Paid by Agreement": "Paid by Agreement",
+	"Booking Guest": "Booking Guest",
 
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."

@@ -8,6 +8,8 @@ import {
     BookingUndoCheckInRight, BookingGenerateInvoiceRight, BookingUnreserveRoomRight
 } from './BookingEditRights';
 
+import * as _ from "underscore";
+
 export class BookingMetaFactory {
     public getBookingMetaList(): BookingMeta[] {
         return [

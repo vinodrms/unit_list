@@ -15,6 +15,8 @@ import {RoomAttributesService} from '../settings/RoomAttributesService';
 import {RoomCategoryStatsDO} from '../room-categories/data-objects/RoomCategoryStatsDO';
 import {RoomVMBuilder} from './view-models/RoomVMBuilder';
 
+import * as _ from "underscore";
+
 @Injectable()
 export class RoomsService extends ARequestService<RoomVM[]> {
 

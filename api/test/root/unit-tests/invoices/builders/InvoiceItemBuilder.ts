@@ -1,5 +1,7 @@
 import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../../../../api/core/data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {IInvoiceItemMeta} from '../../../../../../api/core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
+import { IInvoiceItemMeta } from '../../../../../../api/core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
+
+import _ = require("underscore");
 
 export class InvoiceItemBuilder {
     private _id: string;
@@ -23,14 +25,14 @@ export class InvoiceItemBuilder {
         this._meta = meta;
         return this;
     }
-    
+
     public build(): InvoiceItemDO {
         var invoiceItemDO = new InvoiceItemDO();
         invoiceItemDO.id = this._id;
         invoiceItemDO.type = this._type;
         invoiceItemDO.meta = this._meta;
 
-        if(!_.isUndefined(this._accountingType)) {
+        if (!_.isUndefined(this._accountingType)) {
             invoiceItemDO.accountingType = this._accountingType;
         }
 
