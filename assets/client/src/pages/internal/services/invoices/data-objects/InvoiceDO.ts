@@ -34,6 +34,7 @@ export class InvoiceDO extends BaseDO {
     paidTimestamp: ThTimestampDO;
     paidDateUtcTimestamp: number;
     paidDateTimeUtcTimestamp: number;
+    paymentDueDate: ThDateDO;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "reinstatedInvoiceId", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
@@ -60,6 +61,9 @@ export class InvoiceDO extends BaseDO {
 
         this.paidTimestamp = new ThTimestampDO();
         this.paidTimestamp.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidTimestamp"));
+
+        this.paymentDueDate = new ThDateDO();
+        this.paymentDueDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentDueDate"));
     }
 
     public buildCleanInvoice(accountingType: InvoiceAccountingType = InvoiceAccountingType.Debit) {

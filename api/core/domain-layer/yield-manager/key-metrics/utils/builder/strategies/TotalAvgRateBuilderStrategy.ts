@@ -26,7 +26,7 @@ export class TotalAvgRateBuilderStrategy extends AMetricBuilderStrategy {
             let confirmedRevenue = this._input.excludeCommission? statsForDate.confirmedRevenueWithoutCommission : statsForDate.confirmedRevenue;
             let guaranteedRevenue = this._input.excludeCommission? statsForDate.guaranteedRevenueWithoutCommission : statsForDate.guaranteedRevenue;
 
-            totalNoOccupiedRooms += statsForDate.confirmedOccupancy.getTotalRoomOccupancy() + statsForDate.guaranteedOccupancy.getTotalRoomOccupancy();
+            totalNoOccupiedRooms += statsForDate.confirmedOccupancy[this._input.revenueSegment].getTotalRoomOccupancy() + statsForDate.guaranteedOccupancy[this._input.revenueSegment].getTotalRoomOccupancy();
             totalRoomRevenue += confirmedRevenue[this._input.revenueSegment].revenue.roomRevenue 
                 + guaranteedRevenue[this._input.revenueSegment].revenue.roomRevenue;
             

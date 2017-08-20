@@ -12,6 +12,7 @@ import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingD
 import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repositories/IBookingRepository";
 import { PaymentMethodDO } from "../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO";
 import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
+import { InvoicePaymentMethodsUtils } from "../../../invoices/utils/InvoicePaymentMethodsUtils";
 
 import _ = require('underscore');
 
@@ -19,7 +20,7 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
 
     private _indexedCustomersById: { [id: string]: CustomerDO };
     private _indexedBookingById: { [id: string]: BookingDO };
-    private _paymentMethodList: PaymentMethodDO[];
+    private _invoicePaymentMethodsUtils: InvoicePaymentMethodsUtils;
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
         private _allInvoiceGroupList: InvoiceGroupDO[],
@@ -54,7 +55,7 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
 
     protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
         this._appContext.getRepositoryFactory().getSettingsRepository().getPaymentMethods().then((result: PaymentMethodDO[]) => {
-            this._paymentMethodList = result;
+            this._invoicePaymentMethodsUtils = new InvoicePaymentMethodsUtils(result);
 
             let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
             let customerIdList = this.getCustomerIdList();
@@ -111,7 +112,7 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                         });
                     }
 
-                    let paymentMethodString = (invoice.isPaid && invoice.payerList.length == 1) ? this.getPaymentMethodName(invoice.payerList[0].paymentMethod) : "";
+                    let paymentMethodString = (invoice.isPaid) ? this.getPaymentMethodString(invoice.payerList) : "";
 
                     let row = [invoiceRefDisplayString, payerString, priceToPay, transactionFee, priceToPayPlusTransactionFee, bookingRef, paidTimestampStr, paymentMethodString];
 
@@ -138,11 +139,21 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
         });
     }
 
-    private getPaymentMethodName(inputInvoicePaymentMethodDO: InvoicePaymentMethodDO): string {
-        var result = _.find(this._paymentMethodList, (paymentMethod: PaymentMethodDO) => {
-            return paymentMethod.id === inputInvoicePaymentMethodDO.value;
+    private getPaymentMethodString(invoicePayerList: InvoicePayerDO[]): string {
+        let invoicePaymentMethodList: InvoicePaymentMethodDO = _.map(invoicePayerList, (invoicePayer: InvoicePayerDO) => {
+            return invoicePayer.paymentMethod;
         });
-        return (result) ? result.name : "";
+
+        return _.reduce(invoicePaymentMethodList, (paymentMethodString: string, invoicePaymentMethod: InvoicePaymentMethodDO) => {
+            let pmName = this._invoicePaymentMethodsUtils.getPaymentMethodName(invoicePaymentMethod);
+            pmName = this._appContext.thTranslate.translate(pmName);
+
+            if (!this._thUtils.isUndefinedOrNull(pmName)) {
+                return paymentMethodString + (paymentMethodString.length > 0 ? ", " : "") + pmName;
+            }
+
+            return paymentMethodString;
+        }, "");
     }
 
     private getBookingIdList(): string[] {

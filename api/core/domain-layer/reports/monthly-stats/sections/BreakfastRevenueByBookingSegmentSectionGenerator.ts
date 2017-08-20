@@ -16,8 +16,8 @@ import { KeyMetricsResultItem, KeyMetric } from "../../../yield-manager/key-metr
 
 import _ = require('underscore');
 
-export class BreakfastSectionGenerator extends AReportSectionGeneratorStrategy {
-    private static KeyMetricList = [KeyMetricType.BreakfastRevenue];
+export class BreakfastRevenueByBookingSegmentSectionGenerator extends AReportSectionGeneratorStrategy {
+    private static KeyMetricList = [KeyMetricType.BreakfastRevenueByBookingSegment];
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
         private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem) {
@@ -26,7 +26,7 @@ export class BreakfastSectionGenerator extends AReportSectionGeneratorStrategy {
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Breakfast Included in the Price Product"
+            title: "Breakfast Price Charged Included in the Price Product"
         }
     }
 
@@ -48,7 +48,7 @@ export class BreakfastSectionGenerator extends AReportSectionGeneratorStrategy {
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
         var data: any[] = [];
         _.filter(this._kmResultItem.metricList, (metric: KeyMetric) => {
-            return _.contains(BreakfastSectionGenerator.KeyMetricList, metric.type);
+            return _.contains(BreakfastRevenueByBookingSegmentSectionGenerator.KeyMetricList, metric.type);
         }).forEach((metric: KeyMetric) => {
             let displayValue = this._appContext.thTranslate.translate(metric.displayName);
             let row: any = [displayValue];

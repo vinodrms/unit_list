@@ -9,7 +9,7 @@
 						<small>{{ 'All rates and prices will be in the selected currency' | translate }}</small>
 					</label>
 					<div class="form-group">
-						<div class="input-group" [ngClass]="{'form-warning': (!hotel.ccyCode && didSubmitPage)}">
+						<div class="input-group" [ngClass]="{'form-warning': (!hotel.ccyCode || didSubmitPage)}">
 							<select class="form-control" [ngModel]="hotel.ccyCode" (ngModelChange)="didChangeCurrencyCode($event)" name="hotelCcyCode">
 							<option value="" disabled>{{ 'Select a currency' | translate }}</option>
 							<option *ngFor="let currency of currencies.currencyList" [value]="currency.code">{{currency.code}} - {{currency.name}}</option>
@@ -34,8 +34,20 @@
 					</div>
 				</div>				
 			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<label class="control-label">
+						<h3>{{ 'Payment Due In Days' | translate }}  </h3>
+					</label>
+					<div class="form-group">
+						<div class="input-group" [ngClass]="{'form-warning': !paymentDueInDays}">
+							<input type="number" [(ngModel)]="paymentDueInDays" min="0" class="form-control">
+						</div>
+					</div>
+				</div>				
+			</div>
 		</div>
-
+		
 		<div class="col-xs-12 col-md-6 col-lg-3">
 			<div class="row">
 				<div class="col-xs-12">
