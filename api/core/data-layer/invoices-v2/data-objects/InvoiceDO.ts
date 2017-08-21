@@ -3,6 +3,11 @@ import { TaxDO } from "../../taxes/data-objects/TaxDO";
 import { InvoiceItemDO, InvoiceItemType } from "./items/InvoiceItemDO";
 import { InvoicePayerDO } from "./payer/InvoicePayerDO";
 import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
+import { BookingDO } from "../../bookings/data-objects/BookingDO";
+import { ThUtils } from "../../../utils/ThUtils";
+import { CustomerDO } from "../../customers/data-objects/CustomerDO";
+import { InvoicePaymentDO } from "./payer/InvoicePaymentDO";
+import { InvoicePaymentMethodType } from "./payer/InvoicePaymentMethodDO";
 
 import _ = require('underscore');
 
@@ -80,5 +85,83 @@ export class InvoiceDO extends BaseDO {
             return bookingItem.id;
         });
         this.indexedBookingIdList = _.uniq(bookingIdList);
+    }
+
+    public removeItemsPopulatedFromBooking() {
+        var itemsToRemoveIdList = [];
+        _.forEach(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
+            if (invoiceItemDO.type === InvoiceItemType.Booking) {
+                delete invoiceItemDO.meta;
+            }
+            else if (invoiceItemDO.meta.isDerivedFromBooking()) {
+                itemsToRemoveIdList.push(invoiceItemDO.id);
+            }
+        });
+        _.forEach(itemsToRemoveIdList, (id: string) => {
+            var index = _.findIndex(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
+                return invoiceItemDO.id === id;
+            });
+            if (index != -1) {
+                this.itemList.splice(index, 1);
+            }
+        });
+    }
+
+    public linkBookingPrices(indexedBookingsById: { [id: string]: BookingDO }) {
+        let thUtils = new ThUtils();
+        let actualItemList: InvoiceItemDO[] = [];
+        _.forEach(this.itemList, (item: InvoiceItemDO) => {
+            if (item.type === InvoiceItemType.Booking) {
+                let booking = indexedBookingsById[item.id];
+                if (thUtils.isUndefinedOrNull(booking)) {
+                    actualItemList.push(item);
+                } else {
+                    let bookingInvoiceItemList = this.getBookingInvoiceItems(item, booking);
+                    actualItemList = actualItemList.concat(bookingInvoiceItemList);
+                }
+            }
+            else {
+                actualItemList.push(item);
+            }
+        });
+        this.itemList = actualItemList;
+    }
+    private getBookingInvoiceItems(item: InvoiceItemDO, booking: BookingDO): InvoiceItemDO[] {
+        let bookingInvoiceItemList: InvoiceItemDO[] = [];
+
+        item.meta = booking.price;
+        bookingInvoiceItemList.push(item);
+
+        if (booking.price.hasDeductedCommission()) {
+            var invoiceRoomCommissionItem = new InvoiceItemDO();
+            invoiceRoomCommissionItem.buildItemFromRoomCommission(booking.price.deductedCommissionPrice);
+            bookingInvoiceItemList.push(invoiceRoomCommissionItem);
+        }
+
+        if (!booking.price.isPenalty()) {
+            booking.price.includedInvoiceItemList.reverse();
+            _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+                var includedItem = new InvoiceItemDO();
+                includedItem.buildFromObject(invoiceItem);
+
+                bookingInvoiceItemList = bookingInvoiceItemList.concat(includedItem);
+            });
+        }
+        return bookingInvoiceItemList;
+    }
+    public addInvoiceFeeIfNecessary(indexedCustomersById: { [id: string]: CustomerDO }) {
+        let thUtils = new ThUtils();
+        this.payerList.forEach((payer: InvoicePayerDO) => {
+            payer.paymentList.forEach((payment: InvoicePaymentDO) => {
+                if (payment.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                    var customerDO = indexedCustomersById[payer.customerId];
+                    if (!thUtils.isUndefinedOrNull(customerDO)) {
+                        var invoiceFeeItem = new InvoiceItemDO();
+                        invoiceFeeItem.buildFeeItemFromCustomerDO(customerDO);
+                        this.itemList.push(invoiceFeeItem);
+                    }
+                }
+            });
+        });
     }
 }

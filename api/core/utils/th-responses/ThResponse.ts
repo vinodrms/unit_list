@@ -546,6 +546,8 @@ export enum ThStatusCode {
     InvoiceRepositoryErrorAddingInvoice,
     InvoiceRepositoryProblemUpdatingInvoice,
     InvoiceRepositoryErrorUpdatingInvoice,
+    InvoiceRepositoryBookingPriceLinkError,
+    InvoiceRepositoryAddInvoiceFeeError,
 
 }
 
@@ -1083,6 +1085,8 @@ ThMessage[ThStatusCode.InvoiceRepositoryErrorGettingInvoiceList] = "Error gettin
 ThMessage[ThStatusCode.InvoiceRepositoryErrorAddingInvoice] = "Error adding the invoice.";
 ThMessage[ThStatusCode.InvoiceRepositoryProblemUpdatingInvoice] = "Problem updating the invoice - concurrency.";
 ThMessage[ThStatusCode.InvoiceRepositoryErrorUpdatingInvoice] = "Error updating the invoice.";
+ThMessage[ThStatusCode.InvoiceRepositoryBookingPriceLinkError] = "Error linking booking prices with the invoices.";
+ThMessage[ThStatusCode.InvoiceRepositoryAddInvoiceFeeError] = "Error adding invoice fee to the invoices if necessary.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
