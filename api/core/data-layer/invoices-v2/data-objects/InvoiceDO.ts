@@ -3,6 +3,11 @@ import { TaxDO } from "../../taxes/data-objects/TaxDO";
 import { InvoiceItemDO } from "./items/InvoiceItemDO";
 import { InvoicePayerDO } from "./payer/InvoicePayerDO";
 
+export enum InvoiceStatus {
+    Active,
+    Deleted
+}
+
 export enum InvoicePaymentStatus {
     Unpaid, Paid, LossAcceptedByManagement, Credit
 }
@@ -11,7 +16,7 @@ export class InvoiceDO extends BaseDO {
     id: string;
     versionId: number;
     hotelId: string;
-
+    status: InvoiceStatus;
     groupId: string;
     reference: string;
     paymentStatus: InvoicePaymentStatus;
@@ -26,7 +31,8 @@ export class InvoiceDO extends BaseDO {
     paidTimestamp: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "versionId", "hotelId", "groupId", "reference", "paymentStatus", "indexedCustomerIdList", "indexedBookingIdList", "reinstatedInvoiceId", "notesFromBooking", "paidTimestamp"];
+        return ["id", "versionId", "hotelId", "groupId", "reference", "paymentStatus", "indexedCustomerIdList",
+            "indexedBookingIdList", "reinstatedInvoiceId", "notesFromBooking", "paidTimestamp"];
     }
 
     public buildFromObject(object: Object) {
