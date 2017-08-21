@@ -32,6 +32,9 @@ import { IBookingRepository } from './bookings/repositories/IBookingRepository';
 import { MongoBookingRepository } from "./bookings/repositories/mongo/MongoBookingRepository";
 import { IHotelInventorySnapshotRepository } from './hotel-inventory-snapshots/repositories/IHotelInventorySnapshotRepository';
 import { MongoHotelInventorySnapshotRepository } from './hotel-inventory-snapshots/repositories/mongo/MongoHotelInventorySnapshotRepository';
+import { IInvoiceRepository } from "./invoices-v2/repositories/IInvoiceRepository";
+import { MongoInvoiceRepositoryWithBookingPriceLink } from "./invoices-v2/repositories/mongo/decorators/MongoInvoiceRepositoryWithBookingPriceLink";
+import { MongoInvoiceRepository } from "./invoices-v2/repositories/mongo/MongoInvoiceRepository";
 
 export class RepositoryFactory {
     private _databaseType: DatabaseType;
@@ -132,10 +135,20 @@ export class RepositoryFactory {
         }
     }
 
+    /**
+     * deprecated in favor of getInvoiceRepository
+     */
     getInvoiceGroupsRepository(): IInvoiceGroupsRepository {
         switch (this._databaseType) {
             default:
                 return new MongoInvoiceGroupsRepositoryWithBookingPriceLink(new MongoInvoiceGroupsRepository(new MongoHotelRepository()), new MongoBookingRepository(), new MongoCustomerRepository());
+        }
+    }
+
+    getInvoiceRepository(): IInvoiceRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoInvoiceRepositoryWithBookingPriceLink(new MongoInvoiceRepository(new MongoHotelRepository()), new MongoBookingRepository(), new MongoCustomerRepository());
         }
     }
 
