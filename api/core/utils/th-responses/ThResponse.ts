@@ -543,6 +543,9 @@ export enum ThStatusCode {
     InvoiceRepositoryErrorGettingInvoice,
     InvoiceRepositoryErrorReadingDocumentCount,
     InvoiceRepositoryErrorGettingInvoiceList,
+    InvoiceRepositoryErrorAddingInvoice,
+    InvoiceRepositoryProblemUpdatingInvoice,
+    InvoiceRepositoryErrorUpdatingInvoice,
 
 }
 
@@ -1077,6 +1080,9 @@ ThMessage[ThStatusCode.InvoiceRepositoryInvoiceNotFound] = "Invoice not found.";
 ThMessage[ThStatusCode.InvoiceRepositoryErrorGettingInvoice] = "Error retrieving the invoice from the database.";
 ThMessage[ThStatusCode.InvoiceRepositoryErrorReadingDocumentCount] = "Error reading invoice document count.";
 ThMessage[ThStatusCode.InvoiceRepositoryErrorGettingInvoiceList] = "Error getting the list of invoices.";
+ThMessage[ThStatusCode.InvoiceRepositoryErrorAddingInvoice] = "Error adding the invoice.";
+ThMessage[ThStatusCode.InvoiceRepositoryProblemUpdatingInvoice] = "Problem updating the invoice - concurrency.";
+ThMessage[ThStatusCode.InvoiceRepositoryErrorUpdatingInvoice] = "Error updating the invoice.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
