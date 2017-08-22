@@ -37,10 +37,12 @@ import { TotalAvgRateSectionGenerator } from "./sections/TotalAvgRateSectionGene
 import { BreakfastRevenueByBookingSegmentSectionGenerator } from "./sections/BreakfastRevenueByBookingSegmentSectionGenerator";
 import { CapacitySectionGenerator } from "./sections/CapacitySectionGenerator";
 import { BreakfastInternalCostByBookingSegmentSectionGenerator } from "./sections/BreakfastInternalCostByBookingSegmentSectionGenerator";
+import { PrimitiveValidationStructure } from "../../../utils/th-validation/structure/PrimitiveValidationStructure";
+import { NumberInListValidationRule } from "../../../utils/th-validation/rules/NumberInListValidationRule";
 
 import _ = require('underscore');
 
-export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
+export class GeneralStatsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _startDate: ThDateDO;
 	private _endDate: ThDateDO;
 	private _period: YieldManagerPeriodDO;
@@ -51,6 +53,7 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 
 	private _loadedRoomList: RoomDO[];
 	private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
+	private _periodType: number;
 
 	protected getParamsValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -62,6 +65,10 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 				key: "endDate",
 				validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
 			},
+			{
+				key: "periodType",
+				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([ThPeriodType.Day, ThPeriodType.Month, ThPeriodType.Week]))
+			}
 
 		]);
 	}
@@ -71,6 +78,7 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 		this._startDate.buildFromObject(params.startDate);
 		this._endDate = new ThDateDO();
 		this._endDate.buildFromObject(params.endDate);
+		this._periodType = params.periodType;
 
 		this._excludeVat = true;
 	}
@@ -96,11 +104,11 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 				new KeyMetricsReaderInputBuilder()
 					.setYieldManagerPeriodDO(this._period)
 					.includePreviousPeriod(false)
-					.setDataAggregationType(ThPeriodType.Month)
+					.setDataAggregationType(this._periodType)
 					.setCommissionOption(CommissionOption.EXCLUDE)
 					.excludeVat(this._excludeVat)
 					.build(),
-				KeyMetricOutputType.MonthlyStatsReport
+				KeyMetricOutputType.GeneralStatsReport
 			);
 		}).then((reportItems: KeyMetricsResult) => {
 			this._keyMetricItem = reportItems.currentItem;
@@ -159,7 +167,7 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 			this._excludeVat ? this._appContext.thTranslate.translate("Yes") : this._appContext.thTranslate.translate("No");
 
 		return {
-			name: "Monthly Stats Report",
+			name: "General Stats Report",
 			pageOrientation: PageOrientation.Portrait,
 			displayParams: displayParams
 		}
@@ -186,27 +194,27 @@ export class MonthlyStatsReportGroupGenerator extends AReportGeneratorStrategy {
 		let homeCountry = this._hotelDetails.hotel.contactDetails.address.country;
 		return [
 			new GuestNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem),
+				this._periodType, this._keyMetricItem),
 			new GuestNightsDividedByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem),
+				this._periodType, this._keyMetricItem),
 			new ArrivalsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem),
+				this._periodType, this._keyMetricItem),
 			new ArrivalsFromHomeCountrySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem, homeCountry),
+				this._periodType, this._keyMetricItem, homeCountry),
 			new GuestNightsDividedByNationalitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem, homeCountry),
+				this._periodType, this._keyMetricItem, homeCountry),
 			new RoomNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem),
+				this._periodType, this._keyMetricItem),
 			new RoomNightsDividedByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem),
+				this._periodType, this._keyMetricItem),
 			new TotalAvgRateSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem),
+				this._periodType, this._keyMetricItem),
 			new BreakfastRevenueByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem),
+				this._periodType, this._keyMetricItem),
 			new BreakfastInternalCostByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem),
+				this._periodType, this._keyMetricItem),
 			new CapacitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				ThPeriodType.Month, this._keyMetricItem, this._loadedRoomList, this._loadedRoomCategoryStatsList)
+				this._periodType, this._keyMetricItem, this._loadedRoomList, this._loadedRoomCategoryStatsList)
 		];
 	}
 }

@@ -2,7 +2,7 @@
 	<div class="row basic-info-form">
 		<div class="col-xs-12 col-md-6">
 			<label class="control-label">
-				<h3>{{ 'Monthly Stats Report' | translate }}</h3><small>{{ 'Contains general hotel stats' | translate }}</small>
+				<h3>{{ 'General Stats Report' | translate }}</h3><small>{{ 'Contains general hotel stats' | translate }}</small>
 			</label>
 			<hr>
 			<loading-component [isLoading]="isLoading"></loading-component>
@@ -23,6 +23,14 @@
 						(didSelectThDate)="didSelectEndDate($event)"
 						>
 					</th-date-picker>
+				</div>
+				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'Group By' | translate }}</label>
+					<div class="input-group">
+						<select class="form-control" [ngModel]="selectedPeriodType" (ngModelChange)="didSelectPeriodOption($event)">
+							<option *ngFor="let periodOption of periodOptionList" [value]="periodOption.type">{{ periodOption.displayName | translate }}</option>
+						</select>
+					</div>
 				</div>
 				<div class="col-xs-12 col-md-6 form-group">
 					<label>{{ 'File Format' | translate }}</label>
