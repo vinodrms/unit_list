@@ -1,14 +1,14 @@
 import { TestUtils } from '../../../../helpers/TestUtils';
 import { InvoiceItemBuilder } from '../builders/InvoiceItemBuilder';
-import { InvoiceGroupDO } from '../../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO, InvoiceAccountingType } from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceGroupDO } from '../../../../../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoiceAccountingType } from '../../../../../core/data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { SaveInvoiceGroupDO } from '../../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
-import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../../../core/data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { AddOnProductDO } from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 import { ThUtils } from '../../../../../core/utils/ThUtils';
-import { IInvoiceItemMeta } from '../../../../../core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
-import { InvoicePayerDO } from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
-import { AddOnProductInvoiceItemMetaDO } from '../../../../../core/data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import { IInvoiceItemMeta } from '../../../../../core/data-layer/invoices-deprecated/data-objects/items/IInvoiceItemMeta';
+import { InvoicePayerDO } from '../../../../../core/data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO';
+import { AddOnProductInvoiceItemMetaDO } from '../../../../../core/data-layer/invoices-deprecated/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 
 import should = require('should');
 import _ = require("underscore");

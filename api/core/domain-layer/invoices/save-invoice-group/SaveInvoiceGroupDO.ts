@@ -5,10 +5,10 @@ import { ArrayValidationStructure } from '../../../utils/th-validation/structure
 import { StringValidationRule } from '../../../utils/th-validation/rules/StringValidationRule';
 import { NumberValidationRule } from '../../../utils/th-validation/rules/NumberValidationRule';
 import { NumberInListValidationRule } from '../../../utils/th-validation/rules/NumberInListValidationRule';
-import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../data-layer/invoices/data-objects/InvoiceDO';
-import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoicePaymentMethodType } from '../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { CommissionType } from '../../../data-layer/common/data-objects/commission/CommissionDO';
-import { InvoiceItemType, InvoiceItemAccountingType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemType, InvoiceItemAccountingType } from '../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { TransactionFeeType } from "../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 export class SaveInvoiceGroupDO {

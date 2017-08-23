@@ -2,7 +2,7 @@ import { DefaultBillingDetailsDO } from '../../../data-layer/bookings/data-objec
 import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { ConfigCapacityDO } from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
 import { BookingValidationStructures } from '../validators/BookingValidationStructures';
-import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodType } from '../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
 import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
 import { ArrayValidationStructure } from '../../../utils/th-validation/structure/ArrayValidationStructure';
@@ -59,7 +59,7 @@ export class AddBookingItemsDO {
                 key: "groupBookingId",
                 validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
             },
-            {   
+            {
                 key: "bookingList",
                 validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
                     {

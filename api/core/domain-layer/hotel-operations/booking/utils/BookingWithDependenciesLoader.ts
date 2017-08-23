@@ -12,7 +12,7 @@ import { AllotmentsContainer } from '../../../allotments/validators/results/Allo
 import { RoomSearchResultRepoDO } from '../../../../data-layer/rooms/repositories/IRoomRepository';
 import { RoomCategoryStatsAggregator } from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
 import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
 
 export class BookingWithDependenciesLoader {

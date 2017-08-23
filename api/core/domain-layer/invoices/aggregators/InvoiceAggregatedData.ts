@@ -1,9 +1,9 @@
 import {ThTranslation} from '../../../utils/localization/ThTranslation';
 import {ThUtils} from '../../../utils/ThUtils';
 import {SessionContext} from '../../../utils/SessionContext';
-import {InvoiceDO} from '../../../data-layer/invoices/data-objects/InvoiceDO';
-import {InvoiceItemDO} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {AddOnProductInvoiceItemMetaDO} from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import {InvoiceDO} from '../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
+import {InvoiceItemDO} from '../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
+import {AddOnProductInvoiceItemMetaDO} from '../../../data-layer/invoices-deprecated/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import {TaxDO} from '../../../data-layer/taxes/data-objects/TaxDO';
@@ -44,7 +44,7 @@ export class InvoiceAggregatedData {
 
     public addSharedInvoiceItemIfNecessary() {
         if(this.invoice.payerList.length > 1) {
-            var sharedInvoiceItem = new InvoiceItemDO(); 
+            var sharedInvoiceItem = new InvoiceItemDO();
             var sharedInvoiceItemMeta = new AddOnProductInvoiceItemMetaDO();
             sharedInvoiceItemMeta.aopDisplayName = this._thTranslation.translate(InvoiceAggregatedData.SHARED_INVOICE_ITEM_DISPLAY_NAME);
             sharedInvoiceItemMeta.numberOfItems = 1;

@@ -1,9 +1,9 @@
 import { AppContext } from '../../../utils/AppContext';
 import { SessionContext } from '../../../utils/SessionContext';
 import { ThError } from '../../../utils/th-responses/ThError';
-import { InvoiceGroupSearchResultRepoDO } from '../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import { InvoiceGroupDO } from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceGroupSearchResultRepoDO } from '../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
 import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
 import { BookingValidationStructures } from '../../bookings/validators/BookingValidationStructures';
@@ -121,7 +121,7 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 		var endNameKey: string = this._appContext.thTranslate.translate("End Time");
 		var displayParams = {};
 		displayParams[startNameKey] = this._shiftReportParams.startTime;
-		displayParams[endNameKey] = this._shiftReportParams.endTime;		
+		displayParams[endNameKey] = this._shiftReportParams.endTime;
 		return {
 			name: "Shift Report",
 			displayParams: displayParams
@@ -140,7 +140,7 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 				title: "Loss Accepted By Management Transactions Grouped by Category"
 			}),
 			new ShiftReportLossAcceptedByManagementInvoicesSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._allInvoiceGroupList, this._lossAcceptedByManagementInvoiceGroupList)
-			
+
 		];
 	}
 }

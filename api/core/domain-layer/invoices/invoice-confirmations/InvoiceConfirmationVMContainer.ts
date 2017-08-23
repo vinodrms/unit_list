@@ -4,17 +4,17 @@ import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
 import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerDO';
 import { AddressDO } from '../../../data-layer/common/data-objects/address/AddressDO';
 import { PaymentMethodDO } from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../data-layer/invoices/data-objects/InvoiceDO';
-import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { InvoiceItemVM } from './InvoiceItemVM';
-import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodType } from '../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { InvoiceAggregatedData } from '../aggregators/InvoiceAggregatedData';
 import { BookingConfirmationVMContainer } from '../../bookings/booking-confirmations/BookingConfirmationVMContainer';
 import { BookingPriceDO } from "../../../data-layer/bookings/data-objects/price/BookingPriceDO";
 import { PricePerDayDO } from "../../../data-layer/bookings/data-objects/price/PricePerDayDO";
-import { AddOnProductInvoiceItemMetaDO } from "../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
+import { AddOnProductInvoiceItemMetaDO } from "../../../data-layer/invoices-deprecated/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
 import { TransactionFeeDO, TransactionFeeType } from "../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
-import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
+import { InvoicePayerDO } from "../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO";
 
 import _ = require('underscore');
 

@@ -5,10 +5,10 @@ import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { BookingSearchResultRepoDO, BookingSearchCriteriaRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
-import { InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
-import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoicePaymentStatus } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { CustomerIdValidator } from '../../../customers/validators/CustomerIdValidator';
 import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
 import { HotelOperationsQueryDO, HotelOperationsQueryType } from '../utils/HotelOperationsQueryDO';
@@ -73,7 +73,7 @@ export class HotelOperationsDeparturesReader {
             departuresInfoBuilder.appendCustomerInformation(customersContainer);
 
             var departuresInfo = departuresInfoBuilder.getBuiltHotelOperationsDeparturesInfo();
-            departuresInfo.referenceDate = this._parsedQuery.referenceDate;        
+            departuresInfo.referenceDate = this._parsedQuery.referenceDate;
             resolve(departuresInfo);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.HotelOperationsDeparturesReaderError, error);

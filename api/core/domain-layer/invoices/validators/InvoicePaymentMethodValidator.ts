@@ -3,7 +3,7 @@ import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import {ThUtils} from '../../../utils/ThUtils';
 
 import _ = require('underscore');

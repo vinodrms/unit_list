@@ -11,15 +11,15 @@ import { DefaultDataBuilder } from '../../../db-initializers/DefaultDataBuilder'
 import { TestContext } from '../../../helpers/TestContext';
 import { BookingInvoicesTestHelper } from './helpers/BookingInvoicesTestHelper';
 import { CustomerInvoicesTestHelper } from './helpers/CustomerInvoicesTestHelper';
-import { InvoiceGroupDO } from '../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupDO } from '../../../../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { GenerateBookingInvoice } from '../../../../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoice';
-import { InvoiceGroupSearchResultRepoDO } from '../../../../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupSearchResultRepoDO } from '../../../../core/data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
 import { InvoiceConfirmationEmailSender } from '../../../../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationEmailSender';
 import { SaveInvoiceGroup } from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
 import { SaveInvoiceGroupDO } from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
 import { InvoiceTestUtils } from './utils/InvoiceTestUtils';
-import { InvoiceDO, InvoiceAccountingType } from '../../../../core/data-layer/invoices/data-objects/InvoiceDO';
-import { InvoicePayerDO } from '../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import { InvoiceDO, InvoiceAccountingType } from '../../../../core/data-layer/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoicePayerDO } from '../../../../core/data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO';
 import { ReinstateInvoice } from "../../../../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
 
 describe("Invoices Tests", function () {
@@ -236,7 +236,7 @@ describe("Invoices Tests", function () {
                     return invoice.reinstatedInvoiceId === createdBookingInvoiceGroup.invoiceList[0].id;
                 });
                 invoiceTestUtils.testInvoiceEquality(reinstatedInvoice, reinstatementInvoice);
-                
+
                 done();
             }).catch((err: any) => {
                 done(err);

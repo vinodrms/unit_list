@@ -2,14 +2,14 @@ import { ReinstateInvoiceMetaDO } from "./ReinstateInvoiceMetaDO";
 import { AppContext } from "../../../utils/AppContext";
 import { SessionContext } from "../../../utils/SessionContext";
 import { ThUtils } from "../../../utils/ThUtils";
-import { InvoiceGroupDO } from "../../../data-layer/invoices/data-objects/InvoiceGroupDO";
+import { InvoiceGroupDO } from "../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO";
 import { ThError } from "../../../utils/th-responses/ThError";
-import { InvoiceDO, InvoiceAccountingType, InvoicePaymentStatus } from "../../../data-layer/invoices/data-objects/InvoiceDO";
-import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from "../../../data-layer/invoices/repositories/IInvoiceGroupsRepository";
+import { InvoiceDO, InvoiceAccountingType, InvoicePaymentStatus } from "../../../data-layer/invoices-deprecated/data-objects/InvoiceDO";
+import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from "../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository";
 import { ThStatusCode } from "../../../utils/th-responses/ThResponse";
 import { ThLogLevel, ThLogger } from "../../../utils/logging/ThLogger";
-import { InvoiceItemDO, InvoiceItemAccountingType } from "../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
-import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
+import { InvoiceItemDO, InvoiceItemAccountingType } from "../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO";
+import { InvoicePayerDO } from "../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO";
 
 import _ = require('underscore');
 
@@ -93,13 +93,13 @@ export class ReinstateInvoice {
         creditInvoice.buildFromObject(invoiceToBeCredited);
         creditInvoice.accountingType = InvoiceAccountingType.Credit;
         creditInvoice.paymentStatus = InvoicePaymentStatus.Paid;
-        
+
         delete creditInvoice.reinstatedInvoiceId;
 
         _.forEach(creditInvoice.itemList, (item: InvoiceItemDO) => {
             item.accountingType = InvoiceItemAccountingType.Credit;
         });
-        
+
         _.forEach(creditInvoice.payerList, (payer: InvoicePayerDO) => {
             payer.shouldApplyTransactionFee = true;
             payer.priceToPay = payer.priceToPay * -1;
@@ -112,9 +112,9 @@ export class ReinstateInvoice {
         delete creditInvoice.paidDate;
         delete creditInvoice.paidTimestamp;
         delete creditInvoice.paymentDueDate;
-        
+
         return creditInvoice;
-    }    
+    }
 
     private get invoiceGroupMeta(): InvoiceGroupMetaRepoDO {
         return {

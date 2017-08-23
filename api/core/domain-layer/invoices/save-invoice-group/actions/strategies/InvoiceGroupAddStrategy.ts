@@ -5,9 +5,9 @@ import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
 
-import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupDO } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { ISaveInvoiceGroupActionStrategy } from '../ISaveInvoiceGroupActionStrategy';
-import { InvoiceGroupMetaRepoDO } from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupMetaRepoDO } from '../../../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
 
 import { TaxResponseRepoDO } from '../../../../../data-layer/taxes/repositories/ITaxRepository';
 import { TaxDO } from '../../../../../data-layer/taxes/data-objects/TaxDO';

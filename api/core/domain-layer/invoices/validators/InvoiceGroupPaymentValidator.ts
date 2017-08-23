@@ -2,7 +2,7 @@ import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {ThUtils} from '../../../utils/ThUtils';
-import {InvoiceGroupDO} from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import {InvoiceGroupDO} from '../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import {AddOnProductsContainer} from '../../../domain-layer/add-on-products/validators/results/AddOnProductsContainer';
 import {CustomersContainer} from '../../../domain-layer/customers/validators/results/CustomersContainer';
 import {PriceProductsContainer} from '../../../domain-layer/price-products/validators/results/PriceProductsContainer';
@@ -31,7 +31,7 @@ export class InvoiceGroupPaymentValidator {
     }
 
     private validateCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-        
+
     }
 
 }

@@ -1,6 +1,6 @@
-import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../../api/core/data-layer/invoices/data-objects/InvoiceDO';
-import { InvoicePayerDO } from '../../../../../../api/core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
-import { InvoiceItemDO, InvoiceItemType } from '../../../../../../api/core/data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../../api/core/data-layer/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoicePayerDO } from '../../../../../../api/core/data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../../../../api/core/data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 
 export class InvoiceBuilder {
     private _accountingType: InvoiceAccountingType;

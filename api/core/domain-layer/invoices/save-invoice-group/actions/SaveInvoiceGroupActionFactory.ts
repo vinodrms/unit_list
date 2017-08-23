@@ -3,7 +3,7 @@ import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { ISaveInvoiceGroupActionStrategy } from './ISaveInvoiceGroupActionStrategy';
 
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { InvoiceGroupUpdateStrategy } from './strategies/InvoiceGroupUpdateStrategy';
 import { InvoiceGroupAddStrategy } from './strategies/InvoiceGroupAddStrategy';
 

@@ -7,10 +7,10 @@ import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
 import { ThTimestampDO } from '../../../../../utils/th-dates/data-objects/ThTimestampDO';
 import { HotelDO } from '../../../../../data-layer/hotel/data-objects/HotelDO';
 
-import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceGroupDO } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { ISaveInvoiceGroupActionStrategy } from '../ISaveInvoiceGroupActionStrategy';
-import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from '../../../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
 
 export class InvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActionStrategy {
     private _loadedInvoiceGroup: InvoiceGroupDO;
@@ -29,7 +29,7 @@ export class InvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActionStrate
         invoiceGroupRepo.getInvoiceGroupById(invoiceGroupMeta, this._invoiceGroupDO.id)
             .then((loadedInvoiceGroup: InvoiceGroupDO) => {
                 this._loadedInvoiceGroup = loadedInvoiceGroup;
-                
+
                 var invoiceGroupItemMeta = this.buildInvoiceGroupItemMetaRepoDO();
                 var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
                 return invoiceGroupRepo.updateInvoiceGroup(invoiceGroupMeta, invoiceGroupItemMeta, this._invoiceGroupDO);

@@ -1,11 +1,11 @@
-import { InvoiceGroupDO } from '../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../core/data-layer/invoices/data-objects/InvoiceDO';
-import { InvoiceItemDO, InvoiceItemType } from '../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
-import { InvoicePayerDO } from '../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import { InvoiceGroupDO } from '../../../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../core/data-layer/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../core/data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
+import { InvoicePayerDO } from '../../../core/data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO';
 import { BookingDO } from '../../../core/data-layer/bookings/data-objects/BookingDO';
 import { CustomerDO } from '../../../core/data-layer/customers/data-objects/CustomerDO';
 import { AddOnProductDO } from '../../../core/data-layer/add-on-products/data-objects/AddOnProductDO'
-import { AddOnProductInvoiceItemMetaDO } from '../../../core/data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import { AddOnProductInvoiceItemMetaDO } from '../../../core/data-layer/invoices-deprecated/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import { TestContext } from '../../helpers/TestContext';
 import { HotelDO } from "../../../core/data-layer/hotel/data-objects/HotelDO";
 import { TransactionFeeDO } from "../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";

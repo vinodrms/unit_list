@@ -8,13 +8,13 @@ import { InvoiceBuilder } from '../builders/InvoiceBuilder';
 import { InvoiceItemBuilder } from '../builders/InvoiceItemBuilder';
 import { InvoicePayerBuilder } from '../builders/InvoicePayerBuilder';
 import { InvoicePaymentMethodBuilder } from '../builders/InvoicePaymentMethodBuilder';
-import { InvoiceGroupDO } from '../../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceGroupDO } from '../../../../../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../core/data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { CustomerDO, CustomerType } from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
-import { InvoicePayerDO } from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
-import { InvoiceItemDO, InvoiceItemType } from '../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoicePayerDO } from '../../../../../core/data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../../../core/data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { AddOnProductDO } from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
-import { InvoicePaymentMethodType } from '../../../../../../api/core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodType } from '../../../../../../api/core/data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { InvoiceTestUtils } from '../utils/InvoiceTestUtils';
 import { TransactionFeeDO } from "../../../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 

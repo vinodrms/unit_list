@@ -1,5 +1,5 @@
-import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../../../../api/core/data-layer/invoices/data-objects/items/InvoiceItemDO';
-import { IInvoiceItemMeta } from '../../../../../../api/core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../../../../api/core/data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
+import { IInvoiceItemMeta } from '../../../../../../api/core/data-layer/invoices-deprecated/data-objects/items/IInvoiceItemMeta';
 
 import _ = require("underscore");
 

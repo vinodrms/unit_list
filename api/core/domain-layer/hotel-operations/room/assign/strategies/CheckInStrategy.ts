@@ -7,7 +7,7 @@ import { IAssignRoomStrategy, AssignRoomValidationDO } from './IAssignRoomStrate
 import { BookingDO, BookingConfirmationStatus } from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import { AAssignRoomStrategy } from './AAssignRoomStrategy';
 import { GenerateBookingInvoice } from '../../../../invoices/generate-booking-invoice/GenerateBookingInvoice';
-import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupDO } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { GenerateBookingInvoiceAopMeta } from '../../../../invoices/generate-booking-invoice/GenerateBookingInvoiceDO';
 import { AddOnProductLoader, AddOnProductItemContainer, AddOnProductItem } from '../../../../add-on-products/validators/AddOnProductLoader';
 

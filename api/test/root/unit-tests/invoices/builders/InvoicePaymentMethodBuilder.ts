@@ -1,4 +1,4 @@
-import {InvoicePaymentMethodType, InvoicePaymentMethodDO} from '../../../../../../api/core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import {InvoicePaymentMethodType, InvoicePaymentMethodDO} from '../../../../../../api/core/data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 
 export class InvoicePaymentMethodBuilder {
     private _type: InvoicePaymentMethodType;

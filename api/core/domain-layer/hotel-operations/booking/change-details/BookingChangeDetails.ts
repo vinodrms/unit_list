@@ -9,7 +9,7 @@ import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objec
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import { BookingInvoiceSync } from "../../../bookings/invoice-sync/BookingInvoiceSync";
-import { InvoiceGroupDO } from "../../../../data-layer/invoices/data-objects/InvoiceGroupDO";
+import { InvoiceGroupDO } from "../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO";
 import { BookingWithDependencies } from "../utils/BookingWithDependencies";
 import { BookingWithDependenciesLoader } from "../utils/BookingWithDependenciesLoader";
 

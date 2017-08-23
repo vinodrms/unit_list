@@ -1,5 +1,5 @@
 import { PaymentMethodDO } from "../../../data-layer/common/data-objects/payment-method/PaymentMethodDO";
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO";
 
 import _ = require('underscore');
 

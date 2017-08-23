@@ -3,8 +3,8 @@ import { SessionContext } from '../../../../../utils/SessionContext';
 import { ThUtils } from '../../../../../utils/ThUtils';
 import { ThError } from '../../../../../utils/th-responses/ThError';
 
-import { InvoiceGroupMetaRepoDO } from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupMetaRepoDO } from '../../../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { IGenerateBookingInvoiceActionStrategy } from '../IGenerateBookingInvoiceActionStrategy';
 
 import { TaxResponseRepoDO } from '../../../../../data-layer/taxes/repositories/ITaxRepository';

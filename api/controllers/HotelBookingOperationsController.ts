@@ -18,7 +18,7 @@ import { BookingChangePriceProduct } from '../core/domain-layer/hotel-operations
 import { BookingUndoCheckIn } from '../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckIn';
 import { BookingChangeGuestOnInvoice } from "../core/domain-layer/hotel-operations/booking/change-guest-invoice/BookingChangeGuestOnInvoice";
 import { GenerateBookingInvoice } from "../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoice";
-import { InvoiceGroupDO } from "../core/data-layer/invoices/data-objects/InvoiceGroupDO";
+import { InvoiceGroupDO } from "../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO";
 
 class HotelBookingOperationsController extends BaseController {
     public getPossiblePrices(req: any, res: any) {

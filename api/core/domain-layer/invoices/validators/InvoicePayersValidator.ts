@@ -1,10 +1,10 @@
-import { InvoiceDO } from '../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceDO } from '../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
 import { ThError } from '../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
 import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerDO';
 import { CustomersContainer } from '../../../domain-layer/customers/validators/results/CustomersContainer';
-import { InvoicePayerDO } from '../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import { InvoicePayerDO } from '../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO';
 
 import _ = require("underscore");
 

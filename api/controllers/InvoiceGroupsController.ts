@@ -4,9 +4,9 @@ import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
 import { AppContext } from '../core/utils/AppContext';
 import { SessionContext } from '../core/utils/SessionContext';
 import { ThTranslation } from '../core/utils/localization/ThTranslation';
-import { InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO } from '../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import { InvoiceGroupDO } from '../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../core/data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO } from '../core/data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../core/data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
 import { SaveInvoiceGroup } from '../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
 import { InvoiceDataAggregator, InvoiceDataAggregatorQuery } from '../core/domain-layer/invoices/aggregators/InvoiceDataAggregator';
@@ -77,7 +77,7 @@ export class InvoiceGroupsController extends BaseController {
 
     public reinstateInvoice(req: any, res: any) {
         let reinstatementInvoiceGenerator = new ReinstateInvoice(req.appContext, req.sessionContext);
-        
+
         reinstatementInvoiceGenerator.reinstate(req.body.reinstatedInvoiceMeta).then((updatedInvoiceGroup: InvoiceGroupDO) => {
             this.returnSuccesfulResponse(req, res, { invoiceGroup: updatedInvoiceGroup });
         }).catch((err: any) => {

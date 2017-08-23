@@ -22,7 +22,7 @@ import { BookingChangeNoShowTime } from '../../../../../core/domain-layer/hotel-
 import { BookingChangeNoShowTimeDO } from '../../../../../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTimeDO';
 import { ThTimestampDO } from '../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
 import { ThHourDO } from '../../../../../core/utils/th-dates/data-objects/ThHourDO';
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../core/data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { FileAttachmentDO } from '../../../../../core/data-layer/common/data-objects/file/FileAttachmentDO';
 import { BookingStateChangeTriggerType } from '../../../../../core/data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 import { BookingChangeCapacity } from '../../../../../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacity';
@@ -50,9 +50,9 @@ import { AssignRoom } from '../../../../../core/domain-layer/hotel-operations/ro
 import { AssignRoomDO } from '../../../../../core/domain-layer/hotel-operations/room/assign/AssignRoomDO';
 import { BookingUndoCheckIn } from '../../../../../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckIn';
 import { BookingUndoCheckInDO } from '../../../../../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckInDO';
-import { InvoiceGroupSearchResultRepoDO } from "../../../../../core/data-layer/invoices/repositories/IInvoiceGroupsRepository";
-import { InvoiceItemType } from "../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO";
-import { RoomCommissionItemMetaDO } from "../../../../../core/data-layer/invoices/data-objects/items/room-commission/RoomCommissionItemMetaDO";
+import { InvoiceGroupSearchResultRepoDO } from "../../../../../core/data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository";
+import { InvoiceItemType } from "../../../../../core/data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO";
+import { RoomCommissionItemMetaDO } from "../../../../../core/data-layer/invoices-deprecated/data-objects/items/room-commission/RoomCommissionItemMetaDO";
 
 describe("Hotel Booking Operations Tests", function () {
     var testContext: TestContext;
@@ -185,7 +185,7 @@ describe("Hotel Booking Operations Tests", function () {
             var paymentGuaranteeDO = new BookingPaymentGuaranteeDO();
             paymentGuaranteeDO.groupBookingId = bookingToChange.groupBookingId;
             paymentGuaranteeDO.id = bookingToChange.id;
-            paymentGuaranteeDO.billedCustomerId = bookingToChange.defaultBillingDetails.customerId; 
+            paymentGuaranteeDO.billedCustomerId = bookingToChange.defaultBillingDetails.customerId;
             paymentGuaranteeDO.paymentMethod = new InvoicePaymentMethodDO();
             paymentGuaranteeDO.paymentMethod.type = InvoicePaymentMethodType.DefaultPaymentMethod;
             var paymentMethod = testUtils.getRandomListElement(testDataBuilder.paymentMethodList);

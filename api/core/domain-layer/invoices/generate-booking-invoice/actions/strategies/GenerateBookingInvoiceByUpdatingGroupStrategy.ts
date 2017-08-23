@@ -4,8 +4,8 @@ import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
 
-import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from '../../../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { IGenerateBookingInvoiceActionStrategy } from '../IGenerateBookingInvoiceActionStrategy';
 import { BookingDO } from "../../../../../data-layer/bookings/data-objects/BookingDO";
 import { ThUtils } from "../../../../../utils/ThUtils";

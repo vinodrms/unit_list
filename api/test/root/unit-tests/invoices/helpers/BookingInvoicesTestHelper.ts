@@ -4,10 +4,10 @@ import { SaveInvoiceGroupBuilder } from '../builders/SaveInvoiceGroupBuilder';
 import { SaveInvoiceGroupDO } from '../../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
 import { InvoiceBuilder } from '../builders/InvoiceBuilder';
 import { InvoicePayerBuilder } from '../builders/InvoicePayerBuilder';
-import { InvoiceGroupDO } from '../../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
-import { InvoiceItemDO } from '../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
-import { IInvoiceItemMeta } from '../../../../../core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
+import { InvoiceGroupDO } from '../../../../../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../core/data-layer/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoiceItemDO } from '../../../../../core/data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
+import { IInvoiceItemMeta } from '../../../../../core/data-layer/invoices-deprecated/data-objects/items/IInvoiceItemMeta';
 import { BookingDO } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
 import { GenerateBookingInvoiceDO } from '../../../../../../api/core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoiceDO';
 import { TransactionFeeDO } from "../../../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
@@ -76,7 +76,7 @@ export class BookingInvoicesTestHelper {
         _.forEach(aopItemList, (aopItem: InvoiceItemDO) => {
             aopItemMetaList.push(aopItem.meta);
         })
-        
+
         this._invoiceTestUtils.getTotalPriceFromItemMetaList(aopItemMetaList).then((totalPrice: number) => {
             var invoicePayer = invoiceGroupToUpdate.invoiceList[0].payerList[0];
             var invoicePayerWithUpdatedPricetoPay = new InvoicePayerBuilder()
@@ -100,7 +100,7 @@ export class BookingInvoicesTestHelper {
         }).catch((error) => {
             reject(error);
         });
-        
+
     }
 
     private getOneBookingIdFromInvoiceGroup(invoiceGroup: InvoiceGroupDO): string {

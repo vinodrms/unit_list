@@ -1,5 +1,5 @@
-import {InvoicePayerDO} from '../../../../../../api/core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
-import { InvoicePaymentMethodDO } from '../../../../../../api/core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import {InvoicePayerDO} from '../../../../../../api/core/data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO';
+import { InvoicePaymentMethodDO } from '../../../../../../api/core/data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { TransactionFeeDO } from "../../../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 export class InvoicePayerBuilder {

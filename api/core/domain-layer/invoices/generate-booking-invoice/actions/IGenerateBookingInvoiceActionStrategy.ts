@@ -1,4 +1,4 @@
-import {InvoiceGroupDO} from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import {InvoiceGroupDO} from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import {ThError} from '../../../../utils/th-responses/ThError';
 
 export interface IGenerateBookingInvoiceActionStrategy {

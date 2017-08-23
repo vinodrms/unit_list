@@ -32,8 +32,8 @@ import { AllotmentDO } from '../../core/data-layer/allotments/data-objects/Allot
 import { DefaultBookingBuilder } from './builders/DefaultBookingBuilder';
 import { BookingDO } from '../../core/data-layer/bookings/data-objects/BookingDO';
 import { DefaultInvoiceGroupBuilder } from './builders/DefaultInvoiceGroupBuilder';
-import { InvoiceGroupDO } from '../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../../core/data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceGroupDO } from '../../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../core/data-layer/invoices-deprecated/data-objects/InvoiceDO';
 
 import _ = require("underscore");
 

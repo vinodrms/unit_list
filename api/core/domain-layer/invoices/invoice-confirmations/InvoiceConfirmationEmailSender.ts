@@ -12,9 +12,9 @@ import { BaseEmailTemplateDO, EmailTemplateTypes } from '../../../services/email
 import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
 import { InvoiceEmailTemplateDO } from "../../../services/email/data-objects/InvoiceEmailTemplateDO";
 import { ThUtils } from "../../../utils/ThUtils";
-import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
-import { InvoicePaymentMethodType } from "../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
-import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
+import { InvoiceDO } from "../../../data-layer/invoices-deprecated/data-objects/InvoiceDO";
+import { InvoicePaymentMethodType } from "../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO";
+import { InvoicePayerDO } from "../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO";
 
 import fs = require('fs');
 import path = require('path');
