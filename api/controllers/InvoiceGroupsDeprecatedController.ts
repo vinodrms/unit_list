@@ -20,7 +20,7 @@ import path = require("path");
 /**
  * @deprecated
  */
-export class InvoiceGroupsController extends BaseController {
+export class InvoiceGroupsDeprecatedController extends BaseController {
 
     public getInvoiceGroupById(req: any, res: any) {
         if (!this.precheckGETParameters(req, res, ['id'])) { return };
@@ -125,7 +125,7 @@ export class InvoiceGroupsController extends BaseController {
     }
 }
 
-var invoiceGroupsController = new InvoiceGroupsController();
+var invoiceGroupsController = new InvoiceGroupsDeprecatedController();
 module.exports = {
     getInvoiceGroupById: invoiceGroupsController.getInvoiceGroupById.bind(invoiceGroupsController),
     getInvoiceGroupList: invoiceGroupsController.getInvoiceGroupList.bind(invoiceGroupsController),
