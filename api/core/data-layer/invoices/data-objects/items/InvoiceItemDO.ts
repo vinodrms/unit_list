@@ -15,9 +15,11 @@ export class InvoiceItemDO extends BaseDO {
     id: string;
     type: InvoiceItemType;
     meta: IInvoiceItemMeta;
+    transactionId: string;
+    timestamp: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "type"];
+        return ["id", "type", "transactionId", "timestamp"];
     }
 
     public buildFromObject(object: Object) {

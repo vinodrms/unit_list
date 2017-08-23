@@ -3,6 +3,7 @@ import { InvoicePaymentMethodDO } from "./InvoicePaymentMethodDO";
 import { TransactionFeeDO } from "../../../common/data-objects/payment-method/TransactionFeeDO";
 
 export class InvoicePaymentDO extends BaseDO {
+    transactionId: string;
     paymentMethod: InvoicePaymentMethodDO;
     shouldApplyTransactionFee: boolean;
     transactionFeeSnapshot: TransactionFeeDO;
@@ -12,7 +13,7 @@ export class InvoicePaymentDO extends BaseDO {
     notes: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["shouldApplyTransactionFee", "priceToPay", "priceToPayPlusTransactionFee", "timestamp", "notes"];
+        return ["transactionId", "shouldApplyTransactionFee", "priceToPay", "priceToPayPlusTransactionFee", "timestamp", "notes"];
     }
 
     public buildFromObject(object: Object) {
