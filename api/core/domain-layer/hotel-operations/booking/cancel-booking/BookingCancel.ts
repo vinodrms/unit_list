@@ -12,7 +12,7 @@ import { DocumentActionDO } from '../../../../data-layer/common/data-objects/doc
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
 import { BookingCancelDO } from './BookingCancelDO';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
-import { GenerateBookingInvoice } from '../../../invoices/generate-booking-invoice/GenerateBookingInvoice';
+import { GenerateBookingInvoice } from '../../../invoices-deprecated/generate-booking-invoice/GenerateBookingInvoice';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { BookingInvoiceSync } from "../../../bookings/invoice-sync/BookingInvoiceSync";
 import { BookingWithDependencies } from "../utils/BookingWithDependencies";

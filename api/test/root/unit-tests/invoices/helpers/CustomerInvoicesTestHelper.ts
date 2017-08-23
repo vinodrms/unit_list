@@ -3,7 +3,7 @@ import { DefaultDataBuilder } from '../../../../db-initializers/DefaultDataBuild
 import { TestUtils } from '../../../../helpers/TestUtils';
 
 import { SaveInvoiceGroupBuilder } from '../builders/SaveInvoiceGroupBuilder';
-import { SaveInvoiceGroupDO } from '../../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
+import { SaveInvoiceGroupDO } from '../../../../../core/domain-layer/invoices-deprecated/save-invoice-group/SaveInvoiceGroupDO';
 import { InvoiceBuilder } from '../builders/InvoiceBuilder';
 import { InvoiceItemBuilder } from '../builders/InvoiceItemBuilder';
 import { InvoicePayerBuilder } from '../builders/InvoicePayerBuilder';

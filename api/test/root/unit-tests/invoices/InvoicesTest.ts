@@ -12,15 +12,15 @@ import { TestContext } from '../../../helpers/TestContext';
 import { BookingInvoicesTestHelper } from './helpers/BookingInvoicesTestHelper';
 import { CustomerInvoicesTestHelper } from './helpers/CustomerInvoicesTestHelper';
 import { InvoiceGroupDO } from '../../../../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
-import { GenerateBookingInvoice } from '../../../../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoice';
+import { GenerateBookingInvoice } from '../../../../core/domain-layer/invoices-deprecated/generate-booking-invoice/GenerateBookingInvoice';
 import { InvoiceGroupSearchResultRepoDO } from '../../../../core/data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
-import { InvoiceConfirmationEmailSender } from '../../../../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationEmailSender';
-import { SaveInvoiceGroup } from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
-import { SaveInvoiceGroupDO } from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
+import { InvoiceConfirmationEmailSender } from '../../../../core/domain-layer/invoices-deprecated/invoice-confirmations/InvoiceConfirmationEmailSender';
+import { SaveInvoiceGroup } from '../../../../core/domain-layer/invoices-deprecated/save-invoice-group/SaveInvoiceGroup';
+import { SaveInvoiceGroupDO } from '../../../../core/domain-layer/invoices-deprecated/save-invoice-group/SaveInvoiceGroupDO';
 import { InvoiceTestUtils } from './utils/InvoiceTestUtils';
 import { InvoiceDO, InvoiceAccountingType } from '../../../../core/data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { InvoicePayerDO } from '../../../../core/data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO';
-import { ReinstateInvoice } from "../../../../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
+import { ReinstateInvoice } from "../../../../core/domain-layer/invoices-deprecated/reinstate-invoice/ReinstateInvoice";
 
 describe("Invoices Tests", function () {
     var testUtils: TestUtils;

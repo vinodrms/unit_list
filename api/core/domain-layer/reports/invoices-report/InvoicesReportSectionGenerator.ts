@@ -19,7 +19,7 @@ import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../data-
 import { ShiftReportPaidInvoicesSectionGenerator } from "../shift-report/strategies/ShiftReportPaidInvoicesSectionGenerator";
 import { BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
 import { ThDateIntervalUtils } from "../../../utils/th-dates/ThDateIntervalUtils";
-import { InvoicePaymentMethodsUtils } from "../../invoices/utils/InvoicePaymentMethodsUtils";
+import { InvoicePaymentMethodsUtils } from "../../invoices-deprecated/utils/InvoicePaymentMethodsUtils";
 
 import _ = require("underscore");
 

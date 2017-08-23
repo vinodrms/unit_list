@@ -1,7 +1,7 @@
 import { DefaultDataBuilder } from '../../../../db-initializers/DefaultDataBuilder';
 import { InvoiceTestUtils } from '../utils/InvoiceTestUtils';
 import { SaveInvoiceGroupBuilder } from '../builders/SaveInvoiceGroupBuilder';
-import { SaveInvoiceGroupDO } from '../../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
+import { SaveInvoiceGroupDO } from '../../../../../core/domain-layer/invoices-deprecated/save-invoice-group/SaveInvoiceGroupDO';
 import { InvoiceBuilder } from '../builders/InvoiceBuilder';
 import { InvoicePayerBuilder } from '../builders/InvoicePayerBuilder';
 import { InvoiceGroupDO } from '../../../../../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
@@ -9,7 +9,7 @@ import { InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../core
 import { InvoiceItemDO } from '../../../../../core/data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { IInvoiceItemMeta } from '../../../../../core/data-layer/invoices-deprecated/data-objects/items/IInvoiceItemMeta';
 import { BookingDO } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
-import { GenerateBookingInvoiceDO } from '../../../../../../api/core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoiceDO';
+import { GenerateBookingInvoiceDO } from '../../../../../../api/core/domain-layer/invoices-deprecated/generate-booking-invoice/GenerateBookingInvoiceDO';
 import { TransactionFeeDO } from "../../../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 import _ = require("underscore");

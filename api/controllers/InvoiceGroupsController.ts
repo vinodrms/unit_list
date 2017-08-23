@@ -8,12 +8,12 @@ import { InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupS
 import { InvoiceGroupDO } from '../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { InvoiceDO } from '../core/data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
-import { SaveInvoiceGroup } from '../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
-import { InvoiceDataAggregator, InvoiceDataAggregatorQuery } from '../core/domain-layer/invoices/aggregators/InvoiceDataAggregator';
-import { InvoiceAggregatedData } from '../core/domain-layer/invoices/aggregators/InvoiceAggregatedData';
-import { InvoiceConfirmationVMContainer } from '../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationVMContainer';
+import { SaveInvoiceGroup } from '../core/domain-layer/invoices-deprecated/save-invoice-group/SaveInvoiceGroup';
+import { InvoiceDataAggregator, InvoiceDataAggregatorQuery } from '../core/domain-layer/invoices-deprecated/aggregators/InvoiceDataAggregator';
+import { InvoiceAggregatedData } from '../core/domain-layer/invoices-deprecated/aggregators/InvoiceAggregatedData';
+import { InvoiceConfirmationVMContainer } from '../core/domain-layer/invoices-deprecated/invoice-confirmations/InvoiceConfirmationVMContainer';
 import { ReportType, PdfReportsServiceResponse } from '../core/services/pdf-reports/IPdfReportsService';
-import { ReinstateInvoice } from "../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
+import { ReinstateInvoice } from "../core/domain-layer/invoices-deprecated/reinstate-invoice/ReinstateInvoice";
 
 import path = require("path");
 

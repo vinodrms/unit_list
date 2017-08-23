@@ -12,7 +12,7 @@ import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingD
 import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repositories/IBookingRepository";
 import { PaymentMethodDO } from "../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO";
 import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO";
-import { InvoicePaymentMethodsUtils } from "../../../invoices/utils/InvoicePaymentMethodsUtils";
+import { InvoicePaymentMethodsUtils } from "../../../invoices-deprecated/utils/InvoicePaymentMethodsUtils";
 
 import _ = require('underscore');
 

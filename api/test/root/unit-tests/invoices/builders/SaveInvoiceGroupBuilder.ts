@@ -1,5 +1,5 @@
 import {InvoiceDO, InvoicePaymentStatus} from '../../../../../../api/core/data-layer/invoices-deprecated/data-objects/InvoiceDO';
-import {SaveInvoiceGroupDO} from '../../../../../../api/core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
+import {SaveInvoiceGroupDO} from '../../../../../../api/core/domain-layer/invoices-deprecated/save-invoice-group/SaveInvoiceGroupDO';
 
 export class SaveInvoiceGroupBuilder {
     private _id: string;

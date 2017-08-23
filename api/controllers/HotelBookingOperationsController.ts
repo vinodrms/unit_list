@@ -17,7 +17,7 @@ import { BookingReserveAddOnProducts } from '../core/domain-layer/hotel-operatio
 import { BookingChangePriceProduct } from '../core/domain-layer/hotel-operations/booking/change-price-product/BookingChangePriceProduct';
 import { BookingUndoCheckIn } from '../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckIn';
 import { BookingChangeGuestOnInvoice } from "../core/domain-layer/hotel-operations/booking/change-guest-invoice/BookingChangeGuestOnInvoice";
-import { GenerateBookingInvoice } from "../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoice";
+import { GenerateBookingInvoice } from "../core/domain-layer/invoices-deprecated/generate-booking-invoice/GenerateBookingInvoice";
 import { InvoiceGroupDO } from "../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO";
 
 class HotelBookingOperationsController extends BaseController {

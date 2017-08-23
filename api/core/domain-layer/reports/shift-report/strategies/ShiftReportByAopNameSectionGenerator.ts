@@ -5,7 +5,7 @@ import { InvoicePaymentStatus } from '../../../../data-layer/invoices-deprecated
 import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { TaxDO } from '../../../../data-layer/taxes/data-objects/TaxDO';
-import { InvoiceItemVM } from '../../../invoices/invoice-confirmations/InvoiceItemVM';
+import { InvoiceItemVM } from '../../../invoices-deprecated/invoice-confirmations/InvoiceItemVM';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 import { AddOnProductItemContainer } from '../../../add-on-products/validators/AddOnProductLoader';
