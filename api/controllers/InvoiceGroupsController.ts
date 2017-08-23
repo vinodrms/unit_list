@@ -17,6 +17,9 @@ import { ReinstateInvoice } from "../core/domain-layer/invoices-deprecated/reins
 
 import path = require("path");
 
+/**
+ * @deprecated
+ */
 export class InvoiceGroupsController extends BaseController {
 
     public getInvoiceGroupById(req: any, res: any) {
