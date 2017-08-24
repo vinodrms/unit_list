@@ -348,8 +348,8 @@ export enum ThStatusCode {
     InvoiceGroupsControllerErrorDownloading,
     InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief,
     InvoiceGroupsControllerErrorsavingInvoiceGroup,
-    SaveInvoiceGroupItem,
-    SaveInvoiceGroupError,
+    SaveInvoiceItem,
+    SaveInvoiceError,
     InvoicePaymentMethodValidatorError,
     InvoicePaymentMethodValidatorInvalidPaymentMethod,
     InvoicePaymentMethodValidatorUnsupportedPaymentMethod,
@@ -360,7 +360,7 @@ export enum ThStatusCode {
     InvoicePayersValidatorNoAccessToWalkIn,
     GetInvoiceGroupBriefDataError,
     CustomerInvoiceGroupUpdateStrategyErrorUpdating,
-    CustomerInvoiceGroupAddStrategyErrorAdding,
+    CustomerInvoiceAddStrategyErrorAdding,
     BookingInvoiceGroupUpdateStrategyErrorUpdating,
     BookingInvoiceGroupUpdateStrategyErrorSavingPaymentDate,
     InvoiceGroupsRepositoryBookingPriceLinkError,
@@ -889,8 +889,8 @@ ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief] = 
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorDownloading] = "Error downloading invoice.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorsavingInvoiceGroup] = "Error saving invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief] = "Error getting brief info about the required invoices.";
-ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
-ThMessage[ThStatusCode.SaveInvoiceGroupError] = "Error updating the invoice group.";
+ThMessage[ThStatusCode.SaveInvoiceItem] = "Error saving the invoice group item.";
+ThMessage[ThStatusCode.SaveInvoiceError] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorError] = "Error validating the payment methods.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorInvalidPaymentMethod] = "Unrecognized payment method.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorUnsupportedPaymentMethod] = "The payment method selected is not supported by the hotel.";
@@ -901,7 +901,7 @@ ThMessage[ThStatusCode.InvoicePayersValidatorError] = "Error validating the paye
 ThMessage[ThStatusCode.InvoicePayersValidatorInvalidSplit] = "Error validating the payers that split the invoice payment.";
 ThMessage[ThStatusCode.InvoicePayersValidatorNoAccessToWalkIn] = "Customers with pay invoice by agreement enabled cannot create walk in invoices.";
 ThMessage[ThStatusCode.CustomerInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
-ThMessage[ThStatusCode.CustomerInvoiceGroupAddStrategyErrorAdding] = "Error adding the invoice group.";
+ThMessage[ThStatusCode.CustomerInvoiceAddStrategyErrorAdding] = "Error adding the invoice group.";
 ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorSavingPaymentDate] = "Error saving the payment date an timestamp.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryBookingPriceLinkError] = "Error linking booking prices with the invoice groups.";

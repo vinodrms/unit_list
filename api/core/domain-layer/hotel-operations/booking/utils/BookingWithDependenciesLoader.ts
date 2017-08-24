@@ -64,7 +64,7 @@ export class BookingWithDependenciesLoader {
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 bookingWithDependencies.roomCategoryStatsList = roomCategoryStatsList;
 
-                var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+                var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
                 return invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._groupBookingId,
                     bookingId: this._bookingId

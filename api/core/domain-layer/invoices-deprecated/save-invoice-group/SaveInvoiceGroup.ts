@@ -13,7 +13,7 @@ import { CustomerIdValidator } from '../../../domain-layer/customers/validators/
 import { CustomersContainer } from '../../../domain-layer/customers/validators/results/CustomersContainer';
 import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerDO';
 import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from '../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository'
-import { InvoicePaymentMethodValidator } from '../validators/InvoicePaymentMethodValidator';
+import { InvoicePaymentMethodValidatorDeprecated } from '../validators/InvoicePaymentMethodValidatorDeprecated';
 import { InvoicePaymentMethodDO } from '../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { InvoicePayerDO } from '../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO';
 import { InvoiceItemDO } from '../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
@@ -21,7 +21,7 @@ import { InvoiceDO } from '../../../data-layer/invoices-deprecated/data-objects/
 import { AddOnProductIdValidator } from '../../../domain-layer/add-on-products/validators/AddOnProductIdValidator';
 import { AddOnProductsContainer } from '../../../domain-layer/add-on-products/validators/results/AddOnProductsContainer';
 import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
-import { InvoicePayersValidator } from '../validators/InvoicePayersValidator';
+import { InvoicePayersValidatorDeprecated } from '../validators/InvoicePayersValidatorDeprecated';
 import { SaveInvoiceGroupActionFactory } from './actions/SaveInvoiceGroupActionFactory';
 
 import _ = require("underscore");
@@ -57,7 +57,7 @@ export class SaveInvoiceGroup {
         }
 
         var invoiceGroupDO = this.getInvoiceGroupDO();
-        var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+        var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
 
         this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id)
             .then((loadedHotel: HotelDO) => {
@@ -74,12 +74,12 @@ export class SaveInvoiceGroup {
 
                 this._invoicePaymentMethodList = _.chain(invoiceGroupDO.getAggregatedPayerList())
                     .map((payer: InvoicePayerDO) => {
-                        return new InvoicePaymentMethodValidator(this._hotel, this._customersContainer.getCustomerById(payer.customerId)).validate(payer.paymentMethod);
+                        return new InvoicePaymentMethodValidatorDeprecated(this._hotel, this._customersContainer.getCustomerById(payer.customerId)).validate(payer.paymentMethod);
                     }).value();
 
                 let payersValidators: Promise<InvoiceDO>[] = [];
                 _.forEach(invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
-                    let payersValidator = new InvoicePayersValidator(this._customersContainer);
+                    let payersValidator = new InvoicePayersValidatorDeprecated(this._customersContainer);
                     payersValidators.push(payersValidator.validate(invoice));
                 });
                 return Promise.all(payersValidators);
@@ -88,7 +88,7 @@ export class SaveInvoiceGroup {
                 var actionStrategy = actionFactory.getActionStrategy(invoiceGroupDO);
                 actionStrategy.saveInvoiceGroup(resolve, reject);
             }).catch((error: any) => {
-                var thError = new ThError(ThStatusCode.SaveInvoiceGroupError, error);
+                var thError = new ThError(ThStatusCode.SaveInvoiceError, error);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "error saving invoice group", this._saveInvoiceGroup, thError);
                 reject(thError);
             });

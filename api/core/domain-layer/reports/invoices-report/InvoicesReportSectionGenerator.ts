@@ -80,7 +80,7 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
 
             return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { customerIdList: this._customerIdList });
         }).then((result: CustomerSearchResultRepoDO) => {
-            let invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            let invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
 
             let invoiceSearchCriteria: InvoiceGroupSearchCriteriaRepoDO = {
                 customerIdList: this._customerIdList,

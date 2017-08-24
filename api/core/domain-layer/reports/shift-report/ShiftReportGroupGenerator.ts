@@ -73,7 +73,7 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	}
 
 	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-		let igRepository = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+		let igRepository = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
 		let igMeta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 		let searchCriteria = {
 			paidInterval: this._shiftReportParams.dateInterval

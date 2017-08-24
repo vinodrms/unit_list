@@ -79,7 +79,7 @@ describe("Invoices Tests", function () {
         });
 
         it("Should get the previosly created booking invoice group by INVOICE GROUP id", function (done) {
-            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
             invoiceGroupsRepo.getInvoiceGroupById({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, createdBookingInvoiceGroup.id)
                 .then((loadedInvoiceGroup: InvoiceGroupDO) => {
                     should.equal(loadedInvoiceGroup.groupBookingId, createdBookingInvoiceGroup.groupBookingId);
@@ -97,7 +97,7 @@ describe("Invoices Tests", function () {
         });
 
         it("Should get the previosly created booking invoice group by GROUP BOOKING id", function (done) {
-            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
             invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: createdBookingInvoiceGroup.groupBookingId })
                 .then((result: InvoiceGroupSearchResultRepoDO) => {
                     should.equal(result.invoiceGroupList.length, 1);
@@ -117,7 +117,7 @@ describe("Invoices Tests", function () {
         });
 
         it("[query by CUSTOMER ID LIST] Should get the invoice groups which contain at least an invoice which has one of the customers passed as arguments as payer", function (done) {
-            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
             invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: InvoiceGroupSearchResultRepoDO) => {
                 var allInvoiceGroups = result.invoiceGroupList;
                 var customerIdQueryList = invoiceTestUtils.getDistinctCustomerIdListFromInvoiceGroupList(allInvoiceGroups)
@@ -183,7 +183,7 @@ describe("Invoices Tests", function () {
 
     describe("Invoice Aggregators", function () {
         it("Should get an invoice group by group booking id", function (done) {
-            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
             invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: createdBookingInvoiceGroup.groupBookingId }).then((result: InvoiceGroupSearchResultRepoDO) => {
                 invoiceTestUtils.testInvoiceGroupEquality(createdBookingInvoiceGroup, result.invoiceGroupList[0]);
                 done();

@@ -35,7 +35,7 @@ export class ReinstateInvoice {
         let invoiceToBeReinstated: InvoiceDO;
         let invoiceToBeReinstatedIndex: number;
 
-        let invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+        let invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
         invoiceGroupRepo.getInvoiceGroupById(this.invoiceGroupMeta,
             this._reinstatedInvoiceMeta.invoiceGroupId).then((loadedInvoiceGroup: InvoiceGroupDO) => {
                 this._loadedInvoiceGroup = loadedInvoiceGroup;

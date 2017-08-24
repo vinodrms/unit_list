@@ -21,7 +21,7 @@ export class InvoiceGroupAddStrategy implements ISaveInvoiceGroupActionStrategy 
     }
 
     public saveInvoiceGroup(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-        var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+        var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
         this._appContext.getRepositoryFactory().getTaxRepository().getTaxList({ hotelId: this.hotelId }).then((result: TaxResponseRepoDO) => {
             this._invoiceGroupDO.vatTaxListSnapshot = result.vatList;
 
@@ -29,7 +29,7 @@ export class InvoiceGroupAddStrategy implements ISaveInvoiceGroupActionStrategy 
         }).then((result: InvoiceGroupDO) => {
             resolve(result);
         }).catch((error: any) => {
-            var thError = new ThError(ThStatusCode.CustomerInvoiceGroupAddStrategyErrorAdding, error);
+            var thError = new ThError(ThStatusCode.CustomerInvoiceAddStrategyErrorAdding, error);
             if (thError.isNativeError()) {
                 ThLogger.getInstance().logError(ThLogLevel.Error, "error adding customer invoice group", this._invoiceGroupDO, thError);
             }

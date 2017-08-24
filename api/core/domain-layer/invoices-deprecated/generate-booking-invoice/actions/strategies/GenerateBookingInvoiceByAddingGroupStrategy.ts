@@ -22,7 +22,7 @@ export class GenerateBookingInvoiceByAddingGroupStrategy implements IGenerateBoo
 	}
 
 	public generateBookingInvoice(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-		var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+		var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
 
 		this._appContext.getRepositoryFactory().getTaxRepository().getTaxList({ hotelId: this.hotelId }).then((result: TaxResponseRepoDO) => {
 			this._invoiceGroupDO.vatTaxListSnapshot = result.vatList;

@@ -113,7 +113,7 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
         var invoiceGroupList = dataSource.getInvoiceGroupList(hotel, customerList, aopList, bookingList);
         var addInvoiceGroupPromiseList: Promise<InvoiceGroupDO>[] = [];
         invoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
-            var invoiceGroupsRepository = this._testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            var invoiceGroupsRepository = this._testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
             addInvoiceGroupPromiseList.push(invoiceGroupsRepository.addInvoiceGroup({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, invoiceGroup));
         });
         Promise.all(addInvoiceGroupPromiseList).then((invoiceGroupList: InvoiceGroupDO[]) => {

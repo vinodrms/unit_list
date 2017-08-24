@@ -43,7 +43,7 @@ export class InvoiceIndexer {
     }
 
     private getInvoiceStatsCore(resolve: { (result: IInvoiceStats): void }, reject: { (err: ThError): void }, indexedInterval: IndexedBookingInterval) {
-        var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+        var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
         invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id },
             {
                 paidInterval: ThDateIntervalDO.buildThDateIntervalDO(

@@ -24,7 +24,7 @@ export class GenerateBookingInvoiceByUpdatingGroupStrategy implements IGenerateB
     }
 
     public generateBookingInvoice(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-        var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+        var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
 
         invoiceGroupRepo.getInvoiceGroupById(this._invoiceGroupMeta, this._invoiceGroupDO.id)
             .then((loadedInvoiceGroup: InvoiceGroupDO) => {

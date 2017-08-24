@@ -33,7 +33,7 @@ export class GenerateBookingInvoiceActionFactory {
 
     private getActionstrategyCore(resolve: { (result: IGenerateBookingInvoiceActionStrategy): void }, reject: { (err: ThError): void }) {
         var invoiceGroupMeta = this.buildInvoiceGroupMetaRepoDO();
-        this._appContext.getRepositoryFactory().getInvoiceGroupsRepository().getInvoiceGroupList(invoiceGroupMeta, { groupBookingId: this._booking.groupBookingId })
+        this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated().getInvoiceGroupList(invoiceGroupMeta, { groupBookingId: this._booking.groupBookingId })
             .then((result: InvoiceGroupSearchResultRepoDO) => {
                 var bookingInvoiceGroup: InvoiceGroupDO;
                 if (_.isEmpty(result.invoiceGroupList)) {

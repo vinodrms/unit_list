@@ -4,7 +4,7 @@ import { ABusinessValidationRule } from '../../../../common/validation-rules/ABu
 import { BookingDO } from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import { BookingDOConstraints } from '../../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { PriceProductsContainer } from '../../../../price-products/validators/results/PriceProductsContainer';
-import { InvoicePaymentMethodValidator } from '../../../../invoices-deprecated/validators/InvoicePaymentMethodValidator';
+import { InvoicePaymentMethodValidatorDeprecated } from '../../../../invoices-deprecated/validators/InvoicePaymentMethodValidatorDeprecated';
 import { HotelDO } from '../../../../../data-layer/hotel/data-objects/HotelDO';
 import { CustomersContainer } from '../../../../customers/validators/results/CustomersContainer';
 
@@ -42,7 +42,7 @@ export class BookingBillingDetailsValidationRule extends ABusinessValidationRule
             resolve(booking);
             return;
         }
-        var invoicePMValidator = new InvoicePaymentMethodValidator(this._hotelDO, billedCustomer);
+        var invoicePMValidator = new InvoicePaymentMethodValidatorDeprecated(this._hotelDO, billedCustomer);
         invoicePMValidator.validate(booking.defaultBillingDetails.paymentMethod).then((validationResult: any) => {
             resolve(booking);
         }).catch((error: any) => {

@@ -24,14 +24,14 @@ export class InvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActionStrate
 
     public saveInvoiceGroup(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
         var invoiceGroupMeta = this.buildInvoiceGroupMetaRepoDO();
-        var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+        var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
 
         invoiceGroupRepo.getInvoiceGroupById(invoiceGroupMeta, this._invoiceGroupDO.id)
             .then((loadedInvoiceGroup: InvoiceGroupDO) => {
                 this._loadedInvoiceGroup = loadedInvoiceGroup;
 
                 var invoiceGroupItemMeta = this.buildInvoiceGroupItemMetaRepoDO();
-                var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+                var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
                 return invoiceGroupRepo.updateInvoiceGroup(invoiceGroupMeta, invoiceGroupItemMeta, this._invoiceGroupDO);
             }).then((result: InvoiceGroupDO) => {
                 resolve(result);

@@ -137,7 +137,7 @@ export class BookingChangePriceProduct {
             }).then((validatedBookingList: BookingDO[]) => {
                 this._booking = validatedBookingList[0];
 
-                var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+                var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
                 return invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._booking.groupBookingId,
                     bookingId: this._booking.id

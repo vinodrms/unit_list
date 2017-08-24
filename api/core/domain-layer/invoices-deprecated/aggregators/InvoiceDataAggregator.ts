@@ -66,7 +66,7 @@ export class InvoiceDataAggregator {
         hotelRepo.getHotelById(this.hotelId).then((hotel: HotelDO) => {
             this._hotel = hotel;
 
-            var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
             return invoiceGroupsRepo.getInvoiceGroupById({ hotelId: this._hotel.id }, query.invoiceGroupId);
         }).then((invoiceGroupDO: InvoiceGroupDO) => {
             this._vatList = invoiceGroupDO.vatTaxListSnapshot;

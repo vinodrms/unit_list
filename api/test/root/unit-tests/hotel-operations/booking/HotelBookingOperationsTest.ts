@@ -355,7 +355,7 @@ describe("Hotel Booking Operations Tests", function () {
         });
 
         it("Should check the invoice of the checked in booking", function (done) {
-            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
             invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
                 bookingId: bookingToChange.id
             }).then((result: InvoiceGroupSearchResultRepoDO) => {

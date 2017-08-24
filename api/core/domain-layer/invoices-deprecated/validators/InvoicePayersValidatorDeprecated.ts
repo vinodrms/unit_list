@@ -8,7 +8,7 @@ import { InvoicePayerDO } from '../../../data-layer/invoices-deprecated/data-obj
 
 import _ = require("underscore");
 
-export class InvoicePayersValidator {
+export class InvoicePayersValidatorDeprecated {
     private _invoice: InvoiceDO;
 
     constructor(private _customersContainer: CustomersContainer) {

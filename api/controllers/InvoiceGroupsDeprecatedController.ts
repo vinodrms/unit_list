@@ -29,7 +29,7 @@ export class InvoiceGroupsDeprecatedController extends BaseController {
         var sessionContext: SessionContext = req.sessionContext;
         var invoiceGroupId = req.query.id;
         var invoiceGroupMeta = this.getInvoiceGroupMetaRepoDOFrom(sessionContext);
-        var invoiceGroupRepo = appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+        var invoiceGroupRepo = appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
 
         invoiceGroupRepo.getInvoiceGroupById(this.getInvoiceGroupMetaRepoDOFrom(sessionContext), invoiceGroupId).then((invoiceGroup: InvoiceGroupDO) => {
             this.returnSuccesfulResponse(req, res, invoiceGroup);
@@ -42,7 +42,7 @@ export class InvoiceGroupsDeprecatedController extends BaseController {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
         var invoiceGroupMeta = this.getInvoiceGroupMetaRepoDOFrom(sessionContext);
-        var invoiceGroupRepo = appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+        var invoiceGroupRepo = appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
 
         invoiceGroupRepo.getInvoiceGroupList(invoiceGroupMeta, req.body.searchCriteria, req.body.lazyLoad).then((result: InvoiceGroupSearchResultRepoDO) => {
             this.returnSuccesfulResponse(req, res, result);
@@ -55,7 +55,7 @@ export class InvoiceGroupsDeprecatedController extends BaseController {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
         var invoiceGroupMeta = this.getInvoiceGroupMetaRepoDOFrom(sessionContext);
-        var invoiceGroupRepo = appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+        var invoiceGroupRepo = appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
 
         invoiceGroupRepo.getInvoiceGroupListCount(invoiceGroupMeta, req.body.searchCriteria).then((lazyLoadMeta: LazyLoadMetaResponseRepoDO) => {
             this.returnSuccesfulResponse(req, res, lazyLoadMeta);

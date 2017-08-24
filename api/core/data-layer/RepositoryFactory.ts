@@ -138,7 +138,7 @@ export class RepositoryFactory {
     /**
      * @deprecated in favor of getInvoiceRepository
      */
-    getInvoiceGroupsRepository(): IInvoiceGroupsRepository {
+    getInvoiceGroupsRepositoryDeprecated(): IInvoiceGroupsRepository {
         switch (this._databaseType) {
             default:
                 return new MongoInvoiceGroupsRepositoryWithBookingPriceLink(new MongoInvoiceGroupsRepository(new MongoHotelRepository()), new MongoBookingRepository(), new MongoCustomerRepository());

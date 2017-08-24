@@ -78,13 +78,7 @@ export class InvoiceDO extends BaseDO {
         });
         this.indexedCustomerIdList = _.uniq(customerIdList);
 
-        let bookingItemList = _.filter(this.itemList, item => {
-            return item.type === InvoiceItemType.Booking;
-        });
-        let bookingIdList = _.map(bookingItemList, bookingItem => {
-            return bookingItem.id;
-        });
-        this.indexedBookingIdList = _.uniq(bookingIdList);
+        this.indexedBookingIdList = this.getItemIdListByItemType(InvoiceItemType.Booking);
     }
 
     public removeItemsPopulatedFromBooking() {
@@ -163,5 +157,24 @@ export class InvoiceDO extends BaseDO {
                 }
             });
         });
+    }
+
+    public getAddOnProductIdList(): string[] {
+        return this.getItemIdListByItemType(InvoiceItemType.AddOnProduct);
+    }
+    private getItemIdListByItemType(itemType: InvoiceItemType): string[] {
+        return _.chain(this.itemList)
+            .filter((invoiceItem: InvoiceItemDO) => {
+                return invoiceItem.type === itemType;
+            })
+            .map((invoiceItem: InvoiceItemDO) => {
+                return invoiceItem.id;
+            })
+            .uniq()
+            .value();
+    }
+
+    public isWalkInInvoice(): boolean {
+        return this.indexedBookingIdList.length == 0;
     }
 }

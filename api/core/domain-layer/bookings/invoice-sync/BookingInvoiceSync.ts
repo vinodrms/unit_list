@@ -37,7 +37,7 @@ export class BookingInvoiceSync {
     }
 
     private syncInvoiceWithBookingCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }, booking: BookingDO, syncType: BookingInvoiceSyncType) {
-        let invoiceRepository = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+        let invoiceRepository = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
         invoiceRepository.getInvoiceGroupList({
             hotelId: this._sessionContext.sessionDO.hotel.id
         }, {
