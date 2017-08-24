@@ -32,7 +32,10 @@ export class EagerCustomersService {
 	}
 
 	private getCustomersBySearchCriteria(searchCriteria: Object): Observable<CustomersDO> {
-		return this._appContext.thHttp.post(ThServerApi.Customers, { searchCriteria: searchCriteria }).map((resultObject: Object) => {
+		return this._appContext.thHttp.post({
+			serverApi: ThServerApi.Customers,
+			parameters: { searchCriteria: searchCriteria }
+		}).map((resultObject: Object) => {
 			var customers = new CustomersDO();
 			customers.buildFromObject(resultObject);
 			return customers;

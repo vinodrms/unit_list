@@ -14,7 +14,10 @@ export class SettingsReportsService {
 	}
 
 	public generate(params: any) {
-		return this._appContext.thHttp.post(ThServerApi.Report, params).subscribe(() => {
+		return this._appContext.thHttp.post({
+			serverApi: ThServerApi.Report,
+			parameters: params
+		}).subscribe(() => {
 		});
 	}
 }

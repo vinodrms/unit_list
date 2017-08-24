@@ -69,12 +69,18 @@ export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM
 		if (parentIdList.length == 0) {
 			return Observable.from([new PriceProductsDO()]);
 		}
-		return this._appContext.thHttp.post(ThServerApi.PriceProducts,
-			{ searchCriteria: { priceProductIdList: parentIdList } }).map((resultObject: Object) => {
-				var priceProducts = new PriceProductsDO();
-				priceProducts.buildFromObject(resultObject);
-				return priceProducts;
-			});
+		return this._appContext.thHttp.post({
+			serverApi: ThServerApi.PriceProducts,
+			parameters: {
+				searchCriteria: {
+					priceProductIdList: parentIdList
+				}
+			}
+		}).map((resultObject: Object) => {
+			var priceProducts = new PriceProductsDO();
+			priceProducts.buildFromObject(resultObject);
+			return priceProducts;
+		});
 	}
 
 	public searchByText(text: string) {
@@ -105,7 +111,12 @@ export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM
 	}
 
 	private runServerPostActionOnPriceProduct(apiAction: ThServerApi, priceProduct: PriceProductDO): Observable<PriceProductDO> {
-		return this._appContext.thHttp.post(apiAction, { priceProduct: priceProduct }).map((addOnProductObject: Object) => {
+		return this._appContext.thHttp.post({
+			serverApi: apiAction,
+			parameters: {
+				priceProduct: priceProduct
+			}
+		}).map((addOnProductObject: Object) => {
 			this.refreshData();
 
 			var updatedPriceProductDO: PriceProductDO = new PriceProductDO();

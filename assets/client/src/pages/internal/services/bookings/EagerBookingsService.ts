@@ -19,9 +19,12 @@ export class EagerBookingsService {
     }
 
     public getBooking(groupBookingId: string, bookingId: string): Observable<BookingDO> {
-        return this._appContext.thHttp.get(ThServerApi.BookingsItem, {
-            groupBookingId: groupBookingId,
-            bookingId: bookingId
+        return this._appContext.thHttp.get({
+            serverApi: ThServerApi.BookingsItem,
+            parameters: {
+                groupBookingId: groupBookingId,
+                bookingId: bookingId
+            }
         }).map((bookingObject: Object) => {
             var bookingDO = new BookingDO();
             bookingDO.buildFromObject(bookingObject["booking"]);
@@ -30,9 +33,12 @@ export class EagerBookingsService {
     }
 
     public getCheckedInBookings(): Observable<BookingsDO> {
-        return this._appContext.thHttp.post(ThServerApi.Bookings, {
-            searchCriteria: {
-                confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_CheckedId
+        return this._appContext.thHttp.post({
+            serverApi: ThServerApi.Bookings,
+            parameters: {
+                searchCriteria: {
+                    confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_CheckedId
+                }
             }
         }).map((bookingsObject: Object) => {
             var bookings = new BookingsDO();
@@ -42,9 +48,12 @@ export class EagerBookingsService {
     }
 
     public getBookingsByGroupBookingId(groupBookingId: string): Observable<BookingsDO> {
-        return this._appContext.thHttp.post(ThServerApi.Bookings, {
-            searchCriteria: {
-                groupBookingId: groupBookingId
+        return this._appContext.thHttp.post({
+            serverApi: ThServerApi.Bookings,
+            parameters: {
+                searchCriteria: {
+                    groupBookingId: groupBookingId
+                }
             }
         }).map((bookingsObject: Object) => {
             var bookings = new BookingsDO();
@@ -57,7 +66,7 @@ export class EagerBookingsService {
         return this.getBookingsByGroupBookingId(groupBookingId).flatMap((bookings: BookingsDO) => {
             let bookingsServiceUtils = new BookingsServiceUtils(this._appContext, this._eagerCustomersService,
                 this._hotelAggregatorService, this._roomCategoriesService);
-            
+
             return bookingsServiceUtils.buildBookingVMListFromBookingList(bookings);
         }).map((bookingVMList: BookingVM[]) => {
             return bookingVMList;

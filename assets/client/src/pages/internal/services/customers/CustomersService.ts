@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ALazyLoadRequestService} from '../common/ALazyLoadRequestService';
-import {CustomerDO, CustomerType} from './data-objects/CustomerDO';
-import {CustomersDO} from './data-objects/CustomersDO';
-import {CustomerVM} from './view-models/CustomerVM';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ALazyLoadRequestService } from '../common/ALazyLoadRequestService';
+import { CustomerDO, CustomerType } from './data-objects/CustomerDO';
+import { CustomersDO } from './data-objects/CustomersDO';
+import { CustomerVM } from './view-models/CustomerVM';
 
 import * as _ from "underscore";
 
@@ -50,7 +50,12 @@ export class CustomersService extends ALazyLoadRequestService<CustomerVM> {
 	}
 
 	public saveCustomerDO(customer: CustomerDO): Observable<CustomerDO> {
-		return this._appContext.thHttp.post(ThServerApi.CustomersSaveItem, { customer: customer }).map((customerObject: Object) => {
+		return this._appContext.thHttp.post({
+			serverApi: ThServerApi.CustomersSaveItem,
+			parameters: {
+				customer: customer
+			}
+		}).map((customerObject: Object) => {
 			this.refreshData();
 
 			var updatedCustomerDO: CustomerDO = new CustomerDO();

@@ -1,23 +1,23 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ALazyLoadRequestService} from '../common/ALazyLoadRequestService';
-import {RoomCategoriesService} from '../room-categories/RoomCategoriesService';
-import {RoomCategoryDO} from '../room-categories/data-objects/RoomCategoryDO';
-import {EagerPriceProductsService} from '../price-products/EagerPriceProductsService';
-import {PriceProductDO, PriceProductStatus} from '../price-products/data-objects/PriceProductDO';
-import {PriceProductsDO} from '../price-products/data-objects/PriceProductsDO';
-import {EagerCustomersService} from '../customers/EagerCustomersService';
-import {CustomersDO} from '../customers/data-objects/CustomersDO';
-import {CustomerDO} from '../customers/data-objects/CustomerDO';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ALazyLoadRequestService } from '../common/ALazyLoadRequestService';
+import { RoomCategoriesService } from '../room-categories/RoomCategoriesService';
+import { RoomCategoryDO } from '../room-categories/data-objects/RoomCategoryDO';
+import { EagerPriceProductsService } from '../price-products/EagerPriceProductsService';
+import { PriceProductDO, PriceProductStatus } from '../price-products/data-objects/PriceProductDO';
+import { PriceProductsDO } from '../price-products/data-objects/PriceProductsDO';
+import { EagerCustomersService } from '../customers/EagerCustomersService';
+import { CustomersDO } from '../customers/data-objects/CustomersDO';
+import { CustomerDO } from '../customers/data-objects/CustomerDO';
 
-import {AllotmentVM} from './view-models/AllotmentVM';
-import {AllotmentsDO} from './data-objects/AllotmentsDO';
-import {AllotmentDO, AllotmentStatus} from './data-objects/AllotmentDO';
-import {AllotmentConstraintMeta} from './data-objects/constraint/IAllotmentConstraint';
-import {AllotmentConstraintFactory} from './data-objects/constraint/AllotmentConstraintFactory';
+import { AllotmentVM } from './view-models/AllotmentVM';
+import { AllotmentsDO } from './data-objects/AllotmentsDO';
+import { AllotmentDO, AllotmentStatus } from './data-objects/AllotmentDO';
+import { AllotmentConstraintMeta } from './data-objects/constraint/IAllotmentConstraint';
+import { AllotmentConstraintFactory } from './data-objects/constraint/AllotmentConstraintFactory';
 
 import * as _ from "underscore";
 
@@ -81,7 +81,12 @@ export class AllotmentsService extends ALazyLoadRequestService<AllotmentVM> {
 		return this.runServerPostActionOnAllotment(ThServerApi.AllotmentsArchiveItem, allotment);
 	}
 	private runServerPostActionOnAllotment(apiAction: ThServerApi, allotment: AllotmentDO): Observable<AllotmentDO> {
-		return this._appContext.thHttp.post(apiAction, { allotment: allotment }).map((allotmentObject: Object) => {
+		return this._appContext.thHttp.post({
+			serverApi: apiAction,
+			parameters: {
+				allotment: allotment
+			}
+		}).map((allotmentObject: Object) => {
 			this.refreshData();
 
 			var updatedAllotmentDO: AllotmentDO = new AllotmentDO();

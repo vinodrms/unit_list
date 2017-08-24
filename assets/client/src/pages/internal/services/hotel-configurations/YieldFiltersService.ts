@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ARequestService} from '../common/ARequestService';
-import {YieldFiltersDO} from './data-objects/YieldFiltersDO';
-import {YieldFilterDO} from '../common/data-objects/yield-filter/YieldFilterDO';
-import {YieldFilterValueDO} from '../common/data-objects/yield-filter/YieldFilterValueDO';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ARequestService } from '../common/ARequestService';
+import { YieldFiltersDO } from './data-objects/YieldFiltersDO';
+import { YieldFilterDO } from '../common/data-objects/yield-filter/YieldFilterDO';
+import { YieldFilterValueDO } from '../common/data-objects/yield-filter/YieldFilterValueDO';
 
 import * as _ from "underscore";
 
@@ -14,7 +14,9 @@ export class YieldFiltersService extends ARequestService<YieldFiltersDO> {
 		super();
 	}
 	protected sendRequest(): Observable<Object> {
-		return this._appContext.thHttp.get(ThServerApi.HotelConfigurationsYieldFilters);
+		return this._appContext.thHttp.get({
+			serverApi: ThServerApi.HotelConfigurationsYieldFilters
+		});
 	}
 	protected parseResult(result: Object): YieldFiltersDO {
 		var yieldFiltersDO: YieldFiltersDO = new YieldFiltersDO();
@@ -29,7 +31,10 @@ export class YieldFiltersService extends ARequestService<YieldFiltersDO> {
 		var yieldFilterValueObject: Object = _.clone(yieldFilterValue);
 		yieldFilterValueObject["filterId"] = filterId;
 
-		return this._appContext.thHttp.post(ThServerApi.HotelConfigurationsSaveYieldFilterValue, { yieldFilterValue: yieldFilterValueObject }).map((yfValueObject: Object) => {
+		return this._appContext.thHttp.post({
+			serverApi: ThServerApi.HotelConfigurationsSaveYieldFilterValue,
+			parameters: { yieldFilterValue: yieldFilterValueObject }
+		}).map((yfValueObject: Object) => {
 			this.updateServiceResult();
 
 			var yieldFilterValue: YieldFilterValueDO = new YieldFilterValueDO();

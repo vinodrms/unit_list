@@ -1,18 +1,18 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
 
-import {ARequestService} from '../../../common/ARequestService';
-import {AppContext, ThServerApi} from '../../../../../../common/utils/AppContext';
-import {YieldManagerPeriodParam} from '../common/YieldManagerPeriodParam';
-import {KeyMetricsResultDO} from './data-objects/KeyMetricsResultDO';
-import {KeyMetricsResultItemDO} from './data-objects/result-item/KeyMetricsResultItemDO';
-import {KeyMetricDO} from './data-objects/result-item/KeyMetricDO';
-import {KeyMetricsResultVM} from './view-models/KeyMetricsResultVM';
-import {KeyMetricsResultItemVM} from './view-models/KeyMetricsResultItemVM';
-import {KeyMetricVM} from './view-models/key-metric/KeyMetricVM';
-import {KeyMetricMetaFactory} from './view-models/key-metric/KeyMetricMetaFactory';
+import { ARequestService } from '../../../common/ARequestService';
+import { AppContext, ThServerApi } from '../../../../../../common/utils/AppContext';
+import { YieldManagerPeriodParam } from '../common/YieldManagerPeriodParam';
+import { KeyMetricsResultDO } from './data-objects/KeyMetricsResultDO';
+import { KeyMetricsResultItemDO } from './data-objects/result-item/KeyMetricsResultItemDO';
+import { KeyMetricDO } from './data-objects/result-item/KeyMetricDO';
+import { KeyMetricsResultVM } from './view-models/KeyMetricsResultVM';
+import { KeyMetricsResultItemVM } from './view-models/KeyMetricsResultItemVM';
+import { KeyMetricVM } from './view-models/key-metric/KeyMetricVM';
+import { KeyMetricMetaFactory } from './view-models/key-metric/KeyMetricMetaFactory';
 
 import * as _ from "underscore";
 
@@ -25,7 +25,10 @@ export class YieldManagerDashboardKeyMetricsService extends ARequestService<KeyM
     }
 
     protected sendRequest(): Observable<Object> {
-        return this._appContext.thHttp.post(ThServerApi.YieldManagerGetKeyMetrics, { yieldParams: this._yieldManagerPeriodParam });
+        return this._appContext.thHttp.post({
+            serverApi: ThServerApi.YieldManagerGetKeyMetrics,
+            parameters: { yieldParams: this._yieldManagerPeriodParam }
+        });
     }
 
     protected parseResult(result: Object): KeyMetricsResultVM {

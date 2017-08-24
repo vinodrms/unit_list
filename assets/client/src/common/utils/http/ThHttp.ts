@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { Observer } from "rxjs/Observer";
 import { Injectable, Inject } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
-import { IThHttp, UploadedFileResponse } from './IThHttp';
+import { IThHttp, UploadedFileResponse, RequestConfiguration } from './IThHttp';
 import { IBrowserLocation } from '../browser-location/IBrowserLocation';
 import { LoginStatusCode } from '../responses/LoginStatusCode';
 import { ThUtils } from '../ThUtils';
@@ -36,9 +36,9 @@ export class ThHttp implements IThHttp {
 		return builder.getUrl();
 	}
 
-	public get(serverApi: ThServerApi, parameters?: Object): Observable<Object> {
-		var url = this.getApiUrl(serverApi);
-		var searchParams = this.buildSearchParameters(parameters);
+	public get(config: RequestConfiguration): Observable<Object> {
+		var url = this.getApiUrl(config.serverApi);
+		var searchParams = this.buildSearchParameters(config.parameters);
 
 		return new Observable<Object>((observer: Observer<Object>) => {
 			this._http.get(url, { search: searchParams, body: JSON.stringify(this.getDefaultReqParams()) }).subscribe((res: Response) => {
@@ -65,11 +65,11 @@ export class ThHttp implements IThHttp {
 		return urlSearchParams;
 	}
 
-	public post(serverApi: ThServerApi, parameters: Object): Observable<Object> {
-		var url = this.getApiUrl(serverApi);
+	public post(config: RequestConfiguration): Observable<Object> {
+		var url = this.getApiUrl(config.serverApi);
 		var actualParams = this.getDefaultReqParams();
-		if (_.isObject(parameters)) {
-			actualParams = _.extend(actualParams, parameters);
+		if (_.isObject(config.parameters)) {
+			actualParams = _.extend(actualParams, config.parameters);
 		}
 		return new Observable((observer: Observer<Object>) => {
 			this._http.post(url, JSON.stringify(actualParams)).subscribe((res: Response) => {
