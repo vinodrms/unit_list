@@ -193,4 +193,14 @@ export class InvoiceDO extends BaseDO {
     public isWalkInInvoice(): boolean {
         return this.indexedBookingIdList.length == 0;
     }
+
+    public isPaid(): boolean {
+        return this.paymentStatus === InvoicePaymentStatus.Paid;
+    }
+    public isLossAcceptedByManagement(): boolean {
+        return this.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement;
+    }
+    public isClosed(): boolean {
+        return this.isPaid() || this.isLossAcceptedByManagement();
+    }
 }

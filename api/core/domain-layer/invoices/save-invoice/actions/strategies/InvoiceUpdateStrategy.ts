@@ -53,15 +53,32 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
             return;
         }
         // otherwise the existing invoice is unpaid
+        existingInvoice.paymentStatus = this.invoiceToSave.paymentStatus;
+
+        if (this.invoiceToSave.paymentStatus == InvoicePaymentStatus.Credit) {
+            var thError = new ThError(ThStatusCode.SaveInvoiceUnpaidInvoiceCannotBeMarkedAsCredit, null);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot mark an unpaid invoice as a credit", this.invoiceToSave, thError);
+            throw thError;
+        }
+
         this.deleteItemsFrom(existingInvoice);
         this.addNewItemsOn(existingInvoice);
         this.addNewPaymentsOn(existingInvoice);
         this.deletePayersFrom(existingInvoice);
         existingInvoice.recomputePrices();
+
+        // only close the invoice if the amount to pay is the same with the paid amount
+        if (existingInvoice.isClosed()) {
+            if (existingInvoice.amountPaid != existingInvoice.amountToPay) {
+                var thError = new ThError(ThStatusCode.SaveInvoiceAmountsNotMatching, null);
+                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot close an invoice on which the amount to pay is not equal with the paid amount",
+                    this.invoiceToSave, thError);
+                throw thError;
+            }
+        }
     }
 
     private deleteItemsFrom(existingInvoice: InvoiceDO) {
-        existingInvoice.paymentStatus = this.invoiceToSave.paymentStatus;
         existingInvoice.itemList = existingInvoice.itemList
             .filter((existingItem: InvoiceItemDO) => {
                 return !_.contains(this.itemTransactionIdListToDelete, existingItem.transactionId);
