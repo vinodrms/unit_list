@@ -33,7 +33,7 @@ export class SaveInvoiceDO {
             },
             {
                 key: "itemList",
-                validationStruct: new ArrayValidationStructure​​(
+                validationStruct: new ArrayValidationStructure(
                     new ObjectValidationStructure([
                         {
                             key: "id",
@@ -56,7 +56,7 @@ export class SaveInvoiceDO {
             },
             {
                 key: "payerList",
-                validationStruct: new ArrayValidationStructure​​(
+                validationStruct: new ArrayValidationStructure(
                     new ObjectValidationStructure([
                         {
                             key: "customerId",
@@ -64,7 +64,7 @@ export class SaveInvoiceDO {
                         },
                         {
                             key: "paymentList",
-                            validationStruct: new ArrayValidationStructure​​(
+                            validationStruct: new ArrayValidationStructure(
                                 new ObjectValidationStructure([
                                     {
                                         key: "transactionId",
@@ -88,11 +88,11 @@ export class SaveInvoiceDO {
                                         validationStruct: new PrimitiveValidationStructure(new BooleanValidationRule())
                                     },
                                     {
-                                        key: "priceToPay",
+                                        key: "amount",
                                         validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
                                     },
                                     {
-                                        key: "priceToPayPlusTransactionFee",
+                                        key: "amountPlusTransactionFee",
                                         validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
                                     },
                                     {

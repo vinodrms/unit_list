@@ -350,6 +350,8 @@ export enum ThStatusCode {
     InvoiceGroupsControllerErrorsavingInvoiceGroup,
     SaveInvoiceItem,
     SaveInvoiceError,
+    SaveInvoiceSamePayerAddedMoreThanOnce,
+    SaveInvoiceCannotDeletePayerWithPayments,
     InvoicePaymentMethodValidatorError,
     InvoicePaymentMethodValidatorInvalidPaymentMethod,
     InvoicePaymentMethodValidatorUnsupportedPaymentMethod,
@@ -361,7 +363,7 @@ export enum ThStatusCode {
     GetInvoiceGroupBriefDataError,
     CustomerInvoiceGroupUpdateStrategyErrorUpdating,
     CustomerInvoiceAddStrategyErrorAdding,
-    BookingInvoiceGroupUpdateStrategyErrorUpdating,
+    BookingInvoiceUpdateStrategyErrorUpdating,
     BookingInvoiceGroupUpdateStrategyErrorSavingPaymentDate,
     InvoiceGroupsRepositoryBookingPriceLinkError,
     InvoiceGroupsRepositoryAddInvoiceFeeError,
@@ -891,6 +893,8 @@ ThMessage[ThStatusCode.InvoiceGroupsControllerErrorsavingInvoiceGroup] = "Error 
 ThMessage[ThStatusCode.InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief] = "Error getting brief info about the required invoices.";
 ThMessage[ThStatusCode.SaveInvoiceItem] = "Error saving the invoice group item.";
 ThMessage[ThStatusCode.SaveInvoiceError] = "Error updating the invoice group.";
+ThMessage[ThStatusCode.SaveInvoiceSamePayerAddedMoreThanOnce] = "You cannot add the same payer more than once on the invoice.";
+ThMessage[ThStatusCode.SaveInvoiceCannotDeletePayerWithPayments] = "You cannot delete a payer that already has a posted payment on the invoice.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorError] = "Error validating the payment methods.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorInvalidPaymentMethod] = "Unrecognized payment method.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorUnsupportedPaymentMethod] = "The payment method selected is not supported by the hotel.";
@@ -902,7 +906,7 @@ ThMessage[ThStatusCode.InvoicePayersValidatorInvalidSplit] = "Error validating t
 ThMessage[ThStatusCode.InvoicePayersValidatorNoAccessToWalkIn] = "Customers with pay invoice by agreement enabled cannot create walk in invoices.";
 ThMessage[ThStatusCode.CustomerInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.CustomerInvoiceAddStrategyErrorAdding] = "Error adding the invoice group.";
-ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
+ThMessage[ThStatusCode.BookingInvoiceUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorSavingPaymentDate] = "Error saving the payment date an timestamp.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryBookingPriceLinkError] = "Error linking booking prices with the invoice groups.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryAddInvoiceFeeError] = "Error adding invoice fee to the invoices if necessary.";

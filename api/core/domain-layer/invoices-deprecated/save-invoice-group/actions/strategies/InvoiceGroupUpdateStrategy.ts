@@ -36,7 +36,7 @@ export class InvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActionStrate
             }).then((result: InvoiceGroupDO) => {
                 resolve(result);
             }).catch((error: any) => {
-                var thError = new ThError(ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorUpdating, error);
+                var thError = new ThError(ThStatusCode.BookingInvoiceUpdateStrategyErrorUpdating, error);
                 if (thError.isNativeError()) {
                     ThLogger.getInstance().logError(ThLogLevel.Error, "error updating booking invoice group", this._invoiceGroupDO, thError);
                 }

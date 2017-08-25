@@ -21,6 +21,8 @@ import { SaveInvoiceActionFactory } from "./actions/SaveInvoiceActionFactory";
 
 export class SaveInvoice {
     private invoiceToSave: InvoiceDO;
+    private itemTransactionIdListToDelete: string[];
+    private payerCustomerIdListToDelete: string[];
 
     private hotel: HotelDO;
     private customersContainer: CustomersContainer;
@@ -28,9 +30,14 @@ export class SaveInvoice {
     constructor(private appContext: AppContext, private sessionContext: SessionContext) {
     }
 
-    public save(invoice: InvoiceDO): Promise<InvoiceDO> {
+    // save an invoice and optionally send a list of items' transactions or payers' ids that will be deleted
+    public save(invoice: InvoiceDO, itemTransactionIdListToDelete: string[] = [],
+        payerCustomerIdListToDelete: string[] = []): Promise<InvoiceDO> {
         this.invoiceToSave = new InvoiceDO();
         this.invoiceToSave.buildFromObject(invoice);
+        this.itemTransactionIdListToDelete = itemTransactionIdListToDelete;
+        this.payerCustomerIdListToDelete = payerCustomerIdListToDelete;
+
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
             this.saveCore(resolve, reject);
         });
@@ -70,13 +77,27 @@ export class SaveInvoice {
                 let payersValidator = new InvoicePayersValidator(this.customersContainer);
                 return payersValidator.validate(this.invoiceToSave);
             }).then((validatedInvoice: InvoiceDO) => {
+                if (this.invoiceContainsTheSamePayerMoreThanOnce()) {
+                    var thError = new ThError(ThStatusCode.SaveInvoiceSamePayerAddedMoreThanOnce, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "same payer added more than once", this.invoiceToSave, thError);
+                    throw thError;
+                }
+
                 var actionFactory = new SaveInvoiceActionFactory(this.appContext, this.sessionContext);
-                var actionStrategy = actionFactory.getActionStrategy(this.invoiceToSave);
+                var actionStrategy = actionFactory.getActionStrategy(this.invoiceToSave, this.itemTransactionIdListToDelete, this.payerCustomerIdListToDelete);
                 actionStrategy.saveInvoice(resolve, reject);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.SaveInvoiceError, error);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "error saving invoice", this.invoiceToSave, thError);
                 reject(thError);
             });
+    }
+
+    private invoiceContainsTheSamePayerMoreThanOnce(): boolean {
+        let customerIdList: string[] = _.map(this.invoiceToSave.payerList, (payer: InvoicePayerDO) => {
+            return payer.customerId;
+        });
+        let uniqueCustomerIdList: string[] = _.uniq(customerIdList);
+        return customerIdList.length != uniqueCustomerIdList.length;
     }
 }

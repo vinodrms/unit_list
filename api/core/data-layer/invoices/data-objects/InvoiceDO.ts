@@ -34,6 +34,8 @@ export class InvoiceDO extends BaseDO {
     reinstatedInvoiceId: string;
     notesFromBooking: string;
     itemList: InvoiceItemDO[];
+    amountToPay: number;
+    amountPaid: number;
     payerList: InvoicePayerDO[];
     // the actual UTC timestamp when the invoice was paid
     paidTimestamp: number;
@@ -41,7 +43,8 @@ export class InvoiceDO extends BaseDO {
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["id", "versionId", "hotelId", "groupId", "reference", "paymentStatus", "indexedCustomerIdList",
-            "indexedBookingIdList", "reinstatedInvoiceId", "notesFromBooking", "paidTimestamp"];
+            "indexedBookingIdList", "reinstatedInvoiceId", "notesFromBooking", "amountToPay", "amountPaid",
+            "paidTimestamp"];
     }
 
     public buildFromObject(object: Object) {
@@ -79,6 +82,19 @@ export class InvoiceDO extends BaseDO {
         this.indexedCustomerIdList = _.uniq(customerIdList);
 
         this.indexedBookingIdList = this.getItemIdListByItemType(InvoiceItemType.Booking);
+    }
+
+    public recomputePrices() {
+        this.amountToPay = _.reduce(this.itemList, function (sum, item: InvoiceItemDO) {
+            return sum + item.meta.getTotalPrice();
+        }, 0);
+
+        this.amountPaid = 0.0;
+        this.payerList.forEach((payer: InvoicePayerDO) => {
+            payer.paymentList.forEach((payment: InvoicePaymentDO) => {
+                this.amountPaid += payment.amount;
+            });
+        });
     }
 
     public removeItemsPopulatedFromBooking() {

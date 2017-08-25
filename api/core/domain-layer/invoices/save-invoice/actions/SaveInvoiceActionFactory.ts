@@ -4,6 +4,7 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { ISaveInvoiceActionStrategy } from './ISaveInvoiceActionStrategy';
 import { InvoiceDO } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
 import { InvoiceAddStrategy } from "./strategies/InvoiceAddStrategy";
+import { InvoiceUpdateStrategy } from "./strategies/InvoiceUpdateStrategy";
 
 export class SaveInvoiceActionFactory {
     private thUtils: ThUtils;
@@ -12,10 +13,11 @@ export class SaveInvoiceActionFactory {
         this.thUtils = new ThUtils();
     }
 
-    public getActionStrategy(invoice: InvoiceDO): ISaveInvoiceActionStrategy {
+    public getActionStrategy(invoice: InvoiceDO, itemTransactionIdListToDelete: string[],
+        payerCustomerIdListToDelete: string[]): ISaveInvoiceActionStrategy {
         if (!this.thUtils.isUndefinedOrNull(invoice.id)) {
-            // TODO: create update invoice strategy
-            return null;
+            return new InvoiceUpdateStrategy(this.appContext, this.sessionContext, invoice,
+                itemTransactionIdListToDelete, payerCustomerIdListToDelete);
         }
         return new InvoiceAddStrategy(this.appContext, this.sessionContext, invoice);
     }

@@ -7,13 +7,13 @@ export class InvoicePaymentDO extends BaseDO {
     paymentMethod: InvoicePaymentMethodDO;
     shouldApplyTransactionFee: boolean;
     transactionFeeSnapshot: TransactionFeeDO;
-    priceToPay: number;
-    priceToPayPlusTransactionFee: number;
+    amount: number;
+    amountPlusTransactionFee: number;
     timestamp: number;
     notes: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["transactionId", "shouldApplyTransactionFee", "priceToPay", "priceToPayPlusTransactionFee", "timestamp", "notes"];
+        return ["transactionId", "shouldApplyTransactionFee", "amount", "amountPlusTransactionFee", "timestamp", "notes"];
     }
 
     public buildFromObject(object: Object) {

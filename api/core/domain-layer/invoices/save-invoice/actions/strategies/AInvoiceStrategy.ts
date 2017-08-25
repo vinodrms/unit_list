@@ -11,11 +11,11 @@ export abstract class AInvoiceStrategy implements ISaveInvoiceActionStrategy {
     // we want all the timestamps for the new payments/items to be the same
     private timestamp: number;
 
-    private thUtils: ThUtils;
+    protected thUtils: ThUtils;
 
     constructor(protected appContext: AppContext,
         protected sessionContext: SessionContext,
-        protected invoice: InvoiceDO) {
+        protected invoiceToSave: InvoiceDO) {
         this.timestamp = (new Date()).getTime();
         this.thUtils = new ThUtils();
     }
