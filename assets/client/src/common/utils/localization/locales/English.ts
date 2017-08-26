@@ -971,5 +971,12 @@ export var EnglishTranslations: Object = {
 	"Monthly Stats Report": "Monthly Stats Report",
 	"Contains general hotel stats for a month": "Contains general hotel stats for a month",
 	"Payment Due in Days": "Payment Due in Days",
-	
+	"Unit Cost" : "Unit Cost",
+	"Add item": "Add item",
+	"TOTAL": "TOTAL",
+	"Paid": "Paid",
+	"View Bookings": "View Bookings",
+	"Add Payment": "Add Payment",
+	"Add Invoice": "Add Invoice",
+	"ADD PAYER": "ADD PAYER",
 };

@@ -1,40 +1,37 @@
-<loading-component [isLoading]="isLoading && !didInitOnce"></loading-component>
+<loading-component [isLoading]="isLoading"></loading-component>
 
-<div class="full-height" *ngIf="didInitOnce">
-	<div class="invoice-container">
-		<span class="horizontal-align-center" *ngIf="noEditableInvoicesExist" class="full-width"> 
-			<div>
-				{{ 'Only unpaid invoices are editable. No unpaid invoices exist in this invoice group.' | translate }}
-			</div> 
-		</span>
-		<invoice-edit *ngFor="let displayedInvoiceIndex of displayedInvoiceIndexList" 
-			[invoiceUniqueId]="getInvoiceUniqueIdentifier(displayedInvoiceIndex)" 
-			[groupBookingId]="groupBookingId"
-			(newlyAddedInvoiceRemoved)="newlyAddedInvoiceRemoved($event)"
-			(invoiceAdded)="invoiceAdded($event)">
-		</invoice-edit>
-
-	</div>
-	<div class="invoice-operations-footer">
-
-		<item-list-navigator 
-			(displayedItemsUpdated)="displayedItemsUpdated($event)" 
-			[config]="itemListNavigatorConfig"
-			[reset]="resetItemNavigator" 
-			[itemsAdded]="itemsAddedObservable" 
-			[itemRemoved]="itemRemovedObservable"
-			[selectItemTriggered]="selectItemObservable">
-		</item-list-navigator>
-
-		<div *ngIf="editMode" class="invoice-operations-btn-group">
-			<th-button [upFont]="'\''" [text]="'Add Invoice'" (onButtonClick)="onAddInvoice()"></th-button>
-			<button class="btn btn-primary" type="button" (click)="onSave()"> {{ 'Save Changes' | translate }}</button>
-			<button class="btn btn-danger" type="button" (click)="onCancel()"> {{ 'Cancel' | translate }}</button>
+<div class="full-height overflow-y-auto" *ngIf="!isLoading">
+	<div class="invoice-summary">
+		<i class="fa fa-angle-left cycle-related-invoices pull-left clickable"></i>
+		<i class="fa fa-angle-right cycle-related-invoices m-l-6 clickable"></i>
+		<i class="fa fa-trash invoice-change-button pull-right clickable"></i>
+		<i class="fa fa-exchange invoice-change-button pull-right m-r-12 clickable"></i>
+		<div>
+			<div class="invoice-title">{{ invoiceTitle }}
+			<span *ngIf="isPaid" class="invoice-status paid-invoice">{{ 'Paid' | translate }}</span></div>
+			<div class="related-invoices clickable">{{ 'Related Invoices' | translate }}</div>
 		</div>
-
-		<div *ngIf="payOnlyModeWithEditOption" class="invoice-operations-btn-group">
-			<button class="btn btn-danger" type="button" (click)="onEdit()"> {{ 'Edit' | translate }}</button>
-		</div>
-
 	</div>
+	<div class="invoice-payer-section row m-b-16">
+		<div class="payer-box col-xs-5 col-md-3" *ngFor="let payer of payerList">
+			<i class="fa fa-user payer-icon"></i>
+			<div class="payer-dropdown">
+				<button class="fa fa-angle-down clickable"></button>
+				<ul>
+					<li class="clickable">{{ 'View Bookings' | translate }}</li>
+					<li class="clickable">{{ 'Add Payment' | translate }}</li>
+					<li class="clickable">{{ 'Add Invoice' | translate }}</li>
+					<li class="clickable">{{ 'Remove Payer' | translate }}</li>
+				</ul>
+			</div>
+  			<div class="payer-name">{{ payer.customerNameString }}</div>
+			<div class="payer-email">{{ payer.emailString }}</div>
+		</div>
+			<div class=" add-payer clickable">
+				<span class="fa fa-plus-circle add-payer-icon"></span>
+				<div class="add-payer-text">{{ 'ADD PAYER' | translate }}</div>
+			</div>
+	</div>
+	<invoice-edit>
+	</invoice-edit>
 </div>
