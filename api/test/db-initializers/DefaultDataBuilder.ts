@@ -31,7 +31,7 @@ import { DefaultAllotmentBuilder } from './builders/DefaultAllotmentBuilder';
 import { AllotmentDO } from '../../core/data-layer/allotments/data-objects/AllotmentDO';
 import { DefaultBookingBuilder } from './builders/DefaultBookingBuilder';
 import { BookingDO } from '../../core/data-layer/bookings/data-objects/BookingDO';
-import { DefaultInvoiceGroupBuilder } from './builders/DefaultInvoiceGroupBuilder';
+import { DefaultInvoiceDeprecatedGroupBuilder } from './builders/DefaultInvoiceDeprecatedGroupBuilder';
 import { InvoiceGroupDO } from '../../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { InvoiceDO } from '../../core/data-layer/invoices-deprecated/data-objects/InvoiceDO';
 
@@ -62,7 +62,7 @@ export class DefaultDataBuilder {
     private _priceProductList: PriceProductDO[];
     private _allotmentList: AllotmentDO[];
     private _bookingList: BookingDO[];
-    private _invoiceGroupList: InvoiceGroupDO[];
+    private _invoiceGroupDeprecatedList: InvoiceGroupDO[];
 
     constructor(private _testContext: TestContext) {
         this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
@@ -191,10 +191,10 @@ export class DefaultDataBuilder {
             }).then((bookingList: BookingDO[]) => {
                 this._bookingList = bookingList;
 
-                var invoiceGroupBuilder = new DefaultInvoiceGroupBuilder(this._testContext);
+                var invoiceGroupBuilder = new DefaultInvoiceDeprecatedGroupBuilder(this._testContext);
                 return invoiceGroupBuilder.loadInvoiceGroups(invoiceGroupBuilder, this._hotelDO, this._customerList, this._addOnProductList, this._bookingList);
             }).then((invoiceGroupList: InvoiceGroupDO[]) => {
-                this._invoiceGroupList = invoiceGroupList;
+                this._invoiceGroupDeprecatedList = invoiceGroupList;
 
                 resolve(true);
             }).catch((err: any) => {
@@ -267,12 +267,12 @@ export class DefaultDataBuilder {
     public get bookingList(): BookingDO[] {
         return this._bookingList;
     }
-    public get invoiceGroupList(): InvoiceGroupDO[] {
-        return this._invoiceGroupList;
+    public get invoiceGroupDeprecatedList(): InvoiceGroupDO[] {
+        return this._invoiceGroupDeprecatedList;
     }
-    public getNoUnpaidInvoices(): number {
+    public getNoUnpaidInvoicesDeprecated(): number {
         var noUnpaidInvoices = 0;
-        _.forEach(this._invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
+        _.forEach(this._invoiceGroupDeprecatedList, (invoiceGroup: InvoiceGroupDO) => {
             _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
                 if (!invoice.isClosed()) { noUnpaidInvoices++; };
             });

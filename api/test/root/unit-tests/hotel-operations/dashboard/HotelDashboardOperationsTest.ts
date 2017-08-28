@@ -135,7 +135,7 @@ describe("Hotel Dashboard Operations Tests", function () {
                 let unreserveRoomDO = new UnreserveRoomDO();
                 unreserveRoomDO.bookingId = booking.id;
                 unreserveRoomDO.groupBookingId = booking.groupBookingId;
-                let unreserveRoom = new UnreserveRoom​​(testContext.appContext, testContext.sessionContext);
+                let unreserveRoom = new UnreserveRoom(testContext.appContext, testContext.sessionContext);
                 return unreserveRoom.unreserve(unreserveRoomDO);
             }).then((updatedBooking: BookingDO) => {
                 should.equal(_.isEmpty(updatedBooking.roomId), true);
@@ -201,7 +201,7 @@ describe("Hotel Dashboard Operations Tests", function () {
         it("Should not see any departures for today", function (done) {
             var departuresReader = new HotelOperationsDeparturesReader(testContext.appContext, testContext.sessionContext);
             departuresReader.read(dashboardHelper.getQueryForToday(testDataBuilder)).then((departuresInfo: HotelOperationsDeparturesInfo) => {
-                should.equal(departuresInfo.departureInfoList.length, testDataBuilder.getNoUnpaidInvoices());
+                should.equal(departuresInfo.departureInfoList.length, testDataBuilder.getNoUnpaidInvoicesDeprecated());
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -213,7 +213,7 @@ describe("Hotel Dashboard Operations Tests", function () {
                 departuresInfo.departureInfoList.forEach((departureItem: DeparturelItemInfo) => {
                     should.equal(departureItem.bookingItemStatus, DeparturelItemBookingStatus.CanNotCheckOut);
                 });
-                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + testDataBuilder.getNoUnpaidInvoices());
+                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + testDataBuilder.getNoUnpaidInvoicesDeprecated());
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -293,7 +293,7 @@ describe("Hotel Dashboard Operations Tests", function () {
         it("Should still see all the bookings as departures tomorrow even though we checked in one booking", function (done) {
             var departuresReader = new HotelOperationsDeparturesReader(testContext.appContext, testContext.sessionContext);
             departuresReader.read(dashboardHelper.getQueryForTomorrow(testDataBuilder)).then((departuresInfo: HotelOperationsDeparturesInfo) => {
-                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + 1 + testDataBuilder.getNoUnpaidInvoices());
+                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + 1 + testDataBuilder.getNoUnpaidInvoicesDeprecated());
                 departuresInfo.departureInfoList.forEach((departureItem: DeparturelItemInfo) => {
                     if (departureItem.bookingId === booking.id) {
                         should.equal(departureItem.bookingItemStatus, DeparturelItemBookingStatus.CanCheckOut);
@@ -322,7 +322,7 @@ describe("Hotel Dashboard Operations Tests", function () {
         it("Should not see the checked out booking in the departures", function (done) {
             var departuresReader = new HotelOperationsDeparturesReader(testContext.appContext, testContext.sessionContext);
             departuresReader.read(dashboardHelper.getQueryForTomorrow(testDataBuilder)).then((departuresInfo: HotelOperationsDeparturesInfo) => {
-                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + 1 + testDataBuilder.getNoUnpaidInvoices());
+                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + 1 + testDataBuilder.getNoUnpaidInvoicesDeprecated());
                 departuresInfo.departureInfoList.forEach((departureItem: DeparturelItemInfo) => {
                     should.equal(departureItem.bookingItemStatus, DeparturelItemBookingStatus.CanNotCheckOut);
                 });

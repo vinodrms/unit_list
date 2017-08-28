@@ -16,7 +16,7 @@ export interface IInvoiceGroupDataSource {
     getInvoiceGroupList(hotel: HotelDO, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]): InvoiceGroupDO[];
 }
 
-export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
+export class DefaultInvoiceDeprecatedGroupBuilder implements IInvoiceGroupDataSource {
 
     constructor(private _testContext: TestContext) {
     }
