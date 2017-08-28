@@ -1,5 +1,4 @@
-<div class="full-height">
-    <div class="invoice-items-container">
+<div class="invoice-items-container">
     <table class="table table-invoice-items" style="width: 100%">
         <thead>
             <tr>
@@ -86,20 +85,19 @@
             </tr>
         </tfoot>
     </table>
-    </div>
-    <div class="invoice-edit-footer m-t-24">
-        
-        <button type="button" class="btn btn-danger" (click)="onReinstateInvoice()">
-            <i class="fa fa-2x unitpal-font">+</i> {{ 'Reinstate Invoice' | translate }}
-        </button>
+</div>
+<div class="invoice-edit-footer m-t-24">
+    
+    <button type="button" class="btn btn-danger" (click)="onReinstateInvoice()">
+        <i class="fa fa-2x unitpal-font">+</i> {{ 'Reinstate Invoice' | translate }}
+    </button>
 
-        <button type="button" class="btn btn-primary m-l-8" (click)="onPayInvoice()">
-            <i class="fa fa-2x unitpal-font rotate-45">L</i> {{ 'Pay Invoice' | translate }}
-        </button>
-        
-        <button type="button" class="btn btn-danger m-l-8" (click)="onLossByManagementInvoice()">
-            <i class="fa fa-2x unitpal-font">+</i> {{ 'Loss Accepted By Management' | translate }}
-        </button>
+    <button type="button" class="btn btn-primary m-l-8" (click)="onPayInvoice()">
+        <i class="fa fa-2x unitpal-font rotate-45">L</i> {{ 'Pay Invoice' | translate }}
+    </button>
+    
+    <button type="button" class="btn btn-danger m-l-8" (click)="onLossByManagementInvoice()">
+        <i class="fa fa-2x unitpal-font">+</i> {{ 'Loss Accepted By Management' | translate }}
+    </button>
 
-    </div>
 </div>

@@ -3836,16 +3836,6 @@ tr.selected-invoice-item {
     color: white;
     font-size: 14px;
 }
-.invoice-edit-wrap {
-    height: calc(100% - 80px); 
-}
-.invoice-edit-wrap:after {
-    content: "";
-    display: block;
-}
-.invoice-edit-footer, .invoice-edit-wrap:after {
-	height: 80px; 
-}
 
 .rotate-45 {
     /* Safari */
@@ -4347,8 +4337,7 @@ textarea.payer-details {
 }
 
 .invoice-items-container {
-    overflow-y: scroll;
-    max-height: 240px;
+    flex-grow: 2;
 }
 
 .overflow-y-auto {
@@ -4432,6 +4421,17 @@ textarea.payer-details {
 .table-payment-items tr.selectable:hover {
     cursor: pointer;
     background-color: #ededed;
+}
+
+.invoice-edit-footer {
+    height: 78px;
+    min-height: 78px;
+}
+
+.invoice-operations {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
 }
 
 
