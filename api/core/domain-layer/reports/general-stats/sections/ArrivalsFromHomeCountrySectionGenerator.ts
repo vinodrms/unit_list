@@ -16,7 +16,7 @@ export class ArrivalsFromHomeCountrySectionGenerator extends AReportSectionGener
     private static KeyMetricList = [KeyMetricType.ArrivalsByNationality];
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
-        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem,
+        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem, private _reportSectionHeader: ReportSectionHeader,
         private _homeCountry: CountryDO) {
         super(appContext, sessionContext, globalSummary);
     }
@@ -36,12 +36,7 @@ export class ArrivalsFromHomeCountrySectionGenerator extends AReportSectionGener
     }
 
     protected getHeader(): ReportSectionHeader {
-        return {
-            display: true,
-            values: [
-
-            ]
-        };
+        return this._reportSectionHeader;
     }
 
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {

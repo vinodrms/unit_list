@@ -13,7 +13,7 @@ export class GuestNightsDividedByBookingSegmentSectionGenerator extends AReportS
     private static KeyMetricList = [KeyMetricType.GuestNightsByBookingSegment];
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
-        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem) {
+        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem, private _reportSectionHeader: ReportSectionHeader) {
         super(appContext, sessionContext, globalSummary);
     }
 
@@ -33,12 +33,7 @@ export class GuestNightsDividedByBookingSegmentSectionGenerator extends AReportS
     }
 
     protected getHeader(): ReportSectionHeader {
-        return {
-            display: true,
-            values: [
-
-            ]
-        };
+        return this._reportSectionHeader;
     }
 
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {

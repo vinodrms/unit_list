@@ -17,7 +17,7 @@ export class TotalAvgRateSectionGenerator extends AReportSectionGeneratorStrateg
     private static KeyMetricList = [KeyMetricType.TotalAvgRate];
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
-        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem) {
+        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem, private _reportSectionHeader: ReportSectionHeader) {
         super(appContext, sessionContext, globalSummary);
     }
 
@@ -36,10 +36,7 @@ export class TotalAvgRateSectionGenerator extends AReportSectionGeneratorStrateg
     }
 
     protected getHeader(): ReportSectionHeader {
-        return {
-            display: false,
-            values: []
-        };
+        return this._reportSectionHeader;
     }
 
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {

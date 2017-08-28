@@ -20,7 +20,7 @@ export class ArrivalsSectionGenerator extends AReportSectionGeneratorStrategy {
     private static KeyMetricList = [KeyMetricType.Arrivals];
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
-        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem) {
+        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem, private _reportSectionHeader: ReportSectionHeader) {
         super(appContext, sessionContext, globalSummary);
     }
 
@@ -39,10 +39,7 @@ export class ArrivalsSectionGenerator extends AReportSectionGeneratorStrategy {
     }
 
     protected getHeader(): ReportSectionHeader {
-        return {
-            display: false,
-            values: []
-        };
+        return this._reportSectionHeader;
     }
 
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {

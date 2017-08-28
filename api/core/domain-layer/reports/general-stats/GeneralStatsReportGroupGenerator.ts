@@ -4,7 +4,7 @@ import { AReportGeneratorStrategy } from "../common/report-generator/AReportGene
 import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
 import { YieldManagerPeriodDO } from "../../yield-manager/utils/YieldManagerPeriodDO";
 import { HotelDetailsDO } from "../../hotel-details/utils/HotelDetailsBuilder";
-import { KeyMetricsResultItem, KeyMetricsResult } from "../../yield-manager/key-metrics/utils/KeyMetricsResult";
+import { KeyMetricsResultItem, KeyMetricsResult, IKeyMetricValueGroup } from "../../yield-manager/key-metrics/utils/KeyMetricsResult";
 import { RoomDO } from "../../../data-layer/rooms/data-objects/RoomDO";
 import { RoomCategoryStatsDO } from "../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
 import { IValidationStructure } from "../../../utils/th-validation/structure/core/IValidationStructure";
@@ -16,7 +16,7 @@ import { HotelGetDetails } from "../../hotel-details/get-details/HotelGetDetails
 import { RoomCategoryStatsAggregator } from "../../room-categories/aggregators/RoomCategoryStatsAggregator";
 import { KeyMetricReader } from "../../yield-manager/key-metrics/KeyMetricReader";
 import { KeyMetricsReaderInputBuilder } from "../../yield-manager/key-metrics/utils/KeyMetricsReaderInputBuilder";
-import { ThPeriodType } from "../key-metrics/period-converter/ThPeriodDO";
+import { ThPeriodType, ThPeriodDO } from "../key-metrics/period-converter/ThPeriodDO";
 import { CommissionOption } from "../../yield-manager/key-metrics/utils/KeyMetricsReaderInput";
 import { KeyMetricOutputType } from "../../yield-manager/key-metrics/utils/builder/MetricBuilderStrategyFactory";
 import { RoomSearchResultRepoDO } from "../../../data-layer/rooms/repositories/IRoomRepository";
@@ -39,6 +39,8 @@ import { CapacitySectionGenerator } from "./sections/CapacitySectionGenerator";
 import { BreakfastInternalCostByBookingSegmentSectionGenerator } from "./sections/BreakfastInternalCostByBookingSegmentSectionGenerator";
 import { PrimitiveValidationStructure } from "../../../utils/th-validation/structure/PrimitiveValidationStructure";
 import { NumberInListValidationRule } from "../../../utils/th-validation/rules/NumberInListValidationRule";
+import { IThDateToThPeriodConverter } from "../key-metrics/period-converter/IThDateToThPeriodConverter";
+import { ThDateToThPeriodConverterFactory } from "../key-metrics/period-converter/ThDateToThPeriodConverterFactory";
 
 import _ = require('underscore');
 
@@ -150,7 +152,6 @@ export class GeneralStatsReportGroupGenerator extends AReportGeneratorStrategy {
 			return roomCategStatsAggregator.getRoomCategoryStatsList(roomCategorySnapshotIdList);
 		}).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
 			this._loadedRoomCategoryStatsList = roomCategoryStatsList;
-
 			resolve(true);
 		}).catch((e) => { reject(e); })
 	}
@@ -190,29 +191,75 @@ export class GeneralStatsReportGroupGenerator extends AReportGeneratorStrategy {
 		};
 	}
 
+	private generateSectionHeadersWithPeriods(): ReportSectionHeader {
+		let periodConverter = ThDateToThPeriodConverterFactory.getConverter(this._periodType);
+		let periodIdToValueGroupMap: { [index: string]: IKeyMetricValueGroup; } = {};
+		var headerValues = [""];
+		this._keyMetricItem.dateList.forEach((thDate: ThDateDO, index: number) => {
+			let period = periodConverter.convert(thDate);
+			if (this._thUtils.isUndefinedOrNull(periodIdToValueGroupMap[period.id])) {
+				periodIdToValueGroupMap[period.id] = {
+					period: period
+				};
+				this.tryUpdatePeriodMarginDisplayString(period, thDate, index);
+				headerValues.push(period.displayString);
+			}
+			else {
+				period = periodIdToValueGroupMap[period.id].period;
+				let didUpdate = this.tryUpdatePeriodMarginDisplayString(period, thDate, index);
+				if (didUpdate) {
+					headerValues.pop();
+					headerValues.push(period.displayString);
+				}
+			}
+		});
+		return {
+			display: true,
+			values: headerValues
+		};
+	}
+
+	private tryUpdatePeriodMarginDisplayString(period: ThPeriodDO, thDate: ThDateDO, index: number): boolean {
+		if (index == 0 && period.dateStart.isBefore(thDate)) {
+			period.dateStart = thDate;
+			this.updatePeriodDisplayString(period);
+			return true;
+		}
+		if (index == this._keyMetricItem.dateList.length - 1 && thDate.isBefore(period.dateEnd)) {
+			period.dateEnd = thDate;
+			this.updatePeriodDisplayString(period);
+			return true;
+		}
+		return false;
+	}
+	private updatePeriodDisplayString(period: ThPeriodDO) {
+		period.displayString = period.dateStart.toString() + " - " + period.dateEnd.toString();
+	}
+
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
 		let homeCountry = this._hotelDetails.hotel.contactDetails.address.country;
+		let reportSectionsHeader = this.generateSectionHeadersWithPeriods();
 		return [
 			new GuestNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				this._periodType, this._keyMetricItem),
+				this._periodType, this._keyMetricItem, reportSectionsHeader),
 			new GuestNightsDividedByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				this._periodType, this._keyMetricItem),
+				this._periodType, this._keyMetricItem, reportSectionsHeader),
 			new ArrivalsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				this._periodType, this._keyMetricItem),
+				this._periodType, this._keyMetricItem, reportSectionsHeader),
 			new ArrivalsFromHomeCountrySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				this._periodType, this._keyMetricItem, homeCountry),
+				this._periodType, this._keyMetricItem, reportSectionsHeader, homeCountry),
 			new GuestNightsDividedByNationalitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				this._periodType, this._keyMetricItem, homeCountry),
+				this._periodType, this._keyMetricItem, reportSectionsHeader, homeCountry),
 			new RoomNightsSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				this._periodType, this._keyMetricItem),
+				this._periodType, this._keyMetricItem, reportSectionsHeader),
 			new RoomNightsDividedByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				this._periodType, this._keyMetricItem),
+				this._periodType, this._keyMetricItem, reportSectionsHeader),
 			new TotalAvgRateSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				this._periodType, this._keyMetricItem),
+				this._periodType, this._keyMetricItem, reportSectionsHeader),
 			new BreakfastRevenueByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				this._periodType, this._keyMetricItem),
+				this._periodType, this._keyMetricItem, reportSectionsHeader),
 			new BreakfastInternalCostByBookingSegmentSectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
-				this._periodType, this._keyMetricItem),
+				this._periodType, this._keyMetricItem, reportSectionsHeader),
 			new CapacitySectionGenerator(this._appContext, this._sessionContext, this._globalSummary,
 				this._periodType, this._keyMetricItem, this._loadedRoomList, this._loadedRoomCategoryStatsList)
 		];
