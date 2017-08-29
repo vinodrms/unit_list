@@ -74,7 +74,7 @@ export class InvoiceGroupsDeprecatedController extends BaseController {
         saveInvoiceGroup.save(req.body.invoiceGroup).then((updatedInvoiceGroup: InvoiceGroupDO) => {
             this.returnSuccesfulResponse(req, res, { invoiceGroup: updatedInvoiceGroup });
         }).catch((err: any) => {
-            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorsavingInvoiceGroup);
+            this.returnErrorResponse(req, res, err, ThStatusCode.InvoicesControllerErrorSavingInvoice);
         });
     }
 
@@ -84,7 +84,7 @@ export class InvoiceGroupsDeprecatedController extends BaseController {
         reinstatementInvoiceGenerator.reinstate(req.body.reinstatedInvoiceMeta).then((updatedInvoiceGroup: InvoiceGroupDO) => {
             this.returnSuccesfulResponse(req, res, { invoiceGroup: updatedInvoiceGroup });
         }).catch((err: any) => {
-            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorsavingInvoiceGroup);
+            this.returnErrorResponse(req, res, err, ThStatusCode.InvoicesControllerErrorSavingInvoice);
         });
     }
 
