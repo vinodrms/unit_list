@@ -21,6 +21,7 @@ export class InvoiceAddStrategy extends AInvoiceStrategy {
                 if (this.thUtils.isUndefinedOrNull(this.invoiceToSave.groupId)) {
                     this.invoiceToSave.groupId = this.thUtils.generateUniqueID();
                 }
+                this.invoiceToSave.recomputePrices();
 
                 var invoiceRepo = this.appContext.getRepositoryFactory().getInvoiceRepository();
                 return invoiceRepo.addInvoice({ hotelId: this.hotelId }, this.invoiceToSave);

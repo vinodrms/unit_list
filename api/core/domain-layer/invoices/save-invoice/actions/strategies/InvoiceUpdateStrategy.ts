@@ -67,11 +67,19 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
         this.deletePayersFrom(existingInvoice);
         existingInvoice.recomputePrices();
 
-        // only close the invoice if the amount to pay is the same with the paid amount
+        // Only close the invoice if
+        //  1. The amount to pay is the same with the paid amount
+        //  2. There is at least one item on the invoice
         if (existingInvoice.isClosed()) {
             if (existingInvoice.amountPaid != existingInvoice.amountToPay) {
                 var thError = new ThError(ThStatusCode.SaveInvoiceAmountsNotMatching, null);
                 ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot close an invoice on which the amount to pay is not equal with the paid amount",
+                    this.invoiceToSave, thError);
+                throw thError;
+            }
+            if (existingInvoice.itemList.length == 0) {
+                var thError = new ThError(ThStatusCode.SaveInvoiceCannotCloseInvoiceWithNoItems, null);
+                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot close an invoice with no items on it",
                     this.invoiceToSave, thError);
                 throw thError;
             }
@@ -102,7 +110,7 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
                 if (this.thUtils.isUndefinedOrNull(payment.transactionId)) {
                     this.ensurePayerExistsOn(payer.customerId, existingInvoice);
                     this.stampPayment(payment);
-                    let payerIndex = _.indexOf(existingInvoice.payerList, ((p: InvoicePayerDO) => { return p.customerId === payer.customerId; }));
+                    let payerIndex = _.findIndex(existingInvoice.payerList, ((p: InvoicePayerDO) => { return p.customerId === payer.customerId; }));
                     existingInvoice.payerList[payerIndex].paymentList.push(payment);
                 }
             });

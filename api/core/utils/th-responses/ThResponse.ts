@@ -354,6 +354,7 @@ export enum ThStatusCode {
     SaveInvoiceCannotDeletePayerWithPayments,
     SaveInvoiceUnpaidInvoiceCannotBeMarkedAsCredit,
     SaveInvoiceAmountsNotMatching,
+    SaveInvoiceCannotCloseInvoiceWithNoItems,
     InvoicePaymentMethodValidatorError,
     InvoicePaymentMethodValidatorInvalidPaymentMethod,
     InvoicePaymentMethodValidatorUnsupportedPaymentMethod,
@@ -899,6 +900,7 @@ ThMessage[ThStatusCode.SaveInvoiceSamePayerAddedMoreThanOnce] = "You cannot add 
 ThMessage[ThStatusCode.SaveInvoiceCannotDeletePayerWithPayments] = "You cannot delete a payer that already has a posted payment on the invoice.";
 ThMessage[ThStatusCode.SaveInvoiceUnpaidInvoiceCannotBeMarkedAsCredit] = "An unpaid invoice cannot be marked as Credit.";
 ThMessage[ThStatusCode.SaveInvoiceAmountsNotMatching] = "The invoice cannot be closed because the paid amount is different than the amount to pay.";
+ThMessage[ThStatusCode.SaveInvoiceCannotCloseInvoiceWithNoItems] = "Am invoice with no items cannot be closed.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorError] = "Error validating the payment methods.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorInvalidPaymentMethod] = "Unrecognized payment method.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorUnsupportedPaymentMethod] = "The payment method selected is not supported by the hotel.";
