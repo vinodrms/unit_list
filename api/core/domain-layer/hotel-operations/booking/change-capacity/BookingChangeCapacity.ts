@@ -6,7 +6,7 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { PriceProductDO } from '../../../../data-layer/price-products/data-objects/PriceProductDO';
 import { ConfigCapacityDO } from '../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
 import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';

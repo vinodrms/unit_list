@@ -8,14 +8,14 @@ import { InvoiceStats } from './InvoiceStats';
 import { IndexedBookingInterval } from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { ThDateIntervalDO } from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { ThDateDO } from '../../../../../utils/th-dates/data-objects/ThDateDO';
-import { InvoiceGroupSearchResultRepoDO } from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
-import { InvoiceItemDO, InvoiceItemType } from '../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceGroupSearchResultRepoDO } from '../../../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { RevenueForDate } from '../../data-objects/revenue/RevenueForDate';
 import { TaxDO } from "../../../../../data-layer/taxes/data-objects/TaxDO";
 import { ThUtils } from "../../../../../utils/ThUtils";
-import { InvoicePayerDO } from "../../../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
+import { InvoicePayerDO } from "../../../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO";
 
 import _ = require('underscore');
 
@@ -43,7 +43,7 @@ export class InvoiceIndexer {
     }
 
     private getInvoiceStatsCore(resolve: { (result: IInvoiceStats): void }, reject: { (err: ThError): void }, indexedInterval: IndexedBookingInterval) {
-        var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+        var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
         invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id },
             {
                 paidInterval: ThDateIntervalDO.buildThDateIntervalDO(

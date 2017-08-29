@@ -11,8 +11,8 @@ import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/boo
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { BookingStateChangeTriggerTimeDO, BookingStateChangeTriggerType } from '../../../../data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
 import { ThDateUtils } from '../../../../utils/th-dates/ThDateUtils';
 import { ThUtils } from '../../../../utils/ThUtils';

@@ -10,7 +10,7 @@ import { ConfigCapacityDO } from '../../../core/data-layer/common/data-objects/b
 import { TestUtils } from '../../helpers/TestUtils';
 import { ThDateUtils } from '../../../core/utils/th-dates/ThDateUtils';
 import { DefaultBillingDetailsDO } from '../../../core/data-layer/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
-import { InvoicePaymentMethodType } from '../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodType } from '../../../core/data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { ThDateIntervalDO } from '../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
 import { ThTimestampDO } from '../../../core/utils/th-dates/data-objects/ThTimestampDO';
 import { AddBookingItemsDO, BookingItemDO } from '../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';

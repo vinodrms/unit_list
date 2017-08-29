@@ -1,15 +1,15 @@
-import {AppContext} from '../../../../../../utils/AppContext';
-import {SessionContext} from '../../../../../../utils/SessionContext';
+import { AppContext } from '../../../../../../utils/AppContext';
+import { SessionContext } from '../../../../../../utils/SessionContext';
 
-import {IValidationStructure} from '../../../../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../../../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../../../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {StringValidationRule} from '../../../../../../utils/th-validation/rules/StringValidationRule';
+import { IValidationStructure } from '../../../../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../../../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../../../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { StringValidationRule } from '../../../../../../utils/th-validation/rules/StringValidationRule';
 
-import {IEmailConfirmationStrategy} from '../IEmailConfirmationStrategy';
-import {EmailConfirmationDO} from '../../EmailConfirmationDO';
-import {InvoiceConfirmationEmailSender} from '../../../../../invoices/invoice-confirmations/InvoiceConfirmationEmailSender';
-import { InvoiceDataAggregatorQuery } from '../../../../../invoices/aggregators/InvoiceDataAggregator';
+import { IEmailConfirmationStrategy } from '../IEmailConfirmationStrategy';
+import { EmailConfirmationDO } from '../../EmailConfirmationDO';
+import { InvoiceConfirmationEmailSender } from '../../../../../invoices-deprecated/invoice-confirmations/InvoiceConfirmationEmailSender';
+import { InvoiceDataAggregatorQuery } from '../../../../../invoices-deprecated/aggregators/InvoiceDataAggregator';
 import { EmailDistributionDO } from "../data-objects/EmailDistributionDO";
 
 import _ = require("underscore");

@@ -3,7 +3,7 @@ import {ObjectValidationStructure} from '../../../../utils/th-validation/structu
 import {PrimitiveValidationStructure} from '../../../../utils/th-validation/structure/PrimitiveValidationStructure';
 import {StringValidationRule} from '../../../../utils/th-validation/rules/StringValidationRule';
 import {NumberInListValidationRule} from '../../../../utils/th-validation/rules/NumberInListValidationRule';
-import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 
 export class BookingPaymentGuaranteeDO {
     groupBookingId: string;

@@ -195,7 +195,7 @@ export class HotelInventoryIndexer {
 
         // we only keep the penalty bookings
         return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
-            let invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            let invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
             invoiceGroupRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                 bookingIdList: penaltyBookingIdList
             }).then(searchResult => {

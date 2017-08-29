@@ -10,7 +10,7 @@ import { BedDO } from '../../../data-layer/common/data-objects/bed/BedDO';
 import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import { AddOnProductCategoryDO, AddOnProductCategoryType } from '../../../data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import { BookingAggregatedData } from '../aggregators/BookingAggregatedData';
-import { InvoiceItemDO } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO } from '../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
 import { PriceProductCancellationPenaltyType } from "../../../data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty";
 import { PriceProductCancellationPolicyType } from "../../../data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy";
@@ -223,7 +223,7 @@ export class BookingConfirmationVM {
         let ppCancellationConditions = this._bookingAggregatedData.booking.priceProductSnapshot.conditions;
         if(ppCancellationConditions.penaltyType != PriceProductCancellationPenaltyType.NoPenalty ||
             ppCancellationConditions.policyType != PriceProductCancellationPolicyType.NoPolicy) {
-                this.cancellationPolicyAndPenalty = this._bookingAggregatedData.booking.priceProductSnapshot.conditions.getValueDisplayString(this._thTranslation);               
+                this.cancellationPolicyAndPenalty = this._bookingAggregatedData.booking.priceProductSnapshot.conditions.getValueDisplayString(this._thTranslation);
             }
     }
 
