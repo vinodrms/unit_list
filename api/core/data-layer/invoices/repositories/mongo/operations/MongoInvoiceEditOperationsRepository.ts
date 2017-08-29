@@ -145,6 +145,8 @@ export class MongoInvoiceEditOperationsRepository extends MongoRepository {
             if (!this._thUtils.isUndefinedOrNull(invoice.id)) {
                 oldPaymentStatus = paymentStatusByInvoiceIdMap[invoice.id];
             }
+            this.ensureDueDateIsSet(invoice, timezone, paymentDueInDays);
+
             // only attach the invoice reference from the Invoice Sequence if it was marked as Paid and it was not Paid previously
             if (oldPaymentStatus !== invoice.paymentStatus
                 && invoice.paymentStatus === InvoicePaymentStatus.Paid
@@ -152,7 +154,7 @@ export class MongoInvoiceEditOperationsRepository extends MongoRepository {
                 this.hotelRepo.getNextSequenceValue(hotelId, HotelSequenceType.InvoiceItem)
                     .then((seq: SequenceValue) => {
                         invoice.reference = seq.hotelPrefix + this.getSequenceString(seq.sequence);
-                        this.setPaidDatesOnInvoice(invoice, timezone, paymentDueInDays);
+                        this.setPaidTimestampOnInvoice(invoice);
                         resolve(invoice);
                     }).catch((e) => {
                         reject(e);
@@ -160,7 +162,7 @@ export class MongoInvoiceEditOperationsRepository extends MongoRepository {
             }
             //attach paid dates if it's a new invoice and paymentStatus=PAID
             else if (invoice.paymentStatus === InvoicePaymentStatus.Paid && _.isUndefined(oldPaymentStatus)) {
-                this.setPaidDatesOnInvoice(invoice, timezone, paymentDueInDays);
+                this.setPaidTimestampOnInvoice(invoice);
                 resolve(invoice);
             }
             else {
@@ -172,18 +174,23 @@ export class MongoInvoiceEditOperationsRepository extends MongoRepository {
                 // attach the paid date for reporting if it has been marked as loss by management
                 if (oldPaymentStatus !== invoice.paymentStatus
                     && invoice.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement) {
-                    this.setPaidDatesOnInvoice(invoice, timezone, paymentDueInDays);
+                    this.setPaidTimestampOnInvoice(invoice);
                 }
 
                 resolve(invoice);
             }
         });
     }
-    private setPaidDatesOnInvoice(invoice: InvoiceDO, timezone: string, paymentDueInDays: number) {
-        var thTimestamp = ThTimestampDO.buildThTimestampForTimezone(timezone);
-        invoice.paymentDueDate = new ThDateUtils().addDaysToThDateDO(thTimestamp.thDateDO, paymentDueInDays);
+    private ensureDueDateIsSet(invoice: InvoiceDO, timezone: string, paymentDueInDays: number) {
+        if (this._thUtils.isUndefinedOrNull(invoice.paymentDueDate)) {
+            var thTimestamp = ThTimestampDO.buildThTimestampForTimezone(timezone);
+            invoice.paymentDueDate = new ThDateUtils().addDaysToThDateDO(thTimestamp.thDateDO, paymentDueInDays);
+        }
+    }
+    private setPaidTimestampOnInvoice(invoice: InvoiceDO) {
         invoice.paidTimestamp = (new Date()).getTime();
     }
+
     private getSequenceString(seq: number): string {
         var seqStr: string = seq + "";
         while (seqStr.length < MongoInvoiceEditOperationsRepository.RefMinLength) {

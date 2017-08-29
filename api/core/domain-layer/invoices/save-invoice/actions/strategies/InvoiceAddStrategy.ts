@@ -18,6 +18,9 @@ export class InvoiceAddStrategy extends AInvoiceStrategy {
                 this.invoiceToSave.vatTaxListSnapshot = result.vatList;
                 this.invoiceToSave.paymentStatus = InvoicePaymentStatus.Unpaid;
                 this.stampInvoice();
+                if (this.thUtils.isUndefinedOrNull(this.invoiceToSave.groupId)) {
+                    this.invoiceToSave.groupId = this.thUtils.generateUniqueID();
+                }
 
                 var invoiceRepo = this.appContext.getRepositoryFactory().getInvoiceRepository();
                 return invoiceRepo.addInvoice({ hotelId: this.hotelId }, this.invoiceToSave);

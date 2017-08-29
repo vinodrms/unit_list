@@ -35,6 +35,7 @@ export class SaveInvoice {
         payerCustomerIdListToDelete: string[] = []): Promise<InvoiceDO> {
         this.invoiceToSave = new InvoiceDO();
         this.invoiceToSave.buildFromObject(invoice);
+        this.invoiceToSave.reindex();
         this.itemTransactionIdListToDelete = itemTransactionIdListToDelete;
         this.payerCustomerIdListToDelete = payerCustomerIdListToDelete;
 

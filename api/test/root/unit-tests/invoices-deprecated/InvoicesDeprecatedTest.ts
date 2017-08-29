@@ -22,7 +22,7 @@ import { InvoiceDO, InvoiceAccountingType } from '../../../../core/data-layer/in
 import { InvoicePayerDO } from '../../../../core/data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO';
 import { ReinstateInvoice } from "../../../../core/domain-layer/invoices-deprecated/reinstate-invoice/ReinstateInvoice";
 
-describe("Invoices Tests", function () {
+describe("[Deprecated] Invoices Tests", function () {
     var testUtils: TestUtils;
     var testContext: TestContext;
     var testDataBuilder: DefaultDataBuilder;
@@ -43,7 +43,7 @@ describe("Invoices Tests", function () {
         customerInvoiceGroupsHelper = new CustomerInvoicesTestHelper(testDataBuilder);
     });
 
-    describe("Booking Invoice Groups Flow", function () {
+    describe("[Deprecated] Booking Invoice Groups Flow", function () {
         it("Should generate a new booking invoice (new invoice group)", function (done) {
             var generateBookingInvoice = new GenerateBookingInvoice(testContext.appContext, testContext.sessionContext);
             var generateBookingInvoiceDO = bookingInvoiceGroupsHelper.buildGenerateBookingInvoiceDOForNewInvoiceGroup();
@@ -152,7 +152,7 @@ describe("Invoices Tests", function () {
         });
     });
 
-    describe("Customer Invoice Groups Flow", function () {
+    describe("[Deprecated] Customer Invoice Groups Flow", function () {
 
         it("Should add a new customer invoice group with one invoice", function (done) {
             var saveInvoiceGroupDO = customerInvoiceGroupsHelper.buildSaveInvoiceGroupDOForAddingNewCustomerInvoiceGroup();
@@ -181,7 +181,7 @@ describe("Invoices Tests", function () {
         });
     });
 
-    describe("Invoice Aggregators", function () {
+    describe("[Deprecated] Invoice Aggregators", function () {
         it("Should get an invoice group by group booking id", function (done) {
             var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
             invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: createdBookingInvoiceGroup.groupBookingId }).then((result: InvoiceGroupSearchResultRepoDO) => {
@@ -194,7 +194,7 @@ describe("Invoices Tests", function () {
 
     });
 
-    describe("Invoice Email Sender Flow", function () {
+    describe("[Deprecated] Invoice Email Sender Flow", function () {
         it("Should send the invoice by email", function (done) {
             var invoiceEmailSender = new InvoiceConfirmationEmailSender(testContext.appContext, testContext.sessionContext);
             var invoice = createdBookingInvoiceGroup.invoiceList[0];
@@ -215,7 +215,7 @@ describe("Invoices Tests", function () {
         });
     });
 
-    describe("Invoice reinstatement", function () {
+    describe("[Deprecated] Invoice reinstatement", function () {
         it("Should reinstate an invoice", function (done) {
             let reinstatementGenerator = new ReinstateInvoice(testContext.appContext, testContext.sessionContext);
             reinstatementGenerator.reinstate({

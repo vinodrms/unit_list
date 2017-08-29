@@ -22,10 +22,12 @@ class InvoicesEntity extends BasePersistentEntity {
                 required: true
             },
             groupId: {
-                type: 'string'
+                type: 'string',
+                required: true
             },
             reference: {
-                type: 'string'
+                type: 'string',
+                required: true
             },
             paymentStatus: {
                 type: 'integer',
@@ -47,7 +49,8 @@ class InvoicesEntity extends BasePersistentEntity {
                 type: 'string'
             },
             notesFromBooking: {
-                type: 'string'
+                type: 'string',
+                defaultsTo: ""
             },
             itemList: {
                 type: 'array',
@@ -58,8 +61,7 @@ class InvoicesEntity extends BasePersistentEntity {
                 defaultsTo: []
             },
             paidTimestamp: {
-                type: 'float',
-                required: true
+                type: 'float'
             }
         }
     }
