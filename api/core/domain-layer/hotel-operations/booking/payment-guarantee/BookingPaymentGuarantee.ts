@@ -8,7 +8,7 @@ import { CustomerIdValidator } from '../../../customers/validators/CustomerIdVal
 import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
 import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import { InvoicePaymentMethodDO } from '../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodDO } from '../../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { BookingWithDependenciesLoader } from '../utils/BookingWithDependenciesLoader';

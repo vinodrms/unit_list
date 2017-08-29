@@ -7,7 +7,7 @@ import { MongoBedRepository } from '../../../../../data-layer/beds/repositories/
 import { MongoPatchType } from '../patches/MongoPatchType';
 import { MongoHotelRepository } from "../../../../../data-layer/hotel/repositories/mongo/MongoHotelRepository";
 import { MongoCustomerRepository } from "../../../../../data-layer/customers/repositories/mongo/MongoCustomerRepository";
-import { MongoInvoiceGroupsRepository } from "../../../../../data-layer/invoices/repositories/mongo/MongoInvoiceGroupsRepository";
+import { MongoInvoiceGroupsRepository } from "../../../../../data-layer/invoices-deprecated/repositories/mongo/MongoInvoiceGroupsRepository";
 import { MongoRepository } from "../../../../../data-layer/common/base/MongoRepository";
 import { MongoBookingRepository } from "../../../../../data-layer/bookings/repositories/mongo/MongoBookingRepository";
 

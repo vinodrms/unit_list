@@ -1,5 +1,5 @@
-import {BaseDO} from '../../../common/base/BaseDO';
-import {InvoicePaymentMethodDO} from '../../../invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { BaseDO } from '../../../common/base/BaseDO';
+import { InvoicePaymentMethodDO } from '../../../invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 
 export class DefaultBillingDetailsDO extends BaseDO {
     customerId: string;

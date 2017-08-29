@@ -5,7 +5,7 @@ import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { BookingChangeDatesDO } from './BookingChangeDatesDO';
 import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';

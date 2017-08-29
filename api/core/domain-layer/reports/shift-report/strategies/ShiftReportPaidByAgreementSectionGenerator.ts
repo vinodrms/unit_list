@@ -3,10 +3,10 @@ import { ReportSectionHeader, ReportSectionMeta } from "../../common/result/Repo
 import { ThError } from "../../../../utils/th-responses/ThError";
 import { AppContext } from "../../../../utils/AppContext";
 import { SessionContext } from "../../../../utils/SessionContext";
-import { InvoiceGroupDO } from "../../../../data-layer/invoices/data-objects/InvoiceGroupDO";
-import { InvoiceDO } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
-import { InvoicePayerDO } from "../../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
+import { InvoiceGroupDO } from "../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO";
+import { InvoiceDO } from "../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO";
+import { InvoicePayerDO } from "../../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO";
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO";
 import { CustomerSearchResultRepoDO, CustomerMetaRepoDO } from "../../../../data-layer/customers/repositories/ICustomerRepository";
 import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
 import { BaseCorporateDetailsDO } from "../../../../data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO";
@@ -43,7 +43,7 @@ export class ShiftReportPaidByAgreementSectionGenerator extends AReportSectionGe
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
         let data = [];
 
-        let allInvoicePayers: InvoicePayerDO[] = 
+        let allInvoicePayers: InvoicePayerDO[] =
             _.chain(this._paidInvoiceGroupList).map((invoiceGroupDO: InvoiceGroupDO) => {
                 return invoiceGroupDO.invoiceList;
             }).flatten().map((invoiceDO: InvoiceDO) => {
@@ -65,7 +65,7 @@ export class ShiftReportPaidByAgreementSectionGenerator extends AReportSectionGe
                 }
             }
         });
-            
+
         this.convertCustomerIdMapToCustomerMap(payByAgreementCustomerIdMap).then((payByAgreementCustomerNameMap: Object) => {
             _.forEach(Object.keys(payByAgreementCustomerNameMap), (companyLabel: string) => {
                 let paymentsDetails = payByAgreementCustomerNameMap[companyLabel];
