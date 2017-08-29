@@ -13,17 +13,17 @@ import { ThPeriodType } from "../../key-metrics/period-converter/ThPeriodDO";
 
 import _ = require('underscore');
 
-export class TotalAvgRateSectionGenerator extends AReportSectionGeneratorStrategy {
-    private static KeyMetricList = [KeyMetricType.TotalAvgRate];
+export class RoomNightsSectionGenerator extends AReportSectionGeneratorStrategy {
+    private static KeyMetricList = [KeyMetricType.RoomNights];
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
-        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem) {
+        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem, private _reportSectionHeader: ReportSectionHeader) {
         super(appContext, sessionContext, globalSummary);
     }
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Avg Rate Total"
+            title: "Room Nights Total"
         }
     }
 
@@ -36,16 +36,13 @@ export class TotalAvgRateSectionGenerator extends AReportSectionGeneratorStrateg
     }
 
     protected getHeader(): ReportSectionHeader {
-        return {
-            display: false,
-            values: []
-        };
+        return this._reportSectionHeader;
     }
 
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
         var data: any[] = [];
         _.filter(this._kmResultItem.metricList, (metric: KeyMetric) => {
-            return _.contains(TotalAvgRateSectionGenerator.KeyMetricList, metric.type);
+            return _.contains(RoomNightsSectionGenerator.KeyMetricList, metric.type);
         }).forEach((metric: KeyMetric) => {
             let typeStr = this._appContext.thTranslate.translate(metric.displayName);
             let row: any = [typeStr];
