@@ -4057,7 +4057,8 @@ textarea.payer-details {
     overflow: hidden;
 }
 
-.invoice-summary .invoice-status {
+.invoice-summary .invoice-status,
+.related-invoice .invoice-status {
     font-weight: 200;
     font-style: normal;
     font-size: 11px;
@@ -4067,9 +4068,22 @@ textarea.payer-details {
     margin-left: 10px;
 }
 
-.invoice-summary .paid-invoice {
+.invoice-summary .paid-invoice-status,
+.related-invoice .paid-invoice-status {
     color: #ffffff;
     background-color: rgba(54, 206, 141, 1);
+}
+
+.invoice-summary .loss-accepted-by-management-invoice-status,
+.related-invoice .loss-accepted-by-management-invoice-status {
+    color: #ffffff;
+    background-color: rgba(246, 102, 0, 1);
+}
+
+.invoice-summary .unpaid-invoice-status,
+.related-invoice .unpaid-invoice-status {
+    color: #ffffff;
+    background-color: rgba(204, 204, 204, 1);
 }
 
 .invoice-summary .related-invoices {
@@ -4432,6 +4446,107 @@ textarea.payer-details {
     display: flex;
     flex-flow: column;
     height: 100%;
+}
+
+.related-invoices-menu {
+    margin-left: 13px;
+    margin-right: 13px;
+    border-bottom: 1px solid rgba(201, 215, 223, 1);
+    height: 67px;
+}
+
+.related-invoices-menu .related-invoices-menu-back {
+    outline: none;
+    position: absolute;
+    left: 24px;
+    top: 23px;
+    width: 15px;
+    height: 15px;
+    border: none;
+    text-align: center;
+    line-height: 15px;
+    background-color: transparent;
+    color: #F66600;
+    font-size: 28px;
+}
+
+.related-invoices-menu .related-invoices-menu-title {
+    position: absolute;
+    left: 53px;
+    top: 19px;
+    height: 19px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    color: #F66600;
+}
+
+.related-invoices-menu .related-invoices-count {
+    position: absolute;
+    left: 53px;
+    top: 40px;
+    height: 16px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    color: #999999;
+}
+
+.related-invoices-list {
+    overflow-y: auto;
+    height: calc(100% - 67px);
+}
+
+.related-invoice {
+    height: 90px;
+    margin-left: 13px;
+    margin-right: 13px;
+    border-bottom: 1px solid rgba(201, 215, 223, 1);
+    position: relative;
+}
+
+.related-invoice .related-invoice-info {
+    height: 100%;
+    width: calc(100% - 50px);
+}
+
+.related-invoice .related-invoice-title {
+    font-weight: 700;
+    font-style: normal;
+    font-size: 13px;
+    color: #333333;
+    top: 18px;
+    position: absolute;
+}
+
+.related-invoice .related-invoice-payer {
+    font-weight: 200;
+    font-style: normal;
+    font-size: 11px;
+    color: #999999;
+    top: 40px;
+    position: absolute;
+}
+
+.related-invoice .related-invoice-total {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 11px;
+    top: 58px;
+    position: absolute;
+}
+
+.related-invoice .related-invoice-button {
+    position: relative;
+    top: 40px;
+    right: 10px;
+    height: 15px;
+    width: 15px;
+    color: #F66600;
+    background-color: transparent;
+    text-align: center;
+    line-height: 15px;
+    float: right;
 }
 
 
