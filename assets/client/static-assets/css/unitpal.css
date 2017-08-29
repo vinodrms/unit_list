@@ -11,7 +11,7 @@
 }*/
 
 .unitpal-font { font-family: UnitpalIcons !important; font-weight:normal; font-size:larger; }
-.unitpal-large { font-size:xx-large;  line-height:100%; } 
+.unitpal-large { font-size:xx-large;  line-height:100%; }
 
 .menu_section .unitpal-font {
     font-size: x-large;
@@ -19,7 +19,7 @@
 }
 
 .signup-step {
-    background-color: white; 
+    background-color: white;
 }
 
 body,html {
@@ -150,7 +150,7 @@ header {
 }
 @media screen and (max-width: 450px) {
     .side-menu-item {
-        display: none;   
+        display: none;
     }
 }
 @media screen and (max-width: 800px) and (min-width: 450px) {
@@ -456,7 +456,7 @@ table .buttons,table button,table .btn {
     height: 100%;
 }
 .overview-right h1 {
-    font-size: 22px; 
+    font-size: 22px;
 }
 
 .overview-left {
@@ -582,7 +582,7 @@ lazy-loading-table {
 
 .overview-right-body{
     height: calc(100% - 82px);
-    overflow-y: hidden;    
+    overflow-y: hidden;
 }
 
 .wizard-nav  {
@@ -590,7 +590,7 @@ lazy-loading-table {
     color:#0b2139;
     padding: 0px;
     height: 100%;
-    /*TODO: Use scroll*/ 
+    /*TODO: Use scroll*/
     overflow-y: hidden;
 }
 
@@ -875,7 +875,7 @@ td .room-categ-capacity {
 
 .modal-body lazy-loading-table {
     flex-grow: 1;
-} 
+}
 
 .modal-dialog.vertical-align-center:not(.modal-xlg) {
     margin-top: 61px;
@@ -1340,19 +1340,19 @@ table.lazy-loading tfoot {
 }
 
 table.lazy-loading th:nth-child(even) {
-  background: rgba(225, 225, 225, 0.6);  
+  background: rgba(225, 225, 225, 0.6);
 }
 
 table.lazy-loading th:nth-child(odd) {
-  background: rgba(244, 244, 244, 0.6);  
+  background: rgba(244, 244, 244, 0.6);
 }
 
 table.lazy-loading.odd-columns th:last-child {
-  background: rgba(225, 225, 225, 0.6);  
+  background: rgba(225, 225, 225, 0.6);
 }
 
 table.lazy-loading.even-columns th:last-child {
-  background: rgba(244, 244, 244, 0.6);  
+  background: rgba(244, 244, 244, 0.6);
 }
 
 table.lazy-loading tbody td:nth-child(even) {
@@ -1364,11 +1364,11 @@ table.lazy-loading tbody td:nth-child(odd) {
 }
 
 table.lazy-loading.odd-columns tbody td:last-child {
-  background: rgba(244, 244, 244, 0.6);  
+  background: rgba(244, 244, 244, 0.6);
 }
 
 table.lazy-loading.even-columns tbody td:last-child {
-  background: rgba(255, 255, 255, 0.6);  
+  background: rgba(255, 255, 255, 0.6);
 }
 
 table.lazy-loading tfoot {
@@ -1391,7 +1391,7 @@ table.lazy-loading td.right {
 }
 
 table.lazy-loading .pagination-container {
-    padding-right: 10px;       
+    padding-right: 10px;
 }
 
 /* This is to override default pagination style */
@@ -1427,7 +1427,7 @@ table.lazy-loading .th-pagination {
 }
 
 .lazy-loading-table-filter {
-    margin-bottom: 5px;    
+    margin-bottom: 5px;
 }
 .lazy-loading-table-sort {
     float: right;
@@ -1436,7 +1436,7 @@ table.lazy-loading .th-pagination {
 }
 
 .up-col-0p {
-    display: none !important;   
+    display: none !important;
 }
 .up-col-5p {
     flex-grow: 1 !important;
@@ -1472,10 +1472,10 @@ table.lazy-loading .th-pagination {
     flex-grow: 14 !important;
 }
 .up-col-80p {
-    flex-grow: 16 !important;   
+    flex-grow: 16 !important;
 }
 .up-col-85p {
-    flex-grow: 17 !important;   
+    flex-grow: 17 !important;
 }
 .up-col-90p {
     flex-grow: 18 !important;
@@ -1498,12 +1498,12 @@ table.lazy-loading .th-pagination {
 }
 
 .basic-info-settings-tabbar {
-    margin-top: 10px;            
+    margin-top: 10px;
 }
 
 .basic-info-settings-edit-container {
     height: calc(100% - 53px);
-    padding: 5px 0 5px 0;       
+    padding: 5px 0 5px 0;
 }
 
 .allotment-availability-overview {
@@ -1597,7 +1597,7 @@ table.lazy-loading .th-pagination {
 
 @media screen and (max-width: 800px) {
     .home-header-button>p {
-        display: none;   
+        display: none;
     }
     .home-header-button {
         width: 55px;
@@ -1619,7 +1619,7 @@ table.lazy-loading .th-pagination {
 .home-header-logo>p {
     font-size: 22px;
     display: inline-block;
-    color: white; 
+    color: white;
     position:relative;
     top: 17px;
     left: 3px;
@@ -1864,7 +1864,7 @@ ul.msg_list li .text-center a {
     top: 0px;
 }
 .btn-square.btn-square-next-prev {
-    background-color: rgb(251, 103, 8);    
+    background-color: rgb(251, 103, 8);
 }
 
 a.btn.btn-square:hover,
@@ -1882,10 +1882,10 @@ a.btn.btn-square:focus {
     width: 190px;
 }
 .btn.btn-square.disabled {
-    background-color: #c1c1c1;   
+    background-color: #c1c1c1;
 }
 .btn.btn-square>i {
-    font-size: 30px;  
+    font-size: 30px;
     position: relative;
 }
 .btn.btn-square>i {
@@ -1929,7 +1929,7 @@ a.btn.btn-square:focus {
     font-weight: bold;
     text-transform: uppercase;
     overflow: hidden;
-    text-overflow: ellipsis;   
+    text-overflow: ellipsis;
  }
  @media screen and (max-width: 630px) {
     .btn-err-container>i {
@@ -1937,7 +1937,7 @@ a.btn.btn-square:focus {
     }
 }
 .float-right {
-    float: right;   
+    float: right;
 }
 .right-margin {
     border-right: 1px solid #DBDBDB;
@@ -2160,7 +2160,7 @@ a.btn.btn-square:focus {
 }
 .search-input-text {
     display: block;
-    width: 100%; 
+    width: 100%;
     height: 34px !important;
 }
 .input-group .select2-selection {
@@ -2229,7 +2229,7 @@ a.btn.btn-square:focus {
             display: flex;
             flex-direction: column;
         }
-        
+
         .operations-dashboard .header .pane-title{
             display: flex;
             align-items: center;
@@ -2261,7 +2261,7 @@ a.btn.btn-square:focus {
             flex-basis: 48px;
             background-color: white;
         }
-        
+
     .hotel-operations-dashboard .customer-name{
         font-size: 14px;
         color: #7c7c81;
@@ -2351,7 +2351,7 @@ a.btn.btn-square:focus {
         text-align: center;
         flex-grow: 1;
     }
-    
+
     rooms-canvas > .header > .notification .notification-close{
         flex-basis: 32;
         flex-grow: 0;
@@ -2372,31 +2372,31 @@ a.btn.btn-square:focus {
     }
 
         /* Room cards */
-        
+
         /* Occupied */
         .room-card.occupied {
             border-left: 6px solid rgb(251, 103, 8);
             line-height: normal;
         }
-       
+
         .room-card.occupied .card-header .section1 .room-number{
-            color: rgb(251, 103, 8);  
+            color: rgb(251, 103, 8);
         }
 
         /* Free */
         .room-card.free {
             border-left: 6px solid rgb(29, 205, 140);
         }
-    
+
         .room-card.free .card-header .section1 .room-number{
-            color: rgb(29, 205, 140);  
+            color: rgb(29, 205, 140);
         }
 
         /*Out of service */
         .room-card.out-of-service {
             border-left: 6px solid #555;
         }
-    
+
         .room-card.out-of-service .card-header .section1 .room-number{
             color: #555;
         }
@@ -2405,7 +2405,7 @@ a.btn.btn-square:focus {
         .room-card.out-of-order {
             border-left: 6px solid #9A9A9A;
         }
-    
+
         .room-card.out-of-order .card-header .section1 .room-number{
             color: #9A9A9A;
         }
@@ -2414,13 +2414,13 @@ a.btn.btn-square:focus {
         .room-card.reserved {
             border-left: 6px solid rgb(255, 190, 1);
         }
-    
+
         .room-card.reserved .card-header .section1 .room-number{
             color: rgb(255, 190, 1);
         }
 
         .room-card .info-icon {
-            padding-left: 3px;   
+            padding-left: 3px;
         }
 
         .page{
@@ -2492,13 +2492,13 @@ a.btn.btn-square:focus {
         .room-card .card-header{
            padding: 6px 12px 6px 12px;
         }
-        
+
         .room-card .card-header .section1{
             display: flex;
             flex-direction: column;
             flex-grow: 1;
         }
-        
+
             .room-card .card-header .section1 .room-number{
                 font-size: 24px;
                 max-width: 150px;
@@ -2826,7 +2826,7 @@ a.btn.btn-square:focus {
         position: absolute;
         z-index: 1;
         margin-top: -12px;
-    }    
+    }
 
     .yield-manager-dashboard .view-mode-toggle-container .view-mode-button{
         position: relative !important;
@@ -2922,9 +2922,9 @@ a.btn.btn-square:focus {
             justify-content: space-between;
             border-bottom: 1px solid #DBDBDB;
         }
-        
+
         .yield-manager-dashboard .price-products-table .default-row-select-color{
-            background-color: #FFFAD8; 
+            background-color: #FFFAD8;
         }
 
         .yield-manager-dashboard .price-products-table .filter-indicator{
@@ -2943,7 +2943,7 @@ a.btn.btn-square:focus {
 
         /* This is a quick way to accomodate the selected-indicator*/
         .yield-manager-dashboard .price-products-row .price-products-col.wide {
-            padding: 0px; 
+            padding: 0px;
         }
 
         .yield-manager-dashboard .key-metrics-col,
@@ -2965,7 +2965,7 @@ a.btn.btn-square:focus {
             /*width: 50px;*/
             width: 100%;
         }
-        
+
         .key-metrics-col .key-metric-value{
             color: #555;
             text-align: center;
@@ -2986,7 +2986,7 @@ a.btn.btn-square:focus {
         {
             background-color:rgba(187, 187, 187, 0.1);
         }
-        
+
         .yield-actions-control {
             padding: 12px 12px 0px 12px;
             height: 56px;
@@ -3662,7 +3662,7 @@ a.btn.btn-square:focus {
     font-size: 14px;
 }
 .link-with-unitpal-font-icon {
-    font-size: 12px; 
+    font-size: 12px;
 }
 .link-with-unitpal-font-icon:hover {
     text-decoration: none;
@@ -3685,7 +3685,7 @@ a.btn.btn-square:focus {
      font-size: 20px;
  }
  .operational-page-container .right-sidebar .notes {
-     font-size: 11px; 
+     font-size: 11px;
  }
  textarea.notes {
      font-size: 11px;
@@ -3741,6 +3741,7 @@ invoice-edit {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 .invoice-title-container {
     position: relative;
@@ -3799,7 +3800,7 @@ invoice-edit {
     color: rgb(251, 103, 8);
 }
 tr.selected-invoice-item {
-    background-color: #ededed;        
+    background-color: #ededed;
 }
 .move-left-invoice-item-cell {
     text-align: left;
@@ -3932,13 +3933,13 @@ textarea.payer-details {
 }
 
 /* Use this class with the bootstrap row class to force all the columns to have the same height */
-.row-eq-height { 
-    display: flex; 
-    flex-wrap: wrap; 
+.row-eq-height {
+    display: flex;
+    flex-wrap: wrap;
 }
-.row-eq-height > [class*='col-'] { 
-    display: flex; 
-    flex-direction: column; 
+.row-eq-height > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
 }
 /* Needed for Safari */
 .row.row-eq-height:before, .row.row-eq-height:after {
@@ -4192,12 +4193,12 @@ textarea.payer-details {
 }
 
 .invoice-payer-section .payer-box .payer-dropdown > ul:hover {
-    display: block; 
+    display: block;
 }
 
 .invoice-payer-section .payer-box .payer-dropdown:hover > ul {
     display: block;
-} 
+}
 
 .invoice-payer-section .add-payer {
     border: 1px dashed #F66600;
