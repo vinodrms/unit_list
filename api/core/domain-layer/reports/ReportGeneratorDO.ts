@@ -11,7 +11,7 @@ export enum ReportGroupType {
     Bookings,
     Invoices,
     Guests,
-    MonthlyStats,
+    GeneralStats,
 
 }
 
@@ -23,7 +23,7 @@ var SupportedReportGroupTypes: ReportGroupType[] = [
     ReportGroupType.Bookings,
     ReportGroupType.Invoices,
     ReportGroupType.Guests,
-    ReportGroupType.MonthlyStats,
+    ReportGroupType.GeneralStats,
     
 ]
 

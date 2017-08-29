@@ -19,7 +19,7 @@ import { GuestNightsWeekendBuilderStrategy } from "./strategies/GuestNightsWeeke
 import { GuestNightsByNationalityBuilderStrategy } from "./strategies/GuestNightsByNationalityBuilderStrategy";
 import { BookingSegment } from "../../../../hotel-inventory-snapshots/stats-reader/data-objects/utils/BookingSegment";
 import { GuestNightsByBookingSegmentBuilderStrategy } from "./strategies/GuestNightsByBookingSegmentBuilderStrategy";
-import { CountryContainer } from "../../../../reports/monthly-stats/utils/CountryContainer";
+import { CountryContainer } from "../../../../reports/general-stats/utils/CountryContainer";
 import { ArrivalsBuilderStrategy } from "./strategies/ArrivalsBuilderStrategy";
 import { ArrivalsByNationalityBuilderStrategy } from "./strategies/ArrivalsByNationalityBuilderStrategy";
 import { RoomNightsByBookingSegmentBuilderStrategy } from "./strategies/RoomNightsByBookingSegmentBuilderStrategy";
@@ -32,7 +32,7 @@ import _ = require('underscore');
 export enum KeyMetricOutputType {
     YieldManager,
     KeyMetricReport,
-    MonthlyStatsReport,
+    GeneralStatsReport,
 
 }
 
@@ -197,7 +197,7 @@ export class MetricBuilderStrategyFactory {
             });
         }
 
-        else if (outputType === KeyMetricOutputType.MonthlyStatsReport) {
+        else if (outputType === KeyMetricOutputType.GeneralStatsReport) {
             metricList = [
                 new GuestNightsBuilderStrategy(this._hotelInventoryStats, {}),
                 new GuestNightsWeekdaysBuilderStrategy(this._hotelInventoryStats, {}),

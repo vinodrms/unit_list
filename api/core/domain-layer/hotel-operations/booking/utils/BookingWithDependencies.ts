@@ -5,8 +5,8 @@ import { AllotmentDO, AllotmentStatus } from '../../../../data-layer/allotments/
 import { AllotmentsContainer } from '../../../allotments/validators/results/AllotmentsContainer';
 import { RoomDO } from '../../../../data-layer/rooms/data-objects/RoomDO';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { ThUtils } from '../../../../utils/ThUtils';
 import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
 

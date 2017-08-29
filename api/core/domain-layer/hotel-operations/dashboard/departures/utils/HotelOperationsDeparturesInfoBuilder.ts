@@ -1,8 +1,8 @@
 import { HotelOperationsDeparturesInfo, DeparturelItemInfo, DeparturelItemBookingStatus, DepartureItemCustomerInfo } from './HotelOperationsDeparturesInfo';
 import { BookingDO, BookingConfirmationStatus } from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import { CustomersContainer } from '../../../../customers/validators/results/CustomersContainer';
-import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceGroupDO } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { ThUtils } from '../../../../../utils/ThUtils';
 
 import _ = require('underscore');
@@ -132,14 +132,14 @@ export class HotelOperationsDeparturesInfoBuilder {
 
     public getCustomerIdList(): string[] {
         let customerIdList = [];
-        _.forEach(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => { 
+        _.forEach(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => {
             let guestCustomerIdList = _.map(departureInfoItem.guestCustomerInfoList, (customerInfo: DepartureItemCustomerInfo) => {
                 return customerInfo.customerId;
             });
             customerIdList = customerIdList.concat(guestCustomerIdList);
             customerIdList.push(departureInfoItem.customerId);
         });
-        
+
         var departureInfoListWithCorporateCustomerId = _.filter(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => { return departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0 });
         customerIdList = _.union(customerIdList, _.map(departureInfoListWithCorporateCustomerId, (departureInfoItem: DeparturelItemInfo) => {
             if (departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0) {

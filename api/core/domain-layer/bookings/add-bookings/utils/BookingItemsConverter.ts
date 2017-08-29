@@ -19,7 +19,7 @@ import { BookingPriceDO, BookingPriceType } from '../../../../data-layer/booking
 import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
 import { AddOnProductItemContainer, AddOnProductItem } from '../../../add-on-products/validators/AddOnProductLoader';
 import { AddOnProductDO } from '../../../../data-layer/add-on-products/data-objects/AddOnProductDO';
-import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { TaxDO, TaxType } from '../../../../data-layer/taxes/data-objects/TaxDO';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import { IHotelRepository, SequenceValue } from "../../../../data-layer/hotel/repositories/IHotelRepository";
@@ -142,7 +142,7 @@ export class BookingItemsConverter {
                     priceProduct, billingCustomer, groupBookingRoomCategoryIdList);
 
                 this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
-                this._bookingUtils.updateCorporateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);                
+                this._bookingUtils.updateCorporateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
                 bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest = bookingDO.displayCustomerId;
                 this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
 

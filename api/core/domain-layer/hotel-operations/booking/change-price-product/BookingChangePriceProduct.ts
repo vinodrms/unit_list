@@ -21,8 +21,8 @@ import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data
 import { RoomDO } from '../../../../data-layer/rooms/data-objects/RoomDO';
 import { PriceProductDO } from '../../../../data-layer/price-products/data-objects/PriceProductDO';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
-import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { BookingWithDependencies } from '../utils/BookingWithDependencies';
 import { NewBookingsValidationRules } from '../../../bookings/add-bookings/utils/NewBookingsValidationRules';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
@@ -137,7 +137,7 @@ export class BookingChangePriceProduct {
             }).then((validatedBookingList: BookingDO[]) => {
                 this._booking = validatedBookingList[0];
 
-                var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+                var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
                 return invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._booking.groupBookingId,
                     bookingId: this._booking.id

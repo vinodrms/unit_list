@@ -3,7 +3,6 @@ import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
 import { ABusinessValidationRule } from '../../../../common/validation-rules/ABusinessValidationRule';
 import { BookingDO } from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import { PriceProductsContainer } from '../../../../price-products/validators/results/PriceProductsContainer';
-import { InvoicePaymentMethodValidator } from '../../../../invoices/validators/InvoicePaymentMethodValidator';
 import { HotelDO } from '../../../../../data-layer/hotel/data-objects/HotelDO';
 import { CustomersContainer } from '../../../../customers/validators/results/CustomersContainer';
 import { RoomCategoryStatsDO } from '../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';

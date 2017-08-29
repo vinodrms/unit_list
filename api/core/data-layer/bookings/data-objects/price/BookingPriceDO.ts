@@ -1,7 +1,7 @@
 import { BaseDO } from '../../../common/base/BaseDO';
 import { ThTranslation } from '../../../../utils/localization/ThTranslation';
-import { IInvoiceItemMeta } from '../../../invoices/data-objects/items/IInvoiceItemMeta';
-import { InvoiceItemDO, InvoiceItemAccountingType } from '../../../invoices/data-objects/items/InvoiceItemDO';
+import { IInvoiceItemMeta } from '../../../invoices-deprecated/data-objects/items/IInvoiceItemMeta';
+import { InvoiceItemDO, InvoiceItemAccountingType } from '../../../invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { ThUtils } from '../../../../utils/ThUtils';
 import { PricePerDayDO } from './PricePerDayDO';
 import { CommissionDO } from "../../../common/data-objects/commission/CommissionDO";

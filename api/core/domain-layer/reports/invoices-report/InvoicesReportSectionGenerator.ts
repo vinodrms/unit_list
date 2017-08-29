@@ -7,19 +7,19 @@ import { ThError } from "../../../utils/th-responses/ThError";
 import { LazyLoadRepoDO } from "../../../data-layer/common/repo-data-objects/LazyLoadRepoDO";
 import { ThDateIntervalDO } from "../../../utils/th-dates/data-objects/ThDateIntervalDO";
 import { BookingSearchCriteriaRepoDO, BookingSearchResultRepoDO } from "../../../data-layer/bookings/repositories/IBookingRepository";
-import { InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO } from "../../../data-layer/invoices/repositories/IInvoiceGroupsRepository";
-import { InvoiceGroupDO } from "../../../data-layer/invoices/data-objects/InvoiceGroupDO";
-import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO } from "../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository";
+import { InvoiceGroupDO } from "../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO";
+import { InvoiceDO } from "../../../data-layer/invoices-deprecated/data-objects/InvoiceDO";
 import { CustomerSearchResultRepoDO } from "../../../data-layer/customers/repositories/ICustomerRepository";
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 import { ThUtils } from "../../../utils/ThUtils";
 import { PaymentMethodDO } from "../../../data-layer/common/data-objects/payment-method/PaymentMethodDO";
-import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
+import { InvoicePayerDO } from "../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO";
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO";
 import { ShiftReportPaidInvoicesSectionGenerator } from "../shift-report/strategies/ShiftReportPaidInvoicesSectionGenerator";
 import { BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
 import { ThDateIntervalUtils } from "../../../utils/th-dates/ThDateIntervalUtils";
-import { InvoicePaymentMethodsUtils } from "../../invoices/utils/InvoicePaymentMethodsUtils";
+import { InvoicePaymentMethodsUtils } from "../../invoices-deprecated/utils/InvoicePaymentMethodsUtils";
 
 import _ = require("underscore");
 
@@ -80,7 +80,7 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
 
             return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { customerIdList: this._customerIdList });
         }).then((result: CustomerSearchResultRepoDO) => {
-            let invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            let invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
 
             let invoiceSearchCriteria: InvoiceGroupSearchCriteriaRepoDO = {
                 customerIdList: this._customerIdList,
@@ -158,7 +158,7 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
 
                 return 0;
             });
-            
+
             data = _.map(rawData, (row: any) => {
                 let invoice: InvoiceDO = row[0];
                 let customer: CustomerDO = row[1];

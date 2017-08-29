@@ -1,10 +1,10 @@
 import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
-import { InvoiceDO } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
-import { InvoicePayerDO } from '../../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
-import { InvoicePaymentMethodType } from '../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoicePayerDO } from '../../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO';
+import { InvoicePaymentMethodType } from '../../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 
@@ -56,7 +56,7 @@ export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGe
 				let amountWithoutFee = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[pMethod].amountWithoutFee);
 				let amountWithFee = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[pMethod].amountWithFee);
 				let fee = this._thUtils.roundNumberToTwoDecimals(amountWithFee - amountWithoutFee);
-				
+
 				let row = [pmName, transactions, amountWithFee, amountWithoutFee, fee];
 
 				totalTransaction += transactions;
@@ -69,7 +69,7 @@ export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGe
 			totalAmountWithoutFee = this._thUtils.roundNumberToTwoDecimals(totalAmountWithoutFee);
 			totalAmountWithFee = this._thUtils.roundNumberToTwoDecimals(totalAmountWithFee);
 			totalFees = this._thUtils.roundNumberToTwoDecimals(totalFees);
-			
+
 			data.push([this._appContext.thTranslate.translate('Total'), totalTransaction, totalAmountWithFee, totalAmountWithoutFee, totalFees]);
 			resolve(data);
 		}).catch((e) => { reject(e) });

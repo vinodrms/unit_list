@@ -35,30 +35,30 @@ export class TestUtils {
 
     /**
      * Delays running the function given as parameter.
-     * 
+     *
      * Example usage:
-     * 
+     *
      * function downloadImage(imageUrl) {
      *    ... download imageUrl ...
      * }
-     * 
+     *
      * var lazyDownloadImage = lazyFunction(downloadImage);
      *
      * lazyDownloadImage(URL) doesn't download the image. Instead,
      * it returns a function that when called downloads the image.
      * This comes especially useful when you want to pass this as
      * a parameter to other function. For instance, if you do:
-     * 
+     *
      * f(downloadImage(URL))
-     * 
+     *
      * downloadImage(URL) is called before f is called. If you want to
      * resolve the parameter lazily, i.e., download the image inside f,
      * you need to do:
-     * 
-     * f(lazyDownloadImage(URL)) 
-     * 
+     *
+     * f(lazyDownloadImage(URL))
+     *
      * and then inside f call the parameter as a function with no
-     * parameters whenever you want to trigger the download. 
+     * parameters whenever you want to trigger the download.
      */
     public static lazyFunction(func) {
         return function (...args) {

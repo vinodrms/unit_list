@@ -8,7 +8,7 @@ import { ThHourDO } from '../../../../utils/th-dates/data-objects/ThHourDO';
 import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
 import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { BookingStateChangeTriggerTimeDO, BookingStateChangeTriggerType } from '../../../../data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 import { CustomerIdValidator } from '../../../customers/validators/CustomerIdValidator';
 import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
