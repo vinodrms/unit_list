@@ -1,169 +1,103 @@
-<div class="invoice-edit-container full-height" [ngClass]="{'read-only-invoice': !editMode}" customScroll>
-    <div class="invoice-edit-wrap">
-        <p class="invoice-title-container">
-            <span class="invoice-title m-l-16" [ngClass]="{'read-only': !editMode}">
-                <i *ngIf="isPaid" class="fa fa-check" aria-hidden="true"></i> 
-                <i *ngIf="isLossAcceptedByManagement" class="fa fa-2x unitpal-font" aria-hidden="true">+</i>
-                {{ 'Invoice' | translate }} 
-                <small><i *ngIf="!isNewlyAdded">{{ invoiceReference }}</i></small>
-                <small *ngIf="isNewlyAdded"><i>{{ '(unsaved)' | translate }}</i></small>
-                <b *ngIf="isPaid"> {{ 'PAID' | translate }}</b>
-                <b *ngIf="isPaid && (isReinstated || isReinstatement || isCredited || isCredit)"> - </b>
-                <b *ngIf="isCredited">{{ 'CREDITED' | translate }}</b>
-                <b *ngIf="isReinstated">{{ 'REINSTATED' | translate }}</b>
-                <b *ngIf="isCredit">{{ 'CREDIT' | translate }}</b>
-                <b *ngIf="isReinstatement">{{ 'REINSTATEMENT of ' | translate }} {{ reinstatedInvoiceReference }}</b>
-                <b *ngIf="isLossAcceptedByManagement"> {{ 'LOSS ACCEPTED BY MANAGEMENT' | translate }}</b>
-            </span>
-            <span class="pull-right clickable-item p-r-6" 
-                *ngIf="!editMode && !isNewlyAdded && bookingId && groupBookingId"
-                (click)="viewBooking()">
-                <i class="fa unitpal-font" title="{{'View Booking' | translate}}">8</i> 
-                {{ 'View Booking' | translate }} 
-            </span>
-            <span class="invoice-remove p-r-6" *ngIf="editMode && isNewlyAdded">
-                <a class="btn btn-xs" title="{{ 'Delete' | translate}}" (click)="onDelete()"><i class="fa unitpal-font">\</i></a>
-            </span>            
-            <br/>
-            <span *ngFor="let errorMessage of errorMessageList" class="text-warning m-l-16">
-                <small><i class="fa fa-info-circle"></i> {{ errorMessage | translate }}</small><br/>
-            </span>
-        </p>
+<div class="invoice-items-container">
+    <table class="table table-invoice-items" style="width: 100%">
+        <thead>
+            <tr>
+                <th width="25%">
+                    {{ 'Item Name'| translate }}
+                </th>
+                <th width="15%">
+                    {{ 'Qty' | translate }}
+                </th>
+                <th width="20%">
+                    {{ 'Unit Cost' | translate }}
+                </th>
+                <th width="20%">
+                    {{ 'Total' | translate }}
+                </th>
+                <th width="20%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="selectable">
+                <td>1Rack_BB</td>
+                <td>1</td>
+                <td>Dkr 1,244</td>
+                <td>Dkr 1,244</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>1Rack_BB</td>
+                <td>1</td>
+                <td>Dkr 1,244</td>
+                <td>Dkr 1,244</td>
+                <td></td>
+            </tr>
+            <tr class="selectable">
+                <td>1Rack_BB</td>
+                <td>1</td>
+                <td>Dkr 1,244</td>
+                <td>Dkr 1,244</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>1Rack_BB</td>
+                <td>1</td>
+                <td>Dkr 1,244</td>
+                <td>Dkr 1,244</td>
+                <td></td>
+            </tr>
+            <tr class="add-item">
+                <td>
+                    <div class="clickable">
+                        <span class="fa fa-plus-circle m-r-6"></span>{{ 'Add item' | translate }}
+                    </div>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+        </tbody>
+    </table>
+    <table class="table table-payment-items">
+        <colgroup>
+            <col width="25%">
+            <col width="15%">
+            <col width="20%">
+            <col width="20%">
+            <col width="20%">
+        </colgroup>
+        <tr class="selectable">
+            <td>Mister Brown
+                <div class="payment-type">Payment by VISA</div>
+            </td>
+            <td></td>
+            <td></td>
+            <td>-Dkr 1,244</td>
+            <td></td>
+        </tr>
+        <tfoot>
+            <tr>
+                <td>{{ 'TOTAL' | translate }}</td>
+                <td></td>
+                <td></td>
+                <td>Dkr 6,522</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<div class="invoice-edit-footer m-t-24">
+    
+    <button type="button" class="btn btn-danger" (click)="onReinstateInvoice()">
+        <i class="fa fa-2x unitpal-font">+</i> {{ 'Reinstate Invoice' | translate }}
+    </button>
 
-        <invoice-payer *ngFor="let invoicePayerVM of invoicePayerVMList; let invoicePayerVMIndex = index" [invoiceUniqueId]="invoiceUniqueId"
-            [invoicePayerVMIndex]="invoicePayerVMIndex"></invoice-payer>
+    <button type="button" class="btn btn-primary m-l-8" (click)="onPayInvoice()">
+        <i class="fa fa-2x unitpal-font rotate-45">L</i> {{ 'Pay Invoice' | translate }}
+    </button>
+    
+    <button type="button" class="btn btn-danger m-l-8" (click)="onLossByManagementInvoice()">
+        <i class="fa fa-2x unitpal-font">+</i> {{ 'Loss Accepted By Management' | translate }}
+    </button>
 
-        <p *ngIf="editMode" class="btn-add-invoice-payer">
-            <th-button [upFont]="'\''" [text]="'Add Payer'" (onButtonClick)="openCustomerSelectModal()"></th-button>
-        </p>
-        <table class="table table-invoice-items" style="width: 100%">
-            <thead>
-                <tr>
-                    <th>
-                    </th>
-                    <th>
-                        {{ 'Item Name'| translate }}
-                    </th>
-                    <th>
-                        {{ 'Qty' | translate }}
-                    </th>
-                    <th>
-                        {{ 'Unit Cost' | translate }}
-                    </th>
-                    <th>
-                        {{ 'Total' | translate }}
-                    </th>
-                    <th>
-                    </th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <td></td>
-                    <td><b>{{ 'Total' | translate }}</b></td>
-                    <td></td>
-                    <td></td>
-                    <td>{{ ccySymbol }} <b>{{ totalPrice | price }}</b></td>
-                    <td></td>
-                </tr>
-            </tfoot>
-            <tbody>
-
-                <tr *ngFor="let invoiceItemVM of invoiceItemVMList; let invoiceItemVMIndex = index" (click)="selectInvoiceItem(invoiceItemVMIndex)"
-                    [ngClass]="{'selectable' : invoiceItemVM.isMovable() && editMode, 'selected': invoiceItemVM.isMovable() && invoiceItemSelected(invoiceItemVMIndex) && editMode, 'not-allowed': !invoiceItemVM.isMovable() && editMode}">
-
-                    <td class="move-left-invoice-item-cell" width="10%">
-                        <label *ngIf="invoiceItemVM.isMovable() && invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn" [ngClass]="{disabled: !hasLeftEditableNeighbor()}" (click)="moveLeft(invoiceItemVMIndex)">
-                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                        </label>
-                    </td>
-                    <td width="40%">
-                        <span *ngIf="!invoiceItemVM.displayBookingDateBreakdown()">
-                            <i *ngIf="invoiceItemVM.invoiceItemDO.meta.isDerivedFromBooking()" class="unitpal-font">%</i> {{ invoiceItemVM.itemDisplayText | translate }}
-                        </span>
-                        
-                        <!-- Booking price -->
-                        <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
-                            <span *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.getInvoicedRoomPricePerNightList(invoiceItemVM.invoiceItemDO.accountingType)"
-                                title="{{ invoiceItemVM.itemDisplayText }}">
-                                <i class="unitpal-font">%</i>
-                                {{ 'Accomodation for' | translate }} {{ roomPricePerNight.thDate | thdate }}
-                                <br>
-                            </span>
-                        </span>
-                        <!-- END Booking price -->
-                    </td>
-                    <td width="10%">
-                        <span *ngIf="!invoiceItemVM.displayBookingDateBreakdown()">
-                            {{ invoiceItemVM.qty }}
-                        </span>
-                        <!-- Booking price -->
-                        <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
-                            <p *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.getInvoicedRoomPricePerNightList(invoiceItemVM.invoiceItemDO.accountingType)" class="invoice-item-small">
-                                {{ (invoiceItemVM.invoiceItemDO.isOfTypeCredit())? -1 : 1 }}
-                            </p>
-                        </span>
-                        <!-- END Booking price -->
-                    </td>
-                    <td width="15%">
-                        <span *ngIf="!invoiceItemVM.displayBookingDateBreakdown()">
-                            {{ ccySymbol }} <b>{{ invoiceItemVM.price | price}}</b>
-                        </span>
-
-                        <!-- Booking price -->
-                        <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
-                            <p *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.roomPricePerNightList" class="invoice-item-small">
-                                {{ ccySymbol }} <b>{{ roomPricePerNight.price | price }}</b>
-                            </p>
-                        </span>
-                        <!-- END Booking price -->    
-                    </td>
-                    <td width="15%">
-                        <span *ngIf="!invoiceItemVM.displayBookingDateBreakdown()">
-                            {{ ccySymbol }} <b>{{ invoiceItemVM.totalPrice | price }}</b>
-                        </span>
-                        
-                        <!-- Booking price -->
-                        <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
-                            <p *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.getInvoicedRoomPricePerNightList(invoiceItemVM.invoiceItemDO.accountingType)" class="invoice-item-small">
-                                {{ ccySymbol }} <b>{{ roomPricePerNight.price | price }}</b>
-                            </p>
-                        </span>
-                        <!-- END Booking price -->  
-                    </td>
-                    <td width="10%" class="move-right-invoice-item-cell">
-                        <label *ngIf="invoiceItemVM.isMovable() && invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn" [ngClass]="{disabled: !hasRightEditableNeighbor()}" (click)="moveRight(invoiceItemVMIndex)">
-                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                        </label>
-                    </td>
-                </tr>
-
-                <tr *ngIf="editMode">
-                    <td colspan="2" class='add-item-cell'>
-                        <th-button [upFont]="'\''" [text]="'Add Item'" (onButtonClick)="openAddOnProductSelectModal()"></th-button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div *ngIf="!editMode" class="invoice-edit-footer">
-        
-        <button type="button" class="btn btn-danger" *ngIf="isPaid && !isReinstated && !isCredited && !isCredit" (click)="onReinstateInvoice()">
-            <i class="fa fa-2x unitpal-font">+</i> {{ 'Reinstate Invoice' | translate }}
-        </button>
-
-        <button type="button" class="btn btn-primary" *ngIf="!isPaid" (click)="onPayInvoice()">
-            <i class="fa fa-2x unitpal-font rotate-45">L</i> {{ 'Pay Invoice' | translate }}
-        </button>
-        
-        <p *ngIf="isLossAcceptedByManagement">
-            <small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.' | translate }} </small>
-        </p>
-        
-        <button type="button" class="btn btn-danger" *ngIf="!isPaid && !isLossAcceptedByManagement" (click)="onLossByManagementInvoice()">
-            <i class="fa fa-2x unitpal-font">+</i> {{ 'Loss Accepted By Management' | translate }}
-        </button>
-
-    </div>
 </div>
