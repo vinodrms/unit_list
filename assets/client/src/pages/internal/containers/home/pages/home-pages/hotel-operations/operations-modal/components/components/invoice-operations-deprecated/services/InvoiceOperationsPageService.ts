@@ -7,7 +7,7 @@ import { InvoiceGroupsService } from '../../../../../../../../../../services/inv
 import { EagerInvoiceGroupsService } from '../../../../../../../../../../services/invoices/EagerInvoiceGroupsService';
 import { EagerCustomersService } from '../../../../../../../../../../services/customers/EagerCustomersService';
 import { HotelAggregatorService } from '../../../../../../../../../../services/hotel/HotelAggregatorService';
-import { HotelInvoiceOperationsPageParam } from '../utils/HotelInvoiceOperationsPageParam';
+import { HotelInvoiceOperationsDeprecatedPageParam } from '../utils/HotelInvoiceOperationsDeprecatedPageParam';
 import { InvoiceGroupDO } from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
 import { InvoiceOperationsPageData } from './utils/InvoiceOperationsPageData';
 import { HotelAggregatedInfo } from '../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
@@ -33,7 +33,7 @@ export class InvoiceOperationsPageService {
         this._pageData = new InvoiceOperationsPageData();
     }
 
-    public getPageData(pageParam: HotelInvoiceOperationsPageParam): Observable<InvoiceOperationsPageData> {
+    public getPageData(pageParam: HotelInvoiceOperationsDeprecatedPageParam): Observable<InvoiceOperationsPageData> {
         return Observable.combineLatest(
             this.getInvoiceGroupDO(pageParam.invoiceGroupId),
             this._hotelAggregatorService.getHotelAggregatedInfo()

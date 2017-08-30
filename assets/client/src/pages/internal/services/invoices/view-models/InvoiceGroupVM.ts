@@ -4,7 +4,7 @@ import { InvoiceVM } from './InvoiceVM';
 import { InvoiceItemDO, InvoiceItemType } from '../data-objects/items/InvoiceItemDO';
 import { InvoiceItemVM } from './InvoiceItemVM';
 import { InvoicePayerVM } from './InvoicePayerVM';
-import { InvoiceOperationsPageData } from '../../../containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/services/utils/InvoiceOperationsPageData';
+import { InvoiceOperationsPageData } from '../../../containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations-deprecated/services/utils/InvoiceOperationsPageData';
 import { ThTranslation } from '../../../../../common/utils/localization/ThTranslation';
 import { ThUtils } from '../../../../../common/utils/ThUtils';
 

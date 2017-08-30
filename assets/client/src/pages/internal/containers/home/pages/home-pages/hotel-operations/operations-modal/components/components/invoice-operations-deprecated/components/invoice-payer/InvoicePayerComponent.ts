@@ -23,7 +23,7 @@ import * as _ from "underscore";
 
 @Component({
     selector: 'invoice-payer',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-payer/template/invoice-payer.html',
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations-deprecated/components/invoice-payer/template/invoice-payer.html',
     providers: [CustomerRegisterModalService, EmailSenderModalService]
 })
 export class InvoicePayerComponent implements OnInit {

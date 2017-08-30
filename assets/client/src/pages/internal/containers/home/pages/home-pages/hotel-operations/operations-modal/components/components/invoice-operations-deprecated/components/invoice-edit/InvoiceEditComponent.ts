@@ -25,7 +25,7 @@ import * as _ from "underscore";
 
 @Component({
     selector: 'invoice-edit',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-edit/template/invoice-edit.html',
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations-deprecated/components/invoice-edit/template/invoice-edit.html',
     providers: [AddOnProductsModalService, NumberOfAddOnProductsModalService, CustomerRegisterModalService]
 })
 export class InvoiceEditComponent implements OnInit {
