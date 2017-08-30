@@ -127,6 +127,9 @@ module.exports.routes = {
     'POST /api/invoiceGroups/saveInvoicegroupItem': 'InvoiceGroupsDeprecatedController.saveInvoiceGroupItem',
     'POST /api/invoiceGroups/reinstate': 'InvoiceGroupsDeprecatedController.reinstateInvoice',
 
+    'POST /api/invoices': 'InvoicesController.getInvoiceList',
+    'POST /api/invoices/count': 'InvoicesController.getInvoiceListCount',
+    'GET /api/invoices/invoiceGroupItem': 'InvoicesController.getInvoiceById',
     'POST /api/invoices/saveInvoice': 'InvoicesController.saveInvoice',
 
     'POST /api/hotelOperations/dashboard/arrivals': 'HotelDashboardOperationsController.getArrivals',
