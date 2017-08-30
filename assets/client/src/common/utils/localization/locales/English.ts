@@ -980,5 +980,7 @@ export var EnglishTranslations: Object = {
     "Add Invoice": "Add Invoice",
     "ADD PAYER": "ADD PAYER",
     "Group By": "Group By",
+    "Unpaid" : "Unpaid",
+    "Loss Management": "Loss Management",
 
 };

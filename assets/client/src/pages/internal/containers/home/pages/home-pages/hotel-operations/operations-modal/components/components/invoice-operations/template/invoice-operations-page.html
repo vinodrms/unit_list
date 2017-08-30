@@ -1,37 +1,68 @@
 <loading-component [isLoading]="isLoading"></loading-component>
 
 <div class="full-height invoice-operations" *ngIf="!isLoading">
-	<div class="invoice-summary">
-		<i class="fa fa-angle-left cycle-related-invoices pull-left clickable"></i>
-		<i class="fa fa-angle-right cycle-related-invoices m-l-6 clickable"></i>
-		<i class="fa fa-trash invoice-change-button pull-right clickable"></i>
-		<i class="fa fa-exchange invoice-change-button pull-right m-r-12 clickable"></i>
-		<div>
-			<div class="invoice-title">{{ invoiceTitle }}
-			<span *ngIf="isPaid" class="invoice-status paid-invoice">{{ 'Paid' | translate }}</span></div>
-			<div class="related-invoices clickable">{{ 'Related Invoices' | translate }}</div>
+	<div *ngIf="!showRelatedInvoices">
+		<div class="invoice-summary">
+			<i class="fa fa-angle-left cycle-related-invoices pull-left clickable" (click)="moveToPreviousRelatedInvoice()"></i>
+			<i class="fa fa-angle-right cycle-related-invoices m-l-6 clickable" (click)="moveToNextRelatedInvoice()"></i>
+			<i class="fa fa-trash invoice-change-button pull-right clickable"></i>
+			<i class="fa fa-exchange invoice-change-button pull-right m-r-12 clickable"></i>
+			<div>
+				<div class="invoice-title">{{ 'Invoice' | translate }} {{ currentInvoice.reference }}
+					<span *ngIf="currentInvoice.isPaid()" class="invoice-status paid-invoice-status">{{ 'Paid' | translate }}</span>
+					<span *ngIf="currentInvoice.isLossAccepted()" class="invoice-status loss-accepted-by-management-invoice-status">{{ 'Loss Management' | translate }}</span>
+					<span *ngIf="currentInvoice.isUnpaid()" class="invoice-status unpaid-invoice-status">{{ 'Unpaid' | translate }}</span>
+				</div>
+				<div class="related-invoices clickable" (click)="showRelatedInvoices = true">{{ 'Related Invoices' | translate }}</div>
+			</div>
+		</div>
+		<div class="invoice-payer-section row m-b-16">
+			<div class="payer-box col-xs-5 col-md-3" *ngFor="let payer of payerList">
+				<i class="fa fa-user payer-icon"></i>
+				<div class="payer-dropdown">
+					<button class="fa fa-angle-down clickable"></button>
+					<ul>
+						<li class="clickable">{{ 'View Bookings' | translate }}</li>
+						<li class="clickable">{{ 'Add Payment' | translate }}</li>
+						<li class="clickable">{{ 'Add Invoice' | translate }}</li>
+						<li class="clickable">{{ 'Remove Payer' | translate }}</li>
+					</ul>
+				</div>
+				<div class="payer-name">{{ payer.customerNameString }}</div>
+				<div class="payer-email">{{ payer.emailString }}</div>
+			</div>
+				<div class=" add-payer clickable">
+					<span class="fa fa-plus-circle add-payer-icon"></span>
+					<div class="add-payer-text">{{ 'ADD PAYER' | translate }}</div>
+				</div>
+		</div>
+		<invoice-edit customScroll>
+		</invoice-edit>	
+	</div>
+	<div *ngIf="showRelatedInvoices" style="height: 100%">
+		<div class="related-invoices-menu">
+			<button class="fa fa-angle-left related-invoices-menu-back clickable" (click)="showRelatedInvoices = false"></button>
+			<div class="related-invoices-menu-title">
+				{{ 'Related Invoices' | translate }}
+			</div>
+			<div class="related-invoices-count">
+			{{ relatedInvoices.length }} {{ 'Invoices' | translate }}
+			</div>
+		</div>
+		<div class="related-invoices-list">
+			<div class="related-invoice" *ngFor="let relatedInvoice of relatedInvoices; let i = index">
+				<i class="fa fa-trash related-invoice-button clickable" (click)="deleteInvoice(relatedInvoice)"></i>
+				<i class="fa fa-download related-invoice-button m-r-8 clickable" (click)="downloadInvoice(relatedInvoice)"></i>
+				<div class="related-invoice-info clickable" (click)="selectRelatedInvoiceIndex(i)">
+					<div class="related-invoice-title">{{ 'Invoice' | translate }} {{ relatedInvoice.reference }}
+						<span *ngIf="relatedInvoice.isPaid()" class="invoice-status paid-invoice-status">{{ 'Paid' | translate }}</span>
+						<span *ngIf="relatedInvoice.isLossAccepted()" class="invoice-status loss-accepted-by-management-invoice-status">{{ 'Loss Management' | translate }}</span>
+						<span *ngIf="relatedInvoice.isUnpaid()" class="invoice-status unpaid-invoice-status">{{ 'Unpaid' | translate }}</span>
+					</div>
+					<div class="related-invoice-payer">{{ getPayerListString(relatedInvoice) }}</div>
+					<div class="related-invoice-total">{{ relatedInvoice.totalAmount }}</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	<div class="invoice-payer-section row m-b-16">
-		<div class="payer-box col-xs-5 col-md-3" *ngFor="let payer of payerList">
-			<i class="fa fa-user payer-icon"></i>
-			<div class="payer-dropdown">
-				<button class="fa fa-angle-down clickable"></button>
-				<ul>
-					<li class="clickable">{{ 'View Bookings' | translate }}</li>
-					<li class="clickable">{{ 'Add Payment' | translate }}</li>
-					<li class="clickable">{{ 'Add Invoice' | translate }}</li>
-					<li class="clickable">{{ 'Remove Payer' | translate }}</li>
-				</ul>
-			</div>
-  			<div class="payer-name">{{ payer.customerNameString }}</div>
-			<div class="payer-email">{{ payer.emailString }}</div>
-		</div>
-			<div class=" add-payer clickable">
-				<span class="fa fa-plus-circle add-payer-icon"></span>
-				<div class="add-payer-text">{{ 'ADD PAYER' | translate }}</div>
-			</div>
-	</div>
-	<invoice-edit customScroll>
-	</invoice-edit>
 </div>
