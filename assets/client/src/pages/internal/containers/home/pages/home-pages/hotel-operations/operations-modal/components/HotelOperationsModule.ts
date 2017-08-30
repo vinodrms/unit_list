@@ -8,6 +8,7 @@ import {SharedComponentsModule} from '../../../../../../../../../common/utils/co
 import {RoomOperationsPageModule} from './components/room-operations/RoomOperationsPageModule';
 import {BookingOperationsPageModule} from './components/booking-operations/BookingOperationsPageModule';
 import {CustomerOperationsPageModule} from './components/customer-operations/CustomerOperationsPageModule';
+import {InvoiceOperationsPageDeprecatedModule} from './components/invoice-operations-deprecated/InvoiceOperationsPageDeprecatedModule';
 import {InvoiceOperationsPageModule} from './components/invoice-operations/InvoiceOperationsPageModule';
 
 import {HotelOperationsComponent} from './HotelOperationsComponent';
@@ -16,7 +17,7 @@ import {HotelOperationsComponent} from './HotelOperationsComponent';
     imports: [CommonModule, FormsModule,
         SharedPipesModule, SharedDirectivesModule, SharedComponentsModule,
         RoomOperationsPageModule, BookingOperationsPageModule,
-        CustomerOperationsPageModule, InvoiceOperationsPageModule],
+        CustomerOperationsPageModule, InvoiceOperationsPageModule, InvoiceOperationsPageDeprecatedModule],
     declarations: [HotelOperationsComponent],
     exports: [HotelOperationsComponent]
 })

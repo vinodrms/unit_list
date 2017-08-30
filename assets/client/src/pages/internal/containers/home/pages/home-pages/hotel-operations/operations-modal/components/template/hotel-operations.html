@@ -56,4 +56,10 @@
 		>
 	</invoice-operations-page>
 
+	<invoice-operations-page-deprecated class="full-height" 
+		*ngIf="isInvoiceOperationsPageDeprecated()"
+		[invoiceOperationsPageParam]="currentHotelOperationsPageParam"
+		>
+	</invoice-operations-page-deprecated>
+
 </div>

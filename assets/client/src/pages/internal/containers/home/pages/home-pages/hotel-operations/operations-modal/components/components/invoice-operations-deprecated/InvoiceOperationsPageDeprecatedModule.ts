@@ -6,13 +6,14 @@ import {SharedPipesModule} from '../../../../../../../../../../../common/utils/p
 import {SharedDirectivesModule} from '../../../../../../../../../../../common/utils/directives/modules/SharedDirectivesModule';
 import {SharedComponentsModule} from '../../../../../../../../../../../common/utils/components/modules/SharedComponentsModule';
 
-import {InvoiceOperationsPageComponent} from './InvoiceOperationsPageComponent';
+import {InvoiceOperationsDeprecatedPageComponent} from './InvoiceOperationsDeprecatedPageComponent';
 import {InvoiceEditComponent} from './components/invoice-edit/InvoiceEditComponent';
+import {InvoicePayerComponent} from './components/invoice-payer/InvoicePayerComponent';
 
 @NgModule({
     imports: [CommonModule, FormsModule,
         SharedPipesModule, SharedDirectivesModule, SharedComponentsModule],
-    declarations: [InvoiceOperationsPageComponent, InvoiceEditComponent ],
-    exports: [InvoiceOperationsPageComponent]
+    declarations: [InvoiceOperationsDeprecatedPageComponent, InvoiceEditComponent, InvoicePayerComponent],
+    exports: [InvoiceOperationsDeprecatedPageComponent]
 })
-export class InvoiceOperationsPageModule { }
+export class InvoiceOperationsPageDeprecatedModule { }

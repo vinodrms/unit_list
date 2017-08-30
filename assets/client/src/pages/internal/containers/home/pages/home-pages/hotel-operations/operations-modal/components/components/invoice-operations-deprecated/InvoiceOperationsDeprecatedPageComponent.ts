@@ -4,7 +4,7 @@ import { LoadingComponent } from '../../../../../../../../../../../common/utils/
 import { CustomScroll } from '../../../../../../../../../../../common/utils/directives/CustomScroll';
 import { ThError, AppContext } from '../../../../../../../../../../../common/utils/AppContext';
 import { ThUtils } from '../../../../../../../../../../../common/utils/ThUtils';
-import { HotelInvoiceOperationsPageParam } from './utils/HotelInvoiceOperationsPageParam';
+import { HotelInvoiceOperationsDeprecatedPageParam } from './utils/HotelInvoiceOperationsDeprecatedPageParam';
 import { HotelOperationsPageFilterMeta } from '../../../services/utils/IHotelOperationsPageParam';
 import { IHotelOperationsOnFilterRemovedHandler } from '../../../services/utils/IHotelOperationsOnFilterRemovedHandler';
 import { ItemListNavigatorConfig } from '../../../../../../../../../../../common/utils/components/item-list-navigator/ItemListNavigatorConfig';
@@ -34,12 +34,12 @@ export enum FilterType {
 }
 
 @Component({
-    selector: 'invoice-operations-page',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/template/invoice-operations-page.html',
+    selector: 'invoice-operations-page-deprecated',
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations-deprecated/template/invoice-operations-page.html',
     providers: [InvoiceOperationsPageService, InvoiceGroupControllerService]
 })
-export class InvoiceOperationsPageComponent implements OnInit {
-    @Input() invoiceOperationsPageParam: HotelInvoiceOperationsPageParam;
+export class InvoiceOperationsDeprecatedPageComponent implements OnInit {
+    @Input() invoiceOperationsPageParam: HotelInvoiceOperationsDeprecatedPageParam;
 
     private static MAX_NO_OF_INVOICES = 100;
 
@@ -191,7 +191,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
         if (this.maxNoOfInvoicesLimitExceeeded()) {
             var title = this._appContext.thTranslation.translate("Info");
             var content = this._appContext.thTranslation.translate("The maximum number of %maxNoOfInvoices% invoices was exceeded.", {
-                maxNoOfInvoices: InvoiceOperationsPageComponent.MAX_NO_OF_INVOICES
+                maxNoOfInvoices: InvoiceOperationsDeprecatedPageComponent.MAX_NO_OF_INVOICES
             });
             var positiveLabel = this._appContext.thTranslation.translate("OK");
 
@@ -211,7 +211,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
 
     private maxNoOfInvoicesLimitExceeeded(): boolean {
-        return this.invoiceGroupVM.invoiceVMList.length >= InvoiceOperationsPageComponent.MAX_NO_OF_INVOICES;
+        return this.invoiceGroupVM.invoiceVMList.length >= InvoiceOperationsDeprecatedPageComponent.MAX_NO_OF_INVOICES;
     }
 
     private get newInvoiceRef(): string {

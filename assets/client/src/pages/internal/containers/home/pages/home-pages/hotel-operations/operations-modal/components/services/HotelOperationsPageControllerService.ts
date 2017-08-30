@@ -3,7 +3,8 @@ import {IHotelOperationsPageParam} from '../../services/utils/IHotelOperationsPa
 import {HotelRoomOperationsPageParam} from '../components/room-operations/utils/HotelRoomOperationsPageParam';
 import {HotelBookingOperationsPageParam} from '../components/booking-operations/utils/HotelBookingOperationsPageParam';
 import {HotelCustomerOperationsPageParam} from '../components/customer-operations/utils/HotelCustomerOperationsPageParam';
-import {HotelInvoiceOperationsPageParam, HotelInvoiceOperationsPageFilterParam} from '../components/invoice-operations/utils/HotelInvoiceOperationsPageParam';
+import { HotelInvoiceOperationsPageParam, HotelInvoiceOperationsPageFilterParam } from '../components/invoice-operations/utils/HotelInvoiceOperationsPageParam';
+import { HotelInvoiceOperationsDeprecatedPageParam, HotelInvoiceOperationsDeprecatedPageFilterParam } from "../components/invoice-operations-deprecated/utils/HotelInvoiceOperationsDeprecatedPageParam";
 
 @Injectable()
 export class HotelOperationsPageControllerService {
@@ -39,6 +40,10 @@ export class HotelOperationsPageControllerService {
     }
     public goToInvoice(invoiceGroupId: string, invoiceFilter: HotelInvoiceOperationsPageFilterParam, openInEditMode: boolean) {
         var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, invoiceFilter, openInEditMode);
+        this.goToPage(invoiceOperationsPageParam);
+    }
+    public goToInvoiceDeprecated(invoiceGroupId: string, invoiceFilter: HotelInvoiceOperationsDeprecatedPageFilterParam, openInEditMode: boolean) {
+        var invoiceOperationsPageParam = new HotelInvoiceOperationsDeprecatedPageParam(invoiceGroupId, invoiceFilter, openInEditMode);
         this.goToPage(invoiceOperationsPageParam);
     }
     private goToPage(operationsPageParam: IHotelOperationsPageParam) {

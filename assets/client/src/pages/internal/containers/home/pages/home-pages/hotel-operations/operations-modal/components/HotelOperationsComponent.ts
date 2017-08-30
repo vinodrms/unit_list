@@ -71,6 +71,10 @@ export class HotelOperationsComponent {
         return this.currentHotelOperationsPageParam.pageType === HotelOperationsPageType.InvoiceOperations;
     }
 
+    public isInvoiceOperationsPageDeprecated(): boolean {
+        return this.currentHotelOperationsPageParam.pageType === HotelOperationsPageType.InvoiceOperationsDeprecated;
+    }
+
     private get currentHotelOperationsPageParam(): IHotelOperationsPageParam {
         return this._hotelOperationsPageController.currentHotelOperationsPageParam;
     }
