@@ -5,8 +5,8 @@ import { AppContext, ThServerApi } from '../../../../../common/utils/AppContext'
 import { BookingPossiblePriceItemsDO } from './data-objects/BookingPossiblePriceItemsDO';
 import { BookingDO } from '../../bookings/data-objects/BookingDO';
 import { ThTimestampDO } from '../../common/data-objects/th-dates/ThTimestampDO';
-import { InvoicePaymentMethodDO } from '../../invoices/data-objects/payers/InvoicePaymentMethodDO';
-import { InvoiceGroupDO } from "../../invoices/data-objects/InvoiceGroupDO";
+import { InvoicePaymentMethodDO } from '../../invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoiceGroupDO } from "../../invoices-deprecated/data-objects/InvoiceGroupDO";
 import { CustomerDO } from "../../customers/data-objects/CustomerDO";
 
 @Injectable()

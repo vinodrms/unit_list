@@ -12,7 +12,7 @@ import { TransientBookingItem } from '../../data-objects/TransientBookingItem';
 import { BookingSearchParams } from '../../data-objects/BookingSearchParams';
 import { DefaultBillingDetailsDO } from '../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
 import { CustomerDO } from '../../../../../../../../services/customers/data-objects/CustomerDO';
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../services/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { HotelAggregatedInfo } from '../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import { BookingVM } from "../../../../../../../../services/bookings/view-models/BookingVM";
 

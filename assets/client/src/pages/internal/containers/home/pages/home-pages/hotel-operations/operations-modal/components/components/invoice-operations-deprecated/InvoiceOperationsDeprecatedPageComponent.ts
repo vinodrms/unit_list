@@ -11,16 +11,16 @@ import { ItemListNavigatorConfig } from '../../../../../../../../../../../common
 import { InvoiceOperationsPageService } from './services/InvoiceOperationsPageService';
 import { InvoiceOperationsPageData } from './services/utils/InvoiceOperationsPageData';
 import { InvoiceGroupControllerService } from './services/InvoiceGroupControllerService';
-import { InvoiceDO } from '../../../../../../../../../services/invoices/data-objects/InvoiceDO';
-import { InvoiceGroupDO } from '../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceGroupVM } from '../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
-import { InvoiceVM } from '../../../../../../../../../services/invoices/view-models/InvoiceVM';
-import { InvoicePayerVM } from '../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
+import { InvoiceDO } from '../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoiceGroupDO } from '../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceGroupVM } from '../../../../../../../../../services/invoices-deprecated/view-models/InvoiceGroupVM';
+import { InvoiceVM } from '../../../../../../../../../services/invoices-deprecated/view-models/InvoiceVM';
+import { InvoicePayerVM } from '../../../../../../../../../services/invoices-deprecated/view-models/InvoicePayerVM';
 import { CustomerDO } from '../../../../../../../../../services/customers/data-objects/CustomerDO';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { InvoiceMeta } from './components/invoice-edit/InvoiceMeta';
-import { InvoiceGroupsService } from '../../../../../../../../../services/invoices/InvoiceGroupsService';
+import { InvoiceGroupsServiceDeprecated } from '../../../../../../../../../services/invoices-deprecated/InvoiceGroupsService';
 import { HotelOperationsResultService } from '../../../../operations-modal/services/HotelOperationsResultService';
 import { ModalDialogRef } from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import { HotelOperationsResult } from '../../../services/utils/HotelOperationsResult';
@@ -71,7 +71,7 @@ export class InvoiceOperationsDeprecatedPageComponent implements OnInit {
         private _hotelOperationsResultService: HotelOperationsResultService,
         private _invoiceOperationsPageService: InvoiceOperationsPageService,
         private _invoiceGroupControllerService: InvoiceGroupControllerService,
-        private _invoiceGroupsService: InvoiceGroupsService) {
+        private _invoiceGroupsServiceDeprecated: InvoiceGroupsServiceDeprecated) {
 
         this._thUtils = new ThUtils();
         this._title = "Invoice Group";
@@ -152,7 +152,7 @@ export class InvoiceOperationsDeprecatedPageComponent implements OnInit {
             if (firstInvalidInvoice === -1) {
                 var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
                 var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
-                this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
+                this._invoiceGroupsServiceDeprecated.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
                     this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
                     this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice group was saved successfully."));
                     this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
@@ -259,12 +259,12 @@ export class InvoiceOperationsDeprecatedPageComponent implements OnInit {
 
     public get filterMetaForEnabledFilter(): HotelOperationsPageFilterMeta {
         let fontName = '';
-        switch(this.filterType) {
+        switch (this.filterType) {
             case FilterType.Customer: fontName = '('; break;
             case FilterType.InvoiceRef: fontName = '-'; break;
             default: fontName = '-';
         }
-        
+
         return {
             filterInfo: 'filtered by:',
             filterValue: this.invoiceFilterValue,

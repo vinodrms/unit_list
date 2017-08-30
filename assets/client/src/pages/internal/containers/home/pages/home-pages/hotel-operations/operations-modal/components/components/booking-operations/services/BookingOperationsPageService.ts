@@ -13,9 +13,9 @@ import { RoomsService } from '../../../../../../../../../../services/rooms/Rooms
 import { RoomVM } from '../../../../../../../../../../services/rooms/view-models/RoomVM';
 import { EagerCustomersService } from '../../../../../../../../../../services/customers/EagerCustomersService';
 import { EagerAllotmentsService } from '../../../../../../../../../../services/allotments/EagerAllotmentsService';
-import { EagerInvoiceGroupsService } from '../../../../../../../../../../services/invoices/EagerInvoiceGroupsService';
-import { InvoiceGroupDO } from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO, InvoiceAccountingType } from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { EagerInvoiceGroupsServiceDeprecated } from '../../../../../../../../../../services/invoices-deprecated/EagerInvoiceGroupsService';
+import { InvoiceGroupDO } from '../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoiceAccountingType } from '../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO';
 import { AllotmentDO } from '../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
 import { CustomersDO } from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
 import { EagerAddOnProductsService } from '../../../../../../../../../../services/add-on-products/EagerAddOnProductsService';
@@ -35,7 +35,7 @@ export class BookingOperationsPageService {
         private _roomsService: RoomsService,
         private _eagerCustomersService: EagerCustomersService,
         private _eagerAllotmentsService: EagerAllotmentsService,
-        private _eagerInvoiceGroupsService: EagerInvoiceGroupsService,
+        private _eagerInvoiceGroupsServiceDeprecated: EagerInvoiceGroupsServiceDeprecated,
         private _eagerAddOnProductsService: EagerAddOnProductsService) {
     }
 
@@ -58,7 +58,7 @@ export class BookingOperationsPageService {
                 this.getAttachedRoom(pageData.bookingDO),
                 this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryId(pageData.bookingDO.roomCategoryId),
                 this.getAttachedAllotment(pageData.bookingDO),
-                this._eagerInvoiceGroupsService.getInvoiceGroupList({
+                this._eagerInvoiceGroupsServiceDeprecated.getInvoiceGroupList({
                     groupBookingId: pageData.bookingDO.groupBookingId,
                     bookingId: pageData.bookingDO.id
                 }),

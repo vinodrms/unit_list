@@ -9,8 +9,8 @@ import { CustomersDO } from '../../../../../../../../../../../services/customers
 import { RoomVM } from '../../../../../../../../../../../services/rooms/view-models/RoomVM';
 import { RoomCategoryStatsDO } from '../../../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
 import { AllotmentDO } from '../../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
-import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO';
 import { AddOnProductsDO } from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
 import { HotelAggregatedPaymentMethodsDO } from "../../../../../../../../../../../services/settings/data-objects/HotelAggregatedPaymentMethodsDO";
 

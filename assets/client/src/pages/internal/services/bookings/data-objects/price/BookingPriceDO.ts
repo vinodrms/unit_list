@@ -1,8 +1,8 @@
 import { BaseDO } from '../../../../../../common/base/BaseDO';
 import { ThUtils } from '../../../../../../common/utils/ThUtils';
 import { ThTranslation } from '../../../../../../common/utils/localization/ThTranslation';
-import { IInvoiceItemMeta } from '../../../invoices/data-objects/items/IInvoiceItemMeta';
-import { InvoiceItemDO, InvoiceItemAccountingType } from '../../../invoices/data-objects/items/InvoiceItemDO';
+import { IInvoiceItemMeta } from '../../../invoices-deprecated/data-objects/items/IInvoiceItemMeta';
+import { InvoiceItemDO, InvoiceItemAccountingType } from '../../../invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { PricePerDayDO } from './PricePerDayDO';
 import { CommissionDO } from "../../../common/data-objects/commission/CommissionDO";
 
@@ -18,7 +18,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
 
     roomPricePerNightAvg: number;
     public getInvoicedRoomPricePerNightAvg(accountingType: InvoiceItemAccountingType): number {
-        return (accountingType === InvoiceItemAccountingType.Credit)? this.roomPricePerNightAvg * -1 : this.roomPricePerNightAvg;
+        return (accountingType === InvoiceItemAccountingType.Credit) ? this.roomPricePerNightAvg * -1 : this.roomPricePerNightAvg;
     }
 
     roomPricePerNightList: PricePerDayDO[];
@@ -28,10 +28,10 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         _.forEach(this.roomPricePerNightList, (pricePerDay: PricePerDayDO) => {
             let invoicedPricePerDay = new PricePerDayDO();
             invoicedPricePerDay.buildFromObject(pricePerDay);
-            invoicedPricePerDay.price = (accountingType === InvoiceItemAccountingType.Credit)? invoicedPricePerDay.price * -1: invoicedPricePerDay.price;
+            invoicedPricePerDay.price = (accountingType === InvoiceItemAccountingType.Credit) ? invoicedPricePerDay.price * -1 : invoicedPricePerDay.price;
 
             invoicedRoomPricePerNightList.push(invoicedPricePerDay)
-        });  
+        });
 
         return invoicedRoomPricePerNightList;
     }
@@ -93,10 +93,10 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         return this.numberOfNights;
     }
     public getTotalPrice(): number {
-        if(this.priceType === BookingPriceType.Penalty) {
+        if (this.priceType === BookingPriceType.Penalty) {
             return this.roomPricePerNightAvg;
         }
-        return _.reduce(this.roomPricePerNightList, function(sum, pricePerDay: PricePerDayDO){ return sum + pricePerDay.price; }, 0);
+        return _.reduce(this.roomPricePerNightList, function (sum, pricePerDay: PricePerDayDO) { return sum + pricePerDay.price; }, 0);
     }
     public getDisplayName(thTranslation: ThTranslation): string {
         return thTranslation.translate(this.getDisplayNameCore(thTranslation));
@@ -139,7 +139,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     }
 
     public hasDiscount(): boolean {
-        return _.reduce(this.roomPricePerNightList, function(sum, pricePerDay: PricePerDayDO){ return sum + pricePerDay.discount; }, 0) > 0.0;
+        return _.reduce(this.roomPricePerNightList, function (sum, pricePerDay: PricePerDayDO) { return sum + pricePerDay.discount; }, 0) > 0.0;
     }
     public isMovableByDefault(): boolean {
         return false;
