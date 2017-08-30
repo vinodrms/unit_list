@@ -11,6 +11,7 @@ import { CustomerDO } from "../../../../core/data-layer/customers/data-objects/C
 import { SaveInvoice } from "../../../../core/domain-layer/invoices/save-invoice/SaveInvoice";
 import { ThError } from "../../../../core/utils/th-responses/ThError";
 import { InvoicesTestHelper } from "./helpers/InvoicesTestHelper";
+import { InvoiceSearchResultRepoDO } from "../../../../core/data-layer/invoices/repositories/IInvoiceRepository";
 
 describe("Invoices Tests", function () {
     var testUtils: TestUtils;
@@ -45,8 +46,12 @@ describe("Invoices Tests", function () {
                     should.equal(createdInvoice.indexedCustomerIdList[0], invoiceToCreate.payerList[0].customerId);
                     should.equal(createdInvoice.payerList.length, 1);
                     should.equal(testUtils.thUtils.isUndefinedOrNull(createdInvoice.paidTimestamp), true);
-
                     invoice = createdInvoice;
+
+                    let invoiceRepo = testContext.appContext.getRepositoryFactory().getInvoiceRepository();
+                    return invoiceRepo.getInvoiceById({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, invoice.id);
+                }).then((readInvoice: InvoiceDO) => {
+                    should.equal(_.isEqual(invoice, readInvoice), true, "The created invoice should be read correctly from the repository");
                     done();
                 }).catch((e: ThError) => {
                     done(e);
@@ -80,6 +85,21 @@ describe("Invoices Tests", function () {
                     should.exist(updatedInvoice.itemList[0].timestamp);
 
                     invoice = updatedInvoice;
+
+                    let invoiceRepo = testContext.appContext.getRepositoryFactory().getInvoiceRepository();
+                    return invoiceRepo.getInvoiceList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
+                        groupId: invoice.groupId
+                    });
+                }).then((result: InvoiceSearchResultRepoDO) => {
+                    should.equal(result.invoiceList.length, 1, "The invoice's group should only contain 1 invoice");
+                    should.equal(_.isEqual(invoice, result.invoiceList[0]), true, "The updated invoice has some different attributes than the one read via the getInvoiceList method");
+
+                    let invoiceRepo = testContext.appContext.getRepositoryFactory().getInvoiceRepository();
+                    return invoiceRepo.getInvoiceListCount({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
+                        groupId: invoice.groupId
+                    });
+                }).then(countResult => {
+                    should.equal(countResult.numOfItems, 1, "The invoice's group should only contain 1 invoice");
                     done();
                 }).catch((e: ThError) => {
                     done(e);

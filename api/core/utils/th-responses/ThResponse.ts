@@ -340,10 +340,10 @@ export enum ThStatusCode {
     InvoiceGroupsRepositoryInvoiceGroupNotFound,
     InvoiceGroupsRepositoryErrorGettingInvoiceGroup,
     InvoiceGroupsRepositoryErrorReadingDocumentCount,
-    InvoiceGroupsControllerErrorGettingInvoiceGroupById,
-    InvoiceGroupsControllerErrorGettingInvoiceGroups,
+    InvoiceControllerErrorGettingInvoiceById,
+    InvoiceControllerErrorGettingInvoices,
     InvoiceGroupsRepositoryErrorGettingInvoice,
-    InvoiceGroupsControllerErrorGettingInvoiceGroupsCount,
+    InvoiceControllerErrorGettingInvoicesCount,
     InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief,
     InvoiceGroupsControllerErrorDownloading,
     InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief,
@@ -886,10 +886,10 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoice] = "Error gett
 ThMessage[ThStatusCode.InvoiceGroupsItemUpdateStrategyErrorUpdating] = "Error updating the invoice group item.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryInvoiceGroupNotFound] = "Invoice group not found.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroup] = "Error retrieving the invoice group from the database.";
-ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupById] = "Error getting invoice group by id.";
+ThMessage[ThStatusCode.InvoiceControllerErrorGettingInvoiceById] = "Error getting invoice by id.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount] = "Error reading invoice grupt document count.";
-ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroups] = "Error getting the invoice group list.";
-ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsCount] = "Error getting the total number of invoice groups matching the search criteria.";
+ThMessage[ThStatusCode.InvoiceControllerErrorGettingInvoices] = "Error getting the invoice list.";
+ThMessage[ThStatusCode.InvoiceControllerErrorGettingInvoicesCount] = "Error getting the total number of invoices matching the search criteria.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief] = "Error getting brief info about the required invoices.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorDownloading] = "Error downloading invoice.";
 ThMessage[ThStatusCode.InvoicesControllerErrorSavingInvoice] = "Error saving invoice.";

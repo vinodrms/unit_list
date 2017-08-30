@@ -34,7 +34,7 @@ export class InvoiceGroupsDeprecatedController extends BaseController {
         invoiceGroupRepo.getInvoiceGroupById(this.getInvoiceGroupMetaRepoDOFrom(sessionContext), invoiceGroupId).then((invoiceGroup: InvoiceGroupDO) => {
             this.returnSuccesfulResponse(req, res, invoiceGroup);
         }).catch((err: any) => {
-            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupById);
+            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceControllerErrorGettingInvoiceById);
         });
     }
 
@@ -47,7 +47,7 @@ export class InvoiceGroupsDeprecatedController extends BaseController {
         invoiceGroupRepo.getInvoiceGroupList(invoiceGroupMeta, req.body.searchCriteria, req.body.lazyLoad).then((result: InvoiceGroupSearchResultRepoDO) => {
             this.returnSuccesfulResponse(req, res, result);
         }).catch((err: any) => {
-            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroups);
+            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceControllerErrorGettingInvoices);
         });
     }
 
@@ -60,7 +60,7 @@ export class InvoiceGroupsDeprecatedController extends BaseController {
         invoiceGroupRepo.getInvoiceGroupListCount(invoiceGroupMeta, req.body.searchCriteria).then((lazyLoadMeta: LazyLoadMetaResponseRepoDO) => {
             this.returnSuccesfulResponse(req, res, lazyLoadMeta);
         }).catch((err: any) => {
-            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsCount);
+            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceControllerErrorGettingInvoicesCount);
         });
     }
 
