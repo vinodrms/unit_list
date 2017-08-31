@@ -6,24 +6,24 @@ import { StringValidationRule } from "../../../utils/th-validation/rules/StringV
 import { BooleanValidationRule } from "../../../utils/th-validation/rules/BooleanValidationRule";
 
 export interface GenerateBookingInvoiceAopMeta {
-	addOnProductDO: AddOnProductDO;
-	noOfItems: number;
+    addOnProductDO: AddOnProductDO;
+    noOfItems: number;
 }
 
-export class GenerateBookingInvoiceDO {
-	groupBookingId: string;
-	id: string;
+export class GenerateBookingInvoiceDODeprecated {
+    groupBookingId: string;
+    id: string;
 
-	public static getValidationStructure(): IValidationStructure {
-		return new ObjectValidationStructure([
-			{
-				key: "groupBookingId",
-				validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
-			},
-			{
-				key: "id",
-				validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
-			}
-		]);
-	}
+    public static getValidationStructure(): IValidationStructure {
+        return new ObjectValidationStructure([
+            {
+                key: "groupBookingId",
+                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+            },
+            {
+                key: "id",
+                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+            }
+        ]);
+    }
 }

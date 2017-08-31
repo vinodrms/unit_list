@@ -9,7 +9,7 @@ import { InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../core
 import { InvoiceItemDO } from '../../../../../core/data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { IInvoiceItemMeta } from '../../../../../core/data-layer/invoices-deprecated/data-objects/items/IInvoiceItemMeta';
 import { BookingDO } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
-import { GenerateBookingInvoiceDO } from '../../../../../../api/core/domain-layer/invoices-deprecated/generate-booking-invoice/GenerateBookingInvoiceDO';
+import { GenerateBookingInvoiceDODeprecated } from '../../../../../../api/core/domain-layer/invoices-deprecated/generate-booking-invoice/GenerateBookingInvoiceDO';
 import { TransactionFeeDO } from "../../../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 import _ = require("underscore");
@@ -26,7 +26,7 @@ export class BookingInvoicesTestHelper {
         return this._defaultDataBuilder.bookingList[0];
     }
 
-    public buildGenerateBookingInvoiceDOForNewInvoiceGroup(): GenerateBookingInvoiceDO {
+    public buildGenerateBookingInvoiceDOForNewInvoiceGroup(): GenerateBookingInvoiceDODeprecated {
         var booking = this.getFirstBooking();
 
         return {
@@ -39,7 +39,7 @@ export class BookingInvoicesTestHelper {
         return this._defaultDataBuilder.bookingList[1];
     }
 
-    public buildGenerateBookingInvoiceDOForExistingInvoiceGroup(): GenerateBookingInvoiceDO {
+    public buildGenerateBookingInvoiceDOForExistingInvoiceGroup(): GenerateBookingInvoiceDODeprecated {
         var booking = this.getSecondBooking();
 
         return {

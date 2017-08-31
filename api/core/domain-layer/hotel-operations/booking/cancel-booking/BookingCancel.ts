@@ -12,7 +12,7 @@ import { DocumentActionDO } from '../../../../data-layer/common/data-objects/doc
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
 import { BookingCancelDO } from './BookingCancelDO';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
-import { GenerateBookingInvoice } from '../../../invoices-deprecated/generate-booking-invoice/GenerateBookingInvoice';
+import { GenerateBookingInvoiceDeprecated } from '../../../invoices-deprecated/generate-booking-invoice/GenerateBookingInvoice';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { BookingInvoiceSync } from "../../../bookings/invoice-sync/BookingInvoiceSync";
 import { BookingWithDependencies } from "../utils/BookingWithDependencies";
@@ -140,7 +140,7 @@ export class BookingCancel {
             resolve(true);
             return;
         }
-        var generateBookingInvoice = new GenerateBookingInvoice(this._appContext, this._sessionContext);
+        var generateBookingInvoice = new GenerateBookingInvoiceDeprecated(this._appContext, this._sessionContext);
         generateBookingInvoice.generate({
             groupBookingId: this._cancelDO.groupBookingId,
             id: this._cancelDO.id

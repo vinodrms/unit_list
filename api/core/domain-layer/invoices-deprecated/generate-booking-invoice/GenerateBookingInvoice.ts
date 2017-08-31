@@ -5,7 +5,7 @@ import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
 import { AppContext } from '../../../utils/AppContext';
 import { SessionContext } from '../../../utils/SessionContext';
 import { ValidationResultParser } from '../../common/ValidationResultParser';
-import { GenerateBookingInvoiceDO, GenerateBookingInvoiceAopMeta } from './GenerateBookingInvoiceDO';
+import { GenerateBookingInvoiceDODeprecated, GenerateBookingInvoiceAopMeta } from './GenerateBookingInvoiceDO';
 import { InvoiceGroupDO } from '../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { BookingDO, AddOnProductBookingReservedItem } from '../../../data-layer/bookings/data-objects/BookingDO';
 import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
@@ -26,9 +26,9 @@ import { TransactionFeeDO } from "../../../data-layer/common/data-objects/paymen
 
 import _ = require('underscore');
 
-export class GenerateBookingInvoice {
+export class GenerateBookingInvoiceDeprecated {
     private _thUtils: ThUtils;
-    private _generateBookingInvoiceDO: GenerateBookingInvoiceDO;
+    private _generateBookingInvoiceDO: GenerateBookingInvoiceDODeprecated;
 
     private _loadedBooking: BookingDO;
     private _loadedDefaultBillingCustomer: CustomerDO;
@@ -38,7 +38,7 @@ export class GenerateBookingInvoice {
         this._thUtils = new ThUtils();
     }
 
-    public generate(generateBookingInvoiceItemDO: GenerateBookingInvoiceDO): Promise<InvoiceGroupDO> {
+    public generate(generateBookingInvoiceItemDO: GenerateBookingInvoiceDODeprecated): Promise<InvoiceGroupDO> {
         this._generateBookingInvoiceDO = generateBookingInvoiceItemDO;
 
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
@@ -47,7 +47,7 @@ export class GenerateBookingInvoice {
     }
 
     private generateCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-        var validationResult = GenerateBookingInvoiceDO.getValidationStructure().validateStructure(this._generateBookingInvoiceDO);
+        var validationResult = GenerateBookingInvoiceDODeprecated.getValidationStructure().validateStructure(this._generateBookingInvoiceDO);
         if (!validationResult.isValid()) {
             var parser = new ValidationResultParser(validationResult, this._generateBookingInvoiceDO);
             parser.logAndReject("Error validating data for Generate Booking Invoice", reject);

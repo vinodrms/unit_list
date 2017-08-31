@@ -6,7 +6,7 @@ import { SessionContext } from '../../../../../utils/SessionContext';
 import { IAssignRoomStrategy, AssignRoomValidationDO } from './IAssignRoomStrategy';
 import { BookingDO, BookingConfirmationStatus } from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import { AAssignRoomStrategy } from './AAssignRoomStrategy';
-import { GenerateBookingInvoice } from '../../../../invoices-deprecated/generate-booking-invoice/GenerateBookingInvoice';
+import { GenerateBookingInvoiceDeprecated } from '../../../../invoices-deprecated/generate-booking-invoice/GenerateBookingInvoice';
 import { InvoiceGroupDO } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { GenerateBookingInvoiceAopMeta } from '../../../../invoices-deprecated/generate-booking-invoice/GenerateBookingInvoiceDO';
 import { AddOnProductLoader, AddOnProductItemContainer, AddOnProductItem } from '../../../../add-on-products/validators/AddOnProductLoader';
@@ -53,7 +53,7 @@ export class CheckInStrategy extends AAssignRoomStrategy {
         return true;
     }
     protected generateInvoiceIfNecessaryCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
-        let generateBookingInvoice = new GenerateBookingInvoice(this._appContext, this._sessionContext);
+        let generateBookingInvoice = new GenerateBookingInvoiceDeprecated(this._appContext, this._sessionContext);
         generateBookingInvoice.generate({
             groupBookingId: booking.groupBookingId,
             id: booking.id

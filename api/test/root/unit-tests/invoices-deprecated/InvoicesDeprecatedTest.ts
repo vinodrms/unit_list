@@ -12,7 +12,7 @@ import { TestContext } from '../../../helpers/TestContext';
 import { BookingInvoicesTestHelper } from './helpers/BookingInvoicesTestHelper';
 import { CustomerInvoicesTestHelper } from './helpers/CustomerInvoicesTestHelper';
 import { InvoiceGroupDO } from '../../../../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
-import { GenerateBookingInvoice } from '../../../../core/domain-layer/invoices-deprecated/generate-booking-invoice/GenerateBookingInvoice';
+import { GenerateBookingInvoiceDeprecated } from '../../../../core/domain-layer/invoices-deprecated/generate-booking-invoice/GenerateBookingInvoice';
 import { InvoiceGroupSearchResultRepoDO } from '../../../../core/data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
 import { InvoiceConfirmationEmailSender } from '../../../../core/domain-layer/invoices-deprecated/invoice-confirmations/InvoiceConfirmationEmailSender';
 import { SaveInvoiceGroup } from '../../../../core/domain-layer/invoices-deprecated/save-invoice-group/SaveInvoiceGroup';
@@ -45,7 +45,7 @@ describe("[Deprecated] Invoices Tests", function () {
 
     describe("[Deprecated] Booking Invoice Groups Flow", function () {
         it("Should generate a new booking invoice (new invoice group)", function (done) {
-            var generateBookingInvoice = new GenerateBookingInvoice(testContext.appContext, testContext.sessionContext);
+            var generateBookingInvoice = new GenerateBookingInvoiceDeprecated(testContext.appContext, testContext.sessionContext);
             var generateBookingInvoiceDO = bookingInvoiceGroupsHelper.buildGenerateBookingInvoiceDOForNewInvoiceGroup();
             generateBookingInvoice.generate(generateBookingInvoiceDO).then((invoiceGroup: InvoiceGroupDO) => {
                 createdBookingInvoiceGroup = invoiceGroup;
@@ -62,7 +62,7 @@ describe("[Deprecated] Invoices Tests", function () {
         });
 
         it("Should generate a new booking invoice for a booking from the same booking group (-> update existing invoice group)", function (done) {
-            var generateBookingInvoice = new GenerateBookingInvoice(testContext.appContext, testContext.sessionContext);
+            var generateBookingInvoice = new GenerateBookingInvoiceDeprecated(testContext.appContext, testContext.sessionContext);
             var generateBookingInvoiceDO = bookingInvoiceGroupsHelper.buildGenerateBookingInvoiceDOForExistingInvoiceGroup();
             generateBookingInvoice.generate(generateBookingInvoiceDO).then((invoiceGroup: InvoiceGroupDO) => {
                 createdBookingInvoiceGroup = invoiceGroup;
