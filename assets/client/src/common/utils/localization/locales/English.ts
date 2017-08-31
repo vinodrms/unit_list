@@ -982,5 +982,10 @@ export var EnglishTranslations: Object = {
     "Group By": "Group By",
     "Unpaid" : "Unpaid",
     "Loss Management": "Loss Management",
+    "The payer is already added on the invoice": "The payer is already added on the invoice",
+    "The payer was not found on the invoice": "The payer was not found on the invoice",
+    "You cannot remove this payer because there is at least one payment referencing him.": "You cannot remove this payer because there is at least one payment referencing him.",
+    "The item was not found on the invoice": "The item was not found on the invoice",
+    "Could not find invoices. Empty group provided.": "Could not find invoices. Empty group provided.",
 
 };
