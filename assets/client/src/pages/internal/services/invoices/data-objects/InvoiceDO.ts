@@ -75,6 +75,11 @@ export class InvoiceDO extends BaseDO {
         this.paymentDueDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentDueDate"));
     }
 
+    public getCustomerIdList(): string[] {
+        return _.map(this.payerList, (payer: InvoicePayerDO) => {
+            return payer.customerId;
+        });
+    }
     public getAddOnProductIdList(): string[] {
         return this.getItemIdListByItemType(InvoiceItemType.AddOnProduct);
     }

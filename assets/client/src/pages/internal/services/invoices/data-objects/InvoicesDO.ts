@@ -1,3 +1,4 @@
+import * as _ from "underscore";
 import { BaseDO } from '../../../../../common/base/BaseDO';
 import { InvoiceDO } from './InvoiceDO';
 
@@ -16,5 +17,13 @@ export class InvoicesDO extends BaseDO {
             invoice.buildFromObject(invoiceObject);
             this.invoiceList.push(invoice);
         });
+    }
+
+    public getUniqueCustomerIdList(): string[] {
+        var customerIdList: string[] = [];
+        _.forEach(this.invoiceList, (invoice: InvoiceDO) => {
+            customerIdList = customerIdList.concat(invoice.getCustomerIdList());
+        });
+        return _.uniq(customerIdList);
     }
 }

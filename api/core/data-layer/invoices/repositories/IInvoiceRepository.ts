@@ -19,6 +19,7 @@ export interface InvoiceSearchCriteriaRepoDO {
     paidInterval?: ThDateIntervalDO;
     payerCustomerIdList?: string[];
     groupId?: string;
+    term?: string;
 }
 
 export interface InvoiceSearchResultRepoDO {
