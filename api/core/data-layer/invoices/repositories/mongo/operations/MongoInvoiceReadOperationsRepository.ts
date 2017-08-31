@@ -111,6 +111,8 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
                 );
             }
             mongoQueryBuilder.addExactMatch("groupId", searchCriteria.groupId);
+            // for now the search term is only checked against the invoice reference
+            mongoQueryBuilder.addRegex("reference", searchCriteria.term);
         }
 
         return mongoQueryBuilder.processedQuery;

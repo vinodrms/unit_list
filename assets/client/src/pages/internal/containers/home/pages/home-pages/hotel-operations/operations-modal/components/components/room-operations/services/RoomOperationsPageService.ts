@@ -1,26 +1,26 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
 
-import {AppContext} from '../../../../../../../../../../../../common/utils/AppContext';
-import {RoomsService} from '../../../../../../../../../../services/rooms/RoomsService';
-import {RoomVM} from '../../../../../../../../../../services/rooms/view-models/RoomVM';
-import {HotelOperationsRoomService} from '../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
-import {RoomAttachedBookingResultVM} from '../../../../../../../../../../services/hotel-operations/room/view-models/RoomAttachedBookingResultVM';
-import {BedsEagerService} from '../../../../../../../../../../services/beds/BedsEagerService';
-import {BedVM} from '../../../../../../../../../../services/beds/view-models/BedVM';
-import {BedVMFilter} from '../../../../../../../../../../services/beds/utils/BedVMFilter';
-import {RoomAmenitiesService} from '../../../../../../../../../../services/settings/RoomAmenitiesService';
-import {RoomAttributesService} from '../../../../../../../../../../services/settings/RoomAttributesService';
-import {RoomAmenitiesDO} from '../../../../../../../../../../services/settings/data-objects/RoomAmenitiesDO';
-import {RoomAttributesDO} from '../../../../../../../../../../services/settings/data-objects/RoomAttributesDO';
-import {HotelRoomOperationsPageParam} from '../utils/HotelRoomOperationsPageParam';
-import {RoomOperationsPageData} from './utils/RoomOperationsPageData';
-import {BookingDO} from '../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import {EagerInvoiceGroupsService} from '../../../../../../../../../../services/invoices/EagerInvoiceGroupsService';
-import {InvoiceGroupDO} from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { AppContext } from '../../../../../../../../../../../../common/utils/AppContext';
+import { RoomsService } from '../../../../../../../../../../services/rooms/RoomsService';
+import { RoomVM } from '../../../../../../../../../../services/rooms/view-models/RoomVM';
+import { HotelOperationsRoomService } from '../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
+import { RoomAttachedBookingResultVM } from '../../../../../../../../../../services/hotel-operations/room/view-models/RoomAttachedBookingResultVM';
+import { BedsEagerService } from '../../../../../../../../../../services/beds/BedsEagerService';
+import { BedVM } from '../../../../../../../../../../services/beds/view-models/BedVM';
+import { BedVMFilter } from '../../../../../../../../../../services/beds/utils/BedVMFilter';
+import { RoomAmenitiesService } from '../../../../../../../../../../services/settings/RoomAmenitiesService';
+import { RoomAttributesService } from '../../../../../../../../../../services/settings/RoomAttributesService';
+import { RoomAmenitiesDO } from '../../../../../../../../../../services/settings/data-objects/RoomAmenitiesDO';
+import { RoomAttributesDO } from '../../../../../../../../../../services/settings/data-objects/RoomAttributesDO';
+import { HotelRoomOperationsPageParam } from '../utils/HotelRoomOperationsPageParam';
+import { RoomOperationsPageData } from './utils/RoomOperationsPageData';
+import { BookingDO } from '../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { EagerInvoiceGroupsServiceDeprecated } from '../../../../../../../../../../services/invoices-deprecated/EagerInvoiceGroupsService';
+import { InvoiceGroupDO } from '../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO';
 
 import * as _ from 'underscore';
 
@@ -33,7 +33,7 @@ export class RoomOperationsPageService {
         private _bedsEagerService: BedsEagerService,
         private _roomAmenitiesService: RoomAmenitiesService,
         private _roomAttributesService: RoomAttributesService,
-        private _eagerInvoiceGroupsService: EagerInvoiceGroupsService) {
+        private _eagerInvoiceGroupsServiceDeprecated: EagerInvoiceGroupsServiceDeprecated) {
     }
 
     public getPageData(roomOperationsPageParams: HotelRoomOperationsPageParam): Observable<RoomOperationsPageData> {
@@ -67,7 +67,7 @@ export class RoomOperationsPageService {
         if (this._appContext.thUtils.isUndefinedOrNull(attachedBooking)) {
             return Observable.from([roomOperationsData]);
         }
-        return this._eagerInvoiceGroupsService.getInvoiceGroupList({
+        return this._eagerInvoiceGroupsServiceDeprecated.getInvoiceGroupList({
             groupBookingId: attachedBooking.groupBookingId,
             bookingId: attachedBooking.id
         }).map((invoiceGroupList: InvoiceGroupDO[]) => {

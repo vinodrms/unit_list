@@ -6,9 +6,9 @@ import {BookingControllerService} from '../../utils/BookingControllerService';
 import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
 import {BookingDOConstraints} from '../../../../../../../../../services/bookings/data-objects/BookingDOConstraints';
 import {IBookingCustomerRegisterSelector} from '../../utils/IBookingCustomerRegister';
-import {InvoicePaymentMethodVMGenerator} from '../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
-import {InvoicePaymentMethodVM} from '../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import {InvoicePaymentMethodVMGenerator} from '../../../../../../../../../services/invoices-deprecated/view-models/utils/InvoicePaymentMethodVMGenerator';
+import {InvoicePaymentMethodVM} from '../../../../../../../../../services/invoices-deprecated/view-models/InvoicePaymentMethodVM';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../../services/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { TravelActivityType, TravelActivityTypeOption, TravelType } from "../../../../../../../../../services/bookings/data-objects/BookingDO";
 
 import * as _ from "underscore";
@@ -180,7 +180,7 @@ export class NewBookingDetailsEditorComponent extends BaseComponent {
         this._bookingCartItem.transientBookingItem.defaultBillingDetails.paymentMethod = paymentMethod;
         this.triggerBookingCartItemChange();
     }
-    
+
     public get externalBookingReference() : string {
         return this._bookingCartItem.transientBookingItem.externalBookingReference;
     }

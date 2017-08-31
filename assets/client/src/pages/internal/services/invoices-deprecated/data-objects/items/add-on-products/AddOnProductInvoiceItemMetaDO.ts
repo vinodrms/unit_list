@@ -1,7 +1,7 @@
-import { ThUtils } from '../../../../../../../common/utils/ThUtils';
-import { BaseDO } from '../../../../../../../common/base/BaseDO';
-import { IInvoiceItemMeta } from '../IInvoiceItemMeta';
-import { ThTranslation } from '../../../../../../../common/utils/localization/ThTranslation';
+import {BaseDO} from '../../../../../../../common/base/BaseDO';
+import {ThUtils} from '../../../../../../../common/utils/ThUtils';
+import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
+import {IInvoiceItemMeta} from '../IInvoiceItemMeta';
 
 export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
     pricePerItem: number;
@@ -10,13 +10,8 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
     aopDisplayName: string;
     includedInBooking: boolean;
 
-    constructor() {
-        super();
-        this.includedInBooking = false;
-    }
-
     protected getPrimitivePropertyKeys(): string[] {
-        return ["pricePerItem", "vatId", "numberOfItems", "aopDisplayName", "includedInBooking"];
+        return ["includedInBooking", "pricePerItem", "vatId", "numberOfItems", "aopDisplayName"];
     }
     public getTotalPrice(): number {
         return this.getUnitPrice() * this.getNumberOfItems();
@@ -32,6 +27,12 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
     }
     public getVatId(): string {
         return this.vatId;
+    }
+    public isMovableByDefault(): boolean {
+        if(this.includedInBooking) {
+            return false;
+        }
+        return true;
     }
     public isDerivedFromBooking(): boolean {
         return this.includedInBooking;

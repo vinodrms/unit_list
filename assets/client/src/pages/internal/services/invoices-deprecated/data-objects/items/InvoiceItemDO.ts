@@ -1,11 +1,15 @@
-import { ThUtils } from '../../../../../../common/utils/ThUtils';
 import { BaseDO } from '../../../../../../common/base/BaseDO';
+import { ThUtils } from '../../../../../../common/utils/ThUtils';
 import { IInvoiceItemMeta } from './IInvoiceItemMeta';
 import { AddOnProductInvoiceItemMetaDO } from './add-on-products/AddOnProductInvoiceItemMetaDO';
 import { FeeInvoiceItemMetaDO } from './invoice-fee/FeeInvoiceItemMetaDO';
-import { AddOnProductDO } from '../../../add-on-products/data-objects/AddOnProductDO';
+import { BookingPriceDO } from '../../../bookings/data-objects/price/BookingPriceDO';
 import { CustomerDO } from '../../../customers/data-objects/CustomerDO';
 import { RoomCommissionItemMetaDO } from "./room-commission/RoomCommissionItemMetaDO";
+
+export enum InvoiceItemAccountingType {
+    Debit, Credit
+}
 
 export enum InvoiceItemType {
     AddOnProduct, Booking, InvoiceFee, RoomCommission
@@ -14,12 +18,16 @@ export enum InvoiceItemType {
 export class InvoiceItemDO extends BaseDO {
     id: string;
     type: InvoiceItemType;
+    accountingType: InvoiceItemAccountingType;
     meta: IInvoiceItemMeta;
-    transactionId: string;
-    timestamp: number;
+
+    constructor() {
+        super();
+        this.accountingType = InvoiceItemAccountingType.Debit;
+    }
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "type", "transactionId", "timestamp"];
+        return ["id", "type", "accountingType"];
     }
 
     public buildFromObject(object: Object) {
@@ -30,6 +38,11 @@ export class InvoiceItemDO extends BaseDO {
             var addOnProductInvoiceItemMetaDO = new AddOnProductInvoiceItemMetaDO();
             addOnProductInvoiceItemMetaDO.buildFromObject(metaObject);
             this.meta = addOnProductInvoiceItemMetaDO;
+        }
+        else if (this.type === InvoiceItemType.Booking) {
+            var bookingPrice = new BookingPriceDO();
+            bookingPrice.buildFromObject(metaObject);
+            this.meta = bookingPrice;
         }
         else if (this.type === InvoiceItemType.InvoiceFee) {
             var feeInvoiceItemMetaDO = new FeeInvoiceItemMetaDO();
@@ -42,16 +55,23 @@ export class InvoiceItemDO extends BaseDO {
             this.meta = roomCommissionItemMetaDO;
         }
     }
+    public buildFeeItemFromCustomerDO(customerDO: CustomerDO,
+        accountingType: InvoiceItemAccountingType = InvoiceItemAccountingType.Debit) {
 
-    public buildFeeItemFromCustomerDO(customerDO: CustomerDO) {
         var meta = new FeeInvoiceItemMetaDO();
         meta.buildFromCustomerDO(customerDO);
         this.meta = meta;
         this.type = InvoiceItemType.InvoiceFee;
+        this.accountingType = accountingType;
     }
 
     public getTotalPrice(): number {
         let thUtils = new ThUtils();
-        return thUtils.roundNumberToTwoDecimals(this.meta.getTotalPrice());
+        let factor = (this.accountingType === InvoiceItemAccountingType.Credit)? -1 : 1;
+        return thUtils.roundNumberToTwoDecimals(this.meta.getTotalPrice() * factor);
+    }
+
+    public isOfTypeCredit(): boolean {
+        return this.accountingType === InvoiceItemAccountingType.Credit;
     }
 }

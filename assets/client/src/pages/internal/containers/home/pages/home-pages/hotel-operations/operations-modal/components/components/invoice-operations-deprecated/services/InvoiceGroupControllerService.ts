@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {InvoiceOperationsPageData} from '../services/utils/InvoiceOperationsPageData';
-import {InvoiceGroupVM} from '../../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
-import {InvoiceGroupDO} from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import {InvoiceGroupVM} from '../../../../../../../../../../services/invoices-deprecated/view-models/InvoiceGroupVM';
+import {InvoiceGroupDO} from '../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO';
 import {AppContext, ThServerApi} from '../../../../../../../../../../../../common/utils/AppContext';
 import {ThTranslation} from '../../../../../../../../../../../../common/utils/localization/ThTranslation';
 

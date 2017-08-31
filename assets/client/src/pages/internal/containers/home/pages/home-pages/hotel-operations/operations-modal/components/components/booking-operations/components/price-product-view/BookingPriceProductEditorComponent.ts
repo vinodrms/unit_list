@@ -4,7 +4,7 @@ import { ModalDialogRef } from '../../../../../../../../../../../../../common/ut
 import { BookingOperationsPageData } from '../../services/utils/BookingOperationsPageData';
 import { PriceProductDO } from '../../../../../../../../../../../services/price-products/data-objects/PriceProductDO';
 import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import { InvoiceItemDO } from '../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { BookingChangePriceProductRight } from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
 import { ChangePriceProductModalService } from './components/change-pp/services/ChangePriceProductModalService';
 import { BookingCartItemVM } from '../../../../../../../../utils/new-booking/services/search/view-models/BookingCartItemVM';

@@ -3,7 +3,7 @@ import { AppContext, ThError } from '../../../../../../../../../../../../../comm
 import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
 import { BookingOperationsPageData } from '../../services/utils/BookingOperationsPageData';
 import { HotelOperationsBookingService } from "../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService";
-import { InvoiceGroupDO } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO";
+import { InvoiceGroupDO } from "../../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO";
 import { BookingGenerateInvoiceRight } from "../../../../../../../../../../../services/bookings/data-objects/BookingEditRights";
 
 @Component({
