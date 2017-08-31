@@ -8,7 +8,6 @@ import { BookingDO, BookingConfirmationStatus } from '../../../../../data-layer/
 import { AAssignRoomStrategy } from './AAssignRoomStrategy';
 import { GenerateBookingInvoiceDeprecated } from '../../../../invoices-deprecated/generate-booking-invoice/GenerateBookingInvoice';
 import { InvoiceGroupDO } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
-import { GenerateBookingInvoiceAopMeta } from '../../../../invoices-deprecated/generate-booking-invoice/GenerateBookingInvoiceDO';
 import { AddOnProductLoader, AddOnProductItemContainer, AddOnProductItem } from '../../../../add-on-products/validators/AddOnProductLoader';
 
 import _ = require('underscore');
