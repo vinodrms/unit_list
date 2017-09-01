@@ -4,12 +4,15 @@ import { GenerateBookingInvoiceDO, BookingInvoiceItem } from "./GenerateBookingI
 import { BookingDO, AddOnProductBookingReservedItem } from "../../../data-layer/bookings/data-objects/BookingDO";
 import { AppContext } from "../../../utils/AppContext";
 import { SessionContext } from "../../../utils/SessionContext";
-import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceDO, InvoicePaymentStatus } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 import { ThError } from "../../../utils/th-responses/ThError";
 import { ValidationResultParser } from "../../common/ValidationResultParser";
 import { ThStatusCode } from "../../../utils/th-responses/ThResponse";
 import { ThLogger, ThLogLevel } from "../../../utils/logging/ThLogger";
 import { AddOnProductLoader, AddOnProductItemContainer, AddOnProductItem } from "../../add-on-products/validators/AddOnProductLoader";
+import { InvoiceSearchResultRepoDO } from "../../../data-layer/invoices/repositories/IInvoiceRepository";
+import { GenerateBookingInvoiceActionFactory } from "./utils/GenerateBookingInvoiceActionFactory";
+import { IGenerateBookingInvoiceActionStrategy } from "./utils/IGenerateBookingInvoiceActionStrategy";
 
 export class GenerateBookingInvoiceDeprecated {
     private thUtils: ThUtils;
@@ -47,6 +50,23 @@ export class GenerateBookingInvoiceDeprecated {
             }).then((reservedItemList: BookingInvoiceItem[]) => {
                 this.initialInvoiceItemList = reservedItemList;
 
+                let invoiceRepo = this.appContext.getRepositoryFactory().getInvoiceRepository();
+                return invoiceRepo.getInvoiceList({ hotelId: this.sessionContext.sessionDO.hotel.id }, {
+                    bookingId: this.loadedBooking.id
+                });
+            }).then((invoiceSearchResult: InvoiceSearchResultRepoDO) => {
+                let existingInvoice = _.find(invoiceSearchResult.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.paymentStatus != InvoicePaymentStatus.Credit;
+                });
+                if (!this.appContext.thUtils.isUndefinedOrNull(existingInvoice)) {
+                    resolve(existingInvoice);
+                    return;
+                }
+                let actionFactory = new GenerateBookingInvoiceActionFactory(this.appContext, this.sessionContext);
+                actionFactory.getActionStrategy(this.loadedBooking, this.initialInvoiceItemList)
+                    .then((strategy: IGenerateBookingInvoiceActionStrategy) => {
+                        strategy.generateBookingInvoice(resolve, reject);
+                    }).catch(e => { throw e; });
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.GenerateBookingInvoiceError, error);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "error generating invoice related to booking", this.generateBookingInvoiceDO, thError);
