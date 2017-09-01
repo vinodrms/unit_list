@@ -52,6 +52,7 @@ export class AddBookingItemsDO {
     groupBookingId?: string;
     bookingList: BookingItemDO[];
     confirmationEmailList: EmailDistributionDO[];
+    mergeInvoice: boolean;
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
@@ -147,6 +148,10 @@ export class AddBookingItemsDO {
                             validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
                         }
                     ]))
+            },
+            {
+                key: "mergeInvoice",
+                validationStruct: new PrimitiveValidationStructure(new BooleanValidationRule())
             }
         ]);
     }

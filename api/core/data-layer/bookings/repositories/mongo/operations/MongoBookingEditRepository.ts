@@ -130,7 +130,8 @@ export class MongoBookingEditRepository extends MongoRepository {
                 "bookingHistory": booking.bookingHistory,
                 "indexedSearchTerms": booking.indexedSearchTerms,
                 "travelActivityType": booking.travelActivityType,
-                "travelType": booking.travelType
+                "travelType": booking.travelType,
+                "mergeInvoice": booking.mergeInvoice
             });
     }
 

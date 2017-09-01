@@ -980,12 +980,14 @@ export var EnglishTranslations: Object = {
     "Add Invoice": "Add Invoice",
     "ADD PAYER": "ADD PAYER",
     "Group By": "Group By",
-    "Unpaid" : "Unpaid",
+    "Unpaid": "Unpaid",
     "Loss Management": "Loss Management",
     "The payer is already added on the invoice": "The payer is already added on the invoice",
     "The payer was not found on the invoice": "The payer was not found on the invoice",
     "You cannot remove this payer because there is at least one payment referencing him.": "You cannot remove this payer because there is at least one payment referencing him.",
     "The item was not found on the invoice": "The item was not found on the invoice",
     "Could not find invoices. Empty group provided.": "Could not find invoices. Empty group provided.",
+    "Generate the bookings on only one invoice": "Generate the bookings on only one invoice",
+    "If marked Yes, all the bookings from this group will be generated on the same invoice.": "If marked Yes, all the bookings from this group will be generated on the same invoice.",
 
 };
