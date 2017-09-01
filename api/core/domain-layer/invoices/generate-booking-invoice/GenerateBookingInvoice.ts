@@ -14,7 +14,7 @@ import { InvoiceSearchResultRepoDO } from "../../../data-layer/invoices/reposito
 import { GenerateBookingInvoiceActionFactory } from "./utils/GenerateBookingInvoiceActionFactory";
 import { IGenerateBookingInvoiceActionStrategy } from "./utils/IGenerateBookingInvoiceActionStrategy";
 
-export class GenerateBookingInvoiceDeprecated {
+export class GenerateBookingInvoice {
     private thUtils: ThUtils;
     private generateBookingInvoiceDO: GenerateBookingInvoiceDO;
 
