@@ -189,7 +189,6 @@ describe("User Account Tests", function () {
 					done(err ? err : "Login Failed");
 				}
 			});
-
 		});
 	});
 
