@@ -6,9 +6,8 @@ import { IndividualDetailsDO } from "../../../../../../../../../services/custome
 import { ContactDetailsDO } from "../../../../../../../../../services/customers/data-objects/customer-details/ContactDetailsDO";
 import { InvoicePaymentStatus } from "../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO";
 
-import _  = require('underscore');
 
-class InvoiceVMMockup {
+export class InvoiceVMMockup {
     payerList: CustomerVM[] = [];
     invoiceStatus: InvoicePaymentStatus;
     totalAmount: string;
@@ -23,6 +22,20 @@ class InvoiceVMMockup {
     public isUnpaid(): boolean {
         return this.invoiceStatus === InvoicePaymentStatus.Unpaid;
     }
+
+    public getFirstPayerName(): string {
+        return (this.payerList.length > 0 ) ? this.payerList[0].customerNameString : "";
+    }
+    public getFirstPayerEmail(): string {
+        return (this.payerList.length > 0 ) ? this.payerList[0].customer.emailString : "";
+    }
+}
+
+
+enum PageType {
+    InvoiceOverview,
+    RelatedInvoices,
+    InvoiceTransfer
 }
 
 @Component({
@@ -35,78 +48,21 @@ export class InvoiceOperationsPageComponent implements OnInit {
     @Input() invoiceOperationsPageParam: HotelInvoiceOperationsPageParam;
 
     isLoading: boolean = true;
-    showRelatedInvoices: boolean = false;
     relatedInvoices: InvoiceVMMockup[] = [];
     currentRelatedInvoiceIndex: number = 0;
+
+    private _pageType: PageType;
+
+    constructor() {
+        this.setRelatedInvoices();
+        this.currentRelatedInvoiceIndex = 0;
+    }
 
 
     ngOnInit(): void {
         this.isLoading = false;
         this.invoiceOperationsPageParam.updateTitle("Invoice Overview", "");
-        /*
-        this.payerList = [];
-        var individualDetails = new IndividualDetailsDO();
-        individualDetails.firstName = "Mister";
-        individualDetails.lastName = "Brown";
-        individualDetails.contactDetailsList = [];
-        individualDetails.contactDetailsList[0] = new ContactDetailsDO();
-        individualDetails.contactDetailsList[0].email = "misterbrown@example.com";
-        var customerDO = new CustomerDO();
-        customerDO.customerDetails = individualDetails;
-        this.payerList[0] = new CustomerVM();
-        this.payerList[0].customer = customerDO;
-        var individualDetails = new IndividualDetailsDO();
-        individualDetails.firstName = "Ms";
-        individualDetails.lastName = "White";
-        individualDetails.contactDetailsList = [];
-        individualDetails.contactDetailsList[0] = new ContactDetailsDO();
-        individualDetails.contactDetailsList[0].email = "mswhite@example.com";
-        var customerDO = new CustomerDO();
-        customerDO.customerDetails = individualDetails;
-        this.payerList[1] = new CustomerVM();
-        this.payerList[1].customer = customerDO;
-        var individualDetails = new IndividualDetailsDO();
-        individualDetails.firstName = "Ms";
-        individualDetails.lastName = "LongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame";
-        individualDetails.contactDetailsList = [];
-        individualDetails.contactDetailsList[0] = new ContactDetailsDO();
-        individualDetails.contactDetailsList[0].email = "msLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame@example.com";
-        var customerDO = new CustomerDO();
-        customerDO.customerDetails = individualDetails;
-        this.payerList[2] = new CustomerVM();
-        this.payerList[2].customer = customerDO;
-        var individualDetails = new IndividualDetailsDO();
-        individualDetails.firstName = "Ms";
-        individualDetails.lastName = "LongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame";
-        individualDetails.contactDetailsList = [];
-        individualDetails.contactDetailsList[0] = new ContactDetailsDO();
-        individualDetails.contactDetailsList[0].email = "msLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame@example.com";
-        var customerDO = new CustomerDO();
-        customerDO.customerDetails = individualDetails;
-        this.payerList[3] = new CustomerVM();
-        this.payerList[3].customer = customerDO;
-        var individualDetails = new IndividualDetailsDO();
-        individualDetails.firstName = "Ms";
-        individualDetails.lastName = "LongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame";
-        individualDetails.contactDetailsList = [];
-        individualDetails.contactDetailsList[0] = new ContactDetailsDO();
-        individualDetails.contactDetailsList[0].email = "msLongNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaame@example.com";
-        var customerDO = new CustomerDO();
-        customerDO.customerDetails = individualDetails;
-        this.payerList[4] = new CustomerVM();
-        this.payerList[4].customer = customerDO;
-        */
-        this.setRelatedInvoices();
-        this.currentRelatedInvoiceIndex = 0;
-
-    }
-
-    public get currentInvoice(): InvoiceVMMockup {
-        return this.relatedInvoices[this.currentRelatedInvoiceIndex];
-    }
-
-    public get payerList(): CustomerVM[] {
-        return this.currentInvoice.payerList;
+        this._pageType = PageType.InvoiceOverview;
     }
 
     private setRelatedInvoices() {
@@ -181,7 +137,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
         var individualDetails = new IndividualDetailsDO();
         individualDetails.firstName = "Mr";
-        individualDetails.lastName = "Brown";
+        individualDetails.lastName = "Brownish";
         individualDetails.contactDetailsList = [];
         individualDetails.contactDetailsList[0] = new ContactDetailsDO();
         individualDetails.contactDetailsList[0].email = "mrbrown@example.com";
@@ -336,35 +292,32 @@ export class InvoiceOperationsPageComponent implements OnInit {
         this.relatedInvoices[8] = relatedInvoice;
     }
 
-    public getPayerListString(invoice: InvoiceVMMockup): string {
-        var payerListString: string = "";
-        _.forEach(invoice.payerList, (customer: CustomerVM, index: number) => {
-            payerListString += customer.customerNameString;
-            if (index < invoice.payerList.length - 1) {
-                payerListString += ", ";
-            }
-        });
-        return payerListString;
+    public shouldShowCurrentInvoice(): boolean {
+        return this._pageType == PageType.InvoiceOverview;
     }
 
-    public moveToNextRelatedInvoice() {
-        if (this.currentRelatedInvoiceIndex < this.relatedInvoices.length - 1) {
-            this.currentRelatedInvoiceIndex++;
-        } else {
-            this.currentRelatedInvoiceIndex = 0;
-        }
+    public shouldShowRelatedInvoices(): boolean {
+        return this._pageType == PageType.RelatedInvoices;
     }
 
-    public moveToPreviousRelatedInvoice() {
-        if (this.currentRelatedInvoiceIndex > 0) {
-            this.currentRelatedInvoiceIndex--;
-        } else {
-            this.currentRelatedInvoiceIndex = this.relatedInvoices.length - 1;
-        }
+    public shouldShowInvoiceTransfer(): boolean {
+        return this._pageType == PageType.InvoiceTransfer;
+    }
+
+    public showInvoiceOverview() {
+        this._pageType = PageType.InvoiceOverview;
+    }
+
+    public showRelatedInvoices() {
+        this._pageType = PageType.RelatedInvoices;
+    }
+
+    public showInvoiceTransfer() {
+        this._pageType = PageType.InvoiceTransfer;
     }
 
     public selectRelatedInvoiceIndex(index: number) {
         this.currentRelatedInvoiceIndex = index;
-        this.showRelatedInvoices = false;
+        this.showInvoiceOverview();
     }
 }

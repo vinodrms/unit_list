@@ -1,0 +1,194 @@
+<div class="transfer-invoices-menu">
+    <button class="fa fa-angle-left transfer-invoices-menu-back clickable" (click)="backToInvoiceOverview()"></button>
+    <div class="transfer-invoices-menu-title">
+        {{ 'Invoice' | translate }} {{ currentInvoice.reference }}
+    </div>
+</div>
+<div class="row invoice-transfer-row m-l-12 m-r-12">
+    <div class="col-xs-6 invoice-transfer-column p-l-0 p-r-0">
+        <div class="invoice-transfer-summary p-r-16">
+            <div class="invoice-title">
+                {{ 'Invoice' | translate }} {{ currentInvoice.reference }}
+            </div>
+        </div>
+        <div class="invoice-transfer-payer-section m-r-16">
+            <div class="payer-name">
+                {{ currentInvoice.getFirstPayerName() }}
+            </div>
+            <div class="payer-email">
+                {{ currentInvoice.getFirstPayerEmail() }}
+            </div>
+        </div>
+        <div class="invoice-items-container m-t-12 m-r-16">
+            <table class="table table-invoice-items" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th width="30%">
+                            {{ 'Item Name'| translate }}
+                        </th>
+                        <th width="16%">
+                            {{ 'Qty' | translate }}
+                        </th>
+                        <th width="22%">
+                            {{ 'Unit Cost' | translate }}
+                        </th>
+                        <th width="22%">
+                            {{ 'Total' | translate }}
+                        </th>
+                        <th width="10%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="selectable">
+                        <td>1Rack_BB</td>
+                        <td>1</td>
+                        <td>Dkr 1,244</td>
+                        <td>Dkr 1,244</td>
+                        <td><i class="fa fa-arrow-right transfer-right clickable"></i></td>
+                    </tr>
+                    <tr class="selectable">
+                        <td>1Rack_BB</td>
+                        <td>1</td>
+                        <td>Dkr 1,244</td>
+                        <td>Dkr 1,244</td>
+                        <td><i class="fa fa-arrow-right transfer-right clickable"></i></td>
+                    </tr>
+                    <tr class="selectable">
+                        <td>1Rack_BB</td>
+                        <td>1</td>
+                        <td>Dkr 1,244</td>
+                        <td>Dkr 1,244</td>
+                        <td><i class="fa fa-arrow-right transfer-right clickable"></i></td>
+                    </tr>
+                    <tr class="selectable">
+                        <td>1Rack_BB</td>
+                        <td>1</td>
+                        <td>Dkr 1,244</td>
+                        <td>Dkr 1,244</td>
+                        <td><i class="fa fa-arrow-right transfer-right clickable"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-payment-items">
+                <colgroup>
+                    <col width="30%">
+                    <col width="16%">
+                    <col width="22%">
+                    <col width="22%">
+                    <col width="10%">
+                </colgroup>
+                <tfoot>
+                    <tr>
+                        <td>{{ 'TOTAL' | translate }}</td>
+                        <td></td>
+                        <td></td>
+                        <td>Dkr 6,522</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <div class="col-xs-6 invoice-transfer-column p-l-0 p-r-0">
+        <div class="invoice-transfer-summary">
+            <div *ngIf="isInvoiceSelectedForTransfer()">
+                <div class="invoice-transfer-summary p-l-16">
+                    <div class="invoice-title p-l-16">
+                        {{ 'Invoice' | translate }} {{ transferInvoice.reference }}
+                    </div>
+                </div>
+                <div class="invoice-transfer-payer-section m-l-16">
+                    <div class="payer-name">
+                        {{ transferInvoice.getFirstPayerName() }}
+                    </div>
+                    <div class="payer-email">
+                        {{ transferInvoice.getFirstPayerEmail() }}
+                    </div>
+                </div>
+                <div class="invoice-items-container m-t-12 m-l-16">
+                    <table class="table table-invoice-items right-transfer-invoice-items" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th width="10%"></th>
+                                <th width="30%">
+                                    {{ 'Item Name'| translate }}
+                                </th>
+                                <th width="16%">
+                                    {{ 'Qty' | translate }}
+                                </th>
+                                <th width="22%">
+                                    {{ 'Unit Cost' | translate }}
+                                </th>
+                                <th width="22%">
+                                    {{ 'Total' | translate }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="selectable">
+                                <td><i class="fa fa-arrow-left transfer-left clickable"></i></td>
+                                <td>1Rack_BB</td>
+                                <td>1</td>
+                                <td>Dkr 1,244</td>
+                                <td>Dkr 1,244</td>
+                            </tr>
+                            <tr class="selectable">
+                                <td><i class="fa fa-arrow-left transfer-left clickable"></i></td>
+                                <td>1Rack_BB</td>
+                                <td>1</td>
+                                <td>Dkr 1,244</td>
+                                <td>Dkr 1,244</td>
+                            </tr>
+                            <tr class="selectable">
+                                <td><i class="fa fa-arrow-left transfer-left clickable"></i></td>
+                                <td>1Rack_BB</td>
+                                <td>1</td>
+                                <td>Dkr 1,244</td>
+                                <td>Dkr 1,244</td>
+                            </tr>
+                            <tr class="selectable">
+                                <td><i class="fa fa-arrow-left transfer-left clickable"></i></td>
+                                <td>1Rack_BB</td>
+                                <td>1</td>
+                                <td>Dkr 1,244</td>
+                                <td>Dkr 1,244</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-payment-items right-transfer-payment-items">
+                        <colgroup>
+                            <col width="10%">
+                            <col width="30%">
+                            <col width="16%">
+                            <col width="22%">
+                            <col width="22%">
+                        </colgroup>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td>{{ 'TOTAL' | translate }}</td>
+                                <td></td>
+                                <td></td>
+                                <td>Dkr 6,522</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div *ngIf="!isInvoiceSelectedForTransfer()">
+                <div style="text-align: center">
+                    <button class="select-invoice clickable" (click)="selectInvoiceForTransfer()">{{ 'Select an Invoice' | translate }}</button>
+                </div>
+                <div class="no-invoice-selected-explanation">
+                    <div class="title">{{ 'No Invoice Selected' | translate }}</div>
+                    <div class="subtitle">{{ 'You can select an invoice to transfer items to or to transfer items from.' | translate }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="invoice-transfer-footer m-t-24">
+    <button type="button" class="btn btn-primary m-l-8" (click)="transferItems()">
+        {{ 'Transfer Items' | translate }}
+    </button>
+</div>

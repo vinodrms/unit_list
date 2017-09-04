@@ -4257,15 +4257,6 @@ textarea.payer-details {
     font-weight: 400;
     font-style: normal;
     border-top: none;
-    text-align: right;
-}
-
-.table-invoice-items > thead > tr > th:first-child {
-    text-align: left;
-}
-
-.table-invoice-items > thead > tr > th:nth-last-child(2) {
-    text-align: right;
 }
 
 .table-invoice-items > tbody > tr,
@@ -4284,7 +4275,6 @@ textarea.payer-details {
 
 .table-invoice-items > tbody > tr > td {
     border-top: none;
-    text-align: right;
 }
 
 .table-invoice-items > tbody > tr:nth-child(even) {
@@ -4299,17 +4289,33 @@ textarea.payer-details {
     background-color: transparent;
 }
 
-.table-invoice-items > tbody > tr >td:first-child {
+.table-invoice-items tr > td,
+.table-payment-items tr > td,
+.table-invoice-items tr > th,
+.table-payment-items tr > th {
+    text-align: center;
+}
+
+.table-invoice-items tr > td:first-child,
+.table-payment-items tr > td:first-child,
+.table-invoice-items tr > th:first-child,
+.table-payment-items tr > th:first-child {
     text-align: left;
 }
 
-.table-invoice-items > tbody > tr >td:nth-last-child(2) {
+.table-invoice-items tr > td:nth-last-child(2),
+.table-invoice-items tr > td:nth-last-child(3),
+.table-payment-items tr > td:nth-last-child(2),
+.table-payment-items tr > td:nth-last-child(3),
+.table-invoice-items tr > th:nth-last-child(2),
+.table-invoice-items tr > th:nth-last-child(3),
+.table-payment-items tr > th:nth-last-child(2),
+.table-payment-items tr > th:nth-last-child(3) {
     text-align: right;
 }
 
 .table-invoice-items > tfoot > tr > td {
     border-top: none;
-    text-align: right;
     font-size: 13px;
     font-weight: 700;
     font-style: normal;
@@ -4321,14 +4327,6 @@ textarea.payer-details {
     display: block;
     height: 15px;
     line-height: 15px;
-}
-
-.table-invoice-items > tfoot > tr > td:first-child {
-    text-align: left;
-}
-
-.table-invoice-items > tfoot > tr > td:nth-last-child(2) {
-    text-align: right;
 }
 
 .table-invoice-items th:first-child {
@@ -4343,6 +4341,18 @@ textarea.payer-details {
     background-color: #ededed;
 }
 
+.table-invoice-items .transfer-right {
+    color: #F66600;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.table-invoice-items .transfer-left {
+    color: rgba(54, 206, 141, 1);
+    font-weight: 700;
+    font-size: 13px;
+}
+
 .table-invoice-items .add-item {
     font-weight: 400;
     font-style: normal;
@@ -4352,6 +4362,7 @@ textarea.payer-details {
 
 .invoice-items-container {
     flex-grow: 2;
+    overflow-y: auto;
 }
 
 .overflow-y-auto {
@@ -4382,7 +4393,6 @@ textarea.payer-details {
 
 .table-payment-items > tbody > tr > td {
     border-top: none;
-    text-align: right;
 }
 
 .table-payment-items > tbody > tr > td .payment-type {
@@ -4396,17 +4406,8 @@ textarea.payer-details {
     background-color: transparent;
 }
 
-.table-payment-items > tbody > tr >td:first-child {
-    text-align: left;
-}
-
-.table-payment-items > tbody > tr >td:nth-last-child(2) {
-    text-align: right;
-}
-
 .table-payment-items > tfoot > tr > td {
     border-top: none;
-    text-align: right;
     font-size: 13px;
     font-weight: 700;
     font-style: normal;
@@ -4418,14 +4419,6 @@ textarea.payer-details {
     display: block;
     height: 15px;
     line-height: 15px;
-}
-
-.table-payment-items > tfoot > tr > td:first-child {
-    text-align: left;
-}
-
-.table-payment-items > tfoot > tr > td:nth-last-child(2) {
-    text-align: right;
 }
 
 .table-payment-items tr.selected {
@@ -4442,7 +4435,7 @@ textarea.payer-details {
     min-height: 78px;
 }
 
-.invoice-operations {
+.invoice-overview {
     display: flex;
     flex-flow: column;
     height: 100%;
@@ -4547,4 +4540,164 @@ textarea.payer-details {
     text-align: center;
     line-height: 15px;
     float: right;
+}
+
+.invoice-transfer-summary {
+    height: 60px;
+    border-bottom: 1px solid rgba(201, 215, 223, 1);
+    position: relative;
+}
+
+.invoice-transfer-summary .invoice-title {
+    font-weight: 700;
+    font-style: normal;
+    font-size: 13px;
+    color: #333333;
+    position: absolute;
+    left: 0px;
+    top: 23px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: calc(100% - 30px);
+}
+
+.invoice-transfer-payer-section {
+    position: relative;
+    height: 66px;
+}
+
+.invoice-transfer-payer-section .payer-name {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    color: #333333;
+    position: absolute;
+    left: 0px;
+    top: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: calc(100% - 30px);
+}
+
+.invoice-transfer-payer-section .payer-email {
+    font-weight: 200;
+    font-style: normal;
+    font-size: 11px;
+    color: #999999;
+    position: absolute;
+    left: 0px;
+    top: 33px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: calc(100% - 30px);
+}
+
+.table-invoice-items.right-transfer-invoice-items tr > td,
+.table-invoice-items.right-transfer-invoice-items tr > th,
+.table-payment-items.right-transfer-payment-items tr > td,
+.table-payment-items.right-transfer-payment-items tr > th {
+    text-align: center;
+}
+
+.table-invoice-items.right-transfer-invoice-items tr > td:nth-child(2),
+.table-invoice-items.right-transfer-invoice-items tr > th:nth-child(2),
+.table-payment-items.right-transfer-payment-items tr > td:nth-child(2),
+.table-payment-items.right-transfer-payment-items tr > th:nth-child(2) {
+    text-align: left;
+}
+
+.table-invoice-items.right-transfer-invoice-items tr > td:last-child,
+.table-invoice-items.right-transfer-invoice-items tr > td:nth-last-child(2),
+.table-invoice-items.right-transfer-invoice-items tr > th:last-child,
+.table-invoice-items.right-transfer-invoice-items tr > th:nth-last-child(2),
+.table-payment-items.right-transfer-payment-items tr > td:last-child,
+.table-payment-items.right-transfer-payment-items tr > td:nth-last-child(2),
+.table-payment-items.right-transfer-payment-items tr > th:last-child,
+.table-payment-items.right-transfer-payment-items tr > th:nth-last-child(2) {
+    text-align: right;
+}
+
+
+.transfer-invoices-menu {
+    margin-left: 13px;
+    margin-right: 13px;
+    border-bottom: 1px solid rgba(201, 215, 223, 1);
+    height: 67px;
+}
+
+.transfer-invoices-menu .transfer-invoices-menu-back {
+    outline: none;
+    position: absolute;
+    left: 24px;
+    top: 23px;
+    width: 15px;
+    height: 15px;
+    border: none;
+    text-align: center;
+    line-height: 15px;
+    background-color: transparent;
+    color: #F66600;
+    font-size: 28px;
+}
+
+.transfer-invoices-menu .transfer-invoices-menu-title {
+    position: absolute;
+    left: 53px;
+    top: 19px;
+    height: 19px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    color: #F66600;
+}
+
+
+.select-invoice {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px; 
+    color: #333333;
+    outline: none;
+    border: none;
+    padding: 4px;
+    background-color: transparent;
+    position: relative;
+    top: 18px;
+}
+
+.no-invoice-selected-explanation {
+    text-align: center;
+    position: relative;
+    top: 154px;
+}
+
+.no-invoice-selected-explanation .subtitle {
+    font-weight: 200;
+    font-style: normal;
+    font-size: 11px;
+    color: #999999;
+}
+
+.no-invoice-selected-explanation .title {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    color: #333333;
+}
+
+.invoice-transfer-footer {
+    height: 78px;
+    min-height: 78px;
+}
+
+.invoice-transfer-row {
+    height: calc(100% - 145px);
+}
+
+.invoice-transfer-column {
+    overflow-y: auto;
+    height: 100%;
 }

@@ -1,0 +1,24 @@
+<div class="related-invoices-menu">
+    <button class="fa fa-angle-left related-invoices-menu-back clickable" (click)="backToInvoiceOverview()"></button>
+    <div class="related-invoices-menu-title">
+        {{ 'Related Invoices' | translate }}
+    </div>
+    <div class="related-invoices-count">
+    {{ relatedInvoices.length }} {{ 'Invoices' | translate }}
+    </div>
+</div>
+<div class="related-invoices-list">
+    <div class="related-invoice" *ngFor="let relatedInvoice of relatedInvoices; let i = index">
+        <i class="fa fa-trash related-invoice-button clickable" (click)="deleteInvoice(relatedInvoice)"></i>
+        <i class="fa fa-download related-invoice-button m-r-8 clickable" (click)="downloadInvoice(relatedInvoice)"></i>
+        <div class="related-invoice-info clickable" (click)="selectRelatedInvoiceIndex(i)">
+            <div class="related-invoice-title">{{ 'Invoice' | translate }} {{ relatedInvoice.reference }}
+                <span *ngIf="relatedInvoice.isPaid()" class="invoice-status paid-invoice-status">{{ 'Paid' | translate }}</span>
+                <span *ngIf="relatedInvoice.isLossAccepted()" class="invoice-status loss-accepted-by-management-invoice-status">{{ 'Loss Management' | translate }}</span>
+                <span *ngIf="relatedInvoice.isUnpaid()" class="invoice-status unpaid-invoice-status">{{ 'Unpaid' | translate }}</span>
+            </div>
+            <div class="related-invoice-payer">{{ getPayerListString(relatedInvoice) }}</div>
+            <div class="related-invoice-total">{{ relatedInvoice.totalAmount }}</div>
+        </div>
+    </div>
+</div>
