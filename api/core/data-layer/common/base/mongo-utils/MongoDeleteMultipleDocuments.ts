@@ -13,7 +13,7 @@ export class MongoDeleteMultipleDocuments {
 		mongoUtils.getNativeMongoCollection(this._sailsEntity).then((collection: any) => {
 			return collection.deleteMany(filter);
 		}).then((result: any) => {
-			if(result.deletedCount !== 1) {
+			if(result.deletedCount < 1) {
 				this.errorCallback(new Error("Documents could not be removed"));
 				return;
 			}
