@@ -78,7 +78,7 @@ export class LogInComponent extends BaseFormComponent implements OnInit, OnDestr
 			this.goToMainPage(loginResult);
 		}, (error: ThError) => {
 			this.isLoading = false;
-			this._appContext.toaster.error(error.message);
+			this._appContext.toaster.error(this._appContext.thTranslation.translate("Invalid username or password"));
 		});
 	}
 	private goToMainPage(loginResult: Object) {
