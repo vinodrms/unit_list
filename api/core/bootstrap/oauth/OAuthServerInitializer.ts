@@ -107,8 +107,6 @@ export class OAuthServerInitializer {
             model: {
                 //Request Authentication
                 getAccessToken: (accessToken, callback) => {
-                    console.log("getAccessToken");
-
                     let oAuthToken: OAuthTokenDO;
 
                     this.oAuthTokenRepository.getOAuthToken({ accessToken: accessToken }).then((savedOAuthToken: OAuthTokenDO) => {
@@ -132,14 +130,11 @@ export class OAuthServerInitializer {
                  * This model function is required if scopes are used with OAuth2Server#authenticate().
                  */
                 verifyScope: (accessToken: string, scope: string[], callback) => {
-                    console.log("verifyScope");
                     callback(true);
                 },
 
                 //Password Grant
                 getUser: (username: string, password: string, callback) => {
-                    console.log("getUser");
-
                     this.hotelAuthentication.checkCredentials(username, password).then((response: { user: UserDO, hotel: HotelDO }) => {
                         callback(null, {
                             id: response.user.id,
@@ -156,7 +151,6 @@ export class OAuthServerInitializer {
 
                 //Refresh Token Grant
                 getRefreshToken: (refreshToken: string, callback) => {
-                    console.log("getRefreshToken");
                     let oAuthToken: OAuthTokenDO;
 
                     this.oAuthTokenRepository.getOAuthToken({ refreshToken: refreshToken }).then((savedOAuthToken: OAuthTokenDO) => {
@@ -175,8 +169,6 @@ export class OAuthServerInitializer {
                 },
 
                 revokeToken: (token: IToken, callback) => {
-                    console.log("revokeToken");
-                    
                     this.tokenService.revokeToken(
                         token.refreshToken
                     ).then((deletedCount: number) => {
@@ -189,7 +181,6 @@ export class OAuthServerInitializer {
 
                 //Password & Refresh Token Grant common
                 getClient: (clientId: string, clientSecret: string, callback) => {
-                    console.log("getClient");
                     if (client.id === clientId) {
                         callback(null, client);
                     }
@@ -199,8 +190,6 @@ export class OAuthServerInitializer {
 
                 },
                 saveToken: (token: IToken, client: IClient, user: IUser, callback) => {
-                    console.log("saveToken");
-
                     let oAuthToken = new OAuthTokenDO();
                     oAuthToken.buildFromTokenUserInfoAndClient(token, user.id, client.id, user.hotelId);
 
