@@ -52,7 +52,7 @@ export class ThUtils {
 		if (!value) {
 			return value;
 		}
-		return value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+		return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 	}
 	public getArrayAverage(array: INumber[]): number {
 		if (!_.isArray(array) || array.length == 0) {
@@ -64,5 +64,13 @@ export class ThUtils {
 		var sum = 0.0;
 		_.forEach(array, (value: INumber) => { sum += value.getValue(); })
 		return sum;
+	}
+
+	public getUTCTimestampFromDate(date: Date): number {
+		return Math.floor(date.getTime() / 1000);
+	}
+	public getDateFromUTCTimestamp(timestamp: number): Date {
+		let date = new Date(timestamp * 1000); 
+		return date;
 	}
 }
