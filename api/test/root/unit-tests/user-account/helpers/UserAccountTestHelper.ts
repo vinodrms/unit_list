@@ -37,4 +37,19 @@ export class UserAccountTestHelper {
         };
     }
 
+    public getReissueTokenRequestOptions(refreshToken: string) {
+        let clientId = UserAccountTestHelper.ClientId;
+        let baseUrl = this.testContext.appContext.getUnitPalConfig().getAppContextRoot();
+        let url = baseUrl + '/api/token';
+
+        return {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            url: url,
+            body: `client_id=${clientId}&grant_type=refresh_token&refresh_token=${refreshToken}`,
+            method: 'POST',
+        };
+    }
+
 }
