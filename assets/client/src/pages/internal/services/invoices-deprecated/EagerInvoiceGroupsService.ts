@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {InvoiceGroupDO} from './data-objects/InvoiceGroupDO';
-import {InvoiceDO, InvoicePaymentStatus} from './data-objects/InvoiceDO';
-import {InvoiceGroupsQuery} from './InvoiceGroupsService';
-import {InvoiceGroupsDO} from './data-objects/InvoiceGroupsDO';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { InvoiceGroupDO } from './data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoicePaymentStatus } from './data-objects/InvoiceDO';
+import { InvoiceGroupsQuery } from './InvoiceGroupsService';
+import { InvoiceGroupsDO } from './data-objects/InvoiceGroupsDO';
 
 @Injectable()
-export class EagerInvoiceGroupsService {
+export class EagerInvoiceGroupsServiceDeprecated {
     constructor(private _appContext: AppContext) {
     }
 
@@ -28,7 +28,7 @@ export class EagerInvoiceGroupsService {
         }).map((invoiceGroupsObject: Object) => {
             var invoiceGroupsDO = new InvoiceGroupsDO();
             invoiceGroupsDO.buildFromObject(invoiceGroupsObject);
-            return invoiceGroupsDO.invoiceGroupList;    
+            return invoiceGroupsDO.invoiceGroupList;
         });
     }
 }

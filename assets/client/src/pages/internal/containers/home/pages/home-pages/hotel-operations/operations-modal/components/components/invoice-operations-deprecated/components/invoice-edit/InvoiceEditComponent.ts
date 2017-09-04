@@ -3,18 +3,18 @@ import { AppContext, ThError } from '../../../../../../../../../../../../../comm
 import { AddOnProductDO } from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
 import { ModalDialogRef } from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import { CustomerRegisterModalService } from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
-import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceGroupVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
-import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
-import { InvoiceItemDO, InvoiceItemType } from '../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO';
-import { AddOnProductInvoiceItemMetaDO } from '../../../../../../../../../../../services/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
-import { InvoiceVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceVM';
-import { InvoicePayerDO } from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePayerDO';
-import { InvoicePayerVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
-import { InvoiceItemVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM';
+import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO';
+import { InvoiceGroupVM } from '../../../../../../../../../../../services/invoices-deprecated/view-models/InvoiceGroupVM';
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/items/InvoiceItemDO';
+import { AddOnProductInvoiceItemMetaDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import { InvoiceVM } from '../../../../../../../../../../../services/invoices-deprecated/view-models/InvoiceVM';
+import { InvoicePayerDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/payers/InvoicePayerDO';
+import { InvoicePayerVM } from '../../../../../../../../../../../services/invoices-deprecated/view-models/InvoicePayerVM';
+import { InvoiceItemVM } from '../../../../../../../../../../../services/invoices-deprecated/view-models/InvoiceItemVM';
 import { CustomerDO } from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
 import { InvoiceGroupControllerService } from '../../services/InvoiceGroupControllerService';
-import { InvoiceGroupsService } from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
+import { InvoiceGroupsServiceDeprecated } from '../../../../../../../../../../../services/invoices-deprecated/InvoiceGroupsService';
 import { HotelOperationsResultService } from '../../../../../services/HotelOperationsResultService';
 import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
 import { AddOnProductsModalService } from "../../../../../../../../../../common/inventory/add-on-products/modals/services/AddOnProductsModalService";
@@ -43,7 +43,7 @@ export class InvoiceEditComponent implements OnInit {
         private _addOnProductsModalService: AddOnProductsModalService,
         private _numberOfAddOnProductsModalService: NumberOfAddOnProductsModalService,
         private _customerRegisterModalService: CustomerRegisterModalService,
-        private _invoiceGroupsService: InvoiceGroupsService,
+        private _invoiceGroupsServiceDeprecated: InvoiceGroupsServiceDeprecated,
         private _invoiceGroupControllerService: InvoiceGroupControllerService,
         private _operationsPageControllerService: HotelOperationsPageControllerService) {
     }
@@ -167,7 +167,7 @@ export class InvoiceEditComponent implements OnInit {
             }
         }
         var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
-        this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
+        this._invoiceGroupsServiceDeprecated.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
             this._appContext.analytics.logEvent("invoice", logEventName, logMessage);
             this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
             this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was changed succesfully."));
@@ -183,7 +183,7 @@ export class InvoiceEditComponent implements OnInit {
             return invoiceVM.invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId);
         });
 
-        this._invoiceGroupsService.reinstate({
+        this._invoiceGroupsServiceDeprecated.reinstate({
             invoiceGroupId: invoiceGroupVMClone.invoiceGroupDO.id,
             invoiceId: invoiceToBeReinstated.invoiceDO.id
         }).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {

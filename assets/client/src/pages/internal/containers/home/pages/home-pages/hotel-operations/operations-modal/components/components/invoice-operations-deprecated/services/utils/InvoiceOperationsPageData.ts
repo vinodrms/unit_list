@@ -1,7 +1,7 @@
 import { CustomersDO } from '../../../../../../../../../../../services/customers/data-objects/CustomersDO';
 import { CurrencyDO } from '../../../../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 import { HotelPaymentMethodsDO } from '../../../../../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
-import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { BookingsDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingsDO';
 import { HotelAggregatedPaymentMethodsDO } from "../../../../../../../../../../../services/settings/data-objects/HotelAggregatedPaymentMethodsDO";
 
@@ -10,7 +10,7 @@ export class InvoiceOperationsPageData {
     private _allPaymentMethods: HotelPaymentMethodsDO;
     private _allowedPaymentMethods: HotelAggregatedPaymentMethodsDO;
     private _customersContainer: CustomersDO;
-    private _bookingsContainer: BookingsDO; 
+    private _bookingsContainer: BookingsDO;
     private _ccy: CurrencyDO;
 
     public get invoiceGroupDO(): InvoiceGroupDO {
@@ -42,11 +42,11 @@ export class InvoiceOperationsPageData {
     }
     public set bookingsContainer(bookingsContainer: BookingsDO) {
         this._bookingsContainer = bookingsContainer;
-    }   
+    }
     public get ccy(): CurrencyDO {
         return this._ccy;
     }
     public set ccy(ccy: CurrencyDO) {
         this._ccy = ccy;
-    } 
+    }
 }

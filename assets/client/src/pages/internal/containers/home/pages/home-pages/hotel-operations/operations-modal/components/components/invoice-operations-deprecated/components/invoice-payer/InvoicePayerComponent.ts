@@ -5,17 +5,17 @@ import { CustomerRegisterModalService } from '../../../../../../../../../../comm
 import { CustomerDO } from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
 import { ModalDialogRef } from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import { InvoiceGroupControllerService } from '../../services/InvoiceGroupControllerService';
-import { InvoiceDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { InvoiceDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO';
 import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import { InvoicePayerDO } from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePayerDO';
-import { InvoicePayerVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
-import { InvoiceGroupVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
-import { InvoiceVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceVM';
+import { InvoicePayerDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/payers/InvoicePayerDO';
+import { InvoicePayerVM } from '../../../../../../../../../../../services/invoices-deprecated/view-models/InvoicePayerVM';
+import { InvoiceGroupVM } from '../../../../../../../../../../../services/invoices-deprecated/view-models/InvoiceGroupVM';
+import { InvoiceVM } from '../../../../../../../../../../../services/invoices-deprecated/view-models/InvoiceVM';
 import { InvoiceOperationsPageData } from '../../services/utils/InvoiceOperationsPageData';
 import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
-import { InvoicePaymentMethodVMGenerator } from '../../../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
-import { InvoicePaymentMethodVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodVMGenerator } from '../../../../../../../../../../../services/invoices-deprecated/view-models/utils/InvoicePaymentMethodVMGenerator';
+import { InvoicePaymentMethodVM } from '../../../../../../../../../../../services/invoices-deprecated/view-models/InvoicePaymentMethodVM';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { EmailSenderModalService } from '../../../../../../email-sender/services/EmailSenderModalService';
 import { TransactionFeeDO, TransactionFeeType } from "../../../../../../../../../../../services/common/data-objects/payment-method/TransactionFeeDO";
 
@@ -64,7 +64,7 @@ export class InvoicePayerComponent implements OnInit {
         if(selectedPaymentMethodVM.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
             this.transactionFee = TransactionFeeDO.getDefaultTransactionFee();
         }
-        
+
         this.invoicePayerVM.invoicePayerDO.transactionFeeSnapshot = this.transactionFee;
         this.invoicePayerVM.invoicePayerDO.priceToPayPlusTransactionFee = this.getPriceToPayPlusTransactionFee();
     }
@@ -73,7 +73,7 @@ export class InvoicePayerComponent implements OnInit {
         if(!this.invoicePayerVM.invoicePayerDO.shouldApplyTransactionFee) {
             return this.invoicePayerVM.invoicePayerDO.priceToPay;
         }
-        
+
         return this.invoicePayerVM.invoicePayerDO.transactionFeeSnapshot.getAmountWihtTransactionFeeIncluded(this.invoicePayerVM.invoicePayerDO.priceToPay);
     }
 
@@ -138,7 +138,7 @@ export class InvoicePayerComponent implements OnInit {
                 this.paymentMethodVMList = this.generatePaymentMethodsFor(selectedCustomer);
                 this.selectedPaymentMethodVM = this.paymentMethodVMList[0];
                 newInvoicePayer.paymentMethod = this.paymentMethodVMList[0].paymentMethod;
-                
+
                 if (this.invoiceVM.invoicePayerVMList.length === 1) {
                     newInvoicePayer.priceToPay = this.invoicePayerVM.invoicePayerDO.priceToPay;
                     newInvoicePayer.transactionFeeSnapshot = this.selectedPaymentMethodVM.transactionFee;

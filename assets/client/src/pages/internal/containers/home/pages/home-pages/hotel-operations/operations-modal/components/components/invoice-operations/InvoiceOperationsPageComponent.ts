@@ -4,7 +4,7 @@ import { CustomerVM } from "../../../../../../../../../services/customers/view-m
 import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
 import { IndividualDetailsDO } from "../../../../../../../../../services/customers/data-objects/customer-details/IndividualDetailsDO";
 import { ContactDetailsDO } from "../../../../../../../../../services/customers/data-objects/customer-details/ContactDetailsDO";
-import { InvoicePaymentStatus } from "../../../../../../../../../services/invoices/data-objects/InvoiceDO";
+import { InvoicePaymentStatus } from "../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO";
 
 
 export class InvoiceVMMockup {
@@ -82,7 +82,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
         relatedInvoice.totalAmount = "Dkr 24,515";
         relatedInvoice.reference = "#1";
         this.relatedInvoices[0] = relatedInvoice;
-        
+
         var individualDetails = new IndividualDetailsDO();
         individualDetails.firstName = "Mr";
         individualDetails.lastName = "Brown";

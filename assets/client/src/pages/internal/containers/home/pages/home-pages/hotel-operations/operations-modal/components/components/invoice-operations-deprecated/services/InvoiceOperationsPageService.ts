@@ -3,18 +3,18 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
 import { ThError, AppContext } from '../../../../../../../../../../../../common/utils/AppContext';
-import { InvoiceGroupsService } from '../../../../../../../../../../services/invoices/InvoiceGroupsService';
-import { EagerInvoiceGroupsService } from '../../../../../../../../../../services/invoices/EagerInvoiceGroupsService';
+import { InvoiceGroupsServiceDeprecated } from '../../../../../../../../../../services/invoices-deprecated/InvoiceGroupsService';
+import { EagerInvoiceGroupsServiceDeprecated } from '../../../../../../../../../../services/invoices-deprecated/EagerInvoiceGroupsService';
 import { EagerCustomersService } from '../../../../../../../../../../services/customers/EagerCustomersService';
 import { HotelAggregatorService } from '../../../../../../../../../../services/hotel/HotelAggregatorService';
 import { HotelInvoiceOperationsDeprecatedPageParam } from '../utils/HotelInvoiceOperationsDeprecatedPageParam';
-import { InvoiceGroupDO } from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupDO } from '../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { InvoiceOperationsPageData } from './utils/InvoiceOperationsPageData';
 import { HotelAggregatedInfo } from '../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import { CustomersDO } from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
-import { InvoicePayerDO } from '../../../../../../../../../../services/invoices/data-objects/payers/InvoicePayerDO';
-import { InvoicePaymentMethodDO } from '../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoicePayerDO } from '../../../../../../../../../../services/invoices-deprecated/data-objects/payers/InvoicePayerDO';
+import { InvoicePaymentMethodDO } from '../../../../../../../../../../services/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { EagerBookingsService } from '../../../../../../../../../../services/bookings/EagerBookingsService';
 import { BookingsDO } from '../../../../../../../../../../services/bookings/data-objects/BookingsDO';
 
@@ -25,8 +25,8 @@ export class InvoiceOperationsPageService {
     private _pageData: InvoiceOperationsPageData;
 
     constructor(private _appContext: AppContext,
-        private _eagerInvoiceGroupsService: EagerInvoiceGroupsService,
-        private _invoiceGroupsService: InvoiceGroupsService,
+        private _eagerInvoiceGroupsService: EagerInvoiceGroupsServiceDeprecated,
+        private _invoiceGroupsService: InvoiceGroupsServiceDeprecated,
         private _hotelAggregatorService: HotelAggregatorService,
         private _eagerCustomersService: EagerCustomersService,
         private _eagerBookingService: EagerBookingsService) {
@@ -67,7 +67,7 @@ export class InvoiceOperationsPageService {
         });
 
     }
-    
+
     private getBookingsDO(groupBookingId?: string): Observable<BookingsDO> {
         if(!this._appContext.thUtils.isUndefinedOrNull(groupBookingId)) {
             return this._eagerBookingService.getBookingsByGroupBookingId(groupBookingId);

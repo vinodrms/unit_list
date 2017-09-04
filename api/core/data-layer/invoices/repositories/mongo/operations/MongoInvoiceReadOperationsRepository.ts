@@ -101,7 +101,7 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
             mongoQueryBuilder.addExactMatch("paymentStatus", searchCriteria.invoicePaymentStatus);
             mongoQueryBuilder.addMultipleSelectOptionList("payerList.customerId", searchCriteria.payerCustomerIdList);
             if (!this._thUtils.isUndefinedOrNull(searchCriteria.paidInterval)) {
-                let dateUtils = new ThDateUtils​​();
+                let dateUtils = new ThDateUtils();
                 let endDate = dateUtils.addDaysToThDateDO(searchCriteria.paidInterval.end, 1);
                 mongoQueryBuilder.addCustomQuery("$and",
                     [
@@ -110,6 +110,9 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
                     ]
                 );
             }
+            mongoQueryBuilder.addExactMatch("groupId", searchCriteria.groupId);
+            // for now the search term is only checked against the invoice reference
+            mongoQueryBuilder.addRegex("reference", searchCriteria.term);
         }
 
         return mongoQueryBuilder.processedQuery;

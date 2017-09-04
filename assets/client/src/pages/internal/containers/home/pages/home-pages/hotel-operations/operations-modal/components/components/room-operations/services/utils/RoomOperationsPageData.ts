@@ -4,8 +4,8 @@ import {RoomAttachedBookingResultVM} from '../../../../../../../../../../../serv
 import {BedVM} from '../../../../../../../../../../../services/beds/view-models/BedVM';
 import {RoomAmenitiesDO} from '../../../../../../../../../../../services/settings/data-objects/RoomAmenitiesDO';
 import {RoomAttributesDO} from '../../../../../../../../../../../services/settings/data-objects/RoomAttributesDO';
-import {InvoiceGroupDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import {InvoiceGroupDO} from '../../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO';
+import {InvoiceDO} from '../../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO';
 
 export class RoomOperationsPageData {
     private _thUtils: ThUtils;

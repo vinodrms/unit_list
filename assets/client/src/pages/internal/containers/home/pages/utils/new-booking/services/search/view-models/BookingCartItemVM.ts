@@ -6,7 +6,7 @@ import { ThDateIntervalDO } from '../../../../../../../../services/common/data-o
 import { CurrencyDO } from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 import { CustomerDO } from '../../../../../../../../services/customers/data-objects/CustomerDO';
 import { HotelPaymentMethodsDO } from '../../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
-import { InvoicePaymentMethodType, InvoicePaymentMethodDO } from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodType, InvoicePaymentMethodDO } from '../../../../../../../../services/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { HotelAggregatedPaymentMethodsDO } from "../../../../../../../../services/settings/data-objects/HotelAggregatedPaymentMethodsDO";
 import { BookingDO } from "../../../../../../../../services/bookings/data-objects/BookingDO";
 import { RoomCategoryDO } from "../../../../../../../../services/room-categories/data-objects/RoomCategoryDO";

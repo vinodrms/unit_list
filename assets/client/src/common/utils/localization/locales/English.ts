@@ -986,5 +986,10 @@ export var EnglishTranslations: Object = {
     "No Invoice Selected": "No Invoice Selected",
     "You can select an invoice to transfer items to or to transfer items from." : "You can select an invoice to transfer items to or to transfer items from.",
     "Transfer Items": "Transfer Items",
+    "The payer is already added on the invoice": "The payer is already added on the invoice",
+    "The payer was not found on the invoice": "The payer was not found on the invoice",
+    "You cannot remove this payer because there is at least one payment referencing him.": "You cannot remove this payer because there is at least one payment referencing him.",
+    "The item was not found on the invoice": "The item was not found on the invoice",
+    "Could not find invoices. Empty group provided.": "Could not find invoices. Empty group provided.",
 
 };

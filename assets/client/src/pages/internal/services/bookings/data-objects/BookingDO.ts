@@ -8,7 +8,7 @@ import { BookingStateChangeTriggerTimeDO } from './state-change-time/BookingStat
 import { DefaultBillingDetailsDO } from './default-billing/DefaultBillingDetailsDO';
 import { DocumentHistoryDO } from '../../common/data-objects/document-history/DocumentHistoryDO';
 import { BookingPriceDO } from './price/BookingPriceDO';
-import { IInvoiceItemMeta } from '../../invoices/data-objects/items/IInvoiceItemMeta';
+import { IInvoiceItemMeta } from '../../invoices-deprecated/data-objects/items/IInvoiceItemMeta';
 import { ThDateDO } from "../../common/data-objects/th-dates/ThDateDO";
 
 import * as _ from "underscore";

@@ -5,9 +5,9 @@ import { BookingPaymentGuaranteeEditRight } from '../../../../../../../../../../
 import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
 import { DefaultBillingDetailsDO } from '../../../../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
 import { HotelOperationsBookingService } from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
-import { InvoicePaymentMethodVMGenerator } from '../../../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
-import { InvoicePaymentMethodVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
-import { InvoicePaymentMethodDO } from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodVMGenerator } from '../../../../../../../../../../../services/invoices-deprecated/view-models/utils/InvoicePaymentMethodVMGenerator';
+import { InvoicePaymentMethodVM } from '../../../../../../../../../../../services/invoices-deprecated/view-models/InvoicePaymentMethodVM';
+import { InvoicePaymentMethodDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { CustomerDO } from "../../../../../../../../../../../services/customers/data-objects/CustomerDO";
 import { ModalDialogRef } from "../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
 import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
@@ -40,7 +40,7 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
 
     paymentMethodVMList: InvoicePaymentMethodVM[] = [];
     selectedPaymentMethodVM: InvoicePaymentMethodVM;
-    
+
     private _selectedPaymentMethodVMCopy: InvoicePaymentMethodVM;
     private _billedCustomer: CustomerDO;
     private _pmGenerator: InvoicePaymentMethodVMGenerator;
@@ -60,10 +60,10 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
         this.isSaving = false;
 
         this._pmGenerator = new InvoicePaymentMethodVMGenerator(this._bookingOperationsPageData.allowedPaymentMethods);
-        
+
         var billedCustomerId = this.defaultBillingDetailsDO.customerId;
         this._billedCustomer = this._bookingOperationsPageData.customersContainer.getCustomerById(billedCustomerId);
-        
+
         this.paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this._billedCustomer);
         this.selectedPaymentMethodVM = this._pmGenerator.generateInvoicePaymentMethodVMForPaymentMethod(this.defaultBillingDetailsDO.paymentMethod, this._bookingOperationsPageData.allPaymentMethods);
     }
@@ -127,7 +127,7 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
             return;
         }
         this.isSaving = true;
-        
+
         this._hotelOperationsBookingService.addPaymentGuarantee(this.bookingDO, this.billedCustomer, this.selectedPaymentMethodVM.paymentMethod).subscribe((updatedBooking: BookingDO) => {
             this._appContext.analytics.logEvent("booking", "payment-guarantee", "Updated payment guarantee on a booking");
             this.readonly = true;

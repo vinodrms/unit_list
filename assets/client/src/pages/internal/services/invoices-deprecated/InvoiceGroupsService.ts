@@ -29,8 +29,8 @@ export interface ReinstateInvoiceMetaDO {
 }
 
 @Injectable()
-export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupDO> {
-    
+export class InvoiceGroupsServiceDeprecated extends ALazyLoadRequestService<InvoiceGroupDO> {
+
     private _customerIdListFilter: string[];
 
     constructor(appContext: AppContext) {
