@@ -2,7 +2,7 @@ import * as _ from "underscore";
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AppContext, ThServerApi, ThError } from "../../../../../common/utils/AppContext";
-import { InvoiceDO } from "../../invoices/data-objects/InvoiceDO";
+import { InvoiceDO, InvoicePaymentStatus } from "../../invoices/data-objects/InvoiceDO";
 import { InvoicesDO } from "../../invoices/data-objects/InvoicesDO";
 import { InvoicePaymentDO } from "../../invoices/data-objects/payer/InvoicePaymentDO";
 import { InvoiceItemDO } from "../../invoices/data-objects/items/InvoiceItemDO";
@@ -92,6 +92,14 @@ export class HotelOperationsInvoiceService {
         delete payment.transactionId;
 
         invoice.payerList[payerIndex].paymentList.push(payment);
+        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: invoice });
+    }
+    markAsPaid(invoice: InvoiceDO): Observable<InvoiceDO> {
+        invoice.paymentStatus = InvoicePaymentStatus.Paid;
+        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: invoice });
+    }
+    markAsLossByManagemnt(invoice: InvoiceDO): Observable<InvoiceDO> {
+        invoice.paymentStatus = InvoicePaymentStatus.LossAcceptedByManagement;
         return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: invoice });
     }
 
