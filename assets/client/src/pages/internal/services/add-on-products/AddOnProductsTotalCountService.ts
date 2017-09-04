@@ -21,7 +21,7 @@ export class AddOnProductsTotalCountService extends ARequestService<TotalCountDO
 		};
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.AddOnProductsCount,
-			parameters: searchCriteria
+			body: JSON.stringify(searchCriteria)
 		});
 	}
 	protected parseResult(result: Object): TotalCountDO {

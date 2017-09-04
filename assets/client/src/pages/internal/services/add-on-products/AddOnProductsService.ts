@@ -73,9 +73,9 @@ export class AddOnProductsService extends ALazyLoadRequestService<AddOnProductVM
 	private runServerPostActionOnAddOnProduct(apiAction: ThServerApi, addOnProduct: AddOnProductDO): Observable<AddOnProductDO> {
 		return this._appContext.thHttp.post({
 			serverApi: apiAction,
-			parameters: {
+			body: JSON.stringify({
 				addOnProduct: addOnProduct
-			}
+			})
 		}).map((addOnProductObject: Object) => {
 			this.refreshData();
 

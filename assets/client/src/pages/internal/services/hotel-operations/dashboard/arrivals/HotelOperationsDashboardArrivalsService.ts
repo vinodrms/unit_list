@@ -38,11 +38,11 @@ export class HotelOperationsDashboardArrivalsService extends ARequestService<Arr
             this._roomsService.getRoomList(),
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsDashboardArrivals,
-                parameters: {
+                body: JSON.stringify({
                     query: {
                         referenceDate: this._referenceDate
                     }
-                }
+                })
             })
         ).map((result: [RoomCategoryStatsDO[], RoomVM[], Object]) => {
             var roomCategoriesStatsList: RoomCategoryStatsDO[] = result[0];

@@ -83,9 +83,9 @@ export class AllotmentsService extends ALazyLoadRequestService<AllotmentVM> {
 	private runServerPostActionOnAllotment(apiAction: ThServerApi, allotment: AllotmentDO): Observable<AllotmentDO> {
 		return this._appContext.thHttp.post({
 			serverApi: apiAction,
-			parameters: {
+			body: JSON.stringify({
 				allotment: allotment
-			}
+			})
 		}).map((allotmentObject: Object) => {
 			this.refreshData();
 

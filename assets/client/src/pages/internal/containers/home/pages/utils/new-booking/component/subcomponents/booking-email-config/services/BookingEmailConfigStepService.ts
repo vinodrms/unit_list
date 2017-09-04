@@ -76,7 +76,9 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
     private postBookingsToServer(addBookingsObserver: Observer<BookingDO[]>, bookingItems: AddBookingItemsDO) {
         this._appContext.thHttp.post({
             serverApi: ThServerApi.BookingsAdd,
-            parameters: { bookingItems: bookingItems }
+            body: JSON.stringify({
+                bookingItems: bookingItems
+            })
         }).subscribe((result: any) => {
             this._appContext.analytics.logEvent("booking", "add", "Added " + bookingItems.bookingList.length + " bookings");
             addBookingsObserver.next(result.bookingList);

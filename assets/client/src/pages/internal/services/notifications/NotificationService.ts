@@ -39,7 +39,7 @@ export class NotificationService extends ALazyLoadRequestService<ThNotificationD
         var params = { searchCriteria: searchCriteria };
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.NotificationsMarkAsRead,
-            parameters: params
+            body: JSON.stringify(params)
         }).map((numUpdatedObj: Object) => {
             return <number>numUpdatedObj;
         });

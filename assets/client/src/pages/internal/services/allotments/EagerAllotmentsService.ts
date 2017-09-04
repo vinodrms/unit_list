@@ -18,9 +18,9 @@ export class EagerAllotmentsService {
 		}
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.Allotments,
-			parameters: {
+			body: JSON.stringify({
 				searchCriteria: { customerId: customerId, priceProductIdList: priceProductIdList, status: allotmentStatus }
-			}
+			})
 		}).map((resultObject: Object) => {
 			var allotments = new AllotmentsDO();
 			allotments.buildFromObject(resultObject);
@@ -30,7 +30,7 @@ export class EagerAllotmentsService {
 	public getAllotmentById(allotmentId: string): Observable<AllotmentDO> {
 		return this._appContext.thHttp.get({
 			serverApi: ThServerApi.AllotmentItem,
-			parameters: { id: allotmentId }
+			queryParameters: { id: allotmentId }
 		}).map((allotmentObject: Object) => {
 			var allotment = new AllotmentDO();
 			allotment.buildFromObject(allotmentObject["allotment"]);

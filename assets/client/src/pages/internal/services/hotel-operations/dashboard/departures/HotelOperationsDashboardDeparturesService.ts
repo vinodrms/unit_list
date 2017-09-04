@@ -41,9 +41,9 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
             this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryIdList(),
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsDashboardDepartures,
-                parameters: {
+                body: JSON.stringify({
                     query: { referenceDate: this._referenceDate }
-                }
+                })
             })
         ).map((result: [RoomVM[], HotelAggregatedInfo, RoomCategoryStatsDO[], Object]) => {
             var roomVMList: RoomVM[] = result[0];

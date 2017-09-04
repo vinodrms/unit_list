@@ -27,9 +27,9 @@ export class HotelService extends ARequestService<HotelDetailsDO> {
 	public updateOverviewInfo(hotel: HotelDO): Observable<HotelDetailsDO> {
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.HotelDetailsUpdateBasicInfo,
-			parameters: {
+			body: JSON.stringify({
 				basicInfo: hotel
-			}
+			})
 		}).map((hotelDetailsObject: Object) => {
 			var hotelDetails: HotelDetailsDO = this.parseResult(hotelDetailsObject);
 			this.updateResult(hotelDetails);
@@ -39,9 +39,9 @@ export class HotelService extends ARequestService<HotelDetailsDO> {
 	public updatePaymentsAndPolicies(hotel: HotelDO): Observable<HotelDetailsDO> {
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.HotelDetailsUpdatePaymentsAndPolicies,
-			parameters: {
+			body: JSON.stringify({
 				paymentsAndPolicies: hotel
-			}
+			})
 		}).map((hotelDetailsObject: Object) => {
 			var hotelDetails: HotelDetailsDO = this.parseResult(hotelDetailsObject);
 			this.updateResult(hotelDetails);
@@ -51,9 +51,9 @@ export class HotelService extends ARequestService<HotelDetailsDO> {
 	public updatePropertyDetails(hotel: HotelDO): Observable<HotelDetailsDO> {
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.HotelDetailsUpdatePropertyDetails,
-			parameters: {
+			body: JSON.stringify({
 				propertyDetails: hotel
-			}
+			})
 		}).map((hotelDetailsObject: Object) => {
 			var hotelDetails: HotelDetailsDO = this.parseResult(hotelDetailsObject);
 			this.updateResult(hotelDetails);

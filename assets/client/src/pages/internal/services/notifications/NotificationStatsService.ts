@@ -36,7 +36,7 @@ export class NotificationStatsService extends ARequestService<NotificationStatsD
         var params = { searchCriteria: { read: false } };
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.NotificationsCount,
-            parameters: params
+            body: JSON.stringify(params)
         }).map((result: Object) => {
             var totalCountDO = new TotalCountDO();
             totalCountDO.buildFromObject(result);
@@ -48,7 +48,7 @@ export class NotificationStatsService extends ARequestService<NotificationStatsD
         var requestParams = { searchCriteria: {}, lazyLoad: { pageNumber: 0, pageSize: numItems } };
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.Notifications,
-            parameters: requestParams
+            body: JSON.stringify(requestParams)
         }).map((result: Object) => {
             var notificationObjList = result["notificationList"];
             if (!notificationObjList || !_.isArray(notificationObjList)) {

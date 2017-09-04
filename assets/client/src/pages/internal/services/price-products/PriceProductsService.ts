@@ -71,11 +71,11 @@ export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM
 		}
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.PriceProducts,
-			parameters: {
+			body: JSON.stringify({
 				searchCriteria: {
 					priceProductIdList: parentIdList
 				}
-			}
+			})
 		}).map((resultObject: Object) => {
 			var priceProducts = new PriceProductsDO();
 			priceProducts.buildFromObject(resultObject);
@@ -113,9 +113,9 @@ export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM
 	private runServerPostActionOnPriceProduct(apiAction: ThServerApi, priceProduct: PriceProductDO): Observable<PriceProductDO> {
 		return this._appContext.thHttp.post({
 			serverApi: apiAction,
-			parameters: {
+			body: JSON.stringify({
 				priceProduct: priceProduct
-			}
+			})
 		}).map((addOnProductObject: Object) => {
 			this.refreshData();
 

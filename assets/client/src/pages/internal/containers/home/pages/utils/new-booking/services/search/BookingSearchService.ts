@@ -68,9 +68,9 @@ export class BookingSearchService extends ABookingService {
     private searchBookingsCore(searchParams: BookingSearchParams): Observable<BookingSearchResultDO> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.BookingsSearch,
-            parameters: {
+            body: JSON.stringify({
                 searchParams: searchParams
-            }
+            })
         }).map((resultObject: Object) => {
             var searchResult = new BookingSearchResultDO();
             searchResult.buildFromObject(resultObject["searchResult"]);

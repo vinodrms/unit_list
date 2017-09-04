@@ -17,9 +17,9 @@ export class EagerAddOnProductsService {
 		}
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.AddOnProducts,
-			parameters: {
+			body: JSON.stringify({
 				searchCriteria: { addOnProductIdList: addOnProductIdList }
-			}
+			})
 		}).map((resultObject: Object) => {
 			var addOnProducts = new AddOnProductsDO();
 			addOnProducts.buildFromObject(resultObject);

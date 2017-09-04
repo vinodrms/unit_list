@@ -13,9 +13,9 @@ export class HotelOperationsCustomerService {
     public changeDetails(customer: CustomerDO): Observable<CustomerDO> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.CustomersSaveItem,
-            parameters: {
+            body: JSON.stringify({
                 customer: customer
-            }
+            })
         }).map((customerObject: Object) => {
             var updatedCustomerDO: CustomerDO = new CustomerDO();
             updatedCustomerDO.buildFromObject(customerObject["customer"]);

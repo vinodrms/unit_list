@@ -39,9 +39,9 @@ export class UpdatePasswordService {
 		var updPassDO = this.getUpdatePasswordDO();
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.AccountResetPassword,
-			parameters: {
+			body: JSON.stringify({
 				requestData: updPassDO
-			}
+			})
 		});
 	}
 

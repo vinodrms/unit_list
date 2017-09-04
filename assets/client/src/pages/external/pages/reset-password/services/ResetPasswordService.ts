@@ -26,7 +26,9 @@ export class ResetPasswordService {
 		resetPasswd.buildFromObject(this._resetPasswdForm.value);
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.AccountRequestResetPassword,
-			parameters: { requestData: resetPasswd }
+			body: JSON.stringify({
+				requestData: resetPasswd
+			})
 		});
 	}
 

@@ -15,9 +15,9 @@ export class EagerPriceProductsService {
 	public getActivePriceProducts(): Observable<PriceProductsDO> {
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.PriceProducts,
-			parameters: {
+			body: JSON.stringify({
 				searchCriteria: { status: PriceProductStatus.Active }
-			}
+			})
 		}).map((resultObject: Object) => {
 			var priceProducts = new PriceProductsDO();
 			priceProducts.buildFromObject(resultObject);
@@ -31,11 +31,11 @@ export class EagerPriceProductsService {
 		}
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.PriceProducts,
-			parameters: {
+			body: JSON.stringify({
 				searchCriteria: {
 					priceProductIdList: priceProductIdList, status: priceProductStatus
 				}
-			}
+			})
 		}).map((resultObject: Object) => {
 			var priceProducts = new PriceProductsDO();
 			priceProducts.buildFromObject(resultObject);

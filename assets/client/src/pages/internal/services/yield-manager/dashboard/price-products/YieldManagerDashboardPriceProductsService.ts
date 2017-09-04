@@ -39,9 +39,9 @@ export class YieldManagerDashboardPriceProductsService extends ARequestService<P
             this._dashboardFilterService.getTextFilterCollections(),
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.YieldManagerYieldGetPriceProductItems,
-                parameters: {
+                body: JSON.stringify({
                     yieldParams: this._yieldManagerPeriodParam
-                }
+                })
             })
         ).map((result: [FilterVMCollection<ColorFilterVM>[], FilterVMCollection<TextFilterVM>[], Object]) => {
             var yieldResultObject = result[2];
@@ -95,9 +95,9 @@ export class YieldManagerDashboardPriceProductsService extends ARequestService<P
     public yieldPriceProducts(yieldParam: PriceProductYieldParam): Observable<PriceProductsDO> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.YieldManagerYieldPriceProducts,
-            parameters: {
+            body: JSON.stringify({
                 yieldData: yieldParam
-            }
+            })
         }).map((priceProductsObject: Object) => {
             var priceProducts = new PriceProductsDO();
             priceProducts.buildFromObject(priceProductsObject);
@@ -107,7 +107,9 @@ export class YieldManagerDashboardPriceProductsService extends ARequestService<P
     public openDynamicPrice(yieldParam: DynamicPriceYieldParam): Observable<PriceProductDO> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.YieldManagerOpenDynamicPrice,
-            parameters: { yieldData: yieldParam }
+            body: JSON.stringify({ 
+                yieldData: yieldParam 
+            })
         }).map((priceProductObject: Object) => {
             var priceProduct = new PriceProductDO();
             priceProduct.buildFromObject(priceProductObject);

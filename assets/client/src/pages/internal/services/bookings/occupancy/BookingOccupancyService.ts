@@ -13,12 +13,12 @@ export class BookingOccupancyService {
     public getBookingOccupancyFor(interval: ThDateIntervalDO, bookingIdToOmit?: string): Observable<BookingOccupancyDO> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.BookingsOccupancy,
-            parameters: {
+            body: JSON.stringify({
                 filters: {
                     interval: interval,
                     bookingIdToOmit: bookingIdToOmit
                 }
-            }
+            })
         }).map((occupancyObject: Object) => {
             var bookingOccupancyDO = new BookingOccupancyDO();
             bookingOccupancyDO.buildFromObject(occupancyObject["bookingOccupancy"]);

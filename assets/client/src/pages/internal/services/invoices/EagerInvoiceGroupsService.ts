@@ -15,7 +15,7 @@ export class EagerInvoiceGroupsService {
     public getInvoiceGroup(invoiceGroupId: string): Observable<InvoiceGroupDO> {
         return this._appContext.thHttp.get({
             serverApi: ThServerApi.InvoiceGroupItem,
-            parameters: {
+            queryParameters: {
                 id: invoiceGroupId
             }
         }).map((invoiceGroupObject: Object) => {
@@ -28,9 +28,9 @@ export class EagerInvoiceGroupsService {
     public getInvoiceGroupList(searchCriteria: InvoiceGroupsQuery): Observable<InvoiceGroupDO[]> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.InvoiceGroups,
-            parameters: {
+            body: JSON.stringify({
                 searchCriteria: searchCriteria
-            }
+            })
         }).map((invoiceGroupsObject: Object) => {
             var invoiceGroupsDO = new InvoiceGroupsDO();
             invoiceGroupsDO.buildFromObject(invoiceGroupsObject);

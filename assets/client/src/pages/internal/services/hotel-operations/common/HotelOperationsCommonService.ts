@@ -13,9 +13,9 @@ export class HotelOperationsCommonService {
     public sendEmail(emailConfig: EmailConfirmationParams): Observable<boolean> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.HotelOperationsCommonSendEmail,
-            parameters: {
+            body: JSON.stringify({
                 emailConfig: emailConfig
-            }
+            })
         }).map((result: boolean) => {
             return result;
         });

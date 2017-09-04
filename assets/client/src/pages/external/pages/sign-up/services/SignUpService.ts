@@ -38,9 +38,9 @@ export class SignUpService {
 		var signUpDO = this.getSignUpDO();
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.AccountSignUp,
-			parameters: {
+			body: JSON.stringify({
 				accountData: signUpDO
-			}
+			})
 		});
 	}
 

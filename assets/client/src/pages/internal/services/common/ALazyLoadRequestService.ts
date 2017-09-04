@@ -76,7 +76,7 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 	private updateCount() {
 		this._appContext.thHttp.post({
 			serverApi: this._countApi,
-			parameters: this.getParameters()
+			body: JSON.stringify(this.getParameters())
 		}).map((countObject: Object) => {
 			var countDO = new TotalCountDO();
 			countDO.buildFromObject(countObject);
@@ -90,7 +90,7 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 	private updatePageData() {
 		this._appContext.thHttp.post({
 			serverApi: this._pageDataApi,
-			parameters: this.getParameters()
+			body: JSON.stringify(this.getParameters())
 		}).map((pageDataObject: Object) => {
 			var pageMeta: PageMetaDO = new PageMetaDO();
 			pageMeta.buildFromObject(pageDataObject["lazyLoad"]);

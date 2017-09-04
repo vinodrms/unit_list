@@ -16,9 +16,9 @@ export class AllotmentsTotalCountService extends ARequestService<TotalCountDO> {
 		var searchCriteria = { status: this._allotmentStatus };
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.AllotmentsCount,
-			parameters: {
+			body: JSON.stringify({
 				searchCriteria: searchCriteria
-			}
+			})
 		});
 	}
 	protected parseResult(result: Object): TotalCountDO {

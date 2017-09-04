@@ -52,9 +52,9 @@ export class CustomersService extends ALazyLoadRequestService<CustomerVM> {
 	public saveCustomerDO(customer: CustomerDO): Observable<CustomerDO> {
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.CustomersSaveItem,
-			parameters: {
+			body: JSON.stringify({
 				customer: customer
-			}
+			})
 		}).map((customerObject: Object) => {
 			this.refreshData();
 

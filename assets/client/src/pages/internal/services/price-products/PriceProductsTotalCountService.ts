@@ -16,9 +16,9 @@ export class PriceProductsTotalCountService extends ARequestService<TotalCountDO
 		var searchCriteria = { status: this._priceProductStatus };
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.PriceProductsCount,
-			parameters: {
+			body: JSON.stringify({
 				searchCriteria: searchCriteria
-			}
+			})
 		});
 	}
 	protected parseResult(result: Object): TotalCountDO {

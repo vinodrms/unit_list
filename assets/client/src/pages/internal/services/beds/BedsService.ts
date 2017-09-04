@@ -57,9 +57,9 @@ export class BedsService extends ALazyLoadRequestService<BedVM> {
 	private runServerPostActionOnBed(apiAction: ThServerApi, bed: BedDO): Observable<BedDO> {
 		return this._appContext.thHttp.post({
 			serverApi: apiAction,
-			parameters: {
+			body: JSON.stringify({
 				bed: bed
-			}
+			})
 		}).map((bedObject: Object) => {
 			this.refreshData();
 

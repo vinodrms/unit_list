@@ -18,12 +18,12 @@ export class HotelOperationsBookingService {
     public getPossiblePrices(groupBookingId: string, bookingId: string): Observable<BookingPossiblePriceItemsDO> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.HotelOperationsBookingPossiblePrices,
-            parameters: {
+            body: JSON.stringify({
                 booking: {
                     groupBookingId: groupBookingId,
                     id: bookingId
                 }
-            }
+            })
         }).map((possiblePricesObject: Object) => {
             var possiblePrices = new BookingPossiblePriceItemsDO();
             possiblePrices.buildFromObject(possiblePricesObject);
@@ -35,9 +35,9 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsBookingChangeDates,
-                parameters: {
+                body: JSON.stringify({
                     booking: booking
-                }
+                })
             })
         );
     }
@@ -45,13 +45,13 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsBookingChangeNoShowTime,
-                parameters: {
+                body: JSON.stringify({
                     booking: {
                         groupBookingId: booking.groupBookingId,
                         id: booking.id,
                         noShowTimestamp: noShowTimestamp
                     }
-                }
+                })
             })
         );
     }
@@ -60,9 +60,9 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsBookingChangeCapacity,
-                parameters: {
+                body: JSON.stringify({
                     booking: booking
-                }
+                })
             })
         );
     }
@@ -71,14 +71,14 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsBookingAddPaymentGuarantee,
-                parameters: {
+                body: JSON.stringify({
                     booking: {
                         groupBookingId: booking.groupBookingId,
                         id: booking.id,
                         billedCustomerId: billedCustomer.id,
                         paymentMethod: paymentMethod
                     }
-                }
+                })
             })
         );
     }
@@ -87,9 +87,9 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsBookingChangeDetails,
-                parameters: {
+                body: JSON.stringify({
                     booking: booking
-                }
+                })
             })
         );
     }
@@ -98,9 +98,9 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsBookingChangeGuestOnInvoice,
-                parameters: {
+                body: JSON.stringify({
                     booking: booking
-                }
+                })
             })
         );
     }
@@ -109,9 +109,9 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsBookingChangeCustomers,
-                parameters: {
+                body: JSON.stringify({
                     booking: booking
-                }
+                })
             })
         );
     }
@@ -120,9 +120,9 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsBookingCancel,
-                parameters: {
+                body: JSON.stringify({
                     booking: booking
-                }
+                })
             })
         );
     }
@@ -131,9 +131,9 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsBookingReactivate,
-                parameters: {
+                body: JSON.stringify({
                     booking: booking
-                }
+                })
             })
         );
     }
@@ -142,9 +142,9 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsBookingReserveAddOnProducts,
-                parameters: {
+                body: JSON.stringify({
                     booking: booking
-                }
+                })
             })
         );
     }
@@ -153,9 +153,9 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsBookingChangePriceProduct,
-                parameters: {
+                body: JSON.stringify({
                     booking: booking
-                }
+                })
             })
         );
     }
@@ -164,9 +164,9 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsBookingUndoCheckIn,
-                parameters: {
+                body: JSON.stringify({
                     booking: booking
-                }
+                })
             })
         );
     }
@@ -174,9 +174,9 @@ export class HotelOperationsBookingService {
     public generateInvoice(booking: BookingDO): Observable<InvoiceGroupDO> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.HotelOperationsBookingGenerateInvoice,
-            parameters: {
+            body: JSON.stringify({
                 booking: booking
-            }
+            })
         }).map(invoiceGroupObject => {
             var updatedInvoiceGroupDO = new InvoiceGroupDO();
             updatedInvoiceGroupDO.buildFromObject(invoiceGroupObject["invoiceGroup"]);

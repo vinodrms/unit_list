@@ -27,7 +27,9 @@ export class YieldManagerDashboardKeyMetricsService extends ARequestService<KeyM
     protected sendRequest(): Observable<Object> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.YieldManagerGetKeyMetrics,
-            parameters: { yieldParams: this._yieldManagerPeriodParam }
+            body: JSON.stringify({ 
+                yieldParams: this._yieldManagerPeriodParam 
+            })
         });
     }
 

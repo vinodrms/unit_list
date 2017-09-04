@@ -112,7 +112,7 @@ export class VATComponent extends BaseComponent implements OnInit {
 				this.triggerVatDetailsChanged();
 				return this._appContext.thHttp.get({
 					serverApi: ThServerApi.ServiceVatVerifier,
-					parameters: {
+					queryParameters: {
 						countryCode: this.convertedCountryCode, vatNumber: this.vatCodeControl.value
 					}
 				})

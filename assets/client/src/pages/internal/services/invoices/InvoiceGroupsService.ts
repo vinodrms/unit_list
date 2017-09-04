@@ -62,7 +62,7 @@ export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupDO
     private runServerPostActionOnInvoiceGroup(apiAction: ThServerApi, postData: Object): Observable<InvoiceGroupDO> {
         return this._appContext.thHttp.post({
             serverApi: apiAction,
-            parameters: postData
+            body: JSON.stringify(postData)
         }).map((invoiceGroupObject: Object) => {
             var updatedInvoiceGroupDO = new InvoiceGroupDO();
             updatedInvoiceGroupDO.buildFromObject(invoiceGroupObject["invoiceGroup"]);

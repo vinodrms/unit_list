@@ -16,7 +16,7 @@ export abstract class ATextSearchRequestService<T> implements ITextSearchRequest
 	public searchItemsByText(text: string): Observable<T[]> {
 		return this._appContext.thHttp.post({
 			serverApi: this._pageDataApi,
-			parameters: this.getParameters(text)
+			body: JSON.stringify(this.getParameters(text))
 		}).flatMap((pageItemListDataObject: Object) => {
 			return this.parsePageItemListData(pageItemListDataObject);
 		});

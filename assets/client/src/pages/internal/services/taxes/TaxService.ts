@@ -26,9 +26,9 @@ export class TaxService extends ARequestService<TaxContainerDO> {
 	public saveTax(taxDO: TaxDO): Observable<TaxDO> {
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.TaxesSaveItem,
-			parameters: {
+			body: JSON.stringify({
 				tax: taxDO
-			}
+			})
 		}).map((taxObject: Object) => {
 			this.updateServiceResult();
 

@@ -41,7 +41,7 @@ export class HotelOperationsRoomService {
     private applyRoomChange(roomChangeApi: ThServerApi, postData: Object): Observable<BookingDO> {
         return this._appContext.thHttp.post({
             serverApi: roomChangeApi,
-            parameters: postData
+            body: JSON.stringify(postData)
         }).map((bookingObject: Object) => {
             var bookingDO = new BookingDO();
             bookingDO.buildFromObject(bookingObject["booking"]);
@@ -52,9 +52,9 @@ export class HotelOperationsRoomService {
     public updateMaintenanceStatus(roomMaintenanceStatusParam: ChangeRoomMaintenanceStatusParam): Observable<RoomDO> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.HotelOperationsRoomChangeMaintenanceStatus,
-            parameters: {
+            body: JSON.stringify({
                 room: roomMaintenanceStatusParam
-            }
+            })
         }).map((roomObject: Object) => {
             this._roomsService.refresh();
             var roomDO = new RoomDO();
@@ -66,9 +66,9 @@ export class HotelOperationsRoomService {
     public updateRollawayBedStatus(rollawayStatusParam: ChangeRoomRollawayStatusParam): Observable<RoomDO> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.HotelOperationsRoomChangeRollawayBedStatus,
-            parameters: {
+            body: JSON.stringify({
                 room: rollawayStatusParam
-            }
+            })
         }).map((roomObject: Object) => {
             this._roomsService.refresh();
             var roomDO = new RoomDO();
@@ -80,7 +80,7 @@ export class HotelOperationsRoomService {
     public getAttachedBooking(roomId: string): Observable<RoomAttachedBookingResultVM> {
         return this._appContext.thHttp.get({
             serverApi: ThServerApi.HotelOperationsRoomGetAttachedBooking,
-            parameters: {
+            queryParameters: {
                 roomId: roomId
             }
         }).map((resultObject: Object) => {

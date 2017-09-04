@@ -21,7 +21,7 @@ export class EagerBookingsService {
     public getBooking(groupBookingId: string, bookingId: string): Observable<BookingDO> {
         return this._appContext.thHttp.get({
             serverApi: ThServerApi.BookingsItem,
-            parameters: {
+            queryParameters: {
                 groupBookingId: groupBookingId,
                 bookingId: bookingId
             }
@@ -35,11 +35,11 @@ export class EagerBookingsService {
     public getCheckedInBookings(): Observable<BookingsDO> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.Bookings,
-            parameters: {
+            body: JSON.stringify({
                 searchCriteria: {
                     confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_CheckedId
                 }
-            }
+            })
         }).map((bookingsObject: Object) => {
             var bookings = new BookingsDO();
             bookings.buildFromObject(bookingsObject);
@@ -50,11 +50,11 @@ export class EagerBookingsService {
     public getBookingsByGroupBookingId(groupBookingId: string): Observable<BookingsDO> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.Bookings,
-            parameters: {
+            body: JSON.stringify({
                 searchCriteria: {
                     groupBookingId: groupBookingId
                 }
-            }
+            })
         }).map((bookingsObject: Object) => {
             var bookings = new BookingsDO();
             bookings.buildFromObject(bookingsObject);

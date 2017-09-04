@@ -52,7 +52,9 @@ export class LazyLoadRoomsService extends ALazyLoadRequestService<RoomVM> {
     private runServerPostActionOnRoom(apiAction: ThServerApi, room: RoomDO): Observable<RoomDO> {
         return this._appContext.thHttp.post({
             serverApi: apiAction,
-            parameters: { room: room }
+            body: JSON.stringify({ 
+                room: room 
+            })
         }).map((roomObject: Object) => {
             this.runRefreshOnDependencies();
             this.refreshData();

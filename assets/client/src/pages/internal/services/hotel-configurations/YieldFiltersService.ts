@@ -33,7 +33,9 @@ export class YieldFiltersService extends ARequestService<YieldFiltersDO> {
 
 		return this._appContext.thHttp.post({
 			serverApi: ThServerApi.HotelConfigurationsSaveYieldFilterValue,
-			parameters: { yieldFilterValue: yieldFilterValueObject }
+			body: JSON.stringify({ 
+				yieldFilterValue: yieldFilterValueObject 
+			})
 		}).map((yfValueObject: Object) => {
 			this.updateServiceResult();
 
