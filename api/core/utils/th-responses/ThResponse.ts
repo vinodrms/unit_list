@@ -25,6 +25,7 @@ export enum ThStatusCode {
 	HotelRepositoryAccountAlreadyExists,
 	HotelRepositoryErrorAddingHotel,
 	HotelLoginError,
+	UserLogoutError,
 	HotelRepositoryErrorFindingAccount,
 	HotelRepositoryAccountNotFound,
 	HotelAuthenticationAccountNotActive,
@@ -67,6 +68,8 @@ export enum ThStatusCode {
 	HotelDetailsControllerErrorSavingTaxItem,
 	HotelRepositoryHotelIdNotFound,
 	HotelRepositoryErrorFindingHotelById,
+	HotelRepositoryErrorFindingUser,
+	HotelRepositoryUserSearchError,
 	HotelDetailsRepositoryProblemUpdatingAccount,
 	HotelDetailsRepositoryErrorUpdatingAccount,
 	PaymentMethodIdListValidatorInvalid,
@@ -524,7 +527,7 @@ export enum ThStatusCode {
 	BookingChangePriceProductError,
 	BookingChangePriceProductInvalidState,
 	BookingChangePriceProductPaidInvoice,
-	
+
 	// Reports
 	ReportsMetadataListFetchError,
 	ReportFetchError,
@@ -539,6 +542,9 @@ export enum ThStatusCode {
 	//OAuth tokens
 	OAuthTokenRepositoryOAuthTokenNotFound,
 	OAuthTokenRepositoryErrorGettingOAuthToken,
+	OAuthTokenRepositoryErrorUpdatingToken,
+	OAuthTokenRepositoryErrorSavingToken,
+	OAuthTokenErrorDeletingToken,
 
 }
 
@@ -566,6 +572,7 @@ ThMessage[ThStatusCode.HotelSignUpError] = "Error signing up. Please try again."
 ThMessage[ThStatusCode.HotelRepositoryAccountAlreadyExists] = "An account with this email already exists.";
 ThMessage[ThStatusCode.HotelRepositoryErrorAddingHotel] = "Error adding the information. Please try again.";
 ThMessage[ThStatusCode.HotelLoginError] = "Error signing in. Please try again.";
+ThMessage[ThStatusCode.UserLogoutError] = "Error logging you out. Please try again.";
 ThMessage[ThStatusCode.HotelRepositoryErrorFindingAccount] = "Error finding account. Please try again.";
 ThMessage[ThStatusCode.HotelRepositoryAccountNotFound] = "Invalid email or password.";
 ThMessage[ThStatusCode.HotelAuthenticationAccountNotActive] = "The account is not active.";
@@ -1068,7 +1075,10 @@ ThMessage[ThStatusCode.FileServiceErrorDeletingFile] = "Error deleting file";
 
 //OAuth Tokens
 ThMessage[ThStatusCode.OAuthTokenRepositoryOAuthTokenNotFound] = "OAuth token was not found.";
-ThMessage[ThStatusCode.OAuthTokenRepositoryErrorGettingOAuthToken] = "Error retrieving the OAuth token.";
+ThMessage[ThStatusCode.OAuthTokenRepositoryErrorGettingOAuthToken] = "Error retrieving the token.";
+ThMessage[ThStatusCode.OAuthTokenRepositoryErrorUpdatingToken] = "There was a problem when generating the new token.";
+ThMessage[ThStatusCode.OAuthTokenRepositoryErrorSavingToken] = "There was a problem when saving the new token.";
+ThMessage[ThStatusCode.OAuthTokenErrorDeletingToken] = "There was a problem when removing new token.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;
