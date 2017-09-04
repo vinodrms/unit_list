@@ -4,8 +4,9 @@ import {ThServerApi} from './ThServerApi';
 
 export interface RequestConfiguration {
     serverApi: ThServerApi;
-    headers?: Dictionary<string>;
-    parameters?: Object;
+    headers?: Object;
+    queryParameters?: Object;
+    body?: any;
 };
 
 export interface UploadedFileResponse {

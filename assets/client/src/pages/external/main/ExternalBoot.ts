@@ -10,7 +10,6 @@ import { ExternalRouting } from './ExternalRouterConfig';
 import { IThCookie } from '../../../common/utils/cookies/IThCookie';
 import { ThCookie } from '../../../common/utils/cookies/ThCookie';
 import { IThHttp } from '../../../common/utils/http/IThHttp';
-import { ThHttp } from '../../../common/utils/http/ThHttp';
 import { IBrowserLocation } from '../../../common/utils/browser-location/IBrowserLocation';
 import { BrowserLocation } from '../../../common/utils/browser-location/BrowserLocation';
 import { IRouterNavigator } from '../../../common/utils/navigator/IRouterNavigator';
@@ -28,6 +27,11 @@ import { ModuleLoaderService } from '../../../common/utils/module-loader/ModuleL
 import { SharedDirectivesModule } from '../../../common/utils/directives/modules/SharedDirectivesModule';
 import { SharedPipesModule } from '../../../common/utils/pipes/modules/SharedPipesModule';
 import { ExternalPagesModule } from '../pages/ExternalPagesModule';
+import { ITokenService } from "../../../common/utils/oauth-token/ITokenService";
+import { TokenService } from "../../../common/utils/oauth-token/TokenService";
+import { IThLocalStorage } from "../../../common/utils/local-storage/IThLocalStorage";
+import { ThLocalStorage } from "../../../common/utils/local-storage/ThLocalStorage";
+import { ThOAuthHttp } from "../../../common/utils/http/oauth/ThOAuthHttp";
 
 @NgModule({
 	imports: [BrowserModule, HttpModule, RouterModule, ExternalRouting,
@@ -36,10 +40,12 @@ import { ExternalPagesModule } from '../pages/ExternalPagesModule';
 	bootstrap: [MainLayoutExternalComponent],
 	providers: [
 		{ provide: IThCookie, useClass: ThCookie },
+		{ provide: IThLocalStorage, useClass: ThLocalStorage },
 		{ provide: IBrowserLocation, useClass: BrowserLocation },
 		{ provide: IRouterNavigator, useClass: RouterNavigator },
 		ThTranslation,
-		{ provide: IThHttp, useClass: ThHttp },
+		{ provide: ITokenService, useClass: TokenService },
+		{ provide: IThHttp, useClass: ThOAuthHttp },
 		{ provide: IToaster, useClass: Toaster },
 		{ provide: IModalService, useClass: ModalService },
 		{ provide: IAnalytics, useClass: GoogleAnalytics },
