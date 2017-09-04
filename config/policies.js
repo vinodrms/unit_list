@@ -26,7 +26,7 @@ module.exports.policies = {
 	*                                                                          *
 	***************************************************************************/
 
-	'*': ['sessionAuth', 'contextBuilder', 'oauth'],
+	'*': ['oauth', 'contextBuilder'],
 
 	/***************************************************************************
 	*                                                                          *
@@ -44,6 +44,12 @@ module.exports.policies = {
 		'logIn': ['contextBuilder'],
         'requestResetPassword': ['contextBuilder'],
 		'resetPassword': ['contextBuilder']
+	},
+	InvoiceGroupsController: {
+		'downloadInvoicePdf': ['contextBuilder']
+	},
+	ReportsController: {
+		'getReport': ['contextBuilder']
 	},
 	HealthCheckController: {
 		'getHealth': ['contextBuilder']
