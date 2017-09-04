@@ -34,6 +34,12 @@ export class LogInComponent extends BaseFormComponent implements OnInit, OnDestr
 			this.displayStatusAlertIfNecessary();
 			this._location.replaceState("");
 		});
+
+
+		this._logInService.isAuthenticated().subscribe((loginResult: Object) => {
+			this.goToMainPage(loginResult);
+			this.isLoading = false;
+		});
 	}
 	ngOnDestroy() {
 		this._statusCodeSubscription.unsubscribe();
