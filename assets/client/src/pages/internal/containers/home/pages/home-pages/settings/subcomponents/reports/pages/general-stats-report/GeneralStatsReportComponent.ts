@@ -10,17 +10,20 @@ import { HotelDetailsDO } from "../../../../../../../../../services/hotel/data-o
 import { ThDateUtils } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateUtils";
 import { ThDateIntervalDO } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO";
 import { SettingsReportsUrlBuilderService } from "../../main/services/SettingsReportsUrlBuilderService";
+import { ThPeriodOption, ThPeriodType } from "../../utils/ThPeriodType";
 
 @Component({
     selector: 'settings-key-metrics-report',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/monthly-stats-report/template/settings-monthly-stats-report.html',
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/general-stats-report/template/settings-general-stats-report.html',
     providers: []
 })
-export class MonthlyStatsReportComponent extends BaseComponent {
+export class GeneralStatsReportComponent extends BaseComponent {
     private format: ReportOutputFormatType;
 	private isLoading: boolean = false;
 	private startDate: ThDateDO;
 	private endDate: ThDateDO;
+	private periodOptionList: ThPeriodOption[];
+	private selectedPeriodType: ThPeriodType;
     
     constructor(
 		private _appContext: AppContext,
@@ -28,7 +31,9 @@ export class MonthlyStatsReportComponent extends BaseComponent {
 		private _pagesService: SettingsReportsPagesService,
 		private _urlBuilderService: SettingsReportsUrlBuilderService) {
 		super();
-		this._pagesService.bootstrapSelectedTab(ReportGroupType.MonthlyStats);
+		this._pagesService.bootstrapSelectedTab(ReportGroupType.GeneralStats);
+		this.periodOptionList = ThPeriodOption.getValues();
+		this.selectedPeriodType = this.periodOptionList[2].type;
 	}
 	ngOnInit() {
 		this.isLoading = true;
@@ -63,15 +68,20 @@ export class MonthlyStatsReportComponent extends BaseComponent {
 
 	public reportCSVUrl(): string {
 		let params = {
-			reportType: ReportGroupType.MonthlyStats,
+			reportType: ReportGroupType.GeneralStats,
 			format: this.format,
 			properties: {
 				startDate: this.startDate,
 				endDate: this.endDate,
+				periodType: this.selectedPeriodType,
 				
 			}
 		}
 
 		return this._urlBuilderService.getReportUrl(params);
+	}
+
+	public didSelectPeriodOption(periodType: string) {
+		this.selectedPeriodType = parseInt(periodType);
 	}
 }

@@ -16,7 +16,7 @@ import { SettingsHousekeepingReportComponent } from "./pages/housekeeping-report
 import { BookingsReportComponent } from "./pages/bookings-report/BookingsReportComponent";
 import { InvoicesReportComponent } from "./pages/invoices-report/InvoicesReportComponent";
 import { SettingsGuestsReportComponent } from "./pages/guests-report/SettingsGuestsReportComponent";
-import { MonthlyStatsReportComponent } from "./pages/monthly-stats-report/MonthlyStatsReportComponent";
+import { GeneralStatsReportComponent } from "./pages/general-stats-report/GeneralStatsReportComponent";
 
 import { TimezoneService } from '../../../../../../../services/timezones/TimezoneService';
 import { CustomerSelectorModule } from "../../../../../../common/inventory/customer-register/utils/CustomerSelectorModule";
@@ -31,7 +31,7 @@ var settingsReportsComponents = [
     SettingsHousekeepingReportComponent,
     BookingsReportComponent,
     InvoicesReportComponent,
-    MonthlyStatsReportComponent,
+    GeneralStatsReportComponent,
     
 ];
 @NgModule({

@@ -969,8 +969,9 @@ export var EnglishTranslations: Object = {
 	"Leisure": "Leisure",
 	"Travel As": "Travel As",
 	"Group": "Group",
-	"Monthly Stats Report": "Monthly Stats Report",
-	"Contains general hotel stats for a month": "Contains general hotel stats for a month",
+	"General Stats Report": "General Stats Report",
+	"Contains general hotel stats": "Contains general hotel stats",
 	"Payment Due in Days": "Payment Due in Days",
+	"Group By": "Group By",
 	
 };

@@ -16,17 +16,17 @@ import { KeyMetricsResultItem, KeyMetric } from "../../../yield-manager/key-metr
 
 import _ = require('underscore');
 
-export class BreakfastRevenueByBookingSegmentSectionGenerator extends AReportSectionGeneratorStrategy {
-    private static KeyMetricList = [KeyMetricType.BreakfastRevenueByBookingSegment];
+export class ArrivalsSectionGenerator extends AReportSectionGeneratorStrategy {
+    private static KeyMetricList = [KeyMetricType.Arrivals];
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
-        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem) {
+        private _periodType: ThPeriodType, private _kmResultItem: KeyMetricsResultItem, private _reportSectionHeader: ReportSectionHeader) {
         super(appContext, sessionContext, globalSummary);
     }
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Breakfast Price Charged Included in the Price Product"
+            title: "Guest Arrivals"
         }
     }
 
@@ -39,16 +39,13 @@ export class BreakfastRevenueByBookingSegmentSectionGenerator extends AReportSec
     }
 
     protected getHeader(): ReportSectionHeader {
-        return {
-            display: false,
-            values: []
-        };
+        return this._reportSectionHeader;
     }
 
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
         var data: any[] = [];
         _.filter(this._kmResultItem.metricList, (metric: KeyMetric) => {
-            return _.contains(BreakfastRevenueByBookingSegmentSectionGenerator.KeyMetricList, metric.type);
+            return _.contains(ArrivalsSectionGenerator.KeyMetricList, metric.type);
         }).forEach((metric: KeyMetric) => {
             let displayValue = this._appContext.thTranslate.translate(metric.displayName);
             let row: any = [displayValue];
