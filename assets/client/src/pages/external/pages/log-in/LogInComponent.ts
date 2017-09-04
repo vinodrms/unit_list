@@ -1,19 +1,21 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {FormGroup} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {Location} from '@angular/common';
-import {Subscription} from 'rxjs/Subscription';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { Subscription } from 'rxjs/Subscription';
 
-import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
-import {LogInService} from './services/LogInService';
-import {LogInStatusCodeParser, LoginStatusAction} from './utils/LogInStatusCodeParser';
-import {ThError} from '../../../../common/utils/responses/ThError';
-import {AppContext} from '../../../../common/utils/AppContext';
+import { BaseFormComponent } from '../../../../common/base/BaseFormComponent';
+import { LogInService } from './services/LogInService';
+import { LogInStatusCodeParser, LoginStatusAction } from './utils/LogInStatusCodeParser';
+import { ThError } from '../../../../common/utils/responses/ThError';
+import { AppContext } from '../../../../common/utils/AppContext';
+import { HotelService } from "../../../internal/services/hotel/HotelService";
+import { HotelDetailsDO } from "../../../internal/services/hotel/data-objects/HotelDetailsDO";
 
 @Component({
 	selector: 'log-in-component',
 	templateUrl: '/client/src/pages/external/pages/log-in/template/log-in-component.html',
-	providers: [LogInService]
+	providers: [LogInService, HotelService]
 })
 export class LogInComponent extends BaseFormComponent implements OnInit, OnDestroy {
 	public isLoading: boolean = false;
@@ -23,6 +25,7 @@ export class LogInComponent extends BaseFormComponent implements OnInit, OnDestr
 	constructor(
 		private _appContext: AppContext,
 		private _logInService: LogInService,
+		private _hotelService: HotelService,
 		private _location: Location,
 		private _activatedRoute: ActivatedRoute) {
 		super();
@@ -35,10 +38,13 @@ export class LogInComponent extends BaseFormComponent implements OnInit, OnDestr
 			this._location.replaceState("");
 		});
 
-
+		this.isLoading = true;
 		this._logInService.isAuthenticated().subscribe((loginResult: Object) => {
-			this.goToMainPage(loginResult);
-			this.isLoading = false;
+			this._hotelService.getHotelDetailsDO().subscribe((result: HotelDetailsDO) => {
+				this.isLoading = false;
+				this.goToMainPage(result);
+			});
+			
 		});
 	}
 	ngOnDestroy() {
@@ -72,18 +78,24 @@ export class LogInComponent extends BaseFormComponent implements OnInit, OnDestr
 			this._appContext.toaster.error(errorMessage);
 			return;
 		}
+
 		this.isLoading = true;
-		this._logInService.logIn().subscribe((loginResult: Object) => {
-			this.isLoading = false;
-			this.goToMainPage(loginResult);
-		}, (error: ThError) => {
+
+		let onError = (error: ThError) => {
 			this.isLoading = false;
 			this._appContext.toaster.error(this._appContext.thTranslation.translate("Invalid username or password"));
-		});
+		};
+
+		this._logInService.logIn().subscribe((loginResult: Object) => {
+			this._hotelService.getHotelDetailsDO().subscribe((result: HotelDetailsDO) => {
+				this.isLoading = false;
+				this.goToMainPage(result);
+			}, onError);
+		}, onError);
 	}
-	private goToMainPage(loginResult: Object) {
-		if (!this._appContext.thUtils.isUndefinedOrNull(loginResult, "configurationCompleted")) {
-			if (loginResult["configurationCompleted"] === false) {
+	private goToMainPage(result: HotelDetailsDO) {
+		if (!this._appContext.thUtils.isUndefinedOrNull(result.hotel.configurationCompleted)) {
+			if (result.hotel.configurationCompleted === false) {
 				this._appContext.browserLocation.goToWizardPage();
 				return;
 			}
