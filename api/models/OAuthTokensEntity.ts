@@ -19,7 +19,7 @@ class OAuthTokensEntity extends BasePersistentEntity {
                 type: "string",
                 required: true
             },
-            accessTokenExpiresOn: {
+            accessTokenExpiresAt: {
                 type: "float",
                 required: true
             },
@@ -27,7 +27,7 @@ class OAuthTokensEntity extends BasePersistentEntity {
                 type: "string",
                 required: true
             },
-            refreshTokenExpiresOn: {
+            refreshTokenExpiresAt: {
                 type: "float",
                 required: true
             },
@@ -36,6 +36,10 @@ class OAuthTokensEntity extends BasePersistentEntity {
                 required: true
             },
             userId: {
+                type: "string",
+                required: true
+            },
+            clientId: {
                 type: "string",
                 required: true
             }

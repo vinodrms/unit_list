@@ -9,7 +9,6 @@ import { ILoginService } from './login/ILoginService';
 import { IImageStorageService } from './image-storage/IImageStorageService';
 import { CloudinaryImageStorageService } from './image-storage/cloudinary/CloudinaryImageStorageService';
 import { MockImageStorageService } from './image-storage/mock/MockImageStorageService';
-import { PassportLoginService } from './login/custom/PassportLoginService';
 import { MomentTimeZonesService } from './time-zones/providers/moment/MomentTimeZonesService';
 import { ITimeZonesService } from './time-zones/ITimeZonesService';
 import { INotificationService } from './notifications/INotificationService';
@@ -24,6 +23,8 @@ import { PdfReportsService } from './pdf-reports/providers/PdfReportsService';
 import { MockPdfReportsService } from './pdf-reports/providers/MockPdfReportsService';
 import { IFileService } from './file-service/IFileService'
 import { FileService } from './file-service/FileService'
+import { ITokenService } from "../domain-layer/token/ITokenService";
+import { TokenService } from "../domain-layer/token/TokenService";
 
 declare var sails: any;
 
@@ -52,9 +53,6 @@ export class ServiceFactory {
                 return new CloudinaryImageStorageService(this._unitPalConfig);
         }
     }
-    public getLoginService(): ILoginService {
-        return new PassportLoginService();
-    }
     public getTimeZonesService(): ITimeZonesService {
         return new MomentTimeZonesService();
     }
@@ -80,5 +78,9 @@ export class ServiceFactory {
 
     public getFileService(): IFileService {
         return new FileService();
+    }
+
+    public getTokenService(): ITokenService {
+        return new TokenService(this._unitPalConfig);
     }
 }

@@ -1,9 +1,10 @@
-import {ThLogger, ThLogLevel} from './logging/ThLogger';
-import {ThError} from './th-responses/ThError';
-import {ThStatusCode} from './th-responses/ThResponse';
-import {Locales} from './localization/ThTranslation';
-import {UserRoles, UserDO} from '../data-layer/hotel/data-objects/user/UserDO';
-import {HotelDO} from '../data-layer/hotel/data-objects/HotelDO';
+import { ThLogger, ThLogLevel } from './logging/ThLogger';
+import { ThError } from './th-responses/ThError';
+import { ThStatusCode } from './th-responses/ThResponse';
+import { Locales } from './localization/ThTranslation';
+import { UserRoles, UserDO } from '../data-layer/hotel/data-objects/user/UserDO';
+import { HotelDO } from '../data-layer/hotel/data-objects/HotelDO';
+import { IUser } from "../bootstrap/oauth/OAuthServerInitializer";
 
 export class SessionDO {
 	user: {
@@ -13,6 +14,17 @@ export class SessionDO {
 	}
 	hotel: {
 		id: string
+	}
+
+	public buildFromUserInfo(user: IUser) {
+		this.user = {
+			id: user.id,
+			email: user.email,
+			roleList: user.roleList
+		};
+		this.hotel = {
+			id: user.hotelId
+		}
 	}
 }
 export class SessionContext {
@@ -42,27 +54,24 @@ export class SessionManager {
 		});
 	}
 	public getSessionContext(loginData: { user: UserDO, hotel: HotelDO }): SessionContext {
-		var sessionDO: SessionDO = {
-			user: {
-				id: loginData.user.id,
-				email: loginData.user.email,
-				roleList: loginData.user.roleList
-			},
-			hotel: {
-				id: loginData.hotel.id
-			}
-		};
+		let sessionDO = new SessionDO();
+		sessionDO.user = {
+			id: loginData.user.id,
+			email: loginData.user.email,
+			roleList: loginData.user.roleList
+		}
+		sessionDO.hotel = {
+			id: loginData.hotel.id
+		}
+
 		return {
 			sessionDO: sessionDO,
 			language: loginData.user.language
 		}
 	}
-	public destroySession() {
-		this._req.logout();
-	}
 	public sessionExists(): boolean {
 		var sessionContext: SessionContext = this._req["user"];
-		if (this._req.isAuthenticated() && sessionContext) {
+		if (sessionContext) {
 			return true;
 		}
 		return false;
