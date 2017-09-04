@@ -4,15 +4,17 @@ import { SettingsNavbarService } from '../../navbar/services/SettingsNavbarServi
 import { SettingsPageType } from '../../navbar/services/utils/SettingsPageType';
 import { SettingsReportsPageVM } from './services/utils/SettingsReportsPageVM';
 import { SettingsReportsPagesService } from './services/SettingsReportsPagesService';
+import { SettingsReportsUrlBuilderService } from "./services/SettingsReportsUrlBuilderService";
 
 @Component({
 	selector: 'settings-reports',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/main/template/settings-reports.html',
-	providers: [SettingsReportsPagesService]
+	providers: [SettingsReportsUrlBuilderService, SettingsReportsPagesService]
 })
 export class SettingsReportsComponent extends BaseComponent {
 	constructor(private _navbarService: SettingsNavbarService,
-		private _reportsService: SettingsReportsPagesService) {
+		private _reportsService: SettingsReportsPagesService,
+		) {
 		super();
 		this._navbarService.bootstrap(SettingsPageType.Reports);
 	}

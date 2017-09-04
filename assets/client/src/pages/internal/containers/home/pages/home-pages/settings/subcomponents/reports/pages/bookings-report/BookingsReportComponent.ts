@@ -14,6 +14,7 @@ import { ThDateDO } from "../../../../../../../../../services/common/data-object
 import { HotelDetailsDO } from "../../../../../../../../../services/hotel/data-objects/HotelDetailsDO";
 import { HotelService } from "../../../../../../../../../services/hotel/HotelService";
 import { Observable } from "rxjs/Observable";
+import { SettingsReportsUrlBuilderService } from "../../main/services/SettingsReportsUrlBuilderService";
 
 import * as _ from "underscore";
 
@@ -40,7 +41,8 @@ export class BookingsReportComponent extends BaseComponent implements OnInit {
     constructor(private _appContext: AppContext,
         private _pagesService: SettingsReportsPagesService,
         private _eagerPriceProductsService: EagerPriceProductsService,
-        private _hotelService: HotelService) {
+        private _hotelService: HotelService,
+        private _urlBuilderService: SettingsReportsUrlBuilderService) {
         super();
         this.filterByBookingCreationDate = false;
         this._pagesService.bootstrapSelectedTab(ReportGroupType.Bookings);
@@ -146,7 +148,7 @@ export class BookingsReportComponent extends BaseComponent implements OnInit {
             params.properties["bookingCreationStartDate"] = this.bookingCreationStartDate;
             params.properties["bookingCreationEndDate"] = this.bookingCreationEndDate;
         }
-        var encodedParams = encodeURI(JSON.stringify(params));
-        return 'api/reports/report?params=' + encodedParams;
+        
+        return this._urlBuilderService.getReportUrl(params);
     }
 }
