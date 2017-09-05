@@ -24,7 +24,8 @@ function getSignUpDO(): HotelSignUpDO {
 		firstName: "Dragos",
 		lastName: "Pricope",
 		hotelName: "3angleTECH Hotel",
-		password: "TestTest01"
+		password: "TestTest01",
+		signupCode: "12345"
 	};
 	return signUpDO;
 }

@@ -536,7 +536,13 @@ export enum ThStatusCode {
 
 	//File service
 	FileServiceErrorWritingFile,
-	FileServiceErrorDeletingFile
+	FileServiceErrorDeletingFile,
+
+	// Signup code
+	SignupCodeRepositorySignupCodeNotFound,
+	SignupCodeRepositoryErrorGettingSignupCode,
+	SignupCodeRepositoryErrorAddingSignupCode,
+
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -1064,6 +1070,11 @@ ThMessage[ThStatusCode.ReportsHKBookingCustomers] = "Error getting compnay/TA fo
 // File service
 ThMessage[ThStatusCode.FileServiceErrorWritingFile] = "Error writing file";
 ThMessage[ThStatusCode.FileServiceErrorDeletingFile] = "Error deleting file";
+
+// Signup code
+ThMessage[ThStatusCode.SignupCodeRepositorySignupCodeNotFound] = "Sign up code not found.";
+ThMessage[ThStatusCode.SignupCodeRepositoryErrorGettingSignupCode] = "Error getting sign up code by value.";
+ThMessage[ThStatusCode.SignupCodeRepositoryErrorAddingSignupCode] = "Error adding the sign up code.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;
