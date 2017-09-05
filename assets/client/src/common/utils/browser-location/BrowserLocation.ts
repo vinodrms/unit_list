@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {IBrowserLocation} from './IBrowserLocation';
-import {LoginStatusCode} from '../responses/LoginStatusCode';
+import { Injectable } from '@angular/core';
+import { IBrowserLocation } from './IBrowserLocation';
+import { LoginStatusCode } from '../responses/LoginStatusCode';
 
 @Injectable()
 export class BrowserLocation implements IBrowserLocation {
@@ -9,6 +9,10 @@ export class BrowserLocation implements IBrowserLocation {
 	}
 
 	public goToLoginPage(statusCode: LoginStatusCode) {
+		if (location.pathname === '') return;
+		if (location.pathname === '/') return;
+		if (location.pathname.startsWith('/login')) return;
+
 		location.href = '/login/' + statusCode;
 	}
 	public goToWizardPage() {
