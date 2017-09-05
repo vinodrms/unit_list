@@ -29,9 +29,10 @@ export class HotelDO extends BaseDO {
 	operationHours: OperationHoursDO;
 	sequences: HotelSequencesDO;
 	paymentDueInDays: number;
+	signupCode: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "versionId", "logoUrl", "ccyCode", "amenityIdList", "additionalInvoiceDetails", "configurationCompleted", "timezone", "paymentDueInDays"];
+		return ["id", "versionId", "logoUrl", "ccyCode", "amenityIdList", "additionalInvoiceDetails", "configurationCompleted", "timezone", "paymentDueInDays", "signupCode"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
