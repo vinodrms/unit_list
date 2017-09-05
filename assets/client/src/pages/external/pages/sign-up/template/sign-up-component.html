@@ -1,6 +1,6 @@
 <form [formGroup]="getDefaultFormGroup()">
 	<h1>{{ "Create Account" | translate }}</h1>
-	
+
 	<div class="form-group">
 		<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('hotelName')}">
 			<input type="text" class="form-control" placeholder="{{ 'Hotel Name' | translate }}" formControlName="hotelName" />
@@ -21,7 +21,8 @@
 	</div>
 	<div class="form-group">
 		<div class="input-group" [ngClass]="{'form-warning': confirmationControlIsInvalid('passwordConfirmation', 'password')}">
-			<input type="password" class="form-control" placeholder="{{ 'Confirm Password' | translate }}" formControlName="passwordConfirmation" />
+			<input type="password" class="form-control" placeholder="{{ 'Confirm Password' | translate }}" formControlName="passwordConfirmation"
+			/>
 		</div>
 		<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'The passwords should match' | translate }}</small></label>
 	</div>
@@ -36,6 +37,15 @@
 			<input type="text" class="form-control" placeholder="{{ 'Last Name' | translate }}" formControlName="lastName" />
 		</div>
 		<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter your last name' | translate }}</small></label>
+	</div>
+	<div class="form-group">
+		<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('signupCode')}">
+			<input type="text" class="form-control" placeholder="{{ 'Sign Up Code' | translate }}" formControlName="signupCode" />
+		</div>
+		<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the sign up code' | translate }}</small></label>
+		<div class="text-left">
+			<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Don\'t have a code yet? Click' | translate }} <a href="http://unitpal.dk/contact">{{ 'here' | translate }}</a> {{'to get one' | translate }}</small>
+		</div>
 	</div>
 	<div>
 		<loading-button [isLoading]="isLoading" title="Create Account" (didClick)="signUp()"></loading-button>

@@ -539,6 +539,13 @@ export enum ThStatusCode {
 	FileServiceErrorWritingFile,
 	FileServiceErrorDeletingFile,
 
+	// Signup code
+	SignupCodeRepositorySignupCodeNotFound,
+	SignupCodeRepositoryErrorGettingSignupCode,
+	SignupCodeRepositoryErrorAddingSignupCode,
+	SignupCodeRepositoryErrorDeletingSignupCode,
+	SignupCodeRepositorySignupCodeInvalid,
+
 	//OAuth tokens
 	OAuthTokenRepositoryOAuthTokenNotFound,
 	OAuthTokenRepositoryErrorGettingOAuthToken,
@@ -1072,6 +1079,13 @@ ThMessage[ThStatusCode.ReportsHKBookingCustomers] = "Error getting compnay/TA fo
 // File service
 ThMessage[ThStatusCode.FileServiceErrorWritingFile] = "Error writing file";
 ThMessage[ThStatusCode.FileServiceErrorDeletingFile] = "Error deleting file";
+
+// Signup code
+ThMessage[ThStatusCode.SignupCodeRepositorySignupCodeNotFound] = "Invalid sign up code.";
+ThMessage[ThStatusCode.SignupCodeRepositoryErrorGettingSignupCode] = "Error getting sign up code by value.";
+ThMessage[ThStatusCode.SignupCodeRepositoryErrorAddingSignupCode] = "Error adding the sign up code.";
+ThMessage[ThStatusCode.SignupCodeRepositoryErrorDeletingSignupCode] = "Error deleting sign up code.";
+ThMessage[ThStatusCode.SignupCodeRepositorySignupCodeInvalid] = "Invalid sign up code.";
 
 //OAuth Tokens
 ThMessage[ThStatusCode.OAuthTokenRepositoryOAuthTokenNotFound] = "OAuth token was not found.";

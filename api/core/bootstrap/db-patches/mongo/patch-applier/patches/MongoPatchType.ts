@@ -7,4 +7,6 @@ export enum MongoPatchType {
     ChangeReservedAddOnProductListStructureForBookings,
     AddPaymentDueInDaysToHotels,
     AddIndexForBookingsSort,
+    AddSignupCodes,
+    
 }
