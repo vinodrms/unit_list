@@ -5,8 +5,7 @@ import { AllotmentDO, AllotmentStatus } from '../../../../data-layer/allotments/
 import { AllotmentsContainer } from '../../../allotments/validators/results/AllotmentsContainer';
 import { RoomDO } from '../../../../data-layer/rooms/data-objects/RoomDO';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { ThUtils } from '../../../../utils/ThUtils';
 import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
 
@@ -25,7 +24,7 @@ export class BookingWithDependencies {
     private _roomList: RoomDO[];
     private _roomCategoryStatsList: RoomCategoryStatsDO[];
 
-    private _invoiceGroupList: InvoiceGroupDO[];
+    private _invoiceList: InvoiceDO[];
 
     private _billingCustomer: CustomerDO;
 
@@ -83,11 +82,11 @@ export class BookingWithDependencies {
     public set roomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) {
         this._roomCategoryStatsList = roomCategoryStatsList;
     }
-    public get invoiceGroupList(): InvoiceGroupDO[] {
-        return this._invoiceGroupList;
+    public get invoiceList(): InvoiceDO[] {
+        return this._invoiceList;
     }
-    public set invoiceGroupList(invoiceGroupList: InvoiceGroupDO[]) {
-        this._invoiceGroupList = invoiceGroupList;
+    public set invoiceList(invoiceList: InvoiceDO[]) {
+        this._invoiceList = invoiceList;
     }
     public get billingCustomer(): CustomerDO {
         return this._billingCustomer;
@@ -103,19 +102,20 @@ export class BookingWithDependencies {
     }
 
     public hasClosedInvoice(): boolean {
-        let invoiceGroup = this.getInvoiceGroupDO();
-        if (this._thUtils.isUndefinedOrNull(invoiceGroup)) { return false; }
-
-        let invoice = invoiceGroup.getInvoiceForBooking(this._bookingDO.id);
+        let invoice = this.getInvoice();
         if (this._thUtils.isUndefinedOrNull(invoice)) { return false; }
         return invoice.isClosed();
     }
 
-    public getInvoiceGroupDO(): InvoiceGroupDO {
-        if (this._invoiceGroupList.length == 0) { return null; }
-        return _.find(this._invoiceGroupList, (groupInvoice: InvoiceGroupDO) => {
-            return groupInvoice.groupBookingId === this._bookingDO.groupBookingId;
+    public getInvoice(): InvoiceDO {
+        if (this.invoiceList.length == 0) { return null; }
+        let debitInvoices = _.filter(this.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.paymentStatus != InvoicePaymentStatus.Credit;
         });
+        debitInvoices = _.sortBy(debitInvoices, (invoice: InvoiceDO) => {
+            return invoice.paidTimestamp;
+        });
+        return _.last(debitInvoices);
     }
 
     public getRoom(): RoomDO {

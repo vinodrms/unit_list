@@ -1,19 +1,17 @@
+import _ = require('underscore');
 import { HotelOperationsDeparturesInfo, DeparturelItemInfo, DeparturelItemBookingStatus, DepartureItemCustomerInfo } from './HotelOperationsDeparturesInfo';
 import { BookingDO, BookingConfirmationStatus } from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import { CustomersContainer } from '../../../../customers/validators/results/CustomersContainer';
-import { InvoiceGroupDO } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
 import { ThUtils } from '../../../../../utils/ThUtils';
-
-import _ = require('underscore');
+import { InvoiceDO } from "../../../../../data-layer/invoices/data-objects/InvoiceDO";
 
 export class HotelOperationsDeparturesInfoBuilder {
-    private _thUtils: ThUtils;
-    private _departuresInfo: HotelOperationsDeparturesInfo;
+    private thUtils: ThUtils;
+    private departuresInfo: HotelOperationsDeparturesInfo;
 
     constructor() {
-        this._thUtils = new ThUtils();
-        this._departuresInfo = new HotelOperationsDeparturesInfo();
+        this.thUtils = new ThUtils();
+        this.departuresInfo = new HotelOperationsDeparturesInfo();
     }
 
     public appendBookingList(bookingList: BookingDO[]) {
@@ -49,90 +47,68 @@ export class HotelOperationsDeparturesInfoBuilder {
             bookingNotes: booking.notes,
             billedCustomerId: booking.defaultBillingDetails.customerId
         }
-        this._departuresInfo.departureInfoList.push(departureItemInfo);
+        this.departuresInfo.departureInfoList.push(departureItemInfo);
     }
 
-    public appendInvoiceInformation(invoiceGroupList: InvoiceGroupDO[], attachedBookingList: BookingDO[]) {
-        var filteredInvoiceGroupList = this.filterOpenInvoices(invoiceGroupList);
-        filteredInvoiceGroupList = this.filterInvoiceGroupsWithAtLeastOneInvoice(filteredInvoiceGroupList);
-        this.linkInvoicesWithBookings(filteredInvoiceGroupList);
-        filteredInvoiceGroupList = this.filterInvoiceGroupsWithAtLeastOneInvoice(filteredInvoiceGroupList);
-        this.createInvoiceDepartureItemForGroupList(filteredInvoiceGroupList, attachedBookingList);
+    public appendInvoiceInformation(invoiceList: InvoiceDO[], attachedBookingList: BookingDO[]) {
+        var filteredInvoiceList = this.filterOpenInvoices(invoiceList);
+        filteredInvoiceList = this.linkInvoicesWithBookings(filteredInvoiceList);
+        this.createInvoiceDepartureItemForInvoices(filteredInvoiceList, attachedBookingList);
     }
-    private filterOpenInvoices(invoiceGroupList: InvoiceGroupDO[]): InvoiceGroupDO[] {
-        _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
-            invoiceGroup.invoiceList = _.filter(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return !invoice.isClosed() });
-        });
-        return invoiceGroupList;
+    private filterOpenInvoices(invoiceList: InvoiceDO[]): InvoiceDO[] {
+        return _.filter(invoiceList, (invoice: InvoiceDO) => { return !invoice.isClosed() });
     }
-    private filterInvoiceGroupsWithAtLeastOneInvoice(invoiceGroupList: InvoiceGroupDO[]): InvoiceGroupDO[] {
-        invoiceGroupList = _.filter(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
-            return invoiceGroup.invoiceList.length > 0;
+    private linkInvoicesWithBookings(invoiceList: InvoiceDO[]): InvoiceDO[] {
+        let unlinkedInvoices = invoiceList;
+        _.forEach(this.departuresInfo.departureInfoList, (departureItem: DeparturelItemInfo) => {
+            var linkedInvoice = this.getLinkedInvoice(unlinkedInvoices, departureItem);
+            if (!this.thUtils.isUndefinedOrNull(linkedInvoice)) {
+                departureItem.invoiceGroupId = linkedInvoice.groupId;
+                departureItem.invoiceId = linkedInvoice.id;
+                departureItem.invoicePrice = linkedInvoice.amountToPay;
+                unlinkedInvoices = _.filter(unlinkedInvoices, (invoice: InvoiceDO) => { return invoice.id != linkedInvoice.id; });
+            }
         });
-        return invoiceGroupList;
+        return unlinkedInvoices;
+    }
+    private getLinkedInvoice(invoiceList: InvoiceDO[], departureItem: DeparturelItemInfo): InvoiceDO {
+        return _.find(invoiceList, (invoice: InvoiceDO) => {
+            return _.contains(invoice.indexedBookingIdList, departureItem.bookingId);
+        });
     }
 
-    private linkInvoicesWithBookings(invoiceGroupList: InvoiceGroupDO[]) {
-        _.forEach(this._departuresInfo.departureInfoList, (departureItem: DeparturelItemInfo) => {
-            var linkedInvoice = this.getLinkedInvoice(invoiceGroupList, departureItem);
-            if (!this._thUtils.isUndefinedOrNull(linkedInvoice)) {
-                departureItem.invoiceGroupId = linkedInvoice.invoiceGroupId;
-                departureItem.invoiceId = linkedInvoice.invoiceDO.id;
-                departureItem.invoicePrice = linkedInvoice.invoiceDO.getPrice();
+    private createInvoiceDepartureItemForInvoices(invoiceList: InvoiceDO[], attachedBookingList: BookingDO[]) {
+        _.forEach(invoiceList, (invoice: InvoiceDO) => {
+            if (this.invoiceHasOnlyCheckedInBookingsAttached(invoice, attachedBookingList)) {
+                return;
             }
-        });
-    }
-    private getLinkedInvoice(invoiceGroupList: InvoiceGroupDO[], departureItem: DeparturelItemInfo): { invoiceGroupId: string, invoiceDO: InvoiceDO } {
-        for (var index = 0; index < invoiceGroupList.length; index++) {
-            var invoiceGroup: InvoiceGroupDO = invoiceGroupList[index];
-            var foundInvoice = _.find(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return invoice.bookingId === departureItem.bookingId });
-            if (!this._thUtils.isUndefinedOrNull(foundInvoice)) {
-                invoiceGroup.invoiceList = _.filter(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return invoice.bookingId !== departureItem.bookingId });
-                return {
-                    invoiceGroupId: invoiceGroup.id,
-                    invoiceDO: foundInvoice
-                };
+            var departureItemInfo: DeparturelItemInfo = {
+                customerId: invoice.payerList[0].customerId,
+                bookingItemStatus: DeparturelItemBookingStatus.CanNotCheckOut,
+                invoiceGroupId: invoice.groupId,
+                invoiceId: invoice.id,
+                invoicePrice: invoice.amountToPay
             }
-        }
-        return null;
-    }
-    private createInvoiceDepartureItemForGroupList(invoiceGroupList: InvoiceGroupDO[], attachedBookingList: BookingDO[]) {
-        _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
-            this.createInvoiceDepartureItemForGroup(invoiceGroup, attachedBookingList);
+            this.departuresInfo.departureInfoList.push(departureItemInfo);
         });
     }
-    private createInvoiceDepartureItemForGroup(invoiceGroup: InvoiceGroupDO, attachedBookingList: BookingDO[]) {
-        _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-            this.createInvoiceDepartureItemForInvoice(invoiceGroup.id, invoice, attachedBookingList);
-        });
-    }
-    private createInvoiceDepartureItemForInvoice(invoiceGroupId: string, invoice: InvoiceDO, attachedBookingList: BookingDO[]) {
-        if (this.invoiceHasAttachedCheckedInBooking(invoice, attachedBookingList)) {
-            return;
-        }
-        var departureItemInfo: DeparturelItemInfo = {
-            customerId: invoice.payerList[0].customerId,
-            bookingItemStatus: DeparturelItemBookingStatus.CanNotCheckOut,
-            invoiceGroupId: invoiceGroupId,
-            invoiceId: invoice.id,
-            invoicePrice: invoice.getPrice()
-        }
-        this._departuresInfo.departureInfoList.push(departureItemInfo);
-    }
-    private invoiceHasAttachedCheckedInBooking(invoice: InvoiceDO, attachedBookingList: BookingDO[]): boolean {
-        if (this._thUtils.isUndefinedOrNull(invoice.bookingId)) {
+
+    private invoiceHasOnlyCheckedInBookingsAttached(invoice: InvoiceDO, attachedBookingList: BookingDO[]): boolean {
+        if (invoice.isWalkInInvoice()) {
             return false;
         }
-        var attachedBooking = _.find(attachedBookingList, (booking: BookingDO) => { return booking.id === invoice.bookingId });
-        if (this._thUtils.isUndefinedOrNull(attachedBooking)) {
-            return false;
-        }
-        return attachedBooking.confirmationStatus === BookingConfirmationStatus.CheckedIn;
+        let bookingList: BookingDO[] = _.filter(attachedBookingList, (booking: BookingDO) => {
+            return _.contains(invoice.indexedBookingIdList, booking.id);
+        });
+        let checkedInBookingList: BookingDO[] = _.filter(bookingList, (booking: BookingDO) => {
+            return booking.confirmationStatus === BookingConfirmationStatus.CheckedIn;
+        });
+        return bookingList.length == checkedInBookingList.length;
     }
 
     public getCustomerIdList(): string[] {
         let customerIdList = [];
-        _.forEach(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => {
+        _.forEach(this.departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => {
             let guestCustomerIdList = _.map(departureInfoItem.guestCustomerInfoList, (customerInfo: DepartureItemCustomerInfo) => {
                 return customerInfo.customerId;
             });
@@ -140,7 +116,7 @@ export class HotelOperationsDeparturesInfoBuilder {
             customerIdList.push(departureInfoItem.customerId);
         });
 
-        var departureInfoListWithCorporateCustomerId = _.filter(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => { return departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0 });
+        var departureInfoListWithCorporateCustomerId = _.filter(this.departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => { return departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0 });
         customerIdList = _.union(customerIdList, _.map(departureInfoListWithCorporateCustomerId, (departureInfoItem: DeparturelItemInfo) => {
             if (departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0) {
                 return departureInfoItem.corporateCustomerId;
@@ -150,7 +126,7 @@ export class HotelOperationsDeparturesInfoBuilder {
     }
 
     public appendCustomerInformation(customersContainer: CustomersContainer) {
-        _.forEach(this._departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => {
+        _.forEach(this.departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => {
             var customer = customersContainer.getCustomerById(departureInfoItem.customerId);
             departureInfoItem.customerName = customer.customerDetails.getName();
             if (departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0) {
@@ -169,6 +145,6 @@ export class HotelOperationsDeparturesInfoBuilder {
     }
 
     public getBuiltHotelOperationsDeparturesInfo(): HotelOperationsDeparturesInfo {
-        return this._departuresInfo;
+        return this.departuresInfo;
     }
 }

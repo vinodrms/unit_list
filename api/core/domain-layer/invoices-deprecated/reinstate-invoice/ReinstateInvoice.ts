@@ -41,7 +41,7 @@ export class ReinstateInvoice {
                 this._loadedInvoiceGroup = loadedInvoiceGroup;
 
                 _.forEach(this._loadedInvoiceGroup.invoiceList, (invoiceDO: InvoiceDO, index: number) => {
-                    if(invoiceDO.id === this._reinstatedInvoiceMeta.invoiceId) {
+                    if (invoiceDO.id === this._reinstatedInvoiceMeta.invoiceId) {
                         invoiceToBeReinstated = invoiceDO;
                         invoiceToBeReinstatedIndex = index;
                     }
@@ -101,6 +101,7 @@ export class ReinstateInvoice {
         });
 
         _.forEach(creditInvoice.payerList, (payer: InvoicePayerDO) => {
+            // TODO: this is a BUG; should reuse the `shouldApplyTransactionFee flag from the previous invoice !!!!
             payer.shouldApplyTransactionFee = true;
             payer.priceToPay = payer.priceToPay * -1;
             payer.priceToPayPlusTransactionFee = payer.priceToPayPlusTransactionFee * -1;
@@ -125,7 +126,7 @@ export class ReinstateInvoice {
     private buildInvoiceGroupItemMetaRepoDO(): InvoiceGroupItemMetaRepoDO {
         return {
             id: this._loadedInvoiceGroup.id,
-			versionId: this._loadedInvoiceGroup.versionId
+            versionId: this._loadedInvoiceGroup.versionId
         }
     }
 }

@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
@@ -21,14 +22,12 @@ import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data
 import { RoomDO } from '../../../../data-layer/rooms/data-objects/RoomDO';
 import { PriceProductDO } from '../../../../data-layer/price-products/data-objects/PriceProductDO';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
-import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { BookingWithDependencies } from '../utils/BookingWithDependencies';
 import { NewBookingsValidationRules } from '../../../bookings/add-bookings/utils/NewBookingsValidationRules';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { BookingChangePriceProductDO } from './BookingChangePriceProductDO';
-
-import _ = require('underscore');
+import { InvoiceDO } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceSearchResultRepoDO } from "../../../../data-layer/invoices/repositories/IInvoiceRepository";
 
 export class BookingChangePriceProduct {
     private _thUtils: ThUtils;
@@ -43,7 +42,7 @@ export class BookingChangePriceProduct {
     private _loadedAllotmentsContainer: AllotmentsContainer;
     private _loadedRoomList: RoomDO[];
     private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
-    private _loadedInvoiceGroupList: InvoiceGroupDO[];
+    private _loadedInvoiceList: InvoiceDO[];
 
     private _booking: BookingDO;
 
@@ -137,13 +136,12 @@ export class BookingChangePriceProduct {
             }).then((validatedBookingList: BookingDO[]) => {
                 this._booking = validatedBookingList[0];
 
-                var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
-                return invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-                    groupBookingId: this._booking.groupBookingId,
+                var invoiceRepo = this._appContext.getRepositoryFactory().getInvoiceRepository();
+                return invoiceRepo.getInvoiceList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     bookingId: this._booking.id
                 });
-            }).then((invoiceGroupSearchResult: InvoiceGroupSearchResultRepoDO) => {
-                this._loadedInvoiceGroupList = invoiceGroupSearchResult.invoiceGroupList;
+            }).then((invoiceSearchResult: InvoiceSearchResultRepoDO) => {
+                this._loadedInvoiceList = invoiceSearchResult.invoiceList;
 
                 if (this.bookingHasClosedInvoice()) {
                     var thError = new ThError(ThStatusCode.BookingChangePriceProductPaidInvoice, null);
@@ -160,7 +158,7 @@ export class BookingChangePriceProduct {
             }).then((updatedBooking: BookingDO) => {
                 this._booking = updatedBooking;
                 return this._bookingInvoiceSync.syncInvoiceWithBookingPrice(updatedBooking);
-            }).then((updatedGroup: InvoiceGroupDO) => {
+            }).then((updated: InvoiceDO) => {
                 resolve(this._booking);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingChangePriceProductError, error);
@@ -182,7 +180,7 @@ export class BookingChangePriceProduct {
         bookingWithDependencies.allotmentsContainer = this._loadedAllotmentsContainer;
         bookingWithDependencies.roomList = this._loadedRoomList;
         bookingWithDependencies.roomCategoryStatsList = this._loadedRoomCategoryStatsList;
-        bookingWithDependencies.invoiceGroupList = this._loadedInvoiceGroupList;
+        bookingWithDependencies.invoiceList = this._loadedInvoiceList;
         return bookingWithDependencies.hasClosedInvoice();
     }
 

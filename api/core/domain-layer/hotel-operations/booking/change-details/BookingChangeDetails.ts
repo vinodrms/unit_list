@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
@@ -9,11 +10,9 @@ import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objec
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import { BookingInvoiceSync } from "../../../bookings/invoice-sync/BookingInvoiceSync";
-import { InvoiceGroupDO } from "../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO";
 import { BookingWithDependencies } from "../utils/BookingWithDependencies";
 import { BookingWithDependenciesLoader } from "../utils/BookingWithDependenciesLoader";
-
-import _ = require('underscore');
+import { InvoiceDO } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
 
 export class BookingChangeDetails {
     private _bookingInvoiceSync: BookingInvoiceSync;
@@ -72,13 +71,13 @@ export class BookingChangeDetails {
                 this._updatedBooking = updatedBooking;
 
                 if (!this._invoiceSyncRequired) {
-                    return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
+                    return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
                         resolve(null);
                     });
                 }
 
                 return this.syncInvoice();
-            }).then((updatedInvoiceGroup: InvoiceGroupDO) => {
+            }).then((updatedInvoice: InvoiceDO) => {
                 resolve(this._updatedBooking);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingChangeDetailsError, error);
@@ -95,14 +94,14 @@ export class BookingChangeDetails {
         return !this._bookingWithDependencies.hasClosedInvoice();
     }
 
-    private syncInvoice(): Promise<InvoiceGroupDO> {
-        return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
+    private syncInvoice(): Promise<InvoiceDO> {
+        return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
             this.syncInvoiceCore(resolve, reject);
         });
     }
-    private syncInvoiceCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-        this._bookingInvoiceSync.syncInvoiceWithBookingNotes(this._updatedBooking).then((invoiceGroupDO: InvoiceGroupDO) => {
-            resolve(invoiceGroupDO);
+    private syncInvoiceCore(resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) {
+        this._bookingInvoiceSync.syncInvoiceWithBookingNotes(this._updatedBooking).then((invoiceDO: InvoiceDO) => {
+            resolve(invoiceDO);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.BookingChangeDetailsInvoiceSyncError, error);
             if (thError.isNativeError()) {
