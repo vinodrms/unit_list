@@ -9,10 +9,9 @@ import { CustomersDO } from '../../../../../../../../../../../services/customers
 import { RoomVM } from '../../../../../../../../../../../services/rooms/view-models/RoomVM';
 import { RoomCategoryStatsDO } from '../../../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
 import { AllotmentDO } from '../../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
-import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO';
 import { AddOnProductsDO } from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
 import { HotelAggregatedPaymentMethodsDO } from "../../../../../../../../../../../services/settings/data-objects/HotelAggregatedPaymentMethodsDO";
+import { InvoiceDO } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceDO";
 
 export class BookingOperationsPageData {
     private _thUtils: ThUtils;
@@ -27,7 +26,6 @@ export class BookingOperationsPageData {
     private _customersContainer: CustomersDO;
     private _roomVM: RoomVM;
     private _roomCategoryStats: RoomCategoryStatsDO;
-    private _invoiceGroupDO: InvoiceGroupDO;
     private _invoiceDO: InvoiceDO;
     private _reservedAddOnProductsContainer: AddOnProductsDO;
 
@@ -97,12 +95,6 @@ export class BookingOperationsPageData {
     public set allotmentDO(allotmentDO: AllotmentDO) {
         this._allotmentDO = allotmentDO;
     }
-    public get invoiceGroupDO(): InvoiceGroupDO {
-        return this._invoiceGroupDO;
-    }
-    public set invoiceGroupDO(invoiceGroupDO: InvoiceGroupDO) {
-        this._invoiceGroupDO = invoiceGroupDO;
-    }
     public get invoiceDO(): InvoiceDO {
         return this._invoiceDO;
     }
@@ -117,11 +109,10 @@ export class BookingOperationsPageData {
     }
 
     public get hasInvoice(): boolean {
-        return !this._thUtils.isUndefinedOrNull(this.invoiceDO) &&
-            !this._thUtils.isUndefinedOrNull(this.invoiceGroupDO);
+        return !this._thUtils.isUndefinedOrNull(this.invoiceDO);
     }
     public get hasClosedInvoice(): boolean {
-        return this.hasInvoice && this.invoiceDO.isClosed;
+        return this.hasInvoice && this.invoiceDO.isClosed();
     }
     public get hasRoom(): boolean {
         return !this._thUtils.isUndefinedOrNull(this.roomVM) &&
@@ -140,7 +131,6 @@ export class BookingOperationsPageData {
         pageData.customersContainer = this.customersContainer;
         pageData.roomVM = this.roomVM;
         pageData.roomCategoryStats = this.roomCategoryStats;
-        pageData.invoiceGroupDO = this.invoiceGroupDO;
         pageData.invoiceDO = this.invoiceDO;
         pageData.reservedAddOnProductsContainer = this.reservedAddOnProductsContainer;
         return pageData;

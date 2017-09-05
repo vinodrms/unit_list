@@ -18,31 +18,30 @@ import { RoomAttributesDO } from '../../../../../../../../../../services/setting
 import { HotelRoomOperationsPageParam } from '../utils/HotelRoomOperationsPageParam';
 import { RoomOperationsPageData } from './utils/RoomOperationsPageData';
 import { BookingDO } from '../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import { EagerInvoiceGroupsServiceDeprecated } from '../../../../../../../../../../services/invoices-deprecated/EagerInvoiceGroupsService';
-import { InvoiceGroupDO } from '../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO';
 
 import * as _ from 'underscore';
+import { HotelOperationsInvoiceService } from "../../../../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
+import { InvoiceDO } from "../../../../../../../../../../services/invoices/data-objects/InvoiceDO";
 
 @Injectable()
 export class RoomOperationsPageService {
 
-    constructor(private _appContext: AppContext,
-        private _roomsService: RoomsService,
-        private _hotelOperationsRoomService: HotelOperationsRoomService,
-        private _bedsEagerService: BedsEagerService,
-        private _roomAmenitiesService: RoomAmenitiesService,
-        private _roomAttributesService: RoomAttributesService,
-        private _eagerInvoiceGroupsServiceDeprecated: EagerInvoiceGroupsServiceDeprecated) {
+    constructor(private context: AppContext,
+        private roomsService: RoomsService,
+        private hotelOperationsRoomService: HotelOperationsRoomService,
+        private bedsEagerService: BedsEagerService,
+        private roomAmenitiesService: RoomAmenitiesService,
+        private roomAttributesService: RoomAttributesService,
+        private invoiceService: HotelOperationsInvoiceService) {
     }
 
     public getPageData(roomOperationsPageParams: HotelRoomOperationsPageParam): Observable<RoomOperationsPageData> {
         return Observable.combineLatest(
-            this._roomsService.getRoomById(roomOperationsPageParams.roomId),
-            this._bedsEagerService.getBedAggregatedList(),
-            this._hotelOperationsRoomService.getAttachedBooking(roomOperationsPageParams.roomId),
-            this._roomAmenitiesService.getRoomAmenitiesDO(),
-            this._roomAttributesService.getRoomAttributesDO()
+            this.roomsService.getRoomById(roomOperationsPageParams.roomId),
+            this.bedsEagerService.getBedAggregatedList(),
+            this.hotelOperationsRoomService.getAttachedBooking(roomOperationsPageParams.roomId),
+            this.roomAmenitiesService.getRoomAmenitiesDO(),
+            this.roomAttributesService.getRoomAttributesDO()
         ).map((result: [RoomVM, BedVM[], RoomAttachedBookingResultVM, RoomAmenitiesDO, RoomAttributesDO]) => {
             var roomVM: RoomVM = result[0];
             var bedVMList: BedVM[] = result[1];
@@ -64,20 +63,13 @@ export class RoomOperationsPageService {
             return Observable.from([roomOperationsData]);
         }
         var attachedBooking: BookingDO = roomOperationsData.attachedBookingResultVM.roomAttachedBookingResultDO.booking;
-        if (this._appContext.thUtils.isUndefinedOrNull(attachedBooking)) {
+        if (this.context.thUtils.isUndefinedOrNull(attachedBooking)) {
             return Observable.from([roomOperationsData]);
         }
-        return this._eagerInvoiceGroupsServiceDeprecated.getInvoiceGroupList({
-            groupBookingId: attachedBooking.groupBookingId,
-            bookingId: attachedBooking.id
-        }).map((invoiceGroupList: InvoiceGroupDO[]) => {
-            if (invoiceGroupList.length > 0) {
-                roomOperationsData.invoiceGroupDO = invoiceGroupList[0];
-                roomOperationsData.invoiceDO = _.find(roomOperationsData.invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
-                    return invoice.bookingId === attachedBooking.id;
-                });
-            }
-            return roomOperationsData;
-        });
+        return this.invoiceService.getDefaultInvoiceForBooking(attachedBooking.id)
+            .map((invoice: InvoiceDO) => {
+                roomOperationsData.invoiceDO = invoice;
+                return roomOperationsData;
+            });
     }
 }

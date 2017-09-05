@@ -3,8 +3,8 @@ import { AppContext, ThError } from '../../../../../../../../../../../../../comm
 import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
 import { BookingOperationsPageData } from '../../services/utils/BookingOperationsPageData';
 import { HotelOperationsBookingService } from "../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService";
-import { InvoiceGroupDO } from "../../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO";
 import { BookingGenerateInvoiceRight } from "../../../../../../../../../../../services/bookings/data-objects/BookingEditRights";
+import { InvoiceDO } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceDO";
 
 @Component({
     selector: 'booking-links',
@@ -13,9 +13,9 @@ import { BookingGenerateInvoiceRight } from "../../../../../../../../../../../se
 export class BookingLinksComponent {
     @Input() bookingOperationsPageData: BookingOperationsPageData;
 
-    @Output() onInvoiceGenerated = new EventEmitter<InvoiceGroupDO>();
-    public triggerOnInvoiceGenerated(invoiceGroup: InvoiceGroupDO) {
-        this.onInvoiceGenerated.next(invoiceGroup);
+    @Output() onInvoiceGenerated = new EventEmitter<InvoiceDO>();
+    public triggerOnInvoiceGenerated(invoice: InvoiceDO) {
+        this.onInvoiceGenerated.next(invoice);
     }
 
     private isSaving: boolean = false;
@@ -28,13 +28,11 @@ export class BookingLinksComponent {
         return this.bookingOperationsPageData.hasInvoice;
     }
     public get invoiceIsPaid(): boolean {
-        return this.bookingOperationsPageData.invoiceDO.isPaid;
+        return this.bookingOperationsPageData.invoiceDO.isPaid();
     }
     public viewInvoice() {
         if (!this.hasInvoice) { return; }
-        this._operationsPageControllerService.goToInvoice(this.bookingOperationsPageData.invoiceGroupDO.id, {
-            bookingId: this.bookingOperationsPageData.bookingDO.id
-        }, false);
+        this._operationsPageControllerService.goToInvoice(this.bookingOperationsPageData.invoiceDO.id);
     }
 
     public get hasRoom(): boolean {
@@ -60,10 +58,10 @@ export class BookingLinksComponent {
     private generateInvoiceCore() {
         this.isSaving = true;
         this._hotelOperationsBookingService.generateInvoice(this.bookingOperationsPageData.bookingDO)
-            .subscribe((updatedBooking: InvoiceGroupDO) => {
+            .subscribe((createdInvoice: InvoiceDO) => {
                 this._appContext.analytics.logEvent("booking", "generate-invoice", "Generated an invoice for a booking");
                 this.isSaving = false;
-                this.triggerOnInvoiceGenerated(updatedBooking);
+                this.triggerOnInvoiceGenerated(createdInvoice);
             }, (error: ThError) => {
                 this.isSaving = false;
                 this._appContext.toaster.error(error.message);

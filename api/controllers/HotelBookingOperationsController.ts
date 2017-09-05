@@ -17,8 +17,8 @@ import { BookingReserveAddOnProducts } from '../core/domain-layer/hotel-operatio
 import { BookingChangePriceProduct } from '../core/domain-layer/hotel-operations/booking/change-price-product/BookingChangePriceProduct';
 import { BookingUndoCheckIn } from '../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckIn';
 import { BookingChangeGuestOnInvoice } from "../core/domain-layer/hotel-operations/booking/change-guest-invoice/BookingChangeGuestOnInvoice";
-import { GenerateBookingInvoiceDeprecated } from "../core/domain-layer/invoices-deprecated/generate-booking-invoice/GenerateBookingInvoice";
-import { InvoiceGroupDO } from "../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO";
+import { GenerateBookingInvoice } from "../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoice";
+import { InvoiceDO } from "../core/data-layer/invoices/data-objects/InvoiceDO";
 
 class HotelBookingOperationsController extends BaseController {
     public getPossiblePrices(req: any, res: any) {
@@ -192,9 +192,9 @@ class HotelBookingOperationsController extends BaseController {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
-        let generateBookingInvoiceDeprecated = new GenerateBookingInvoiceDeprecated(appContext, sessionContext);
-        generateBookingInvoiceDeprecated.generate(req.body.booking).then((invoiceGroup: InvoiceGroupDO) => {
-            this.returnSuccesfulResponse(req, res, { invoiceGroup: invoiceGroup });
+        let generateBookingInvoice = new GenerateBookingInvoice(appContext, sessionContext);
+        generateBookingInvoice.generate(req.body.booking).then((invoice: InvoiceDO) => {
+            this.returnSuccesfulResponse(req, res, { invoice: invoice });
         }).catch((error: any) => {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorUndoCheckIn);
         });

@@ -693,8 +693,8 @@ export var EnglishTranslations: Object = {
     "View": "View",
     "Amount paid": "Amount paid",
     "from": "from",
-    "Invoice group payment status": "Invoice group payment status",
-    "Open invoice group": "Open invoice group",
+    "Invoice payment status": "Invoice payment status",
+    "Open invoice %reference%": "Open invoice %reference%",
     "No Payment Guarantee": "No Payment Guarantee",
     "Arrivals": "Arrivals",
     "Departures": "Departures",
@@ -993,5 +993,6 @@ export var EnglishTranslations: Object = {
     "Could not find invoices. Empty group provided.": "Could not find invoices. Empty group provided.",
     "Generate the bookings on only one invoice": "Generate the bookings on only one invoice",
     "If marked Yes, all the bookings from this group will be generated on the same invoice.": "If marked Yes, all the bookings from this group will be generated on the same invoice.",
+    "Could not find invoices. Empty booking provided.": "Could not find invoices. Empty booking provided.",
 
 };

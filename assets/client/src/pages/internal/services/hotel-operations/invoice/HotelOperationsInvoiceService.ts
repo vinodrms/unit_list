@@ -18,12 +18,31 @@ export class HotelOperationsInvoiceService {
             let msg = this.context.thTranslation.translate("Could not find invoices. Empty group provided.");
             return Observable.throw(new ThError(msg));
         }
-        return this.context.thHttp.post(ThServerApi.Invoices, { searchCriteria: { groupId: groupId } })
-            .map((resultObject: Object) => {
-                var invoices = new InvoicesDO();
-                invoices.buildFromObject(resultObject);
-                return invoices.invoiceList;
+        return this.getInvoices({ groupId: groupId });
+    }
+
+    getDefaultInvoiceForBooking(bookingId: string): Observable<InvoiceDO> {
+        return this.getInvoicesForBooking(bookingId)
+            .map((invoiceList: InvoiceDO[]) => {
+                if (invoiceList.length == 0) {
+                    return null;
+                }
+                let unpaidInvoice = _.find(invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.isUnpaid();
+                });
+                if (!this.context.thUtils.isUndefinedOrNull(unpaidInvoice)) {
+                    return unpaidInvoice;
+                }
+                return invoiceList[0];
             });
+    }
+
+    getInvoicesForBooking(bookingId: string): Observable<InvoiceDO[]> {
+        if (this.context.thUtils.isUndefinedOrNull(bookingId)) {
+            let msg = this.context.thTranslation.translate("Could not find invoices. Empty booking provided.");
+            return Observable.throw(new ThError(msg));
+        }
+        return this.getInvoices({ bookingId: bookingId });
     }
 
     get(id: string): Observable<InvoiceDO> {
@@ -103,6 +122,14 @@ export class HotelOperationsInvoiceService {
         return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: invoice });
     }
 
+    private getInvoices(searchCriteria: Object): Observable<InvoiceDO[]> {
+        return this.context.thHttp.post(ThServerApi.Invoices, { searchCriteria: searchCriteria })
+            .map((resultObject: Object) => {
+                var invoices = new InvoicesDO();
+                invoices.buildFromObject(resultObject);
+                return invoices.invoiceList;
+            });
+    }
     private runHttpPostActionOnInvoice(apiAction: ThServerApi, postData: Object): Observable<InvoiceDO> {
         return this.context.thHttp.post(apiAction, postData)
             .map((result: Object) => {
