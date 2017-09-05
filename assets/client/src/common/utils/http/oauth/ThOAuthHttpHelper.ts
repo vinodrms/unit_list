@@ -34,7 +34,6 @@ export class ThOAuthHttpHelper {
 
 	public parseError(error: any, observer: Observer<Object>) {
 		if (error.status == HttpStatusCode.Forbidden) {
-			this.browserLocation.goToLoginPage(LoginStatusCode.SessionTimeout);
 			observer.error(error);
 			return;
 		}
@@ -50,7 +49,6 @@ export class ThOAuthHttpHelper {
 			this.parseJsonResult(resultJson, observer);
 		}
 		else if (result.status == HttpStatusCode.Forbidden) {
-			this.browserLocation.goToLoginPage(LoginStatusCode.SessionTimeout);
 			observer.error(result);
 		}
 		else {
