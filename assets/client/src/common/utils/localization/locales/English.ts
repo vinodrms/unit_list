@@ -972,5 +972,10 @@ export var EnglishTranslations: Object = {
 	"Contains general hotel stats": "Contains general hotel stats",
 	"Payment Due in Days": "Payment Due in Days",
 	"Group By": "Group By",
-	
+	"Enter the sign up code": "Enter the sign up code",
+	"Sign Up Code": "Sign Up Code",
+	"here": "here",
+	"Don\'t have a code yet? Click": "Don\'t have a code yet? Click",
+	"to get one": "to get one",
+		
 };

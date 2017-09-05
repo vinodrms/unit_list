@@ -1,4 +1,5 @@
 export class ThFieldLengths {
+	public static MaxSignupCodeLength = 5;
 	public static MaxCityLength = 100;
 	public static MaxCountryCodeLength = 2;
 	public static MaxCountryLength = 100;

@@ -19,7 +19,8 @@ export class SignUpService {
 			"password": ["", Validators.compose([Validators.required, ThValidators.passwordValidator])],
 			"passwordConfirmation": ["", Validators.compose([Validators.required, ThValidators.passwordValidator])],
 			"firstName": ["", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)])],
-			"lastName": ["", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)])]
+			"lastName": ["", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)])],
+			"signupCode": ["", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxSignupCodeLength)])]
 		})
 	}
 	public isValid(): boolean {
