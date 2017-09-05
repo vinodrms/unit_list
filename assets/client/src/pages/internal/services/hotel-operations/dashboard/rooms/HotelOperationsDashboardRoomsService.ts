@@ -1,18 +1,18 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
 
-import {AppContext, ThServerApi} from '../../../../../../common/utils/AppContext';
-import {ThDateDO} from '../../../common/data-objects/th-dates/ThDateDO';
-import {ARequestService} from '../../../common/ARequestService';
-import {RoomItemInfoDO, RoomItemStatus} from './data-objects/RoomItemInfoDO';
-import {RoomsInfoDO} from './data-objects/RoomsInfoDO';
-import {RoomItemInfoVM} from './view-models/RoomItemInfoVM';
-import {RoomsService} from '../../../rooms/RoomsService';
-import {RoomVM} from '../../../rooms/view-models/RoomVM';
+import { AppContext, ThServerApi } from '../../../../../../common/utils/AppContext';
+import { ThDateDO } from '../../../common/data-objects/th-dates/ThDateDO';
+import { ARequestService } from '../../../common/ARequestService';
+import { RoomItemInfoDO, RoomItemStatus } from './data-objects/RoomItemInfoDO';
+import { RoomsInfoDO } from './data-objects/RoomsInfoDO';
+import { RoomItemInfoVM } from './view-models/RoomItemInfoVM';
+import { RoomsService } from '../../../rooms/RoomsService';
+import { RoomVM } from '../../../rooms/view-models/RoomVM';
 
-import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
+import { ThTranslation } from '../../../../../../common/utils/localization/ThTranslation';
 
 import * as _ from "underscore";
 
@@ -22,14 +22,16 @@ export class HotelOperationsDashboardRoomsService extends ARequestService<RoomIt
         private _appContext: AppContext,
         private _roomsService: RoomsService,
         private _thTranslation: ThTranslation
-        ) {
+    ) {
         super();
     }
 
     protected sendRequest(): Observable<Object> {
         return Observable.combineLatest(
             this._roomsService.getRoomList(),
-            this._appContext.thHttp.post(ThServerApi.HotelOperationsDashboardRooms, {})
+            this._appContext.thHttp.post({
+                serverApi: ThServerApi.HotelOperationsDashboardRooms
+            })
         ).map((result: [RoomVM[], Object]) => {
             var roomVMList: RoomVM[] = result[0];
             var roomsInfoObject = result[1];
@@ -73,6 +75,6 @@ export class HotelOperationsDashboardRoomsService extends ARequestService<RoomIt
         });
     }
     public refresh() {
-		this.updateServiceResult();
-	}
+        this.updateServiceResult();
+    }
 }

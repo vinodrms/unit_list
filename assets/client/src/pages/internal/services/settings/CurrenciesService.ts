@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ARequestService} from '../common/ARequestService';
-import {CurrenciesDO} from './data-objects/CurrenciesDO';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ARequestService } from '../common/ARequestService';
+import { CurrenciesDO } from './data-objects/CurrenciesDO';
 
 @Injectable()
 export class CurrenciesService extends ARequestService<CurrenciesDO> {
@@ -10,7 +10,9 @@ export class CurrenciesService extends ARequestService<CurrenciesDO> {
 		super();
 	}
 	protected sendRequest(): Observable<Object> {
-		return this._appContext.thHttp.get(ThServerApi.SettingsCurrencies);
+		return this._appContext.thHttp.get({
+			serverApi: ThServerApi.SettingsCurrencies
+		});
 	}
 	protected parseResult(result: Object): CurrenciesDO {
 		var currenciesDO: CurrenciesDO = new CurrenciesDO();

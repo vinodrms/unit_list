@@ -46,6 +46,9 @@ export class MongoHotelRepository extends MongoRepository implements IHotelRepos
 	public getHotelList(lazyLoad: LazyLoadRepoDO): Promise<HotelDO[]> {
 		return this._hotelDetailsRepository.getHotelList(lazyLoad);
 	}
+	public getUser(hotelId: string, userId: string): Promise<UserDO> {
+		return this._hotelDetailsRepository.getUser(hotelId, userId);
+	}
 	public updateBasicInformation(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO): Promise<HotelDO> {
 		return this._hotelDetailsRepository.updateBasicInformation(hotelMeta, basicInfo);
 	}

@@ -1,19 +1,19 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
 
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ALazyLoadRequestService} from '../common/ALazyLoadRequestService';
-import {RoomDO} from './data-objects/RoomDO';
-import {RoomVM} from './view-models/RoomVM';
-import {RoomAmenitiesDO} from '../settings/data-objects/RoomAmenitiesDO';
-import {RoomAttributesDO} from '../settings/data-objects/RoomAttributesDO';
-import {RoomCategoriesStatsService} from '../room-categories/RoomCategoriesStatsService';
-import {RoomAmenitiesService} from '../settings/RoomAmenitiesService';
-import {RoomAttributesService} from '../settings/RoomAttributesService';
-import {RoomCategoryStatsDO} from '../room-categories/data-objects/RoomCategoryStatsDO';
-import {RoomVMBuilder} from './view-models/RoomVMBuilder';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ALazyLoadRequestService } from '../common/ALazyLoadRequestService';
+import { RoomDO } from './data-objects/RoomDO';
+import { RoomVM } from './view-models/RoomVM';
+import { RoomAmenitiesDO } from '../settings/data-objects/RoomAmenitiesDO';
+import { RoomAttributesDO } from '../settings/data-objects/RoomAttributesDO';
+import { RoomCategoriesStatsService } from '../room-categories/RoomCategoriesStatsService';
+import { RoomAmenitiesService } from '../settings/RoomAmenitiesService';
+import { RoomAttributesService } from '../settings/RoomAttributesService';
+import { RoomCategoryStatsDO } from '../room-categories/data-objects/RoomCategoryStatsDO';
+import { RoomVMBuilder } from './view-models/RoomVMBuilder';
 
 @Injectable()
 export class LazyLoadRoomsService extends ALazyLoadRequestService<RoomVM> {
@@ -50,7 +50,12 @@ export class LazyLoadRoomsService extends ALazyLoadRequestService<RoomVM> {
     }
 
     private runServerPostActionOnRoom(apiAction: ThServerApi, room: RoomDO): Observable<RoomDO> {
-        return this._appContext.thHttp.post(apiAction, { room: room }).map((roomObject: Object) => {
+        return this._appContext.thHttp.post({
+            serverApi: apiAction,
+            body: JSON.stringify({ 
+                room: room 
+            })
+        }).map((roomObject: Object) => {
             this.runRefreshOnDependencies();
             this.refreshData();
 

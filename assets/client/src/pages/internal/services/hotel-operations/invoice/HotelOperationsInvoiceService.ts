@@ -46,10 +46,14 @@ export class HotelOperationsInvoiceService {
     }
 
     get(id: string): Observable<InvoiceDO> {
-        return this.context.thHttp.get(ThServerApi.InvoicesItem, { id: id })
-            .map((invoiceObject: Object) => {
-                return this.convertInvoice(invoiceObject);
-            });
+        return this.context.thHttp.get({
+            serverApi: ThServerApi.InvoicesItem,
+            queryParameters: {
+                id: id
+            }
+        }).map((invoiceObject: Object) => {
+            return this.convertInvoice(invoiceObject);
+        });
     }
 
     addPayer(invoice: InvoiceDO, customerId: string): Observable<InvoiceDO> {
@@ -123,18 +127,22 @@ export class HotelOperationsInvoiceService {
     }
 
     private getInvoices(searchCriteria: Object): Observable<InvoiceDO[]> {
-        return this.context.thHttp.post(ThServerApi.Invoices, { searchCriteria: searchCriteria })
-            .map((resultObject: Object) => {
-                var invoices = new InvoicesDO();
-                invoices.buildFromObject(resultObject);
-                return invoices.invoiceList;
-            });
+        return this.context.thHttp.post({
+            serverApi: ThServerApi.Invoices,
+            body: JSON.stringify({ searchCriteria: searchCriteria })
+        }).map((resultObject: Object) => {
+            var invoices = new InvoicesDO();
+            invoices.buildFromObject(resultObject);
+            return invoices.invoiceList;
+        });
     }
     private runHttpPostActionOnInvoice(apiAction: ThServerApi, postData: Object): Observable<InvoiceDO> {
-        return this.context.thHttp.post(apiAction, postData)
-            .map((result: Object) => {
-                return this.convertInvoice(result["invoice"]);
-            });
+        return this.context.thHttp.post({
+            serverApi: apiAction,
+            body: JSON.stringify(postData)
+        }).map((result: Object) => {
+            return this.convertInvoice(result["invoice"]);
+        });
     }
     private convertInvoice(invoiceObject): InvoiceDO {
         var invoice = new InvoiceDO();

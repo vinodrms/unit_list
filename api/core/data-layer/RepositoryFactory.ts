@@ -35,6 +35,8 @@ import { MongoHotelInventorySnapshotRepository } from './hotel-inventory-snapsho
 import { IInvoiceRepository } from "./invoices/repositories/IInvoiceRepository";
 import { MongoInvoiceRepositoryWithBookingPriceLink } from "./invoices/repositories/mongo/decorators/MongoInvoiceRepositoryWithBookingPriceLink";
 import { MongoInvoiceRepository } from "./invoices/repositories/mongo/MongoInvoiceRepository";
+import { IOAuthTokenRepository } from "./oauth-tokens/IOAuthTokenRepository";
+import { MongoOAuthTokenRepository } from "./oauth-tokens/repositories/MongoOAuthTokenRepository";
 
 export class RepositoryFactory {
     private _databaseType: DatabaseType;
@@ -50,7 +52,8 @@ export class RepositoryFactory {
                 new MongoYieldFilterConfigurationRepository(), new MongoAllotmentRepository(), new MongoNotificationsRepository(),
                 new MongoBookingRepository(),
                 new MongoInvoiceGroupsRepository(new MongoHotelRepository()), new MongoHotelInventorySnapshotRepository(),
-                new MongoInvoiceRepository(new MongoHotelRepository()), new MongoBookingRepository(), new MongoCustomerRepository()];
+                new MongoInvoiceRepository(new MongoHotelRepository()), new MongoBookingRepository(), new MongoCustomerRepository(),
+                new MongoOAuthTokenRepository()];
         }
     }
 
@@ -165,6 +168,13 @@ export class RepositoryFactory {
         switch (this._databaseType) {
             default:
                 return new MongoHotelInventorySnapshotRepository();
+        }
+    }
+
+    getOAuthTokenRepository(): IOAuthTokenRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoOAuthTokenRepository();
         }
     }
 }

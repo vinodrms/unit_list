@@ -1,15 +1,15 @@
-import {Injectable} from '@angular/core';
-import {AppContext, ThServerApi} from '../../../../../../../common/utils/AppContext';
-import {IWizardState, WizardStateMeta} from './IWizardState';
-import {IWizardController} from './IWizardController';
-import {WizardBasicInformationStateService} from '../basic-information/main/services/WizardBasicInformationStateService';
-import {WizardBedsStateService} from '../beds/services/WizardBedsStateService';
-import {WizardRoomsStateService} from '../rooms/services/WizardRoomsStateService';
-import {WizardBreakfastStateService} from '../breakfast/services/WizardBreakfastStateService';
-import {WizardAddOnProductsStateService} from '../add-on-products/services/WizardAddOnProductsStateService';
-import {WizardPriceProductsStateService} from '../price-products/services/WizardPriceProductsStateService';
-import {WizardCustomerRegisterStateService} from '../customer-register/services/WizardCustomerRegisterStateService';
-import {WizardAllotmentsStateService} from '../allotments/services/WizardAllotmentsStateService';
+import { Injectable } from '@angular/core';
+import { AppContext, ThServerApi } from '../../../../../../../common/utils/AppContext';
+import { IWizardState, WizardStateMeta } from './IWizardState';
+import { IWizardController } from './IWizardController';
+import { WizardBasicInformationStateService } from '../basic-information/main/services/WizardBasicInformationStateService';
+import { WizardBedsStateService } from '../beds/services/WizardBedsStateService';
+import { WizardRoomsStateService } from '../rooms/services/WizardRoomsStateService';
+import { WizardBreakfastStateService } from '../breakfast/services/WizardBreakfastStateService';
+import { WizardAddOnProductsStateService } from '../add-on-products/services/WizardAddOnProductsStateService';
+import { WizardPriceProductsStateService } from '../price-products/services/WizardPriceProductsStateService';
+import { WizardCustomerRegisterStateService } from '../customer-register/services/WizardCustomerRegisterStateService';
+import { WizardAllotmentsStateService } from '../allotments/services/WizardAllotmentsStateService';
 
 @Injectable()
 export class WizardService implements IWizardState, IWizardController {
@@ -22,8 +22,8 @@ export class WizardService implements IWizardState, IWizardController {
 
 	constructor(private _appContext: AppContext,
 		basicInfo: WizardBasicInformationStateService, beds: WizardBedsStateService,
-        rooms: WizardRoomsStateService, breakfast: WizardBreakfastStateService, 
-        addOnProducts: WizardAddOnProductsStateService, priceProducts: WizardPriceProductsStateService,
+		rooms: WizardRoomsStateService, breakfast: WizardBreakfastStateService,
+		addOnProducts: WizardAddOnProductsStateService, priceProducts: WizardPriceProductsStateService,
 		customerRegister: WizardCustomerRegisterStateService, allotments: WizardAllotmentsStateService) {
 		this._stateList = [basicInfo, beds, rooms, breakfast, addOnProducts, priceProducts, customerRegister, allotments];
 		for (var stateIndex = 0; stateIndex < this._stateList.length; stateIndex++) {
@@ -50,7 +50,9 @@ export class WizardService implements IWizardState, IWizardController {
 		this.setCurrentState(this._currentState.stateIndex + 1, true);
 	}
 	private markConfigurationCompleted() {
-		this._appContext.thHttp.post(ThServerApi.HotelDetailsMarkConfigurationCompleted, {}).subscribe((result: any) => {});
+		this._appContext.thHttp.post({
+			serverApi: ThServerApi.HotelDetailsMarkConfigurationCompleted
+		}).subscribe((result: any) => { });
 	}
 	public movePrevious() {
 		if (this._currentState.stateIndex == 0) {

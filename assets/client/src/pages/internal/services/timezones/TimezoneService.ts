@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ARequestService} from '../common/ARequestService';
-import {TimezoneResponseDO} from './data-objects/TimezoneResponseDO';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ARequestService } from '../common/ARequestService';
+import { TimezoneResponseDO } from './data-objects/TimezoneResponseDO';
 
 @Injectable()
 export class TimezoneService extends ARequestService<TimezoneResponseDO> {
@@ -10,7 +10,9 @@ export class TimezoneService extends ARequestService<TimezoneResponseDO> {
         super();
     }
     protected sendRequest(): Observable<Object> {
-        return this._appContext.thHttp.get(ThServerApi.ServiceTimezones);
+        return this._appContext.thHttp.get({
+            serverApi: ThServerApi.ServiceTimezones
+        });
     }
     protected parseResult(result: Object): TimezoneResponseDO {
         var timezoneResponseDO: TimezoneResponseDO = new TimezoneResponseDO();

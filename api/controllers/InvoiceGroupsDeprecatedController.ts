@@ -2,7 +2,7 @@ import { ThError } from '../core/utils/th-responses/ThError';
 import { BaseController } from './base/BaseController';
 import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
 import { AppContext } from '../core/utils/AppContext';
-import { SessionContext } from '../core/utils/SessionContext';
+import { SessionContext, SessionDO } from '../core/utils/SessionContext';
 import { ThTranslation } from '../core/utils/localization/ThTranslation';
 import { InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO } from '../core/data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository';
 import { InvoiceGroupDO } from '../core/data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
@@ -14,8 +14,9 @@ import { InvoiceAggregatedData } from '../core/domain-layer/invoices-deprecated/
 import { InvoiceConfirmationVMContainer } from '../core/domain-layer/invoices-deprecated/invoice-confirmations/InvoiceConfirmationVMContainer';
 import { ReportType, PdfReportsServiceResponse } from '../core/services/pdf-reports/IPdfReportsService';
 import { ReinstateInvoice } from "../core/domain-layer/invoices-deprecated/reinstate-invoice/ReinstateInvoice";
-
-import path = require("path");
+import { TokenService } from "../core/domain-layer/token/TokenService";
+import { ITokenService } from "../core/domain-layer/token/ITokenService";
+import { IUser } from "../core/bootstrap/oauth/OAuthServerInitializer";
 
 /**
  * @deprecated
@@ -89,19 +90,28 @@ export class InvoiceGroupsDeprecatedController extends BaseController {
     }
 
     public downloadInvoicePdf(req: any, res: any) {
+        let pdfReportsService = req.appContext.getServiceFactory().getPdfReportsService();
+        let thTranslation = new ThTranslation(req.sessionContext.language);
+        let tokenService: ITokenService = req.appContext.getServiceFactory().getTokenService();
+        let generatedPdfAbsolutePath: string;
 
-        var pdfReportsService = req.appContext.getServiceFactory().getPdfReportsService();
-        var invoiceDataAggregator = new InvoiceDataAggregator(req.appContext, req.sessionContext);
-        var generatedPdfAbsolutePath: string;
-        var query: InvoiceDataAggregatorQuery = {
-            customerId: req.query['customerId'],
-            invoiceGroupId: req.query['invoiceGroupId'],
-            invoiceId: req.query['invoiceId'],
-            payerIndex: req.query['payerIndex']
-        };
-        var thTranslation = new ThTranslation(req.sessionContext.language);
+        tokenService.getUserInfoByAccessToken(req.query['token']).then((userInfo: IUser) => {
+            let sessionDO: SessionDO = new SessionDO();
+            sessionDO.buildFromUserInfo(userInfo);
+            req.sessionContext.sessionDO = sessionDO;
 
-        invoiceDataAggregator.getInvoiceAggregatedData(query).then((invoiceAggregatedData: InvoiceAggregatedData) => {
+
+            let invoiceDataAggregator = new InvoiceDataAggregator(req.appContext, req.sessionContext);
+
+            let query: InvoiceDataAggregatorQuery = {
+                customerId: req.query['customerId'],
+                invoiceGroupId: req.query['invoiceGroupId'],
+                invoiceId: req.query['invoiceId'],
+                payerIndex: req.query['payerIndex']
+            };
+
+            return invoiceDataAggregator.getInvoiceAggregatedData(query);
+        }).then((invoiceAggregatedData: InvoiceAggregatedData) => {
             var invoiceConfirmationVMContainer = new InvoiceConfirmationVMContainer(thTranslation);
             invoiceConfirmationVMContainer.buildFromInvoiceAggregatedDataContainer(invoiceAggregatedData);
 

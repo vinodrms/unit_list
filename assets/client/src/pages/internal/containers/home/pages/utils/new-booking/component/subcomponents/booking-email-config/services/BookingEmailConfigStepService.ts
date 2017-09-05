@@ -75,15 +75,19 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
             });
     }
     private postBookingsToServer(addBookingsObserver: Observer<BookingDO[]>, bookingItems: AddBookingItemsDO) {
-        this._appContext.thHttp.post(ThServerApi.BookingsAdd, { bookingItems: bookingItems })
-            .subscribe((result: any) => {
-                this._appContext.analytics.logEvent("booking", "add", "Added " + bookingItems.bookingList.length + " bookings");
-                addBookingsObserver.next(result.bookingList);
-                addBookingsObserver.complete();
-            }, (err: ThError) => {
-                addBookingsObserver.error(err);
-                addBookingsObserver.complete();
-            });
+        this._appContext.thHttp.post({
+            serverApi: ThServerApi.BookingsAdd,
+            body: JSON.stringify({
+                bookingItems: bookingItems
+            })
+        }).subscribe((result: any) => {
+            this._appContext.analytics.logEvent("booking", "add", "Added " + bookingItems.bookingList.length + " bookings");
+            addBookingsObserver.next(result.bookingList);
+            addBookingsObserver.complete();
+        }, (err: ThError) => {
+            addBookingsObserver.error(err);
+            addBookingsObserver.complete();
+        });
     }
 
     private getAddBookingItemsDO(): AddBookingItemsDO {

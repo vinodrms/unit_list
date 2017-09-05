@@ -13,8 +13,11 @@ export class EagerInvoiceGroupsServiceDeprecated {
     }
 
     public getInvoiceGroup(invoiceGroupId: string): Observable<InvoiceGroupDO> {
-        return this._appContext.thHttp.get(ThServerApi.InvoiceGroupItem, {
-            id: invoiceGroupId
+        return this._appContext.thHttp.get({
+            serverApi: ThServerApi.InvoiceGroupItem,
+            queryParameters: {
+                id: invoiceGroupId
+            }
         }).map((invoiceGroupObject: Object) => {
             var invoiceGroupDO = new InvoiceGroupDO();
             invoiceGroupDO.buildFromObject(invoiceGroupObject);
@@ -23,8 +26,11 @@ export class EagerInvoiceGroupsServiceDeprecated {
     }
 
     public getInvoiceGroupList(searchCriteria: InvoiceGroupsQuery): Observable<InvoiceGroupDO[]> {
-        return this._appContext.thHttp.post(ThServerApi.InvoiceGroups, {
-            searchCriteria: searchCriteria
+        return this._appContext.thHttp.post({
+            serverApi: ThServerApi.InvoiceGroups,
+            body: JSON.stringify({
+                searchCriteria: searchCriteria
+            })
         }).map((invoiceGroupsObject: Object) => {
             var invoiceGroupsDO = new InvoiceGroupsDO();
             invoiceGroupsDO.buildFromObject(invoiceGroupsObject);

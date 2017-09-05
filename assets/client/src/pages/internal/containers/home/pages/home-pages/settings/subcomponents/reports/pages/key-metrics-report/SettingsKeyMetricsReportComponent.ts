@@ -6,13 +6,13 @@ import { SettingsReportsPagesService } from '../../main/services/SettingsReports
 import { ThDateDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import { HotelService } from '../../../../../../../../../services/hotel/HotelService';
 import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
-import { SettingsReportsService } from '../../main/services/SettingsReportsService';
 import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ThPeriodType, ThPeriodOption } from '../../utils/ThPeriodType';
 import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
 
 import * as _ from "underscore";
+import { SettingsReportsUrlBuilderService } from "../../main/services/SettingsReportsUrlBuilderService";
 
 export enum CommissionOption {
 	INCLUDE,
@@ -23,7 +23,7 @@ export enum CommissionOption {
 @Component({
 	selector: 'settings-key-metrics-report',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/key-metrics-report/template/settings-key-metrics-report.html',
-	providers: [SettingsReportsService]
+	providers: []
 })
 export class SettingsKeyMetricsReportComponent extends BaseComponent {
 	private static MaxCustomers = 10;
@@ -42,8 +42,8 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 	constructor(
 		private _appContext: AppContext,
 		private _hotelService: HotelService,
-		private _backendService: SettingsReportsService,
-		private _pagesService: SettingsReportsPagesService) {
+		private _pagesService: SettingsReportsPagesService,
+		private _urlBuilderService: SettingsReportsUrlBuilderService) {
 		super();
 		this._pagesService.bootstrapSelectedTab(ReportGroupType.KeyMetrics);
 		this.periodOptionList = ThPeriodOption.getValues();
@@ -91,8 +91,8 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 		if (this.filterByCustomers && this.customerIdList.length > 0) {
 			params.properties["customerIdList"] = this.customerIdList;
 		}
-		var encodedParams = encodeURI(JSON.stringify(params));
-		return 'api/reports/report?params=' + encodedParams;
+		
+		return this._urlBuilderService.getReportUrl(params);
 	}
 
 	public isSelectedCommissionOptionExclude(): boolean {

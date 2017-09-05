@@ -18,6 +18,7 @@ import { InvoicePaymentMethodVM } from '../../../../../../../../../../../service
 import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { EmailSenderModalService } from '../../../../../../email-sender/services/EmailSenderModalService';
 import { TransactionFeeDO, TransactionFeeType } from "../../../../../../../../../../../services/common/data-objects/payment-method/TransactionFeeDO";
+import { ITokenService } from "../../../../../../../../../../../../../common/utils/oauth-token/ITokenService";
 
 import * as _ from "underscore";
 
@@ -47,7 +48,7 @@ export class InvoicePayerComponent implements OnInit {
         this._thUtils = new ThUtils();
     }
 
-    public get selectedPaymentMethodVM(): InvoicePaymentMethodVM {``
+    public get selectedPaymentMethodVM(): InvoicePaymentMethodVM {
         return this._selectedPaymentMethodVM;
     }
 
@@ -160,7 +161,7 @@ export class InvoicePayerComponent implements OnInit {
         return 'api/invoiceGroups/pdf?invoiceGroupId='
             + this.invoiceGroupVM.invoiceGroupDO.id + '&invoiceId='
             + this.invoiceVM.invoiceDO.id + '&customerId=' + this.invoicePayerVM.customerDO.id
-            + '&payerIndex=' + this.invoicePayerVMIndex;
+            + '&payerIndex=' + this.invoicePayerVMIndex + '&token=' + this._appContext.tokenService.accessToken;
     }
 
     public onSend() {
