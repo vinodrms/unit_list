@@ -102,6 +102,9 @@ export class InvoiceDO extends BaseDO {
     public isPaid(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.Paid;
     }
+    public isUnpaid(): boolean {
+        return this.paymentStatus === InvoicePaymentStatus.Unpaid;
+    }
     public isLossAcceptedByManagement(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement;
     }

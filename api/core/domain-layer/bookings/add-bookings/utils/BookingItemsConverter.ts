@@ -49,14 +49,16 @@ export class BookingItemsConverter {
 
     private _bookingItems: BookingItemDO[];
     private _inputChannel: GroupBookingInputChannel;
+    private _mergeInvoice: boolean;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _converterParams: BookingItemsConverterParams) {
         this._thUtils = new ThUtils();
         this._bookingUtils = new BookingUtils();
     }
-    public convert(bookingItems: BookingItemDO[], inputChannel: GroupBookingInputChannel): Promise<BookingDO[]> {
+    public convert(bookingItems: BookingItemDO[], inputChannel: GroupBookingInputChannel, mergeInvoice: boolean): Promise<BookingDO[]> {
         this._bookingItems = bookingItems;
         this._inputChannel = inputChannel;
+        this._mergeInvoice = mergeInvoice;
 
         return new Promise<BookingDO[]>((resolve: { (result: BookingDO[]): void }, reject: { (err: ThError): void }) => {
             try {
@@ -114,6 +116,7 @@ export class BookingItemsConverter {
                 bookingDO.invoiceNotes = bookingItem.invoiceNotes;
                 bookingDO.travelActivityType = bookingItem.travelActivityType;
                 bookingDO.travelType = bookingItem.travelType;
+                bookingDO.mergeInvoice = this._mergeInvoice;
                 bookingDO.interval = bookingInterval;
                 bookingDO.creationDate = this._converterParams.currentHotelTimestamp.thDateDO;
                 bookingDO.creationDateUtcTimestamp = bookingDO.creationDate.getUtcTimestamp();

@@ -5,20 +5,19 @@
                 <table class="table table-striped">
                     <thead></thead>
                     <tbody>
-                        <tr *ngFor="let invoicePayerStats of invoiceGroupPayerStatsList">
+                        <tr *ngFor="let invoice of invoiceList">
                             <td width="30%" class="increased-font-weight clickable-item font-size-small">
-                                <span (click)="goToInvoice(invoicePayerStats)"> 
-                                    {{ 'Open invoice group' | translate }} <i class="fa unitpal-font">L</i>
+                                <span (click)="goToInvoice(invoice)">
+                                    {{ "Open invoice %reference%" | translate:{reference: invoice.reference} }} <i class="fa unitpal-font">L</i>
                                 </span>
                             </td>
                             <td width="70%">
-                                {{ 'Amount paid' | translate }}: <b>{{ invoicePayerStats.amountPaid | price }}{{ ccySymbol }}</b> {{ 'from' | translate }}: <b>{{invoicePayerStats.totalAmountToPay | price}}{{ ccySymbol }}</b> / {{ 'Invoice group payment status' | translate }}:  
-                                <span *ngIf="invoicePayerStats.invoiceGroupPaid">
-                                    <b>{{ 'PAID' | translate }}</b>
+                                {{ 'Amount paid' | translate }}: <b>{{ invoice.amountPaid | price }}{{ ccySymbol }}</b>
+                                {{ 'from' | translate }}: <b>{{invoice.amountToPay | price}}{{ ccySymbol }}</b>
+                                / {{ 'Invoice payment status' | translate }}:
+                                <span>
+                                    <b>{{ getInvoiceStatus(invoice) | translate }}</b>
                                 </span>
-                                <span *ngIf="!invoicePayerStats.invoiceGroupPaid">  
-                                    <b>{{ 'UNPAID' | translate }}</b>
-                                </span> 
                             </td>
                         </tr>
                     </tbody>
@@ -33,7 +32,7 @@
                     <button type="button" class="btn btn-default btn-block btn-xs uppercase" (click)="loadMore()" *ngIf="!isLoading">
                         <i class="fa fa-info-circle"></i> {{ 'Expand' | translate }}
                     </button>
-                    <i class="fa fa-spinner fa-pulse" *ngIf="isLoading"></i> 
+                    <i class="fa fa-spinner fa-pulse" *ngIf="isLoading"></i>
                 </span>
             </span>
         </div>

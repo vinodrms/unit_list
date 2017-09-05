@@ -58,9 +58,9 @@ export class TravelActivityTypeOption {
 }
 
 class TravelTypeDisplayedNameContainer {
-    private static _TravelTypeDisplayedNames: { [type: number] : string } = {
-        [TravelType.Individual] : "Individual",
-        [TravelType.Group] : "Group",
+    private static _TravelTypeDisplayedNames: { [type: number]: string } = {
+        [TravelType.Individual]: "Individual",
+        [TravelType.Group]: "Group",
     };
 
     public static getDisplayedName(travelType: TravelType) {
@@ -118,11 +118,13 @@ export class BookingDO extends BaseDO {
     indexedSearchTerms: string[];
     travelActivityType: TravelActivityType;
     travelType: TravelType;
+    // whether all the bookings from the group this booking belongs to will be posted on the same invoice
+    mergeInvoice: boolean;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "versionId", "status", "inputChannel", "noOfRooms", "id", "bookingReference", "externalBookingReference", "confirmationStatus",
-            "customerIdList", "displayCustomerId",  "corporateDisplayCustomerId", "creationDateUtcTimestamp", "startUtcTimestamp", "endUtcTimestamp", "checkInUtcTimestamp", "checkOutUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
-            "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType", "travelType"];
+            "customerIdList", "displayCustomerId", "corporateDisplayCustomerId", "creationDateUtcTimestamp", "startUtcTimestamp", "endUtcTimestamp", "checkInUtcTimestamp", "checkOutUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
+            "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType", "travelType", "mergeInvoice"];
     }
 
     public buildFromObject(object: Object) {
@@ -188,14 +190,14 @@ export class BookingDO extends BaseDO {
     }
 
     public get travelActivityTypeDisplayedName(): string {
-       var option= _.find(TravelActivityTypeOption.getValues(), (option: TravelActivityTypeOption) => {
+        var option = _.find(TravelActivityTypeOption.getValues(), (option: TravelActivityTypeOption) => {
             return option.type == this.travelActivityType;
         });
         return option.displayName;
     }
 
     public get travelTypeDisplayedName(): string {
-       return TravelTypeDisplayedNameContainer.getDisplayedName(this.travelType);
+        return TravelTypeDisplayedNameContainer.getDisplayedName(this.travelType);
     }
 
     public get reservedAddOnProductIdList(): string[] {

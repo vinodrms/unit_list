@@ -1,13 +1,13 @@
-import {Component, ViewChild, OnInit, AfterViewInit, OnDestroy} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
-import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
-import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
-import {BookingCartService} from '../../../services/search/BookingCartService';
-import {BookingCartItemVM} from '../../../services/search/view-models/BookingCartItemVM';
-import {BookingCartTableMetaBuilderService} from '../utils/table-builder/BookingCartTableMetaBuilderService';
-import {BookingTableUtilsService} from '../utils/table-builder/BookingTableUtilsService';
-import {BookingEmailConfigStepService} from './services/BookingEmailConfigStepService';
+import { Component, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+import { BaseComponent } from '../../../../../../../../../../common/base/BaseComponent';
+import { LazyLoadingTableComponent } from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
+import { AppContext } from '../../../../../../../../../../common/utils/AppContext';
+import { BookingCartService } from '../../../services/search/BookingCartService';
+import { BookingCartItemVM } from '../../../services/search/view-models/BookingCartItemVM';
+import { BookingCartTableMetaBuilderService } from '../utils/table-builder/BookingCartTableMetaBuilderService';
+import { BookingTableUtilsService } from '../utils/table-builder/BookingTableUtilsService';
+import { BookingEmailConfigStepService } from './services/BookingEmailConfigStepService';
 import { CustomerDO } from '../../../../../../../../services/customers/data-objects/CustomerDO';
 import { EmailDistributionDO } from "../../../services/data-objects/AddBookingItemsDO";
 
@@ -26,6 +26,7 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
 
     customerList: CustomerDO[];
     bookingConfirmationsBlocked: boolean;
+    showMergeInvoiceOption: boolean;
 
     constructor(private _appContext: AppContext, private _bookingCartService: BookingCartService,
         private _cartTableMetaBuilder: BookingCartTableMetaBuilderService, private _bookingTableUtilsService: BookingTableUtilsService,
@@ -33,6 +34,7 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
         super();
 
         this.bookingConfirmationsBlocked = false;
+        this.showMergeInvoiceOption = false;
     }
 
     ngAfterViewInit() {
@@ -56,6 +58,7 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
 
     private viewDidAppear() {
         this.customerList = this.buildCustomerList();
+        this.initializeMergeInvoiceOption();
     }
 
     private buildCustomerList(): CustomerDO[] {
@@ -68,11 +71,21 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
             return customer.customerDetails.canReceiveBookingConfirmations();
         });
 
-        if(!_.isEmpty(allCustomers) && allCustomers.length > customersAbleToReceiveConfirmations.length) {
+        if (!_.isEmpty(allCustomers) && allCustomers.length > customersAbleToReceiveConfirmations.length) {
             this.bookingConfirmationsBlocked = true;
         }
 
         return customersAbleToReceiveConfirmations;
+    }
+    private initializeMergeInvoiceOption() {
+        // force the user to select the mergeInvoice option if there are at least 2 bookings in the cart
+        this.showMergeInvoiceOption = this._bookingCartService.bookingItemVMList.length > 1;
+        if (this.showMergeInvoiceOption) {
+            this.mergeInvoice = null;
+        }
+        else {
+            this.mergeInvoice = false;
+        }
     }
 
     public viewDidDisappear() {
@@ -85,12 +98,19 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
     }
     public set emailRecipientList(emailRecipientList: string[]) {
         var emailDistributionList: EmailDistributionDO[] = [];
-        emailDistributionList =_.map(emailRecipientList, (emailRecipient: string) => {
+        emailDistributionList = _.map(emailRecipientList, (emailRecipient: string) => {
             var customerWithThatEmail: CustomerDO = _.find(this.customerList, (customer: CustomerDO) => {
                 return customer.emailString === emailRecipient;
             });
-            return {email: emailRecipient, recipientName: customerWithThatEmail ? customerWithThatEmail.customerName : ""};
+            return { email: emailRecipient, recipientName: customerWithThatEmail ? customerWithThatEmail.customerName : "" };
         });
         this._wizardEmailConfigStepService.emailRecipientList = emailDistributionList;
+    }
+
+    public get mergeInvoice(): boolean {
+        return this._wizardEmailConfigStepService.mergeInvoice;
+    }
+    public set mergeInvoice(value: boolean) {
+        this._wizardEmailConfigStepService.mergeInvoice = value;
     }
 }

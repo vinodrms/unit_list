@@ -24,23 +24,23 @@ export class CustomerOperationsPageComponent implements OnInit {
     customerOperationsPageData: CustomerOperationsPageData;
     showBookingHistory: boolean = true;
 
-    constructor(private _appContext: AppContext,
-        private _custOpPageService: CustomerOperationsPageService,
-        private _operationsPageControllerService: HotelOperationsPageControllerService) { }
+    constructor(private context: AppContext,
+        private custOpPageService: CustomerOperationsPageService,
+        private operationsPageControllerService: HotelOperationsPageControllerService) { }
 
     ngOnInit() {
         this.loadPageData();
-        this._appContext.analytics.logPageView("/operations/customer");
+        this.context.analytics.logPageView("/operations/customer");
     }
     private loadPageData() {
         this.isLoading = true;
-        this._custOpPageService.getPageData(this.customerOperationsPageParam).subscribe((pageData: CustomerOperationsPageData) => {
+        this.custOpPageService.getPageData(this.customerOperationsPageParam).subscribe((pageData: CustomerOperationsPageData) => {
             this.customerOperationsPageData = pageData;
             this.isLoading = false;
             this.didInitOnce = true;
             this.updateContainerData();
         }, (err: ThError) => {
-            this._appContext.toaster.error(err.message);
+            this.context.toaster.error(err.message);
             this.isLoading = false;
         });
     }
@@ -65,8 +65,6 @@ export class CustomerOperationsPageComponent implements OnInit {
     }
 
     public createInvoice() {
-        this._operationsPageControllerService.goToInvoice(null, {
-            customerId: this.customerVM.customer.id
-        }, true);
+        this.operationsPageControllerService.goToInvoice(null, this.customerVM.customer.id);
     }
 }

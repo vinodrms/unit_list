@@ -107,6 +107,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.notes = "This is an automatic booking";
         booking.travelActivityType = TravelActivityType.Leisure;
         booking.travelType = TravelType.Individual;
+        booking.mergeInvoice = false;
 
         let billedCustomer = _.find(customerList, customer => { return customer.id === customerId });
         this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(booking, roomCategoryStatsList, priceProduct, billedCustomer);

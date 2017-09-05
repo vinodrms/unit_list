@@ -1,10 +1,10 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
-import {BookingDetailsEditRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
+import { BookingOperationsPageData } from '../../services/utils/BookingOperationsPageData';
+import { BookingDetailsEditRight } from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
 import { BookingDO, TravelActivityTypeOption, TravelType } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import {FileAttachmentDO} from '../../../../../../../../../../../services/common/data-objects/file/FileAttachmentDO';
-import {HotelOperationsBookingService} from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
+import { FileAttachmentDO } from '../../../../../../../../../../../services/common/data-objects/file/FileAttachmentDO';
+import { HotelOperationsBookingService } from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 
 import * as _ from "underscore";
 
@@ -61,8 +61,8 @@ export class BookingDetailsEditorComponent implements OnInit {
         return this._appContext.thUtils.isUndefinedOrNull(this.bookingDO.invoiceNotes) || this.bookingDO.invoiceNotes.length == 0;
     }
     public get invoiceIsClosed(): boolean {
-        return !this._appContext.thUtils.isUndefinedOrNull(this._bookingOperationsPageData.invoiceDO) && 
-            this._bookingOperationsPageData.invoiceDO.isClosed;
+        return !this._appContext.thUtils.isUndefinedOrNull(this._bookingOperationsPageData.invoiceDO) &&
+            this._bookingOperationsPageData.invoiceDO.isClosed();
     }
     public get fileAttachmentsListIsEmpty(): boolean {
         return this.bookingDO.fileAttachmentList.length == 0;
@@ -106,9 +106,9 @@ export class BookingDetailsEditorComponent implements OnInit {
     }
 
     public setTravelActivityType(travelActivityType: string) {
-        this.bookingDO.travelActivityType = parseInt(travelActivityType);  
+        this.bookingDO.travelActivityType = parseInt(travelActivityType);
     }
-    
+
     public get isIndividualTravelType(): boolean {
         return this.bookingDO.travelType === TravelType.Individual;
     }

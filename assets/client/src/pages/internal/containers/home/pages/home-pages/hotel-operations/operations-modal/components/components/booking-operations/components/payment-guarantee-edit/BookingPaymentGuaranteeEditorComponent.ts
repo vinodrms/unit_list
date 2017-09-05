@@ -1,3 +1,4 @@
+import * as _ from "underscore";
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
 import { BookingOperationsPageData } from '../../services/utils/BookingOperationsPageData';
@@ -5,14 +6,11 @@ import { BookingPaymentGuaranteeEditRight } from '../../../../../../../../../../
 import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
 import { DefaultBillingDetailsDO } from '../../../../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
 import { HotelOperationsBookingService } from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
-import { InvoicePaymentMethodVMGenerator } from '../../../../../../../../../../../services/invoices-deprecated/view-models/utils/InvoicePaymentMethodVMGenerator';
-import { InvoicePaymentMethodVM } from '../../../../../../../../../../../services/invoices-deprecated/view-models/InvoicePaymentMethodVM';
-import { InvoicePaymentMethodDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { CustomerDO } from "../../../../../../../../../../../services/customers/data-objects/CustomerDO";
 import { ModalDialogRef } from "../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
 import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
-
-import * as _ from "underscore";
+import { InvoicePaymentMethodVM } from "../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM";
+import { InvoicePaymentMethodVMGenerator } from "../../../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator";
 
 @Component({
     selector: 'booking-payment-guarantee-editor',
@@ -140,7 +138,7 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
     }
 
     private paymentGuaranteeHasChanged(): boolean {
-        return !(this._selectedPaymentMethodVMCopy.paymentMethod.isSame(this.selectedPaymentMethodVM.paymentMethod) && this.hasPaymentGuarantee) ||
-             this.billedCustomer.id != this.bookingDO.defaultBillingDetails.customerId;
+        return !(this._selectedPaymentMethodVMCopy.paymentMethod.equals(this.selectedPaymentMethodVM.paymentMethod) && this.hasPaymentGuarantee) ||
+            this.billedCustomer.id != this.bookingDO.defaultBillingDetails.customerId;
     }
 }

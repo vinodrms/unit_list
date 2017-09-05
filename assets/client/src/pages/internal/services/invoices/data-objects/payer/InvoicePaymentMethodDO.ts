@@ -11,6 +11,14 @@ export class InvoicePaymentMethodDO extends BaseDO {
     protected getPrimitivePropertyKeys(): string[] {
         return ["type", "value"];
     }
+
+    public buildPrototype(): InvoicePaymentMethodDO {
+        var pm = new InvoicePaymentMethodDO();
+        pm.type = this.type;
+        pm.value = this.value;
+        return pm;
+    }
+
     public equals(otherPaymentMethod: InvoicePaymentMethodDO): boolean {
         return this.type === otherPaymentMethod.type
             && this.value === otherPaymentMethod.value;

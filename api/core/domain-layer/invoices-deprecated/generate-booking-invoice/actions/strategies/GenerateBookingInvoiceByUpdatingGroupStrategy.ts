@@ -41,7 +41,7 @@ export class GenerateBookingInvoiceByUpdatingGroupStrategy implements IGenerateB
                 // the repository may return other invoice items through its decorator => force sync total price
                 let bookingInvoiceSync = new BookingInvoiceSync(this._appContext, this._sessionContext);
                 return bookingInvoiceSync.syncInvoiceWithBookingPrice(this._bookingDO);
-            }).then((updatedGroup: InvoiceGroupDO) => {
+            }).then((updatedGroup: any) => {
                 resolve(updatedGroup);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.InvoiceGroupsItemUpdateStrategyErrorUpdating, error);

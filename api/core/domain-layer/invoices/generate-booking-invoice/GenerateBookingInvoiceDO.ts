@@ -5,12 +5,12 @@ import { PrimitiveValidationStructure } from "../../../utils/th-validation/struc
 import { StringValidationRule } from "../../../utils/th-validation/rules/StringValidationRule";
 import { BooleanValidationRule } from "../../../utils/th-validation/rules/BooleanValidationRule";
 
-export interface GenerateBookingInvoiceAopMeta {
-    addOnProductDO: AddOnProductDO;
+export interface BookingInvoiceItem {
+    addOnProduct: AddOnProductDO;
     noOfItems: number;
 }
 
-export class GenerateBookingInvoiceDODeprecated {
+export class GenerateBookingInvoiceDO {
     groupBookingId: string;
     id: string;
 

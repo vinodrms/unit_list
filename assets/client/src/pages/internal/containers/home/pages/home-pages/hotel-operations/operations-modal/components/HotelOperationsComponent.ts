@@ -20,6 +20,8 @@ import { HotelOperationsRoomService } from '../../../../../../../services/hotel-
 import { HotelOperationsBookingService } from '../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 import { HotelOperationsCustomerService } from '../../../../../../../services/hotel-operations/customer/HotelOperationsCustomerService';
 import { HotelOperationsPageControllerService } from './services/HotelOperationsPageControllerService';
+import { HotelOperationsInvoiceService } from "../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
+import { InvoiceService } from "../../../../../../../services/invoices/InvoiceService";
 
 @Component({
     selector: 'hotel-operations',
@@ -28,8 +30,13 @@ import { HotelOperationsPageControllerService } from './services/HotelOperations
         RoomCategoriesStatsService, BedsEagerService, RoomsService,
         EagerCustomersService, EagerAllotmentsService, EagerAddOnProductsService, EagerPriceProductsService,
         HotelService, HotelAggregatorService, EagerBookingsService, RoomCategoriesService,
-        EagerInvoiceGroupsServiceDeprecated, InvoiceGroupsServiceDeprecated, HotelOperationsRoomService,
-        HotelOperationsBookingService, HotelOperationsCustomerService, HotelOperationsPageControllerService]
+
+        // TODO: remove deprecated services
+        EagerInvoiceGroupsServiceDeprecated, InvoiceGroupsServiceDeprecated,
+
+        HotelOperationsInvoiceService, InvoiceService,
+        HotelOperationsRoomService, HotelOperationsBookingService,
+        HotelOperationsCustomerService, HotelOperationsPageControllerService]
 })
 export class HotelOperationsComponent {
 

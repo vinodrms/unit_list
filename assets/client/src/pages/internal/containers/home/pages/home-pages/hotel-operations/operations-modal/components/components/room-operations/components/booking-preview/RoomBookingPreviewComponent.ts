@@ -1,16 +1,16 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {RoomAttachedBookingResultVM} from '../../../../../../../../../../../services/hotel-operations/room/view-models/RoomAttachedBookingResultVM';
-import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import {CustomerDO} from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
-import {BedStorageType} from '../../../../../../../../../../../services/beds/data-objects/BedDO';
-import {BedVM} from '../../../../../../../../../../../services/beds/view-models/BedVM';
-import {RoomDO, RollawayBedStatus} from '../../../../../../../../../../../services/rooms/data-objects/RoomDO';
-import {RoomVM} from '../../../../../../../../../../../services/rooms/view-models/RoomVM';
-import {HotelOperationsRoomService} from '../../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
-import {CheckOutRoomParam} from '../../../../../../../../../../../services/hotel-operations/room/utils/CheckOutRoomParam';
-import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
-import {RoomOperationsPageData} from '../../services/utils/RoomOperationsPageData';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { RoomAttachedBookingResultVM } from '../../../../../../../../../../../services/hotel-operations/room/view-models/RoomAttachedBookingResultVM';
+import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
+import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { CustomerDO } from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
+import { BedStorageType } from '../../../../../../../../../../../services/beds/data-objects/BedDO';
+import { BedVM } from '../../../../../../../../../../../services/beds/view-models/BedVM';
+import { RoomDO, RollawayBedStatus } from '../../../../../../../../../../../services/rooms/data-objects/RoomDO';
+import { RoomVM } from '../../../../../../../../../../../services/rooms/view-models/RoomVM';
+import { HotelOperationsRoomService } from '../../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
+import { CheckOutRoomParam } from '../../../../../../../../../../../services/hotel-operations/room/utils/CheckOutRoomParam';
+import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
+import { RoomOperationsPageData } from '../../services/utils/RoomOperationsPageData';
 
 import * as _ from "underscore";
 
@@ -86,9 +86,7 @@ export class RoomBookingPreviewComponent implements OnInit {
     }
     public viewInvoice() {
         if (!this.hasUnpaidInvoice()) { return; }
-        this._operationsPageControllerService.goToInvoice(this._roomOperationsPageData.invoiceGroupDO.id, {
-            bookingId: this.roomAttachedBookingResultVM.roomAttachedBookingResultDO.booking.id
-        }, false);
+        this._operationsPageControllerService.goToInvoice(this._roomOperationsPageData.invoiceDO.id);
     }
 
     public get bookingDO(): BookingDO {

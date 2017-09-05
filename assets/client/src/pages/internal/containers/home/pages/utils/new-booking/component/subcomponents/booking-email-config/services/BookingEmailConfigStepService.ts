@@ -16,6 +16,7 @@ import * as _ from "underscore";
 @Injectable()
 export class BookingEmailConfigStepService implements IBookingStepService, ILastBookingStepService {
     emailRecipientList: EmailDistributionDO[] = [];
+    mergeInvoice: boolean;
     private _stepPath: string[];
 
     didAppearObservable: Observable<boolean>;
@@ -38,7 +39,7 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
         return BookingStepType.EmailConfig;
     }
     public canMoveNext(): boolean {
-        return true;
+        return !this._appContext.thUtils.isUndefinedOrNull(this.mergeInvoice);
     }
     public getStepPath(): string[] {
         return this._stepPath;
@@ -90,6 +91,7 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
         bookingItems.groupBookingId = this._bookingCartService.groupBookingId;
         bookingItems.bookingList = this.getOnlyTheNewTransientBookingItems();
         bookingItems.confirmationEmailList = this.emailRecipientList;
+        bookingItems.mergeInvoice = this.mergeInvoice;
         return bookingItems;
     }
 

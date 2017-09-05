@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {IHotelOperationsPageParam} from '../../services/utils/IHotelOperationsPageParam';
-import {HotelRoomOperationsPageParam} from '../components/room-operations/utils/HotelRoomOperationsPageParam';
-import {HotelBookingOperationsPageParam} from '../components/booking-operations/utils/HotelBookingOperationsPageParam';
-import {HotelCustomerOperationsPageParam} from '../components/customer-operations/utils/HotelCustomerOperationsPageParam';
+import { Injectable } from '@angular/core';
+import { IHotelOperationsPageParam } from '../../services/utils/IHotelOperationsPageParam';
+import { HotelRoomOperationsPageParam } from '../components/room-operations/utils/HotelRoomOperationsPageParam';
+import { HotelBookingOperationsPageParam } from '../components/booking-operations/utils/HotelBookingOperationsPageParam';
+import { HotelCustomerOperationsPageParam } from '../components/customer-operations/utils/HotelCustomerOperationsPageParam';
 import { HotelInvoiceOperationsPageParam, HotelInvoiceOperationsPageFilterParam } from '../components/invoice-operations/utils/HotelInvoiceOperationsPageParam';
 import { HotelInvoiceOperationsDeprecatedPageParam, HotelInvoiceOperationsDeprecatedPageFilterParam } from "../components/invoice-operations-deprecated/utils/HotelInvoiceOperationsDeprecatedPageParam";
 
@@ -38,12 +38,10 @@ export class HotelOperationsPageControllerService {
         var custOperationsPageParam = new HotelCustomerOperationsPageParam(customerId);
         this.goToPage(custOperationsPageParam);
     }
-    public goToInvoice(invoiceGroupId: string, invoiceFilter: HotelInvoiceOperationsPageFilterParam, openInEditMode: boolean) {
-        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, invoiceFilter, openInEditMode);
-        this.goToPage(invoiceOperationsPageParam);
-    }
-    public goToInvoiceDeprecated(invoiceGroupId: string, invoiceFilter: HotelInvoiceOperationsDeprecatedPageFilterParam, openInEditMode: boolean) {
-        var invoiceOperationsPageParam = new HotelInvoiceOperationsDeprecatedPageParam(invoiceGroupId, invoiceFilter, openInEditMode);
+    public goToInvoice(invoiceId: string, customerId: string = null) {
+        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceId, {
+            customerId: customerId
+        });
         this.goToPage(invoiceOperationsPageParam);
     }
     private goToPage(operationsPageParam: IHotelOperationsPageParam) {

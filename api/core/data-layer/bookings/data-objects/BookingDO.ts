@@ -105,11 +105,13 @@ export class BookingDO extends BaseDO {
     indexedSearchTerms: string[];
     travelActivityType: TravelActivityType;
     travelType: TravelType;
+    // whether all the bookings from the group this booking belongs to will be posted on the same invoice
+    mergeInvoice: boolean;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "id", "bookingReference", "externalBookingReference", "confirmationStatus",
             "customerIdList", "displayCustomerId", "corporateDisplayCustomerId", "creationDateUtcTimestamp", "startUtcTimestamp", "endUtcTimestamp", "checkInUtcTimestamp", "checkOutUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
-            "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType", "travelType"];
+            "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType", "travelType", "mergeInvoice"];
     }
 
     public buildFromObject(object: Object) {

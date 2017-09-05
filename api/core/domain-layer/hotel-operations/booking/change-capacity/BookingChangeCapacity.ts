@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
@@ -6,7 +7,6 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { PriceProductDO } from '../../../../data-layer/price-products/data-objects/PriceProductDO';
 import { ConfigCapacityDO } from '../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
 import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
@@ -18,8 +18,7 @@ import { BookingChangeCapacityDO } from './BookingChangeCapacityDO';
 import { BusinessValidationRuleContainer } from '../../../common/validation-rules/BusinessValidationRuleContainer';
 import { BookingRoomCategoryValidationRule } from '../../../bookings/validators/validation-rules/booking/BookingRoomCategoryValidationRule';
 import { PriceProductConstraintsValidationRule, PriceProductConstraintsParams } from '../../../bookings/validators/validation-rules/price-product/PriceProductConstraintsValidationRule';
-
-import _ = require('underscore');
+import { InvoiceDO } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
 
 export class BookingChangeCapacity {
     private _bookingUtils: BookingUtils;
@@ -87,7 +86,7 @@ export class BookingChangeCapacity {
             }).then((updatedBooking: BookingDO) => {
                 this._bookingWithDependencies.bookingDO = updatedBooking;
                 return this._bookingInvoiceSync.syncInvoiceWithBookingPrice(updatedBooking);
-            }).then((updatedGroup: InvoiceGroupDO) => {
+            }).then((updatedGroup: InvoiceDO) => {
                 resolve(this._bookingWithDependencies.bookingDO);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingChangeCapacityError, error);

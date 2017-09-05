@@ -50,7 +50,7 @@ export class DepartureItemComponent {
     public openInvoiceModal(invoiceInfo: DepartureItemInvoiceInfoVM) {
         this.shouldShowPayDropdown = false;
 
-        this._modalService.openInvoiceModal(invoiceInfo.invoiceGroupId, { invoiceId: invoiceInfo.invoiceId });
+        this._modalService.openInvoiceModal(invoiceInfo.invoiceId);
     }
 
     public openCustomerModal() {
