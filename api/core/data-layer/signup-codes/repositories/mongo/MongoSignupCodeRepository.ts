@@ -66,7 +66,14 @@ export class MongoSignupCodeRepository extends MongoRepository implements ISignu
         });
     }
     private deleteSignupCodeCore(resolve: { (result: number): void }, reject: { (err: ThError): void }, code: string) {
-        
+        let removeQuery = { value: code };
+        return this.deleteOneDocument(removeQuery,
+            (err: Error) => {
+                this.logAndReject(err, reject, { removeQuery: removeQuery }, ThStatusCode.SignupCodeRepositoryErrorDeletingSignupCode);
+            },
+            (deletedCount: number) => {
+                resolve(deletedCount);
+            });
     }
 
     private logAndReject(err: Error, reject: { (err: ThError): void }, context: Object, defaultStatusCode: ThStatusCode) {

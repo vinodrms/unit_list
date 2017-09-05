@@ -17,6 +17,7 @@ import { AuthUtils } from '../utils/AuthUtils';
 import { HotelSignUpDO } from './HotelSignUpDO';
 import { ValidationResultParser } from '../../common/ValidationResultParser';
 import { HotelConfigurationsBootstrap } from '../../hotel-configurations/HotelConfigurationsBootstrap';
+import { SignupCodeDO } from "../../../data-layer/signup-codes/data-objects/SignupCodeDO";
 
 export class HotelSignUp {
 	private static FirstUserIndex = 0;
@@ -43,33 +44,52 @@ export class HotelSignUp {
 	}
 
 	private signUpCore(resolve: { (result: ActionTokenDO): void }, reject: { (err: ThError): void }) {
-		var validationResult = HotelSignUpDO.getValidationRules().validateStructure(this._signUpDO);
+		let validationResult = HotelSignUpDO.getValidationRules().validateStructure(this._signUpDO);
 		if (!validationResult.isValid()) {
-			var parser = new ValidationResultParser(validationResult, this._signUpDO);
+			let parser = new ValidationResultParser(validationResult, this._signUpDO);
 			parser.logAndReject("Error validating hotel sign up fields", reject);
 			return;
 		}
-		var defaultHotelData = this.generateDefaultHotel();
-		var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-		hotelRepository.addHotel(defaultHotelData)
-			.then((savedHotel: HotelDO) => {
-				this._savedHotel = savedHotel;
 
-				var hotelConfigBootstrap = new HotelConfigurationsBootstrap(this._appContext, savedHotel.id);
-				return hotelConfigBootstrap.bootstrap();
-			})
-			.then((bootstrapResult: boolean) => {
-				var activationEmailTemplateDO = this.getAccountActivationEmailTemplateDO();
-				var emailHeaderDO = this.getEmailHeaderDO();
-				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService();
-				return emailService.sendEmail(emailHeaderDO, activationEmailTemplateDO);
-			})
-			.then((sendEmailResult: any) => {
-				resolve(this._savedHotel.userList[HotelSignUp.FirstUserIndex].accountActivationToken);
-			}).catch((error: any) => {
-				var thError = new ThError(ThStatusCode.HotelSignUpError, error);
+		let signupCodesRepo = this._appContext.getRepositoryFactory().getSignupCodeRepository();
+		let signupCode = this._signUpDO.signupCode;
+		signupCodesRepo.getSignupCode(this._signUpDO.signupCode).then((signupCode: SignupCodeDO) => {
+			if (this._thUtils.isUndefinedOrNull(signupCode)) {
+				var thError = new ThError(ThStatusCode.SignupCodeRepositorySignupCodeInvalid, null);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "invalid sign up code", { signupData: this._signUpDO }, thError);
 				reject(thError);
-			});
+
+				return;
+			}
+			let defaultHotelData = this.generateDefaultHotel();
+			let hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+			return hotelRepository.addHotel(defaultHotelData);
+		}).then((savedHotel: HotelDO) => {
+			this._savedHotel = savedHotel;
+
+			return signupCodesRepo.deleteSignupCode(this._signUpDO.signupCode);
+		}).then((deletedCount: number) => {
+			if (deletedCount !== 1) {
+				var thError = new ThError(ThStatusCode.SignupCodeRepositorySignupCodeInvalid, null);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "sign up code already used", { signupData: this._signUpDO }, thError);
+				reject(thError);
+
+				return;
+			}
+
+			let hotelConfigBootstrap = new HotelConfigurationsBootstrap(this._appContext, this._savedHotel.id);
+			return hotelConfigBootstrap.bootstrap();
+		}).then((bootstrapResult: boolean) => {
+			let activationEmailTemplateDO = this.getAccountActivationEmailTemplateDO();
+			let emailHeaderDO = this.getEmailHeaderDO();
+			let emailService: IEmailService = this._appContext.getServiceFactory().getEmailService();
+			return emailService.sendEmail(emailHeaderDO, activationEmailTemplateDO);
+		}).then((sendEmailResult: any) => {
+			resolve(this._savedHotel.userList[HotelSignUp.FirstUserIndex].accountActivationToken);
+		}).catch((error: any) => {
+			let thError = new ThError(ThStatusCode.HotelSignUpError, error);
+			reject(thError);
+		});
 	}
 
 	private generateDefaultHotel(): HotelDO {
@@ -99,6 +119,7 @@ export class HotelSignUp {
 		hotel.configurationCompleted = false;
 		hotel.sequences = new HotelSequencesDO();
 		hotel.sequences.setInitialValues();
+		hotel.signupCode = this._signUpDO.signupCode;
 
 		return hotel;
 	}
