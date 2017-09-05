@@ -24,8 +24,8 @@ module.exports.routes = {
 	/*
 		Server APIs
 	*/
+	'POST /api/account/isAuthenticated': 'AccountController.isAuthenticated',
 	'POST /api/account/signUp': 'AccountController.signUp',
-	'POST /api/account/logIn': 'AccountController.logIn',
 	'GET /api/account/activate': 'AccountController.activate',
 	'POST /api/account/logOut': 'AccountController.logOut',
 	'POST /api/account/requestResetPassword': 'AccountController.requestResetPassword',
@@ -159,6 +159,8 @@ module.exports.routes = {
 	'GET /api/reports/report': 'ReportsController.getReport',
 
 	'GET /api/health': 'HealthCheckController.getHealth',
+
+	'POST /api/token': 'OAuthTokenController.getToken',
 
 	/*Front End Views	*/
 	'GET /home*': {

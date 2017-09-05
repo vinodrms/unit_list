@@ -57,6 +57,8 @@ export interface IHotelRepository {
 	getHotelById(id: string): Promise<HotelDO>;
 	getHotelList(lazyLoad: LazyLoadRepoDO): Promise<HotelDO[]>;
 
+	getUser(hotelId: string, userId: string): Promise<UserDO>;
+
 	updateBasicInformation(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO): Promise<HotelDO>;
 	updatePaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO>;
 	updatePropertyDetails(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO): Promise<HotelDO>;

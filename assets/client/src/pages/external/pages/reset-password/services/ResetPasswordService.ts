@@ -1,9 +1,9 @@
-import {Injectable, Inject} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ThValidators} from '../../../../../common/utils/form-utils/ThFormUtils';
-import {ResetPasswordDO} from '../data-objects/ResetPasswordDO';
+import { Injectable, Inject } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AppContext, ThServerApi } from '../../../../../common/utils/AppContext';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ThValidators } from '../../../../../common/utils/form-utils/ThFormUtils';
+import { ResetPasswordDO } from '../data-objects/ResetPasswordDO';
 
 @Injectable()
 export class ResetPasswordService {
@@ -24,7 +24,12 @@ export class ResetPasswordService {
 	public resetPassword(): Observable<any> {
 		var resetPasswd = new ResetPasswordDO();
 		resetPasswd.buildFromObject(this._resetPasswdForm.value);
-		return this._appContext.thHttp.post(ThServerApi.AccountRequestResetPassword, { requestData: resetPasswd });
+		return this._appContext.thHttp.post({
+			serverApi: ThServerApi.AccountRequestResetPassword,
+			body: JSON.stringify({
+				requestData: resetPasswd
+			})
+		});
 	}
 
 	public get resetPasswdForm(): FormGroup {

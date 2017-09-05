@@ -1,12 +1,12 @@
-import {Observer} from 'rxjs/Observer';
-import {Observable} from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/operator/share';
-import {ILazyLoadRequestService, PageContent, LazyLoadData, SortOptions} from './ILazyLoadRequestService';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {PageMetaDO} from './data-objects/lazy-load/PageMetaDO';
-import {TotalCountDO} from './data-objects/lazy-load/TotalCountDO';
+import { ILazyLoadRequestService, PageContent, LazyLoadData, SortOptions } from './ILazyLoadRequestService';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { PageMetaDO } from './data-objects/lazy-load/PageMetaDO';
+import { TotalCountDO } from './data-objects/lazy-load/TotalCountDO';
 
 import * as _ from "underscore";
 
@@ -74,7 +74,10 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 	}
 
 	private updateCount() {
-		this._appContext.thHttp.post(this._countApi, this.getParameters()).map((countObject: Object) => {
+		this._appContext.thHttp.post({
+			serverApi: this._countApi,
+			body: JSON.stringify(this.getParameters())
+		}).map((countObject: Object) => {
 			var countDO = new TotalCountDO();
 			countDO.buildFromObject(countObject);
 			return countDO;
@@ -85,15 +88,17 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 		});
 	}
 	private updatePageData() {
-		this._appContext.thHttp.post(this._pageDataApi, this.getParameters())
-			.map((pageDataObject: Object) => {
-				var pageMeta: PageMetaDO = new PageMetaDO();
-				pageMeta.buildFromObject(pageDataObject["lazyLoad"]);
-				return {
-					pageMeta: pageMeta,
-					pageItemList: pageDataObject
-				}
-			})
+		this._appContext.thHttp.post({
+			serverApi: this._pageDataApi,
+			body: JSON.stringify(this.getParameters())
+		}).map((pageDataObject: Object) => {
+			var pageMeta: PageMetaDO = new PageMetaDO();
+			pageMeta.buildFromObject(pageDataObject["lazyLoad"]);
+			return {
+				pageMeta: pageMeta,
+				pageItemList: pageDataObject
+			}
+		})
 			.flatMap((pageContent: PageContent<Object>) => {
 				return this.parsePageData(pageContent);
 			})

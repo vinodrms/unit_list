@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {AddOnProductsDO} from './data-objects/AddOnProductsDO';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { AddOnProductsDO } from './data-objects/AddOnProductsDO';
 
 @Injectable()
 export class EagerAddOnProductsService {
@@ -15,7 +15,12 @@ export class EagerAddOnProductsService {
 		if (!addOnProductIdList || addOnProductIdList.length == 0) {
 			return this.getEmptyResult();
 		}
-		return this._appContext.thHttp.post(ThServerApi.AddOnProducts, { searchCriteria: { addOnProductIdList: addOnProductIdList } }).map((resultObject: Object) => {
+		return this._appContext.thHttp.post({
+			serverApi: ThServerApi.AddOnProducts,
+			body: JSON.stringify({
+				searchCriteria: { addOnProductIdList: addOnProductIdList }
+			})
+		}).map((resultObject: Object) => {
 			var addOnProducts = new AddOnProductsDO();
 			addOnProducts.buildFromObject(resultObject);
 			return addOnProducts;

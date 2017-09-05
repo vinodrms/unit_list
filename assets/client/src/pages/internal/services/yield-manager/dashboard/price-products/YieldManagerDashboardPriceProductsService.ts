@@ -37,7 +37,12 @@ export class YieldManagerDashboardPriceProductsService extends ARequestService<P
         return Observable.combineLatest(
             this._dashboardFilterService.getColorFilterCollections(),
             this._dashboardFilterService.getTextFilterCollections(),
-            this._appContext.thHttp.post(ThServerApi.YieldManagerYieldGetPriceProductItems, { yieldParams: this._yieldManagerPeriodParam })
+            this._appContext.thHttp.post({
+                serverApi: ThServerApi.YieldManagerYieldGetPriceProductItems,
+                body: JSON.stringify({
+                    yieldParams: this._yieldManagerPeriodParam
+                })
+            })
         ).map((result: [FilterVMCollection<ColorFilterVM>[], FilterVMCollection<TextFilterVM>[], Object]) => {
             var yieldResultObject = result[2];
             var yieldResult: PriceProductYieldResultDO = new PriceProductYieldResultDO();
@@ -88,19 +93,27 @@ export class YieldManagerDashboardPriceProductsService extends ARequestService<P
         this.updateServiceResult();
     }
     public yieldPriceProducts(yieldParam: PriceProductYieldParam): Observable<PriceProductsDO> {
-        return this._appContext.thHttp.post(ThServerApi.YieldManagerYieldPriceProducts, { yieldData: yieldParam })
-            .map((priceProductsObject: Object) => {
-                var priceProducts = new PriceProductsDO();
-                priceProducts.buildFromObject(priceProductsObject);
-                return priceProducts;
-            });
+        return this._appContext.thHttp.post({
+            serverApi: ThServerApi.YieldManagerYieldPriceProducts,
+            body: JSON.stringify({
+                yieldData: yieldParam
+            })
+        }).map((priceProductsObject: Object) => {
+            var priceProducts = new PriceProductsDO();
+            priceProducts.buildFromObject(priceProductsObject);
+            return priceProducts;
+        });
     }
     public openDynamicPrice(yieldParam: DynamicPriceYieldParam): Observable<PriceProductDO> {
-        return this._appContext.thHttp.post(ThServerApi.YieldManagerOpenDynamicPrice, { yieldData: yieldParam })
-            .map((priceProductObject: Object) => {
-                var priceProduct = new PriceProductDO();
-                priceProduct.buildFromObject(priceProductObject);
-                return priceProduct;
-            });
+        return this._appContext.thHttp.post({
+            serverApi: ThServerApi.YieldManagerOpenDynamicPrice,
+            body: JSON.stringify({ 
+                yieldData: yieldParam 
+            })
+        }).map((priceProductObject: Object) => {
+            var priceProduct = new PriceProductDO();
+            priceProduct.buildFromObject(priceProductObject);
+            return priceProduct;
+        });
     }
 }

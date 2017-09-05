@@ -3,9 +3,9 @@ import { BaseComponent } from '../../../../../../../../../../../common/base/Base
 import { ThError, AppContext } from '../../../../../../../../../../../common/utils/AppContext';
 import { SettingsReportsPagesService } from '../../main/services/SettingsReportsPagesService';
 import { ThDateDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
-import { SettingsReportsService } from '../../main/services/SettingsReportsService';
 import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
+import { SettingsReportsUrlBuilderService } from "../../main/services/SettingsReportsUrlBuilderService";
 
 enum HousekeepingReportGroupByType {
     Nothing,
@@ -32,7 +32,7 @@ class HousekeepingReportGroupBy {
 @Component({
 	selector: 'settings-housekeeping-report',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/housekeeping-report/template/settings-housekeeping-report.html',
-	providers: [SettingsReportsService]
+	providers: []
 })
 export class SettingsHousekeepingReportComponent extends BaseComponent {
 	private startDate: ThDateDO;
@@ -43,8 +43,8 @@ export class SettingsHousekeepingReportComponent extends BaseComponent {
 
 	constructor(
 		private _appContext: AppContext,
-		private _backendService: SettingsReportsService,
-		private _pagesService: SettingsReportsPagesService) {
+		private _pagesService: SettingsReportsPagesService,
+		private _urlBuilderService: SettingsReportsUrlBuilderService) {
 		super();
 		this._pagesService.bootstrapSelectedTab(ReportGroupType.Housekeeping);
 		this.selectedGroupByType = this.getPossibleHousekeepingReportGroupByValues()[0].type;
@@ -65,8 +65,7 @@ export class SettingsHousekeepingReportComponent extends BaseComponent {
 			}
 		}
 
-		var encodedParams = encodeURI(JSON.stringify(params));
-		return 'api/reports/report?params=' + encodedParams;
+		return this._urlBuilderService.getReportUrl(params);
 	}
 
 	public getPossibleHousekeepingReportGroupByValues(): HousekeepingReportGroupBy[] {

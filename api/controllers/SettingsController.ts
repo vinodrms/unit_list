@@ -1,14 +1,15 @@
-import {BaseController} from './base/BaseController';
-import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
-import {ThUtils} from '../core/utils/ThUtils';
-import {AppContext} from '../core/utils/AppContext';
-import {SessionContext, SessionManager} from '../core/utils/SessionContext';
-import {ISettingsRepository, AmenitySearchCriteriaRepoDO, CountrySearchCriteriaRepoDO,
-CurrencySearchCriteriaRepoDO, PaymentMethodSearchCriteriaRepoDO, AddOnProductCategoryCriteriaRepoDO,
-RoomAttributeSearchCriteriaRepoDO} from '../core/data-layer/settings/repositories/ISettingsRepository';
+import { BaseController } from './base/BaseController';
+import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
+import { ThUtils } from '../core/utils/ThUtils';
+import { AppContext } from '../core/utils/AppContext';
+import {
+    ISettingsRepository, AmenitySearchCriteriaRepoDO, CountrySearchCriteriaRepoDO,
+    CurrencySearchCriteriaRepoDO, PaymentMethodSearchCriteriaRepoDO, AddOnProductCategoryCriteriaRepoDO,
+    RoomAttributeSearchCriteriaRepoDO
+} from '../core/data-layer/settings/repositories/ISettingsRepository';
 
 export class SettingsController extends BaseController {
-    
+
     public getRoomAttributes(req: any, res: any) {
         var roomAttributeID: string = req.query.id;
         var thUtils = new ThUtils();
@@ -26,7 +27,7 @@ export class SettingsController extends BaseController {
         });
 
     }
-    
+
     public getRoomAmenities(req: any, res: any) {
         var amenityID: string = req.query.id;
         var thUtils = new ThUtils();
@@ -38,7 +39,7 @@ export class SettingsController extends BaseController {
         }
 
         settingsRepository.getRoomAmenities(criteria).then((roomAmenityList: any) => {
-            this.returnSuccesfulResponse(req, res, {roomAmenityList: roomAmenityList});
+            this.returnSuccesfulResponse(req, res, { roomAmenityList: roomAmenityList });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -55,7 +56,7 @@ export class SettingsController extends BaseController {
         }
 
         settingsRepository.getHotelAmenities(criteria).then((hotelAmenityList: any) => {
-            this.returnSuccesfulResponse(req, res, {hotelAmenityList: hotelAmenityList});
+            this.returnSuccesfulResponse(req, res, { hotelAmenityList: hotelAmenityList });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -72,7 +73,7 @@ export class SettingsController extends BaseController {
         }
 
         settingsRepository.getCountries(criteria).then((countryList: any) => {
-            this.returnSuccesfulResponse(req, res, {countryList: countryList});
+            this.returnSuccesfulResponse(req, res, { countryList: countryList });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -89,7 +90,7 @@ export class SettingsController extends BaseController {
         }
 
         settingsRepository.getCurrencies(criteria).then((currencyList: any) => {
-            this.returnSuccesfulResponse(req, res, {currencyList: currencyList});
+            this.returnSuccesfulResponse(req, res, { currencyList: currencyList });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -106,12 +107,12 @@ export class SettingsController extends BaseController {
         }
 
         settingsRepository.getPaymentMethods(criteria).then((paymentMethodList: any) => {
-            this.returnSuccesfulResponse(req, res, {paymentMethodList: paymentMethodList});
+            this.returnSuccesfulResponse(req, res, { paymentMethodList: paymentMethodList });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
     }
-	public getAddOnProductCategories(req: any, res: any) {
+    public getAddOnProductCategories(req: any, res: any) {
         var addOnProductId = req.query.id;
         var thUtils = new ThUtils();
         var criteria: AddOnProductCategoryCriteriaRepoDO = {};
@@ -122,7 +123,7 @@ export class SettingsController extends BaseController {
         }
 
         settingsRepository.getAddOnProductCategories(criteria).then((addOnProductCategoryList: any) => {
-            this.returnSuccesfulResponse(req, res, {addOnProductCategoryList: addOnProductCategoryList});
+            this.returnSuccesfulResponse(req, res, { addOnProductCategoryList: addOnProductCategoryList });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -131,7 +132,7 @@ export class SettingsController extends BaseController {
         var thUtils = new ThUtils();
         var settingsRepository: ISettingsRepository = req.appContext.getRepositoryFactory().getSettingsRepository();
         settingsRepository.getBedTemplates().then((bedTemplateList: any) => {
-            this.returnSuccesfulResponse(req, res, {bedTemplateList: bedTemplateList});
+            this.returnSuccesfulResponse(req, res, { bedTemplateList: bedTemplateList });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -146,6 +147,6 @@ module.exports = {
     getCountries: settingsController.getCountries.bind(settingsController),
     getCurrencies: settingsController.getCurrencies.bind(settingsController),
     getPaymentMethods: settingsController.getPaymentMethods.bind(settingsController),
-	getAddOnProductCategories: settingsController.getAddOnProductCategories.bind(settingsController),
+    getAddOnProductCategories: settingsController.getAddOnProductCategories.bind(settingsController),
     getBedTemplates: settingsController.getBedTemplates.bind(settingsController)
 }

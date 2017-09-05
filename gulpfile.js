@@ -15,8 +15,7 @@ gulp.task('install-client-deps', function () {
 gulp.task('set-unit-test-env', function () {
 	env({
 		vars: {
-			NODE_ENV: "test",
-			PORT: 8001
+			NODE_ENV: "test"
 		}
 	})
 });

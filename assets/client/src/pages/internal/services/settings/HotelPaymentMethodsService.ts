@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ARequestService} from '../common/ARequestService';
-import {HotelPaymentMethodsDO} from './data-objects/HotelPaymentMethodsDO';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ARequestService } from '../common/ARequestService';
+import { HotelPaymentMethodsDO } from './data-objects/HotelPaymentMethodsDO';
 
 @Injectable()
 export class HotelPaymentMethodsService extends ARequestService<HotelPaymentMethodsDO> {
@@ -10,7 +10,9 @@ export class HotelPaymentMethodsService extends ARequestService<HotelPaymentMeth
 		super();
 	}
 	protected sendRequest(): Observable<Object> {
-		return this._appContext.thHttp.get(ThServerApi.SettingsPaymentMethods);
+		return this._appContext.thHttp.get({
+			serverApi: ThServerApi.SettingsPaymentMethods
+		});
 	}
 	protected parseResult(result: Object): HotelPaymentMethodsDO {
 		var paymentMethodsDO: HotelPaymentMethodsDO = new HotelPaymentMethodsDO();

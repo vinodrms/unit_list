@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ARequestService} from '../common/ARequestService';
-import {CountriesDO} from './data-objects/CountriesDO';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ARequestService } from '../common/ARequestService';
+import { CountriesDO } from './data-objects/CountriesDO';
 
 @Injectable()
 export class CountriesService extends ARequestService<CountriesDO> {
@@ -10,7 +10,7 @@ export class CountriesService extends ARequestService<CountriesDO> {
 		super();
 	}
 	protected sendRequest(): Observable<Object> {
-		return this._appContext.thHttp.get(ThServerApi.SettingsCountries);
+		return this._appContext.thHttp.get({ serverApi: ThServerApi.SettingsCountries });
 	}
 	protected parseResult(result: Object): CountriesDO {
 		var hotelcountriesDO: CountriesDO = new CountriesDO();

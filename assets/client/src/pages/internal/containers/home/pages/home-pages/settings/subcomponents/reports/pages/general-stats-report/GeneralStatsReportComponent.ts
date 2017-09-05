@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { BaseComponent } from '../../../../../../../../../../../common/base/BaseComponent';
 import { ThError, AppContext } from '../../../../../../../../../../../common/utils/AppContext';
-import { SettingsReportsService } from "../../main/services/SettingsReportsService";
 import { HotelService } from "../../../../../../../../../services/hotel/HotelService";
 import { SettingsReportsPagesService } from "../../main/services/SettingsReportsPagesService";
 import { ReportGroupType } from "../../utils/ReportGroupType";
@@ -10,12 +9,13 @@ import { ThDateDO } from "../../../../../../../../../services/common/data-object
 import { HotelDetailsDO } from "../../../../../../../../../services/hotel/data-objects/HotelDetailsDO";
 import { ThDateUtils } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateUtils";
 import { ThDateIntervalDO } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO";
+import { SettingsReportsUrlBuilderService } from "../../main/services/SettingsReportsUrlBuilderService";
 import { ThPeriodOption, ThPeriodType } from "../../utils/ThPeriodType";
 
 @Component({
     selector: 'settings-key-metrics-report',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/general-stats-report/template/settings-general-stats-report.html',
-    providers: [SettingsReportsService]
+    providers: []
 })
 export class GeneralStatsReportComponent extends BaseComponent {
     private format: ReportOutputFormatType;
@@ -28,8 +28,8 @@ export class GeneralStatsReportComponent extends BaseComponent {
     constructor(
 		private _appContext: AppContext,
 		private _hotelService: HotelService,
-		private _backendService: SettingsReportsService,
-		private _pagesService: SettingsReportsPagesService) {
+		private _pagesService: SettingsReportsPagesService,
+		private _urlBuilderService: SettingsReportsUrlBuilderService) {
 		super();
 		this._pagesService.bootstrapSelectedTab(ReportGroupType.GeneralStats);
 		this.periodOptionList = ThPeriodOption.getValues();
@@ -78,8 +78,7 @@ export class GeneralStatsReportComponent extends BaseComponent {
 			}
 		}
 
-		var encodedParams = encodeURI(JSON.stringify(params));
-		return 'api/reports/report?params=' + encodedParams;
+		return this._urlBuilderService.getReportUrl(params);
 	}
 
 	public didSelectPeriodOption(periodType: string) {

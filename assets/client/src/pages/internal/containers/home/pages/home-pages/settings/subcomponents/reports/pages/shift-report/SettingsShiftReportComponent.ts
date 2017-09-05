@@ -9,16 +9,16 @@ import { HotelService } from '../../../../../../../../../services/hotel/HotelSer
 import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 
 import { SettingsReportsPagesService } from '../../main/services/SettingsReportsPagesService';
-import { SettingsReportsService } from '../../main/services/SettingsReportsService';
 import { ThDateDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import { ThHourDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThHourDO';
 import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
+import { SettingsReportsUrlBuilderService } from "../../main/services/SettingsReportsUrlBuilderService";
 
 @Component({
 	selector: 'settings-shift-report',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/shift-report/template/settings-shift-report.html',
-	providers: [SettingsReportsService]
+	providers: []
 })
 export class SettingsShiftReportComponent extends BaseComponent {
 	private startDate: ThDateDO;
@@ -33,8 +33,8 @@ export class SettingsShiftReportComponent extends BaseComponent {
 	constructor(
 		private _appContext: AppContext,
 		private _hotelService: HotelService,
-		private _backendService: SettingsReportsService,
-		private _pagesService: SettingsReportsPagesService) {
+		private _pagesService: SettingsReportsPagesService,
+		private _urlBuilderService: SettingsReportsUrlBuilderService) {
 		super();
 		this._pagesService.bootstrapSelectedTab(ReportGroupType.Shift);
 		this.startTime = ThHourDO.buildThHourDO(0, 0);
@@ -84,8 +84,7 @@ export class SettingsShiftReportComponent extends BaseComponent {
 			}
 		}
 
-		var encodedParams = encodeURI(JSON.stringify(params));
-		return 'api/reports/report?params=' + encodedParams;
+		return this._urlBuilderService.getReportUrl(params);
 	}
 
 }

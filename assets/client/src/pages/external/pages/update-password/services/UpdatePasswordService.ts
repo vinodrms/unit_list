@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Observable} from 'rxjs/Observable';
-import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
-import {ThValidators} from '../../../../../common/utils/form-utils/ThFormUtils';
-import {UpdatePasswordDO} from '../data-objects/UpdatePasswordDO';
+import { Injectable } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { AppContext, ThServerApi } from '../../../../../common/utils/AppContext';
+import { ThValidators } from '../../../../../common/utils/form-utils/ThFormUtils';
+import { UpdatePasswordDO } from '../data-objects/UpdatePasswordDO';
 
 @Injectable()
 export class UpdatePasswordService {
@@ -37,7 +37,12 @@ export class UpdatePasswordService {
 	}
 	public updatePassword(): Observable<any> {
 		var updPassDO = this.getUpdatePasswordDO();
-		return this._appContext.thHttp.post(ThServerApi.AccountResetPassword, { requestData: updPassDO });
+		return this._appContext.thHttp.post({
+			serverApi: ThServerApi.AccountResetPassword,
+			body: JSON.stringify({
+				requestData: updPassDO
+			})
+		});
 	}
 
 	public get activationCode(): string {

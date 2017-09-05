@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ARequestService} from '../common/ARequestService';
-import {HotelAmenitiesDO} from './data-objects/HotelAmenitiesDO';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ARequestService } from '../common/ARequestService';
+import { HotelAmenitiesDO } from './data-objects/HotelAmenitiesDO';
 
 @Injectable()
 export class HotelAmenitiesService extends ARequestService<HotelAmenitiesDO> {
@@ -10,7 +10,9 @@ export class HotelAmenitiesService extends ARequestService<HotelAmenitiesDO> {
 		super();
 	}
 	protected sendRequest(): Observable<Object> {
-		return this._appContext.thHttp.get(ThServerApi.SettingsHotelAmenities);
+		return this._appContext.thHttp.get({
+			serverApi: ThServerApi.SettingsHotelAmenities
+		});
 	}
 	protected parseResult(result: Object): HotelAmenitiesDO {
 		var hotelAmenitiesDO: HotelAmenitiesDO = new HotelAmenitiesDO();
