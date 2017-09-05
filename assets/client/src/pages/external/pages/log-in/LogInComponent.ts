@@ -38,7 +38,6 @@ export class LogInComponent extends BaseFormComponent implements OnInit, OnDestr
 			this._location.replaceState("");
 		});
 
-		this.isLoading = true;
 		this._logInService.isAuthenticated().subscribe((loginResult: Object) => {
 			this._hotelService.getHotelDetailsDO().subscribe((result: HotelDetailsDO) => {
 				this.isLoading = false;
