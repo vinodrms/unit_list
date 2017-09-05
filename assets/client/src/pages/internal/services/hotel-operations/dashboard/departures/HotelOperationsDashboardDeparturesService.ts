@@ -39,7 +39,12 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
             this._roomsService.getRoomList(),
             this._hotelAggregatorService.getHotelAggregatedInfo(),
             this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryIdList(),
-            this._appContext.thHttp.post(ThServerApi.HotelOperationsDashboardDepartures, { query: { referenceDate: this._referenceDate } })
+            this._appContext.thHttp.post({
+                serverApi: ThServerApi.HotelOperationsDashboardDepartures,
+                body: JSON.stringify({
+                    query: { referenceDate: this._referenceDate }
+                })
+            })
         ).map((result: [RoomVM[], HotelAggregatedInfo, RoomCategoryStatsDO[], Object]) => {
             var roomVMList: RoomVM[] = result[0];
             var hotelAggregatedInfo: HotelAggregatedInfo = result[1];
@@ -50,7 +55,7 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
             var departuresInfo = new DeparturesInfoDO();
             departuresInfo.buildFromObject(departuresInfoObject);
 
-            let departureContainer = new DepartureItemContainer(this._appContext, this._thTranslation, 
+            let departureContainer = new DepartureItemContainer(this._appContext, this._thTranslation,
                 departuresInfo.departureInfoList, hotelAggregatedInfo, roomCategStatsList, roomVMList);
             let list = departureContainer.departureItemInfoVMList;
 

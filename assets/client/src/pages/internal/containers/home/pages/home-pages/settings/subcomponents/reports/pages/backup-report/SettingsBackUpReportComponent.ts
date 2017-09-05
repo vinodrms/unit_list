@@ -6,14 +6,14 @@ import { BasicInfoPaymentsAndPoliciesEditService } from '../../../../../../../..
 import { ThDateDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import { HotelService } from '../../../../../../../../../services/hotel/HotelService';
 import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
-import { SettingsReportsService } from '../../main/services/SettingsReportsService';
 import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
+import { SettingsReportsUrlBuilderService } from "../../main/services/SettingsReportsUrlBuilderService";
 
 @Component({
 	selector: 'settings-backup-report',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/backup-report/template/settings-backup-report.html',
-	providers: [SettingsReportsService]
+	providers: []
 })
 export class SettingsBackUpReportComponent extends BaseComponent {
 	private format: ReportOutputFormatType;
@@ -21,8 +21,8 @@ export class SettingsBackUpReportComponent extends BaseComponent {
 	constructor(
 		private _appContext: AppContext,
 		private _hotelService: HotelService,
-		private _backendService: SettingsReportsService,
-		private _pagesService: SettingsReportsPagesService) {
+		private _pagesService: SettingsReportsPagesService,
+		private _urlBuilderService: SettingsReportsUrlBuilderService) {
 		super();
 		this._pagesService.bootstrapSelectedTab(ReportGroupType.Backup);
 	}
@@ -43,8 +43,7 @@ export class SettingsBackUpReportComponent extends BaseComponent {
 			}
 		}
 
-		var encodedParams = encodeURI(JSON.stringify(params));
-		return 'api/reports/report?params=' + encodedParams;
+		return this._urlBuilderService.getReportUrl(params);
 	}
 
 }

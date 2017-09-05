@@ -2,26 +2,26 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
+
 import { ThError, AppContext } from '../../../../../../../../../../../common/utils/AppContext';
 import { HotelDO } from '../../../../../../../../../services/hotel/data-objects/hotel/HotelDO';
 import { BaseComponent } from '../../../../../../../../../../../common/base/BaseComponent';
 import { HotelService } from '../../../../../../../../../services/hotel/HotelService';
 import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
-
 import { SettingsReportsPagesService } from '../../main/services/SettingsReportsPagesService';
-import { SettingsReportsService } from '../../main/services/SettingsReportsService';
 import { ThDateDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import { ThHourDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThHourDO';
 import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
+import { SettingsReportsUrlBuilderService } from "../../main/services/SettingsReportsUrlBuilderService";
 
 import * as _ from "underscore";
 
 @Component({
 	selector: 'invoices-report',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/invoices-report/template/invoices-report.html',
-	providers: [SettingsReportsService]
+	providers: []
 })
 export class InvoicesReportComponent extends BaseComponent {
 	public static MaxCustomers = 10;
@@ -37,8 +37,8 @@ export class InvoicesReportComponent extends BaseComponent {
 	constructor(
 		private _appContext: AppContext,
 		private _hotelService: HotelService,
-		private _backendService: SettingsReportsService,
-		private _pagesService: SettingsReportsPagesService) {
+		private _pagesService: SettingsReportsPagesService,
+		private _urlBuilderService: SettingsReportsUrlBuilderService) {
 		super();
 		this._pagesService.bootstrapSelectedTab(ReportGroupType.Invoices);
 
@@ -99,8 +99,7 @@ export class InvoicesReportComponent extends BaseComponent {
 			}
 		}
 
-		var encodedParams = encodeURI(JSON.stringify(params));
-		return 'api/reports/report?params=' + encodedParams;
+		return this._urlBuilderService.getReportUrl(params);
 	}
 
 }

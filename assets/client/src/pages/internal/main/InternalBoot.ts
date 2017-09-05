@@ -9,7 +9,6 @@ import { InternalRouting } from './InternalRouterConfig';
 import { IThCookie } from '../../../common/utils/cookies/IThCookie';
 import { ThCookie } from '../../../common/utils/cookies/ThCookie';
 import { IThHttp } from '../../../common/utils/http/IThHttp';
-import { ThHttp } from '../../../common/utils/http/ThHttp';
 import { IBrowserLocation } from '../../../common/utils/browser-location/IBrowserLocation';
 import { BrowserLocation } from '../../../common/utils/browser-location/BrowserLocation';
 import { IRouterNavigator } from '../../../common/utils/navigator/IRouterNavigator';
@@ -24,6 +23,11 @@ import { IAnalytics } from '../../../common/utils/analytics/IAnalytics';
 import { AppContext } from '../../../common/utils/AppContext';
 import { ModuleLoaderService } from '../../../common/utils/module-loader/ModuleLoaderService';
 import { HomeModule } from '../containers/home/HomeModule';
+import { ITokenService } from "../../../common/utils/oauth-token/ITokenService";
+import { TokenService } from "../../../common/utils/oauth-token/TokenService";
+import { IThLocalStorage } from "../../../common/utils/local-storage/IThLocalStorage";
+import { ThLocalStorage } from "../../../common/utils/local-storage/ThLocalStorage";
+import { ThOAuthHttp } from "../../../common/utils/http/oauth/ThOAuthHttp";
 
 @NgModule({
 	imports: [BrowserModule, HttpModule, InternalRouting, HomeModule],
@@ -32,10 +36,12 @@ import { HomeModule } from '../containers/home/HomeModule';
 	providers: [
 		{ provide: APP_BASE_HREF, useValue: '/home' },
 		{ provide: IThCookie, useClass: ThCookie },
+		{ provide: IThLocalStorage, useClass: ThLocalStorage },
 		{ provide: IBrowserLocation, useClass: BrowserLocation },
 		{ provide: IRouterNavigator, useClass: RouterNavigator },
 		ThTranslation,
-		{ provide: IThHttp, useClass: ThHttp },
+		{ provide: ITokenService, useClass: TokenService },
+		{ provide: IThHttp, useClass: ThOAuthHttp },
 		{ provide: IToaster, useClass: Toaster },
 		{ provide: IModalService, useClass: ModalService },
 		{ provide: IAnalytics, useClass: GoogleAnalytics },

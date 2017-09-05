@@ -25,8 +25,7 @@ export enum ThStatusCode {
 	HotelRepositoryAccountAlreadyExists,
 	HotelRepositoryErrorAddingHotel,
 	HotelLoginError,
-	PassportLoginServiceInvalidLogin,
-	PassportLoginServiceErrorInvalidLogin,
+	UserLogoutError,
 	HotelRepositoryErrorFindingAccount,
 	HotelRepositoryAccountNotFound,
 	HotelAuthenticationAccountNotActive,
@@ -69,6 +68,8 @@ export enum ThStatusCode {
 	HotelDetailsControllerErrorSavingTaxItem,
 	HotelRepositoryHotelIdNotFound,
 	HotelRepositoryErrorFindingHotelById,
+	HotelRepositoryErrorFindingUser,
+	HotelRepositoryUserSearchError,
 	HotelDetailsRepositoryProblemUpdatingAccount,
 	HotelDetailsRepositoryErrorUpdatingAccount,
 	PaymentMethodIdListValidatorInvalid,
@@ -526,7 +527,7 @@ export enum ThStatusCode {
 	BookingChangePriceProductError,
 	BookingChangePriceProductInvalidState,
 	BookingChangePriceProductPaidInvoice,
-	
+
 	// Reports
 	ReportsMetadataListFetchError,
 	ReportFetchError,
@@ -536,7 +537,15 @@ export enum ThStatusCode {
 
 	//File service
 	FileServiceErrorWritingFile,
-	FileServiceErrorDeletingFile
+	FileServiceErrorDeletingFile,
+
+	//OAuth tokens
+	OAuthTokenRepositoryOAuthTokenNotFound,
+	OAuthTokenRepositoryErrorGettingOAuthToken,
+	OAuthTokenRepositoryErrorUpdatingToken,
+	OAuthTokenRepositoryErrorSavingToken,
+	OAuthTokenErrorDeletingToken,
+
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -563,8 +572,7 @@ ThMessage[ThStatusCode.HotelSignUpError] = "Error signing up. Please try again."
 ThMessage[ThStatusCode.HotelRepositoryAccountAlreadyExists] = "An account with this email already exists.";
 ThMessage[ThStatusCode.HotelRepositoryErrorAddingHotel] = "Error adding the information. Please try again.";
 ThMessage[ThStatusCode.HotelLoginError] = "Error signing in. Please try again.";
-ThMessage[ThStatusCode.PassportLoginServiceInvalidLogin] = "Error signing in. Please try again.";
-ThMessage[ThStatusCode.PassportLoginServiceErrorInvalidLogin] = "Error signing in. Please try again.";
+ThMessage[ThStatusCode.UserLogoutError] = "Error logging you out. Please try again.";
 ThMessage[ThStatusCode.HotelRepositoryErrorFindingAccount] = "Error finding account. Please try again.";
 ThMessage[ThStatusCode.HotelRepositoryAccountNotFound] = "Invalid email or password.";
 ThMessage[ThStatusCode.HotelAuthenticationAccountNotActive] = "The account is not active.";
@@ -1064,6 +1072,13 @@ ThMessage[ThStatusCode.ReportsHKBookingCustomers] = "Error getting compnay/TA fo
 // File service
 ThMessage[ThStatusCode.FileServiceErrorWritingFile] = "Error writing file";
 ThMessage[ThStatusCode.FileServiceErrorDeletingFile] = "Error deleting file";
+
+//OAuth Tokens
+ThMessage[ThStatusCode.OAuthTokenRepositoryOAuthTokenNotFound] = "OAuth token was not found.";
+ThMessage[ThStatusCode.OAuthTokenRepositoryErrorGettingOAuthToken] = "Error retrieving the token.";
+ThMessage[ThStatusCode.OAuthTokenRepositoryErrorUpdatingToken] = "There was a problem when generating the new token.";
+ThMessage[ThStatusCode.OAuthTokenRepositoryErrorSavingToken] = "There was a problem when saving the new token.";
+ThMessage[ThStatusCode.OAuthTokenErrorDeletingToken] = "There was a problem when removing new token.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;

@@ -16,6 +16,7 @@ export var EnglishTranslations: Object = {
 	"Account succesfully activated": "Account succesfully activated",
 	"Problem activating account. The link may have expired.": "Problem activating account. The link may have expired.",
 	"Am email has been sent. Please check your inbox.": "Am email has been sent. Please check your inbox.",
+	"Invalid username or password": "Invalid username or password",
 	"Reset Password": "Reset Password",
 	"Remember your password ?": "Remember your password ?",
 	"Update Password": "Update Password",

@@ -1,9 +1,11 @@
 export enum ThServerApi {
+	AccountIsAuthenticated,
 	AccountSignUp,
 	AccountLogIn,
 	AccountLogOut,
 	AccountRequestResetPassword,
 	AccountResetPassword,
+	AccountRefreshToken,
 	HotelDetails,
 	HotelDetailsUpdateBasicInfo,
 	HotelDetailsUpdatePaymentsAndPolicies,
@@ -110,10 +112,12 @@ export enum ThServerApi {
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
+ThServerApiUrl[ThServerApi.AccountIsAuthenticated] = "/account/isAuthenticated";
 ThServerApiUrl[ThServerApi.AccountSignUp] = "/account/signUp";
-ThServerApiUrl[ThServerApi.AccountLogIn] = "/account/logIn";
+ThServerApiUrl[ThServerApi.AccountLogIn] = "/token";
 ThServerApiUrl[ThServerApi.AccountLogOut] = "/account/logOut";
 ThServerApiUrl[ThServerApi.AccountRequestResetPassword] = "/account/requestResetPassword";
+ThServerApiUrl[ThServerApi.AccountRefreshToken] = "/token";
 
 ThServerApiUrl[ThServerApi.AccountResetPassword] = "/account/resetPassword";
 ThServerApiUrl[ThServerApi.HotelDetails] = "/hotel/details";
@@ -224,12 +228,13 @@ ThServerApiUrl[ThServerApi.YieldManagerGetKeyMetrics] = "/yManager/getKeyMetrics
 ThServerApiUrl[ThServerApi.Report] = '/reports/report';
 
 export class ServerApiBuilder {
+	public static ClientId = "UnitPal-Web";
 	public static ApiRoot = "/api";
 
 	constructor(private _thServerApi: ThServerApi) {
 	}
 
-	public getUrl(): string {
+	public getBaseUrl(): string {
 		return ServerApiBuilder.ApiRoot + ThServerApiUrl[this._thServerApi];
 	}
 }

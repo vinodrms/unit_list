@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
-import {EmailConfirmationParams} from './utils/EmailConfirmationParams';
+import { AppContext, ThServerApi } from '../../../../../common/utils/AppContext';
+import { EmailConfirmationParams } from './utils/EmailConfirmationParams';
 
 @Injectable()
 export class HotelOperationsCommonService {
@@ -11,8 +11,11 @@ export class HotelOperationsCommonService {
     }
 
     public sendEmail(emailConfig: EmailConfirmationParams): Observable<boolean> {
-        return this._appContext.thHttp.post(ThServerApi.HotelOperationsCommonSendEmail, {
-            emailConfig: emailConfig
+        return this._appContext.thHttp.post({
+            serverApi: ThServerApi.HotelOperationsCommonSendEmail,
+            body: JSON.stringify({
+                emailConfig: emailConfig
+            })
         }).map((result: boolean) => {
             return result;
         });

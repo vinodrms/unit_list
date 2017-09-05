@@ -1,19 +1,19 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ALazyLoadRequestService} from '../common/ALazyLoadRequestService';
-import {AddOnProductsDO} from './data-objects/AddOnProductsDO';
-import {AddOnProductDO} from './data-objects/AddOnProductDO';
-import {AddOnProductVM} from './view-models/AddOnProductVM';
-import {TaxService} from '../taxes/TaxService';
-import {TaxContainerDO} from '../taxes/data-objects/TaxContainerDO';
-import {AddOnProductCategoriesService} from '../settings/AddOnProductCategoriesService';
-import {AddOnProductCategoriesDO} from '../settings/data-objects/AddOnProductCategoriesDO';
-import {HotelAggregatorService} from '../hotel/HotelAggregatorService';
-import {HotelAggregatedInfo} from '../hotel/utils/HotelAggregatedInfo';
-import {AddOnProductCategoryDO} from '../common/data-objects/add-on-product/AddOnProductCategoryDO';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ALazyLoadRequestService } from '../common/ALazyLoadRequestService';
+import { AddOnProductsDO } from './data-objects/AddOnProductsDO';
+import { AddOnProductDO } from './data-objects/AddOnProductDO';
+import { AddOnProductVM } from './view-models/AddOnProductVM';
+import { TaxService } from '../taxes/TaxService';
+import { TaxContainerDO } from '../taxes/data-objects/TaxContainerDO';
+import { AddOnProductCategoriesService } from '../settings/AddOnProductCategoriesService';
+import { AddOnProductCategoriesDO } from '../settings/data-objects/AddOnProductCategoriesDO';
+import { HotelAggregatorService } from '../hotel/HotelAggregatorService';
+import { HotelAggregatedInfo } from '../hotel/utils/HotelAggregatedInfo';
+import { AddOnProductCategoryDO } from '../common/data-objects/add-on-product/AddOnProductCategoryDO';
 
 import * as _ from "underscore";
 
@@ -71,7 +71,12 @@ export class AddOnProductsService extends ALazyLoadRequestService<AddOnProductVM
 	}
 
 	private runServerPostActionOnAddOnProduct(apiAction: ThServerApi, addOnProduct: AddOnProductDO): Observable<AddOnProductDO> {
-		return this._appContext.thHttp.post(apiAction, { addOnProduct: addOnProduct }).map((addOnProductObject: Object) => {
+		return this._appContext.thHttp.post({
+			serverApi: apiAction,
+			body: JSON.stringify({
+				addOnProduct: addOnProduct
+			})
+		}).map((addOnProductObject: Object) => {
 			this.refreshData();
 
 			var updatedAddOnProductDO: AddOnProductDO = new AddOnProductDO();

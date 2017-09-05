@@ -1,23 +1,17 @@
-import {BaseController} from './base/BaseController';
-import {AppEnvironmentType} from '../core/utils/environment/UnitPalConfig';
-import {SessionManager} from '../core/utils/SessionContext';
-import {LoginStatusCode} from '../core/utils/th-responses/LoginStatusCode';
-import {UnitPalConfig, GoogleAnalyticsSettings} from '../core/utils/environment/UnitPalConfig';
+import { BaseController } from './base/BaseController';
+import { AppEnvironmentType } from '../core/utils/environment/UnitPalConfig';
+import { LoginStatusCode } from '../core/utils/th-responses/LoginStatusCode';
+import { UnitPalConfig, GoogleAnalyticsSettings } from '../core/utils/environment/UnitPalConfig';
 
 class AppViewsController extends BaseController {
 	public getExternalView(req: any, res: any) {
 		var unitPalConfig: UnitPalConfig = req.appContext.getUnitPalConfig();
-        res.view("external", this.getViewParameters(unitPalConfig));
+		res.view("external", this.getViewParameters(unitPalConfig));
 	}
 
 	public getInternalView(req: any, res: any) {
 		var unitPalConfig: UnitPalConfig = req.appContext.getUnitPalConfig();
-		var sessionManager = new SessionManager(req);
-
-		if (!this.isDevelopmentEnvironment(unitPalConfig) && !sessionManager.sessionExists()) {
-			return res.redirect(unitPalConfig.getAppContextRoot() + "/login/" + LoginStatusCode.SessionTimeout);
-		}
-        return res.view("internal", this.getViewParameters(unitPalConfig));
+		return res.view("internal", this.getViewParameters(unitPalConfig));
 	}
 
 	private getViewParameters(unitPalConfig: UnitPalConfig): Object {
@@ -26,7 +20,7 @@ class AppViewsController extends BaseController {
 			isDevelopmentEnvironment: this.isDevelopmentEnvironment(unitPalConfig),
 			googleAnalyticsEnabled: googleAnalyticsSettings.enabled,
 			googleAnalyticsTrackingId: googleAnalyticsSettings.trackingId
-        };
+		};
 	}
 	private isDevelopmentEnvironment(unitPalConfig: UnitPalConfig) {
 		return unitPalConfig.getAppEnvironment() == AppEnvironmentType.Development;

@@ -21,9 +21,13 @@ export class RoomCategoriesStatsService extends ARequestService<RoomCategoryStat
 	protected sendRequest(): Observable<Object> {
 		switch (this._categoriesType) {
 			case RoomCategoriesType.UsedInRooms:
-				return this._appContext.thHttp.post(ThServerApi.UsedRoomCategoriesStats, {});
+				return this._appContext.thHttp.post({
+					serverApi: ThServerApi.UsedRoomCategoriesStats
+				});
 			default:
-				return this._appContext.thHttp.post(ThServerApi.RoomCategoriesStats, {});
+				return this._appContext.thHttp.post({
+					serverApi: ThServerApi.RoomCategoriesStats
+				});
 		}
 	}
 

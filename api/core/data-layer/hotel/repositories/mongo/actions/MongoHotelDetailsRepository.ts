@@ -10,6 +10,7 @@ import { HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, Property
 import { LazyLoadRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
 import { ThTimestampDO } from '../../../../../utils/th-dates/data-objects/ThTimestampDO';
 import { HotelSequenceType, HotelSequencesDO } from '../../../data-objects/sequences/HotelSequencesDO';
+import { UserDO } from "../../../data-objects/user/UserDO";
 
 import _ = require("underscore");
 
@@ -43,6 +44,31 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 			}
 		);
 	}
+	public getUser(hotelId: string, userId: string): Promise<UserDO> {
+		return new Promise<UserDO>((resolve: { (result: UserDO): void }, reject: { (err: ThError): void }) => {
+			this.getUserCore(resolve, reject, hotelId, userId);
+		});
+	}
+	private getUserCore(resolve: { (result: UserDO): void }, reject: { (err: ThError): void }, hotelId: string, userId: string) {
+		this.getHotelById(hotelId).then((hotel: HotelDO) => {
+			let user = _.find(hotel.userList, (user: UserDO) => {
+				return user.id === userId;
+			});
+			if (this._thUtils.isUndefinedOrNull(user)) {
+				var thError = new ThError(ThStatusCode.HotelRepositoryErrorFindingUser, null);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "No user found", { hotelId: hotelId, userId: userId }, thError);
+				reject(thError);
+			}
+			else {
+				resolve(user);
+			}
+		}).catch((error: any) => {
+			var thError = new ThError(ThStatusCode.HotelRepositoryUserSearchError, error);
+			ThLogger.getInstance().logError(ThLogLevel.Error, "Error in user search", { hotelId: hotelId, userId: userId }, thError);
+			reject(thError);
+		});
+	}
+
 	public updateBasicInformation(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO): Promise<HotelDO> {
 		return this.findAndModifyHotel(hotelMeta, {
 			"contactDetails": basicInfo.contactDetails,

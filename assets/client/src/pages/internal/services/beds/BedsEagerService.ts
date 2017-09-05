@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
 
-import {BedTemplatesService} from '../settings/BedTemplatesService';
-import {BedTemplateDO} from '../common/data-objects/bed-template/BedTemplateDO';
-import {BedTemplatesDO} from '../settings/data-objects/BedTemplatesDO';
-import {ARequestService} from '../common/ARequestService';
-import {BedsDO} from './data-objects/BedsDO';
-import {BedDO} from './data-objects/BedDO';
-import {BedVM} from './view-models/BedVM';
+import { BedTemplatesService } from '../settings/BedTemplatesService';
+import { BedTemplateDO } from '../common/data-objects/bed-template/BedTemplateDO';
+import { BedTemplatesDO } from '../settings/data-objects/BedTemplatesDO';
+import { ARequestService } from '../common/ARequestService';
+import { BedsDO } from './data-objects/BedsDO';
+import { BedDO } from './data-objects/BedDO';
+import { BedVM } from './view-models/BedVM';
 
 import * as _ from "underscore";
 
@@ -21,7 +21,9 @@ export class BedsEagerService extends ARequestService<BedsDO> {
     }
 
     protected sendRequest(): Observable<Object> {
-        return this._appContext.thHttp.post(ThServerApi.Beds, {});
+        return this._appContext.thHttp.post({
+            serverApi: ThServerApi.Beds
+        });
     }
 
     protected parseResult(result: Object): BedsDO {

@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ARequestService} from '../common/ARequestService';
-import {BedTemplatesDO} from './data-objects/BedTemplatesDO';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ARequestService } from '../common/ARequestService';
+import { BedTemplatesDO } from './data-objects/BedTemplatesDO';
 
 @Injectable()
 export class BedTemplatesService extends ARequestService<BedTemplatesDO> {
@@ -10,7 +10,9 @@ export class BedTemplatesService extends ARequestService<BedTemplatesDO> {
 		super();
 	}
 	protected sendRequest(): Observable<Object> {
-		return this._appContext.thHttp.get(ThServerApi.SettingsBedTemplates);
+		return this._appContext.thHttp.get({
+			serverApi: ThServerApi.SettingsBedTemplates
+		});
 	}
 	protected parseResult(result: Object): BedTemplatesDO {
 		var bedTemplatesDO: BedTemplatesDO = new BedTemplatesDO();

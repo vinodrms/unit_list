@@ -110,7 +110,12 @@ export class VATComponent extends BaseComponent implements OnInit {
 			.switchMap((vatCode: string) => {
 				this.vatDetails.fullVat = vatCode;
 				this.triggerVatDetailsChanged();
-				return this._appContext.thHttp.get(ThServerApi.ServiceVatVerifier, { countryCode: this.convertedCountryCode, vatNumber: this.vatCodeControl.value })
+				return this._appContext.thHttp.get({
+					serverApi: ThServerApi.ServiceVatVerifier,
+					queryParameters: {
+						countryCode: this.convertedCountryCode, vatNumber: this.vatCodeControl.value
+					}
+				})
 			})
 			.subscribe((vatResponse: VatResponse) => {
 				this.onVatResponseReceived.next(vatResponse);
