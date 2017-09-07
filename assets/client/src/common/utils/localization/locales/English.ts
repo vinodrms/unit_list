@@ -16,6 +16,7 @@ export var EnglishTranslations: Object = {
 	"Account succesfully activated": "Account succesfully activated",
 	"Problem activating account. The link may have expired.": "Problem activating account. The link may have expired.",
 	"Am email has been sent. Please check your inbox.": "Am email has been sent. Please check your inbox.",
+	"Invalid username or password": "Invalid username or password",
 	"Reset Password": "Reset Password",
 	"Remember your password ?": "Remember your password ?",
 	"Update Password": "Update Password",
@@ -968,8 +969,14 @@ export var EnglishTranslations: Object = {
 	"Leisure": "Leisure",
 	"Travel As": "Travel As",
 	"Group": "Group",
-	"Monthly Stats Report": "Monthly Stats Report",
-	"Contains general hotel stats for a month": "Contains general hotel stats for a month",
+	"General Stats Report": "General Stats Report",
+	"Contains general hotel stats": "Contains general hotel stats",
 	"Payment Due in Days": "Payment Due in Days",
-	
+	"Group By": "Group By",
+	"Enter the sign up code": "Enter the sign up code",
+	"Sign Up Code": "Sign Up Code",
+	"here": "here",
+	"Don\'t have a code yet? Click": "Don\'t have a code yet? Click",
+	"to get one": "to get one",
+		
 };

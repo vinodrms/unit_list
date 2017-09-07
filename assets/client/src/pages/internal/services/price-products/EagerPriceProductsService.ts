@@ -13,24 +13,34 @@ export class EagerPriceProductsService {
 	}
 
 	public getActivePriceProducts(): Observable<PriceProductsDO> {
-		return this._appContext.thHttp.post(ThServerApi.PriceProducts,
-			{ searchCriteria: { status: PriceProductStatus.Active } }).map((resultObject: Object) => {
-				var priceProducts = new PriceProductsDO();
-				priceProducts.buildFromObject(resultObject);
-				return priceProducts;
-			});
+		return this._appContext.thHttp.post({
+			serverApi: ThServerApi.PriceProducts,
+			body: JSON.stringify({
+				searchCriteria: { status: PriceProductStatus.Active }
+			})
+		}).map((resultObject: Object) => {
+			var priceProducts = new PriceProductsDO();
+			priceProducts.buildFromObject(resultObject);
+			return priceProducts;
+		});
 	}
 
 	public getPriceProducts(priceProductStatus: PriceProductStatus, priceProductIdList: string[]): Observable<PriceProductsDO> {
 		if (!priceProductIdList || priceProductIdList.length == 0) {
 			return this.getEmptyResult();
 		}
-		return this._appContext.thHttp.post(ThServerApi.PriceProducts,
-			{ searchCriteria: { priceProductIdList: priceProductIdList, status: priceProductStatus } }).map((resultObject: Object) => {
-				var priceProducts = new PriceProductsDO();
-				priceProducts.buildFromObject(resultObject);
-				return priceProducts;
-			});
+		return this._appContext.thHttp.post({
+			serverApi: ThServerApi.PriceProducts,
+			body: JSON.stringify({
+				searchCriteria: {
+					priceProductIdList: priceProductIdList, status: priceProductStatus
+				}
+			})
+		}).map((resultObject: Object) => {
+			var priceProducts = new PriceProductsDO();
+			priceProducts.buildFromObject(resultObject);
+			return priceProducts;
+		});
 	}
 	private getEmptyResult(): Observable<PriceProductsDO> {
 		return new Observable<PriceProductsDO>((serviceObserver: Observer<PriceProductsDO>) => {

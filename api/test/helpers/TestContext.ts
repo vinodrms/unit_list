@@ -1,6 +1,6 @@
 import { UnitPalConfig } from '../../core/utils/environment/UnitPalConfig';
 import { AppContext } from '../../core/utils/AppContext';
-import { SessionContext, SessionManager } from '../../core/utils/SessionContext';
+import { SessionContext, SessionDO } from '../../core/utils/SessionContext';
 import { Locales, ThTranslation } from '../../core/utils/localization/ThTranslation';
 import { HotelDO } from '../../core/data-layer/hotel/data-objects/HotelDO';
 import { UserDO } from '../../core/data-layer/hotel/data-objects/user/UserDO';
@@ -15,7 +15,19 @@ export class TestContext {
 		this.appContext.thTranslate = new ThTranslation(Locales.English);
 	}
 	public updateSessionContext(loginData: { user: UserDO, hotel: HotelDO }) {
-		var sessionManager = new SessionManager(null);
-		this.sessionContext = sessionManager.getSessionContext(loginData);
+		let sessionDO = new SessionDO();
+		sessionDO.user = {
+			id: loginData.user.id,
+			email: loginData.user.email,
+			roleList: loginData.user.roleList
+		}
+		sessionDO.hotel = {
+			id: loginData.hotel.id
+		}
+
+		this.sessionContext = {
+			sessionDO: sessionDO,
+			language: loginData.user.language
+		};
 	}
 }

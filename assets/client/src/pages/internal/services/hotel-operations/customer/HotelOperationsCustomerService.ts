@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
-import {CustomerDO} from '../../customers/data-objects/CustomerDO';
+import { AppContext, ThServerApi } from '../../../../../common/utils/AppContext';
+import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 
 @Injectable()
 export class HotelOperationsCustomerService {
@@ -11,7 +11,12 @@ export class HotelOperationsCustomerService {
     }
 
     public changeDetails(customer: CustomerDO): Observable<CustomerDO> {
-        return this._appContext.thHttp.post(ThServerApi.CustomersSaveItem, { customer: customer }).map((customerObject: Object) => {
+        return this._appContext.thHttp.post({
+            serverApi: ThServerApi.CustomersSaveItem,
+            body: JSON.stringify({
+                customer: customer
+            })
+        }).map((customerObject: Object) => {
             var updatedCustomerDO: CustomerDO = new CustomerDO();
             updatedCustomerDO.buildFromObject(customerObject["customer"]);
             return updatedCustomerDO;

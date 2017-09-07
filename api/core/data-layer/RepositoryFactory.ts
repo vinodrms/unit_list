@@ -32,6 +32,10 @@ import { IBookingRepository } from './bookings/repositories/IBookingRepository';
 import { MongoBookingRepository } from "./bookings/repositories/mongo/MongoBookingRepository";
 import { IHotelInventorySnapshotRepository } from './hotel-inventory-snapshots/repositories/IHotelInventorySnapshotRepository';
 import { MongoHotelInventorySnapshotRepository } from './hotel-inventory-snapshots/repositories/mongo/MongoHotelInventorySnapshotRepository';
+import { ISignupCodeRepository } from "./signup-codes/repositories/ISignupCodeRepository";
+import { MongoSignupCodeRepository } from "./signup-codes/repositories/mongo/MongoSignupCodeRepository";
+import { IOAuthTokenRepository } from "./oauth-tokens/IOAuthTokenRepository";
+import { MongoOAuthTokenRepository } from "./oauth-tokens/repositories/MongoOAuthTokenRepository";
 
 export class RepositoryFactory {
     private _databaseType: DatabaseType;
@@ -45,7 +49,8 @@ export class RepositoryFactory {
                 return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(),
                 new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository(),
                 new MongoYieldFilterConfigurationRepository(), new MongoAllotmentRepository(), new MongoNotificationsRepository(),
-                new MongoBookingRepository(), new MongoInvoiceGroupsRepository(new MongoHotelRepository()), new MongoHotelInventorySnapshotRepository()];
+                new MongoBookingRepository(), new MongoInvoiceGroupsRepository(new MongoHotelRepository()), new MongoHotelInventorySnapshotRepository(),
+                new MongoOAuthTokenRepository(), new MongoSignupCodeRepository()];
         }
     }
 
@@ -150,6 +155,20 @@ export class RepositoryFactory {
         switch (this._databaseType) {
             default:
                 return new MongoHotelInventorySnapshotRepository();
+        }
+    }
+
+    getSignupCodeRepository(): ISignupCodeRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoSignupCodeRepository();
+        }
+    }
+    
+    getOAuthTokenRepository(): IOAuthTokenRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoOAuthTokenRepository();
         }
     }
 }

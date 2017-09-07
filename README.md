@@ -94,6 +94,16 @@ sudo letsencrypt certonly --webroot -w /var/www/html -d app.unitpal.com -d www.a
     
     https://certbot.eff.org/#ubuntuxenial-nginx
 
+    For manual renew:
+
+    ```
+    sudo service nginx stop
+    sudo cp /etc/nginx/sites-available/unitpal /etc/nginx/sites-available/unitpal_bkp
+    sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/unitpal
+    sudo letsencrypt renew
+    sudo service nginx startW
+    ```
+    
 ### Ansible
 ansible 2.1.3.0
 

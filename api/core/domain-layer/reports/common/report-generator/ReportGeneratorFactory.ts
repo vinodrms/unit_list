@@ -9,7 +9,7 @@ import { HousekeepingReportGroupGenerator } from "../../housekeeping/Housekeepin
 import { BookingsReportGroupGenerator } from "../../bookings/BookingsReportGroupGenerator";
 import { InvoicesReportGroupGenerator } from "../../invoices-report/InvoicesReportGroupGenerator";
 import { GuestsReportGroupGenerator } from "../../guests/GuestsReportGroupGenerator";
-import { MonthlyStatsReportGroupGenerator } from "../../monthly-stats/MonthlyStatsReportGroupGenerator";
+import { GeneralStatsReportGroupGenerator } from "../../general-stats/GeneralStatsReportGroupGenerator";
 
 export class ReportGeneratorFactory {
 	private _thUtils: ThUtils;
@@ -34,8 +34,8 @@ export class ReportGeneratorFactory {
 				return new InvoicesReportGroupGenerator(this._appContext, this._sessionContext);
 			case ReportGroupType.Guests:
 				return new GuestsReportGroupGenerator(this._appContext, this._sessionContext);
-			case ReportGroupType.MonthlyStats:
-				return new MonthlyStatsReportGroupGenerator(this._appContext, this._sessionContext);
+			case ReportGroupType.GeneralStats:
+				return new GeneralStatsReportGroupGenerator(this._appContext, this._sessionContext);
 		}
 	}
 }

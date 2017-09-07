@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ARequestService} from '../common/ARequestService';
-import {TotalCountDO} from '../common/data-objects/lazy-load/TotalCountDO';
-import {AllotmentStatus} from './data-objects/AllotmentDO';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ARequestService } from '../common/ARequestService';
+import { TotalCountDO } from '../common/data-objects/lazy-load/TotalCountDO';
+import { AllotmentStatus } from './data-objects/AllotmentDO';
 
 @Injectable()
 export class AllotmentsTotalCountService extends ARequestService<TotalCountDO> {
@@ -14,7 +14,12 @@ export class AllotmentsTotalCountService extends ARequestService<TotalCountDO> {
 	}
 	protected sendRequest(): Observable<Object> {
 		var searchCriteria = { status: this._allotmentStatus };
-		return this._appContext.thHttp.post(ThServerApi.AllotmentsCount, { searchCriteria: searchCriteria });
+		return this._appContext.thHttp.post({
+			serverApi: ThServerApi.AllotmentsCount,
+			body: JSON.stringify({
+				searchCriteria: searchCriteria
+			})
+		});
 	}
 	protected parseResult(result: Object): TotalCountDO {
 		var countDO = new TotalCountDO();

@@ -38,6 +38,8 @@ import { InvoiceDO } from '../../core/data-layer/invoices/data-objects/InvoiceDO
 import _ = require("underscore");
 
 export class DefaultDataBuilder {
+    public static SignupCode1 = "12345";
+    public static SignupCode2 = "12346";
     public static DefaultEmail = "paraschiv.ionut@gmail.com";
     private static FirstUserIndex = 0;
     private _repositoryCleaner: RepositoryCleanerWrapper;
@@ -82,6 +84,11 @@ export class DefaultDataBuilder {
     private buildCore(resolve: { (result: boolean): void }, reject: { (err: any): void }) {
         this._repositoryCleaner.cleanRepository()
             .then((result: any) => {
+                let signupCodesRepository = this._testContext.appContext.getRepositoryFactory().getSignupCodeRepository();
+
+                return Promise.all([signupCodesRepository.addSignupCode(DefaultDataBuilder.SignupCode1),
+                    signupCodesRepository.addSignupCode(DefaultDataBuilder.SignupCode2)]);
+            }).then((result: any) => {
                 var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
 
                 return settingsRepository.getPaymentMethods();

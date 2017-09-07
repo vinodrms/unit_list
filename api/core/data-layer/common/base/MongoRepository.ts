@@ -15,6 +15,8 @@ import { MongoDocumentCount } from './mongo-utils/MongoDocumentCount';
 import { MongoUpdateMultipleDocuments } from './mongo-utils/MongoUpdateMultipleDocuments';
 import { MongoDocumentListAggregation } from './mongo-utils/aggregations/MongoDocumentListAggregation';
 import { MongoDocumentCountAggregation } from './mongo-utils/aggregations/MongoDocumentCountAggregation';
+import { MongoDeleteSingleDocument } from "./mongo-utils/MongoDeleteSingleDocument";
+import { MongoDeleteMultipleDocuments } from "./mongo-utils/MongoDeleteMultipleDocuments";
 
 import _ = require('underscore');
 import mongodb = require('mongodb');
@@ -91,6 +93,20 @@ export class MongoRepository implements IRepositoryCleaner {
 		mongoCreateDoc.errorCallback = errorCallback;
 		mongoCreateDoc.successCallback = successCallback;
 		return mongoCreateDoc.createDocument(documentToCreate);
+	}
+
+	public deleteOneDocument(documentToRemove: Object, errorCallback: { (err: Error): void }, successCallback: { (deletedCount: number): void }) {
+		let mongoDeleteDocument = new MongoDeleteSingleDocument(this._sailsEntity);
+		mongoDeleteDocument.successCallback = successCallback;
+		mongoDeleteDocument.errorCallback = errorCallback;
+		return mongoDeleteDocument.deleteDocument(documentToRemove);
+	}
+
+	public deleteMultipleDocuments(filter: Object, errorCallback: { (err: Error): void }, successCallback: { (deletedCount: number): void }) {
+		let mongoDeleteMultipleDocuments = new MongoDeleteMultipleDocuments(this._sailsEntity);
+		mongoDeleteMultipleDocuments.successCallback = successCallback;
+		mongoDeleteMultipleDocuments.errorCallback = errorCallback;
+		return mongoDeleteMultipleDocuments.deleteMultipleDocuments(filter);
 	}
 
 	public findAndModifyDocument(searchCriteria: Object, updates: Object, notFoundCallback: { (): void }, errorCallback: { (err: Error): void }, successCallback: { (updatedDocument: Object): void }) {

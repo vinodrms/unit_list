@@ -1,9 +1,9 @@
-import {ThLogger, ThLogLevel} from '../../core/utils/logging/ThLogger';
-import {ThError} from '../../core/utils/th-responses/ThError';
-import {ThStatusCode, ThResponse} from '../../core/utils/th-responses/ThResponse';
-import {ThUtils} from '../../core/utils/ThUtils';
-import {SessionContext} from '../../core/utils/SessionContext';
-import {ThTranslation} from '../../core/utils/localization/ThTranslation';
+import { ThLogger, ThLogLevel } from '../../core/utils/logging/ThLogger';
+import { ThError } from '../../core/utils/th-responses/ThError';
+import { ThStatusCode, ThResponse } from '../../core/utils/th-responses/ThResponse';
+import { ThUtils } from '../../core/utils/ThUtils';
+import { SessionContext } from '../../core/utils/SessionContext';
+import { ThTranslation } from '../../core/utils/localization/ThTranslation';
 
 import _ = require("underscore");
 
@@ -40,12 +40,18 @@ export class BaseController {
 		var thResponse = new ThResponse(ThStatusCode.Ok, data);
 		this.returnResponse(req, res, thResponse);
 	}
-	protected returnErrorResponse(req: any, res: any, error: any, defaultErrorCode: ThStatusCode) {
+	protected returnErrorResponse(req: any, res: any, error: any, defaultErrorCode: ThStatusCode, httpCode?: number) {
 		var thError = new ThError(defaultErrorCode, error);
 		if (thError.isNativeError()) {
 			ThLogger.getInstance().logError(ThLogLevel.Error, "Native Uncaught Error", { url: req.url, body: req.body, query: req.query }, thError);
 		}
 		this.returnResponse(req, res, new ThResponse(thError.getThStatusCode()));
+	}
+	protected returnHttpErrorResponse(req: any, res: any, httpCode: number, message: string) {
+		res.statusCode = httpCode;
+		return res.json({
+			message: message
+		});
 	}
 
 	private returnResponse(req: any, res: any, thResponse: ThResponse) {
@@ -54,6 +60,6 @@ export class BaseController {
 	}
 
 	protected getThTranslation(sessionContext: SessionContext): ThTranslation {
-        return new ThTranslation(sessionContext.language);
-    }
+		return new ThTranslation(sessionContext.language);
+	}
 }

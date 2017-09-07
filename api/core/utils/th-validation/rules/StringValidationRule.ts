@@ -4,6 +4,7 @@ import {InvalidConstraintType} from './core/ValidationResult';
 import _ = require("underscore");
 
 export class StringValidationRule extends AValidationRule {
+	public static MaxSignupCodeLength = 5;
 	public static MaxCityLength = 100;
 	public static MaxCountryCodeLength = 2;
 	public static MaxCountryLength = 100;

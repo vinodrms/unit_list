@@ -7,8 +7,9 @@ export class SignUpDO extends BaseDO {
 	passwordConfirmation: string;
 	firstName: string;
 	lastName: string;
-	
+	signupCode: string;
+
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["hotelName", "email", "password", "passwordConfirmation", "firstName", "lastName"];
+		return ["hotelName", "email", "password", "passwordConfirmation", "firstName", "lastName", "signupCode"];
 	}
 }
