@@ -7,7 +7,8 @@ import { P4_AddTravelTypeToBookings } from "./list/P4_AddTravelTypeToBookings";
 import { P5_ChangeReservedAddOnProductListStructureForBookings } from "./list/P5_ChangeReservedAddOnProductListStructureForBookings";
 import { P6_AddPaymentDueInDaysToHotels } from "./list/P6_AddPaymentDueInDaysToHotels";
 import { P7_AddIndexForBookingsSort } from "./list/P7_AddIndexForBookingsSort";
-import { P8_AddMergeInvoiceToBookings } from "./list/P8_AddMergeInvoiceToBookings";
+import { P8_AddSignupCodes } from "./list/P8_AddSignupCodes";
+import { P9_AddMergeInvoiceToBookings } from "./list/P9_AddMergeInvoiceToBookings";
 
 export class MongoPatchUtils {
     public static get PatchList(): ATransactionalMongoPatch[] {
@@ -20,7 +21,8 @@ export class MongoPatchUtils {
             new P5_ChangeReservedAddOnProductListStructureForBookings(),
             new P6_AddPaymentDueInDaysToHotels(),
             new P7_AddIndexForBookingsSort(),
-            new P8_AddMergeInvoiceToBookings(),
+            new P8_AddSignupCodes(),
+            new P9_AddMergeInvoiceToBookings(),
 
         ];
     }

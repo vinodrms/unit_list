@@ -1,9 +1,9 @@
-import {IValidationStructure} from '../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
-import {EmailValidationRule} from '../../../utils/th-validation/rules/EmailValidationRule';
-import {PasswordValidationRule} from '../../../utils/th-validation/rules/PasswordValidationRule';
+import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { StringValidationRule } from '../../../utils/th-validation/rules/StringValidationRule';
+import { EmailValidationRule } from '../../../utils/th-validation/rules/EmailValidationRule';
+import { PasswordValidationRule } from '../../../utils/th-validation/rules/PasswordValidationRule';
 
 export class HotelSignUpDO {
 	hotelName: string;
@@ -11,6 +11,7 @@ export class HotelSignUpDO {
 	password: string;
 	firstName: string;
 	lastName: string;
+	signupCode: string;
 
 	public static getValidationRules(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -34,6 +35,10 @@ export class HotelSignUpDO {
 			{
 				key: "lastName",
 				validationStruct: new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxNameLength))
+			},
+			{
+				key: "signupCode",
+				validationStruct: new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxSignupCodeLength))
 			}
 		]);
 	}

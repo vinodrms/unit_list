@@ -37,6 +37,8 @@ import { MongoInvoiceRepositoryWithBookingPriceLink } from "./invoices/repositor
 import { MongoInvoiceRepository } from "./invoices/repositories/mongo/MongoInvoiceRepository";
 import { IOAuthTokenRepository } from "./oauth-tokens/IOAuthTokenRepository";
 import { MongoOAuthTokenRepository } from "./oauth-tokens/repositories/MongoOAuthTokenRepository";
+import { ISignupCodeRepository } from "./signup-codes/repositories/ISignupCodeRepository";
+import { MongoSignupCodeRepository } from "./signup-codes/repositories/mongo/MongoSignupCodeRepository";
 
 export class RepositoryFactory {
     private _databaseType: DatabaseType;
@@ -53,7 +55,7 @@ export class RepositoryFactory {
                 new MongoBookingRepository(),
                 new MongoInvoiceGroupsRepository(new MongoHotelRepository()), new MongoHotelInventorySnapshotRepository(),
                 new MongoInvoiceRepository(new MongoHotelRepository()), new MongoBookingRepository(), new MongoCustomerRepository(),
-                new MongoOAuthTokenRepository()];
+                new MongoOAuthTokenRepository(), new MongoSignupCodeRepository()];
         }
     }
 
@@ -168,6 +170,13 @@ export class RepositoryFactory {
         switch (this._databaseType) {
             default:
                 return new MongoHotelInventorySnapshotRepository();
+        }
+    }
+
+    getSignupCodeRepository(): ISignupCodeRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoSignupCodeRepository();
         }
     }
 

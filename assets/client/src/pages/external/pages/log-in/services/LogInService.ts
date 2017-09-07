@@ -1,6 +1,5 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Injectable, Inject } from '@angular/core';
-import { Http, Headers } from "@angular/http";
 import { Observer } from "rxjs";
 import { Observable } from 'rxjs/Observable';
 
@@ -16,7 +15,6 @@ export class LogInService {
 	private _loginForm: FormGroup;
 
 	constructor(private _appContext: AppContext,
-		private http: Http, 
 		private _formBuilder: FormBuilder) {
 		this.initLoginForm();
 	}
@@ -58,20 +56,10 @@ export class LogInService {
 	}
 
 	public isAuthenticated(): Observable<any> {
-		let baseUrl = new ServerApiBuilder(ThServerApi.AccountIsAuthenticated).getBaseUrl();
-		let headers = new Headers();
-		headers.append("Authorization", "Bearer " + this._appContext.tokenService.accessToken);
-		
-		//We don't need the standard 401 handling -> the standard handling would cause an infinite
-		//loop in the login screen
-		return new Observable((observer: Observer<Object>) => {
-			this.http.post(baseUrl, {}, { headers: headers }).subscribe((res) => {
-				observer.next(res);
-				observer.complete();
-			}, (err: any) => {
-				observer.error(err);
-				observer.complete();
-			});
+		return this._appContext.thHttp.post({
+			serverApi: ThServerApi.AccountIsAuthenticated,
+			body: {},
+			headers: {}
 		});
 	}
 

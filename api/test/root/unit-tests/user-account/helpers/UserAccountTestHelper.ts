@@ -17,7 +17,8 @@ export class UserAccountTestHelper {
             firstName: "Dragos",
             lastName: "Pricope",
             hotelName: "3angleTECH Hotel",
-            password: "TestTest01"
+            password: "TestTest01",
+            signupCode: ""
         };
         return signUpDO;
     }
