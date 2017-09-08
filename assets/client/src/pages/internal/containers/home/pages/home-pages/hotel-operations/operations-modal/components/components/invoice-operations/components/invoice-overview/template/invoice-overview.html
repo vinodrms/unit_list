@@ -2,13 +2,13 @@
     <div class="invoice-summary">
         <i class="fa fa-angle-left cycle-related-invoices pull-left clickable" (click)="moveToPreviousRelatedInvoice()"></i>
         <i class="fa fa-angle-right cycle-related-invoices m-l-6 clickable" (click)="moveToNextRelatedInvoice()"></i>
-        <i class="fa fa-trash invoice-change-button pull-right clickable"></i>
+        <i *ngIf="hasInvoiceRemoveRight()" class="fa fa-trash invoice-change-button pull-right clickable"></i>
         <i class="fa fa-exchange invoice-change-button pull-right m-r-12 clickable" (click)="showInvoiceTransfer()"></i>
         <div>
-            <div class="invoice-title">{{ 'Invoice' | translate }} {{ currentInvoice.reference }}
-                <span *ngIf="currentInvoice.isPaid()" class="invoice-status paid-invoice-status">{{ 'Paid' | translate }}</span>
-                <span *ngIf="currentInvoice.isLossAccepted()" class="invoice-status loss-accepted-by-management-invoice-status">{{ 'Loss Management' | translate }}</span>
-                <span *ngIf="currentInvoice.isUnpaid()" class="invoice-status unpaid-invoice-status">{{ 'Unpaid' | translate }}</span>
+            <div class="invoice-title">{{ 'Invoice' | translate }} {{ currentInvoice.invoice.reference }}
+                <span *ngIf="currentInvoice.invoice.isPaid()" class="invoice-status paid-invoice-status">{{ 'Paid' | translate }}</span>
+                <span *ngIf="currentInvoice.invoice.isLossAcceptedByManagement()" class="invoice-status loss-accepted-by-management-invoice-status">{{ 'Loss Management' | translate }}</span>
+                <span *ngIf="currentInvoice.invoice.isUnpaid()" class="invoice-status unpaid-invoice-status">{{ 'Unpaid' | translate }}</span>
             </div>
             <div class="related-invoices clickable" (click)="showRelatedInvoices()">{{ 'Related Invoices' | translate }}</div>
         </div>
@@ -20,15 +20,15 @@
                 <button class="fa fa-angle-down clickable"></button>
                 <ul>
                     <li class="clickable">{{ 'View Bookings' | translate }}</li>
-                    <li class="clickable">{{ 'Add Payment' | translate }}</li>
+                    <li *ngIf="hasInvoiceAddPaymentsRight()" class="clickable" (click)="openAddInvoicePaymentModal(payer)">{{ 'Add Payment' | translate }}</li>
                     <li class="clickable">{{ 'Add Invoice' | translate }}</li>
-                    <li class="clickable">{{ 'Remove Payer' | translate }}</li>
+                    <li *ngIf="hasInvoiceEditPayersRight()" class="clickable" (click)="removePayer(payer)">{{ 'Remove Payer' | translate }}</li>
                 </ul>
             </div>
-            <div class="payer-name">{{ payer.customerNameString }}</div>
+            <div class="payer-name">{{ payer.customerName }}</div>
             <div class="payer-email">{{ payer.emailString }}</div>
         </div>
-            <div class=" add-payer clickable">
+            <div *ngIf="hasInvoiceEditPayersRight()" class="add-payer clickable" (click)="openCustomerSelectModal()">
                 <span class="fa fa-plus-circle add-payer-icon"></span>
                 <div class="add-payer-text">{{ 'ADD PAYER' | translate }}</div>
             </div>
@@ -53,37 +53,16 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="selectable">
-                    <td>1Rack_BB</td>
-                    <td>1</td>
-                    <td>Dkr 1,244</td>
-                    <td>Dkr 1,244</td>
-                    <td></td>
+                <tr *ngFor="let item of currentInvoice.invoice.itemList" class="selectable">
+                    <td>{{ getInvoiceItemDisplayName(item) }}</td>
+                    <td>{{ item.meta.getNumberOfItems() }}</td>
+                    <td>{{ ccySymbol }}{{ item.meta.getUnitPrice() }}</td>
+                    <td>{{ ccySymbol }}{{ item.getTotalPrice() }}</td>
+                    <td><i *ngIf="hasInvoiceEditItemsRight()" class="fa fa-trash remove-item clickable" (click)="openRemoveItemConfirmationModal(item)"></i></td>
                 </tr>
-                <tr>
-                    <td>1Rack_BB</td>
-                    <td>1</td>
-                    <td>Dkr 1,244</td>
-                    <td>Dkr 1,244</td>
-                    <td></td>
-                </tr>
-                <tr class="selectable">
-                    <td>1Rack_BB</td>
-                    <td>1</td>
-                    <td>Dkr 1,244</td>
-                    <td>Dkr 1,244</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>1Rack_BB</td>
-                    <td>1</td>
-                    <td>Dkr 1,244</td>
-                    <td>Dkr 1,244</td>
-                    <td></td>
-                </tr>
-                <tr class="add-item">
+                <tr *ngIf="hasInvoiceEditItemsRight()" class="add-item">
                     <td>
-                        <div class="clickable">
+                        <div class="clickable" (click)="openAddOnProductSelectModal()">
                             <span class="fa fa-plus-circle m-r-6"></span>{{ 'Add item' | translate }}
                         </div>
                     </td>
@@ -101,21 +80,23 @@
                 <col width="20%">
                 <col width="20%">
             </colgroup>
-            <tr class="selectable">
-                <td>Mister Brown
-                    <div class="payment-type">Payment by VISA</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td>-Dkr 1,244</td>
-                <td></td>
-            </tr>
+            <ng-container *ngFor="let payer of currentInvoice.invoice.payerList">
+                <tr *ngFor="let payment of payer.paymentList" class="selectable">
+                    <td>{{ currentInvoice.getCustomerDO(payer.customerId).customerName }}
+                        <div class="payment-type">{{ 'Payment via' | translate}} {{getPaymentMethodDisplayName(payment) | translate}}</div>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td>-{{ ccySymbol }}{{ payment.amount }}</td>
+                    <td></td>
+                </tr>
+            </ng-container>
             <tfoot>
                 <tr>
                     <td>{{ 'TOTAL' | translate }}</td>
                     <td></td>
                     <td></td>
-                    <td>Dkr 6,522</td>
+                    <td>{{ ccySymbol }}{{ currentInvoice.invoice.amountToPay }}</td>
                     <td></td>
                 </tr>
             </tfoot>
@@ -123,15 +104,15 @@
     </div>
     <div class="invoice-edit-footer m-t-24">
         
-        <button type="button" class="btn btn-danger" (click)="onReinstateInvoice()">
+        <button *ngIf="hasInvoiceReinstateRight()" type="button" class="btn btn-danger" (click)="onReinstateInvoice()">
             <i class="fa fa-2x unitpal-font">+</i> {{ 'Reinstate Invoice' | translate }}
         </button>
 
-        <button type="button" class="btn btn-primary m-l-8" (click)="onPayInvoice()">
+        <button *ngIf="hasInvoicePayRight()" type="button" class="btn btn-primary m-l-8" (click)="onPayInvoice()">
             <i class="fa fa-2x unitpal-font rotate-45">L</i> {{ 'Pay Invoice' | translate }}
         </button>
         
-        <button type="button" class="btn btn-danger m-l-8" (click)="onLossByManagementInvoice()">
+        <button *ngIf="hasInvoiceSetAsLossAcceptedByManagementRight()" type="button" class="btn btn-danger m-l-8" (click)="onLossByManagementInvoice()">
             <i class="fa fa-2x unitpal-font">+</i> {{ 'Loss Accepted By Management' | translate }}
         </button>
 

@@ -6,6 +6,7 @@ import { FeeInvoiceItemMetaDO } from './invoice-fee/FeeInvoiceItemMetaDO';
 import { AddOnProductDO } from '../../../add-on-products/data-objects/AddOnProductDO';
 import { CustomerDO } from '../../../customers/data-objects/CustomerDO';
 import { RoomCommissionItemMetaDO } from "./room-commission/RoomCommissionItemMetaDO";
+import { BookingPriceDO } from "../../../bookings/data-objects/price/BookingPriceDO";
 
 export enum InvoiceItemType {
     AddOnProduct, Booking, InvoiceFee, RoomCommission
@@ -26,7 +27,12 @@ export class InvoiceItemDO extends BaseDO {
         super.buildFromObject(object);
 
         let metaObject = this.getObjectPropertyEnsureUndefined(object, "meta");
-        if (this.type === InvoiceItemType.AddOnProduct) {
+        if (this.type === InvoiceItemType.Booking) {
+            var bookingPrice = new BookingPriceDO();
+            bookingPrice.buildFromObject(metaObject);
+            this.meta = bookingPrice;
+        }
+        else if (this.type === InvoiceItemType.AddOnProduct) {
             var addOnProductInvoiceItemMetaDO = new AddOnProductInvoiceItemMetaDO();
             addOnProductInvoiceItemMetaDO.buildFromObject(metaObject);
             this.meta = addOnProductInvoiceItemMetaDO;

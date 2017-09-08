@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { AppContext } from "../../../../../../../../../../../../../common/utils/AppContext";
-import { InvoiceVMMockup } from "../../InvoiceOperationsPageComponent";
-import { CustomerVM } from "../../../../../../../../../../../services/customers/view-models/CustomerVM";
+import { InvoiceVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceVM";
+import { CustomerDO } from "../../../../../../../../../../../services/customers/data-objects/CustomerDO";
+import { InvoiceOperationsPageData } from "../../utils/InvoiceOperationsPageData";
 
 import _ = require('underscore');
 
@@ -11,7 +12,8 @@ import _ = require('underscore');
 })
 export class RelatedInvoicesComponent implements OnInit {
 
-    @Input() relatedInvoices: InvoiceVMMockup[];
+    @Input() relatedInvoices: InvoiceVM[];
+    @Input() invoiceOperationsPageData: InvoiceOperationsPageData;
     @Output() backToInvoiceOverviewClicked = new EventEmitter();
     @Output() relatedInvoiceIndexSelected = new EventEmitter();
 
@@ -25,11 +27,11 @@ export class RelatedInvoicesComponent implements OnInit {
         this.backToInvoiceOverviewClicked.emit();
     }
 
-    public getPayerListString(invoice: InvoiceVMMockup): string {
+    public getPayerListString(invoice: InvoiceVM): string {
         var payerListString: string = "";
-        _.forEach(invoice.payerList, (customer: CustomerVM, index: number) => {
-            payerListString += customer.customerNameString;
-            if (index < invoice.payerList.length - 1) {
+        _.forEach(invoice.customerList, (customer: CustomerDO, index: number) => {
+            payerListString += customer.customerName;
+            if (index < invoice.customerList.length - 1) {
                 payerListString += ", ";
             }
         });
@@ -38,5 +40,9 @@ export class RelatedInvoicesComponent implements OnInit {
 
     public selectRelatedInvoiceIndex(index: number) {
         this.relatedInvoiceIndexSelected.emit(index);
+    }
+
+    public get ccySymbol(): string {
+        return this.invoiceOperationsPageData.ccy.symbol;
     }
 }

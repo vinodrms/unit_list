@@ -995,5 +995,14 @@ export var EnglishTranslations: Object = {
     "Generate the bookings on only one invoice": "Generate the bookings on only one invoice",
     "If marked Yes, all the bookings from this group will be generated on the same invoice.": "If marked Yes, all the bookings from this group will be generated on the same invoice.",
     "Could not find invoices. Empty booking provided.": "Could not find invoices. Empty booking provided.",
-
+    "Payment via": "Payment via",
+    "Are you sure you want to remove %itemDisplayName% from the invoice?": "Are you sure you want to remove %itemDisplayName% from the invoice?",
+    "Remove Item From Invoice": "Remove Item From Invoice",
+    "Add Invoice Payment": "Add Invoice Payment",
+    "Payment Amount": "Payment Amount",
+    "Please add at least one item before making a payment.": "Please add at least one item before making a payment.",
+    "Taxes": "Taxes",
+    "No Fee": "No Fee",
+    "Please add a payment amount.": "Please add a payment amount.",
+    "Please select a payment amount lower or equal to the amount left to pay.": "Please select a payment amount lower or equal to the amount left to pay.",  
 };

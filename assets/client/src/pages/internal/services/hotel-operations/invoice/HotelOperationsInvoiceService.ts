@@ -64,6 +64,9 @@ export class HotelOperationsInvoiceService {
             let msg = this.context.thTranslation.translate("The payer is already added on the invoice");
             return Observable.throw(new ThError(msg));
         }
+        let customerPayerDO = new InvoicePayerDO();
+        customerPayerDO.customerId = customerId;
+        invoice.payerList.push(customerPayerDO);
         return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: invoice });
     }
 

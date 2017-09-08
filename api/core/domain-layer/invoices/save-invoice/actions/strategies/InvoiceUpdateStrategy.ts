@@ -63,6 +63,7 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
 
         this.deleteItemsFrom(existingInvoice);
         this.addNewItemsOn(existingInvoice);
+        this.addNewPayersOn(existingInvoice);
         this.addNewPaymentsOn(existingInvoice);
         this.deletePayersFrom(existingInvoice);
         existingInvoice.recomputePrices();
@@ -101,6 +102,15 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
             this.stampItem(item);
         });
         existingInvoice.itemList = existingInvoice.itemList.concat(newItems);
+    }
+
+    private addNewPayersOn(existingInvoice: InvoiceDO) {
+        this.invoiceToSave.payerList.forEach((payer: InvoicePayerDO) => {
+            let payerIndex = _.findIndex(existingInvoice.payerList, ((p: InvoicePayerDO) => { return p.customerId === payer.customerId; }));
+            if (payerIndex < 0) {
+                existingInvoice.payerList.push(payer);
+            }
+        });
     }
 
     private addNewPaymentsOn(existingInvoice: InvoiceDO) {
