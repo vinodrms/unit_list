@@ -30,8 +30,6 @@ enum PageType {
 @Component({
     selector: 'invoice-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/template/invoice-operations-page.html',
-    providers: [InvoiceVMHelper, HotelOperationsInvoiceService]
-
 })
 export class InvoiceOperationsPageComponent implements OnInit {
 

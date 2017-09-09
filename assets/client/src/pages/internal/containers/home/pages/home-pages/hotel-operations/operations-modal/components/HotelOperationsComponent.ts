@@ -22,6 +22,7 @@ import { HotelOperationsCustomerService } from '../../../../../../../services/ho
 import { HotelOperationsPageControllerService } from './services/HotelOperationsPageControllerService';
 import { HotelOperationsInvoiceService } from "../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
 import { InvoiceService } from "../../../../../../../services/invoices/InvoiceService";
+import { InvoiceVMHelper } from "../../../../../../../services/invoices/view-models/utils/InvoiceVMHelper";
 
 @Component({
     selector: 'hotel-operations',
@@ -34,7 +35,7 @@ import { InvoiceService } from "../../../../../../../services/invoices/InvoiceSe
         // TODO: remove deprecated services
         EagerInvoiceGroupsServiceDeprecated, InvoiceGroupsServiceDeprecated,
 
-        HotelOperationsInvoiceService, InvoiceService,
+        InvoiceVMHelper, HotelOperationsInvoiceService, InvoiceService,
         HotelOperationsRoomService, HotelOperationsBookingService,
         HotelOperationsCustomerService, HotelOperationsPageControllerService]
 })
