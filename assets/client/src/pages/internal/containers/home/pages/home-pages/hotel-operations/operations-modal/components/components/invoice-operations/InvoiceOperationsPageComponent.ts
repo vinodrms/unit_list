@@ -41,59 +41,72 @@ export class InvoiceOperationsPageComponent implements OnInit {
     relatedInvoices: InvoiceVM[] = [];
     currentRelatedInvoiceIndex: number = 0;
 
-    private _pageType: PageType;
-    private _pageData: InvoiceOperationsPageData;
-    private _invoiceMetaFactory: InvoiceMetaFactory;
+    private pageType: PageType;
+    private pageData: InvoiceOperationsPageData;
+    private invoiceMetaFactory: InvoiceMetaFactory;
 
-
-    constructor(private _appContext: AppContext, private _invoiceVMHelper: InvoiceVMHelper, private _hotelAggregatorService: HotelAggregatorService, private _customersService: EagerCustomersService, private _invoiceOperationsService: HotelOperationsInvoiceService) {
+    constructor(private context: AppContext,
+        private invoiceVMHelper: InvoiceVMHelper,
+        private hotelAggregatorService: HotelAggregatorService,
+        private customersService: EagerCustomersService,
+        private invoiceOperationsService: HotelOperationsInvoiceService,
+    ) {
         this.currentRelatedInvoiceIndex = 0;
         this.relatedInvoices = [];
-        this._invoiceMetaFactory = new InvoiceMetaFactory();
+        this.invoiceMetaFactory = new InvoiceMetaFactory();
     }
 
-
     ngOnInit(): void {
-        this._pageType = PageType.InvoiceOverview;
+        this.pageType = PageType.InvoiceOverview;
         this.invoiceOperationsPageParam.updateTitle("Invoice Overview", "");
-        this._pageData = new InvoiceOperationsPageData();
-        this._hotelAggregatorService.getHotelAggregatedInfo().subscribe((hotelInfo: HotelAggregatedInfo) => {
-            this._pageData.ccy = hotelInfo.ccy;
-            this._pageData.allowedPaymentMethods = hotelInfo.allowedPaymentMethods;
-            this._pageData.allPaymentMethods = hotelInfo.allAvailablePaymentMethods;
-            if (this.invoiceOperationsPageParam.invoiceId) {
-                this._invoiceOperationsService.get(this.invoiceOperationsPageParam.invoiceId).flatMap((invoice: InvoiceDO) => {
-                    return this._invoiceOperationsService.getInvoicesByGroup(invoice.groupId).flatMap((invoices: InvoiceDO[]) => {
-                        var invoicesDO: InvoicesDO = new InvoicesDO();
-                        invoicesDO.invoiceList = invoices;
-                        return this._invoiceVMHelper.convertToViewModels(invoicesDO);
-                    });
-                }).subscribe((invoiceVMList: InvoiceVM[]) =>{
-                    this.relatedInvoices = invoiceVMList;
-                    this.currentRelatedInvoiceIndex = _.findIndex(this.relatedInvoices, (invoiceVM: InvoiceVM) => {
-                        return invoiceVM.invoice.id == this.invoiceOperationsPageParam.invoiceId;
-                    });
-                    this.isLoading = false;
-                }), ((err: ThError) => {
-                    this._appContext.toaster.error(err.message);
-                    this.isLoading = false;
-                });
+        this.pageData = new InvoiceOperationsPageData();
+        this.hotelAggregatorService.getHotelAggregatedInfo().subscribe((hotelInfo: HotelAggregatedInfo) => {
+            this.pageData.ccy = hotelInfo.ccy;
+            this.pageData.allowedPaymentMethods = hotelInfo.allowedPaymentMethods;
+            this.pageData.allPaymentMethods = hotelInfo.allAvailablePaymentMethods;
+            if (!this.context.thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceId)) {
+                this.readExistingInvoice();
             } else {
-                this.relatedInvoices[0] = this.createNewInvoiceVM();
-                if (this.invoiceOperationsPageParam.invoiceFilter.customerId) {
-                    this._customersService.getCustomerById(this.invoiceOperationsPageParam.invoiceFilter.customerId).subscribe((customer: CustomerDO) => {
-                        this.addCustomerToInvoiceVM(this.relatedInvoices[0], customer);
-                        this.isLoading = false;
-                    }, (err: ThError) => {
-                        this._appContext.toaster.error(err.message);
-                        this.isLoading = false;
-                    });
-                }
+                this.createNewInvoice();
             }
         }), (err: ThError) => {
-            this._appContext.toaster.error(err.message);
+            this.context.toaster.error(err.message);
             this.isLoading = false;
         };
+    }
+    private readExistingInvoice() {
+        this.invoiceOperationsService.get(this.invoiceOperationsPageParam.invoiceId).flatMap((invoice: InvoiceDO) => {
+            return this.invoiceOperationsService.getInvoicesByGroup(invoice.groupId).flatMap((invoices: InvoiceDO[]) => {
+                var invoicesDO: InvoicesDO = new InvoicesDO();
+                invoicesDO.invoiceList = invoices;
+                return this.invoiceVMHelper.convertToViewModels(invoicesDO);
+            });
+        }).subscribe((invoiceVMList: InvoiceVM[]) => {
+            this.relatedInvoices = invoiceVMList;
+            this.currentRelatedInvoiceIndex = _.findIndex(this.relatedInvoices, (invoiceVM: InvoiceVM) => {
+                return invoiceVM.invoice.id == this.invoiceOperationsPageParam.invoiceId;
+            });
+        }, ((err: ThError) => {
+            this.context.toaster.error(err.message);
+        }), () => {
+            this.isLoading = false;
+        });
+    }
+    private createNewInvoice() {
+        this.relatedInvoices = [
+            this.createNewInvoiceVM()
+        ];
+        if (this.context.thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
+            return;
+        }
+        this.customersService.getCustomerById(this.invoiceOperationsPageParam.invoiceFilter.customerId)
+            .subscribe((customer: CustomerDO) => {
+                this.addCustomerToInvoiceVM(this.relatedInvoices[0], customer);
+            }, (err: ThError) => {
+                this.context.toaster.error(err.message);
+            }, () => {
+                this.isLoading = false;
+            });
     }
 
     private createNewInvoiceVM(): InvoiceVM {
@@ -103,7 +116,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
         invoiceVM.invoice.itemList = [];
         invoiceVM.invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
         invoiceVM.customerList = [];
-        invoiceVM.invoiceMeta = this._invoiceMetaFactory.getInvoiceMetaByPaymentStatus(invoiceVM.invoice.paymentStatus);
+        invoiceVM.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(invoiceVM.invoice.paymentStatus);
         return invoiceVM;
     }
 
@@ -114,32 +127,28 @@ export class InvoiceOperationsPageComponent implements OnInit {
         invoiceVM.addCustomer(customer);
     }
 
-    public get pageData(): InvoiceOperationsPageData {
-        return this._pageData;
-    }
-
     public shouldShowCurrentInvoice(): boolean {
-        return this._pageType == PageType.InvoiceOverview;
+        return this.pageType == PageType.InvoiceOverview;
     }
 
     public shouldShowRelatedInvoices(): boolean {
-        return this._pageType == PageType.RelatedInvoices;
+        return this.pageType == PageType.RelatedInvoices;
     }
 
     public shouldShowInvoiceTransfer(): boolean {
-        return this._pageType == PageType.InvoiceTransfer;
+        return this.pageType == PageType.InvoiceTransfer;
     }
 
     public showInvoiceOverview() {
-        this._pageType = PageType.InvoiceOverview;
+        this.pageType = PageType.InvoiceOverview;
     }
 
     public showRelatedInvoices() {
-        this._pageType = PageType.RelatedInvoices;
+        this.pageType = PageType.RelatedInvoices;
     }
 
     public showInvoiceTransfer() {
-        this._pageType = PageType.InvoiceTransfer;
+        this.pageType = PageType.InvoiceTransfer;
     }
 
     public selectRelatedInvoiceIndex(index: number) {
