@@ -99,6 +99,7 @@ describe("User Account Tests", function () {
 	describe("Check Sign Up", function () {
 		it("Should return an activation code", function (done) {
 			var signUpDO = helper.getSignUpDO();
+			signUpDO.signupCode = "12345";
 			var signUp = new HotelSignUp(testContext.appContext, testContext.sessionContext, signUpDO);
 			signUp.signUp().then((accountActivationToken: ActionTokenDO) => {
 				testAccountActivationToken = accountActivationToken;
@@ -111,11 +112,23 @@ describe("User Account Tests", function () {
 		});
 		it("Should return account already exists error code", function (done) {
 			var signUpDO = helper.getSignUpDO();
+			signUpDO.signupCode = "12346";
 			var signUp = new HotelSignUp(testContext.appContext, testContext.sessionContext, signUpDO);
 			signUp.signUp().then((accountActivationToken: ActionTokenDO) => {
 				done(new Error("Signed up with the same email twice!"));
 			}).catch((error: ThError) => {
 				should.equal(error.getThStatusCode(), ThStatusCode.HotelRepositoryAccountAlreadyExists);
+				done();
+			});
+		});
+		it("Should return invalid signup code", function (done) {
+			var signUpDO = helper.getSignUpDO();
+			signUpDO.signupCode = "12345";
+			var signUp = new HotelSignUp(testContext.appContext, testContext.sessionContext, signUpDO);
+			signUp.signUp().then((accountActivationToken: ActionTokenDO) => {
+				done(new Error("Signed up with an invalid sign up code!"));
+			}).catch((error: ThError) => {
+				should.equal(error.getThStatusCode(), ThStatusCode.SignupCodeRepositorySignupCodeNotFound);
 				done();
 			});
 		});

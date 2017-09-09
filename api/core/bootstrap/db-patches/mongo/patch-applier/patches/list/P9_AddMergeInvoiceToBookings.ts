@@ -2,7 +2,7 @@ import { ATransactionalMongoPatch } from '../../utils/ATransactionalMongoPatch';
 import { MongoPatchType } from '../MongoPatchType';
 import { ThError } from '../../../../../../utils/th-responses/ThError';
 
-export class P8_AddMergeInvoiceToBookings extends ATransactionalMongoPatch {
+export class P9_AddMergeInvoiceToBookings extends ATransactionalMongoPatch {
 
     public getPatchType(): MongoPatchType {
         return MongoPatchType.AddMergeInvoiceToBookings;
