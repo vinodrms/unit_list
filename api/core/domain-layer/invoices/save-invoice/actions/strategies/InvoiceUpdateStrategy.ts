@@ -108,7 +108,10 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
         this.invoiceToSave.payerList.forEach((payer: InvoicePayerDO) => {
             let payerIndex = _.findIndex(existingInvoice.payerList, ((p: InvoicePayerDO) => { return p.customerId === payer.customerId; }));
             if (payerIndex < 0) {
-                existingInvoice.payerList.push(payer);
+                let newPayer = new InvoicePayerDO();
+                newPayer.customerId = payer.customerId;
+                newPayer.paymentList = [];
+                existingInvoice.payerList.push(newPayer);
             }
         });
     }
