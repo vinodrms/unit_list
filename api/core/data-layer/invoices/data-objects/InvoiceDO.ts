@@ -85,9 +85,11 @@ export class InvoiceDO extends BaseDO {
     }
 
     public recomputePrices() {
+        let utils = new ThUtils();
         this.amountToPay = _.reduce(this.itemList, function (sum, item: InvoiceItemDO) {
             return sum + item.meta.getTotalPrice();
         }, 0);
+        this.amountToPay = utils.roundNumberToTwoDecimals(this.amountToPay);
 
         this.amountPaid = 0.0;
         this.payerList.forEach((payer: InvoicePayerDO) => {
@@ -95,6 +97,7 @@ export class InvoiceDO extends BaseDO {
                 this.amountPaid += payment.amount;
             });
         });
+        this.amountPaid = utils.roundNumberToTwoDecimals(this.amountPaid);
     }
 
     public removeItemsPopulatedFromBooking() {
