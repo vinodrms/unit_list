@@ -1009,5 +1009,7 @@ export var EnglishTranslations: Object = {
     "Taxes": "Taxes",
     "No Fee": "No Fee",
     "Please add a payment amount.": "Please add a payment amount.",
-    "Please select a payment amount lower or equal to the amount left to pay.": "Please select a payment amount lower or equal to the amount left to pay.",  
+    "Please select a payment amount lower or equal to the amount left to pay.": "Please select a payment amount lower or equal to the amount left to pay.",
+    "out of": "out of",
+
 };
