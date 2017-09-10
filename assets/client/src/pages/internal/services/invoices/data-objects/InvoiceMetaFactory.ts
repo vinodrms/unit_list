@@ -13,6 +13,7 @@ export class InvoiceMetaFactory {
         return [
             new InvoiceMeta({
                 invoicePaymentStatus: InvoicePaymentStatus.Paid,
+                displayName: "Paid",
                 invoicePayRight: InvoicePayRight.None,
                 invoiceSetAsLossAcceptedByManagementRight: InvoiceSetAsLossAcceptedByManagementRight.None,
                 invoiceEditItemsRight: InvoiceEditItemsRight.None,
@@ -23,16 +24,18 @@ export class InvoiceMetaFactory {
             }),
             new InvoiceMeta({
                 invoicePaymentStatus: InvoicePaymentStatus.LossAcceptedByManagement,
+                displayName: "Loss Accepted By Management",
                 invoicePayRight: InvoicePayRight.None,
                 invoiceSetAsLossAcceptedByManagementRight: InvoiceSetAsLossAcceptedByManagementRight.None,
                 invoiceEditItemsRight: InvoiceEditItemsRight.None,
                 invoiceAddPaymentsRight: InvoiceAddPaymentsRight.None,
                 invoiceRemoveRight: InvoiceRemoveRight.None,
                 invoiceEditPayersRight: InvoiceEditPayersRight.None,
-                invoiceReinstateRight: InvoiceReinstateRight.Edit
+                invoiceReinstateRight: InvoiceReinstateRight.None
             }),
             new InvoiceMeta({
                 invoicePaymentStatus: InvoicePaymentStatus.Unpaid,
+                displayName: "Unpaid",
                 invoicePayRight: InvoicePayRight.Edit,
                 invoiceSetAsLossAcceptedByManagementRight: InvoiceSetAsLossAcceptedByManagementRight.Edit,
                 invoiceEditItemsRight: InvoiceEditItemsRight.Edit,
@@ -43,6 +46,7 @@ export class InvoiceMetaFactory {
             }),
             new InvoiceMeta({
                 invoicePaymentStatus: InvoicePaymentStatus.Credit,
+                displayName: "Credit",
                 invoicePayRight: InvoicePayRight.None,
                 invoiceSetAsLossAcceptedByManagementRight: InvoiceSetAsLossAcceptedByManagementRight.None,
                 invoiceEditItemsRight: InvoiceEditItemsRight.None,

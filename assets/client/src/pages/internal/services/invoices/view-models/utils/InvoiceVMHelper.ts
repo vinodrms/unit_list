@@ -14,11 +14,12 @@ import _ = require('underscore');
 @Injectable()
 export class InvoiceVMHelper {
 
-    private _invoiceMetaFactory: InvoiceMetaFactory;
+    private invoiceMetaFactory: InvoiceMetaFactory;
 
     constructor(appContext: AppContext,
-        private eagerCustomersService: EagerCustomersService) {
-            this._invoiceMetaFactory = new InvoiceMetaFactory();
+        private eagerCustomersService: EagerCustomersService
+    ) {
+        this.invoiceMetaFactory = new InvoiceMetaFactory();
     }
 
     public convertToViewModels(invoices: InvoicesDO): Observable<InvoiceVM[]> {
@@ -38,7 +39,7 @@ export class InvoiceVMHelper {
                 _.forEach(invoice.payerList, (payer: InvoicePayerDO) => {
                     invoiceVM.customerList.push(customers.getCustomerById(payer.customerId));
                 });
-                invoiceVM.invoiceMeta = this._invoiceMetaFactory.getInvoiceMetaByPaymentStatus(invoice.paymentStatus);
+                invoiceVM.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(invoice.paymentStatus);
 
                 invoiceVMList.push(invoiceVM);
             });

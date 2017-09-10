@@ -12,6 +12,8 @@ import { Observable } from 'rxjs/Observable';
 import { InvoiceDO, InvoicePaymentStatus } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceDO";
 import { InvoiceService } from "../../../../../../../../../../../services/invoices/InvoiceService";
 import { InvoiceVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceVM";
+import { InvoiceMetaFactory } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory";
+import { InvoiceMeta } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceMeta";
 
 @Component({
     selector: 'customer-invoice-history',
@@ -22,8 +24,9 @@ export class CustomerInvoiceHistoryComponent implements OnInit {
     @Input() customerOperationsPageData: CustomerOperationsPageData;
 
     isLoading: boolean = false;
-    private _pageNumber = 0;
+    private pageNumber = 0;
     private _totalCount: number;
+    private invoiceMetasByInvoiceStatus: { [index: number]: InvoiceMeta };
 
     invoiceList: InvoiceDO[] = [];
     ccySymbol: string = "";
@@ -31,7 +34,14 @@ export class CustomerInvoiceHistoryComponent implements OnInit {
     constructor(private context: AppContext,
         private invoiceService: InvoiceService,
         private hotelAggregatorService: HotelAggregatorService,
-        private operationsPageControllerService: HotelOperationsPageControllerService) { }
+        private operationsPageControllerService: HotelOperationsPageControllerService,
+    ) {
+        let factory = new InvoiceMetaFactory();
+        let invoiceMetas = factory.getInvoiceMetaList();
+        this.invoiceMetasByInvoiceStatus = _.indexBy(invoiceMetas, (meta: InvoiceMeta) => {
+            return meta.invoicePaymentStatus;
+        });
+    }
 
     ngOnInit() {
         this.isLoading = true;
@@ -54,8 +64,8 @@ export class CustomerInvoiceHistoryComponent implements OnInit {
     public loadMore() {
         if (!this.canLoadMore || this.isLoading) { return; }
         this.isLoading = true;
-        this._pageNumber++;
-        this.invoiceService.updatePageNumber(this._pageNumber);
+        this.pageNumber++;
+        this.invoiceService.updatePageNumber(this.pageNumber);
     }
     public goToInvoice(invoice: InvoiceDO) {
         this.operationsPageControllerService.goToInvoice(invoice.id);
@@ -68,17 +78,7 @@ export class CustomerInvoiceHistoryComponent implements OnInit {
         this._totalCount = totalCount;
     }
 
-    // TODO: switch with InvoiceVM which should contain a meta attribute with the display value
     public getInvoiceStatus(invoice: InvoiceDO): string {
-        switch (invoice.paymentStatus) {
-            case InvoicePaymentStatus.Credit:
-                return "Credit";
-            case InvoicePaymentStatus.LossAcceptedByManagement:
-                return "Loss Accepted By Management";
-            case InvoicePaymentStatus.Unpaid:
-                return "Unpaid";
-            case InvoicePaymentStatus.Paid:
-                return "Paid";
-        }
+        return this.invoiceMetasByInvoiceStatus[invoice.paymentStatus].displayName;
     }
 }

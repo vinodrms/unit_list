@@ -7,6 +7,7 @@ import {
 
 export interface InvoiceMetaOptions {
     invoicePaymentStatus: InvoicePaymentStatus;
+    displayName: string;
     invoicePayRight: InvoicePayRight;
     invoiceSetAsLossAcceptedByManagementRight: InvoiceSetAsLossAcceptedByManagementRight;
     invoiceEditItemsRight: InvoiceEditItemsRight;
@@ -18,6 +19,7 @@ export interface InvoiceMetaOptions {
 
 export class InvoiceMeta {
     invoicePaymentStatus: InvoicePaymentStatus;
+    displayName: string;
     invoicePayRight: InvoicePayRight;
     invoiceSetAsLossAcceptedByManagementRight: InvoiceSetAsLossAcceptedByManagementRight;
     invoiceEditItemsRight: InvoiceEditItemsRight;
@@ -28,6 +30,7 @@ export class InvoiceMeta {
 
     constructor(metaOptions: InvoiceMetaOptions) {
         this.invoicePaymentStatus = metaOptions.invoicePaymentStatus;
+        this.displayName = metaOptions.displayName;
         this.invoicePayRight = metaOptions.invoicePayRight;
         this.invoiceSetAsLossAcceptedByManagementRight = metaOptions.invoiceSetAsLossAcceptedByManagementRight;
         this.invoiceEditItemsRight = metaOptions.invoiceEditItemsRight;

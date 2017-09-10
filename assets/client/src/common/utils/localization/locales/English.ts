@@ -988,6 +988,7 @@ export var EnglishTranslations: Object = {
     "to get one": "to get one",
     "Unpaid": "Unpaid",
     "Loss Management": "Loss Management",
+    "Credit": "Credit",
     "Select an Invoice": "Select an Invoice",
     "No Invoice Selected": "No Invoice Selected",
     "You can select an invoice to transfer items to or to transfer items from.": "You can select an invoice to transfer items to or to transfer items from.",
