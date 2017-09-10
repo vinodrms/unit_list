@@ -64,10 +64,11 @@ export class HotelOperationsInvoiceService {
             let msg = this.context.thTranslation.translate("The payer is already added on the invoice");
             return Observable.throw(new ThError(msg));
         }
+        let clonedInvoice = this.cloneInvoice(invoice);
         let customerPayerDO = new InvoicePayerDO();
         customerPayerDO.customerId = customerId;
-        invoice.payerList.push(customerPayerDO);
-        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: invoice });
+        clonedInvoice.payerList.push(customerPayerDO);
+        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: clonedInvoice });
     }
 
     removePayer(invoice: InvoiceDO, customerId: string): Observable<InvoiceDO> {
@@ -93,9 +94,10 @@ export class HotelOperationsInvoiceService {
         // ensure that the item is not already stamped
         delete item.transactionId;
         delete item.timestamp;
-        invoice.itemList.push(item);
+        let clonedInvoice = this.cloneInvoice(invoice);
+        clonedInvoice.itemList.push(item);
 
-        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: invoice });
+        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: clonedInvoice });
     }
     removeItem(invoice: InvoiceDO, itemTransactionId: string): Observable<InvoiceDO> {
         let item: InvoiceItemDO = _.find(invoice.itemList, (item: InvoiceItemDO) => {
@@ -121,18 +123,26 @@ export class HotelOperationsInvoiceService {
         delete payment.timestamp;
         delete payment.transactionId;
 
-        invoice.payerList[payerIndex].paymentList.push(payment);
-        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: invoice });
+        let clonedInvoice = this.cloneInvoice(invoice);
+        clonedInvoice.payerList[payerIndex].paymentList.push(payment);
+        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: clonedInvoice });
     }
     markAsPaid(invoice: InvoiceDO): Observable<InvoiceDO> {
-        invoice.paymentStatus = InvoicePaymentStatus.Paid;
-        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: invoice });
+        let clonedInvoice = this.cloneInvoice(invoice);
+        clonedInvoice.paymentStatus = InvoicePaymentStatus.Paid;
+        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: clonedInvoice });
     }
     markAsLossByManagemnt(invoice: InvoiceDO): Observable<InvoiceDO> {
-        invoice.paymentStatus = InvoicePaymentStatus.LossAcceptedByManagement;
-        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: invoice });
+        let clonedInvoice = this.cloneInvoice(invoice);
+        clonedInvoice.paymentStatus = InvoicePaymentStatus.LossAcceptedByManagement;
+        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: clonedInvoice });
     }
 
+    private cloneInvoice(invoice: InvoiceDO): InvoiceDO {
+        let clone = new InvoiceDO();
+        clone.buildFromObject(invoice);
+        return clone;
+    }
     private getInvoices(searchCriteria: Object): Observable<InvoiceDO[]> {
         return this.context.thHttp.post({
             serverApi: ThServerApi.Invoices,
