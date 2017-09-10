@@ -997,6 +997,7 @@ export var EnglishTranslations: Object = {
     "The payer is already added on the invoice": "The payer is already added on the invoice",
     "The payer was not found on the invoice": "The payer was not found on the invoice",
     "You cannot remove this payer because there is at least one payment referencing him.": "You cannot remove this payer because there is at least one payment referencing him.",
+    "At least one payer must be on the invoice.": "At least one payer must be on the invoice.",
     "The item was not found on the invoice": "The item was not found on the invoice",
     "Could not find invoices. Empty group provided.": "Could not find invoices. Empty group provided.",
     "Generate the bookings on only one invoice": "Generate the bookings on only one invoice",

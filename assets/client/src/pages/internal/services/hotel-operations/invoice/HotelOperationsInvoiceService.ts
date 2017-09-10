@@ -82,6 +82,10 @@ export class HotelOperationsInvoiceService {
             let msg = this.context.thTranslation.translate("You cannot remove this payer because there is at least one payment referencing him.");
             return Observable.throw(new ThError(msg));
         }
+        if (invoice.payerList.length == 1) {
+            let msg = this.context.thTranslation.translate("At least one payer must be on the invoice.");
+            return Observable.throw(new ThError(msg));
+        }
         return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: invoice, payerCustomerIdListToDelete: [customerId] });
     }
 
