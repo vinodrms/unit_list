@@ -112,7 +112,9 @@ export class InvoiceOperationsPageComponent implements OnInit {
         invoiceVM.invoice = new InvoiceDO();
         invoiceVM.invoice.payerList = [];
         invoiceVM.invoice.itemList = [];
-        invoiceVM.invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
+        invoiceVM.invoice.indexedBookingIdList = [];
+        invoiceVM.invoice.indexedCustomerIdList = [];
+        invoiceVM.invoice.paymentStatus = InvoicePaymentStatus.Transient;
         invoiceVM.customerList = [];
         invoiceVM.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(invoiceVM.invoice.paymentStatus);
         return invoiceVM;

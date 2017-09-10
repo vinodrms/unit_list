@@ -1,8 +1,8 @@
+import _ = require('underscore');
 import { InvoiceDO } from "../data-objects/InvoiceDO";
 import { CustomerDO } from "../../customers/data-objects/CustomerDO";
 import { InvoiceMeta } from "../data-objects/InvoiceMeta";
-
-import _ = require('underscore');
+import { InvoiceMetaFactory } from "../data-objects/InvoiceMetaFactory";
 
 export class InvoiceVM {
     private _invoice: InvoiceDO;
@@ -14,6 +14,8 @@ export class InvoiceVM {
     }
     public set invoice(value: InvoiceDO) {
         this._invoice = value;
+        let factory = new InvoiceMetaFactory();
+        this._invoiceMeta = factory.getInvoiceMetaByPaymentStatus(this._invoice.paymentStatus);
     }
 
     public get invoiceMeta(): InvoiceMeta {
@@ -30,10 +32,10 @@ export class InvoiceVM {
         this._customerList = value;
     }
     public getFirstPayerName(): string {
-        return (this._customerList.length > 0 ) ? this._customerList[0].customerName : "";
+        return (this._customerList.length > 0) ? this._customerList[0].customerName : "";
     }
     public getFirstPayerEmail(): string {
-        return (this._customerList.length > 0 ) ? this._customerList[0].emailString : "";
+        return (this._customerList.length > 0) ? this._customerList[0].emailString : "";
     }
 
     public getCustomerDO(id: string): CustomerDO {

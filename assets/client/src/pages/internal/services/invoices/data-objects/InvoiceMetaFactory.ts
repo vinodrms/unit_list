@@ -12,6 +12,17 @@ export class InvoiceMetaFactory {
     public getInvoiceMetaList(): InvoiceMeta[] {
         return [
             new InvoiceMeta({
+                invoicePaymentStatus: InvoicePaymentStatus.Transient,
+                displayName: "Transient",
+                invoicePayRight: InvoicePayRight.None,
+                invoiceSetAsLossAcceptedByManagementRight: InvoiceSetAsLossAcceptedByManagementRight.None,
+                invoiceEditItemsRight: InvoiceEditItemsRight.Edit,
+                invoiceAddPaymentsRight: InvoiceAddPaymentsRight.Edit,
+                invoiceRemoveRight: InvoiceRemoveRight.None,
+                invoiceEditPayersRight: InvoiceEditPayersRight.Edit,
+                invoiceReinstateRight: InvoiceReinstateRight.None
+            }),
+            new InvoiceMeta({
                 invoicePaymentStatus: InvoicePaymentStatus.Paid,
                 displayName: "Paid",
                 invoicePayRight: InvoicePayRight.None,

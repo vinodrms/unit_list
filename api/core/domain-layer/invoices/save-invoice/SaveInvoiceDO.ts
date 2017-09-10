@@ -29,7 +29,10 @@ export class SaveInvoiceDO {
             },
             {
                 key: "paymentStatus",
-                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoicePaymentStatus.Unpaid, InvoicePaymentStatus.Paid, InvoicePaymentStatus.LossAcceptedByManagement, InvoicePaymentStatus.Credit]))
+                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([
+                    // the client uses -1 to map transient invoices
+                    -1, InvoicePaymentStatus.Unpaid, InvoicePaymentStatus.Paid, InvoicePaymentStatus.LossAcceptedByManagement, InvoicePaymentStatus.Credit
+                ]))
             },
             {
                 key: "itemList",

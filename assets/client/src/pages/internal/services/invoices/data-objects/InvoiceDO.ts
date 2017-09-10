@@ -17,7 +17,11 @@ export enum InvoiceStatus {
 }
 
 export enum InvoicePaymentStatus {
-    Unpaid, Paid, LossAcceptedByManagement, Credit
+    Transient = -1,
+    Unpaid,
+    Paid,
+    LossAcceptedByManagement,
+    Credit
 }
 
 export class InvoiceDO extends BaseDO {
