@@ -75,7 +75,7 @@ export class InvoicePayerComponent implements OnInit {
             return this.invoicePayerVM.invoicePayerDO.priceToPay;
         }
 
-        return this.invoicePayerVM.invoicePayerDO.transactionFeeSnapshot.getAmountWihtTransactionFeeIncluded(this.invoicePayerVM.invoicePayerDO.priceToPay);
+        return this.invoicePayerVM.invoicePayerDO.transactionFeeSnapshot.getAmountWithTransactionFeeIncluded(this.invoicePayerVM.invoicePayerDO.priceToPay);
     }
 
     public set shouldApplyTransacationFee(shouldApply: boolean) {

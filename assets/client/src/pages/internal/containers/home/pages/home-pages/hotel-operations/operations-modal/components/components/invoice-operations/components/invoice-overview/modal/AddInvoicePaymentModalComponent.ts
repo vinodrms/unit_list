@@ -67,7 +67,7 @@ export class AddInvoicePaymentModalComponent extends BaseComponent implements IC
         } else {
             invoicePaymentDO.transactionFeeSnapshot = this.selectedInvoicePaymentMethodVM.transactionFee;
         }
-        invoicePaymentDO.amountPlusTransactionFee = invoicePaymentDO.transactionFeeSnapshot.getAmountWihtTransactionFeeIncluded(invoicePaymentDO.amount);
+        invoicePaymentDO.amountPlusTransactionFee = invoicePaymentDO.transactionFeeSnapshot.getAmountWithTransactionFeeIncluded(invoicePaymentDO.amount);
         invoicePaymentDO.notes = this.paymentNotes;
         this._modalDialogRef.addResult(invoicePaymentDO);
         this._modalDialogRef.closeForced();
@@ -107,6 +107,6 @@ export class AddInvoicePaymentModalComponent extends BaseComponent implements IC
             return this.paymentAmount;
         }
 
-        return this.selectedInvoicePaymentMethodVM.transactionFee.getAmountWihtTransactionFeeIncluded(this.paymentAmount);
+        return this.selectedInvoicePaymentMethodVM.transactionFee.getAmountWithTransactionFeeIncluded(this.paymentAmount);
     }
 }

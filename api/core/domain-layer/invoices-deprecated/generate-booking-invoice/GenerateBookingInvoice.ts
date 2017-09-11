@@ -175,7 +175,7 @@ export class GenerateBookingInvoiceDeprecated {
             }
 
             invoice.payerList[0].transactionFeeSnapshot = transactionFee;
-            invoice.payerList[0].priceToPayPlusTransactionFee = transactionFee.getAmountWihtTransactionFeeIncluded(invoice.payerList[0].priceToPay);
+            invoice.payerList[0].priceToPayPlusTransactionFee = transactionFee.getAmountWithTransactionFeeIncluded(invoice.payerList[0].priceToPay);
 
             resolve(invoice);
         }).catch(e => {

@@ -133,6 +133,8 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
             payer.paymentList.forEach((payment: InvoicePaymentDO) => {
                 // if the payment has no transactionId then it's a new payment
                 if (this.thUtils.isUndefinedOrNull(payment.transactionId)) {
+                    payment.amount = this.appContext.thUtils.roundNumberToTwoDecimals(payment.amount);
+                    payment.amountPlusTransactionFee = this.appContext.thUtils.roundNumberToTwoDecimals(payment.amountPlusTransactionFee);
                     this.ensurePayerExistsOn(payer.customerId, existingInvoice);
                     this.stampPayment(payment);
                     let payerIndex = _.findIndex(existingInvoice.payerList, ((p: InvoicePayerDO) => { return p.customerId === payer.customerId; }));

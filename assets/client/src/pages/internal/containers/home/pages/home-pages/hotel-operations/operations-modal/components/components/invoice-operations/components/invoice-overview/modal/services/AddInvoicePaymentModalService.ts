@@ -11,16 +11,16 @@ import { InvoiceOperationsPageData } from "../../../../utils/InvoiceOperationsPa
 
 @Injectable()
 export class AddInvoicePaymentModalService {
-	constructor(private _appContext: AppContext) { }
+    constructor(private context: AppContext) { }
 
-	public openAddInvoicePaymentModal(invoice: InvoiceDO, customerDO: CustomerDO, invoiceOperationsPageData: InvoiceOperationsPageData): Promise<ModalDialogRef<InvoicePaymentDO>> {
-		var modalInput = new AddInvoicePaymentModalInput();
-		modalInput.invoiceAmountLeftToPay = invoice.amountToPay - invoice.amountPaid;
-		modalInput.customer = customerDO;
-		modalInput.invoiceOperationsPageData = invoiceOperationsPageData;
+    public openAddInvoicePaymentModal(invoice: InvoiceDO, customerDO: CustomerDO, invoiceOperationsPageData: InvoiceOperationsPageData): Promise<ModalDialogRef<InvoicePaymentDO>> {
+        var modalInput = new AddInvoicePaymentModalInput();
+        modalInput.invoiceAmountLeftToPay = this.context.thUtils.roundNumberToTwoDecimals(invoice.amountToPay - invoice.amountPaid);
+        modalInput.customer = customerDO;
+        modalInput.invoiceOperationsPageData = invoiceOperationsPageData;
 
-		return this._appContext.modalService.open<any>(AddInvoicePaymentModalModule, AddInvoicePaymentModalComponent, ReflectiveInjector.resolve([
-			{ provide: AddInvoicePaymentModalInput, useValue: modalInput }
-		]));
-	}
+        return this.context.modalService.open<any>(AddInvoicePaymentModalModule, AddInvoicePaymentModalComponent, ReflectiveInjector.resolve([
+            { provide: AddInvoicePaymentModalInput, useValue: modalInput }
+        ]));
+    }
 }
