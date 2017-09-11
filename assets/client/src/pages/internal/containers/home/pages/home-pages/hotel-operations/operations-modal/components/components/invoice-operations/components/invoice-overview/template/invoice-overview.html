@@ -95,7 +95,8 @@
                     <td>{{ 'TOTAL' | translate }}</td>
                     <td></td>
                     <td></td>
-                    <td>{{ ccySymbol }}{{ currentInvoice.invoice.amountPaid }} {{ "out of" }} {{ ccySymbol }}{{ currentInvoice.invoice.amountToPay }}</td>
+                    <td *ngIf="hasItems()">{{ ccySymbol }}{{ currentInvoice.invoice.amountPaid }} {{ "out of" }} {{ ccySymbol }}{{ currentInvoice.invoice.amountToPay }}</td>
+                    <td *ngIf="!hasItems()">{{ 'No items' | translate }}</td>
                     <td></td>
                 </tr>
             </tfoot>

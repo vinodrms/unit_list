@@ -251,6 +251,9 @@ export class InvoiceOverviewComponent implements OnInit {
             return item.type === InvoiceItemType.Booking;
         });
     }
+    public hasItems(): boolean {
+        return !_.isEmpty(this.currentInvoice.invoice.itemList);
+    }
 
     public hasInvoiceAddPaymentsRight(): boolean {
         return this.currentInvoice.invoiceMeta.invoiceAddPaymentsRight === InvoiceAddPaymentsRight.Edit;

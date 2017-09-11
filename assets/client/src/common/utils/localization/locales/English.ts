@@ -1014,6 +1014,6 @@ export var EnglishTranslations: Object = {
     "Please select a payment amount lower or equal to the amount left to pay.": "Please select a payment amount lower or equal to the amount left to pay.",
     "out of": "out of",
     "Are you sure you want to mark this invoice as %status%?": "Are you sure you want to mark this invoice as %status%?",
-
+    "No items": "No items",
 
 };
