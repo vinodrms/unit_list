@@ -40,7 +40,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of currentInvoice.invoice.itemList" class="selectable">
-                        <td>{{ item.meta.getDisplayName() }}</td>
+                        <td>{{ getDisplayName(item) }}</td>
                         <td>{{ item.meta.getNumberOfItems() }}</td>
                         <td>{{ ccySymbol }}{{ item.meta.getUnitPrice() }}</td>
                         <td>{{ ccySymbol }}{{ item.getTotalPrice() }}</td>
@@ -106,7 +106,7 @@
                         <tbody>
                             <tr *ngFor="let item of transferInvoice.invoice.itemList" class="selectable">
                                 <td><i class="fa fa-arrow-left transfer-left clickable"></i></td>
-                                <td>{{ item.meta.getDisplayName() }}</td>
+                                <td>{{ getDisplayName(item) }}</td>
                                 <td>{{ item.meta.getNumberOfItems() }}</td>
                                 <td>{{ ccySymbol }}{{ item.meta.getUnitPrice() }}</td>
                                 <td>{{ ccySymbol }}{{ item.getTotalPrice() }}</td>

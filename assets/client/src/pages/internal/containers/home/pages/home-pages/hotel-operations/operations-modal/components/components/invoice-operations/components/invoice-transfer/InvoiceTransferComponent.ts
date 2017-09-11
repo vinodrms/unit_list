@@ -4,6 +4,7 @@ import { ThUtils } from "../../../../../../../../../../../../../common/utils/ThU
 import { InvoiceVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceVM";
 import { CustomerDO } from "../../../../../../../../../../../services/customers/data-objects/CustomerDO";
 import { InvoiceOperationsPageData } from "../../utils/InvoiceOperationsPageData";
+import { InvoiceItemDO } from "../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO";
 
 
 @Component({
@@ -18,7 +19,7 @@ export class InvoiceTransferComponent implements OnInit {
     @Output() backToInvoiceOverviewClicked = new EventEmitter();
 
     private _thUtils: ThUtils;
-    
+
     transferInvoice: InvoiceVM;
 
     constructor(private _appContext: AppContext) {
@@ -45,10 +46,14 @@ export class InvoiceTransferComponent implements OnInit {
     }
 
     public selectInvoiceForTransfer() {
-        this.transferInvoice = this.relatedInvoices[3];
+        this.transferInvoice = this.relatedInvoices[0];
     }
 
     public get ccySymbol(): string {
         return this.invoiceOperationsPageData.ccy.symbol;
+    }
+
+    public getDisplayName(item: InvoiceItemDO): string {
+        return item.meta.getDisplayName(this._appContext.thTranslation);
     }
 }
