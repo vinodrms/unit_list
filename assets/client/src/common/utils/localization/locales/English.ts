@@ -1016,5 +1016,6 @@ export var EnglishTranslations: Object = {
     "Are you sure you want to mark this invoice as %status%?": "Are you sure you want to mark this invoice as %status%?",
     "No items": "No items",
     "Accomodation for %date%": "Accomodation for %date%",
+    "has a transaction fee of": "has a transaction fee of",
 
 };

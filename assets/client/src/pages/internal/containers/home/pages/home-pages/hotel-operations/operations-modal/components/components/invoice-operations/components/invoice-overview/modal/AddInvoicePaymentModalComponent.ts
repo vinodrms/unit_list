@@ -9,7 +9,7 @@ import { InvoicePaymentMethodDO } from "../../../../../../../../../../../../serv
 import { InvoicePaymentMethodVMGenerator } from "../../../../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator";
 import { InvoicePaymentMethodVM } from "../../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM";
 import { ThUtils } from "../../../../../../../../../../../../../../common/utils/ThUtils";
-import { TransactionFeeDO } from "../../../../../../../../../../../../services/common/data-objects/payment-method/TransactionFeeDO";
+import { TransactionFeeDO, TransactionFeeType } from "../../../../../../../../../../../../services/common/data-objects/payment-method/TransactionFeeDO";
 
 
 @Component({
@@ -94,5 +94,19 @@ export class AddInvoicePaymentModalComponent extends BaseComponent implements IC
 
     public didChangeInvoicePaymentMethod(invoicePaymentMethodVM: InvoicePaymentMethodVM) {
         this.selectedInvoicePaymentMethodVM = invoicePaymentMethodVM;
+    }
+
+    public get transactionFeeIsFixed(): boolean {
+        return this.selectedInvoicePaymentMethodVM.transactionFee.type === TransactionFeeType.Fixed;
+    }
+    public get transactionFee(): TransactionFeeDO {
+        return this.selectedInvoicePaymentMethodVM.transactionFee;
+    }
+    private get priceToPayPlusTransactionFee(): number {
+        if (!this.applyFee || !this.paymentAmount) {
+            return this.paymentAmount;
+        }
+
+        return this.selectedInvoicePaymentMethodVM.transactionFee.getAmountWihtTransactionFeeIncluded(this.paymentAmount);
     }
 }
