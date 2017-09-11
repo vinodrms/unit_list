@@ -25,7 +25,7 @@
                     <li *ngIf="hasInvoiceEditPayersRight()" class="clickable" (click)="removePayer(payer)">{{ 'Remove Payer' | translate }}</li>
                 </ul>
             </div>
-            <div class="payer-name">{{ payer.customerName }}</div>
+            <div class="payer-name clickable" (click)="goToCustomer(payer)">{{ payer.customerName }}</div>
             <div class="payer-email">{{ payer.emailString }}</div>
         </div>
             <div *ngIf="hasInvoiceEditPayersRight()" class="add-payer clickable" (click)="openCustomerSelectModal()">

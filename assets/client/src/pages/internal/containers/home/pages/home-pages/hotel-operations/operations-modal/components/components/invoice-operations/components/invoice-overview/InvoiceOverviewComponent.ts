@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { AppContext, ThError } from "../../../../../../../../../../../../../common/utils/AppContext";
 import { InvoiceVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceVM";
@@ -23,8 +24,7 @@ import {
 } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceEditRights";
 import { InvoiceMetaFactory } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory";
 import { AddInvoicePaymentModalService } from "./modal/services/AddInvoicePaymentModalService";
-
-import _ = require('underscore');
+import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
 
 
 @Component({
@@ -51,6 +51,7 @@ export class InvoiceOverviewComponent implements OnInit {
         private invoiceOperations: HotelOperationsInvoiceService,
         private customerRegisterModalService: CustomerRegisterModalService,
         private addInvoicePaymentModalService: AddInvoicePaymentModalService,
+        private operationsPageControllerService: HotelOperationsPageControllerService,
     ) {
         this.invoiceMetaFactory = new InvoiceMetaFactory();
     }
@@ -148,6 +149,10 @@ export class InvoiceOverviewComponent implements OnInit {
                 });
             });
         }).catch((e: any) => { });
+    }
+
+    public goToCustomer(customer: CustomerDO) {
+        this.operationsPageControllerService.goToCustomer(customer.id);
     }
 
     public removePayer(payer: CustomerDO) {
