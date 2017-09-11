@@ -21,7 +21,7 @@
                 <ul>
                     <li class="clickable">{{ 'View Bookings' | translate }}</li>
                     <li *ngIf="hasInvoiceAddPaymentsRight()" class="clickable" (click)="openAddInvoicePaymentModal(payer)">{{ 'Add Payment' | translate }}</li>
-                    <li class="clickable">{{ 'Add Invoice' | translate }}</li>
+                    <li class="clickable" (click)="createNewInvoiceFor(payer)">{{ 'Add Invoice' | translate }}</li>
                     <li *ngIf="hasInvoiceEditPayersRight()" class="clickable" (click)="removePayer(payer)">{{ 'Remove Payer' | translate }}</li>
                 </ul>
             </div>

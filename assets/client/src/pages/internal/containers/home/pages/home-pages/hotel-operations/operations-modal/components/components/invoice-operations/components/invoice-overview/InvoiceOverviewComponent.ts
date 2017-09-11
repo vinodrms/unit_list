@@ -155,13 +155,17 @@ export class InvoiceOverviewComponent implements OnInit {
         this.operationsPageControllerService.goToCustomer(customer.id);
     }
 
-    public removePayer(payer: CustomerDO) {
-        this.invoiceOperations.removePayer(this.currentInvoice.invoice, payer.id).subscribe((updatedInvoice: InvoiceDO) => {
+    public removePayer(customer: CustomerDO) {
+        this.invoiceOperations.removePayer(this.currentInvoice.invoice, customer.id).subscribe((updatedInvoice: InvoiceDO) => {
             this.currentInvoice.invoice = updatedInvoice;
-            this.currentInvoice.removeCustomer(payer.id);
+            this.currentInvoice.removeCustomer(customer.id);
         }, (err: ThError) => {
             this.context.toaster.error(err.message);
         });
+    }
+
+    public createNewInvoiceFor(customer: CustomerDO) {
+        this.operationsPageControllerService.goToInvoice(null, customer.id);
     }
 
     public get ccySymbol(): string {
