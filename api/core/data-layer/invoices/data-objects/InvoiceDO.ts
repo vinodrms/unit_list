@@ -101,23 +101,17 @@ export class InvoiceDO extends BaseDO {
     }
 
     public removeItemsPopulatedFromBooking() {
-        var itemsToRemoveIdList = [];
-        _.forEach(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
-            if (invoiceItemDO.type === InvoiceItemType.Booking) {
-                delete invoiceItemDO.meta;
+        let updatedItems: InvoiceItemDO[] = [];
+        _.forEach(this.itemList, (item: InvoiceItemDO) => {
+            if (item.type === InvoiceItemType.Booking) {
+                delete item.meta;
+                updatedItems.push(item);
             }
-            else if (invoiceItemDO.meta.isDerivedFromBooking()) {
-                itemsToRemoveIdList.push(invoiceItemDO.id);
-            }
-        });
-        _.forEach(itemsToRemoveIdList, (id: string) => {
-            var index = _.findIndex(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
-                return invoiceItemDO.id === id;
-            });
-            if (index != -1) {
-                this.itemList.splice(index, 1);
+            else if (!item.meta.isDerivedFromBooking()) {
+                updatedItems.push(item);
             }
         });
+        this.itemList = updatedItems;
     }
 
     public linkBookingPrices(indexedBookingsById: { [id: string]: BookingDO }) {
