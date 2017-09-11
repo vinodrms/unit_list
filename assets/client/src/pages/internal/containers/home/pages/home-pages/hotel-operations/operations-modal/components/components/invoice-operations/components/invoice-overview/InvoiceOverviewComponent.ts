@@ -25,6 +25,7 @@ import {
 import { InvoiceMetaFactory } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory";
 import { AddInvoicePaymentModalService } from "./modal/services/AddInvoicePaymentModalService";
 import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
+import { InvoiceItemVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM";
 
 
 @Component({
@@ -293,7 +294,7 @@ export class InvoiceOverviewComponent implements OnInit {
         return item.type === InvoiceItemType.Booking;
     }
 
-    public getInvoiceItemDisplayName(item: InvoiceItemDO): string {
-        return item.meta.getDisplayName(this.context.thTranslation);
+    public getInvoiceItemDisplayName(itemVm: InvoiceItemVM): string {
+        return itemVm.getDisplayName(this.context.thTranslation);
     }
 }

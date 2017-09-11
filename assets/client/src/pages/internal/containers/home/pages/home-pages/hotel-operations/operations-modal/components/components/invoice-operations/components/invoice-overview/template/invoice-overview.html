@@ -52,12 +52,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of currentInvoice.invoice.itemList" class="selectable">
-                    <td>{{ getInvoiceItemDisplayName(item) }}</td>
-                    <td>{{ item.meta.getNumberOfItems() }}</td>
-                    <td>{{ ccySymbol }}{{ item.meta.getUnitPrice() }}</td>
-                    <td>{{ ccySymbol }}{{ item.getTotalPrice() }}</td>
-                    <td><i *ngIf="hasInvoiceEditItemsRight()" class="fa fa-trash remove-item clickable" (click)="openRemoveItemConfirmationModal(item)"></i></td>
+                <tr *ngFor="let itemVm of currentInvoice.invoiceItemVms" class="selectable">
+                    <td>
+                        <i *ngIf="itemVm.isRelatedToBooking" class="unitpal-font">%</i> {{ getInvoiceItemDisplayName(itemVm) }}
+                    </td>
+                    <td>{{ itemVm.numberOfItems }}</td>
+                    <td>{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
+                    <td>{{ ccySymbol }}{{ itemVm.totalPrice }}</td>
+                    <td><i *ngIf="hasInvoiceEditItemsRight() && itemVm.isRemovable" class="fa fa-trash remove-item clickable" (click)="openRemoveItemConfirmationModal(itemVm.item)"></i></td>
                 </tr>
                 <tr *ngIf="hasInvoiceEditItemsRight()" class="add-item">
                     <td>

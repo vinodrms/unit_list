@@ -1,12 +1,11 @@
+import * as _ from "underscore";
 import { BaseDO } from '../../../../../../common/base/BaseDO';
 import { ThUtils } from '../../../../../../common/utils/ThUtils';
 import { ThTranslation } from '../../../../../../common/utils/localization/ThTranslation';
 import { IInvoiceItemMeta } from '../../../invoices-deprecated/data-objects/items/IInvoiceItemMeta';
-import { InvoiceItemDO, InvoiceItemAccountingType } from '../../../invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { PricePerDayDO } from './PricePerDayDO';
 import { CommissionDO } from "../../../common/data-objects/commission/CommissionDO";
-
-import * as _ from "underscore";
+import { InvoiceItemDO } from "../../../invoices/data-objects/items/InvoiceItemDO";
 
 export enum BookingPriceType {
     BookingStay,
@@ -17,24 +16,8 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     priceType: BookingPriceType;
 
     roomPricePerNightAvg: number;
-    public getInvoicedRoomPricePerNightAvg(accountingType: InvoiceItemAccountingType): number {
-        return (accountingType === InvoiceItemAccountingType.Credit) ? this.roomPricePerNightAvg * -1 : this.roomPricePerNightAvg;
-    }
 
     roomPricePerNightList: PricePerDayDO[];
-    public getInvoicedRoomPricePerNightList(accountingType: InvoiceItemAccountingType): PricePerDayDO[] {
-        let invoicedRoomPricePerNightList = [];
-
-        _.forEach(this.roomPricePerNightList, (pricePerDay: PricePerDayDO) => {
-            let invoicedPricePerDay = new PricePerDayDO();
-            invoicedPricePerDay.buildFromObject(pricePerDay);
-            invoicedPricePerDay.price = (accountingType === InvoiceItemAccountingType.Credit) ? invoicedPricePerDay.price * -1 : invoicedPricePerDay.price;
-
-            invoicedRoomPricePerNightList.push(invoicedPricePerDay)
-        });
-
-        return invoicedRoomPricePerNightList;
-    }
     numberOfNights: number;
     totalRoomPrice: number;
     totalOtherPrice: number;

@@ -6,7 +6,7 @@ import { ThStatusCode } from "../../../../../utils/th-responses/ThResponse";
 import { ThLogger, ThLogLevel } from "../../../../../utils/logging/ThLogger";
 import { SessionContext } from "../../../../../utils/SessionContext";
 import { AppContext } from "../../../../../utils/AppContext";
-import { InvoiceItemDO } from "../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
+import { InvoiceItemDO, InvoiceItemType } from "../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
 import { InvoicePayerDO } from "../../../../../data-layer/invoices/data-objects/payer/InvoicePayerDO";
 import { InvoicePaymentDO } from "../../../../../data-layer/invoices/data-objects/payer/InvoicePaymentDO";
 
@@ -88,6 +88,18 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
     }
 
     private deleteItemsFrom(existingInvoice: InvoiceDO) {
+        let itemsToRemove = existingInvoice.itemList.filter((existingItem: InvoiceItemDO) => {
+            return _.contains(this.itemTransactionIdListToDelete, existingItem.transactionId);
+        });
+        itemsToRemove.forEach((item: InvoiceItemDO) => {
+            if (item.type === InvoiceItemType.Booking) {
+                var thError = new ThError(ThStatusCode.SaveInvoiceCannotRemoveBookingItem, null);
+                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot remove booking items from invoices",
+                    this.invoiceToSave, thError);
+                throw thError;
+            }
+        });
+
         existingInvoice.itemList = existingInvoice.itemList
             .filter((existingItem: InvoiceItemDO) => {
                 return !_.contains(this.itemTransactionIdListToDelete, existingItem.transactionId);
