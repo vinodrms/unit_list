@@ -13,85 +13,86 @@ import { TransactionFeeDO } from "../../../../../../../../../../../../services/c
 
 
 @Component({
-	selector: 'add-invoice-payment-modal',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-overview/modal/templates/add-invoice-payment-modal.html'
+    selector: 'add-invoice-payment-modal',
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-overview/modal/templates/add-invoice-payment-modal.html'
 })
 export class AddInvoicePaymentModalComponent extends BaseComponent implements ICustomModalComponent {
 
-	public applyFee: boolean = false;
-	public selectedInvoicePaymentMethodVM: InvoicePaymentMethodVM;
-	public paymentAmount: number;
-	public paymentNotes: string;
+    public applyFee: boolean = false;
+    public selectedInvoicePaymentMethodVM: InvoicePaymentMethodVM;
+    public paymentAmount: number;
+    public paymentNotes: string;
 
-	private _pmGenerator: InvoicePaymentMethodVMGenerator;
-	private _customerPaymentMethodVMList: InvoicePaymentMethodVM[];
+    private _pmGenerator: InvoicePaymentMethodVMGenerator;
+    private _customerPaymentMethodVMList: InvoicePaymentMethodVM[];
     private _invoicePayment: InvoicePaymentDO;
-	private _thUtils: ThUtils;
+    private _thUtils: ThUtils;
 
-	constructor(private _modalDialogRef: ModalDialogRef<InvoicePaymentDO>,
-		private _appContext: AppContext,
-		private _modalInput: AddInvoicePaymentModalInput) {
-		super();
-		this._thUtils = new ThUtils();
-	}
-	
-	ngOnInit() {
-		this._pmGenerator = new InvoicePaymentMethodVMGenerator(this._modalInput.invoiceOperationsPageData.allowedPaymentMethods);
-		this._customerPaymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this._modalInput.customer);
-		this.selectedInvoicePaymentMethodVM = this._customerPaymentMethodVMList[0];
-	}
-	
-	public closeDialog(closeWithoutConfirmation: boolean) {
-		this._modalDialogRef.closeForced();
-	}
+    constructor(private _modalDialogRef: ModalDialogRef<InvoicePaymentDO>,
+        private _appContext: AppContext,
+        private _modalInput: AddInvoicePaymentModalInput) {
+        super();
+        this._thUtils = new ThUtils();
+    }
 
-	public addInvoicePayment() {
-		if (this._thUtils.isUndefinedOrNull(this.paymentAmount)) {
+    ngOnInit() {
+        this.paymentAmount = this._modalInput.invoiceAmountLeftToPay;
+        this._pmGenerator = new InvoicePaymentMethodVMGenerator(this._modalInput.invoiceOperationsPageData.allowedPaymentMethods);
+        this._customerPaymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this._modalInput.customer);
+        this.selectedInvoicePaymentMethodVM = this._customerPaymentMethodVMList[0];
+    }
+
+    public closeDialog(closeWithoutConfirmation: boolean) {
+        this._modalDialogRef.closeForced();
+    }
+
+    public addInvoicePayment() {
+        if (this._thUtils.isUndefinedOrNull(this.paymentAmount)) {
             let errorMessage = this._appContext.thTranslation.translate("Please add a payment amount.");
             this._appContext.toaster.error(errorMessage);
             return;
         }
-		if (this.paymentAmount <= 0 || this.paymentAmount > this._modalInput.invoiceAmountLeftToPay) {
+        if (this.paymentAmount <= 0 || this.paymentAmount > this._modalInput.invoiceAmountLeftToPay) {
             let errorMessage = this._appContext.thTranslation.translate("Please select a payment amount lower or equal to the amount left to pay.");
             this._appContext.toaster.error(errorMessage);
             return;
         }
         var invoicePaymentDO = new InvoicePaymentDO();
         //invoicePaymentDO.amount = this._thUtils.roundNumberToTwoDecimals(this.paymentAmount);
-		invoicePaymentDO.amount = this.paymentAmount;
+        invoicePaymentDO.amount = this.paymentAmount;
         invoicePaymentDO.paymentMethod = this.selectedInvoicePaymentMethodVM.paymentMethod;
-		invoicePaymentDO.shouldApplyTransactionFee = this.applyFee;
-		if (!this.applyFee) {
-			invoicePaymentDO.transactionFeeSnapshot = TransactionFeeDO.getDefaultTransactionFee();
-		} else {
-			invoicePaymentDO.transactionFeeSnapshot = this.selectedInvoicePaymentMethodVM.transactionFee;
-		}
-		invoicePaymentDO.amountPlusTransactionFee = invoicePaymentDO.transactionFeeSnapshot.getAmountWihtTransactionFeeIncluded(invoicePaymentDO.amount);
-		invoicePaymentDO.notes = this.paymentNotes;
-		this._modalDialogRef.addResult(invoicePaymentDO);
-		this._modalDialogRef.closeForced();
-	}
+        invoicePaymentDO.shouldApplyTransactionFee = this.applyFee;
+        if (!this.applyFee) {
+            invoicePaymentDO.transactionFeeSnapshot = TransactionFeeDO.getDefaultTransactionFee();
+        } else {
+            invoicePaymentDO.transactionFeeSnapshot = this.selectedInvoicePaymentMethodVM.transactionFee;
+        }
+        invoicePaymentDO.amountPlusTransactionFee = invoicePaymentDO.transactionFeeSnapshot.getAmountWihtTransactionFeeIncluded(invoicePaymentDO.amount);
+        invoicePaymentDO.notes = this.paymentNotes;
+        this._modalDialogRef.addResult(invoicePaymentDO);
+        this._modalDialogRef.closeForced();
+    }
 
-	public isBlocking(): boolean {
-		return true;
-	}
-	public getSize(): ModalSize {
-		return ModalSize.Medium;
-	}
+    public isBlocking(): boolean {
+        return true;
+    }
+    public getSize(): ModalSize {
+        return ModalSize.Medium;
+    }
 
-	public get maxPaymentAmountString(): string {
-		return this.ccySymbol + this._modalInput.invoiceAmountLeftToPay;
-	}
+    public get maxPaymentAmountString(): string {
+        return this.ccySymbol + this._modalInput.invoiceAmountLeftToPay;
+    }
 
-	public get ccySymbol(): string {
-		return this._modalInput.invoiceOperationsPageData.ccy.symbol;
-	}
+    public get ccySymbol(): string {
+        return this._modalInput.invoiceOperationsPageData.ccy.symbol;
+    }
 
-	public get customerPaymentMethodVMList(): InvoicePaymentMethodVM[] {
-		return this._customerPaymentMethodVMList;
-	}
+    public get customerPaymentMethodVMList(): InvoicePaymentMethodVM[] {
+        return this._customerPaymentMethodVMList;
+    }
 
-	public didChangeInvoicePaymentMethod(invoicePaymentMethodVM: InvoicePaymentMethodVM) {
-		this.selectedInvoicePaymentMethodVM = invoicePaymentMethodVM;
-	}
+    public didChangeInvoicePaymentMethod(invoicePaymentMethodVM: InvoicePaymentMethodVM) {
+        this.selectedInvoicePaymentMethodVM = invoicePaymentMethodVM;
+    }
 }
