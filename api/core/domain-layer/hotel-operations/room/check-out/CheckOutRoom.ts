@@ -40,7 +40,7 @@ export class CheckOutRoom {
             .then((hotel: HotelDO) => {
                 this._loadedHotel = hotel;
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-                return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._checkOutRoomDO.groupBookingId, this._checkOutRoomDO.bookingId);
+                return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._checkOutRoomDO.bookingId);
             }).then((booking: BookingDO) => {
                 this._loadedBooking = booking;
                 if (this._loadedBooking.confirmationStatus !== BookingConfirmationStatus.CheckedIn) {

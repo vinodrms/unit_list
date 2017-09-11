@@ -1,25 +1,24 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
+import * as _ from "underscore";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
-import {AppContext} from '../../../../../../../../../../../common/utils/AppContext';
-import {ASinglePageRequestService} from '../../../../../../../../../services/common/ASinglePageRequestService';
-import {RoomCategoriesStatsService} from '../../../../../../../../../services/room-categories/RoomCategoriesStatsService';
-import {RoomCategoryStatsDO} from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
-import {AssignRoomModalInput} from '../../../services/utils/AssignRoomModalInput';
-import {EagerBookingsService} from '../../../../../../../../../services/bookings/EagerBookingsService';
-import {RoomsService} from '../../../../../../../../../services/rooms/RoomsService';
-import {RoomVM} from '../../../../../../../../../services/rooms/view-models/RoomVM';
-import {BookingOccupancyService} from '../../../../../../../../../services/bookings/occupancy/BookingOccupancyService';
-import {BookingOccupancyDO} from '../../../../../../../../../services/bookings/occupancy/data-objects/BookingOccupancyDO';
-import {BookingDO} from '../../../../../../../../../services/bookings/data-objects/BookingDO';
-import {BookingsDO} from '../../../../../../../../../services/bookings/data-objects/BookingsDO';
-import {AssignableRoomVMContainer} from './view-models/AssignableRoomVMContainer';
-import {AssignableRoomVMBuilder} from './view-models/AssignableRoomVMBuilder';
-import {AssignableRoomVM} from './view-models/AssignableRoomVM';
-
-import * as _ from "underscore";
+import { AppContext } from '../../../../../../../../../../../common/utils/AppContext';
+import { ASinglePageRequestService } from '../../../../../../../../../services/common/ASinglePageRequestService';
+import { RoomCategoriesStatsService } from '../../../../../../../../../services/room-categories/RoomCategoriesStatsService';
+import { RoomCategoryStatsDO } from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
+import { AssignRoomModalInput } from '../../../services/utils/AssignRoomModalInput';
+import { EagerBookingsService } from '../../../../../../../../../services/bookings/EagerBookingsService';
+import { RoomsService } from '../../../../../../../../../services/rooms/RoomsService';
+import { RoomVM } from '../../../../../../../../../services/rooms/view-models/RoomVM';
+import { BookingOccupancyService } from '../../../../../../../../../services/bookings/occupancy/BookingOccupancyService';
+import { BookingOccupancyDO } from '../../../../../../../../../services/bookings/occupancy/data-objects/BookingOccupancyDO';
+import { BookingDO } from '../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { BookingsDO } from '../../../../../../../../../services/bookings/data-objects/BookingsDO';
+import { AssignableRoomVMContainer } from './view-models/AssignableRoomVMContainer';
+import { AssignableRoomVMBuilder } from './view-models/AssignableRoomVMBuilder';
+import { AssignableRoomVM } from './view-models/AssignableRoomVM';
 
 @Injectable()
 export class RoomSelectionService extends ASinglePageRequestService<AssignableRoomVM> {
@@ -48,7 +47,7 @@ export class RoomSelectionService extends ASinglePageRequestService<AssignableRo
     public getRoomsWithOccupancyVM(): Observable<AssignableRoomVMContainer> {
         return Observable.combineLatest(
             this._roomsService.getRoomList(),
-            this._eagerBookingsService.getBooking(this._modalInput.assignRoomParam.groupBookingId, this._modalInput.assignRoomParam.bookingId),
+            this._eagerBookingsService.getBooking(this._modalInput.assignRoomParam.bookingId),
             this._eagerBookingsService.getCheckedInBookings()
         ).flatMap((result: [RoomVM[], BookingDO, BookingsDO]) => {
             this._roomVMList = result[0];

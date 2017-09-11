@@ -155,6 +155,7 @@ describe("Invoices Tests", function () {
             additionalPayer.paymentList = [
                 helper.getPayment(paidAmount)
             ];
+            paidAmount = testContext.appContext.thUtils.roundNumberToTwoDecimals(paidAmount);
             invoice.payerList.push(additionalPayer);
 
             let saveInvoice = new SaveInvoice(testContext.appContext, testContext.sessionContext);

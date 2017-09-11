@@ -1,10 +1,10 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {CustomerOperationsPageData} from '../../services/utils/CustomerOperationsPageData';
-import {LazyLoadData} from '../../../../../../../../../../../services/common/ILazyLoadRequestService';
-import {BookingsService} from '../../../../../../../../../../../services/bookings/BookingsService';
-import {BookingVM} from '../../../../../../../../../../../services/bookings/view-models/BookingVM';
-import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
+import { CustomerOperationsPageData } from '../../services/utils/CustomerOperationsPageData';
+import { LazyLoadData } from '../../../../../../../../../../../services/common/ILazyLoadRequestService';
+import { BookingsService } from '../../../../../../../../../../../services/bookings/BookingsService';
+import { BookingVM } from '../../../../../../../../../../../services/bookings/view-models/BookingVM';
+import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
 
 @Component({
     selector: 'customer-booking-history',
@@ -47,7 +47,7 @@ export class CustomerBookingHistoryComponent implements OnInit {
     }
 
     public goToBooking(bookingVM: BookingVM) {
-        this._operationsPageControllerService.goToBooking(bookingVM.booking.groupBookingId, bookingVM.booking.id);
+        this._operationsPageControllerService.goToBooking(bookingVM.booking.id);
     }
 
     public get totalCount(): number {

@@ -18,11 +18,10 @@ export class EagerBookingsService {
         private _hotelAggregatorService: HotelAggregatorService, private _roomCategoriesService: RoomCategoriesService) {
     }
 
-    public getBooking(groupBookingId: string, bookingId: string): Observable<BookingDO> {
+    public getBooking(bookingId: string): Observable<BookingDO> {
         return this._appContext.thHttp.get({
             serverApi: ThServerApi.BookingsItem,
             queryParameters: {
-                groupBookingId: groupBookingId,
                 bookingId: bookingId
             }
         }).map((bookingObject: Object) => {

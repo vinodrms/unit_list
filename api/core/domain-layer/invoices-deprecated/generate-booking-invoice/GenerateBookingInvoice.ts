@@ -55,7 +55,7 @@ export class GenerateBookingInvoiceDeprecated {
         }
 
         var bookignRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        bookignRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._generateBookingInvoiceDO.groupBookingId, this._generateBookingInvoiceDO.id)
+        bookignRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._generateBookingInvoiceDO.id)
             .then((booking: BookingDO) => {
                 this._loadedBooking = booking;
 
@@ -105,7 +105,7 @@ export class GenerateBookingInvoiceDeprecated {
         if (this._thUtils.isUndefinedOrNull(addOnProductList) || !_.isArray(addOnProductList)) {
             return initialAddOnProducts;
         }
-        var reservedAopMap: { [id: string]: AddOnProductBookingReservedItem } = _.indexBy(addOnProductList, reservedAop => {return reservedAop.aopId});
+        var reservedAopMap: { [id: string]: AddOnProductBookingReservedItem } = _.indexBy(addOnProductList, reservedAop => { return reservedAop.aopId });
         var aopIdList: string[] = Object.keys(reservedAopMap);
         _.forEach(aopIdList, (aopId: string) => {
             var addOnProductItem: AddOnProductItem = addOnProductsContainer.getAddOnProductItemById(aopId);

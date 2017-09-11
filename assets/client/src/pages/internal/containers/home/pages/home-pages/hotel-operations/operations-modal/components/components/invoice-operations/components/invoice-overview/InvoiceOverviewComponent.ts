@@ -236,6 +236,22 @@ export class InvoiceOverviewComponent implements OnInit {
     public hasInvoiceEditItemsRight(): boolean {
         return this.currentInvoice.invoiceMeta.invoiceEditItemsRight === InvoiceEditItemsRight.Edit;
     }
+    public hasBookings(): boolean {
+        let item = this.getFirstBookingItem();
+        return !this.context.thUtils.isUndefinedOrNull(item);
+    }
+    public viewFirstBooking() {
+        let item = this.getFirstBookingItem();
+        if (!this.context.thUtils.isUndefinedOrNull(item)) {
+            this.operationsPageControllerService.goToBooking(item.id);
+        }
+    }
+    private getFirstBookingItem(): InvoiceItemDO {
+        return _.find(this.currentInvoice.invoice.itemList, (item: InvoiceItemDO) => {
+            return item.type === InvoiceItemType.Booking;
+        });
+    }
+
     public hasInvoiceAddPaymentsRight(): boolean {
         return this.currentInvoice.invoiceMeta.invoiceAddPaymentsRight === InvoiceAddPaymentsRight.Edit;
     }

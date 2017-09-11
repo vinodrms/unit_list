@@ -1,15 +1,15 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {BookingChangeNoShowTimeDO} from './BookingChangeNoShowTimeDO';
-import {BookingDO, BookingConfirmationStatus} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {BookingStateChangeTriggerTimeDO, BookingStateChangeTriggerType} from '../../../../data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
-import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {ValidationResultParser} from '../../../common/ValidationResultParser';
-import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestampDO';
-import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { BookingChangeNoShowTimeDO } from './BookingChangeNoShowTimeDO';
+import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingStateChangeTriggerTimeDO, BookingStateChangeTriggerType } from '../../../../data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
+import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { ValidationResultParser } from '../../../common/ValidationResultParser';
+import { ThTimestampDO } from '../../../../utils/th-dates/data-objects/ThTimestampDO';
+import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 
 import _ = require('underscore');
 
@@ -37,7 +37,7 @@ export class BookingChangeNoShowTime {
         this._changeNoShowTimeDO.noShowTimestamp = this.getParsedThTimestamp();
 
         var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._changeNoShowTimeDO.groupBookingId, this._changeNoShowTimeDO.id)
+        bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._changeNoShowTimeDO.id)
             .then((booking: BookingDO) => {
                 this._loadedBooking = booking;
 

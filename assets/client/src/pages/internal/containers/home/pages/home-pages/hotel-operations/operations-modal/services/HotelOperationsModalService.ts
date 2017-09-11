@@ -19,8 +19,8 @@ export class HotelOperationsModalService {
         return this.openOperationsModal(roomOperationsParam);
     }
 
-    public openBookingOperationsModal(groupBookingId: string, bookingId: string): Promise<ModalDialogRef<HotelOperationsResult>> {
-        var bookingOperationsPageParam = new HotelBookingOperationsPageParam(groupBookingId, bookingId);
+    public openBookingOperationsModal(bookingId: string): Promise<ModalDialogRef<HotelOperationsResult>> {
+        var bookingOperationsPageParam = new HotelBookingOperationsPageParam(bookingId);
         return this.openOperationsModal(bookingOperationsPageParam);
     }
 

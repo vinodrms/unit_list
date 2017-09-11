@@ -78,7 +78,7 @@ export class BookingChangePriceProduct {
                 this._loadedHotel = loadedHotel;
 
                 var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
-                return bookingRepository.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._inputDO.groupBookingId, this._inputDO.id);
+                return bookingRepository.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._inputDO.id);
             }).then((loadedBooking: BookingDO) => {
                 this._booking = loadedBooking;
 

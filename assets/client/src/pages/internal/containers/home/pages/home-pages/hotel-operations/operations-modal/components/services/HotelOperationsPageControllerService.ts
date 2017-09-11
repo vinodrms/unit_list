@@ -30,8 +30,8 @@ export class HotelOperationsPageControllerService {
         var roomOperationsParam = new HotelRoomOperationsPageParam(roomId);
         this.goToPage(roomOperationsParam);
     }
-    public goToBooking(groupBookingId: string, bookingId: string) {
-        var bookingOperationsPageParam = new HotelBookingOperationsPageParam(groupBookingId, bookingId);
+    public goToBooking(bookingId: string) {
+        var bookingOperationsPageParam = new HotelBookingOperationsPageParam(bookingId);
         this.goToPage(bookingOperationsPageParam);
     }
     public goToCustomer(customerId: string) {

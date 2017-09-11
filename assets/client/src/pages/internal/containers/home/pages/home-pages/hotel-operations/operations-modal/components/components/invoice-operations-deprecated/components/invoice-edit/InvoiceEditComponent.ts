@@ -303,7 +303,7 @@ export class InvoiceEditComponent implements OnInit {
     }
 
     public viewBooking() {
-        if (!this.bookingId || !this.groupBookingId) { return; }
-        this._operationsPageControllerService.goToBooking(this.groupBookingId, this.bookingId);
+        if (!this.bookingId) { return; }
+        this._operationsPageControllerService.goToBooking(this.bookingId);
     }
 }

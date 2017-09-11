@@ -32,7 +32,7 @@ export class BookingWithDependenciesLoader {
     private loadCore(resolve: { (result: BookingWithDependencies): void }, reject: { (err: ThError): void }) {
         var bookingWithDependencies = new BookingWithDependencies();
         var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._groupBookingId, this._bookingId)
+        bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._bookingId)
             .then((bookingDO: BookingDO) => {
                 bookingWithDependencies.bookingDO = bookingDO;
 

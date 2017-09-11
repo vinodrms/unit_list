@@ -976,7 +976,6 @@ export var EnglishTranslations: Object = {
     "Add item": "Add item",
     "TOTAL": "TOTAL",
     "Paid": "Paid",
-    "View Bookings": "View Bookings",
     "Add Payment": "Add Payment",
     "Add Invoice": "Add Invoice",
     "ADD PAYER": "ADD PAYER",

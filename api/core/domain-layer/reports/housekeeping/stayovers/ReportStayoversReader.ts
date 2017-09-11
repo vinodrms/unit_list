@@ -34,9 +34,9 @@ export class ReportStayoversReader {
 	private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
 		var inHouseInfoBuilder = new ReportStayoverInfoBuilder();
 		var inHouseReader = new HotelOperationsRoomInfoReader(this._appContext, this._sessionContext);
-		
+
 		var meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
-		
+
 		this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id)
 			.then((hotel: HotelDO) => {
 				this._hotelDO = hotel;
@@ -77,23 +77,23 @@ export class ReportStayoversReader {
 		return new Promise<any>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
 			let stayoversInfoBuilder = new ReportStayoverInfoBuilder();
 			stayoversInfoBuilder.setRoomItemInfo(roomInfo);
-			
+
 			let roomStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
 			let roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
 			let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
 			let bookingCustomers = new BookingCustomers(this._appContext, this._sessionContext);
-			
+
 			let meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
-			
+
 			let bookingDO = null;
 			roomRepo.getRoomById(meta, roomInfo.roomId).then((room: RoomDO) => {
 				stayoversInfoBuilder.setRoom(room);
 
-				return bookingRepo.getBookingById(meta, roomInfo.groupBookingId, roomInfo.bookingId);
+				return bookingRepo.getBookingById(meta, roomInfo.bookingId);
 			}).then((booking: BookingDO) => {
 				bookingDO = booking;
 				stayoversInfoBuilder.setBooking(bookingDO);
-				
+
 				return roomStatsAggregator.getRoomCategoryStatsList([booking.roomCategoryId]);
 			}).then((roomStats: RoomCategoryStatsDO[]) => {
 				if(roomStats.length > 0) {
@@ -104,7 +104,7 @@ export class ReportStayoversReader {
             	if (!_.isUndefined(companyOrTA)) {
 					stayoversInfoBuilder.setCompanyOrTA(companyOrTA);
             	}
-				
+
 				resolve(stayoversInfoBuilder.build());
 			}).catch((error: any) => {
 				let thError = new ThError(ThStatusCode.HotelOperationsRoomInfoReaderError, error);

@@ -194,6 +194,6 @@ export class RoomBookingPreviewComponent implements OnInit {
         this._operationsPageControllerService.goToCustomer(customer.id);
     }
     public goToBooking(booking: BookingDO) {
-        this._operationsPageControllerService.goToBooking(booking.groupBookingId, booking.id);
+        this._operationsPageControllerService.goToBooking(booking.id);
     }
 }
