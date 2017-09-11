@@ -164,10 +164,6 @@ export class InvoiceOverviewComponent implements OnInit {
         });
     }
 
-    public createNewInvoiceFor(customer: CustomerDO) {
-        this.operationsPageControllerService.goToInvoice(null, customer.id);
-    }
-
     public get ccySymbol(): string {
         return this.invoiceOperationsPageData.ccy.symbol;
     }
