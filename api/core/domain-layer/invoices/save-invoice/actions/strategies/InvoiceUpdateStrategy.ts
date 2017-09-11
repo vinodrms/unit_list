@@ -72,7 +72,7 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
         //  1. The amount to pay is the same with the paid amount
         //  2. There is at least one item on the invoice
         if (existingInvoice.isClosed()) {
-            if (existingInvoice.amountPaid != existingInvoice.amountToPay) {
+            if (existingInvoice.isPaid() && existingInvoice.amountPaid != existingInvoice.amountToPay) {
                 var thError = new ThError(ThStatusCode.SaveInvoiceAmountsNotMatching, null);
                 ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot close an invoice on which the amount to pay is not equal with the paid amount",
                     this.invoiceToSave, thError);

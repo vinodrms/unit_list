@@ -60,29 +60,40 @@ export class InvoiceOverviewComponent implements OnInit {
     }
 
     public onPayInvoice() {
-        var duplicateInvoiceDO = new InvoiceDO();
-        duplicateInvoiceDO.buildFromObject(this.currentInvoice.invoice);
-        this.invoiceOperations.markAsPaid(duplicateInvoiceDO).subscribe((updatedInvoice: InvoiceDO) => {
-            this.currentInvoice.invoice = updatedInvoice;
-            this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
-        }, (err: ThError) => {
-            this.context.toaster.error(err.message);
+        this.confirm("Paid", () => {
+            this.invoiceOperations.markAsPaid(this.currentInvoice.invoice).subscribe((updatedInvoice: InvoiceDO) => {
+                this.currentInvoice.invoice = updatedInvoice;
+                this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
+            }, (err: ThError) => {
+                this.context.toaster.error(err.message);
+            });
         });
     }
 
     public onLossByManagementInvoice() {
-        var duplicateInvoiceDO = new InvoiceDO();
-        duplicateInvoiceDO.buildFromObject(this.currentInvoice.invoice);
-        this.invoiceOperations.markAsLossByManagemnt(this.currentInvoice.invoice).subscribe((updatedInvoice: InvoiceDO) => {
-            this.currentInvoice.invoice = updatedInvoice;
-            this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
-        }, (err: ThError) => {
-            this.context.toaster.error(err.message);
+        this.confirm("Loss By Management", () => {
+            this.invoiceOperations.markAsLossByManagemnt(this.currentInvoice.invoice).subscribe((updatedInvoice: InvoiceDO) => {
+                this.currentInvoice.invoice = updatedInvoice;
+                this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
+            }, (err: ThError) => {
+                this.context.toaster.error(err.message);
+            });
         });
     }
 
     public onReinstateInvoice() {
         //TODO
+    }
+
+    private confirm(status: string, onConfirm: (() => void)) {
+        var title = this.context.thTranslation.translate("Info");
+        let translatedStatus = this.context.thTranslation.translate(status);
+        var content = this.context.thTranslation.translate("Are you sure you want to mark this invoice as %status%?", { status: translatedStatus });
+        var positiveLabel = this.context.thTranslation.translate("Yes");
+        var negativeLabel = this.context.thTranslation.translate("No");
+        this.context.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+            onConfirm();
+        });
     }
 
     public moveToNextRelatedInvoice() {
@@ -129,9 +140,7 @@ export class InvoiceOverviewComponent implements OnInit {
                     this.context.toaster.error(errorMessage);
                     return;
                 }
-                var duplicateInvoiceDO = new InvoiceDO();
-                duplicateInvoiceDO.buildFromObject(this.currentInvoice.invoice);
-                this.invoiceOperations.addPayer(duplicateInvoiceDO, selectedCustomer.id).subscribe((updatedInvoice: InvoiceDO) => {
+                this.invoiceOperations.addPayer(this.currentInvoice.invoice, selectedCustomer.id).subscribe((updatedInvoice: InvoiceDO) => {
                     this.currentInvoice.invoice = updatedInvoice;
                     this.currentInvoice.addCustomer(selectedCustomer);
                 }, (err: ThError) => {
@@ -142,9 +151,7 @@ export class InvoiceOverviewComponent implements OnInit {
     }
 
     public removePayer(payer: CustomerDO) {
-        var duplicateInvoiceDO = new InvoiceDO();
-        duplicateInvoiceDO.buildFromObject(this.currentInvoice.invoice);
-        this.invoiceOperations.removePayer(duplicateInvoiceDO, payer.id).subscribe((updatedInvoice: InvoiceDO) => {
+        this.invoiceOperations.removePayer(this.currentInvoice.invoice, payer.id).subscribe((updatedInvoice: InvoiceDO) => {
             this.currentInvoice.invoice = updatedInvoice;
             this.currentInvoice.removeCustomer(payer.id);
         }, (err: ThError) => {
@@ -163,13 +170,12 @@ export class InvoiceOverviewComponent implements OnInit {
                     this.numberOfAddOnProductsModalService.openModal(selectedAddOnProductList[0].id).then((modalDialogInstance: ModalDialogRef<NumberOfAddOnProductsModalOutput>) => {
                         modalDialogInstance.resultObservable.subscribe((numberOfAopSelection: NumberOfAddOnProductsModalOutput) => {
                             var invoiceItem = this.buildInvoiceItemDOFromAddOnProductDO(selectedAddOnProductList[0], numberOfAopSelection.noOfItems);
-                            var duplicateInvoiceDO = new InvoiceDO();
-                            duplicateInvoiceDO.buildFromObject(this.currentInvoice.invoice);
-                            this.invoiceOperations.addItem(duplicateInvoiceDO, invoiceItem).subscribe((updatedInvoice: InvoiceDO) => {
-                                this.currentInvoice.invoice = updatedInvoice;
-                            }, (err: ThError) => {
-                                this.context.toaster.error(err.message);
-                            });
+                            this.invoiceOperations.addItem(this.currentInvoice.invoice, invoiceItem)
+                                .subscribe((updatedInvoice: InvoiceDO) => {
+                                    this.currentInvoice.invoice = updatedInvoice;
+                                }, (err: ThError) => {
+                                    this.context.toaster.error(err.message);
+                                });
                         });
                     }).catch((e: any) => { });
                 }
@@ -204,9 +210,7 @@ export class InvoiceOverviewComponent implements OnInit {
     }
 
     public removeItem(item: InvoiceItemDO) {
-        var duplicateInvoiceDO = new InvoiceDO();
-        duplicateInvoiceDO.buildFromObject(this.currentInvoice.invoice);
-        this.invoiceOperations.removeItem(duplicateInvoiceDO, item.transactionId).subscribe((updatedInvoice: InvoiceDO) => {
+        this.invoiceOperations.removeItem(this.currentInvoice.invoice, item.transactionId).subscribe((updatedInvoice: InvoiceDO) => {
             this.currentInvoice.invoice = updatedInvoice;
         }, (err: ThError) => {
             this.context.toaster.error(err.message);
@@ -254,9 +258,7 @@ export class InvoiceOverviewComponent implements OnInit {
     }
 
     public addPayment(customerId: string, invoicePayment: InvoicePaymentDO) {
-        var duplicateInvoiceDO = new InvoiceDO();
-        duplicateInvoiceDO.buildFromObject(this.currentInvoice.invoice);
-        this.invoiceOperations.addPayment(duplicateInvoiceDO, customerId, invoicePayment).subscribe((updatedInvoice: InvoiceDO) => {
+        this.invoiceOperations.addPayment(this.currentInvoice.invoice, customerId, invoicePayment).subscribe((updatedInvoice: InvoiceDO) => {
             this.currentInvoice.invoice = updatedInvoice;
         }, (err: ThError) => {
             this.context.toaster.error(err.message);
