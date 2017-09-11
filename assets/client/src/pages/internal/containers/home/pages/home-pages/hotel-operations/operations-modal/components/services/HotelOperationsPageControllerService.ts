@@ -4,7 +4,6 @@ import { HotelRoomOperationsPageParam } from '../components/room-operations/util
 import { HotelBookingOperationsPageParam } from '../components/booking-operations/utils/HotelBookingOperationsPageParam';
 import { HotelCustomerOperationsPageParam } from '../components/customer-operations/utils/HotelCustomerOperationsPageParam';
 import { HotelInvoiceOperationsPageParam, HotelInvoiceOperationsPageFilterParam } from '../components/invoice-operations/utils/HotelInvoiceOperationsPageParam';
-import { HotelInvoiceOperationsDeprecatedPageParam, HotelInvoiceOperationsDeprecatedPageFilterParam } from "../components/invoice-operations-deprecated/utils/HotelInvoiceOperationsDeprecatedPageParam";
 
 @Injectable()
 export class HotelOperationsPageControllerService {

@@ -1,3 +1,4 @@
+import * as _ from "underscore";
 import { ThUtils } from '../../../../../../../../../../common/utils/ThUtils';
 import { ConfigCapacityDO } from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
 import { PriceProductDO } from '../../../../../../../../services/price-products/data-objects/PriceProductDO';
@@ -6,7 +7,6 @@ import { ThDateIntervalDO } from '../../../../../../../../services/common/data-o
 import { CurrencyDO } from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 import { CustomerDO } from '../../../../../../../../services/customers/data-objects/CustomerDO';
 import { HotelPaymentMethodsDO } from '../../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
-import { InvoicePaymentMethodType, InvoicePaymentMethodDO } from '../../../../../../../../services/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { HotelAggregatedPaymentMethodsDO } from "../../../../../../../../services/settings/data-objects/HotelAggregatedPaymentMethodsDO";
 import { BookingDO } from "../../../../../../../../services/bookings/data-objects/BookingDO";
 import { RoomCategoryDO } from "../../../../../../../../services/room-categories/data-objects/RoomCategoryDO";
@@ -15,8 +15,7 @@ import { HotelAggregatedInfo } from "../../../../../../../../services/hotel/util
 import { DefaultBillingDetailsDO } from "../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO";
 import { ThTranslation } from "../../../../../../../../../../common/utils/localization/ThTranslation";
 import { PricePerDayDO } from "../../../../../../../../services/bookings/data-objects/price/PricePerDayDO";
-
-import * as _ from "underscore";
+import { InvoicePaymentMethodType } from "../../../../../../../../services/invoices/data-objects/payer/InvoicePaymentMethodDO";
 
 export interface BillingValidationResult {
     valid: boolean;

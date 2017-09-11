@@ -2,10 +2,10 @@ import * as _ from "underscore";
 import { BaseDO } from '../../../../../../common/base/BaseDO';
 import { ThUtils } from '../../../../../../common/utils/ThUtils';
 import { ThTranslation } from '../../../../../../common/utils/localization/ThTranslation';
-import { IInvoiceItemMeta } from '../../../invoices-deprecated/data-objects/items/IInvoiceItemMeta';
 import { PricePerDayDO } from './PricePerDayDO';
 import { CommissionDO } from "../../../common/data-objects/commission/CommissionDO";
 import { InvoiceItemDO } from "../../../invoices/data-objects/items/InvoiceItemDO";
+import { IInvoiceItemMeta } from "../../../invoices/data-objects/items/IInvoiceItemMeta";
 
 export enum BookingPriceType {
     BookingStay,

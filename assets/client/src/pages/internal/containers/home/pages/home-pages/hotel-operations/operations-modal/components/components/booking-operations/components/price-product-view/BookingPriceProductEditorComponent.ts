@@ -1,16 +1,15 @@
+import * as _ from "underscore";
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
 import { ModalDialogRef } from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import { BookingOperationsPageData } from '../../services/utils/BookingOperationsPageData';
 import { PriceProductDO } from '../../../../../../../../../../../services/price-products/data-objects/PriceProductDO';
 import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import { InvoiceItemDO } from '../../../../../../../../../../../services/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { BookingChangePriceProductRight } from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
 import { ChangePriceProductModalService } from './components/change-pp/services/ChangePriceProductModalService';
 import { BookingCartItemVM } from '../../../../../../../../utils/new-booking/services/search/view-models/BookingCartItemVM';
 import { PricePerDayDO } from "../../../../../../../../../../../services/bookings/data-objects/price/PricePerDayDO";
-
-import * as _ from "underscore";
+import { InvoiceItemDO } from "../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO";
 
 @Component({
     selector: 'booking-price-product-editor',

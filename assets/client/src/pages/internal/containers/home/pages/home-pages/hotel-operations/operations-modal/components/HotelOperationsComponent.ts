@@ -9,8 +9,6 @@ import { RoomsService } from '../../../../../../../services/rooms/RoomsService';
 import { EagerCustomersService } from '../../../../../../../services/customers/EagerCustomersService';
 import { EagerAllotmentsService } from '../../../../../../../services/allotments/EagerAllotmentsService';
 import { EagerBookingsService } from '../../../../../../../services/bookings/EagerBookingsService';
-import { EagerInvoiceGroupsServiceDeprecated } from '../../../../../../../services/invoices-deprecated/EagerInvoiceGroupsService';
-import { InvoiceGroupsServiceDeprecated } from '../../../../../../../services/invoices-deprecated/InvoiceGroupsService';
 import { HotelService } from '../../../../../../../services/hotel/HotelService';
 import { HotelAggregatorService } from '../../../../../../../services/hotel/HotelAggregatorService';
 import { EagerAddOnProductsService } from '../../../../../../../services/add-on-products/EagerAddOnProductsService';
@@ -31,9 +29,6 @@ import { InvoiceVMHelper } from "../../../../../../../services/invoices/view-mod
         RoomCategoriesStatsService, BedsEagerService, RoomsService,
         EagerCustomersService, EagerAllotmentsService, EagerAddOnProductsService, EagerPriceProductsService,
         HotelService, HotelAggregatorService, EagerBookingsService, RoomCategoriesService,
-
-        // TODO: remove deprecated services
-        EagerInvoiceGroupsServiceDeprecated, InvoiceGroupsServiceDeprecated,
 
         InvoiceVMHelper, HotelOperationsInvoiceService, InvoiceService,
         HotelOperationsRoomService, HotelOperationsBookingService,
@@ -77,10 +72,6 @@ export class HotelOperationsComponent {
     }
     public isInvoiceOperationsPage(): boolean {
         return this.currentHotelOperationsPageParam.pageType === HotelOperationsPageType.InvoiceOperations;
-    }
-
-    public isInvoiceOperationsPageDeprecated(): boolean {
-        return this.currentHotelOperationsPageParam.pageType === HotelOperationsPageType.InvoiceOperationsDeprecated;
     }
 
     private get currentHotelOperationsPageParam(): IHotelOperationsPageParam {
