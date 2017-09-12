@@ -17,7 +17,11 @@ export enum InvoiceStatus {
 }
 
 export enum InvoicePaymentStatus {
-    Unpaid, Paid, LossAcceptedByManagement, Credit
+    Transient = -1,
+    Unpaid,
+    Paid,
+    LossAcceptedByManagement,
+    Credit
 }
 
 export class InvoiceDO extends BaseDO {
@@ -102,11 +106,11 @@ export class InvoiceDO extends BaseDO {
     public isPaid(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.Paid;
     }
-    public isUnpaid(): boolean {
-        return this.paymentStatus === InvoicePaymentStatus.Unpaid;
-    }
     public isLossAcceptedByManagement(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement;
+    }
+    public isUnpaid(): boolean {
+        return this.paymentStatus === InvoicePaymentStatus.Unpaid;
     }
     public isClosed(): boolean {
         return this.isPaid() || this.isLossAcceptedByManagement();

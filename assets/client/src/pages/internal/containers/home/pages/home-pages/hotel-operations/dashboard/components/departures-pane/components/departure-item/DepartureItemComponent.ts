@@ -6,10 +6,6 @@ import { AppContext, ThError } from "../../../../../../../../../../../../common/
 import { HotelOperationsRoomService } from "../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService";
 import { CheckOutRoomParam } from "../../../../../../../../../../services/hotel-operations/room/utils/CheckOutRoomParam";
 import { BookingDO } from "../../../../../../../../../../services/bookings/data-objects/BookingDO";
-import { InvoicePaymentStatus, InvoiceDO } from "../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceDO";
-import { EagerInvoiceGroupsServiceDeprecated } from "../../../../../../../../../../services/invoices-deprecated/EagerInvoiceGroupsService";
-import { InvoiceGroupDO } from "../../../../../../../../../../services/invoices-deprecated/data-objects/InvoiceGroupDO";
-import { InvoiceGroupsServiceDeprecated } from "../../../../../../../../../../services/invoices-deprecated/InvoiceGroupsService";
 
 declare var $: any;
 
@@ -19,9 +15,7 @@ declare var $: any;
     host: {
         '(document:click)': 'onClick($event)',
     },
-    providers: [EagerInvoiceGroupsServiceDeprecated, InvoiceGroupsServiceDeprecated]
 })
-
 export class DepartureItemComponent {
     @Input() departureItemVM: DepartureItemInfoVM;
     @Output() onCheckOut = new EventEmitter();
@@ -35,8 +29,6 @@ export class DepartureItemComponent {
         private _modalService: HotelDashboardModalService,
         private _appContext: AppContext,
         private _hotelOperationsRoomService: HotelOperationsRoomService,
-        private _eagerInvoiceGroupsServiceDeprecated: EagerInvoiceGroupsServiceDeprecated,
-        private _invoiceGroupsServiceDeprecated: InvoiceGroupsServiceDeprecated
     ) {
     }
 
@@ -49,7 +41,6 @@ export class DepartureItemComponent {
 
     public openInvoiceModal(invoiceInfo: DepartureItemInvoiceInfoVM) {
         this.shouldShowPayDropdown = false;
-
         this._modalService.openInvoiceModal(invoiceInfo.invoiceId);
     }
 

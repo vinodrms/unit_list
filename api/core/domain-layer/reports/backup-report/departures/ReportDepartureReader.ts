@@ -23,89 +23,89 @@ import { HotelOperationsQueryDO } from "../../../hotel-operations/dashboard/util
 import _ = require("underscore");
 
 export class ReportDepartureReader {
-		private _thUtils: ThUtils;
+    private _thUtils: ThUtils;
 
-	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
-		this._thUtils = new ThUtils();
-	}
+    constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+        this._thUtils = new ThUtils();
+    }
 
-	public read(): Promise<ReportDepartureInfo[]> {
-		return new Promise<ReportDepartureInfo[]>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
-			this.readCore(resolve, reject);
-		});
-	}
+    public read(): Promise<ReportDepartureInfo[]> {
+        return new Promise<ReportDepartureInfo[]>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
+            this.readCore(resolve, reject);
+        });
+    }
 
-	private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
-		var departureInfoBuilder = new ReportDepartureInfoBuilder();
-		var departureReader = new HotelOperationsDeparturesReader(this._appContext, this._sessionContext);
-		var emptyDateRefParam: any = {};
-		var meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
+    private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
+        var departureInfoBuilder = new ReportDepartureInfoBuilder();
+        var departureReader = new HotelOperationsDeparturesReader(this._appContext, this._sessionContext);
+        var emptyDateRefParam: any = {};
+        var meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 
-		var departureInfo: DeparturelItemInfo = null;
-		departureReader.read(emptyDateRefParam)
-			.then((result: HotelOperationsDeparturesInfo) => {
-				let promiseList = [];
-				result.departureInfoList.forEach((departureInfo: DeparturelItemInfo) => {
-					if (this._thUtils.isUndefinedOrNull(departureInfo.bookingId) || this._thUtils.isUndefinedOrNull(departureInfo.groupBookingId)){
-						return;
-					}
-					let p = this.buildReportDepartureItem(departureInfo)
-					promiseList.push(p);
-				});
-				Promise.all(promiseList).then((reportDepartureItems: ReportDepartureInfo[]) => {
-					let sortedRoomItems = reportDepartureItems.sort(this.sortComparator);
-					resolve(sortedRoomItems);
-				});
-			})
-			.catch((error: any) => {
-				var thError = new ThError(ThStatusCode.HotelOperationsDeparturesReaderError, error);
-				if (thError.isNativeError()) {
-					ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel departure information", this._sessionContext, thError);
-				}
-				reject(thError);
-			});
-	}
+        var departureInfo: DeparturelItemInfo = null;
+        departureReader.read(emptyDateRefParam)
+            .then((result: HotelOperationsDeparturesInfo) => {
+                let promiseList = [];
+                result.departureInfoList.forEach((departureInfo: DeparturelItemInfo) => {
+                    if (this._thUtils.isUndefinedOrNull(departureInfo.bookingId) || this._thUtils.isUndefinedOrNull(departureInfo.groupBookingId)) {
+                        return;
+                    }
+                    let p = this.buildReportDepartureItem(departureInfo)
+                    promiseList.push(p);
+                });
+                Promise.all(promiseList).then((reportDepartureItems: ReportDepartureInfo[]) => {
+                    let sortedRoomItems = reportDepartureItems.sort(this.sortComparator);
+                    resolve(sortedRoomItems);
+                });
+            })
+            .catch((error: any) => {
+                var thError = new ThError(ThStatusCode.HotelOperationsDeparturesReaderError, error);
+                if (thError.isNativeError()) {
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel departure information", this._sessionContext, thError);
+                }
+                reject(thError);
+            });
+    }
 
-	private sortComparator(a: ReportDepartureInfo, b: ReportDepartureInfo) {
-		return a.customerName.localeCompare(b.customerName);
-	}
+    private sortComparator(a: ReportDepartureInfo, b: ReportDepartureInfo) {
+        return a.customerName.localeCompare(b.customerName);
+    }
 
-	private buildReportDepartureItem(departureInfo: DeparturelItemInfo): Promise<ReportDepartureInfo> {
-		return new Promise<any>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
-			let departureInfoBuilder = new ReportDepartureInfoBuilder();
-			let meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
+    private buildReportDepartureItem(departureInfo: DeparturelItemInfo): Promise<ReportDepartureInfo> {
+        return new Promise<any>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
+            let departureInfoBuilder = new ReportDepartureInfoBuilder();
+            let meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 
-			let roomCategoryRepo = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
-			let roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
-			let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+            let roomCategoryRepo = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
+            let roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
+            let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
 
-			departureInfoBuilder.setDepartureItemInfo(departureInfo);
+            departureInfoBuilder.setDepartureItemInfo(departureInfo);
 
-			var pList = [];
-			if (departureInfo.roomId){
-				let pRoom = roomRepo.getRoomById(meta, departureInfo.roomId).then((room: RoomDO) =>{
-					departureInfoBuilder.setRoom(room);
-				})
-				pList.push(pRoom);
-			}
-			if (departureInfo.groupBookingId && departureInfo.bookingId){
-				let pBooking = bookingRepo.getBookingById(meta, departureInfo.groupBookingId, departureInfo.bookingId).then((booking: BookingDO) => {
-					departureInfoBuilder.setBooking(booking);
-				})
-				pList.push(pBooking);
-			}
+            var pList = [];
+            if (departureInfo.roomId) {
+                let pRoom = roomRepo.getRoomById(meta, departureInfo.roomId).then((room: RoomDO) => {
+                    departureInfoBuilder.setRoom(room);
+                })
+                pList.push(pRoom);
+            }
+            if (departureInfo.groupBookingId && departureInfo.bookingId) {
+                let pBooking = bookingRepo.getBookingById(meta, departureInfo.bookingId).then((booking: BookingDO) => {
+                    departureInfoBuilder.setBooking(booking);
+                })
+                pList.push(pBooking);
+            }
 
-			Promise.all(pList).then(()=>{
-				let report = departureInfoBuilder.build();
-				resolve(report);
-			})
-			.catch((error: any) => {
-				let thError = new ThError(ThStatusCode.HotelOperationsRoomInfoReaderError, error);
-				if (thError.isNativeError()) {
-					ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel room item information", this._sessionContext, thError);
-				}
-				reject(thError);
-			});
-		})
-	}
+            Promise.all(pList).then(() => {
+                let report = departureInfoBuilder.build();
+                resolve(report);
+            })
+                .catch((error: any) => {
+                    let thError = new ThError(ThStatusCode.HotelOperationsRoomInfoReaderError, error);
+                    if (thError.isNativeError()) {
+                        ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel room item information", this._sessionContext, thError);
+                    }
+                    reject(thError);
+                });
+        })
+    }
 }

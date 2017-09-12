@@ -11,6 +11,7 @@ import { EagerCustomersService } from "../customers/EagerCustomersService";
 import { CustomersDO } from "../customers/data-objects/CustomersDO";
 import { InvoiceVM } from "./view-models/InvoiceVM";
 import { InvoicePayerDO } from "./data-objects/payer/InvoicePayerDO";
+import { InvoiceVMHelper } from "./view-models/utils/InvoiceVMHelper";
 
 @Injectable()
 export class InvoiceService extends ALazyLoadRequestService<InvoiceVM> {
@@ -18,38 +19,14 @@ export class InvoiceService extends ALazyLoadRequestService<InvoiceVM> {
     private customerIdListFilter: string[];
     private term: string;
 
-    constructor(appContext: AppContext,
-        private eagerCustomersService: EagerCustomersService) {
+    constructor(appContext: AppContext, private _invoiceVMHelper: InvoiceVMHelper) {
         super(appContext, ThServerApi.InvoicesCount, ThServerApi.Invoices);
     }
 
     protected parsePageDataCore(pageDataObject: Object): Observable<InvoiceVM[]> {
         var invoices = new InvoicesDO();
         invoices.buildFromObject(pageDataObject);
-        return this.convertToViewModels(invoices);
-    }
-    private convertToViewModels(invoices: InvoicesDO): Observable<InvoiceVM[]> {
-        var customerIdList: string[] = invoices.getUniqueCustomerIdList();
-
-        return Observable.combineLatest(
-            this.eagerCustomersService.getCustomersById(customerIdList)
-        ).map((result: [CustomersDO]) => {
-            var customers: CustomersDO = result[0];
-
-            var invoiceVMList: InvoiceVM[] = [];
-            _.forEach(invoices.invoiceList, (invoice: InvoiceDO) => {
-                var invoiceVM = new InvoiceVM();
-                invoiceVM.invoice = invoice;
-                invoiceVM.customerList = [];
-
-                _.forEach(invoice.payerList, (payer: InvoicePayerDO) => {
-                    invoiceVM.customerList.push(customers.getCustomerById(payer.customerId));
-                });
-
-                invoiceVMList.push(invoiceVM);
-            });
-            return invoiceVMList;
-        });
+        return this._invoiceVMHelper.convertToViewModels(invoices);
     }
 
     public setCustomerIdFilter(customerId: string) {

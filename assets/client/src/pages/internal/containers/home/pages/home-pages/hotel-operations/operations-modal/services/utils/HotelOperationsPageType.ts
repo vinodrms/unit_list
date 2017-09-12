@@ -3,5 +3,4 @@ export enum HotelOperationsPageType {
     BookingOperations,
     CustomerOperations,
     InvoiceOperations,
-    InvoiceOperationsDeprecated
 }

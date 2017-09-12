@@ -1,14 +1,14 @@
 <div class="transfer-invoices-menu">
     <button class="fa fa-angle-left transfer-invoices-menu-back clickable" (click)="backToInvoiceOverview()"></button>
     <div class="transfer-invoices-menu-title">
-        {{ 'Invoice' | translate }} {{ currentInvoice.reference }}
+        {{ 'Invoice' | translate }} {{ currentInvoice.invoice.reference }}
     </div>
 </div>
 <div class="row invoice-transfer-row m-l-12 m-r-12">
     <div class="col-xs-6 invoice-transfer-column p-l-0 p-r-0">
         <div class="invoice-transfer-summary p-r-16">
             <div class="invoice-title">
-                {{ 'Invoice' | translate }} {{ currentInvoice.reference }}
+                {{ 'Invoice' | translate }} {{ currentInvoice.invoice.reference }}
             </div>
         </div>
         <div class="invoice-transfer-payer-section m-r-16">
@@ -39,32 +39,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="selectable">
-                        <td>1Rack_BB</td>
-                        <td>1</td>
-                        <td>Dkr 1,244</td>
-                        <td>Dkr 1,244</td>
-                        <td><i class="fa fa-arrow-right transfer-right clickable"></i></td>
-                    </tr>
-                    <tr class="selectable">
-                        <td>1Rack_BB</td>
-                        <td>1</td>
-                        <td>Dkr 1,244</td>
-                        <td>Dkr 1,244</td>
-                        <td><i class="fa fa-arrow-right transfer-right clickable"></i></td>
-                    </tr>
-                    <tr class="selectable">
-                        <td>1Rack_BB</td>
-                        <td>1</td>
-                        <td>Dkr 1,244</td>
-                        <td>Dkr 1,244</td>
-                        <td><i class="fa fa-arrow-right transfer-right clickable"></i></td>
-                    </tr>
-                    <tr class="selectable">
-                        <td>1Rack_BB</td>
-                        <td>1</td>
-                        <td>Dkr 1,244</td>
-                        <td>Dkr 1,244</td>
+                    <tr *ngFor="let item of currentInvoice.invoice.itemList" class="selectable">
+                        <td>{{ getDisplayName(item) }}</td>
+                        <td>{{ item.meta.getNumberOfItems() }}</td>
+                        <td>{{ ccySymbol }}{{ item.meta.getUnitPrice() }}</td>
+                        <td>{{ ccySymbol }}{{ item.getTotalPrice() }}</td>
                         <td><i class="fa fa-arrow-right transfer-right clickable"></i></td>
                     </tr>
                 </tbody>
@@ -94,7 +73,7 @@
             <div *ngIf="isInvoiceSelectedForTransfer()">
                 <div class="invoice-transfer-summary p-l-16">
                     <div class="invoice-title p-l-16">
-                        {{ 'Invoice' | translate }} {{ transferInvoice.reference }}
+                        {{ 'Invoice' | translate }} {{ transferInvoice.invoice.reference }}
                     </div>
                 </div>
                 <div class="invoice-transfer-payer-section m-l-16">
@@ -125,33 +104,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="selectable">
+                            <tr *ngFor="let item of transferInvoice.invoice.itemList" class="selectable">
                                 <td><i class="fa fa-arrow-left transfer-left clickable"></i></td>
-                                <td>1Rack_BB</td>
-                                <td>1</td>
-                                <td>Dkr 1,244</td>
-                                <td>Dkr 1,244</td>
-                            </tr>
-                            <tr class="selectable">
-                                <td><i class="fa fa-arrow-left transfer-left clickable"></i></td>
-                                <td>1Rack_BB</td>
-                                <td>1</td>
-                                <td>Dkr 1,244</td>
-                                <td>Dkr 1,244</td>
-                            </tr>
-                            <tr class="selectable">
-                                <td><i class="fa fa-arrow-left transfer-left clickable"></i></td>
-                                <td>1Rack_BB</td>
-                                <td>1</td>
-                                <td>Dkr 1,244</td>
-                                <td>Dkr 1,244</td>
-                            </tr>
-                            <tr class="selectable">
-                                <td><i class="fa fa-arrow-left transfer-left clickable"></i></td>
-                                <td>1Rack_BB</td>
-                                <td>1</td>
-                                <td>Dkr 1,244</td>
-                                <td>Dkr 1,244</td>
+                                <td>{{ getDisplayName(item) }}</td>
+                                <td>{{ item.meta.getNumberOfItems() }}</td>
+                                <td>{{ ccySymbol }}{{ item.meta.getUnitPrice() }}</td>
+                                <td>{{ ccySymbol }}{{ item.getTotalPrice() }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -169,7 +127,7 @@
                                 <td>{{ 'TOTAL' | translate }}</td>
                                 <td></td>
                                 <td></td>
-                                <td>Dkr 6,522</td>
+                                <td>{{ ccySymbol }}{{ currentInvoice.invoice.amountPaid }}</td>
                             </tr>
                         </tfoot>
                     </table>

@@ -85,9 +85,11 @@ export class InvoiceDO extends BaseDO {
     }
 
     public recomputePrices() {
+        let utils = new ThUtils();
         this.amountToPay = _.reduce(this.itemList, function (sum, item: InvoiceItemDO) {
             return sum + item.meta.getTotalPrice();
         }, 0);
+        this.amountToPay = utils.roundNumberToTwoDecimals(this.amountToPay);
 
         this.amountPaid = 0.0;
         this.payerList.forEach((payer: InvoicePayerDO) => {
@@ -95,26 +97,21 @@ export class InvoiceDO extends BaseDO {
                 this.amountPaid += payment.amount;
             });
         });
+        this.amountPaid = utils.roundNumberToTwoDecimals(this.amountPaid);
     }
 
     public removeItemsPopulatedFromBooking() {
-        var itemsToRemoveIdList = [];
-        _.forEach(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
-            if (invoiceItemDO.type === InvoiceItemType.Booking) {
-                delete invoiceItemDO.meta;
+        let updatedItems: InvoiceItemDO[] = [];
+        _.forEach(this.itemList, (item: InvoiceItemDO) => {
+            if (item.type === InvoiceItemType.Booking) {
+                delete item.meta;
+                updatedItems.push(item);
             }
-            else if (invoiceItemDO.meta.isDerivedFromBooking()) {
-                itemsToRemoveIdList.push(invoiceItemDO.id);
-            }
-        });
-        _.forEach(itemsToRemoveIdList, (id: string) => {
-            var index = _.findIndex(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
-                return invoiceItemDO.id === id;
-            });
-            if (index != -1) {
-                this.itemList.splice(index, 1);
+            else if (!item.meta.isDerivedFromBooking()) {
+                updatedItems.push(item);
             }
         });
+        this.itemList = updatedItems;
     }
 
     public linkBookingPrices(indexedBookingsById: { [id: string]: BookingDO }) {

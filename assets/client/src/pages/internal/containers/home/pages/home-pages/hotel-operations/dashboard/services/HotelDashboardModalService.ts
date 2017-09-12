@@ -22,8 +22,8 @@ export class HotelDashboardModalService {
         this.handleHotelOperationsModalPromise(p)
     }
 
-    public openBookingModal(bookingId: string, groupBookingId: string) {
-        var p = this._hotelOperationsModalService.openBookingOperationsModal(groupBookingId, bookingId);
+    public openBookingModal(bookingId: string) {
+        var p = this._hotelOperationsModalService.openBookingOperationsModal(bookingId);
         this.handleHotelOperationsModalPromise(p)
     }
 

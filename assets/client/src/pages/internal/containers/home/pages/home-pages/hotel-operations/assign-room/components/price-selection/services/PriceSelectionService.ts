@@ -56,7 +56,7 @@ export class PriceSelectionService extends ASinglePageRequestService<PriceSelect
             this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryIdList(),
             this._hotelAggregatorService.getHotelAggregatedInfo(),
             this._roomsService.getRoomList(),
-            this._eagerBookingsService.getBooking(this._modalInput.assignRoomParam.groupBookingId, this._modalInput.assignRoomParam.bookingId),
+            this._eagerBookingsService.getBooking(this._modalInput.assignRoomParam.bookingId),
             this._operationsBookingService.getPossiblePrices(this._modalInput.assignRoomParam.groupBookingId, this._modalInput.assignRoomParam.bookingId)
         ).map((result: [RoomCategoryStatsDO[], HotelAggregatedInfo, RoomVM[], BookingDO, BookingPossiblePriceItemsDO]) => {
             var roomCategoryStatsList: RoomCategoryStatsDO[] = result[0];

@@ -6,7 +6,7 @@ import { ThStatusCode } from "../../../../../utils/th-responses/ThResponse";
 import { ThLogger, ThLogLevel } from "../../../../../utils/logging/ThLogger";
 import { SessionContext } from "../../../../../utils/SessionContext";
 import { AppContext } from "../../../../../utils/AppContext";
-import { InvoiceItemDO } from "../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
+import { InvoiceItemDO, InvoiceItemType } from "../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
 import { InvoicePayerDO } from "../../../../../data-layer/invoices/data-objects/payer/InvoicePayerDO";
 import { InvoicePaymentDO } from "../../../../../data-layer/invoices/data-objects/payer/InvoicePaymentDO";
 
@@ -63,6 +63,7 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
 
         this.deleteItemsFrom(existingInvoice);
         this.addNewItemsOn(existingInvoice);
+        this.addNewPayersOn(existingInvoice);
         this.addNewPaymentsOn(existingInvoice);
         this.deletePayersFrom(existingInvoice);
         existingInvoice.recomputePrices();
@@ -71,7 +72,7 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
         //  1. The amount to pay is the same with the paid amount
         //  2. There is at least one item on the invoice
         if (existingInvoice.isClosed()) {
-            if (existingInvoice.amountPaid != existingInvoice.amountToPay) {
+            if (existingInvoice.isPaid() && existingInvoice.amountPaid != existingInvoice.amountToPay) {
                 var thError = new ThError(ThStatusCode.SaveInvoiceAmountsNotMatching, null);
                 ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot close an invoice on which the amount to pay is not equal with the paid amount",
                     this.invoiceToSave, thError);
@@ -87,6 +88,18 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
     }
 
     private deleteItemsFrom(existingInvoice: InvoiceDO) {
+        let itemsToRemove = existingInvoice.itemList.filter((existingItem: InvoiceItemDO) => {
+            return _.contains(this.itemTransactionIdListToDelete, existingItem.transactionId);
+        });
+        itemsToRemove.forEach((item: InvoiceItemDO) => {
+            if (item.type === InvoiceItemType.Booking) {
+                var thError = new ThError(ThStatusCode.SaveInvoiceCannotRemoveBookingItem, null);
+                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot remove booking items from invoices",
+                    this.invoiceToSave, thError);
+                throw thError;
+            }
+        });
+
         existingInvoice.itemList = existingInvoice.itemList
             .filter((existingItem: InvoiceItemDO) => {
                 return !_.contains(this.itemTransactionIdListToDelete, existingItem.transactionId);
@@ -103,11 +116,25 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
         existingInvoice.itemList = existingInvoice.itemList.concat(newItems);
     }
 
+    private addNewPayersOn(existingInvoice: InvoiceDO) {
+        this.invoiceToSave.payerList.forEach((payer: InvoicePayerDO) => {
+            let payerIndex = _.findIndex(existingInvoice.payerList, ((p: InvoicePayerDO) => { return p.customerId === payer.customerId; }));
+            if (payerIndex < 0) {
+                let newPayer = new InvoicePayerDO();
+                newPayer.customerId = payer.customerId;
+                newPayer.paymentList = [];
+                existingInvoice.payerList.push(newPayer);
+            }
+        });
+    }
+
     private addNewPaymentsOn(existingInvoice: InvoiceDO) {
         this.invoiceToSave.payerList.forEach((payer: InvoicePayerDO) => {
             payer.paymentList.forEach((payment: InvoicePaymentDO) => {
                 // if the payment has no transactionId then it's a new payment
                 if (this.thUtils.isUndefinedOrNull(payment.transactionId)) {
+                    payment.amount = this.appContext.thUtils.roundNumberToTwoDecimals(payment.amount);
+                    payment.amountPlusTransactionFee = this.appContext.thUtils.roundNumberToTwoDecimals(payment.amountPlusTransactionFee);
                     this.ensurePayerExistsOn(payer.customerId, existingInvoice);
                     this.stampPayment(payment);
                     let payerIndex = _.findIndex(existingInvoice.payerList, ((p: InvoicePayerDO) => { return p.customerId === payer.customerId; }));

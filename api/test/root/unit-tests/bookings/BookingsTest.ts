@@ -160,18 +160,18 @@ describe("New Bookings Tests", function () {
         it("Should get booking by id", function (done) {
             var randomBooking: BookingDO = testUtils.getRandomListElement(retrievedBookingList);
             var bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
-            bookingRepo.getBookingById({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, randomBooking.groupBookingId, randomBooking.id
-            ).then((foundBooking: BookingDO) => {
-                should.equal(randomBooking.id, foundBooking.id);
-                should.equal(randomBooking.bookingReference, foundBooking.bookingReference);
-                should.equal(randomBooking.groupBookingId, foundBooking.groupBookingId);
-                should.equal(randomBooking.groupBookingReference, foundBooking.groupBookingReference);
-                should.equal(randomBooking.roomCategoryId, foundBooking.roomCategoryId);
-                should.equal(randomBooking.priceProductId, foundBooking.priceProductId);
-                done();
-            }).catch((err: any) => {
-                done(err);
-            });
+            bookingRepo.getBookingById({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, randomBooking.id)
+                .then((foundBooking: BookingDO) => {
+                    should.equal(randomBooking.id, foundBooking.id);
+                    should.equal(randomBooking.bookingReference, foundBooking.bookingReference);
+                    should.equal(randomBooking.groupBookingId, foundBooking.groupBookingId);
+                    should.equal(randomBooking.groupBookingReference, foundBooking.groupBookingReference);
+                    should.equal(randomBooking.roomCategoryId, foundBooking.roomCategoryId);
+                    should.equal(randomBooking.priceProductId, foundBooking.priceProductId);
+                    done();
+                }).catch((err: any) => {
+                    done(err);
+                });
         });
 
     });

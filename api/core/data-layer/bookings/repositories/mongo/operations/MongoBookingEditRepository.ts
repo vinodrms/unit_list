@@ -62,22 +62,22 @@ export class MongoBookingEditRepository extends MongoRepository {
         );
     }
 
-    public getBookingById(meta: BookingMetaRepoDO, groupBookingId: string, bookingId: string): Promise<BookingDO> {
+    public getBookingById(meta: BookingMetaRepoDO, bookingId: string): Promise<BookingDO> {
         return new Promise<BookingDO>((resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }) => {
-            this.getBookingByIdCore(meta, groupBookingId, bookingId, resolve, reject);
+            this.getBookingByIdCore(meta, bookingId, resolve, reject);
         });
     }
-    private getBookingByIdCore(meta: BookingMetaRepoDO, groupBookingId: string, bookingId: string,
+    private getBookingByIdCore(meta: BookingMetaRepoDO, bookingId: string,
         resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }) {
         this.findOneDocument({ "hotelId": meta.hotelId, "id": bookingId },
             () => {
                 var thError = new ThError(ThStatusCode.BookingRepositoryBookingNotFound, null);
-                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Booking not found", { meta: meta, groupBookingId: groupBookingId, bookingId: bookingId }, thError);
+                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Booking not found", { meta: meta, bookingId: bookingId }, thError);
                 reject(thError);
             },
             (err: Error) => {
                 var thError = new ThError(ThStatusCode.BookingRepositoryErrorGettingBooking, err);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting booking by id", { meta: meta, groupBookingId: groupBookingId, bookingId: bookingId }, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting booking by id", { meta: meta, bookingId: bookingId }, thError);
                 reject(thError);
             },
             (foundBooking: Object) => {

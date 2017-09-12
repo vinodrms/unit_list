@@ -1,0 +1,49 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Add Invoice Payment' | translate }}</h4>
+</div>
+<div class="modal-body add-invoice-payment-modal-body m-b-16">
+    <div class="row">
+        <div class="modal-text">{{ 'Payment Amount' | translate }}</div>
+        <input [(ngModel)]="paymentAmount" class="modal-payment-input" type="number" min="0"/>
+        <span class="modal-total-payment-amount">{{ 'of' | translate }} {{ maxPaymentAmountString }}</span>
+    </div>
+    <div class="row">
+        <div class="modal-text">{{ 'Payment Method' | translate }}</div>
+		<select class="modal-payment-method-select" [ngModel]="selectedInvoicePaymentMethodVM" (ngModelChange)="didChangeInvoicePaymentMethod($event)" name="paymentMethod" [disabled]="readonly">
+			<option *ngFor="let invoicePaymentMethodVM of customerPaymentMethodVMList" [ngValue]="invoicePaymentMethodVM">{{ invoicePaymentMethodVM.displayName }}</option>
+		</select>
+    </div>
+    <div class="row">
+        <div class="modal-text">{{ 'Taxes' | translate }}</div>
+        <button class="select-taxes-btn" (click)="applyFee=true" [ngClass]="{'active': applyFee}">{{ 'Apply Fee' | translate }}</button>
+        <button class="select-taxes-btn" (click)="applyFee=false" [ngClass]="{'active': !applyFee}">{{ 'No Fee' | translate }}</button>
+    </div>
+    <div class="row">
+        <span>
+            <span *ngIf="applyFee">
+                <b>
+                    <i class="fa" [ngClass]="selectedInvoicePaymentMethodVM.iconUrl"></i>
+                    {{selectedInvoicePaymentMethodVM.displayName | translate}}
+                </b> {{'has a transaction fee of' | translate}}:
+                <b *ngIf="transactionFeeIsFixed">{{ccySymbol}} {{ transactionFee.amount | price }}</b>
+                <b *ngIf="!transactionFeeIsFixed">{{ transactionFee.amount | percentage }}</b>.
+            </span>
+            <span><b>To pay </b>
+                <span *ngIf="applyFee">(transaction fee included)</span>
+                <span *ngIf="!applyFee"> (no transaction fee)</span>
+                 : <b>{{ccySymbol}} {{ priceToPayPlusTransactionFee | price }}</b>
+            </span>
+        </span>
+    </div>
+    <div class="row">
+        <div class="modal-text">{{ 'Notes' | translate }}</div>
+        <textarea class="modal-notes-textarea" [(ngModel)]="paymentNotes"></textarea>
+    </div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary"
+		(click)="addInvoicePayment()">
+		{{ 'Add Payment' | translate }}
+	</button>
+</div>

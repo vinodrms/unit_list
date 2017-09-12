@@ -9,8 +9,6 @@ import { RoomsService } from '../../../../../../../services/rooms/RoomsService';
 import { EagerCustomersService } from '../../../../../../../services/customers/EagerCustomersService';
 import { EagerAllotmentsService } from '../../../../../../../services/allotments/EagerAllotmentsService';
 import { EagerBookingsService } from '../../../../../../../services/bookings/EagerBookingsService';
-import { EagerInvoiceGroupsServiceDeprecated } from '../../../../../../../services/invoices-deprecated/EagerInvoiceGroupsService';
-import { InvoiceGroupsServiceDeprecated } from '../../../../../../../services/invoices-deprecated/InvoiceGroupsService';
 import { HotelService } from '../../../../../../../services/hotel/HotelService';
 import { HotelAggregatorService } from '../../../../../../../services/hotel/HotelAggregatorService';
 import { EagerAddOnProductsService } from '../../../../../../../services/add-on-products/EagerAddOnProductsService';
@@ -22,6 +20,7 @@ import { HotelOperationsCustomerService } from '../../../../../../../services/ho
 import { HotelOperationsPageControllerService } from './services/HotelOperationsPageControllerService';
 import { HotelOperationsInvoiceService } from "../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
 import { InvoiceService } from "../../../../../../../services/invoices/InvoiceService";
+import { InvoiceVMHelper } from "../../../../../../../services/invoices/view-models/utils/InvoiceVMHelper";
 
 @Component({
     selector: 'hotel-operations',
@@ -31,10 +30,7 @@ import { InvoiceService } from "../../../../../../../services/invoices/InvoiceSe
         EagerCustomersService, EagerAllotmentsService, EagerAddOnProductsService, EagerPriceProductsService,
         HotelService, HotelAggregatorService, EagerBookingsService, RoomCategoriesService,
 
-        // TODO: remove deprecated services
-        EagerInvoiceGroupsServiceDeprecated, InvoiceGroupsServiceDeprecated,
-
-        HotelOperationsInvoiceService, InvoiceService,
+        InvoiceVMHelper, HotelOperationsInvoiceService, InvoiceService,
         HotelOperationsRoomService, HotelOperationsBookingService,
         HotelOperationsCustomerService, HotelOperationsPageControllerService]
 })
@@ -76,10 +72,6 @@ export class HotelOperationsComponent {
     }
     public isInvoiceOperationsPage(): boolean {
         return this.currentHotelOperationsPageParam.pageType === HotelOperationsPageType.InvoiceOperations;
-    }
-
-    public isInvoiceOperationsPageDeprecated(): boolean {
-        return this.currentHotelOperationsPageParam.pageType === HotelOperationsPageType.InvoiceOperationsDeprecated;
     }
 
     private get currentHotelOperationsPageParam(): IHotelOperationsPageParam {

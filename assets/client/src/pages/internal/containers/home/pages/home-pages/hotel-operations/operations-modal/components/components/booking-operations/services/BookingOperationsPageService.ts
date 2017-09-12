@@ -39,7 +39,7 @@ export class BookingOperationsPageService {
 
     public getPageData(pageParam: HotelBookingOperationsPageParam): Observable<BookingOperationsPageData> {
         return Observable.combineLatest(
-            this.eagerBookingsService.getBooking(pageParam.groupBookingId, pageParam.bookingId),
+            this.eagerBookingsService.getBooking(pageParam.bookingId),
             this.hotelAggregatorService.getHotelAggregatedInfo()
         ).flatMap((result: [BookingDO, HotelAggregatedInfo]) => {
             var pageData = new BookingOperationsPageData();

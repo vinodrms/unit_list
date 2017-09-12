@@ -1,6 +1,8 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
 import {AddOnProductSnapshotDO} from './AddOnProductSnapshotDO';
 
+import _ = require('underscore');
+
 export class AddOnProductDO extends BaseDO {
 	constructor() {
 		super();
@@ -27,5 +29,12 @@ export class AddOnProductDO extends BaseDO {
 		snapshot.price = this.price;
 		snapshot.internalCost = this.internalCost;
 		return snapshot;
+	}
+
+	public getVatId(): string {
+		if (!_.isEmpty(this.taxIdList)) {
+			return this.taxIdList[0];
+		}
+		return null;
 	}
 }

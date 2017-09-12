@@ -19,112 +19,112 @@ import { HotelOperationsQueryType, HotelOperationsQueryDO } from "../../../hotel
 import _ = require("underscore");
 
 export class ReportArrivalsReader {
-	private _meta;
+    private _meta;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
-		this._meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
-	}
+        this._meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
+    }
 
-	public read(): Promise<ReportArrivalItemInfo[]> {
-		return new Promise<ReportArrivalItemInfo[]>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
-			this.readCore(resolve, reject);
-		});
-	}
+    public read(): Promise<ReportArrivalItemInfo[]> {
+        return new Promise<ReportArrivalItemInfo[]>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
+            this.readCore(resolve, reject);
+        });
+    }
 
-	private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
-		let emptyDateRefParam: any = {};
-		let arrivalsReader = new HotelOperationsArrivalsReader(this._appContext, this._sessionContext);
+    private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
+        let emptyDateRefParam: any = {};
+        let arrivalsReader = new HotelOperationsArrivalsReader(this._appContext, this._sessionContext);
 
-		arrivalsReader.read(emptyDateRefParam, HotelOperationsQueryType.FixedForTheDay)
-			.then((result: HotelOperationsArrivalsInfo) => {
-				let promiseList = [];
-				result.arrivalInfoList.forEach(arrivalInfo => {
-					let p = this.buildReportArrivalItem(arrivalInfo)
-					promiseList.push(p);
-				});
-				return Promise.all(promiseList);
-			}).then((reportArrivalItems:ReportArrivalItemInfo[]) => {
-				let sortedArrivalItems = reportArrivalItems.sort(this.sortComparator);
-				resolve(sortedArrivalItems);
-			}).catch((error: any) => {
-				let thError = new ThError(ThStatusCode.HotelOperationsArrivalsReaderError, error);
-				if (thError.isNativeError()) {
-					ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel arrivals information", this._sessionContext, thError);
-				}
-				reject(thError);
-			});
-	}
+        arrivalsReader.read(emptyDateRefParam, HotelOperationsQueryType.FixedForTheDay)
+            .then((result: HotelOperationsArrivalsInfo) => {
+                let promiseList = [];
+                result.arrivalInfoList.forEach(arrivalInfo => {
+                    let p = this.buildReportArrivalItem(arrivalInfo)
+                    promiseList.push(p);
+                });
+                return Promise.all(promiseList);
+            }).then((reportArrivalItems: ReportArrivalItemInfo[]) => {
+                let sortedArrivalItems = reportArrivalItems.sort(this.sortComparator);
+                resolve(sortedArrivalItems);
+            }).catch((error: any) => {
+                let thError = new ThError(ThStatusCode.HotelOperationsArrivalsReaderError, error);
+                if (thError.isNativeError()) {
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel arrivals information", this._sessionContext, thError);
+                }
+                reject(thError);
+            });
+    }
 
-	private sortComparator(a:ReportArrivalItemInfo, b:ReportArrivalItemInfo) {
-		let aHasRoomNo = _.isString(a.roomNumber);
-		let bHasRoomNo = _.isString(b.roomNumber);
+    private sortComparator(a: ReportArrivalItemInfo, b: ReportArrivalItemInfo) {
+        let aHasRoomNo = _.isString(a.roomNumber);
+        let bHasRoomNo = _.isString(b.roomNumber);
 
-		if (aHasRoomNo && !bHasRoomNo) {
-			return 1;
-		}
-		if (!aHasRoomNo && bHasRoomNo) {
-			return -1;
-		}
-		if (aHasRoomNo && bHasRoomNo) {
-			return a.roomNumber.localeCompare(b.roomNumber);
-		}
+        if (aHasRoomNo && !bHasRoomNo) {
+            return 1;
+        }
+        if (!aHasRoomNo && bHasRoomNo) {
+            return -1;
+        }
+        if (aHasRoomNo && bHasRoomNo) {
+            return a.roomNumber.localeCompare(b.roomNumber);
+        }
 
-		return a.roomCategory.localeCompare(b.roomCategory);
-	}
+        return a.roomCategory.localeCompare(b.roomCategory);
+    }
 
-	private buildReportArrivalItem(arrivalInfo: ArrivalItemInfo): Promise<ReportArrivalItemInfo> {
-		return new Promise<any>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
-			let roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
+    private buildReportArrivalItem(arrivalInfo: ArrivalItemInfo): Promise<ReportArrivalItemInfo> {
+        return new Promise<any>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
+            let roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
 
-			if (arrivalInfo.reservedRoomId){
-				roomRepo.getRoomById(this._meta, arrivalInfo.reservedRoomId).then((room:RoomDO) => {
-					this.buildReportArrivalItemCore(resolve, reject, arrivalInfo, room);
-				});
-			}
-			else {
-				this.buildReportArrivalItemCore(resolve, reject, arrivalInfo);
-			}
-		});
+            if (arrivalInfo.reservedRoomId) {
+                roomRepo.getRoomById(this._meta, arrivalInfo.reservedRoomId).then((room: RoomDO) => {
+                    this.buildReportArrivalItemCore(resolve, reject, arrivalInfo, room);
+                });
+            }
+            else {
+                this.buildReportArrivalItemCore(resolve, reject, arrivalInfo);
+            }
+        });
 
-	}
+    }
 
-	private buildReportArrivalItemCore(resolve: { (result: any): void }, reject: { (err: ThError): void }, arrivalInfo: ArrivalItemInfo, room?: RoomDO) {
-		let roomCategoryRepo = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
-		let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-		let roomStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
-		let bookingCustomers = new BookingCustomers(this._appContext, this._sessionContext);
+    private buildReportArrivalItemCore(resolve: { (result: any): void }, reject: { (err: ThError): void }, arrivalInfo: ArrivalItemInfo, room?: RoomDO) {
+        let roomCategoryRepo = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
+        let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+        let roomStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
+        let bookingCustomers = new BookingCustomers(this._appContext, this._sessionContext);
 
-		let arrivalsInfoBuilder = new ReportArrivalsItemInfoBuilder();
-		arrivalsInfoBuilder.setArrivalsItemInfo(arrivalInfo);
-		arrivalsInfoBuilder.setRoom(room);
-		
-		let bookingDO = null;
-		roomCategoryRepo.getRoomCategoryById(this._meta, arrivalInfo.roomCategoryId).then((roomCategory : RoomCategoryDO)=>{
-			arrivalsInfoBuilder.setRoomCategory(roomCategory);
+        let arrivalsInfoBuilder = new ReportArrivalsItemInfoBuilder();
+        arrivalsInfoBuilder.setArrivalsItemInfo(arrivalInfo);
+        arrivalsInfoBuilder.setRoom(room);
 
-			return bookingRepo.getBookingById(this._meta, arrivalInfo.groupBookingId, arrivalInfo.bookingId);
-		}).then((booking: BookingDO) => {
-			bookingDO = booking;
-			arrivalsInfoBuilder.setBooking(bookingDO);
+        let bookingDO = null;
+        roomCategoryRepo.getRoomCategoryById(this._meta, arrivalInfo.roomCategoryId).then((roomCategory: RoomCategoryDO) => {
+            arrivalsInfoBuilder.setRoomCategory(roomCategory);
 
-			return roomStatsAggregator.getRoomCategoryStatsList([bookingDO.roomCategoryId]);
-		}).then((roomStats: RoomCategoryStatsDO[]) => {	
-			if (roomStats.length > 0) {
-				arrivalsInfoBuilder.setRoomCategoryStats(roomStats[0]);
-			}
-			return bookingCustomers.getCompanyOrTAForGuest(bookingDO);
-		}).then((companyOrTA: CustomerDO) => {
-			if(!_.isUndefined(companyOrTA)) {
-				arrivalsInfoBuilder.setCompanyOrTA(companyOrTA);
-			}
-			
-			resolve(arrivalsInfoBuilder.build());
-		}).catch((error: any) => {
-			let thError = new ThError(ThStatusCode.HotelOperationsArrivalsReaderError, error);
-			if (thError.isNativeError()) {
-				ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel arrival item information", this._sessionContext, thError);
-			}
-			reject(thError);
-		});
-	}
+            return bookingRepo.getBookingById(this._meta, arrivalInfo.bookingId);
+        }).then((booking: BookingDO) => {
+            bookingDO = booking;
+            arrivalsInfoBuilder.setBooking(bookingDO);
+
+            return roomStatsAggregator.getRoomCategoryStatsList([bookingDO.roomCategoryId]);
+        }).then((roomStats: RoomCategoryStatsDO[]) => {
+            if (roomStats.length > 0) {
+                arrivalsInfoBuilder.setRoomCategoryStats(roomStats[0]);
+            }
+            return bookingCustomers.getCompanyOrTAForGuest(bookingDO);
+        }).then((companyOrTA: CustomerDO) => {
+            if (!_.isUndefined(companyOrTA)) {
+                arrivalsInfoBuilder.setCompanyOrTA(companyOrTA);
+            }
+
+            resolve(arrivalsInfoBuilder.build());
+        }).catch((error: any) => {
+            let thError = new ThError(ThStatusCode.HotelOperationsArrivalsReaderError, error);
+            if (thError.isNativeError()) {
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel arrival item information", this._sessionContext, thError);
+            }
+            reject(thError);
+        });
+    }
 }
