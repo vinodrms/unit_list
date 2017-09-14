@@ -17,7 +17,8 @@ export class HeaderPageService {
 		this._headerPageList = [
 			new HeaderPage(HeaderPageType.HotelOperations, "operations", "Hotel Operations", "E"),
 			new HeaderPage(HeaderPageType.YieldManager, "yield-manager", "Yield Manager", "F"),
-			new HeaderPage(HeaderPageType.BookingHistory, "bookings", "Booking History", "D")
+			new HeaderPage(HeaderPageType.BookingHistory, "bookings", "Booking History", "D"),
+			new HeaderPage(HeaderPageType.InvoiceHistory, "invoices", "Invoice History", "L")
 		]
 	}
 

@@ -249,6 +249,9 @@ export class LazyLoadingTableComponent<T> {
 	protected isFontIconWithText(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.FontIconWithTextType;
 	}
+	protected isTimestamp(valueMeta: TableColumnValueMeta): boolean {
+		return valueMeta.propertyType === TablePropertyType.TimestampType;
+	}
 	protected noResultsExist(): boolean {
 		return this.totalCount.numOfItems === 0 && this.itemList.length === 0;
 	}

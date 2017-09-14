@@ -21,7 +21,8 @@ import {HOTEL_AGGREGATOR_PROVIDERS} from '../../services/hotel/HotelProviders';
 import {RoomCategoriesService} from '../../services/room-categories/RoomCategoriesService';
 import {RoomCategoriesStatsService} from '../../services/room-categories/RoomCategoriesStatsService';
 import {ISocketsService} from '../../../../common/utils/sockets/ISocketsService';
-import {SocketsService} from '../../../../common/utils/sockets/SocketsService';
+import { SocketsService } from '../../../../common/utils/sockets/SocketsService';
+import { InvoiceHistoryDashboardModule } from "./pages/home-pages/invoices-history/InvoiceHistoryDashboardModule";
 
 @NgModule({
     imports: [CommonModule, FormsModule,
@@ -29,7 +30,8 @@ import {SocketsService} from '../../../../common/utils/sockets/SocketsService';
         HomeHeaderModule,
         HotelOperationsDashboardModule,
         YieldManagerDashboardModule,
-        BookingHistoryDashboardModule, 
+        BookingHistoryDashboardModule,
+        InvoiceHistoryDashboardModule,
         homeRouting],
     declarations: [MainHomeComponent],
     providers: [HeaderPageService, { provide: ISocketsService, useClass: SocketsService },

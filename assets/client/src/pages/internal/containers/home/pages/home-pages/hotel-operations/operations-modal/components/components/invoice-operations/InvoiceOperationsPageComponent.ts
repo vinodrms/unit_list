@@ -95,6 +95,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
             this.createNewInvoiceVM()
         ];
         if (this.context.thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
+            this.isLoading = false;
             return;
         }
         this.customersService.getCustomerById(this.invoiceOperationsPageParam.invoiceFilter.customerId)

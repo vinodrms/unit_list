@@ -7,6 +7,8 @@ import { ThLogger, ThLogLevel } from "../../../../../utils/logging/ThLogger";
 import { LazyLoadMetaResponseRepoDO, LazyLoadRepoDO } from "../../../../common/repo-data-objects/LazyLoadRepoDO";
 import { MongoQueryBuilder } from "../../../../common/base/MongoQueryBuilder";
 import { ThDateUtils } from "../../../../../utils/th-dates/ThDateUtils";
+import { ThDateIntervalDO } from "../../../../../utils/th-dates/data-objects/ThDateIntervalDO";
+import { IndexedBookingInterval } from "../../../../price-products/utils/IndexedBookingInterval";
 
 export class MongoInvoiceReadOperationsRepository extends MongoRepository {
 
@@ -101,14 +103,18 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
             mongoQueryBuilder.addExactMatch("paymentStatus", searchCriteria.invoicePaymentStatus);
             mongoQueryBuilder.addMultipleSelectOptionList("payerList.customerId", searchCriteria.payerCustomerIdList);
             if (!this._thUtils.isUndefinedOrNull(searchCriteria.paidInterval)) {
-                let dateUtils = new ThDateUtils();
-                let endDate = dateUtils.addDaysToThDateDO(searchCriteria.paidInterval.end, 1);
-                mongoQueryBuilder.addCustomQuery("$and",
-                    [
-                        { "paidTimestamp": { $gte: searchCriteria.paidInterval.start.getTimestamp() } },
-                        { "paidTimestamp": { $lt: endDate.getTimestamp() } }
-                    ]
-                );
+                var searchInterval = new ThDateIntervalDO();
+                searchInterval.buildFromObject(searchCriteria.paidInterval);
+                if (searchInterval.isValid()) {
+                    let dateUtils = new ThDateUtils();
+                    let endDate = dateUtils.addDaysToThDateDO(searchInterval.end, 1);
+                    mongoQueryBuilder.addCustomQuery("$and",
+                        [
+                            { "paidTimestamp": { $gte: searchInterval.start.getTimestamp() } },
+                            { "paidTimestamp": { $lt: endDate.getTimestamp() } }
+                        ]
+                    );
+                }
             }
             mongoQueryBuilder.addExactMatch("groupId", searchCriteria.groupId);
             // for now the search term is only checked against the invoice reference
