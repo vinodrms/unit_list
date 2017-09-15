@@ -135,7 +135,7 @@
             </div>
             <div *ngIf="!isInvoiceSelectedForTransfer()">
                 <div style="text-align: center">
-                    <button class="select-invoice clickable" (click)="selectInvoiceForTransfer()">{{ 'Select an Invoice' | translate }}</button>
+                    <button class="select-invoice clickable" (click)="openInvoiceSelectionModal()">{{ 'Select an Invoice' | translate }}</button>
                 </div>
                 <div class="no-invoice-selected-explanation">
                     <div class="title">{{ 'No Invoice Selected' | translate }}</div>
