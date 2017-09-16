@@ -103,4 +103,15 @@ export class InvoiceVM {
             id: customerId
         }));
     }
+
+    public get payerListString(): string {
+        var payerListString: string = "";
+        _.forEach(this.customerList, (customer: CustomerDO, index: number) => {
+            payerListString += customer.customerName;
+            if (index < this.customerList.length - 1) {
+                payerListString += ", ";
+            }
+        });
+        return payerListString;
+    }
 }

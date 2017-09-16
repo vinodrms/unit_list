@@ -5,11 +5,16 @@ import { InvoiceVM } from "../../../../../../../../../../../services/invoices/vi
 import { CustomerDO } from "../../../../../../../../../../../services/customers/data-objects/CustomerDO";
 import { InvoiceOperationsPageData } from "../../utils/InvoiceOperationsPageData";
 import { InvoiceItemDO } from "../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO";
-
+import { ModalDialogRef } from "../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
+import { InvoiceDO } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceDO";
+import { InvoiceSelectionModalService } from "../../../../../../../../../../common/inventory/modals/invoices/services/InvoiceSelectionModalService";
+import { InvoicesDO } from "../../../../../../../../../../../services/invoices/data-objects/InvoicesDO";
+import { InvoiceVMHelper } from "../../../../../../../../../../../services/invoices/view-models/utils/InvoiceVMHelper";
 
 @Component({
     selector: 'invoice-transfer',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-transfer/template/invoice-transfer.html',
+    providers: [InvoiceSelectionModalService, InvoiceVMHelper]
 })
 export class InvoiceTransferComponent implements OnInit {
 
@@ -22,7 +27,9 @@ export class InvoiceTransferComponent implements OnInit {
 
     transferInvoice: InvoiceVM;
 
-    constructor(private _appContext: AppContext) {
+    constructor(private _appContext: AppContext,
+                private _invoiceVMHelper: InvoiceVMHelper,
+                private _invoiceSelectionModalService: InvoiceSelectionModalService) {
         this._thUtils = new ThUtils();
     }
 
@@ -45,8 +52,16 @@ export class InvoiceTransferComponent implements OnInit {
         return !this._thUtils.isUndefinedOrNull(this.transferInvoice);
     }
 
-    public selectInvoiceForTransfer() {
-        this.transferInvoice = this.relatedInvoices[0];
+    public openInvoiceSelectionModal() {
+        this._invoiceSelectionModalService.openInvoiceSelectionModal(false, true).then((modalDialogInstance: ModalDialogRef<InvoiceDO[]>) => {
+            modalDialogInstance.resultObservable.subscribe((selectedInvoiceList: InvoiceDO[]) => {
+                var invoicesDO: InvoicesDO = new InvoicesDO();
+                invoicesDO.invoiceList = [selectedInvoiceList[0]];
+                this._invoiceVMHelper.convertToViewModels(invoicesDO).subscribe((invoiceVMList: InvoiceVM[]) => {
+                    this.transferInvoice = invoiceVMList[0];
+                });
+            });
+        }).catch((e: any) => { });
     }
 
     public get ccySymbol(): string {

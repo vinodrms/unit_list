@@ -5,7 +5,7 @@ import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
 import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
 import { ALazyLoadRequestService } from '../common/ALazyLoadRequestService';
-import { InvoiceDO } from "./data-objects/InvoiceDO";
+import { InvoiceDO, InvoicePaymentStatus } from "./data-objects/InvoiceDO";
 import { InvoicesDO } from "./data-objects/InvoicesDO";
 import { EagerCustomersService } from "../customers/EagerCustomersService";
 import { CustomersDO } from "../customers/data-objects/CustomersDO";
@@ -17,6 +17,7 @@ import { InvoiceVMHelper } from "./view-models/utils/InvoiceVMHelper";
 export class InvoiceService extends ALazyLoadRequestService<InvoiceVM> {
 
     private customerIdListFilter: string[];
+    private paymentStatus: InvoicePaymentStatus;
     private term: string;
 
     constructor(appContext: AppContext, private _invoiceVMHelper: InvoiceVMHelper) {
@@ -39,6 +40,11 @@ export class InvoiceService extends ALazyLoadRequestService<InvoiceVM> {
         this.refreshData();
     }
     private rebuildDefaultSearchCriteria() {
-        this.defaultSearchCriteria = { customerIdList: this.customerIdListFilter, term: this.term };
+        this.defaultSearchCriteria = { customerIdList: this.customerIdListFilter, term: this.term, invoicePaymentStatus: this.paymentStatus };
+    }
+
+    public setPaymentStatus(status: InvoicePaymentStatus) {
+        this.paymentStatus = status;
+        this.rebuildDefaultSearchCriteria();
     }
 }
