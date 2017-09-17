@@ -569,6 +569,10 @@ export enum ThStatusCode {
     InvoiceRepositoryErrorUpdatingInvoice,
     InvoiceRepositoryBookingPriceLinkError,
     InvoiceRepositoryAddInvoiceFeeError,
+    TransferInvoiceItemsTwoInvoicesRequired,
+    TransferInvoiceItemsError,
+    TransferInvoiceItemsUnpaidInvoicesNotFound,
+    TransferInvoiceItemsItemNotFound,
 
 }
 
@@ -1129,6 +1133,10 @@ ThMessage[ThStatusCode.InvoiceRepositoryProblemUpdatingInvoice] = "Problem updat
 ThMessage[ThStatusCode.InvoiceRepositoryErrorUpdatingInvoice] = "Error updating the invoice.";
 ThMessage[ThStatusCode.InvoiceRepositoryBookingPriceLinkError] = "Error linking booking prices with the invoices.";
 ThMessage[ThStatusCode.InvoiceRepositoryAddInvoiceFeeError] = "Error adding invoice fee to the invoices if necessary.";
+ThMessage[ThStatusCode.TransferInvoiceItemsTwoInvoicesRequired] = "Transfer can only be made between two invoices.";
+ThMessage[ThStatusCode.TransferInvoiceItemsError] = "Error transferring items.";
+ThMessage[ThStatusCode.TransferInvoiceItemsUnpaidInvoicesNotFound] = "The invoices have not been found. Transfer can only made between unpaid invoices.";
+ThMessage[ThStatusCode.TransferInvoiceItemsItemNotFound] = "Some items have not been found on the invoices.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
