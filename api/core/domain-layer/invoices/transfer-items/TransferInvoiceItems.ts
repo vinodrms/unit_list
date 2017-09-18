@@ -74,7 +74,7 @@ export class TransferInvoiceItems {
             let transfer = this.input.transfers[i];
 
             let source = this.invoicesById[transfer.sourceInvoiceId];
-            let item = _.find(source.itemList, (item: InvoiceItemDO) => {
+            let item: InvoiceItemDO = _.find(source.itemList, (item: InvoiceItemDO) => {
                 return item.transactionId === transfer.transactionId;
             });
             if (this.appContext.thUtils.isUndefinedOrNull(item)) {
@@ -82,8 +82,17 @@ export class TransferInvoiceItems {
                 ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "item not found", this.input, thError);
                 throw thError;
             }
+            if (!this.appContext.thUtils.isUndefinedOrNull(item.parentTransactionId)) {
+                var thError = new ThError(ThStatusCode.TransferInvoiceItemsLinkedItemsCannotBeMoved, null);
+                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to move an item with parent", this.input, thError);
+                throw thError;
+            }
+            let linkedItems: InvoiceItemDO[] = _.filter(source.itemList, (item: InvoiceItemDO) => {
+                return item.parentTransactionId === transfer.transactionId;
+            });
             let destination = this.invoicesById[transfer.destinationInvoiceId];
             destination.itemList.push(item);
+            destination.itemList = destination.itemList.concat(linkedItems);
             destination.recomputePrices();
             invoiceIdsToUpdate.push(destination.id);
         }
@@ -96,7 +105,8 @@ export class TransferInvoiceItems {
         this.input.transfers.forEach((transfer: Transfer) => {
             let source = this.invoicesById[transfer.sourceInvoiceId];
             source.itemList = _.filter(source.itemList, (item: InvoiceItemDO) => {
-                return item.transactionId != transfer.transactionId;
+                return item.transactionId != transfer.transactionId
+                    && item.parentTransactionId != transfer.transactionId;
             });
             source.recomputePrices();
             invoiceIdsToUpdate.push(source.id);
