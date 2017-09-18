@@ -7,12 +7,22 @@ import { InvoiceItemVM } from "./InvoiceItemVM";
 import { InvoiceItemDO, InvoiceItemType } from "../data-objects/items/InvoiceItemDO";
 import { BookingPriceDO } from "../../bookings/data-objects/price/BookingPriceDO";
 import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
+import { ThDateUtils } from "../../common/data-objects/th-dates/ThDateUtils";
+import { ThTimestampDO } from "../../common/data-objects/th-dates/ThTimestampDO";
+import { ThUtils } from "../../../../../common/utils/ThUtils";
 
 export class InvoiceVM {
     private _invoice: InvoiceDO;
     private _customerList: CustomerDO[];
     private _invoiceMeta: InvoiceMeta;
     private _invoiceItemVms: InvoiceItemVM[];
+    private _thDateUtils: ThDateUtils;
+    private _thUtils: ThUtils;
+
+    constructor() {
+        this._thDateUtils = new ThDateUtils();
+        this._thUtils = new ThUtils();
+    }
 
     public get invoice(): InvoiceDO {
         return this._invoice;
@@ -77,11 +87,23 @@ export class InvoiceVM {
         this._invoiceItemVms = value;
     }
 
-    public getFirstPayerName(): string {
+    public get firstPayerName(): string {
         return (this._customerList.length > 0) ? this._customerList[0].customerName : "";
     }
-    public getFirstPayerEmail(): string {
+    public get firstPayerEmail(): string {
         return (this._customerList.length > 0) ? this._customerList[0].emailString : "";
+    }
+
+
+    public get payerListString(): string {
+        var payerListString: string = "";
+        _.forEach(this.customerList, (customer: CustomerDO, index: number) => {
+            payerListString += customer.customerName;
+            if (index < this.customerList.length - 1) {
+                payerListString += ", ";
+            }
+        });
+        return payerListString;
     }
 
     public getCustomerDO(id: string): CustomerDO {
@@ -104,14 +126,7 @@ export class InvoiceVM {
         }));
     }
 
-    public get payerListString(): string {
-        var payerListString: string = "";
-        _.forEach(this.customerList, (customer: CustomerDO, index: number) => {
-            payerListString += customer.customerName;
-            if (index < this.customerList.length - 1) {
-                payerListString += ", ";
-            }
-        });
-        return payerListString;
+    public get paidTimestamp(): ThTimestampDO {
+        return !this._thUtils.isUndefinedOrNull(this.invoice.paidTimestamp) ? this._thDateUtils.convertTimestampToThTimestamp(this.invoice.paidTimestamp) : null;
     }
 }

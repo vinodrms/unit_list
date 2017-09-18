@@ -1,0 +1,21 @@
+<loading-component [isLoading]="isLoading"></loading-component>
+<div *ngIf="!isLoading" class="row full-height operational-box card">
+    <div class="col-xs-9 overview-left full-height">
+        <lazy-loading-table 
+            (onAdd)="openNewInvoice()"
+            (onSelect)="selectInvoice($event)"
+            (onEdit)="editInvoice($event)"
+            >
+        </lazy-loading-table>
+    </div>
+    <div class="col-xs-3 operational-overview-right full-height">
+        <div class="row full-height" *ngIf="selectedInvoiceVM">
+            <invoice-details
+                [invoiceVM]="selectedInvoiceVM"
+                [ccy]="ccy"
+                (onEdit)="editInvoice($event)"
+                >
+            </invoice-details>
+        </div>
+    </div>
+</div>

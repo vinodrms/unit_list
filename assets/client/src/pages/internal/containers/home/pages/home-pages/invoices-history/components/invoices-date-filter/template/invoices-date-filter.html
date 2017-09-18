@@ -1,0 +1,17 @@
+<div class="col-xs-4 checkbox">
+    <label>
+        <input type="checkbox" 
+            [(ngModel)]="filterByPaidDateInterval" 
+            name="filterByPaidDateInterval"> {{'Filter by Paid Date' | translate}}
+    </label>
+</div>
+<div *ngIf="filterByPaidDateInterval" class="col-xs-8">
+    <th-date-interval-picker 
+        [showExpandedView]="true" 
+        [showLabels]="false"
+        [initialThDateInterval]="searchInterval" 
+        [restrictedInterval]="false"
+        (didSelectThDateInterval)="didSelectSearchInterval($event)"
+        >
+    </th-date-interval-picker>
+</div>

@@ -1017,8 +1017,13 @@ export var EnglishTranslations: Object = {
     "No items": "No items",
     "Accomodation for %date%": "Accomodation for %date%",
     "has a transaction fee of": "has a transaction fee of",
-    "Search by reference": "Search by reference",
     "Reference": "Reference",
+    "Paid At": "Paid At",
+    "Filter by Paid Date": "Filter by Paid Date",
+    "Search by reference": "Search by reference",
     "Select Invoice": "Select Invoice",
+    "Invoice Reference": "Invoice Reference",
+    "Payer List": "Payer List",
     "No items have been selected for transfer.": "No items have been selected for transfer.",
+
 };

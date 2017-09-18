@@ -27,17 +27,6 @@ export class RelatedInvoicesComponent implements OnInit {
         this.backToInvoiceOverviewClicked.emit();
     }
 
-    public getPayerListString(invoice: InvoiceVM): string {
-        var payerListString: string = "";
-        _.forEach(invoice.customerList, (customer: CustomerDO, index: number) => {
-            payerListString += customer.customerName;
-            if (index < invoice.customerList.length - 1) {
-                payerListString += ", ";
-            }
-        });
-        return payerListString;
-    }
-
     public selectRelatedInvoiceIndex(index: number) {
         this.relatedInvoiceIndexSelected.emit(index);
     }
