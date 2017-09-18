@@ -17,9 +17,9 @@ import { HotelAggregatorService } from "../../../../../../../../../services/hote
 import { InvoiceOperationsPageData } from "./utils/InvoiceOperationsPageData";
 import { InvoicePayerDO } from "../../../../../../../../../services/invoices/data-objects/payer/InvoicePayerDO";
 import { InvoiceMetaFactory } from "../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory";
+import { HotelOperationsResultService } from "../../../services/HotelOperationsResultService";
 
 import _ = require('underscore');
-
 
 enum PageType {
     InvoiceOverview,
@@ -48,6 +48,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
         private hotelAggregatorService: HotelAggregatorService,
         private customersService: EagerCustomersService,
         private invoiceOperationsService: HotelOperationsInvoiceService,
+        private hotelOperationsResultService: HotelOperationsResultService,
     ) {
         this.currentRelatedInvoiceIndex = 0;
         this.relatedInvoices = [];
@@ -155,5 +156,8 @@ export class InvoiceOperationsPageComponent implements OnInit {
     public selectRelatedInvoiceIndex(index: number) {
         this.currentRelatedInvoiceIndex = index;
         this.showInvoiceOverview();
+    }
+    public markInvoiceChanged() {
+        this.hotelOperationsResultService.markInvoiceChanged(this.relatedInvoices[this.currentRelatedInvoiceIndex]);
     }
 }

@@ -41,6 +41,7 @@ export class InvoiceOverviewComponent implements OnInit {
     @Output() showRelatedInvoicesClicked = new EventEmitter();
     @Output() showInvoiceTransferClicked = new EventEmitter();
     @Output() currentInvoiceChanged = new EventEmitter();
+    @Output() invoiceChanged = new EventEmitter();
 
 
     private pmGenerator: InvoicePaymentMethodVMGenerator;
@@ -66,6 +67,7 @@ export class InvoiceOverviewComponent implements OnInit {
             this.invoiceOperations.markAsPaid(this.currentInvoice.invoice).subscribe((updatedInvoice: InvoiceDO) => {
                 this.currentInvoice.invoice = updatedInvoice;
                 this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
+                this.emitInvoiceChanged();
             }, (err: ThError) => {
                 this.context.toaster.error(err.message);
             });
@@ -77,6 +79,7 @@ export class InvoiceOverviewComponent implements OnInit {
             this.invoiceOperations.markAsLossByManagemnt(this.currentInvoice.invoice).subscribe((updatedInvoice: InvoiceDO) => {
                 this.currentInvoice.invoice = updatedInvoice;
                 this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
+                this.emitInvoiceChanged();
             }, (err: ThError) => {
                 this.context.toaster.error(err.message);
             });
@@ -145,6 +148,7 @@ export class InvoiceOverviewComponent implements OnInit {
                 this.invoiceOperations.addPayer(this.currentInvoice.invoice, selectedCustomer.id).subscribe((updatedInvoice: InvoiceDO) => {
                     this.currentInvoice.invoice = updatedInvoice;
                     this.currentInvoice.addCustomer(selectedCustomer);
+                    this.emitInvoiceChanged();
                 }, (err: ThError) => {
                     this.context.toaster.error(err.message);
                 });
@@ -160,6 +164,7 @@ export class InvoiceOverviewComponent implements OnInit {
         this.invoiceOperations.removePayer(this.currentInvoice.invoice, customer.id).subscribe((updatedInvoice: InvoiceDO) => {
             this.currentInvoice.invoice = updatedInvoice;
             this.currentInvoice.removeCustomer(customer.id);
+            this.emitInvoiceChanged();
         }, (err: ThError) => {
             this.context.toaster.error(err.message);
         });
@@ -179,6 +184,7 @@ export class InvoiceOverviewComponent implements OnInit {
                             this.invoiceOperations.addItem(this.currentInvoice.invoice, invoiceItem)
                                 .subscribe((updatedInvoice: InvoiceDO) => {
                                     this.currentInvoice.invoice = updatedInvoice;
+                                    this.emitInvoiceChanged();
                                 }, (err: ThError) => {
                                     this.context.toaster.error(err.message);
                                 });
@@ -218,6 +224,7 @@ export class InvoiceOverviewComponent implements OnInit {
     public removeItem(item: InvoiceItemDO) {
         this.invoiceOperations.removeItem(this.currentInvoice.invoice, item.transactionId).subscribe((updatedInvoice: InvoiceDO) => {
             this.currentInvoice.invoice = updatedInvoice;
+            this.emitInvoiceChanged();
         }, (err: ThError) => {
             this.context.toaster.error(err.message);
         });
@@ -278,6 +285,7 @@ export class InvoiceOverviewComponent implements OnInit {
         this.addInvoicePaymentModalService.openAddInvoicePaymentModal(this.currentInvoice.invoice, customer, this.invoiceOperationsPageData).then((modalDialogInstance: ModalDialogRef<InvoicePaymentDO>) => {
             modalDialogInstance.resultObservable.subscribe((invoicePayment: InvoicePaymentDO) => {
                 this.addPayment(customer.id, invoicePayment);
+                this.emitInvoiceChanged();
             });
         }).catch((e: any) => { });
     }
@@ -285,6 +293,7 @@ export class InvoiceOverviewComponent implements OnInit {
     public addPayment(customerId: string, invoicePayment: InvoicePaymentDO) {
         this.invoiceOperations.addPayment(this.currentInvoice.invoice, customerId, invoicePayment).subscribe((updatedInvoice: InvoiceDO) => {
             this.currentInvoice.invoice = updatedInvoice;
+            this.emitInvoiceChanged();
         }, (err: ThError) => {
             this.context.toaster.error(err.message);
         });
@@ -296,5 +305,9 @@ export class InvoiceOverviewComponent implements OnInit {
 
     public getInvoiceItemDisplayName(itemVm: InvoiceItemVM): string {
         return itemVm.getDisplayName(this.context.thTranslation);
+    }
+
+    public emitInvoiceChanged() {
+        this.invoiceChanged.emit();
     }
 }

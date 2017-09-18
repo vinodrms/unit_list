@@ -1020,5 +1020,7 @@ export var EnglishTranslations: Object = {
     "Reference": "Reference",
     "Paid At": "Paid At",
     "Filter by Paid Date": "Filter by Paid Date",
+    "Search by reference": "Search by reference",
+    "Select Invoice": "Select Invoice",
 
 };

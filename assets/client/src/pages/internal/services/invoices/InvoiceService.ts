@@ -5,7 +5,7 @@ import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
 import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
 import { ALazyLoadRequestService } from '../common/ALazyLoadRequestService';
-import { InvoiceDO } from "./data-objects/InvoiceDO";
+import { InvoiceDO, InvoicePaymentStatus } from "./data-objects/InvoiceDO";
 import { InvoicesDO } from "./data-objects/InvoicesDO";
 import { EagerCustomersService } from "../customers/EagerCustomersService";
 import { CustomersDO } from "../customers/data-objects/CustomersDO";
@@ -24,6 +24,7 @@ export class InvoiceService extends ALazyLoadRequestService<InvoiceVM> {
     private _term: string;
     private _paidInterval: ThDateIntervalDO;
     private _filterByPaidDateInterval: boolean;
+    private paymentStatus: InvoicePaymentStatus;
 
     constructor(appContext: AppContext, private _invoiceVMHelper: InvoiceVMHelper) {
         super(appContext, ThServerApi.InvoicesCount, ThServerApi.Invoices);
@@ -52,7 +53,7 @@ export class InvoiceService extends ALazyLoadRequestService<InvoiceVM> {
         this.refreshData();
     }
     private rebuildDefaultSearchCriteria() {
-        this.defaultSearchCriteria = { customerIdList: this._customerIdListFilter, term: this._term, paidInterval: this._filterByPaidDateInterval? this.paidInterval: null };
+        this.defaultSearchCriteria = { customerIdList: this._customerIdListFilter, term: this._term, invoicePaymentStatus: this.paymentStatus, paidInterval: this._filterByPaidDateInterval? this.paidInterval: null };
     }
 
     public get paidInterval(): ThDateIntervalDO {
@@ -68,5 +69,10 @@ export class InvoiceService extends ALazyLoadRequestService<InvoiceVM> {
         this._filterByPaidDateInterval = value;
         this.rebuildDefaultSearchCriteria();
         this.refreshData();
+    }
+
+    public setPaymentStatus(status: InvoicePaymentStatus) {
+        this.paymentStatus = status;
+        this.rebuildDefaultSearchCriteria();
     }
 }
