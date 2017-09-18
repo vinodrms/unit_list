@@ -1022,5 +1022,7 @@ export var EnglishTranslations: Object = {
     "Filter by Paid Date": "Filter by Paid Date",
     "Search by reference": "Search by reference",
     "Select Invoice": "Select Invoice",
+    "Invoice Reference": "Invoice Reference",
+    "Payer List": "Payer List",
 
 };
