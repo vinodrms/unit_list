@@ -19,7 +19,7 @@ export class InvoicesTestHelper {
         let invoice = new InvoiceDO();
         invoice.hotelId = this.testDataBuilder.hotelDO.id;
         let payer = new InvoicePayerDO();
-        let individual: CustomerDO = _.find(this.testDataBuilder.customerList, (customer: CustomerDO​​) => { return customer.isIndividual(); });
+        let individual: CustomerDO = _.find(this.testDataBuilder.customerList, (customer: CustomerDO) => { return customer.isIndividual(); });
         payer.customerId = individual.id;
         invoice.payerList = [
             payer
@@ -46,6 +46,28 @@ export class InvoicesTestHelper {
         payment.shouldApplyTransactionFee = false;
         payment.transactionFeeSnapshot = TransactionFeeDO.getDefaultTransactionFee();
         return payment;
+    }
+
+    getUnpaidBookingInvoice(): InvoiceDO {
+        return _.find(this.testDataBuilder.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.paymentStatus === InvoicePaymentStatus.Unpaid
+                && !invoice.isWalkInInvoice();
+        });
+    }
+
+    getUnpaidWalkInInvoice(): InvoiceDO {
+        return _.find(this.testDataBuilder.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.paymentStatus === InvoicePaymentStatus.Unpaid
+                && invoice.isWalkInInvoice();
+        });
+    }
+
+    getTotalPrice(items: InvoiceItemDO[]): number {
+        let amount = 0.0;
+        items.forEach(item => {
+            amount += item.getTotalPrice();
+        });
+        return amount;
     }
 
 }

@@ -17,7 +17,7 @@ export interface IInvoiceDataSource {
 
 export class DefaultInvoiceBuilder implements IInvoiceDataSource {
 
-    constructor(private _testContext: TestContext) {
+    constructor(private context: TestContext) {
     }
 
     public getInvoiceList(hotel: HotelDO, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]): InvoiceDO[] {
@@ -41,12 +41,13 @@ export class DefaultInvoiceBuilder implements IInvoiceDataSource {
 
     private buildBookingInvoiceFromBooking(hotel: HotelDO, booking: BookingDO, customerList: CustomerDO[]): InvoiceDO {
         var invoice = new InvoiceDO();
-        invoice.groupId = this._testContext.appContext.thUtils.generateUniqueID();
+        invoice.groupId = this.context.appContext.thUtils.generateUniqueID();
         invoice.indexedBookingIdList = [booking.id];
         invoice.itemList = [];
         var bookingInvoiceItem = new InvoiceItemDO();
         bookingInvoiceItem.type = InvoiceItemType.Booking;
         bookingInvoiceItem.id = booking.id;
+        this.stampItem(bookingInvoiceItem);
         invoice.itemList.push(bookingInvoiceItem);
         invoice.amountToPay = booking.price.getTotalPrice();
 
@@ -57,7 +58,7 @@ export class DefaultInvoiceBuilder implements IInvoiceDataSource {
         payment.amountPlusTransactionFee = booking.price.getTotalPrice();
         payment.notes = "";
         payment.shouldApplyTransactionFee = true;
-        payment.transactionId = this._testContext.appContext.thUtils.generateUniqueID();
+        payment.transactionId = this.context.appContext.thUtils.generateUniqueID();
         payment.timestamp = (new Date()).getTime();
         payment.transactionFeeSnapshot = TransactionFeeDO.getDefaultTransactionFee();
         payer.paymentList = [payment];
@@ -70,7 +71,7 @@ export class DefaultInvoiceBuilder implements IInvoiceDataSource {
     private buildInvoiceWithTwoAddOnProducts(payerCustomer: InvoicePayerDO, aopList: AddOnProductDO[]): InvoiceDO {
         var invoice = new InvoiceDO();
         invoice.itemList = [];
-        invoice.groupId = this._testContext.appContext.thUtils.generateUniqueID();
+        invoice.groupId = this.context.appContext.thUtils.generateUniqueID();
 
         var totalAmountToPay = 0;
         var aopSample = _.sample(aopList, 2);
@@ -84,6 +85,7 @@ export class DefaultInvoiceBuilder implements IInvoiceDataSource {
             aopItemMeta.numberOfItems = 1;
             aopItemMeta.pricePerItem = aop.price;
             aopInvoiceItem.meta = aopItemMeta;
+            this.stampItem(aopInvoiceItem);
 
             invoice.itemList.push(aopInvoiceItem);
             totalAmountToPay += aop.price;
@@ -110,13 +112,29 @@ export class DefaultInvoiceBuilder implements IInvoiceDataSource {
         var invoiceList = dataSource.getInvoiceList(hotel, customerList, aopList, bookingList);
         var addInvoicePromiseList: Promise<InvoiceDO>[] = [];
         invoiceList.forEach((invoice: InvoiceDO) => {
-            var invoiceRepository = this._testContext.appContext.getRepositoryFactory().getInvoiceRepository();
-            addInvoicePromiseList.push(invoiceRepository.addInvoice({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, invoice));
+            var invoiceRepository = this.context.appContext.getRepositoryFactory().getInvoiceRepository();
+            addInvoicePromiseList.push(invoiceRepository.addInvoice({ hotelId: this.context.sessionContext.sessionDO.hotel.id }, invoice));
         });
-        Promise.all(addInvoicePromiseList).then((invoiceList: InvoiceDO[]) => {
-            resolve(invoiceList);
-        }).catch((error: any) => {
-            reject(error);
-        });
+        Promise.all(addInvoicePromiseList)
+            .then((invoiceList: InvoiceDO[]) => {
+                var updateInvoicePromiseList: Promise<InvoiceDO>[] = [];
+                invoiceList.forEach(invoice => {
+                    invoice.recomputePrices();
+                    var invoiceRepository = this.context.appContext.getRepositoryFactory().getInvoiceRepository();
+                    updateInvoicePromiseList.push(invoiceRepository.updateInvoice({ hotelId: this.context.sessionContext.sessionDO.hotel.id }, {
+                        id: invoice.id,
+                        versionId: invoice.versionId
+                    }, invoice));
+                });
+                return Promise.all(updateInvoicePromiseList);
+            }).then((invoiceList: InvoiceDO[]) => {
+                resolve(invoiceList);
+            }).catch((error: any) => {
+                reject(error);
+            });
+    }
+    private stampItem(item: InvoiceItemDO) {
+        item.transactionId = this.context.appContext.thUtils.generateUniqueID();
+        item.timestamp = (new Date()).getTime();
     }
 }
