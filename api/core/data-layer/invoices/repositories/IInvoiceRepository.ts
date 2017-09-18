@@ -20,6 +20,7 @@ export interface InvoiceSearchCriteriaRepoDO {
     payerCustomerIdList?: string[];
     groupId?: string;
     term?: string;
+    invoiceIdList?: string[];
 }
 
 export interface InvoiceSearchResultRepoDO {

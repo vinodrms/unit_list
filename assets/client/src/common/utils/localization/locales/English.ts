@@ -1024,5 +1024,6 @@ export var EnglishTranslations: Object = {
     "Select Invoice": "Select Invoice",
     "Invoice Reference": "Invoice Reference",
     "Payer List": "Payer List",
+    "No items have been selected for transfer.": "No items have been selected for transfer.",
 
 };

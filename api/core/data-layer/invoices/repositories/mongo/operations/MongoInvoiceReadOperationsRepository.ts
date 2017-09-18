@@ -62,10 +62,10 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
 
     getInvoiceList(invoiceMeta: InvoiceMetaRepoDO, searchCriteria?: InvoiceSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<InvoiceSearchResultRepoDO> {
         return new Promise<InvoiceSearchResultRepoDO>((resolve: { (result: InvoiceSearchResultRepoDO): void }, reject: { (err: ThError): void }) => {
-            this.getInvoiceGroupListCore(resolve, reject, invoiceMeta, searchCriteria, lazyLoad);
+            this.getInvoiceListCore(resolve, reject, invoiceMeta, searchCriteria, lazyLoad);
         });
     }
-    private getInvoiceGroupListCore(resolve: { (result: InvoiceSearchResultRepoDO): void }, reject: { (err: ThError): void }, invoiceMeta: InvoiceMetaRepoDO, searchCriteria?: InvoiceSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO) {
+    private getInvoiceListCore(resolve: { (result: InvoiceSearchResultRepoDO): void }, reject: { (err: ThError): void }, invoiceMeta: InvoiceMetaRepoDO, searchCriteria?: InvoiceSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO) {
 
         this.findMultipleDocuments({ criteria: this.buildSearchCriteria(invoiceMeta, searchCriteria), lazyLoad: lazyLoad },
             (err: Error) => {
@@ -119,6 +119,7 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
             mongoQueryBuilder.addExactMatch("groupId", searchCriteria.groupId);
             // for now the search term is only checked against the invoice reference
             mongoQueryBuilder.addRegex("reference", searchCriteria.term);
+            mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.invoiceIdList);
         }
 
         return mongoQueryBuilder.processedQuery;
