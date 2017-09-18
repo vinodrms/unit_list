@@ -1020,4 +1020,5 @@ export var EnglishTranslations: Object = {
     "Search by reference": "Search by reference",
     "Reference": "Reference",
     "Select Invoice": "Select Invoice",
+    "No items have been selected for transfer.": "No items have been selected for transfer.",
 };

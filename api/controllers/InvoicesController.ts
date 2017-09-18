@@ -7,6 +7,7 @@ import { SaveInvoice } from "../core/domain-layer/invoices/save-invoice/SaveInvo
 import { InvoiceDO } from "../core/data-layer/invoices/data-objects/InvoiceDO";
 import { InvoiceSearchResultRepoDO } from "../core/data-layer/invoices/repositories/IInvoiceRepository";
 import { LazyLoadMetaResponseRepoDO } from "../core/data-layer/common/repo-data-objects/LazyLoadRepoDO";
+import { TransferInvoiceItems } from "../core/domain-layer/invoices/transfer-items/TransferInvoiceItems";
 
 export class InvoicesController extends BaseController {
 
@@ -61,6 +62,16 @@ export class InvoicesController extends BaseController {
             });
     }
 
+    public transferItems(req: any, res: any) {
+        var transferInvoiceItems = new TransferInvoiceItems(req.appContext, req.sessionContext);
+        transferInvoiceItems.transfer(req.body.transferDetails)
+            .then((invoiceList: InvoiceDO[]) => {
+                this.returnSuccesfulResponse(req, res, { invoiceList: invoiceList });
+            }).catch((err: any) => {
+                this.returnErrorResponse(req, res, err, ThStatusCode.InvoicesControllerErrorTransferringItems);
+            });
+    }
+
 }
 
 var invoicesController = new InvoicesController();
@@ -69,4 +80,6 @@ module.exports = {
     getInvoiceList: invoicesController.getInvoiceList.bind(invoicesController),
     getInvoiceListCount: invoicesController.getInvoiceListCount.bind(invoicesController),
     saveInvoice: invoicesController.saveInvoice.bind(invoicesController),
+    transferItems: invoicesController.transferItems.bind(invoicesController),
+
 }
