@@ -14,7 +14,7 @@ export class TransferInvoiceItems {
     private static noSupportedInvoices = 2;
 
     private input: TransferInvoiceItemsDO;
-    private _invoices: InvoiceDO[];
+    private invoices: InvoiceDO[];
     private invoicesById: { [index: string]: InvoiceDO };
 
     constructor(private appContext: AppContext, private sessionContext: SessionContext) {
@@ -50,17 +50,20 @@ export class TransferInvoiceItems {
             invoiceIdList: invoiceIds
         }).then((result: InvoiceSearchResultRepoDO) => {
             this.invoices = result.invoiceList;
+            this.invoicesById = _.indexBy(this.invoices, (invoice: InvoiceDO) => { return invoice.id });
+
             if (this.invoices.length != TransferInvoiceItems.noSupportedInvoices) {
                 var thError = new ThError(ThStatusCode.TransferInvoiceItemsUnpaidInvoicesNotFound, null);
                 ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "invoices for transfer not found", this.input, thError);
                 throw thError;
             }
             return this.addItemsToTheirDestinations();
-        }).then((invoices: InvoiceDO[]) => {
-            this.invoices = invoices;
+        }).then((updatedInvoices: InvoiceDO[]) => {
+            this.updateInvoices(updatedInvoices);
             return this.removeItemsFromTheirSources();
-        }).then((invoices: InvoiceDO[]) => {
-            resolve(invoices);
+        }).then((updatedInvoices: InvoiceDO[]) => {
+            this.updateInvoices(updatedInvoices);
+            resolve(this.invoices);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.TransferInvoiceItemsError, error);
             ThLogger.getInstance().logError(ThLogLevel.Error, "error transferring items", this.input, thError);
@@ -138,11 +141,15 @@ export class TransferInvoiceItems {
         return invoiceIds;
     }
 
-    public get invoices(): InvoiceDO[] {
-        return this._invoices;
-    }
-    public set invoices(value: InvoiceDO[]) {
-        this._invoices = value;
-        this.invoicesById = _.indexBy(this._invoices, (invoice: InvoiceDO) => { return invoice.id });
+    private updateInvoices(newInvoices: InvoiceDO[]) {
+        newInvoices.forEach((newInvoice: InvoiceDO) => {
+            var index = _.findIndex(this.invoices, (invoice: InvoiceDO) => {
+                return invoice.id === newInvoice.id;
+            });
+            if (index >= 0) {
+                this.invoices[index] = newInvoice;
+                this.invoicesById[newInvoice.id] = newInvoice;
+            }
+        });
     }
 }
