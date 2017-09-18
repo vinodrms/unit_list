@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, ReflectiveInjector } from "@angular/core";
+import { Component, AfterViewInit, ViewChild, ReflectiveInjector, OnInit } from "@angular/core";
 import { AHomeContainerComponent } from "../../utils/AHomeContainerComponent";
 import { LazyLoadingTableComponent } from "../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent";
 import { InvoiceVM } from "../../../../../services/invoices/view-models/InvoiceVM";
@@ -13,6 +13,9 @@ import { ModalDialogRef } from "../../../../../../../common/utils/modals/utils/M
 import { HotelOperationsResult } from "../hotel-operations/operations-modal/services/utils/HotelOperationsResult";
 import { InvoicesDateFilterComponent } from "./components/invoices-date-filter/InvoicesDateFilterComponent";
 import { InvoicesDateFilterModule } from "./components/invoices-date-filter/InvoicesDateFilterModule";
+import { HotelAggregatedInfo } from "../../../../../services/hotel/utils/HotelAggregatedInfo";
+import { HotelAggregatorService } from "../../../../../services/hotel/HotelAggregatorService";
+import { CurrencyDO } from "../../../../../services/common/data-objects/currency/CurrencyDO";
 
 @Component({
     selector: 'invoice-history-dashboard',
@@ -22,14 +25,33 @@ import { InvoicesDateFilterModule } from "./components/invoices-date-filter/Invo
 export class InvoiceHistoryDashboardComponent extends AHomeContainerComponent implements AfterViewInit {
     @ViewChild(LazyLoadingTableComponent)
     private _invoicesTableComponent: LazyLoadingTableComponent<InvoiceVM>;
+    private _ccy: CurrencyDO;
+    
+    isLoading: boolean = true;
 
     selectedInvoiceVM: InvoiceVM;
 
     constructor(headerPageService: HeaderPageService,
         private _invoiceService: InvoiceService,
         private _tableBuilder: InvoicesTableMetaBuilderService,
-        private _hotelOperationsModalService: HotelOperationsModalService) {
+        private _hotelOperationsModalService: HotelOperationsModalService,
+        private _hotelAggregatorService: HotelAggregatorService) {
         super(headerPageService, HeaderPageType.InvoiceHistory);
+    }
+
+    ngOnInit(): void {
+        this._hotelAggregatorService.getHotelAggregatedInfo().subscribe((hotelInfo: HotelAggregatedInfo) => {
+            this.ccy = hotelInfo.ccy;
+            this.isLoading = false;
+        });
+    }
+
+    public get ccy(): CurrencyDO {
+        return this._ccy;
+    }
+
+    public set ccy(ccy: CurrencyDO) {
+        this._ccy = ccy;
     }
 
     public ngAfterViewInit() {

@@ -2053,48 +2053,60 @@ a.btn.btn-square:focus {
     padding-top: 15px;
     padding-bottom: 15px;
 }
-.booking-details-header {
+.booking-details-header,
+.invoice-details-header {
     padding-top: 10px;
     font-size: 15px;
 }
-.booking-details-header>.first-line {
+.booking-details-header>.first-line,
+.invoice-details-header>.first-line {
     color: rgb(251, 103, 8);
 }
-.booking-details-container {
+.booking-details-container,
+.invoice-details-container {
     font-size: 12px;
 }
-.booking-details-table {
+.booking-details-table,
+.invoice-details-table {
     padding-left: 0px;
     padding-right: 0px;
 }
-.booking-details-table table {
+.booking-details-table table,
+.invoice-details-table table {
     table-layout:fixed;
     margin-bottom: 5px;
 }
-.booking-details-table table td {
+.booking-details-table table td,
+.invoice-details-table table td {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.booking-details-table>table>thead {
+.booking-details-table>table>thead,
+.invoice-details-table>table>thead {
     background-color: #E6E6E6;
     font-size: 11px;
 }
-.booking-details-table>table>tfoot>td>a {
+.booking-details-table>table>tfoot>td>a,
+.invoice-details-table>table>tfoot>td>a {
     padding-left: 6px;
     padding-top: 6px !important;
 }
-.booking-details-table>table>thead>tr>th {
+.booking-details-table>table>thead>tr>th,
+.invoice-details-table>table>thead>tr>th {
     font-weight: normal !important;
 }
-.booking-details-table>table>tbody {
+.booking-details-table>table>tbody,
+.invoice-details-table>table>tbody {
     background-color: #F5F5F5;
     font-size: 11px;
 }
-.booking-details-table td.name-field {
+.booking-details-table td.name-field,
+.invoice-details-table td.name-field {
     padding-top: 11px;
 }
-.booking-details-table .font-size-small {
+.booking-details-table .font-size-small,
+.invoice-details-table .font-size-small {
     font-size: 11px !important;
 }
 
@@ -2112,7 +2124,8 @@ a.btn.btn-square:focus {
     padding-top: 7px !important;
     padding-left: 13px;
 }
-.booking-details-row {
+.booking-details-row,
+.invoice-details-row {
     padding-top: 5px;
     padding-bottom: 5px;
 }
