@@ -15,6 +15,8 @@ import { InvoiceSearchResultRepoDO } from "../../../../core/data-layer/invoices/
 import { TransferInvoiceItems } from "../../../../core/domain-layer/invoices/transfer-items/TransferInvoiceItems";
 import { TransferInvoiceItemsDO } from "../../../../core/domain-layer/invoices/transfer-items/TransferInvoiceItemsDO";
 import { InvoiceItemDO, InvoiceItemType } from "../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO";
+import { ReinstateInvoice } from "../../../../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
+import { ThStatusCode } from "../../../../core/utils/th-responses/ThResponse";
 
 describe("Invoices Tests", function () {
     var testUtils: TestUtils;
@@ -260,6 +262,36 @@ describe("Invoices Tests", function () {
                 });
         });
 
+        it("Should reinstate the invoice by generating a credit and another unpaid invoice", function (done) {
+            let reinstateInvoice = new ReinstateInvoice(testContext.appContext, testContext.sessionContext);
+            reinstateInvoice.reinstate(invoice.id)
+                .then((invoices: InvoiceDO[]) => {
+                    should.equal(invoices.length, 2);
+                    let credit: InvoiceDO = _.find(invoices, (i: InvoiceDO) => { return i.paymentStatus === InvoicePaymentStatus​​.Credit });
+                    should.exist(credit);
+                    let reinstatement: InvoiceDO = _.find(invoices, (i: InvoiceDO) => { return i.paymentStatus === InvoicePaymentStatus​​.Unpaid });
+                    should.exist(reinstatement);
+
+                    should.equal(reinstatement.reference.startsWith("TEMP"), true);
+                    should.equal(_.isNumber(reinstatement.paidTimestamp), false);
+                    should.equal(credit.reference, invoice.reference);
+                    should.equal(_.isNumber(credit.paidTimestamp), true);
+
+                    done();
+                }).catch((e: ThError) => {
+                    done(e);
+                });
+        });
+        it("Should not reinstate the same invoice more than once", function (done) {
+            let reinstateInvoice = new ReinstateInvoice(testContext.appContext, testContext.sessionContext);
+            reinstateInvoice.reinstate(invoice.id)
+                .then((invoices: InvoiceDO[]) => {
+                    done(new Error("Managed to reinstate the same Paid invoice more than once!"));
+                }).catch((e: ThError) => {
+                    should.equal(e.getThStatusCode(), ThStatusCode.ReinstateInvoiceCreditExists);
+                    done();
+                });
+        });
     });
 
     describe("Invoice transfer tests", function () {

@@ -64,7 +64,7 @@ export class ReinstateInvoice {
                 if (result.invoiceList.length > 1) {
                     var thError = new ThError(ThStatusCode.ReinstateInvoiceMoreCreditsFoundForTheSameReference, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Error, "more than 1 credit invoice found for the same reference", { invoiceId: invoice.id }, thError);
-                    throw thError;
+                    reject(thError);
                 }
                 else if (result.invoiceList.length == 1) {
                     resolve(result.invoiceList[0]);
