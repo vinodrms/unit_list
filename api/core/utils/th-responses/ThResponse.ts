@@ -349,6 +349,7 @@ export enum ThStatusCode {
     InvoiceGroupsRepositoryErrorGettingInvoice,
     InvoiceControllerErrorGettingInvoicesCount,
     InvoicesControllerErrorTransferringItems,
+    InvoicesControllerErrorReinstatingInvoice,
     InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief,
     InvoiceGroupsControllerErrorDownloading,
     InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief,
@@ -920,6 +921,7 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount] = "Erro
 ThMessage[ThStatusCode.InvoiceControllerErrorGettingInvoices] = "Error getting the invoice list.";
 ThMessage[ThStatusCode.InvoiceControllerErrorGettingInvoicesCount] = "Error getting the total number of invoices matching the search criteria.";
 ThMessage[ThStatusCode.InvoicesControllerErrorTransferringItems] = "Error transferring items.";
+ThMessage[ThStatusCode.InvoicesControllerErrorReinstatingInvoice] = "Error reinstating invoice.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief] = "Error getting brief info about the required invoices.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorDownloading] = "Error downloading invoice.";
 ThMessage[ThStatusCode.InvoicesControllerErrorSavingInvoice] = "Error saving invoice.";
