@@ -3,7 +3,7 @@
         <i class="fa fa-angle-left cycle-related-invoices pull-left clickable" (click)="moveToPreviousRelatedInvoice()"></i>
         <i class="fa fa-angle-right cycle-related-invoices m-l-6 clickable" (click)="moveToNextRelatedInvoice()"></i>
         <i *ngIf="hasInvoiceRemoveRight()" class="fa fa-trash invoice-change-button pull-right clickable"></i>
-        <i class="fa fa-exchange invoice-change-button pull-right m-r-12 clickable" (click)="showInvoiceTransfer()"></i>
+        <i *ngIf="hasInvoiceTransferRight()" class="fa fa-exchange invoice-change-button pull-right m-r-12 clickable" (click)="showInvoiceTransfer()"></i>
         <div>
             <div class="invoice-title">{{ 'Invoice' | translate }} {{ currentInvoice.invoice.reference }}
                 <span *ngIf="currentInvoice.invoice.isPaid()" class="invoice-status paid-invoice-status">{{ 'Paid' | translate }}</span>

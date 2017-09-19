@@ -2,7 +2,7 @@ import { InvoiceMeta } from './InvoiceMeta';
 import { InvoicePaymentStatus } from './InvoiceDO';
 import {
     InvoicePayRight, InvoiceSetAsLossAcceptedByManagementRight, InvoiceEditItemsRight, InvoiceAddPaymentsRight,
-    InvoiceRemoveRight, InvoiceEditPayersRight, InvoiceReinstateRight
+    InvoiceRemoveRight, InvoiceEditPayersRight, InvoiceReinstateRight, InvoiceTransferRight
 
 } from './InvoiceEditRights';
 
@@ -20,7 +20,8 @@ export class InvoiceMetaFactory {
                 invoiceAddPaymentsRight: InvoiceAddPaymentsRight.Edit,
                 invoiceRemoveRight: InvoiceRemoveRight.None,
                 invoiceEditPayersRight: InvoiceEditPayersRight.Edit,
-                invoiceReinstateRight: InvoiceReinstateRight.None
+                invoiceReinstateRight: InvoiceReinstateRight.None,
+                invoiceTransferRight: InvoiceTransferRight.None,
             }),
             new InvoiceMeta({
                 invoicePaymentStatus: InvoicePaymentStatus.Paid,
@@ -31,18 +32,20 @@ export class InvoiceMetaFactory {
                 invoiceAddPaymentsRight: InvoiceAddPaymentsRight.None,
                 invoiceRemoveRight: InvoiceRemoveRight.None,
                 invoiceEditPayersRight: InvoiceEditPayersRight.None,
-                invoiceReinstateRight: InvoiceReinstateRight.Edit
+                invoiceReinstateRight: InvoiceReinstateRight.Edit,
+                invoiceTransferRight: InvoiceTransferRight.None,
             }),
             new InvoiceMeta({
                 invoicePaymentStatus: InvoicePaymentStatus.LossAcceptedByManagement,
                 displayName: "Loss Accepted By Management",
-                invoicePayRight: InvoicePayRight.None,
+                invoicePayRight: InvoicePayRight.Edit,
                 invoiceSetAsLossAcceptedByManagementRight: InvoiceSetAsLossAcceptedByManagementRight.None,
                 invoiceEditItemsRight: InvoiceEditItemsRight.None,
                 invoiceAddPaymentsRight: InvoiceAddPaymentsRight.None,
                 invoiceRemoveRight: InvoiceRemoveRight.None,
                 invoiceEditPayersRight: InvoiceEditPayersRight.None,
-                invoiceReinstateRight: InvoiceReinstateRight.None
+                invoiceReinstateRight: InvoiceReinstateRight.None,
+                invoiceTransferRight: InvoiceTransferRight.None,
             }),
             new InvoiceMeta({
                 invoicePaymentStatus: InvoicePaymentStatus.Unpaid,
@@ -53,7 +56,8 @@ export class InvoiceMetaFactory {
                 invoiceAddPaymentsRight: InvoiceAddPaymentsRight.Edit,
                 invoiceRemoveRight: InvoiceRemoveRight.Edit,
                 invoiceEditPayersRight: InvoiceEditPayersRight.Edit,
-                invoiceReinstateRight: InvoiceReinstateRight.None
+                invoiceReinstateRight: InvoiceReinstateRight.None,
+                invoiceTransferRight: InvoiceTransferRight.Edit,
             }),
             new InvoiceMeta({
                 invoicePaymentStatus: InvoicePaymentStatus.Credit,
@@ -64,7 +68,8 @@ export class InvoiceMetaFactory {
                 invoiceAddPaymentsRight: InvoiceAddPaymentsRight.None,
                 invoiceRemoveRight: InvoiceRemoveRight.None,
                 invoiceEditPayersRight: InvoiceEditPayersRight.None,
-                invoiceReinstateRight: InvoiceReinstateRight.None
+                invoiceReinstateRight: InvoiceReinstateRight.None,
+                invoiceTransferRight: InvoiceTransferRight.None,
             })
         ];
     }

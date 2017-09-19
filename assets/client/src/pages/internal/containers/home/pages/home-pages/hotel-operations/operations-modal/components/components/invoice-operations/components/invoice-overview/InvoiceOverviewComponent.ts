@@ -19,7 +19,7 @@ import { InvoicePaymentMethodVMGenerator } from "../../../../../../../../../../.
 import { InvoicePaymentMethodVM } from "../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM";
 import {
     InvoicePayRight, InvoiceSetAsLossAcceptedByManagementRight, InvoiceEditItemsRight, InvoiceAddPaymentsRight,
-    InvoiceRemoveRight, InvoiceEditPayersRight, InvoiceReinstateRight
+    InvoiceRemoveRight, InvoiceEditPayersRight, InvoiceReinstateRight, InvoiceTransferRight
 
 } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceEditRights";
 import { InvoiceMetaFactory } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory";
@@ -243,6 +243,9 @@ export class InvoiceOverviewComponent implements OnInit {
     }
     public hasInvoiceEditItemsRight(): boolean {
         return this.currentInvoice.invoiceMeta.invoiceEditItemsRight === InvoiceEditItemsRight.Edit;
+    }
+    public hasInvoiceTransferRight(): boolean {
+        return this.currentInvoice.invoiceMeta.invoiceTransferRight === InvoiceTransferRight.Edit;
     }
     public hasBookings(): boolean {
         let item = this.getFirstBookingItem();
