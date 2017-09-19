@@ -332,6 +332,9 @@ export enum ThStatusCode {
     GenerateBookingInvoiceErrorBuildingDefaultInvoice,
     GenerateCreditInvoiceError,
     ReinstateInvoiceError,
+    ReinstateInvoiceInvoiceNotPaid,
+    ReinstateInvoiceMoreCreditsFoundForTheSameReference,
+    ReinstateInvoiceCreditExists,
     InvoiceConfirmationErrorGettingData,
     InvoiceGroupsRepositoryErrorAddingInvoiceGroup,
     InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup,
@@ -345,6 +348,8 @@ export enum ThStatusCode {
     InvoiceControllerErrorGettingInvoices,
     InvoiceGroupsRepositoryErrorGettingInvoice,
     InvoiceControllerErrorGettingInvoicesCount,
+    InvoicesControllerErrorTransferringItems,
+    InvoicesControllerErrorReinstatingInvoice,
     InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief,
     InvoiceGroupsControllerErrorDownloading,
     InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief,
@@ -569,6 +574,11 @@ export enum ThStatusCode {
     InvoiceRepositoryErrorUpdatingInvoice,
     InvoiceRepositoryBookingPriceLinkError,
     InvoiceRepositoryAddInvoiceFeeError,
+    TransferInvoiceItemsTwoInvoicesRequired,
+    TransferInvoiceItemsError,
+    TransferInvoiceItemsUnpaidInvoicesNotFound,
+    TransferInvoiceItemsItemNotFound,
+    TransferInvoiceItemsLinkedItemsCannotBeMoved,
 
 }
 
@@ -894,6 +904,9 @@ ThMessage[ThStatusCode.GenerateBookingInvoiceError] = "Error adding booking rela
 ThMessage[ThStatusCode.GenerateBookingInvoiceErrorBuildingDefaultInvoice] = "Error building the default booking invoice object.";
 ThMessage[ThStatusCode.GenerateCreditInvoiceError] = "Error crediting invoice.";
 ThMessage[ThStatusCode.ReinstateInvoiceError] = "Error reinstating invoice.";
+ThMessage[ThStatusCode.ReinstateInvoiceInvoiceNotPaid] = "Only Paid invoices can be reinstated.";
+ThMessage[ThStatusCode.ReinstateInvoiceMoreCreditsFoundForTheSameReference] = "More credit invoices have been found for this invoice.";
+ThMessage[ThStatusCode.ReinstateInvoiceCreditExists] = "Credit already exists for this invoice.";
 ThMessage[ThStatusCode.InvoiceConfirmationErrorGettingData] = "Error getting data for the invoice confirmation.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error adding the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
@@ -907,6 +920,8 @@ ThMessage[ThStatusCode.InvoiceControllerErrorGettingInvoiceById] = "Error gettin
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount] = "Error reading invoice grupt document count.";
 ThMessage[ThStatusCode.InvoiceControllerErrorGettingInvoices] = "Error getting the invoice list.";
 ThMessage[ThStatusCode.InvoiceControllerErrorGettingInvoicesCount] = "Error getting the total number of invoices matching the search criteria.";
+ThMessage[ThStatusCode.InvoicesControllerErrorTransferringItems] = "Error transferring items.";
+ThMessage[ThStatusCode.InvoicesControllerErrorReinstatingInvoice] = "Error reinstating invoice.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief] = "Error getting brief info about the required invoices.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorDownloading] = "Error downloading invoice.";
 ThMessage[ThStatusCode.InvoicesControllerErrorSavingInvoice] = "Error saving invoice.";
@@ -1129,6 +1144,11 @@ ThMessage[ThStatusCode.InvoiceRepositoryProblemUpdatingInvoice] = "Problem updat
 ThMessage[ThStatusCode.InvoiceRepositoryErrorUpdatingInvoice] = "Error updating the invoice.";
 ThMessage[ThStatusCode.InvoiceRepositoryBookingPriceLinkError] = "Error linking booking prices with the invoices.";
 ThMessage[ThStatusCode.InvoiceRepositoryAddInvoiceFeeError] = "Error adding invoice fee to the invoices if necessary.";
+ThMessage[ThStatusCode.TransferInvoiceItemsTwoInvoicesRequired] = "Transfer can only be made between two invoices.";
+ThMessage[ThStatusCode.TransferInvoiceItemsError] = "Error transferring items.";
+ThMessage[ThStatusCode.TransferInvoiceItemsUnpaidInvoicesNotFound] = "The invoices have not been found. Transfer can only made between unpaid invoices.";
+ThMessage[ThStatusCode.TransferInvoiceItemsItemNotFound] = "Some items have not been found on the invoices.";
+ThMessage[ThStatusCode.TransferInvoiceItemsLinkedItemsCannotBeMoved] = "Items linked to others (e.g., included add on products) cannot be moved.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

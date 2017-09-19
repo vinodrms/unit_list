@@ -14,6 +14,8 @@ import { InvoiceAggregatedData } from "../core/domain-layer/invoices/aggregators
 import { InvoiceConfirmationVMContainer } from "../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationVMContainer";
 import { ITokenService } from "../core/domain-layer/token/ITokenService";
 import { IUser } from "../core/bootstrap/oauth/OAuthServerInitializer";
+import { TransferInvoiceItems } from "../core/domain-layer/invoices/transfer-items/TransferInvoiceItems";
+import { ReinstateInvoice } from "../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
 
 export class InvoicesController extends BaseController {
 
@@ -110,6 +112,27 @@ export class InvoicesController extends BaseController {
             this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorDownloading);
         });
     }
+
+    public transferItems(req: any, res: any) {
+        var transferInvoiceItems = new TransferInvoiceItems(req.appContext, req.sessionContext);
+        transferInvoiceItems.transfer(req.body.transferDetails)
+            .then((invoiceList: InvoiceDO[]) => {
+                this.returnSuccesfulResponse(req, res, { invoiceList: invoiceList });
+            }).catch((err: any) => {
+                this.returnErrorResponse(req, res, err, ThStatusCode.InvoicesControllerErrorTransferringItems);
+            });
+    }
+
+    public reinstateInvoice(req: any, res: any) {
+        let reinstateInvoice = new ReinstateInvoice(req.appContext, req.sessionContext);
+
+        reinstateInvoice.reinstate(req.body.invoiceId)
+            .then((invoiceList: InvoiceDO[]) => {
+                this.returnSuccesfulResponse(req, res, { invoiceList: invoiceList });
+            }).catch((err: any) => {
+                this.returnErrorResponse(req, res, err, ThStatusCode.InvoicesControllerErrorReinstatingInvoice);
+            });
+    }
 }
 
 
@@ -119,5 +142,8 @@ module.exports = {
     getInvoiceList: invoicesController.getInvoiceList.bind(invoicesController),
     getInvoiceListCount: invoicesController.getInvoiceListCount.bind(invoicesController),
     saveInvoice: invoicesController.saveInvoice.bind(invoicesController),
-    downloadInvoicePdf: invoicesController.downloadInvoicePdf.bind(invoicesController)
+    downloadInvoicePdf: invoicesController.downloadInvoicePdf.bind(invoicesController),
+    transferItems: invoicesController.transferItems.bind(invoicesController),
+    reinstateInvoice: invoicesController.reinstateInvoice.bind(invoicesController),
+
 }

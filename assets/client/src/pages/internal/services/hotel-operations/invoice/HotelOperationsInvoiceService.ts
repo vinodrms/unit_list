@@ -8,6 +8,12 @@ import { InvoicePaymentDO } from "../../invoices/data-objects/payer/InvoicePayme
 import { InvoiceItemDO } from "../../invoices/data-objects/items/InvoiceItemDO";
 import { InvoicePayerDO } from "../../invoices/data-objects/payer/InvoicePayerDO";
 
+export interface Transfer {
+    sourceInvoiceId: string;
+    destinationInvoiceId: string;
+    transactionId: string;
+}
+
 @Injectable()
 export class HotelOperationsInvoiceService {
 
@@ -136,6 +142,42 @@ export class HotelOperationsInvoiceService {
         let clonedInvoice = this.cloneInvoice(invoice);
         clonedInvoice.paymentStatus = InvoicePaymentStatus.LossAcceptedByManagement;
         return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: clonedInvoice });
+    }
+
+    transfer(transfers: Transfer[]): Observable<InvoiceDO[]> {
+        if (this.context.thUtils.isUndefinedOrNull(transfers) || transfers.length === 0) {
+            let msg = this.context.thTranslation.translate("No items have been selected for transfer.");
+            return Observable.throw(new ThError(msg));
+        }
+        return this.context.thHttp.post({
+            serverApi: ThServerApi.InvoicesTransfer,
+            body: JSON.stringify({
+                transferDetails: {
+                    transfers: transfers
+                }
+            })
+        }).map((resultObject: Object) => {
+            var invoices = new InvoicesDO();
+            invoices.buildFromObject(resultObject);
+            return invoices.invoiceList;
+        });
+    }
+
+    /**
+     * Returns the credit and the reinstated invoices
+     * @param invoice The invoice to be reinstated
+     */
+    reinstate(invoice: InvoiceDO): Observable<InvoiceDO[]> {
+        return this.context.thHttp.post({
+            serverApi: ThServerApi.InvoicesReinstate,
+            body: JSON.stringify({
+                invoiceId: invoice.id
+            })
+        }).map((resultObject: Object) => {
+            var invoices = new InvoicesDO();
+            invoices.buildFromObject(resultObject);
+            return invoices.invoiceList;
+        });
     }
 
     private cloneInvoice(invoice: InvoiceDO): InvoiceDO {

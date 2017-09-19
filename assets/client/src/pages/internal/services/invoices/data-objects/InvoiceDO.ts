@@ -112,7 +112,14 @@ export class InvoiceDO extends BaseDO {
     public isUnpaid(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.Unpaid;
     }
+    public isCredit(): boolean {
+        return this.paymentStatus === InvoicePaymentStatus.Credit;
+    }
     public isClosed(): boolean {
         return this.isPaid() || this.isLossAcceptedByManagement();
+    }
+
+    public isReinstatement(): boolean {
+        return _.isString(this.reinstatedInvoiceId) && !_.isEmpty(this.reinstatedInvoiceId);
     }
 }

@@ -12,13 +12,20 @@
         <i class="fa fa-trash related-invoice-button clickable" (click)="deleteInvoice(relatedInvoice)"></i>
         <i class="fa fa-download related-invoice-button m-r-8 clickable" (click)="downloadInvoice(relatedInvoice)"></i>
         <div class="related-invoice-info clickable" (click)="selectRelatedInvoiceIndex(i)">
-            <div class="related-invoice-title">{{ 'Invoice' | translate }} {{ relatedInvoice.reference }}
+            <div class="related-invoice-title">
+                <span *ngIf="paginationOptions.displayPaginator">
+                    #{{i + 1}} {{'of'| translate}} {{paginationOptions.totalNumberOfPages}}
+                </span>
+                {{ 'Invoice' | translate }} {{ relatedInvoice.invoice.reference }}
                 <span *ngIf="relatedInvoice.invoice.isPaid()" class="invoice-status paid-invoice-status">{{ 'Paid' | translate }}</span>
                 <span *ngIf="relatedInvoice.invoice.isLossAcceptedByManagement()" class="invoice-status loss-accepted-by-management-invoice-status">{{ 'Loss Management' | translate }}</span>
                 <span *ngIf="relatedInvoice.invoice.isUnpaid()" class="invoice-status unpaid-invoice-status">{{ 'Unpaid' | translate }}</span>
+                <span *ngIf="relatedInvoice.invoice.isCredit()" class="invoice-status credit-invoice-status">{{ 'Credit' | translate }}</span>
+
+                <span *ngIf="relatedInvoice.invoice.isReinstatement()" class="reinstatement">{{ 'Reinstatement' | translate }}</span>
             </div>
-            <div class="related-invoice-payer">{{ getPayerListString(relatedInvoice) }}</div>
-            <div class="related-invoice-total">{{ ccy }}{{ relatedInvoice.invoice.amountToPay }}</div>
+            <div class="related-invoice-payer">{{ relatedInvoice.payerListString }}</div>
+            <div class="related-invoice-total">{{ ccySymbol }}{{ relatedInvoice.invoice.amountToPay }}</div>
         </div>
     </div>
 </div>

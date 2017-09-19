@@ -12,16 +12,29 @@ import { CustomersDO } from "../customers/data-objects/CustomersDO";
 import { InvoiceVM } from "./view-models/InvoiceVM";
 import { InvoicePayerDO } from "./data-objects/payer/InvoicePayerDO";
 import { InvoiceVMHelper } from "./view-models/utils/InvoiceVMHelper";
+import { ThDateIntervalDO } from "../common/data-objects/th-dates/ThDateIntervalDO";
+import { ThDateUtils } from "../common/data-objects/th-dates/ThDateUtils";
 
 @Injectable()
 export class InvoiceService extends ALazyLoadRequestService<InvoiceVM> {
+    
+    public static DefaultDayOffset = 3650;
 
-    private customerIdListFilter: string[];
+    private _customerIdListFilter: string[];
+    private _term: string;
+    private _paidInterval: ThDateIntervalDO;
+    private _filterByPaidDateInterval: boolean;
     private paymentStatus: InvoicePaymentStatus;
-    private term: string;
 
     constructor(appContext: AppContext, private _invoiceVMHelper: InvoiceVMHelper) {
         super(appContext, ThServerApi.InvoicesCount, ThServerApi.Invoices);
+        this.buildDefaultSearchInterval();
+    }
+
+    private buildDefaultSearchInterval() {
+        var dateUtils = new ThDateUtils();
+        this._paidInterval = dateUtils.getTodayToTomorrowInterval();
+        this._paidInterval.end = dateUtils.addDaysToThDateDO(this._paidInterval.end, InvoiceService.DefaultDayOffset);
     }
 
     protected parsePageDataCore(pageDataObject: Object): Observable<InvoiceVM[]> {
@@ -31,16 +44,31 @@ export class InvoiceService extends ALazyLoadRequestService<InvoiceVM> {
     }
 
     public setCustomerIdFilter(customerId: string) {
-        this.customerIdListFilter = [customerId];
+        this._customerIdListFilter = [customerId];
         this.rebuildDefaultSearchCriteria();
     }
     public searchByText(text: string) {
-        this.term = text;
+        this._term = text;
         this.rebuildDefaultSearchCriteria();
         this.refreshData();
     }
     private rebuildDefaultSearchCriteria() {
-        this.defaultSearchCriteria = { customerIdList: this.customerIdListFilter, term: this.term, invoicePaymentStatus: this.paymentStatus };
+        this.defaultSearchCriteria = { customerIdList: this._customerIdListFilter, term: this._term, invoicePaymentStatus: this.paymentStatus, paidInterval: this._filterByPaidDateInterval? this.paidInterval: null };
+    }
+
+    public get paidInterval(): ThDateIntervalDO {
+        return this._paidInterval;
+    }
+    public set paidInterval(interval: ThDateIntervalDO) {
+        this._paidInterval = interval;
+        this.rebuildDefaultSearchCriteria();
+        this.refreshData();
+    }
+
+    public set filterByPaidDateInterval(value: boolean) {
+        this._filterByPaidDateInterval = value;
+        this.rebuildDefaultSearchCriteria();
+        this.refreshData();
     }
 
     public setPaymentStatus(status: InvoicePaymentStatus) {

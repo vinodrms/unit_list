@@ -12,6 +12,11 @@ import { SaveInvoice } from "../../../../core/domain-layer/invoices/save-invoice
 import { ThError } from "../../../../core/utils/th-responses/ThError";
 import { InvoicesTestHelper } from "./helpers/InvoicesTestHelper";
 import { InvoiceSearchResultRepoDO } from "../../../../core/data-layer/invoices/repositories/IInvoiceRepository";
+import { TransferInvoiceItems } from "../../../../core/domain-layer/invoices/transfer-items/TransferInvoiceItems";
+import { TransferInvoiceItemsDO } from "../../../../core/domain-layer/invoices/transfer-items/TransferInvoiceItemsDO";
+import { InvoiceItemDO, InvoiceItemType } from "../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO";
+import { ReinstateInvoice } from "../../../../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
+import { ThStatusCode } from "../../../../core/utils/th-responses/ThResponse";
 
 describe("Invoices Tests", function () {
     var testUtils: TestUtils;
@@ -20,6 +25,8 @@ describe("Invoices Tests", function () {
     var helper: InvoicesTestHelper;
 
     var invoice: InvoiceDO;
+    var walkInInvoice: InvoiceDO;
+    var bookingInvoice: InvoiceDO;
 
     before(function (done: any) {
         testUtils = new TestUtils();
@@ -255,6 +262,121 @@ describe("Invoices Tests", function () {
                 });
         });
 
+        it("Should reinstate the invoice by generating a credit and another unpaid invoice", function (done) {
+            let reinstateInvoice = new ReinstateInvoice(testContext.appContext, testContext.sessionContext);
+            reinstateInvoice.reinstate(invoice.id)
+                .then((invoices: InvoiceDO[]) => {
+                    should.equal(invoices.length, 2);
+                    let credit: InvoiceDO = _.find(invoices, (i: InvoiceDO) => { return i.paymentStatus === InvoicePaymentStatus​​.Credit });
+                    should.exist(credit);
+                    let reinstatement: InvoiceDO = _.find(invoices, (i: InvoiceDO) => { return i.paymentStatus === InvoicePaymentStatus​​.Unpaid });
+                    should.exist(reinstatement);
+
+                    should.equal(reinstatement.reference.startsWith("TEMP"), true);
+                    should.equal(_.isNumber(reinstatement.paidTimestamp), false);
+                    should.equal(credit.reference, invoice.reference);
+                    should.equal(_.isNumber(credit.paidTimestamp), true);
+
+                    done();
+                }).catch((e: ThError) => {
+                    done(e);
+                });
+        });
+        it("Should not reinstate the same invoice more than once", function (done) {
+            let reinstateInvoice = new ReinstateInvoice(testContext.appContext, testContext.sessionContext);
+            reinstateInvoice.reinstate(invoice.id)
+                .then((invoices: InvoiceDO[]) => {
+                    done(new Error("Managed to reinstate the same Paid invoice more than once!"));
+                }).catch((e: ThError) => {
+                    should.equal(e.getThStatusCode(), ThStatusCode.ReinstateInvoiceCreditExists);
+                    done();
+                });
+        });
+    });
+
+    describe("Invoice transfer tests", function () {
+        it("Should transfer an AddOnProduct item from an invoice to another", function (done) {
+            let source = helper.getUnpaidWalkInInvoice();
+            let item: InvoiceItemDO = source.itemList[0];
+            let destination = helper.getUnpaidBookingInvoice();
+
+            let transferInvoiceItems = new TransferInvoiceItems(testContext.appContext, testContext.sessionContext);
+            let params = new TransferInvoiceItemsDO();
+            params.transfers = [
+                {
+                    sourceInvoiceId: source.id,
+                    destinationInvoiceId: destination.id,
+                    transactionId: item.transactionId
+                }
+            ];
+            transferInvoiceItems.transfer(params).then((updatedInvoices: InvoiceDO[]) => {
+                should.equal(updatedInvoices.length, 2);
+
+                let updatedSource: InvoiceDO = _.find(updatedInvoices, i => { return i.id === source.id });
+                should.exist(updatedSource);
+
+                let updatedDestination: InvoiceDO = _.find(updatedInvoices, i => { return i.id === destination.id });
+                should.exist(updatedDestination);
+
+                should.equal(source.itemList.length, updatedSource.itemList.length + 1);
+                should.equal(source.amountToPay,
+                    testContext.appContext.thUtils.roundNumberToTwoDecimals(updatedSource.amountToPay + item.getTotalPrice()));
+
+                should.equal(destination.itemList.length, updatedDestination.itemList.length - 1);
+                should.equal(testContext.appContext.thUtils.roundNumberToTwoDecimals(destination.amountToPay + item.getTotalPrice()),
+                    updatedDestination.amountToPay);
+
+                walkInInvoice = updatedSource;
+                bookingInvoice = updatedDestination;
+
+                done();
+            }).catch((e: ThError) => {
+                done(e);
+            });
+        });
+        it("Should transfer a Booking with its child items from an invoice to another", function (done) {
+            let source = bookingInvoice;
+            let destination = walkInInvoice;
+
+            let item: InvoiceItemDO = _.find(source.itemList, (i: InvoiceItemDO) => { return i.type === InvoiceItemType​.​Booking; });
+            should.exist(item);
+            let relatedItems: InvoiceItemDO[] = _.filter(source.itemList, (i: InvoiceItemDO) => { return i.parentTransactionId === item.transactionId; });
+            should.equal(relatedItems.length > 0, true);
+
+            let transferInvoiceItems = new TransferInvoiceItems(testContext.appContext, testContext.sessionContext);
+            let params = new TransferInvoiceItemsDO();
+            params.transfers = [
+                {
+                    sourceInvoiceId: source.id,
+                    destinationInvoiceId: destination.id,
+                    transactionId: item.transactionId
+                }
+            ];
+            transferInvoiceItems.transfer(params).then((updatedInvoices: InvoiceDO[]) => {
+                should.equal(updatedInvoices.length, 2);
+
+                let updatedSource: InvoiceDO = _.find(updatedInvoices, i => { return i.id === source.id });
+                should.exist(updatedSource);
+
+                let updatedDestination: InvoiceDO = _.find(updatedInvoices, i => { return i.id === destination.id });
+                should.exist(updatedDestination);
+
+                should.equal(source.itemList.length, updatedSource.itemList.length + 1 + relatedItems.length);
+                should.equal(source.amountToPay,
+                    testContext.appContext.thUtils.roundNumberToTwoDecimals(updatedSource.amountToPay + item.getTotalPrice() + helper.getTotalPrice(relatedItems)));
+
+                should.equal(destination.itemList.length, updatedDestination.itemList.length - 1 - relatedItems.length);
+                should.equal(testContext.appContext.thUtils.roundNumberToTwoDecimals(destination.amountToPay + item.getTotalPrice() + helper.getTotalPrice(relatedItems)),
+                    updatedDestination.amountToPay);
+
+                walkInInvoice = updatedSource;
+                bookingInvoice = updatedDestination;
+
+                done();
+            }).catch((e: ThError) => {
+                done(e);
+            });
+        });
     });
 
 });

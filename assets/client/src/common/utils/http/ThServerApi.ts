@@ -109,6 +109,8 @@ export enum ThServerApi {
     InvoicesItem,
     InvoicesSave,
     InvoicesDownload,
+    InvoicesTransfer,
+    InvoicesReinstate,
 
     YieldManagerYieldPriceProducts,
     YieldManagerOpenDynamicPrice,
@@ -231,6 +233,8 @@ ThServerApiUrl[ThServerApi.InvoicesCount] = "/invoices/count";
 ThServerApiUrl[ThServerApi.InvoicesItem] = "/invoices/item";
 ThServerApiUrl[ThServerApi.InvoicesSave] = "/invoices/save";
 ThServerApiUrl[ThServerApi.InvoicesDownload] = "/invoices/download";
+ThServerApiUrl[ThServerApi.InvoicesTransfer] = "/invoices/transfer";
+ThServerApiUrl[ThServerApi.InvoicesReinstate] = "/invoices/reinstate";
 
 /* URLs prefixed with yManager instead of yieldManager because of AdBlock rules (EasyList) which contain the following definition: "/yieldmanager/*" */
 ThServerApiUrl[ThServerApi.YieldManagerYieldPriceProducts] = "/yManager/yieldPriceProducts";

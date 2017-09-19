@@ -18,9 +18,11 @@ export class InvoiceItemDO extends BaseDO {
     meta: IInvoiceItemMeta;
     transactionId: string;
     timestamp: number;
+    // attribute used for grouping items; e.g., a Booking item can be followed by AddOnProduct or InvoiceFee items
+    parentTransactionId: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "type", "transactionId", "timestamp"];
+        return ["id", "type", "transactionId", "timestamp", "parentTransactionId"];
     }
 
     public buildFromObject(object: Object) {

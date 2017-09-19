@@ -142,6 +142,7 @@ export class InvoiceDO extends BaseDO {
         if (booking.price.hasDeductedCommission()) {
             var invoiceRoomCommissionItem = new InvoiceItemDO();
             invoiceRoomCommissionItem.buildItemFromRoomCommission(booking.price.deductedCommissionPrice);
+            invoiceRoomCommissionItem.parentTransactionId = item.transactionId;
             bookingInvoiceItemList.push(invoiceRoomCommissionItem);
         }
 
@@ -150,6 +151,7 @@ export class InvoiceDO extends BaseDO {
             _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
                 var includedItem = new InvoiceItemDO();
                 includedItem.buildFromObject(invoiceItem);
+                includedItem.parentTransactionId = item.transactionId;
 
                 bookingInvoiceItemList = bookingInvoiceItemList.concat(includedItem);
             });
