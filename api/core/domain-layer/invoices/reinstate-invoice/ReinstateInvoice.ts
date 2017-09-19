@@ -7,6 +7,7 @@ import { ThStatusCode } from "../../../utils/th-responses/ThResponse";
 import { ThLogger, ThLogLevel } from "../../../utils/logging/ThLogger";
 
 export class ReinstateInvoice {
+    private invoice: InvoiceDO;
 
     constructor(private appContext: AppContext, private sessionContext: SessionContext) {
     }
@@ -30,9 +31,19 @@ export class ReinstateInvoice {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to reinstante an invoice not Paid", { invoiceId: invoiceId }, thError);
                     throw thError;
                 }
+                this.invoice = invoice;
+
+                return this.getExistingCreditFor(invoice);
+            }).then((existingCredit: InvoiceDO) => {
+                if (!this.appContext.thUtils.isUndefinedOrNull(existingCredit)) {
+                    var thError = new ThError(ThStatusCode.ReinstateInvoiceCreditExists, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "credit already exists for this invoice", { invoiceId: invoiceId }, thError);
+                    throw thError;
+                }
+
                 let timestamp = (new Date()).getTime();
-                let credit = this.getCreditInvoiceFor(invoice, timestamp);
-                let reinstatement = this.getReinstatedInvoiceFor(invoice, timestamp);
+                let credit = this.getCreditInvoiceFor(this.invoice, timestamp);
+                let reinstatement = this.getReinstatedInvoiceFor(this.invoice, timestamp);
                 return this.addInvoices([credit, reinstatement]);
             }).then((invoices: InvoiceDO[]) => {
                 resolve(invoices);
@@ -41,6 +52,28 @@ export class ReinstateInvoice {
                 ThLogger.getInstance().logError(ThLogLevel.Error, "error reinstating invoice", { invoiceId: invoiceId }, thError);
                 reject(thError);
             });
+    }
+
+    private getExistingCreditFor(invoice: InvoiceDO): Promise<InvoiceDO> {
+        return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
+            let invoiceRepo = this.appContext.getRepositoryFactory().getInvoiceRepository();
+            invoiceRepo.getInvoiceList({ hotelId: this.sessionContext.sessionDO.hotel.id }, {
+                invoicePaymentStatus: InvoicePaymentStatus.Credit,
+                reference: invoice.reference
+            }).then(result => {
+                if (result.invoiceList.length > 1) {
+                    var thError = new ThError(ThStatusCode.ReinstateInvoiceMoreCreditsFoundForTheSameReference, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Error, "more than 1 credit invoice found for the same reference", { invoiceId: invoice.id }, thError);
+                    throw thError;
+                }
+                else if (result.invoiceList.length == 1) {
+                    resolve(result.invoiceList[0]);
+                }
+                else if (result.invoiceList.length == 0) {
+                    resolve(null);
+                }
+            }).catch(err => { reject(err); })
+        });
     }
 
     private getCreditInvoiceFor(invoice: InvoiceDO, timestamp: number): InvoiceDO {

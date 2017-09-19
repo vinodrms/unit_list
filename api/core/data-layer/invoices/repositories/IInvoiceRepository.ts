@@ -21,6 +21,7 @@ export interface InvoiceSearchCriteriaRepoDO {
     groupId?: string;
     term?: string;
     invoiceIdList?: string[];
+    reference?: string;
 }
 
 export interface InvoiceSearchResultRepoDO {

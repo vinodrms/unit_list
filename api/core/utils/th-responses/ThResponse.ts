@@ -333,6 +333,8 @@ export enum ThStatusCode {
     GenerateCreditInvoiceError,
     ReinstateInvoiceError,
     ReinstateInvoiceInvoiceNotPaid,
+    ReinstateInvoiceMoreCreditsFoundForTheSameReference,
+    ReinstateInvoiceCreditExists,
     InvoiceConfirmationErrorGettingData,
     InvoiceGroupsRepositoryErrorAddingInvoiceGroup,
     InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup,
@@ -902,6 +904,8 @@ ThMessage[ThStatusCode.GenerateBookingInvoiceErrorBuildingDefaultInvoice] = "Err
 ThMessage[ThStatusCode.GenerateCreditInvoiceError] = "Error crediting invoice.";
 ThMessage[ThStatusCode.ReinstateInvoiceError] = "Error reinstating invoice.";
 ThMessage[ThStatusCode.ReinstateInvoiceInvoiceNotPaid] = "Only Paid invoices can be reinstated.";
+ThMessage[ThStatusCode.ReinstateInvoiceMoreCreditsFoundForTheSameReference] = "More credit invoices have been found for this invoice.";
+ThMessage[ThStatusCode.ReinstateInvoiceCreditExists] = "Credit already exists for this invoice.";
 ThMessage[ThStatusCode.InvoiceConfirmationErrorGettingData] = "Error getting data for the invoice confirmation.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error adding the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
