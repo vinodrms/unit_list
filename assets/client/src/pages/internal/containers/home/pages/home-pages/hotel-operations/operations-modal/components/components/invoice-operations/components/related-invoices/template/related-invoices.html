@@ -17,6 +17,8 @@
                 <span *ngIf="relatedInvoice.invoice.isLossAcceptedByManagement()" class="invoice-status loss-accepted-by-management-invoice-status">{{ 'Loss Management' | translate }}</span>
                 <span *ngIf="relatedInvoice.invoice.isUnpaid()" class="invoice-status unpaid-invoice-status">{{ 'Unpaid' | translate }}</span>
                 <span *ngIf="relatedInvoice.invoice.isCredit()" class="invoice-status credit-invoice-status">{{ 'Credit' | translate }}</span>
+
+                <span *ngIf="relatedInvoice.invoice.isReinstatement()" class="reinstatement">{{ 'Reinstatement' | translate }}</span>
             </div>
             <div class="related-invoice-payer">{{ relatedInvoice.payerListString }}</div>
             <div class="related-invoice-total">{{ ccy }}{{ relatedInvoice.invoice.amountToPay }}</div>

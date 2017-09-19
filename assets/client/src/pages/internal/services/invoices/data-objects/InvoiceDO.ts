@@ -118,4 +118,8 @@ export class InvoiceDO extends BaseDO {
     public isClosed(): boolean {
         return this.isPaid() || this.isLossAcceptedByManagement();
     }
+
+    public isReinstatement(): boolean {
+        return _.isString(this.reinstatedInvoiceId) && !_.isEmpty(this.reinstatedInvoiceId);
+    }
 }
