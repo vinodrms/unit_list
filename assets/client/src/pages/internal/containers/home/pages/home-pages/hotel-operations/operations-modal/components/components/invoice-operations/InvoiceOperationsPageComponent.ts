@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { Component, Input, OnInit } from '@angular/core';
 import { HotelInvoiceOperationsPageParam } from "./utils/HotelInvoiceOperationsPageParam";
 import { CustomerVM } from "../../../../../../../../../services/customers/view-models/CustomerVM";
@@ -18,8 +19,8 @@ import { InvoiceOperationsPageData } from "./utils/InvoiceOperationsPageData";
 import { InvoicePayerDO } from "../../../../../../../../../services/invoices/data-objects/payer/InvoicePayerDO";
 import { InvoiceMetaFactory } from "../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory";
 import { HotelOperationsResultService } from "../../../services/HotelOperationsResultService";
-
-import _ = require('underscore');
+import { InvoiceChangedOptions } from "./components/invoice-overview/InvoiceOverviewComponent";
+import { PaginationOptions } from "./utils/PaginationOptions";
 
 enum PageType {
     InvoiceOverview,
@@ -42,6 +43,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
     private pageType: PageType;
     private pageData: InvoiceOperationsPageData;
     private invoiceMetaFactory: InvoiceMetaFactory;
+    private paginationOptions: PaginationOptions;
 
     constructor(private context: AppContext,
         private invoiceVMHelper: InvoiceVMHelper,
@@ -53,6 +55,10 @@ export class InvoiceOperationsPageComponent implements OnInit {
         this.currentRelatedInvoiceIndex = 0;
         this.relatedInvoices = [];
         this.invoiceMetaFactory = new InvoiceMetaFactory();
+        this.paginationOptions = {
+            totalNumberOfPages: 0,
+            displayPaginator: false
+        }
     }
 
     ngOnInit(): void {
@@ -85,6 +91,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
             this.currentRelatedInvoiceIndex = _.findIndex(this.relatedInvoices, (invoiceVM: InvoiceVM) => {
                 return invoiceVM.invoice.id == this.invoiceOperationsPageParam.invoiceId;
             });
+            this.updatePaginationOptions();
         }, ((err: ThError) => {
             this.context.toaster.error(err.message);
         }), () => {
@@ -95,6 +102,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
         this.relatedInvoices = [
             this.createNewInvoiceVM()
         ];
+        this.updatePaginationOptions();
         if (this.context.thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
             this.isLoading = false;
             return;
@@ -120,6 +128,12 @@ export class InvoiceOperationsPageComponent implements OnInit {
         invoiceVM.customerList = [];
         invoiceVM.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(invoiceVM.invoice.paymentStatus);
         return invoiceVM;
+    }
+    private updatePaginationOptions() {
+        this.paginationOptions = {
+            totalNumberOfPages: this.relatedInvoices.length,
+            displayPaginator: this.relatedInvoices.length > 1
+        }
     }
 
     private addCustomerToInvoiceVM(invoiceVM: InvoiceVM, customer: CustomerDO) {
@@ -157,7 +171,21 @@ export class InvoiceOperationsPageComponent implements OnInit {
         this.currentRelatedInvoiceIndex = index;
         this.showInvoiceOverview();
     }
-    public markInvoiceChanged() {
+    public markInvoiceChanged(options: InvoiceChangedOptions) {
         this.hotelOperationsResultService.markInvoiceChanged(this.relatedInvoices[this.currentRelatedInvoiceIndex]);
+
+        if (!options.reloadInvoiceGroup) {
+            return;
+        }
+        if (!this.context.thUtils.isUndefinedOrNull(options.selectedInvoiceId)) {
+            this.invoiceOperationsPageParam.invoiceId = options.selectedInvoiceId;
+        }
+        if (!this.context.thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceId)) {
+            this.readExistingInvoice();
+        }
+    }
+
+    private showPagination(): boolean {
+        return this.relatedInvoices.length > 1;
     }
 }

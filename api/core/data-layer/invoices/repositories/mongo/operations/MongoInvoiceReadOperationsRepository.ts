@@ -120,6 +120,7 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
             // for now the search term is only checked against the invoice reference
             mongoQueryBuilder.addRegex("reference", searchCriteria.term);
             mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.invoiceIdList);
+            mongoQueryBuilder.addExactMatch("reference", searchCriteria.reference);
         }
 
         return mongoQueryBuilder.processedQuery;

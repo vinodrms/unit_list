@@ -1025,5 +1025,10 @@ export var EnglishTranslations: Object = {
     "Invoice Reference": "Invoice Reference",
     "Payer List": "Payer List",
     "No items have been selected for transfer.": "No items have been selected for transfer.",
+    "Reinstate Invoice": "Reinstate Invoice",
+    "Loss By Management": "Loss By Management",
+    "Are you sure you want to reinstate this invoice?": "Are you sure you want to reinstate this invoice?",
+    "Pay Invoice": "Pay Invoice",
+    "Reinstatement": "Reinstatement",
 
 };

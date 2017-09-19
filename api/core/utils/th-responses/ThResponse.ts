@@ -332,6 +332,9 @@ export enum ThStatusCode {
     GenerateBookingInvoiceErrorBuildingDefaultInvoice,
     GenerateCreditInvoiceError,
     ReinstateInvoiceError,
+    ReinstateInvoiceInvoiceNotPaid,
+    ReinstateInvoiceMoreCreditsFoundForTheSameReference,
+    ReinstateInvoiceCreditExists,
     InvoiceConfirmationErrorGettingData,
     InvoiceGroupsRepositoryErrorAddingInvoiceGroup,
     InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup,
@@ -346,6 +349,7 @@ export enum ThStatusCode {
     InvoiceGroupsRepositoryErrorGettingInvoice,
     InvoiceControllerErrorGettingInvoicesCount,
     InvoicesControllerErrorTransferringItems,
+    InvoicesControllerErrorReinstatingInvoice,
     InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief,
     InvoiceGroupsControllerErrorDownloading,
     InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief,
@@ -900,6 +904,9 @@ ThMessage[ThStatusCode.GenerateBookingInvoiceError] = "Error adding booking rela
 ThMessage[ThStatusCode.GenerateBookingInvoiceErrorBuildingDefaultInvoice] = "Error building the default booking invoice object.";
 ThMessage[ThStatusCode.GenerateCreditInvoiceError] = "Error crediting invoice.";
 ThMessage[ThStatusCode.ReinstateInvoiceError] = "Error reinstating invoice.";
+ThMessage[ThStatusCode.ReinstateInvoiceInvoiceNotPaid] = "Only Paid invoices can be reinstated.";
+ThMessage[ThStatusCode.ReinstateInvoiceMoreCreditsFoundForTheSameReference] = "More credit invoices have been found for this invoice.";
+ThMessage[ThStatusCode.ReinstateInvoiceCreditExists] = "Credit already exists for this invoice.";
 ThMessage[ThStatusCode.InvoiceConfirmationErrorGettingData] = "Error getting data for the invoice confirmation.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error adding the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
@@ -914,6 +921,7 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount] = "Erro
 ThMessage[ThStatusCode.InvoiceControllerErrorGettingInvoices] = "Error getting the invoice list.";
 ThMessage[ThStatusCode.InvoiceControllerErrorGettingInvoicesCount] = "Error getting the total number of invoices matching the search criteria.";
 ThMessage[ThStatusCode.InvoicesControllerErrorTransferringItems] = "Error transferring items.";
+ThMessage[ThStatusCode.InvoicesControllerErrorReinstatingInvoice] = "Error reinstating invoice.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief] = "Error getting brief info about the required invoices.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorDownloading] = "Error downloading invoice.";
 ThMessage[ThStatusCode.InvoicesControllerErrorSavingInvoice] = "Error saving invoice.";

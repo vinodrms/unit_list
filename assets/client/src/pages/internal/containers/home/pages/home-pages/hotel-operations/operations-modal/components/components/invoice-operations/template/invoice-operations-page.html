@@ -5,18 +5,20 @@
 		<invoice-overview
 			[relatedInvoices]="relatedInvoices"
     		[currentRelatedInvoiceIndex]="currentRelatedInvoiceIndex"
-			[invoiceOperationsPageData]="pageData"
+            [invoiceOperationsPageData]="pageData"
+            [paginationOptions]="paginationOptions"
 			(showRelatedInvoicesClicked)="showRelatedInvoices()"
 			(showInvoiceTransferClicked)="showInvoiceTransfer()"
 			(currentInvoiceChanged)="currentRelatedInvoiceIndex = $event"
-			(invoiceChanged)="markInvoiceChanged()"
+			(invoiceChanged)="markInvoiceChanged($event)"
 		>
 		</invoice-overview>
 	</div>
 	<div class="full-height" *ngIf="shouldShowRelatedInvoices()">
 		<related-invoices
 			[relatedInvoices]="relatedInvoices"
-			[invoiceOperationsPageData]="pageData"
+            [invoiceOperationsPageData]="pageData"
+            [paginationOptions]="paginationOptions"
 			(backToInvoiceOverviewClicked)="showInvoiceOverview()"
 			(relatedInvoiceIndexSelected)="selectRelatedInvoiceIndex($event)"
 		>

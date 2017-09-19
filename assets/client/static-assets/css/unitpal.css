@@ -4095,6 +4095,23 @@ textarea.payer-details {
     background-color: rgba(204, 204, 204, 1);
 }
 
+.invoice-summary .credit-invoice-status,
+.related-invoice .credit-invoice-status {
+    color: #ffffff;
+    background-color: rgb(255, 190, 1);
+}
+
+.invoice-summary .reinstatement,
+.related-invoice .reinstatement {
+    color: #999999;
+    font-weight: 200;
+}
+
+.invoice-summary .disabled,
+.related-invoice .disabled {
+    color: rgb(201, 215, 223);
+}
+
 .invoice-summary .related-invoices {
     font-weight: 400;
     font-style: normal;

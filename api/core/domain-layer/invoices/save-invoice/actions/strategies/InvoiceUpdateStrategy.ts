@@ -48,8 +48,13 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
         // loss by management invoices can only be marked as Paid
         if (existingInvoice.paymentStatus == InvoicePaymentStatus.LossAcceptedByManagement) {
             if (this.invoiceToSave.paymentStatus == InvoicePaymentStatus.Paid) {
+                this.checkAmountsEqualityOn(existingInvoice);
                 existingInvoice.paymentStatus = InvoicePaymentStatus.Paid;
             }
+            this.addNewPayersOn(existingInvoice);
+            this.addNewPaymentsOn(existingInvoice);
+            this.deletePayersFrom(existingInvoice);
+            existingInvoice.recomputePrices();
             return;
         }
         // otherwise the existing invoice is unpaid
@@ -72,11 +77,8 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
         //  1. The amount to pay is the same with the paid amount
         //  2. There is at least one item on the invoice
         if (existingInvoice.isClosed()) {
-            if (existingInvoice.isPaid() && existingInvoice.amountPaid != existingInvoice.amountToPay) {
-                var thError = new ThError(ThStatusCode.SaveInvoiceAmountsNotMatching, null);
-                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot close an invoice on which the amount to pay is not equal with the paid amount",
-                    this.invoiceToSave, thError);
-                throw thError;
+            if (existingInvoice.isPaid()) {
+                this.checkAmountsEqualityOn(existingInvoice);
             }
             if (existingInvoice.itemList.length == 0) {
                 var thError = new ThError(ThStatusCode.SaveInvoiceCannotCloseInvoiceWithNoItems, null);
@@ -84,6 +86,14 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
                     this.invoiceToSave, thError);
                 throw thError;
             }
+        }
+    }
+    private checkAmountsEqualityOn(existingInvoice: InvoiceDO) {
+        if (existingInvoice.amountPaid != existingInvoice.amountToPay) {
+            var thError = new ThError(ThStatusCode.SaveInvoiceAmountsNotMatching, null);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot close an invoice on which the amount to pay is not equal with the paid amount",
+                this.invoiceToSave, thError);
+            throw thError;
         }
     }
 

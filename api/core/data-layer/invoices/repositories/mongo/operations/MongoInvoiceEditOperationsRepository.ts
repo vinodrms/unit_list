@@ -161,7 +161,8 @@ export class MongoInvoiceEditOperationsRepository extends MongoRepository {
                     });
             }
             //attach paid dates if it's a new invoice and paymentStatus=PAID
-            else if (invoice.paymentStatus === InvoicePaymentStatus.Paid && _.isUndefined(oldPaymentStatus)) {
+            else if ((invoice.paymentStatus === InvoicePaymentStatus.Paid || invoice.paymentStatus === InvoicePaymentStatus.Credit)
+                && _.isUndefined(oldPaymentStatus)) {
                 this.setPaidTimestampOnInvoice(invoice);
                 resolve(invoice);
             }

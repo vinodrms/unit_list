@@ -32,3 +32,8 @@ export enum InvoiceReinstateRight {
     Edit,
     None
 }
+
+export enum InvoiceTransferRight {
+    Edit,
+    None
+}

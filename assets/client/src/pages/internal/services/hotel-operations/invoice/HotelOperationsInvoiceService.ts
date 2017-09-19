@@ -163,6 +163,23 @@ export class HotelOperationsInvoiceService {
         });
     }
 
+    /**
+     * Returns the credit and the reinstated invoices
+     * @param invoice The invoice to be reinstated
+     */
+    reinstate(invoice: InvoiceDO): Observable<InvoiceDO[]> {
+        return this.context.thHttp.post({
+            serverApi: ThServerApi.InvoicesReinstate,
+            body: JSON.stringify({
+                invoiceId: invoice.id
+            })
+        }).map((resultObject: Object) => {
+            var invoices = new InvoicesDO();
+            invoices.buildFromObject(resultObject);
+            return invoices.invoiceList;
+        });
+    }
+
     private cloneInvoice(invoice: InvoiceDO): InvoiceDO {
         let clone = new InvoiceDO();
         clone.buildFromObject(invoice);
