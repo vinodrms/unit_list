@@ -19,14 +19,14 @@ import { InvoicePaymentMethodVMGenerator } from "../../../../../../../../../../.
 import { InvoicePaymentMethodVM } from "../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM";
 import {
     InvoicePayRight, InvoiceSetAsLossAcceptedByManagementRight, InvoiceEditItemsRight, InvoiceAddPaymentsRight,
-    InvoiceRemoveRight, InvoiceEditPayersRight, InvoiceReinstateRight
+    InvoiceRemoveRight, InvoiceEditPayersRight, InvoiceReinstateRight, InvoiceDownloadRight
 
 } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceEditRights";
 import { InvoiceMetaFactory } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory";
 import { AddInvoicePaymentModalService } from "./modal/services/AddInvoicePaymentModalService";
 import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
 import { InvoiceItemVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM";
-
+import {ThServerApi} from "../../../../../../../../../../../../../common/utils/http/ThServerApi";
 
 @Component({
     selector: 'invoice-overview',
@@ -244,6 +244,9 @@ export class InvoiceOverviewComponent implements OnInit {
     public hasInvoiceEditItemsRight(): boolean {
         return this.currentInvoice.invoiceMeta.invoiceEditItemsRight === InvoiceEditItemsRight.Edit;
     }
+    public hasInvoiceDownloadRight(): boolean {
+        return this.currentInvoice.invoiceMeta.invoiceDownloadRight === InvoiceDownloadRight.Available;
+    }
     public hasBookings(): boolean {
         let item = this.getFirstBookingItem();
         return !this.context.thUtils.isUndefinedOrNull(item);
@@ -309,5 +312,34 @@ export class InvoiceOverviewComponent implements OnInit {
 
     public emitInvoiceChanged() {
         this.invoiceChanged.emit();
+    }
+
+ /*   public getInvoicePdfUrl(payer: CustomerDO): string {
+        return 'api/invoices/pdf?invoiceId='
+            + this.currentInvoice.invoice.id
+            + '&customerId='
+            + payer.id;
+    }*/
+
+
+    public downloadInvoice(payer: CustomerDO) {
+        debugger
+        let payerIndex = _.findIndex(this.payerList, (item: CustomerDO) => {
+            return payer.id === item.id;
+        });
+        let accessToken = this.context.tokenService.accessToken;
+        this.context.thHttp.get({
+            serverApi: ThServerApi.InvoicesDownload,
+            queryParameters: {
+                invoiceId: this.currentInvoice.invoice.id,
+                customerId: payer.id,
+                payerIndex: payerIndex,
+                token: accessToken
+            },
+        }).subscribe((data: any) => {
+            window.open(data);
+		}, (err: ThError) => {
+            this.context.toaster.error(err.message);
+		});
     }
 }

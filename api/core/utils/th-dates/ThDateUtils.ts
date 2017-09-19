@@ -77,4 +77,11 @@ export class ThDateUtils {
 		let moment = this.convertThDateDOToMoment(inDate).endOf(unitOfTime);
 		return this.convertMomentToThDateDO(moment);
 	}
+	public convertTimestampToThTimestamp(timestamp: number): ThTimestampDO {
+		var thTimestamp = new ThTimestampDO();
+		var convertedMoment: moment.Moment = moment(timestamp);
+		thTimestamp.thDateDO = this.convertMomentToThDateDO(convertedMoment);
+		thTimestamp.thHourDO = this.convertMomentToThHourDO(convertedMoment);
+		return thTimestamp;
+	}
 }
