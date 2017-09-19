@@ -1,10 +1,10 @@
+import _ = require('underscore');
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { AppContext } from "../../../../../../../../../../../../../common/utils/AppContext";
 import { InvoiceVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceVM";
 import { CustomerDO } from "../../../../../../../../../../../services/customers/data-objects/CustomerDO";
 import { InvoiceOperationsPageData } from "../../utils/InvoiceOperationsPageData";
-
-import _ = require('underscore');
+import { PaginationOptions } from "../../utils/PaginationOptions";
 
 @Component({
     selector: 'related-invoices',
@@ -14,6 +14,7 @@ export class RelatedInvoicesComponent implements OnInit {
 
     @Input() relatedInvoices: InvoiceVM[];
     @Input() invoiceOperationsPageData: InvoiceOperationsPageData;
+    @Input() paginationOptions: PaginationOptions;
     @Output() backToInvoiceOverviewClicked = new EventEmitter();
     @Output() relatedInvoiceIndexSelected = new EventEmitter();
 

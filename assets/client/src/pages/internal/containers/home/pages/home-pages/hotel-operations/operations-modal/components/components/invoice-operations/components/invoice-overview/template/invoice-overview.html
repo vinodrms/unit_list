@@ -1,11 +1,22 @@
 <div class="invoice-overview">
     <div class="invoice-summary">
-        <i class="fa fa-angle-left cycle-related-invoices pull-left clickable" (click)="moveToPreviousRelatedInvoice()"></i>
-        <i class="fa fa-angle-right cycle-related-invoices m-l-6 clickable" (click)="moveToNextRelatedInvoice()"></i>
+        <i [ngClass]="{'disabled': !paginationOptions.displayPaginator, 'clickable': paginationOptions.displayPaginator}"
+            class="fa fa-angle-left cycle-related-invoices pull-left"
+            (click)="moveToPreviousRelatedInvoice()">
+        </i>
+        <i [ngClass]="{'disabled': !paginationOptions.displayPaginator, 'clickable': paginationOptions.displayPaginator}"
+            class="fa fa-angle-right cycle-related-invoices m-l-6"
+            (click)="moveToNextRelatedInvoice()">
+        </i>
+
         <i *ngIf="hasInvoiceRemoveRight()" class="fa fa-trash invoice-change-button pull-right clickable"></i>
         <i *ngIf="hasInvoiceTransferRight()" class="fa fa-exchange invoice-change-button pull-right m-r-12 clickable" (click)="showInvoiceTransfer()"></i>
         <div>
-            <div class="invoice-title">{{ 'Invoice' | translate }} {{ currentInvoice.invoice.reference }}
+            <div class="invoice-title">
+                <span *ngIf="paginationOptions.displayPaginator">
+                    #{{currentRelatedInvoiceIndex + 1}} {{'of'| translate}} {{paginationOptions.totalNumberOfPages}}
+                </span>
+                {{ 'Invoice' | translate }} {{ currentInvoice.invoice.reference }}
                 <span *ngIf="currentInvoice.invoice.isPaid()" class="invoice-status paid-invoice-status">{{ 'Paid' | translate }}</span>
                 <span *ngIf="currentInvoice.invoice.isLossAcceptedByManagement()" class="invoice-status loss-accepted-by-management-invoice-status">{{ 'Loss Management' | translate }}</span>
                 <span *ngIf="currentInvoice.invoice.isUnpaid()" class="invoice-status unpaid-invoice-status">{{ 'Unpaid' | translate }}</span>
@@ -19,7 +30,7 @@
     <div class="invoice-payer-section row m-b-16">
         <div class="payer-box col-xs-5 col-md-3" *ngFor="let payer of payerList">
             <i class="fa fa-user payer-icon"></i>
-            <div class="payer-dropdown">
+            <div class="payer-dropdown" *ngIf="hasBookings() || hasInvoiceAddPaymentsRight() || hasInvoiceEditPayersRight()">
                 <button class="fa fa-angle-down clickable"></button>
                 <ul>
                     <li *ngIf="hasBookings()" class="clickable" (click)="viewFirstBooking()">{{ 'View Booking' | translate }}</li>

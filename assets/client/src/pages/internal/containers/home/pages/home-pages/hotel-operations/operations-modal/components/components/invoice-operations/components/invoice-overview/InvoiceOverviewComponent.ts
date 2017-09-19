@@ -26,6 +26,7 @@ import { InvoiceMetaFactory } from "../../../../../../../../../../../services/in
 import { AddInvoicePaymentModalService } from "./modal/services/AddInvoicePaymentModalService";
 import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
 import { InvoiceItemVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM";
+import { PaginationOptions } from "../../utils/PaginationOptions";
 
 export interface InvoiceChangedOptions {
     reloadInvoiceGroup: boolean;
@@ -42,6 +43,7 @@ export class InvoiceOverviewComponent implements OnInit {
     @Input() relatedInvoices: InvoiceVM[];
     @Input() currentRelatedInvoiceIndex: number;
     @Input() invoiceOperationsPageData: InvoiceOperationsPageData;
+    @Input() paginationOptions: PaginationOptions;
     @Output() showRelatedInvoicesClicked = new EventEmitter();
     @Output() showInvoiceTransferClicked = new EventEmitter();
     @Output() currentInvoiceChanged = new EventEmitter();
@@ -79,10 +81,10 @@ export class InvoiceOverviewComponent implements OnInit {
                 this.currentInvoice.invoice = updatedInvoice;
                 this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
                 this.emitInvoiceChanged();
-            }, (err: ThError) => {
-                this.context.toaster.error(err.message);
-            }, () => {
                 this.payPending = false;
+            }, (err: ThError) => {
+                this.payPending = false;
+                this.context.toaster.error(err.message);
             });
         });
     }
@@ -95,10 +97,10 @@ export class InvoiceOverviewComponent implements OnInit {
                 this.currentInvoice.invoice = updatedInvoice;
                 this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
                 this.emitInvoiceChanged();
-            }, (err: ThError) => {
-                this.context.toaster.error(err.message);
-            }, () => {
                 this.lossByManagementPending = false;
+            }, (err: ThError) => {
+                this.lossByManagementPending = false;
+                this.context.toaster.error(err.message);
             });
         });
     }
@@ -114,10 +116,10 @@ export class InvoiceOverviewComponent implements OnInit {
                         reloadInvoiceGroup: true,
                         selectedInvoiceId: this.currentInvoice.invoice.id
                     });
-                }, (err: ThError) => {
-                    this.context.toaster.error(err.message);
-                }, () => {
                     this.reinstatePending = false;
+                }, (err: ThError) => {
+                    this.reinstatePending = false;
+                    this.context.toaster.error(err.message);
                 });
         }, content);
     }
