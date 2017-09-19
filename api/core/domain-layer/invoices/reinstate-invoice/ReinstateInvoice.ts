@@ -91,7 +91,11 @@ export class ReinstateInvoice {
         delete reinstated.reference;
         reinstated.paymentStatus = InvoicePaymentStatus.Unpaid;
         reinstated.reinstatedInvoiceId = invoice.id;
+        reinstated.payerList.forEach(payer => {
+            payer.paymentList = [];
+        });
         reinstated = this.prepare(reinstated, timestamp);
+        reinstated.recomputePrices();
         return reinstated;
     }
 
