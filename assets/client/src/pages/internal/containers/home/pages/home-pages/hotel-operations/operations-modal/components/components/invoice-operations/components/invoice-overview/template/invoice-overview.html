@@ -9,6 +9,7 @@
                 <span *ngIf="currentInvoice.invoice.isPaid()" class="invoice-status paid-invoice-status">{{ 'Paid' | translate }}</span>
                 <span *ngIf="currentInvoice.invoice.isLossAcceptedByManagement()" class="invoice-status loss-accepted-by-management-invoice-status">{{ 'Loss Management' | translate }}</span>
                 <span *ngIf="currentInvoice.invoice.isUnpaid()" class="invoice-status unpaid-invoice-status">{{ 'Unpaid' | translate }}</span>
+                <span *ngIf="currentInvoice.invoice.isCredit()" class="invoice-status credit-invoice-status">{{ 'Credit' | translate }}</span>
             </div>
             <div class="related-invoices clickable" (click)="showRelatedInvoices()">{{ 'Related Invoices' | translate }}</div>
         </div>
