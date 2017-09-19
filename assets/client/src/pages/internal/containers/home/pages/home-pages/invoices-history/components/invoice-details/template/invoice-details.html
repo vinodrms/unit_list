@@ -2,33 +2,33 @@
     <div class="col-xs-12 invoice-details-header">
         <span class="first-line" title="{{'Invoice Reference' | translate}}">{{ invoiceVM.invoice.reference }}</span>
     </div>
-    <div class="col-xs-12 invoice-details-row"> 
+    <div class="col-xs-12 invoice-details-row">
         <i class="fa unitpal-font" title="{{'Status' | translate}}">+</i> {{ invoiceVM.invoiceMeta.displayName }}
     </div>
     <div class="col-xs-12 invoice-details-row">
         <i class="fa fa-calendar" title="{{ 'Paid At' | translate }}"></i> {{ invoiceVM.paidTimestamp | thtimestamp }}
     </div>
-    <div class="col-xs-12 invoice-details-row"> 
+    <div class="col-xs-12 invoice-details-row">
         <i class="fa unitpal-font" title="{{ 'Payer List' | translate }}">D</i> {{ invoiceVM.payerListString }}
     </div>
     <div class="col-xs-12 invoice-details-table">
         <table class="table form-group">
             <thead>
                 <tr>
-                    <th> {{ 'Item Name' | translate }} </th>
-                    <th> {{ 'Qty' | translate }} </th>
-                    <th> {{ 'Unit Cost' | translate }} </th>
-                    <th> {{ 'Total' | translate }} </th>
+                    <th width="40%"> {{ 'Item Name' | translate }} </th>
+                    <th width="20%"> {{ 'Qty' | translate }} </th>
+                    <th width="20%"> {{ 'Unit Cost' | translate }} </th>
+                    <th width="20%"> {{ 'Total' | translate }} </th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let itemVm of invoiceVM.invoiceItemVms" >
-                    <td width="35%">
+                    <td width="40%">
                         <i *ngIf="itemVm.isRelatedToBooking" class="unitpal-font">%</i> {{ getInvoiceItemDisplayName(itemVm) }}
                     </td>
-                    <td width="15%">{{ itemVm.numberOfItems }}</td>
-                    <td width="25%">{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
-                    <td width="25%">{{ ccySymbol }}{{ itemVm.totalPrice }}</td>
+                    <td width="20%">{{ itemVm.numberOfItems }}</td>
+                    <td width="20%">{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
+                    <td width="20%">{{ ccySymbol }}{{ itemVm.totalPrice }}</td>
                 </tr>
             </tbody>
         </table>
