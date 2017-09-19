@@ -107,15 +107,21 @@
     <div class="invoice-edit-footer m-t-24">
 
         <button *ngIf="hasInvoiceReinstateRight()" type="button" class="btn btn-danger" (click)="onReinstateInvoice()">
-            <i class="fa fa-2x unitpal-font">+</i> {{ 'Reinstate Invoice' | translate }}
+            <i *ngIf="reinstatePending" class="fa fa-spinner fa-pulse"></i>
+            <i *ngIf="!reinstatePending" class="fa fa-2x unitpal-font">+</i>
+            {{ 'Reinstate Invoice' | translate }}
         </button>
 
         <button *ngIf="hasInvoicePayRight()" type="button" class="btn btn-primary m-l-8" (click)="onPayInvoice()">
-            <i class="fa fa-2x unitpal-font rotate-45">L</i> {{ 'Pay Invoice' | translate }}
+            <i *ngIf="payPending" class="fa fa-spinner fa-pulse"></i>
+            <i *ngIf="!payPending" class="fa fa-2x unitpal-font rotate-45">L</i>
+            {{ 'Pay Invoice' | translate }}
         </button>
 
         <button *ngIf="hasInvoiceSetAsLossAcceptedByManagementRight()" type="button" class="btn btn-danger m-l-8" (click)="onLossByManagementInvoice()">
-            <i class="fa fa-2x unitpal-font">+</i> {{ 'Loss Accepted By Management' | translate }}
+            <i *ngIf="lossByManagementPending" class="fa fa-spinner fa-pulse"></i>
+            <i *ngIf="!lossByManagementPending" class="fa fa-2x unitpal-font">+</i>
+            {{ 'Loss Accepted By Management' | translate }}
         </button>
 
     </div>

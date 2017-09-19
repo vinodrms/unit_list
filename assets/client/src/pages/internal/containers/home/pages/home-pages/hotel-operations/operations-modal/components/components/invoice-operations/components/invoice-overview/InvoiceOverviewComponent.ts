@@ -27,6 +27,10 @@ import { AddInvoicePaymentModalService } from "./modal/services/AddInvoicePaymen
 import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
 import { InvoiceItemVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM";
 
+export interface InvoiceChangedOptions {
+    reloadInvoiceGroup: boolean;
+    selectedInvoiceId?: string;
+}
 
 @Component({
     selector: 'invoice-overview',
@@ -41,11 +45,13 @@ export class InvoiceOverviewComponent implements OnInit {
     @Output() showRelatedInvoicesClicked = new EventEmitter();
     @Output() showInvoiceTransferClicked = new EventEmitter();
     @Output() currentInvoiceChanged = new EventEmitter();
-    @Output() invoiceChanged = new EventEmitter();
-
+    @Output() invoiceChanged = new EventEmitter<InvoiceChangedOptions>();
 
     private pmGenerator: InvoicePaymentMethodVMGenerator;
     private invoiceMetaFactory: InvoiceMetaFactory;
+    private lossByManagementPending: boolean;
+    private payPending: boolean;
+    private reinstatePending: boolean;
 
     constructor(private context: AppContext,
         private numberOfAddOnProductsModalService: NumberOfAddOnProductsModalService,
@@ -56,6 +62,9 @@ export class InvoiceOverviewComponent implements OnInit {
         private operationsPageControllerService: HotelOperationsPageControllerService,
     ) {
         this.invoiceMetaFactory = new InvoiceMetaFactory();
+        this.lossByManagementPending = false;
+        this.payPending = false;
+        this.reinstatePending = false;
     }
 
     ngOnInit() {
@@ -63,37 +72,62 @@ export class InvoiceOverviewComponent implements OnInit {
     }
 
     public onPayInvoice() {
+        if (this.payPending) { return; }
         this.confirm("Paid", () => {
+            this.payPending = true;
             this.invoiceOperations.markAsPaid(this.currentInvoice.invoice).subscribe((updatedInvoice: InvoiceDO) => {
                 this.currentInvoice.invoice = updatedInvoice;
                 this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
                 this.emitInvoiceChanged();
             }, (err: ThError) => {
                 this.context.toaster.error(err.message);
+            }, () => {
+                this.payPending = false;
             });
         });
     }
 
     public onLossByManagementInvoice() {
+        if (this.lossByManagementPending) { return; }
         this.confirm("Loss By Management", () => {
+            this.lossByManagementPending = true;
             this.invoiceOperations.markAsLossByManagemnt(this.currentInvoice.invoice).subscribe((updatedInvoice: InvoiceDO) => {
                 this.currentInvoice.invoice = updatedInvoice;
                 this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
                 this.emitInvoiceChanged();
             }, (err: ThError) => {
                 this.context.toaster.error(err.message);
+            }, () => {
+                this.lossByManagementPending = false;
             });
         });
     }
 
     public onReinstateInvoice() {
-        //TODO
+        if (this.reinstatePending) { return; }
+        let content = this.context.thTranslation.translate("Are you sure you want to reinstate this invoice?");
+        this.confirm("Reinstate Invoice", () => {
+            this.reinstatePending = true;
+            this.invoiceOperations.reinstate(this.currentInvoice.invoice)
+                .subscribe((invoices: InvoiceDO[]) => {
+                    this.emitInvoiceChanged({
+                        reloadInvoiceGroup: true,
+                        selectedInvoiceId: this.currentInvoice.invoice.id
+                    });
+                }, (err: ThError) => {
+                    this.context.toaster.error(err.message);
+                }, () => {
+                    this.reinstatePending = false;
+                });
+        }, content);
     }
 
-    private confirm(status: string, onConfirm: (() => void)) {
+    private confirm(status: string, onConfirm: (() => void), content: string = null) {
         var title = this.context.thTranslation.translate("Info");
         let translatedStatus = this.context.thTranslation.translate(status);
-        var content = this.context.thTranslation.translate("Are you sure you want to mark this invoice as %status%?", { status: translatedStatus });
+        if (!content) {
+            content = this.context.thTranslation.translate("Are you sure you want to mark this invoice as %status%?", { status: translatedStatus });
+        }
         var positiveLabel = this.context.thTranslation.translate("Yes");
         var negativeLabel = this.context.thTranslation.translate("No");
         this.context.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
@@ -310,7 +344,7 @@ export class InvoiceOverviewComponent implements OnInit {
         return itemVm.getDisplayName(this.context.thTranslation);
     }
 
-    public emitInvoiceChanged() {
-        this.invoiceChanged.emit();
+    public emitInvoiceChanged(options: InvoiceChangedOptions = { reloadInvoiceGroup: false }) {
+        this.invoiceChanged.emit(options);
     }
 }

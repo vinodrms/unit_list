@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { Component, Input, OnInit } from '@angular/core';
 import { HotelInvoiceOperationsPageParam } from "./utils/HotelInvoiceOperationsPageParam";
 import { CustomerVM } from "../../../../../../../../../services/customers/view-models/CustomerVM";
@@ -18,8 +19,7 @@ import { InvoiceOperationsPageData } from "./utils/InvoiceOperationsPageData";
 import { InvoicePayerDO } from "../../../../../../../../../services/invoices/data-objects/payer/InvoicePayerDO";
 import { InvoiceMetaFactory } from "../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory";
 import { HotelOperationsResultService } from "../../../services/HotelOperationsResultService";
-
-import _ = require('underscore');
+import { InvoiceChangedOptions } from "./components/invoice-overview/InvoiceOverviewComponent";
 
 enum PageType {
     InvoiceOverview,
@@ -157,7 +157,17 @@ export class InvoiceOperationsPageComponent implements OnInit {
         this.currentRelatedInvoiceIndex = index;
         this.showInvoiceOverview();
     }
-    public markInvoiceChanged() {
+    public markInvoiceChanged(options: InvoiceChangedOptions) {
         this.hotelOperationsResultService.markInvoiceChanged(this.relatedInvoices[this.currentRelatedInvoiceIndex]);
+
+        if (!options.reloadInvoiceGroup) {
+            return;
+        }
+        if (!this.context.thUtils.isUndefinedOrNull(options.selectedInvoiceId)) {
+            this.invoiceOperationsPageParam.invoiceId = options.selectedInvoiceId;
+        }
+        if (!this.context.thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceId)) {
+            this.readExistingInvoice();
+        }
     }
 }
