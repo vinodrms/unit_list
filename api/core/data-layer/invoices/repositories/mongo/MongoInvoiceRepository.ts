@@ -15,7 +15,7 @@ export class MongoInvoiceRepository extends MongoRepository implements IInvoiceR
     constructor(hotelRepo: IHotelRepository) {
         super(sails.models.invoicesentity);
 
-        this.readRepository = new MongoInvoiceReadOperationsRepository(sails.models.invoicesentity);
+        this.readRepository = new MongoInvoiceReadOperationsRepository(sails.models.invoicesentity, hotelRepo);
         this.editRepository = new MongoInvoiceEditOperationsRepository(sails.models.invoicesentity, hotelRepo, this.readRepository);
     }
 
