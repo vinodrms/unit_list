@@ -64,9 +64,9 @@ export class ThDateDO extends BaseDO {
     public getUtcTimestamp(): number {
         return Date.UTC(this.year, this.month, this.day);
     }
-    public getTimestamp(): number {
+    public getTimestamp(timezone: string): number {
         var thDateUtils = new ThDateUtils();
-        var thisMoment = thDateUtils.convertThDateDOToMoment(this);
+        var thisMoment = thDateUtils.convertThDateDOToMoment(this, timezone);
         return thisMoment.valueOf();
     }
     public isWeekendDay(): boolean {

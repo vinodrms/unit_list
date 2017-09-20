@@ -9,10 +9,11 @@ import { MongoQueryBuilder } from "../../../../common/base/MongoQueryBuilder";
 import { ThDateUtils } from "../../../../../utils/th-dates/ThDateUtils";
 import { ThDateIntervalDO } from "../../../../../utils/th-dates/data-objects/ThDateIntervalDO";
 import { IndexedBookingInterval } from "../../../../price-products/utils/IndexedBookingInterval";
+import { IHotelRepository } from "../../../../hotel/repositories/IHotelRepository";
 
 export class MongoInvoiceReadOperationsRepository extends MongoRepository {
 
-    constructor(invoicesEntity: any) {
+    constructor(invoicesEntity: any, private hotelRepo: IHotelRepository) {
         super(invoicesEntity);
     }
 
@@ -48,16 +49,20 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
         });
     }
     private getInvoiceListCountCore(resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }, invoiceMeta: InvoiceMetaRepoDO, searchCriteria?: InvoiceSearchCriteriaRepoDO) {
-        var query = this.buildSearchCriteria(invoiceMeta, searchCriteria);
-        return this.getDocumentCount(query,
-            (err: Error) => {
-                var thError = new ThError(ThStatusCode.InvoiceRepositoryErrorReadingDocumentCount, err);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error reading document count", { meta: invoiceMeta, searchCriteria: searchCriteria }, thError);
-                reject(thError);
-            },
-            (meta: LazyLoadMetaResponseRepoDO) => {
-                resolve(meta);
-            });
+        this.getTimezoneIfNecessary(invoiceMeta, searchCriteria).then(timezone => {
+            var query = this.buildSearchCriteria(invoiceMeta, searchCriteria, timezone);
+            return this.getDocumentCount(query,
+                (err: Error) => {
+                    var thError = new ThError(ThStatusCode.InvoiceRepositoryErrorReadingDocumentCount, err);
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "error reading document count", { meta: invoiceMeta, searchCriteria: searchCriteria }, thError);
+                    reject(thError);
+                },
+                (meta: LazyLoadMetaResponseRepoDO) => {
+                    resolve(meta);
+                });
+        }).catch(e => {
+            reject(e);
+        });
     }
 
     getInvoiceList(invoiceMeta: InvoiceMetaRepoDO, searchCriteria?: InvoiceSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<InvoiceSearchResultRepoDO> {
@@ -66,21 +71,24 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
         });
     }
     private getInvoiceListCore(resolve: { (result: InvoiceSearchResultRepoDO): void }, reject: { (err: ThError): void }, invoiceMeta: InvoiceMetaRepoDO, searchCriteria?: InvoiceSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO) {
-
-        this.findMultipleDocuments({ criteria: this.buildSearchCriteria(invoiceMeta, searchCriteria), lazyLoad: lazyLoad },
-            (err: Error) => {
-                var thError = new ThError(ThStatusCode.InvoiceRepositoryErrorGettingInvoiceList, err);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting invoice list.", searchCriteria, thError);
-                reject(thError);
-            },
-            (dbInvoiceList: Array<Object>) => {
-                var resultDO = this.getQueryResultDO(dbInvoiceList);
-                resolve({
-                    invoiceList: resultDO,
-                    lazyLoad: lazyLoad
-                });
-            }
-        );
+        this.getTimezoneIfNecessary(invoiceMeta, searchCriteria).then(timezone => {
+            this.findMultipleDocuments({ criteria: this.buildSearchCriteria(invoiceMeta, searchCriteria, timezone), lazyLoad: lazyLoad },
+                (err: Error) => {
+                    var thError = new ThError(ThStatusCode.InvoiceRepositoryErrorGettingInvoiceList, err);
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting invoice list.", searchCriteria, thError);
+                    reject(thError);
+                },
+                (dbInvoiceList: Array<Object>) => {
+                    var resultDO = this.getQueryResultDO(dbInvoiceList);
+                    resolve({
+                        invoiceList: resultDO,
+                        lazyLoad: lazyLoad
+                    });
+                }
+            );
+        }).catch(e => {
+            reject(e);
+        });
     }
     private getQueryResultDO(dbInvoiceList: Array<Object>): InvoiceDO[] {
         var invoiceList: InvoiceDO[] = [];
@@ -91,7 +99,7 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
         });
         return invoiceList;
     }
-    private buildSearchCriteria(meta: InvoiceMetaRepoDO, searchCriteria: InvoiceSearchCriteriaRepoDO): Object {
+    private buildSearchCriteria(meta: InvoiceMetaRepoDO, searchCriteria: InvoiceSearchCriteriaRepoDO, timezone: string): Object {
         var mongoQueryBuilder = new MongoQueryBuilder();
         mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
         mongoQueryBuilder.addExactMatch("status", InvoiceStatus.Active);
@@ -110,8 +118,8 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
                     let endDate = dateUtils.addDaysToThDateDO(searchInterval.end, 1);
                     mongoQueryBuilder.addCustomQuery("$and",
                         [
-                            { "paidTimestamp": { $gte: searchInterval.start.getTimestamp() } },
-                            { "paidTimestamp": { $lt: endDate.getTimestamp() } }
+                            { "paidTimestamp": { $gte: searchInterval.start.getTimestamp(timezone) } },
+                            { "paidTimestamp": { $lt: endDate.getTimestamp(timezone) } }
                         ]
                     );
                 }
@@ -124,6 +132,22 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
         }
 
         return mongoQueryBuilder.processedQuery;
+    }
+
+    private getTimezoneIfNecessary(invoiceMeta: InvoiceMetaRepoDO, searchCriteria: InvoiceSearchCriteriaRepoDO): Promise<string> {
+        return new Promise<string>((resolve: { (result: string): void }, reject: { (err: ThError): void }) => {
+            if (this._thUtils.isUndefinedOrNull(searchCriteria, "paidInterval.start") ||
+                this._thUtils.isUndefinedOrNull(searchCriteria, "paidInterval.end")) {
+                resolve(null);
+                return;
+            }
+            this.hotelRepo.getHotelById(invoiceMeta.hotelId)
+                .then(hotel => {
+                    resolve(hotel.timezone);
+                }).catch(e => {
+                    reject(e);
+                })
+        });
     }
 
 }

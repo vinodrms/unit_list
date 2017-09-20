@@ -25,9 +25,10 @@ export class InvoiceGroupDO extends BaseDO {
     invoiceList: InvoiceDO[];
     status: InvoiceGroupStatus;
     vatTaxListSnapshot: TaxDO[];
+    migrated: boolean;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "invoiceGroupReference", "versionId", "hotelId", "groupBookingId", "indexedCustomerIdList", "status"];
+        return ["id", "invoiceGroupReference", "versionId", "hotelId", "groupBookingId", "indexedCustomerIdList", "status", "migrated"];
     }
 
     public buildFromObject(object: Object) {
