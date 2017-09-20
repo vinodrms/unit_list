@@ -9,7 +9,7 @@ export class P9_AddMergeInvoiceToBookings extends ATransactionalMongoPatch {
     }
 
     protected applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-        this._bookingRepository.updateMultipleDocuments({
+        this.bookingRepository.updateMultipleDocuments({
             "mergeInvoice": null
         },
             {

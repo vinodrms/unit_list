@@ -9,7 +9,7 @@ export class P6_AddPaymentDueInDaysToHotels extends APaginatedTransactionalMongo
     private paymentDueInDays: number = 8;
 
     protected getMongoRepository(): MongoRepository {
-        return this._hotelRepository;
+        return this.hotelRepository;
     }
 
     public getPatchType(): MongoPatchType {
@@ -17,7 +17,7 @@ export class P6_AddPaymentDueInDaysToHotels extends APaginatedTransactionalMongo
     }
 
     protected updateDocumentInMemory(hotel) {
-        if (this._thUtils.isUndefinedOrNull(hotel.paymentDueInDays)) {
+        if (this.thUtils.isUndefinedOrNull(hotel.paymentDueInDays)) {
             hotel.paymentDueInDays = this.paymentDueInDays;
         }
     }

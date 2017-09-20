@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThUtils } from '../../../utils/ThUtils';
 import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
 import { BookingDO, BookingConfirmationStatus } from '../../../data-layer/bookings/data-objects/BookingDO';
@@ -10,8 +11,6 @@ import { CustomersContainer } from '../../customers/validators/results/Customers
 import { BookingPriceDO, BookingPriceType } from '../../../data-layer/bookings/data-objects/price/BookingPriceDO';
 import { PricePerDayDO } from '../../../data-layer/bookings/data-objects/price/PricePerDayDO';
 import { IndexedBookingInterval } from '../../../data-layer/price-products/utils/IndexedBookingInterval';
-import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
-import { AddOnProductInvoiceItemMetaDO } from '../../../data-layer/invoices-deprecated/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import { AddOnProductSnapshotDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductSnapshotDO';
 import { AttachedAddOnProductItemDO } from '../../../data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
 import { IncludedBookingItems } from './IncludedBookingItems';
@@ -20,8 +19,8 @@ import { RoomCategoryStatsDO } from '../../../data-layer/room-categories/data-ob
 import { StringOccurenciesIndexer } from "../../../utils/indexers/StringOccurenciesIndexer";
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 import { CommissionDO } from "../../../data-layer/common/data-objects/commission/CommissionDO";
-
-import _ = require('underscore');
+import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { AddOnProductInvoiceItemMetaDO } from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 
 export class BookingUtils {
     private _thUtils: ThUtils;
