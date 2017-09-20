@@ -10,10 +10,10 @@ esac
 
 environment=$1
 
-case $environment in 
+case $environment in
   staging)
     inventory="staging"
-    branch="development"
+    branch="invoices-v2"
     ;;
   production)
     inventory="production"
