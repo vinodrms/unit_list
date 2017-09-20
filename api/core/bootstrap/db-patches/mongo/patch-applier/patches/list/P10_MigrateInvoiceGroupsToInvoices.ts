@@ -1,4 +1,5 @@
 import _ = require("underscore");
+import moment = require('moment-timezone');
 import { APaginatedTransactionalMongoPatch } from "../../utils/APaginatedTransactionalMongoPatch";
 import { MongoRepository } from "../../../../../../data-layer/common/base/MongoRepository";
 import { MongoPatchType } from "../MongoPatchType";
@@ -21,6 +22,8 @@ import { InvoicePayerDO as LegacyInvoicePayerDO } from "../../../../../../data-l
 import { InvoicePaymentDO } from "../../../../../../data-layer/invoices/data-objects/payer/InvoicePaymentDO";
 import { InvoicePaymentMethodDO } from "../../../../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO";
 import { InvoicePayerDO } from "../../../../../../data-layer/invoices/data-objects/payer/InvoicePayerDO";
+import { ThDateDO } from "../../../../../../utils/th-dates/data-objects/ThDateDO";
+import { ThHourDO } from "../../../../../../utils/th-dates/data-objects/ThHourDO";
 
 export class P10_MigrateInvoiceGroupsToInvoices extends APaginatedTransactionalMongoPatch {
     private hotelTimezoneMap: { [index: string]: string } = {};
@@ -98,12 +101,14 @@ export class P10_MigrateInvoiceGroupsToInvoices extends APaginatedTransactionalM
             invoice.notesFromBooking = legacyInvoice.notesFromBooking;
 
             let defaultTimestamp: number;
-            if (!this.thUtils.isUndefinedOrNull(legacyInvoice.paidTimestamp)) {
-                let paidTimestamp = new ThTimestampDO();
-                paidTimestamp.buildFromObject(legacyInvoice.paidTimestamp);
-                if (paidTimestamp.isValid()) {
-                    invoice.paidTimestamp = paidTimestamp.getTimestamp(timezone);
-                    defaultTimestamp = invoice.paidTimestamp;
+            if (_.isNumber(legacyInvoice.paidDateTimeUtcTimestamp)) {
+                let actualMoment: moment.Moment = moment.utc(legacyInvoice.paidDateTimeUtcTimestamp);
+                let thTimestamp = new ThTimestampDO();
+                thTimestamp.thDateDO = ThDateDO.buildThDateDO(actualMoment.year(), actualMoment.month(), actualMoment.date());
+                thTimestamp.thHourDO = ThHourDO.buildThHourDO(actualMoment.hour(), actualMoment.minute());
+                if (thTimestamp.isValid()) {
+                    defaultTimestamp = thTimestamp.getTimestamp(timezone);
+                    invoice.paidTimestamp = defaultTimestamp;
                 }
             }
             if (!_.isNumber(defaultTimestamp)) {
