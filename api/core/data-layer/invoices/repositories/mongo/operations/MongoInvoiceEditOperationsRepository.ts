@@ -189,7 +189,9 @@ export class MongoInvoiceEditOperationsRepository extends MongoRepository {
         }
     }
     private setPaidTimestampOnInvoice(invoice: InvoiceDO) {
-        invoice.paidTimestamp = (new Date()).getTime();
+        if (!_.isNumber(invoice.paidTimestamp)) {
+            invoice.paidTimestamp = (new Date()).getTime();
+        }
     }
 
     private getSequenceString(seq: number): string {
