@@ -7,7 +7,7 @@ module.exports = {
             port: 27017,
             user: process.env.MONGO_USER || "",
             password: process.env.MONGO_PASSWD || "",
-            database: 'UnitPalProd_v2'
+            database: 'UnitPalProd'
         }
     },
     models: {

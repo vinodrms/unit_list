@@ -113,7 +113,7 @@ export abstract class APaginatedTransactionalMongoPatch extends ATransactionalMo
     protected abstract getMongoRepository(): MongoRepository;
 
     /**
-     * 
+     *
      * @param document A single document from the collection
      * The function needs to make the according update on the document
      */
