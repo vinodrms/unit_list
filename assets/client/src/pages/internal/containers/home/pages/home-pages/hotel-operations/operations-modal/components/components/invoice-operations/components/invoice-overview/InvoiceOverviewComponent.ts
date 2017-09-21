@@ -354,32 +354,19 @@ export class InvoiceOverviewComponent implements OnInit {
         this.invoiceChanged.emit(options);
     }
 
- /*   public getInvoicePdfUrl(payer: CustomerDO): string {
-        return 'api/invoices/pdf?invoiceId='
-            + this.currentInvoice.invoice.id
-            + '&customerId='
-            + payer.id;
-    }*/
-
-
     public downloadInvoice(payer: CustomerDO) {
-        debugger
+        window.open(this.getInvoicePdfUrl(payer), '_blank');
+    }
+
+    private getInvoicePdfUrl(payer: CustomerDO): string {
         let payerIndex = _.findIndex(this.payerList, (item: CustomerDO) => {
             return payer.id === item.id;
         });
         let accessToken = this.context.tokenService.accessToken;
-        this.context.thHttp.get({
-            serverApi: ThServerApi.InvoicesDownload,
-            queryParameters: {
-                invoiceId: this.currentInvoice.invoice.id,
-                customerId: payer.id,
-                payerIndex: payerIndex,
-                token: accessToken
-            },
-        }).subscribe((data: any) => {
-            window.open(data);
-		}, (err: ThError) => {
-            this.context.toaster.error(err.message);
-		});
+        return 'api/invoices/download?invoiceId='
+            + this.currentInvoice.invoice.id
+            + '&customerId=' + payer.id
+            + '&payerIndex=' + payerIndex 
+            + '&token=' + accessToken;
     }
 }

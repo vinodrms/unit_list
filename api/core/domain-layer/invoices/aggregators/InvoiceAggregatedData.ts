@@ -16,10 +16,10 @@ import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 
 export interface BookingAttachment {
     exists: boolean;
-    roomCategory?: RoomCategoryDO;
-    guest?: CustomerDO;
-    booking?: BookingDO;
-    room?: RoomDO;
+    roomCategories?: RoomCategoryDO[];
+    guests?: CustomerDO[];
+    bookings?: BookingDO[];
+    rooms?: RoomDO[];
 }
 
 export class InvoiceAggregatedData {
@@ -35,7 +35,7 @@ export class InvoiceAggregatedData {
     addOnProductList: AddOnProductDO[];
     vatList: TaxDO[];
     paymentMethodList: PaymentMethodDO[];
-    bookingAttachment: BookingAttachment;
+    bookingAttachments: BookingAttachment;
 
     constructor(private _sessionContext: SessionContext) {
         this._thTranslation = new ThTranslation(this._sessionContext.language);
@@ -48,7 +48,7 @@ export class InvoiceAggregatedData {
             var sharedInvoiceItemMeta = new AddOnProductInvoiceItemMetaDO();
             sharedInvoiceItemMeta.aopDisplayName = this._thTranslation.translate(InvoiceAggregatedData.SHARED_INVOICE_ITEM_DISPLAY_NAME);
             sharedInvoiceItemMeta.numberOfItems = 1;
-            sharedInvoiceItemMeta.pricePerItem = this._thUtils.roundNumberToTwoDecimals((this.invoice.amountToPay /*- this.invoice.payerList[this.payerIndexOnInvoice].paymentList.*/) * -1);
+            sharedInvoiceItemMeta.pricePerItem = this._thUtils.roundNumberToTwoDecimals((this.invoice.amountToPay - this.invoice.payerList[this.payerIndexOnInvoice].totalAmount()) * -1);
             sharedInvoiceItem.meta = sharedInvoiceItemMeta;
             this.invoice.itemList.push(sharedInvoiceItem);
         }

@@ -156,15 +156,18 @@
                                 <%}%>
                                 
                                 <br>
-                                <%if (externalBookingReferenceValue.length > 0) {%>
-                                    <%= externalBookingReferenceLabel %>: <%= externalBookingReferenceValue %><br>
-                                <%}%>
-                                <%if (bookingReferenceValue.length > 0) {%>
-                                    <%= bookingReferenceLabel %>: <%= bookingReferenceValue %><br>
-                                <%}%>
-                                <%if (roomNameValue.length > 0) {%>
-                                    <%= roomNameLabel %>: <%= roomNameValue %><br>
-                                <%}%>
+                                <% bookingReferenceValues.forEach(function(bookingReferenceValue, index) { %>
+                                    <%if (externalBookingReferenceValues[index] && externalBookingReferenceValues[index].length > 0) {%>
+                                        <%= externalBookingReferenceLabel %>: <%= externalBookingReferenceValues[index] %><br>
+                                    <%}%>
+                                    <%if (bookingReferenceValue.length > 0) {%>
+                                        <%= bookingReferenceLabel %>: <%= bookingReferenceValue %><br>
+                                    <%}%>
+                                    <%if (roomNameValues[index] && roomNameValues[index].length > 0) {%>
+                                        <%= roomNameLabel %>: <%= roomNameValues[index] %><br>
+                                    <%}%>
+                                    <br>
+                                <% }); %>
                                 <%if (notesFromBooking.length > 0) {%>
                                     Notes:<br>
                                     <%= notesFromBooking %>
@@ -243,11 +246,23 @@
                 </tr>
             <% }); %>
             
+            <% paymentMethodValues.forEach(function(paymentMethod, index) { %>
             <tr class="total">
                 <td></td>
                 <td colspan="4">
-                   <%= paymentMethodLabel %>: <%= paymentMethodValue %> 
-                   <%if (hasTransactionFee > 0) {%>(<%= transactionFeeLabel %>: <%if (transactionFeeIsFlat) {%><%= ccySymbol %><%}%><%= transactionFeeValue %><%if (!transactionFeeIsFlat) {%>%<%}%>)<%}%>
+                   <%= paymentMethodLabel %>: <%= paymentMethod %>
+                   <% var payment = invoicePayer.paymentList[index] %>
+-                   <%if (hasTransactionFee(payment) > 0) {%>(<%= transactionFeeLabel %>: <%if (transactionFeeIsFlat(payment)) {%><%= ccySymbol %><%}%><%= transactionFeeValues[index] %><%if (!transactionFeeIsFlat(payment)) {%>%<%}%>)<%}%>
+                   <br>
+                   <%= totalLabel %>: <%= ccySymbol %><%= subtotalPerPaymentMethod[index] %> <br>
+                </td>
+            </tr>
+            <% }); %>
+
+            <tr></tr>
+            <tr class="total">
+                <td></td>
+                <td colspan="4">
                    <br>
                    <%= subtotalLabel %>: <%= ccySymbol %><%= subtotalValueFormatted %> <br>
                    <%= vatLabel %>: <%= ccySymbol %><%= totalVatFormatted %> <br>

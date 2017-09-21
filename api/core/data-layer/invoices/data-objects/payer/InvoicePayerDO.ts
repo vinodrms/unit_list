@@ -1,6 +1,8 @@
 import { BaseDO } from '../../../common/base/BaseDO';
 import { InvoicePaymentDO } from './InvoicePaymentDO';
 
+import _ = require('underscore');
+
 export class InvoicePayerDO extends BaseDO {
     customerId: string;
     paymentList: InvoicePaymentDO[];
@@ -22,5 +24,13 @@ export class InvoicePayerDO extends BaseDO {
             payment.buildFromObject(paymentObject);
             this.paymentList.push(payment);
         });
+    }
+
+    public totalAmountPlusTransactionFee(): number {
+        return _.reduce(this.paymentList, function (sum, payment: InvoicePaymentDO) { return sum + payment.amountPlusTransactionFee; }, 0);
+    }
+
+    public totalAmount(): number {
+        return _.reduce(this.paymentList, function (sum, payment: InvoicePaymentDO) { return sum + payment.amount; }, 0);
     }
 }
