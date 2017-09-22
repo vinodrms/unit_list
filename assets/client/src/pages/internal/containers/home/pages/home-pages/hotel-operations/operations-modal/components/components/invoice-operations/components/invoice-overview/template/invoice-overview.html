@@ -9,8 +9,9 @@
             (click)="moveToNextRelatedInvoice()">
         </i>
 
-        <i *ngIf="hasInvoiceRemoveRight()" class="fa fa-trash invoice-change-button pull-right clickable"></i>
-        <i *ngIf="hasInvoiceTransferRight()" class="fa fa-exchange invoice-change-button pull-right m-r-12 clickable" (click)="showInvoiceTransfer()"></i>
+        <i *ngIf="hasInvoiceRemoveRight()" class="fa fa-trash invoice-change-button pull-right clickable" title="{{ 'Delete this invoice' | translate }}"></i>
+        <i *ngIf="hasInvoiceTransferRight()" class="fa fa-exchange invoice-change-button pull-right m-r-12 clickable"
+            (click)="showInvoiceTransfer()" title="{{ 'Easily transfer items from/to this invoice to others' | translate }}"></i>
         <div>
             <div class="invoice-title">
                 <span *ngIf="paginationOptions.displayPaginator">
@@ -33,11 +34,21 @@
             <div class="payer-dropdown" *ngIf="hasBookings() || hasInvoiceAddPaymentsRight() || hasInvoiceEditPayersRight() || hasInvoiceDownloadRight()">
                 <button class="fa fa-angle-down clickable"></button>
                 <ul>
-                    <li *ngIf="hasBookings()" class="clickable" (click)="viewFirstBooking()">{{ 'View Booking' | translate }}</li>
-                    <li *ngIf="hasInvoiceAddPaymentsRight()" class="clickable" (click)="openAddInvoicePaymentModal(payer)">{{ 'Add Payment' | translate }}</li>
-                    <li *ngIf="hasInvoiceDownloadRight()" class="clickable" (click)="downloadInvoice(payer)">{{ 'Download' }}</li>
-                    <li *ngIf="hasInvoiceDownloadRight()" class="clickable" (click)="sendInvoiceConfirmation(payer)">{{ 'Send' }}</li>
-                    <li *ngIf="hasInvoiceEditPayersRight()" class="clickable" (click)="removePayer(payer)">{{ 'Remove Payer' | translate }}</li>
+                    <li *ngIf="hasBookings()" class="clickable" (click)="viewFirstBooking()" title="{{ 'View the first booking from this invoice' | translate }}">
+                        {{ 'View Booking' | translate }}
+                    </li>
+                    <li *ngIf="hasInvoiceAddPaymentsRight()" class="clickable" (click)="openAddInvoicePaymentModal(payer)" title="{{ 'Add a new payment for this customer' | translate }}">
+                        {{ 'Add Payment' | translate }}
+                    </li>
+                    <li *ngIf="hasInvoiceDownloadRight()" class="clickable" (click)="downloadInvoice(payer)" title="{{ 'Download the invoice PDF' | translate }}">
+                        {{ 'Download' }}
+                    </li>
+                    <li *ngIf="hasInvoiceDownloadRight()" class="clickable" (click)="sendInvoiceConfirmation(payer)" title="{{ 'Send the invoice PDF to email' | translate }}">
+                        {{ 'Send' }}
+                    </li>
+                    <li *ngIf="hasInvoiceEditPayersRight()" class="clickable" (click)="removePayer(payer)" title="{{ 'Remove this payer from the invoice' | translate }}">
+                        {{ 'Remove Payer' | translate }}
+                    </li>
                 </ul>
             </div>
             <div class="payer-name clickable" (click)="goToCustomer(payer)">{{ payer.customerName }}</div>
@@ -45,7 +56,7 @@
         </div>
             <div *ngIf="hasInvoiceEditPayersRight()" class="add-payer clickable" (click)="openCustomerSelectModal()">
                 <span class="fa fa-plus-circle add-payer-icon"></span>
-                <div class="add-payer-text">{{ 'ADD PAYER' | translate }}</div>
+                <div class="add-payer-text" title="{{ 'Add a new payer on this invoice' | translate }}">{{ 'ADD PAYER' | translate }}</div>
             </div>
     </div>
     <div class="invoice-items-container">
@@ -75,7 +86,9 @@
                     <td>{{ itemVm.numberOfItems }}</td>
                     <td>{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
                     <td>{{ ccySymbol }}{{ itemVm.totalPrice }}</td>
-                    <td><i *ngIf="hasInvoiceEditItemsRight() && itemVm.isRemovable" class="fa fa-trash remove-item clickable" (click)="openRemoveItemConfirmationModal(itemVm.item)"></i></td>
+                    <td><i *ngIf="hasInvoiceEditItemsRight() && itemVm.isRemovable" class="fa fa-trash remove-item clickable"
+                        (click)="openRemoveItemConfirmationModal(itemVm.item)" title="{{ 'Remove this item from the invoice' | translate }}"></i>
+                    </td>
                 </tr>
                 <tr *ngIf="hasInvoiceEditItemsRight()" class="add-item">
                     <td>
@@ -126,19 +139,20 @@
     </div>
     <div class="invoice-edit-footer m-t-24">
 
-        <button *ngIf="hasInvoiceReinstateRight()" type="button" class="btn btn-danger" (click)="onReinstateInvoice()">
+        <button *ngIf="hasInvoiceReinstateRight()" type="button" class="btn btn-danger" (click)="onReinstateInvoice()" title="{{ 'Create a Credit and a new Unpaid copy of this invoice' | translate }}">
             <i *ngIf="reinstatePending" class="fa fa-spinner fa-pulse"></i>
             <i *ngIf="!reinstatePending" class="fa fa-2x unitpal-font">+</i>
             {{ 'Reinstate Invoice' | translate }}
         </button>
 
-        <button *ngIf="hasInvoicePayRight()" type="button" class="btn btn-primary m-l-8" (click)="onPayInvoice()">
+        <button *ngIf="hasInvoicePayRight()" type="button" class="btn btn-primary m-l-8" (click)="onPayInvoice()" title="{{ 'Close the invoice by marking it as Paid' | translate }}">
             <i *ngIf="payPending" class="fa fa-spinner fa-pulse"></i>
             <i *ngIf="!payPending" class="fa fa-2x unitpal-font rotate-45">L</i>
             {{ 'Pay Invoice' | translate }}
         </button>
 
-        <button *ngIf="hasInvoiceSetAsLossAcceptedByManagementRight()" type="button" class="btn btn-danger m-l-8" (click)="onLossByManagementInvoice()">
+        <button *ngIf="hasInvoiceSetAsLossAcceptedByManagementRight()" type="button" class="btn btn-danger m-l-8" (click)="onLossByManagementInvoice()"
+        title="{{ 'Close the invoice by marking it as Loss by Management' | translate }}">
             <i *ngIf="lossByManagementPending" class="fa fa-spinner fa-pulse"></i>
             <i *ngIf="!lossByManagementPending" class="fa fa-2x unitpal-font">+</i>
             {{ 'Loss Accepted By Management' | translate }}

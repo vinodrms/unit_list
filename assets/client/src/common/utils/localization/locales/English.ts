@@ -1033,5 +1033,16 @@ export var EnglishTranslations: Object = {
     "No transaction fee": "No transaction fee",
     "Price with transaction fee": "Price with transaction fee",
     "Items moved succesfully": "Items moved succesfully",
+    "View the first booking from this invoice": "View the first booking from this invoice",
+    "Add a new payment for this customer": "Add a new payment for this customer",
+    "Download the invoice PDF": "Download the invoice PDF",
+    "Send the invoice PDF to email": "Send the invoice PDF to email",
+    "Remove this payer from the invoice": "Remove this payer from the invoice",
+    "Add a new payer on this invoice": "Add a new payer on this invoice",
+    "Create a Credit and a new Unpaid copy of this invoice": "Create a Credit and a new Unpaid copy of this invoice",
+    "Close the invoice by marking it as Paid": "Close the invoice by marking it as Paid",
+    "Close the invoice by marking it as Loss by Management": "Close the invoice by marking it as Loss by Management",
+    "Easily transfer items from/to this invoice to others": "Easily transfer items from/to this invoice to others",
+    "Remove this item from the invoice": "Remove this item from the invoice",
 
 };
