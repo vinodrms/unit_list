@@ -93,6 +93,7 @@ export class InvoiceTransferComponent implements OnInit {
                 this.transferInProgress = false;
                 let message = this._appContext.thTranslation.translate("Items moved succesfully");
                 this._appContext.toaster.success(message);
+                this._appContext.analytics.logEvent("invoice", "transfer", "Transferred items between invoices");
             }, (error: ThError) => {
                 this.transferInProgress = false;
                 this._appContext.toaster.error(error.message);

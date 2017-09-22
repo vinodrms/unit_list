@@ -85,6 +85,7 @@ export class InvoiceOverviewComponent implements OnInit {
                 this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
                 this.emitInvoiceChanged();
                 this.payPending = false;
+                this.context.analytics.logEvent("invoice", "paid", "Marked as Paid an invoice");
             }, (err: ThError) => {
                 this.payPending = false;
                 this.context.toaster.error(err.message);
@@ -101,6 +102,7 @@ export class InvoiceOverviewComponent implements OnInit {
                 this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
                 this.emitInvoiceChanged();
                 this.lossByManagementPending = false;
+                this.context.analytics.logEvent("invoice", "loss-by-management", "Marked as Loss By Management an invoice");
             }, (err: ThError) => {
                 this.lossByManagementPending = false;
                 this.context.toaster.error(err.message);
@@ -120,6 +122,7 @@ export class InvoiceOverviewComponent implements OnInit {
                         selectedInvoiceId: this.currentInvoice.invoice.id
                     });
                     this.reinstatePending = false;
+                    this.context.analytics.logEvent("invoice", "reinstate", "Reinstated an invoice");
                 }, (err: ThError) => {
                     this.reinstatePending = false;
                     this.context.toaster.error(err.message);
@@ -188,6 +191,7 @@ export class InvoiceOverviewComponent implements OnInit {
                     this.currentInvoice.invoice = updatedInvoice;
                     this.currentInvoice.addCustomer(selectedCustomer);
                     this.emitInvoiceChanged();
+                    this.context.analytics.logEvent("invoice", "add-payer", "Added a payer on an invoice");
                 }, (err: ThError) => {
                     this.context.toaster.error(err.message);
                 });
@@ -204,6 +208,7 @@ export class InvoiceOverviewComponent implements OnInit {
             this.currentInvoice.invoice = updatedInvoice;
             this.currentInvoice.removeCustomer(customer.id);
             this.emitInvoiceChanged();
+            this.context.analytics.logEvent("invoice", "remove-payer", "Removed a payer from an invoice");
         }, (err: ThError) => {
             this.context.toaster.error(err.message);
         });
@@ -224,6 +229,7 @@ export class InvoiceOverviewComponent implements OnInit {
                                 .subscribe((updatedInvoice: InvoiceDO) => {
                                     this.currentInvoice.invoice = updatedInvoice;
                                     this.emitInvoiceChanged();
+                                    this.context.analytics.logEvent("invoice", "add-item", "Added an item on an invoice");
                                 }, (err: ThError) => {
                                     this.context.toaster.error(err.message);
                                 });
@@ -264,6 +270,7 @@ export class InvoiceOverviewComponent implements OnInit {
         this.invoiceOperations.removeItem(this.currentInvoice.invoice, item.transactionId).subscribe((updatedInvoice: InvoiceDO) => {
             this.currentInvoice.invoice = updatedInvoice;
             this.emitInvoiceChanged();
+            this.context.analytics.logEvent("invoice", "remove-item", "Removed an item from an invoice");
         }, (err: ThError) => {
             this.context.toaster.error(err.message);
         });
@@ -339,6 +346,7 @@ export class InvoiceOverviewComponent implements OnInit {
         this.invoiceOperations.addPayment(this.currentInvoice.invoice, customerId, invoicePayment).subscribe((updatedInvoice: InvoiceDO) => {
             this.currentInvoice.invoice = updatedInvoice;
             this.emitInvoiceChanged();
+            this.context.analytics.logEvent("invoice", "add-payment", "Added a payment on an invoice");
         }, (err: ThError) => {
             this.context.toaster.error(err.message);
         });
@@ -358,6 +366,7 @@ export class InvoiceOverviewComponent implements OnInit {
 
     public downloadInvoice(payer: CustomerDO) {
         window.open(this.getInvoicePdfUrl(payer), '_blank');
+        this.context.analytics.logEvent("invoice", "download", "Downloaded an invoice");
     }
     private getInvoicePdfUrl(payer: CustomerDO): string {
         let payerIndex = _.findIndex(this.payerList, (item: CustomerDO) => {
