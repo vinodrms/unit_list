@@ -42,6 +42,9 @@ export class InvoiceSelectionModalComponent extends BaseComponent implements ICu
 		if (this._modalInput.onlyUnpaidInvoices) {
 			this._invoiceService.setPaymentStatus(InvoicePaymentStatus.Unpaid);	
 		}
+		if (this._modalInput.excludedInvoiceId) {
+			this._invoiceService.excludeInvoiceId(this._modalInput.excludedInvoiceId);
+		}
 		this.bootstrapInvoicesTable();
 	}
 	private bootstrapInvoicesTable() {

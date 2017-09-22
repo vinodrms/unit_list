@@ -10,10 +10,13 @@ import { InvoiceDO } from "../../../../../../services/invoices/data-objects/Invo
 export class InvoiceSelectionModalService {
 	constructor(private _appContext: AppContext) { }
 
-	public openInvoiceSelectionModal(multiSelection: boolean, onlyUnpaidInvoices: boolean): Promise<ModalDialogRef<InvoiceDO[]>> {
+	public openInvoiceSelectionModal(multiSelection: boolean, onlyUnpaidInvoices: boolean, excludedInvoiceId?: string): Promise<ModalDialogRef<InvoiceDO[]>> {
 		var invoiceSelectionModalInput = new InvoiceSelectionModalInput();
 		invoiceSelectionModalInput.multiSelection = multiSelection;
 		invoiceSelectionModalInput.onlyUnpaidInvoices = onlyUnpaidInvoices;
+		if (excludedInvoiceId) {
+			invoiceSelectionModalInput.excludedInvoiceId = excludedInvoiceId;
+		}
 
 		return this._appContext.modalService.open<any>(InvoiceSelectionModalModule, InvoiceSelectionModalComponent, ReflectiveInjector.resolve([
 			{ provide: InvoiceSelectionModalInput, useValue: invoiceSelectionModalInput }

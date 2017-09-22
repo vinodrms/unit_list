@@ -32,8 +32,12 @@ export class InvoiceVM {
         let factory = new InvoiceMetaFactory();
         this._invoiceMeta = factory.getInvoiceMetaByPaymentStatus(this._invoice.paymentStatus);
 
+        this.recreateInvoiceItemVms();
+    }
+
+    public recreateInvoiceItemVms() {
         this._invoiceItemVms = [];
-        _.forEach(value.itemList, (item: InvoiceItemDO) => {
+        _.forEach(this._invoice.itemList, (item: InvoiceItemDO) => {
             if (item.type === InvoiceItemType.Booking) {
                 let bookingPrice: BookingPriceDO = <BookingPriceDO>item.meta;
                 if (bookingPrice.isPenalty()) {

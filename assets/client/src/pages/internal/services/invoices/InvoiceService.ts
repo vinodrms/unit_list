@@ -25,6 +25,7 @@ export class InvoiceService extends ALazyLoadRequestService<InvoiceVM> {
     private _paidInterval: ThDateIntervalDO;
     private _filterByPaidDateInterval: boolean;
     private paymentStatus: InvoicePaymentStatus;
+    private _excludedInvoiceId: string;
 
     constructor(appContext: AppContext, private _invoiceVMHelper: InvoiceVMHelper) {
         super(appContext, ThServerApi.InvoicesCount, ThServerApi.Invoices);
@@ -53,7 +54,8 @@ export class InvoiceService extends ALazyLoadRequestService<InvoiceVM> {
         this.refreshData();
     }
     private rebuildDefaultSearchCriteria() {
-        this.defaultSearchCriteria = { customerIdList: this._customerIdListFilter, term: this._term, invoicePaymentStatus: this.paymentStatus, paidInterval: this._filterByPaidDateInterval? this.paidInterval: null };
+        this.defaultSearchCriteria = { customerIdList: this._customerIdListFilter, term: this._term, invoicePaymentStatus: this.paymentStatus,
+            paidInterval: this._filterByPaidDateInterval? this.paidInterval: null, excludedInvoiceId: this._excludedInvoiceId? this._excludedInvoiceId: null };
     }
 
     public get paidInterval(): ThDateIntervalDO {
@@ -73,6 +75,11 @@ export class InvoiceService extends ALazyLoadRequestService<InvoiceVM> {
 
     public setPaymentStatus(status: InvoicePaymentStatus) {
         this.paymentStatus = status;
+        this.rebuildDefaultSearchCriteria();
+    }
+
+    public excludeInvoiceId(id: string) {
+        this._excludedInvoiceId = id;
         this.rebuildDefaultSearchCriteria();
     }
 }
