@@ -1,11 +1,11 @@
-import {Injectable, ReflectiveInjector} from '@angular/core';
-import {AppContext} from '../../../../../../../../../common/utils/AppContext';
-import {ModalDialogRef} from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {CustomerDO} from '../../../../../../../services/customers/data-objects/CustomerDO';
-import {EmailConfirmationParams, EmailConfirmationType} from '../../../../../../../services/hotel-operations/common/utils/EmailConfirmationParams';
-import {EmailSenderModalInput} from './utils/EmailSenderModalInput';
-import {EmailSenderModalComponent} from '../EmailSenderModalComponent';
-import {EmailSenderModalModule} from '../EmailSenderModalModule';
+import { Injectable, ReflectiveInjector } from '@angular/core';
+import { AppContext } from '../../../../../../../../../common/utils/AppContext';
+import { ModalDialogRef } from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { CustomerDO } from '../../../../../../../services/customers/data-objects/CustomerDO';
+import { EmailConfirmationParams, EmailConfirmationType } from '../../../../../../../services/hotel-operations/common/utils/EmailConfirmationParams';
+import { EmailSenderModalInput } from './utils/EmailSenderModalInput';
+import { EmailSenderModalComponent } from '../EmailSenderModalComponent';
+import { EmailSenderModalModule } from '../EmailSenderModalModule';
 
 @Injectable()
 export class EmailSenderModalService {
@@ -19,12 +19,10 @@ export class EmailSenderModalService {
         return this.sendConfirmation(customerList, EmailConfirmationType.Booking, parameters);
     }
 
-    public sendInvoiceConfirmation(customerList: CustomerDO[], invoiceGroupId: string, invoiceId: string, customerId: string, payerIndex: number) {
+    public sendInvoiceConfirmation(customerList: CustomerDO[], invoiceId: string, customerId: string) {
         var parameters = {
-            invoiceGroupId: invoiceGroupId,
             invoiceId: invoiceId,
             customerId: customerId,
-            payerIndex: payerIndex
         };
         return this.sendConfirmation(customerList, EmailConfirmationType.Invoice, parameters);
     }

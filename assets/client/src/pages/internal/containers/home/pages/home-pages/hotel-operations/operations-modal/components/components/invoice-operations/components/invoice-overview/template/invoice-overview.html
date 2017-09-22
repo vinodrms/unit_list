@@ -36,7 +36,7 @@
                     <li *ngIf="hasBookings()" class="clickable" (click)="viewFirstBooking()">{{ 'View Booking' | translate }}</li>
                     <li *ngIf="hasInvoiceAddPaymentsRight()" class="clickable" (click)="openAddInvoicePaymentModal(payer)">{{ 'Add Payment' | translate }}</li>
                     <li *ngIf="hasInvoiceDownloadRight()" class="clickable" (click)="downloadInvoice(payer)">{{ 'Download' }}</li>
-                    <li *ngIf="hasInvoiceDownloadRight() && payer.hasEmailInContactDetails()" class="clickable">{{ 'Send' }}</li>
+                    <li *ngIf="hasInvoiceDownloadRight()" class="clickable" (click)="sendInvoiceConfirmation(payer)">{{ 'Send' }}</li>
                     <li *ngIf="hasInvoiceEditPayersRight()" class="clickable" (click)="removePayer(payer)">{{ 'Remove Payer' | translate }}</li>
                 </ul>
             </div>

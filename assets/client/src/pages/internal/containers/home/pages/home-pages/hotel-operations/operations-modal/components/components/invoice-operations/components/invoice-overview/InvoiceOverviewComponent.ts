@@ -28,6 +28,7 @@ import { HotelOperationsPageControllerService } from "../../../../services/Hotel
 import { InvoiceItemVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM";
 import { ThServerApi } from "../../../../../../../../../../../../../common/utils/http/ThServerApi";
 import { PaginationOptions } from "../../utils/PaginationOptions";
+import { EmailSenderModalService } from '../../../../../../email-sender/services/EmailSenderModalService';
 
 export interface InvoiceChangedOptions {
     reloadInvoiceGroup: boolean;
@@ -37,7 +38,7 @@ export interface InvoiceChangedOptions {
 @Component({
     selector: 'invoice-overview',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-overview/template/invoice-overview.html',
-    providers: [CustomerRegisterModalService, HotelOperationsInvoiceService, NumberOfAddOnProductsModalService, AddOnProductsModalService, AddInvoicePaymentModalService]
+    providers: [CustomerRegisterModalService, HotelOperationsInvoiceService, NumberOfAddOnProductsModalService, AddOnProductsModalService, AddInvoicePaymentModalService, EmailSenderModalService]
 })
 export class InvoiceOverviewComponent implements OnInit {
 
@@ -63,6 +64,7 @@ export class InvoiceOverviewComponent implements OnInit {
         private customerRegisterModalService: CustomerRegisterModalService,
         private addInvoicePaymentModalService: AddInvoicePaymentModalService,
         private operationsPageControllerService: HotelOperationsPageControllerService,
+        private emailSenderModalService: EmailSenderModalService,
     ) {
         this.invoiceMetaFactory = new InvoiceMetaFactory();
         this.lossByManagementPending = false;
@@ -357,7 +359,6 @@ export class InvoiceOverviewComponent implements OnInit {
     public downloadInvoice(payer: CustomerDO) {
         window.open(this.getInvoicePdfUrl(payer), '_blank');
     }
-
     private getInvoicePdfUrl(payer: CustomerDO): string {
         let payerIndex = _.findIndex(this.payerList, (item: CustomerDO) => {
             return payer.id === item.id;
@@ -367,5 +368,15 @@ export class InvoiceOverviewComponent implements OnInit {
             + this.currentInvoice.invoice.id
             + '&customerId=' + payer.id
             + '&token=' + accessToken;
+    }
+    public sendInvoiceConfirmation(customer: CustomerDO) {
+        this.emailSenderModalService.sendInvoiceConfirmation([customer],
+            this.currentInvoice.invoice.id,
+            customer.id)
+            .then((modalDialogRef: ModalDialogRef<boolean>) => {
+                modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
+                    this.context.analytics.logEvent("invoice", "send-confirmation", "Sent an invoice confirmation by email");
+                }, (err: any) => { });
+            }).catch((err: any) => { });
     }
 }
