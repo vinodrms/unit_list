@@ -137,7 +137,10 @@ export class HotelInventoryIndexer {
 
                 return this.indexBookingsByType(bookingSearchResult.bookingList);
             }).then(indexResult => {
-                var invoiceIndexer = new InvoiceIndexer(this._appContext, this._sessionContext);
+                let hotelRepo = this._appContext.getRepositoryFactory().getHotelRepository();
+                return hotelRepo.getHotelById(this._sessionContext.sessionDO.hotel.id);
+            }).then(result => {
+                var invoiceIndexer = new InvoiceIndexer(this._appContext, this._sessionContext, result);
                 return invoiceIndexer.getInvoiceStats(this._indexedInterval, this._bookingIdList, this._indexedVatById, this._excludeVat, this._indexerParams.customerIdList);
             }).then((invoiceStats: IInvoiceStats) => {
                 this._invoiceStats = invoiceStats;
@@ -195,18 +198,16 @@ export class HotelInventoryIndexer {
 
         // we only keep the penalty bookings
         return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
-            let invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
-            invoiceGroupRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+            let invoiceRepo = this._appContext.getRepositoryFactory().getInvoiceRepository();
+            invoiceRepo.getInvoiceList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                 bookingIdList: penaltyBookingIdList
             }).then(searchResult => {
                 let bookingIdMap = {};
 
                 // we create a map of the bookings that have invoices
-                searchResult.invoiceGroupList.forEach(invoiceGroup => {
-                    invoiceGroup.invoiceList.forEach(invoice => {
-                        if (!this._thUtils.isUndefinedOrNull(invoice.bookingId)) {
-                            bookingIdMap[invoice.bookingId] = true;
-                        }
+                searchResult.invoiceList.forEach(invoice => {
+                    invoice.indexedBookingIdList.forEach((bookingId: string) => {
+                        bookingIdMap[bookingId] = true;
                     });
                 });
 

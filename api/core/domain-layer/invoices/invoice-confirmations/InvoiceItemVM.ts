@@ -1,10 +1,9 @@
 import { ThTranslation } from '../../../utils/localization/ThTranslation';
 import { ThUtils } from '../../../../core/utils/ThUtils';
-
-import { InvoiceItemDO, InvoiceItemAccountingType } from '../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { TaxDO } from '../../../data-layer/taxes/data-objects/TaxDO';
-
+import { InvoiceItemDO } from "../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
 import _ = require("underscore");
+
 
 export class InvoiceItemVM {
     private _thUtils: ThUtils;
@@ -33,7 +32,7 @@ export class InvoiceItemVM {
 
     public buildFromInvoiceItemDO(invoiceItemDO: InvoiceItemDO, vatTaxList: TaxDO[]) {
         this.name = invoiceItemDO.meta.getDisplayName(this._thTranslation);
-        this.qty = invoiceItemDO.meta.getNumberOfItems() * ((invoiceItemDO.accountingType === InvoiceItemAccountingType.Credit)? -1 : 1);
+        this.qty = invoiceItemDO.meta.getNumberOfItems();
 
         var vatValue = this.getVatValue(invoiceItemDO.meta.getVatId(), vatTaxList);
         this.vatPercentage = this._thUtils.roundNumberToTwoDecimals(vatValue * 100);

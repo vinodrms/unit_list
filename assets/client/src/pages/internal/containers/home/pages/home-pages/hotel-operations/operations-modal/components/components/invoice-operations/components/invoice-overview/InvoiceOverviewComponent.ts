@@ -19,14 +19,16 @@ import { InvoicePaymentMethodVMGenerator } from "../../../../../../../../../../.
 import { InvoicePaymentMethodVM } from "../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM";
 import {
     InvoicePayRight, InvoiceSetAsLossAcceptedByManagementRight, InvoiceEditItemsRight, InvoiceAddPaymentsRight,
-    InvoiceRemoveRight, InvoiceEditPayersRight, InvoiceReinstateRight, InvoiceTransferRight
+    InvoiceRemoveRight, InvoiceEditPayersRight, InvoiceReinstateRight, InvoiceDownloadRight, InvoiceTransferRight
 
 } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceEditRights";
 import { InvoiceMetaFactory } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory";
 import { AddInvoicePaymentModalService } from "./modal/services/AddInvoicePaymentModalService";
 import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
 import { InvoiceItemVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM";
+import { ThServerApi } from "../../../../../../../../../../../../../common/utils/http/ThServerApi";
 import { PaginationOptions } from "../../utils/PaginationOptions";
+import { EmailSenderModalService } from '../../../../../../email-sender/services/EmailSenderModalService';
 
 export interface InvoiceChangedOptions {
     reloadInvoiceGroup: boolean;
@@ -36,7 +38,7 @@ export interface InvoiceChangedOptions {
 @Component({
     selector: 'invoice-overview',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-overview/template/invoice-overview.html',
-    providers: [CustomerRegisterModalService, HotelOperationsInvoiceService, NumberOfAddOnProductsModalService, AddOnProductsModalService, AddInvoicePaymentModalService]
+    providers: [CustomerRegisterModalService, HotelOperationsInvoiceService, NumberOfAddOnProductsModalService, AddOnProductsModalService, AddInvoicePaymentModalService, EmailSenderModalService]
 })
 export class InvoiceOverviewComponent implements OnInit {
 
@@ -62,6 +64,7 @@ export class InvoiceOverviewComponent implements OnInit {
         private customerRegisterModalService: CustomerRegisterModalService,
         private addInvoicePaymentModalService: AddInvoicePaymentModalService,
         private operationsPageControllerService: HotelOperationsPageControllerService,
+        private emailSenderModalService: EmailSenderModalService,
     ) {
         this.invoiceMetaFactory = new InvoiceMetaFactory();
         this.lossByManagementPending = false;
@@ -280,6 +283,9 @@ export class InvoiceOverviewComponent implements OnInit {
     public hasInvoiceEditItemsRight(): boolean {
         return this.currentInvoice.invoiceMeta.invoiceEditItemsRight === InvoiceEditItemsRight.Edit;
     }
+    public hasInvoiceDownloadRight(): boolean {
+        return this.currentInvoice.invoiceMeta.invoiceDownloadRight === InvoiceDownloadRight.Available;
+    }
     public hasInvoiceTransferRight(): boolean {
         return this.currentInvoice.invoiceMeta.invoiceTransferRight === InvoiceTransferRight.Edit;
     }
@@ -348,5 +354,29 @@ export class InvoiceOverviewComponent implements OnInit {
 
     public emitInvoiceChanged(options: InvoiceChangedOptions = { reloadInvoiceGroup: false }) {
         this.invoiceChanged.emit(options);
+    }
+
+    public downloadInvoice(payer: CustomerDO) {
+        window.open(this.getInvoicePdfUrl(payer), '_blank');
+    }
+    private getInvoicePdfUrl(payer: CustomerDO): string {
+        let payerIndex = _.findIndex(this.payerList, (item: CustomerDO) => {
+            return payer.id === item.id;
+        });
+        let accessToken = this.context.tokenService.accessToken;
+        return 'api/invoices/download?invoiceId='
+            + this.currentInvoice.invoice.id
+            + '&customerId=' + payer.id
+            + '&token=' + accessToken;
+    }
+    public sendInvoiceConfirmation(customer: CustomerDO) {
+        this.emailSenderModalService.sendInvoiceConfirmation([customer],
+            this.currentInvoice.invoice.id,
+            customer.id)
+            .then((modalDialogRef: ModalDialogRef<boolean>) => {
+                modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
+                    this.context.analytics.logEvent("invoice", "send-confirmation", "Sent an invoice confirmation by email");
+                }, (err: any) => { });
+            }).catch((err: any) => { });
     }
 }

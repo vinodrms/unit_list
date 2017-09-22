@@ -30,11 +30,13 @@
     <div class="invoice-payer-section row m-b-16">
         <div class="payer-box col-xs-5 col-md-3" *ngFor="let payer of payerList">
             <i class="fa fa-user payer-icon"></i>
-            <div class="payer-dropdown" *ngIf="hasBookings() || hasInvoiceAddPaymentsRight() || hasInvoiceEditPayersRight()">
+            <div class="payer-dropdown" *ngIf="hasBookings() || hasInvoiceAddPaymentsRight() || hasInvoiceEditPayersRight() || hasInvoiceDownloadRight()">
                 <button class="fa fa-angle-down clickable"></button>
                 <ul>
                     <li *ngIf="hasBookings()" class="clickable" (click)="viewFirstBooking()">{{ 'View Booking' | translate }}</li>
                     <li *ngIf="hasInvoiceAddPaymentsRight()" class="clickable" (click)="openAddInvoicePaymentModal(payer)">{{ 'Add Payment' | translate }}</li>
+                    <li *ngIf="hasInvoiceDownloadRight()" class="clickable" (click)="downloadInvoice(payer)">{{ 'Download' }}</li>
+                    <li *ngIf="hasInvoiceDownloadRight()" class="clickable" (click)="sendInvoiceConfirmation(payer)">{{ 'Send' }}</li>
                     <li *ngIf="hasInvoiceEditPayersRight()" class="clickable" (click)="removePayer(payer)">{{ 'Remove Payer' | translate }}</li>
                 </ul>
             </div>
@@ -98,7 +100,11 @@
             <ng-container *ngFor="let payer of currentInvoice.invoice.payerList">
                 <tr *ngFor="let payment of payer.paymentList" class="selectable">
                     <td>{{ currentInvoice.getCustomerDO(payer.customerId).customerName }}
-                        <div class="payment-type">{{ 'Payment via' | translate}} {{getPaymentMethodDisplayName(payment) | translate}}</div>
+                        <div class="payment-type">
+                            <span>{{ 'Payment via' | translate}} {{getPaymentMethodDisplayName(payment) | translate}}   </span>
+                            <span *ngIf="!payment.shouldApplyTransactionFee"> ; {{ 'No transaction fee' | translate }} </span>
+                            <span *ngIf="payment.shouldApplyTransactionFee"> ; {{ 'Price with transaction fee' | translate }}: {{ ccySymbol }} {{ payment.amountPlusTransactionFee }} </span>
+                        </div>
                     </td>
                     <td></td>
                     <td></td>

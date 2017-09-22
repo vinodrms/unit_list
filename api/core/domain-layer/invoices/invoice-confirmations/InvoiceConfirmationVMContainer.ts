@@ -4,19 +4,24 @@ import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
 import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerDO';
 import { AddressDO } from '../../../data-layer/common/data-objects/address/AddressDO';
 import { PaymentMethodDO } from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
-import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
-import { InvoiceItemVM } from './InvoiceItemVM';
-import { InvoicePaymentMethodType } from '../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { InvoiceAggregatedData } from '../aggregators/InvoiceAggregatedData';
 import { BookingConfirmationVMContainer } from '../../bookings/booking-confirmations/BookingConfirmationVMContainer';
 import { BookingPriceDO } from "../../../data-layer/bookings/data-objects/price/BookingPriceDO";
 import { PricePerDayDO } from "../../../data-layer/bookings/data-objects/price/PricePerDayDO";
-import { AddOnProductInvoiceItemMetaDO } from "../../../data-layer/invoices-deprecated/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
 import { TransactionFeeDO, TransactionFeeType } from "../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
-import { InvoicePayerDO } from "../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO";
+import { InvoiceItemVM } from "./InvoiceItemVM";
+import { InvoiceItemDO, InvoiceItemType } from "../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
+import { AddOnProductInvoiceItemMetaDO } from "../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
+import { InvoicePaymentStatus, InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoicePaymentMethodType } from "../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO";
+import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payer/InvoicePayerDO";
+import { ThDateUtils } from "../../../utils/th-dates/ThDateUtils";
+import { InvoicePaymentDO } from "../../../data-layer/invoices/data-objects/payer/InvoicePaymentDO";
+import { BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
+import { RoomDO } from "../../../data-layer/rooms/data-objects/RoomDO";
 
 import _ = require('underscore');
+
 
 export class InvoiceConfirmationVMContainer {
     private static DEFAULT_VALUE_IF_EMPTY: string = '';
@@ -24,6 +29,7 @@ export class InvoiceConfirmationVMContainer {
     private static LOSS_ACCEPTED_BY_MANAGEMENT_STR: string = 'LOSS ACCEPTED BY MANAGEMENT';
 
     private _thUtils: ThUtils;
+    private _thDateUtils: ThDateUtils;
 
     private _invoiceAggregatedData: InvoiceAggregatedData;
 
@@ -72,9 +78,10 @@ export class InvoiceConfirmationVMContainer {
     itemVMList: InvoiceItemVM[];
 
     paymentMethodLabel: string;
-    paymentMethodValue: string;
+    paymentMethodValues: string[];
     transactionFeeLabel: string;
-    transactionFeeValue: string;
+    transactionFeeValues: string[];
+    subtotalPerPaymentMethod: number[];
 
     subtotalValue: number;
     subtotalValueFormatted: string;
@@ -88,20 +95,21 @@ export class InvoiceConfirmationVMContainer {
     hotelVatValue: string;
 
     externalBookingReferenceLabel: string;
-    externalBookingReferenceValue: string;
+    externalBookingReferenceValues: string[];
     bookingReferenceLabel: string;
-    bookingReferenceValue: string;
+    bookingReferenceValues: string[];
     roomNameLabel: string;
-    roomNameValue: string;
+    roomNameValues: string[];
 
     constructor(private _thTranslation: ThTranslation) {
         this._thUtils = new ThUtils();
+        this._thDateUtils = new ThDateUtils();
     }
 
     public buildFromInvoiceAggregatedDataContainer(invoiceAggregatedData: InvoiceAggregatedData) {
         this._invoiceAggregatedData = invoiceAggregatedData;
 
-        this.invoiceReference = this._invoiceAggregatedData.invoice.invoiceReference;
+        this.invoiceReference = this._invoiceAggregatedData.invoice.reference;
         this.payerIndex = this._invoiceAggregatedData.payerIndexOnInvoice;
         this.ccySymbol = this._invoiceAggregatedData.ccySymbol;
         this.unitpalLogoSrcValue = BookingConfirmationVMContainer.UNITPAL_LOGO_SRC;
@@ -122,21 +130,27 @@ export class InvoiceConfirmationVMContainer {
         this.bookingReferenceLabel = this._thTranslation.translate('Booking Reference');
         this.externalBookingReferenceLabel = this._thTranslation.translate('External Booking Reference');
         this.roomNameLabel = this._thTranslation.translate("Room");
-        this.externalBookingReferenceValue = "";
-        this.bookingReferenceValue = "";
+        this.externalBookingReferenceValues = [];
+        this.bookingReferenceValues = [];
 
-        if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.bookingAttachment.booking)) {
-            let booking = this._invoiceAggregatedData.bookingAttachment.booking;
-            if (booking.externalBookingReference) {
-                this.externalBookingReferenceValue = booking.externalBookingReference;
-            }
-            if (booking.bookingReference) {
-                this.bookingReferenceValue = booking.displayedReservationNumber;
-            }
+        if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.bookingAttachments.bookings)
+            && this._invoiceAggregatedData.bookingAttachments.bookings.length > 0) {
+            let bookings = this._invoiceAggregatedData.bookingAttachments.bookings;
+            _.forEach(bookings, (booking: BookingDO) => {
+                if (booking.externalBookingReference) {
+                    this.externalBookingReferenceValues.push(booking.externalBookingReference);
+                }
+            });
+            _.forEach(bookings, (booking: BookingDO) => {
+                if (booking.bookingReference) {
+                    this.bookingReferenceValues.push(booking.displayedReservationNumber);
+                }
+            });
         }
-        this.roomNameValue = "";
-        if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.bookingAttachment.room)) {
-            this.roomNameValue = this._invoiceAggregatedData.bookingAttachment.room.name;
+        this.roomNameValues = [];
+        if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.bookingAttachments.rooms)
+            && this._invoiceAggregatedData.bookingAttachments.rooms.length > 0) {
+            this.roomNameValues = _.map(this._invoiceAggregatedData.bookingAttachments.rooms, (room: RoomDO) => { return room.name; });
         }
     }
     private initLogoSrcs() {
@@ -152,7 +166,8 @@ export class InvoiceConfirmationVMContainer {
     private initHeaderLabelsAndValues() {
         this.invoiceLabel = this._thTranslation.translate('Invoice');
         this.dateLabel = this._thTranslation.translate('Date');
-        this.dateValue = this._invoice.paidDate.toString();
+        let thTimestamp = this._thDateUtils.convertTimestampToLocalThTimestamp(this._invoice.paidTimestamp, this._invoiceAggregatedData.hotel.timezone);
+        this.dateValue = thTimestamp.thDateDO.toString();
     }
 
     private initHotelInfoLabelsAndValues() {
@@ -206,9 +221,9 @@ export class InvoiceConfirmationVMContainer {
         }
         this.additionalPayerDetails = "";
         var payer = this._invoice.payerList[this.payerIndex];
-        if (_.isString(payer.additionalInvoiceDetails)) {
-            this.additionalPayerDetails = payer.additionalInvoiceDetails;
-        }
+        // if (_.isString(payer.additionalInvoiceDetails)) {
+        //      this.additionalPayerDetails = payer.additionalInvoiceDetails;
+        //  }
     }
 
     private initNotesFromBooking() {
@@ -244,14 +259,17 @@ export class InvoiceConfirmationVMContainer {
         this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + _.reduce(this.itemVMList, function (sum, itemVM: InvoiceItemVM) { return sum + itemVM.vat; }, 0));
         this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + _.reduce(this.itemVMList, function (sum, itemVM: InvoiceItemVM) { return sum + itemVM.subtotal; }, 0));
 
-        if (this.hasTransactionFee) {
-            let transactionFeeInvoiceItemVM = this.getTransactonFeeInvoiceItem();
-            this.itemVMList.push(transactionFeeInvoiceItemVM)
+        _.each(this.invoicePayer.paymentList, (payment: InvoicePaymentDO, index: number) => {
+            if (this.hasTransactionFee(payment)) {
+                let transactionFeeInvoiceItemVM = this.getTransactonFeeInvoiceItem(payment);
+                this.itemVMList.push(transactionFeeInvoiceItemVM);
 
-            this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + transactionFeeInvoiceItemVM.vat);
-            this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + transactionFeeInvoiceItemVM.subtotal);
-            this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + transactionFeeInvoiceItemVM.subtotal);
-        }
+                this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + transactionFeeInvoiceItemVM.vat);
+                this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + transactionFeeInvoiceItemVM.subtotal);
+                this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + transactionFeeInvoiceItemVM.subtotal);
+            }
+        });
+
 
         if (this.itemVMList.length > 0) {
             this.itemVMList[this.itemVMList.length - 1].isLastOne = true;
@@ -260,8 +278,8 @@ export class InvoiceConfirmationVMContainer {
         this.subtotalValueFormatted = this._thUtils.formatNumberToTwoDecimals(this.subtotalValue);
         this.totalVatFormatted = this._thUtils.formatNumberToTwoDecimals(this.totalVat);
     }
-    private getTransactonFeeInvoiceItem(): InvoiceItemVM {
-        let transactionFee = this._thUtils.roundNumberToTwoDecimals(this.invoicePayer.priceToPayPlusTransactionFee - this.invoicePayer.priceToPay);
+    private getTransactonFeeInvoiceItem(payment: InvoicePaymentDO): InvoiceItemVM {
+        let transactionFee = this._thUtils.roundNumberToTwoDecimals(payment.amountPlusTransactionFee - payment.amount);
         var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
         invoiceItemVM.qty = 1;
         invoiceItemVM.name = this._thTranslation.translate("Transaction fee");
@@ -295,7 +313,6 @@ export class InvoiceConfirmationVMContainer {
 
             let item = new InvoiceItemDO();
             item.type = InvoiceItemType.AddOnProduct;
-            item.accountingType = itemDO.accountingType;
             item.meta = aopItemMeta;
 
             var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
@@ -309,52 +326,70 @@ export class InvoiceConfirmationVMContainer {
     private initPaymentMethodLabelsAndValues() {
         this.paymentMethodLabel = this._thTranslation.translate('Payment Method');
         this.transactionFeeLabel = this._thTranslation.translate("transaction fee");
-        this.transactionFeeValue = (this.transactionFeeIsFlat ? this.transactionFee.amount : this.transactionFee.amount * 100).toString();
+        this.transactionFeeValues = [];
+        _.each(this.invoicePayer.paymentList, (payment: InvoicePaymentDO, index: number) => {
+            this.transactionFeeValues[index] = (this.transactionFeeIsFlat(payment) ? this.getTransactionFee(payment).amount : this.getTransactionFee(payment).amount * 100).toString();
+        });
 
+        this.paymentMethodValues = [];
+        this.subtotalPerPaymentMethod = [];
         if (this._invoice.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement) {
-            this.paymentMethodValue = this._thTranslation.translate(InvoiceConfirmationVMContainer.LOSS_ACCEPTED_BY_MANAGEMENT_STR);
+            this.paymentMethodValues[0] = this._thTranslation.translate(InvoiceConfirmationVMContainer.LOSS_ACCEPTED_BY_MANAGEMENT_STR);
             return;
         }
-
-        if (this._invoice.payerList[this.payerIndex].paymentMethod.type === InvoicePaymentMethodType.DefaultPaymentMethod) {
-            this.paymentMethodValue = _.find(this._paymentMethodList, (pm: PaymentMethodDO) => {
-                return pm.id === this._invoice.payerList[this.payerIndex].paymentMethod.value;
-            }).name;
-        }
-        else {
-            this.paymentMethodValue = this._thTranslation.translate(InvoiceConfirmationVMContainer.PAY_INVOICE_BY_AGREEMENT_STR);
-        }
+        _.each(this.invoicePayer.paymentList, (payment: InvoicePaymentDO, index: number) => {
+            if (payment.paymentMethod.type === InvoicePaymentMethodType.DefaultPaymentMethod) {
+                this.paymentMethodValues[index] = _.find(this._paymentMethodList, (pm: PaymentMethodDO) => {
+                    return pm.id === payment.paymentMethod.value;
+                }).name;
+            }
+            else {
+                this.paymentMethodValues[index] = this._thTranslation.translate(InvoiceConfirmationVMContainer.PAY_INVOICE_BY_AGREEMENT_STR);
+            }
+            this.subtotalPerPaymentMethod[index] = this._thUtils.roundNumberToTwoDecimals(payment.amount);
+        });
     }
 
     public get invoicePayer(): InvoicePayerDO {
         return this._invoice.payerList[this.payerIndex];
     }
 
-    public get transactionFee(): TransactionFeeDO {
-        return this._invoice.payerList[this.payerIndex].transactionFeeSnapshot;
+    public getTransactionFee(payment: InvoicePaymentDO): TransactionFeeDO {
+        return payment.transactionFeeSnapshot;
     }
 
-    public get hasTransactionFee(): boolean {
-        return this.invoicePayer.shouldApplyTransactionFee && this.transactionFee.amount > 0;
+    public hasTransactionFee(payment: InvoicePaymentDO): boolean {
+        return payment.shouldApplyTransactionFee && this.getTransactionFee(payment).amount > 0;
     }
 
-    public get transactionFeeIsFlat(): boolean {
-        return this.transactionFee.type === TransactionFeeType.Fixed;
+    public transactionFeeIsFlat(payment: InvoicePaymentDO): boolean {
+        return this.getTransactionFee(payment).type === TransactionFeeType.Fixed;
     }
 
     private initTotalValues() {
         this.totalLabel = this._thTranslation.translate('Total');
-        this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.invoicePayer.priceToPayPlusTransactionFee);
+        this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.invoicePayer.totalAmountPlusTransactionFee);
         this.totalValueFormatted = this._thUtils.formatNumberToTwoDecimals(this.totalValue);
     }
 
     private initAdditionalFields() {
         this.addFieldName1 = "";
         this.addFieldValue1 = "";
-        if (this._invoiceAggregatedData.bookingAttachment.exists) {
-            this.addFieldName1 = this._thTranslation.translate("Guest");
-            this.addFieldValue1 = this._invoiceAggregatedData.bookingAttachment.guest.customerDetails.getName();
+        if (this._invoiceAggregatedData.bookingAttachments.exists) {
+            this.addFieldName1 = this._thTranslation.translate("Guests");
+            this.addFieldValue1 = this.getGuestListString();
         }
+    }
+
+    private getGuestListString(): string {
+        var guestListString: string = "";
+        _.forEach(this._invoiceAggregatedData.bookingAttachments.guests, (customer: CustomerDO, index: number) => {
+            guestListString += customer.customerDetails.getName();
+            if (index < this._invoiceAggregatedData.bookingAttachments.guests.length - 1) {
+                guestListString += ", ";
+            }
+        });
+        return guestListString;
     }
 
     private initHotelVatLabelAndValue() {

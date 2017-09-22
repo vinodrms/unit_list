@@ -2,7 +2,6 @@ import { DefaultBillingDetailsDO } from '../../../data-layer/bookings/data-objec
 import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { ConfigCapacityDO } from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
 import { BookingValidationStructures } from '../validators/BookingValidationStructures';
-import { InvoicePaymentMethodType } from '../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
 import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
 import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
 import { ArrayValidationStructure } from '../../../utils/th-validation/structure/ArrayValidationStructure';
@@ -15,6 +14,7 @@ import { CommonValidationStructures } from "../../common/CommonValidations";
 import { BookingDO, TravelActivityType, TravelType } from "../../../data-layer/bookings/data-objects/BookingDO";
 import { EmailDistributionDO } from "../../hotel-operations/common/email-confirmations/utils/data-objects/EmailDistributionDO";
 import { NumberValidationRule } from "../../../utils/th-validation/rules/NumberValidationRule";
+import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
 
 export class BookingItemDO {
     interval: ThDateIntervalDO;
