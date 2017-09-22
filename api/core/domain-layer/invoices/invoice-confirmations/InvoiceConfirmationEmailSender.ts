@@ -100,7 +100,7 @@ export class InvoiceConfirmationEmailSender {
     }
 
     private isCorporatePayerWithPayByAgreement() {
-        return this._invoiceAggregatedData.payerCustomer.isCompanyOrTravelAgency
+        return this._invoiceAggregatedData.payerCustomer.isCompanyOrTravelAgency()
             && _.find(this._invoiceAggregatedData.invoice.payerList, (payer: InvoicePayerDO) => { return this._invoiceAggregatedData.payerCustomer.id === payer.customerId }).paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement;
     }
 
