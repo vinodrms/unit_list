@@ -94,7 +94,7 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
 
                 let payerString = this.getPayerString(invoice);
                 var bookingRef = '';
-                let bookingRefs: string[];
+                let bookingRefs: string[] = [];
                 invoice.indexedBookingIdList.forEach((bookingId: string) => {
                     bookingRefs.push(this._indexedBookingById[bookingId].displayedReservationNumber);
                 });

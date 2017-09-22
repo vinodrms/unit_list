@@ -73,35 +73,38 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
     }
 
     protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-        let invoiceRepository = this._appContext.getRepositoryFactory().getInvoiceRepository();
-        let igMeta = { hotelId: this._sessionContext.sessionDO.hotel.id };
-        let searchCriteria = {
-            paidInterval: this._shiftReportParams.dateInterval
-        };
-        invoiceRepository.getInvoiceList(igMeta, searchCriteria)
-            .then((result: InvoiceSearchResultRepoDO) => {
-                let invoiceList = result.invoiceList;
-                this._allInvoiceList = invoiceList;
-                this._paidInvoiceList = _.filter(invoiceList, (invoice: InvoiceDO) => {
-                    return invoice.isPaid();
-                });
-                this._lossAcceptedByManagementInvoiceList = _.filter(invoiceList, (invoice: InvoiceDO) => {
-                    return invoice.isLossAcceptedByManagement();
-                });
 
-                let aopLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
-                return aopLoader.loadAll();
-            }).then((aopContainer: AddOnProductItemContainer) => {
-                this._aopContainer = aopContainer;
-
-                let hotelRepo = this._appContext.getRepositoryFactory().getHotelRepository();
-                return hotelRepo.getHotelById(this._sessionContext.sessionDO.hotel.id);
-            }).then((hotel: HotelDO) => {
-                this._hotel = hotel;
-                resolve(true);
-            }).catch((e) => {
-                reject(e);
+        let hotelRepo = this._appContext.getRepositoryFactory().getHotelRepository();
+        hotelRepo.getHotelById(this._sessionContext.sessionDO.hotel.id).then((hotel: HotelDO) => {
+            this._hotel = hotel;
+            let invoiceRepository = this._appContext.getRepositoryFactory().getInvoiceRepository();
+            let igMeta = { hotelId: this._sessionContext.sessionDO.hotel.id };
+            let searchCriteria = {
+                paidInterval: this._shiftReportParams.dateInterval
+            };
+            return invoiceRepository.getInvoiceList(igMeta, searchCriteria)
+        }).then((result: InvoiceSearchResultRepoDO) => {
+            let startTimestamp = this._shiftReportParams.startTime.getTimestamp(this._hotel.timezone);
+            let endTimestamp = this._shiftReportParams.endTime.getTimestamp(this._hotel.timezone);
+            let invoiceList = _.filter(result.invoiceList, (invoice: InvoiceDO) => {
+                return invoice.paidTimestamp >= startTimestamp && invoice.paidTimestamp <= endTimestamp;
             });
+            this._allInvoiceList = invoiceList;
+            this._paidInvoiceList = _.filter(invoiceList, (invoice: InvoiceDO) => {
+                return invoice.isPaid();
+            });
+            this._lossAcceptedByManagementInvoiceList = _.filter(invoiceList, (invoice: InvoiceDO) => {
+                return invoice.isLossAcceptedByManagement();
+            });
+
+            let aopLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
+            return aopLoader.loadAll();
+        }).then((aopContainer: AddOnProductItemContainer) => {
+            this._aopContainer = aopContainer;
+            resolve(true);
+        }).catch((e) => {
+            reject(e);
+        });
     }
 
     protected getMeta(): ReportGroupMeta {
