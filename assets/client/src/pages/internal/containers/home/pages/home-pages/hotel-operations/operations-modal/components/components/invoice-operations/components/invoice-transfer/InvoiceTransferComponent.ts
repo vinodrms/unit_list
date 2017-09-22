@@ -147,10 +147,6 @@ export class InvoiceTransferComponent implements OnInit {
         }));
     }
 
-    public itemHasParentTransactionId(item: InvoiceItemDO): boolean {
-        return !this._thUtils.isUndefinedOrNull(item.parentTransactionId);
-    }
-
     public getInvoiceItemDisplayName(itemVm: InvoiceItemVM): string {
         return itemVm.getDisplayName(this._appContext.thTranslation);
     }

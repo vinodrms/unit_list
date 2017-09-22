@@ -46,7 +46,7 @@
                         <td>{{ itemVm.numberOfItems }}</td>
                         <td>{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
                         <td>{{ ccySymbol }}{{ itemVm.totalPrice }}</td>
-                        <td><i *ngIf="!itemHasParentTransactionId(itemVm.item)" class="fa fa-arrow-right clickable" [ngClass]="{'transfer-left': isTransferedItem(itemVm.item), 'transfer-right': !isTransferedItem(itemVm.item)}" (click)="transferItemsToRight(itemVm.item)"></i></td>
+                        <td><i *ngIf="itemVm.isMovable && isInvoiceSelectedForTransfer()" class="fa fa-arrow-right clickable" [ngClass]="{'transfer-left': isTransferedItem(itemVm.item), 'transfer-right': !isTransferedItem(itemVm.item)}" (click)="transferItemsToRight(itemVm.item)"></i></td>
                     </tr>
                 </tbody>
             </table>
@@ -107,7 +107,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let itemVm of transferInvoice.invoiceItemVms" class="selectable">
-                                <td><i *ngIf="!itemHasParentTransactionId(itemVm.item)" class="fa fa-arrow-left clickable" [ngClass]="{'transfer-right': isTransferedItem(itemVm.item), 'transfer-left': !isTransferedItem(itemVm.item)}" (click)="transferItemsToLeft(itemVm.item)"></i></td>
+                                <td><i *ngIf="itemVm.isMovable && isInvoiceSelectedForTransfer()" class="fa fa-arrow-left clickable" [ngClass]="{'transfer-right': isTransferedItem(itemVm.item), 'transfer-left': !isTransferedItem(itemVm.item)}" (click)="transferItemsToLeft(itemVm.item)"></i></td>
                                 <td>
                                     <i *ngIf="itemVm.isRelatedToBooking" class="unitpal-font">%</i> {{ getInvoiceItemDisplayName(itemVm) }}
                                 </td>
