@@ -24,10 +24,6 @@ export class InvoiceEmailConfirmationStrategy implements IEmailConfirmationStrat
     public getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
             {
-                key: "invoiceGroupId",
-                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
-            },
-            {
                 key: "invoiceId",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },

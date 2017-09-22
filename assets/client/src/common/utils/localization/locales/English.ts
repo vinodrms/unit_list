@@ -1030,5 +1030,7 @@ export var EnglishTranslations: Object = {
     "Are you sure you want to reinstate this invoice?": "Are you sure you want to reinstate this invoice?",
     "Pay Invoice": "Pay Invoice",
     "Reinstatement": "Reinstatement",
+    "No transaction fee": "No transaction fee",
+    "Price with transaction fee": "Price with transaction fee",
 
 };
