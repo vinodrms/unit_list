@@ -1,7 +1,7 @@
+import _ = require('underscore');
 import { BaseDO } from '../../../common/base/BaseDO';
 import { InvoicePaymentDO } from './InvoicePaymentDO';
-
-import _ = require('underscore');
+import { ThUtils } from '../../../../utils/ThUtils';
 
 export class InvoicePayerDO extends BaseDO {
     customerId: string;
@@ -26,11 +26,15 @@ export class InvoicePayerDO extends BaseDO {
         });
     }
 
-    public totalAmountPlusTransactionFee(): number {
-        return _.reduce(this.paymentList, function (sum, payment: InvoicePaymentDO) { return sum + payment.amountPlusTransactionFee; }, 0);
+    public get totalAmountPlusTransactionFee(): number {
+        let total = _.reduce(this.paymentList, function (sum, payment: InvoicePaymentDO) { return sum + payment.amountPlusTransactionFee; }, 0);
+        let utils = new ThUtils();
+        return utils.roundNumberToTwoDecimals(total);
     }
 
-    public totalAmount(): number {
-        return _.reduce(this.paymentList, function (sum, payment: InvoicePaymentDO) { return sum + payment.amount; }, 0);
+    public get totalAmount(): number {
+        let total = _.reduce(this.paymentList, function (sum, payment: InvoicePaymentDO) { return sum + payment.amount; }, 0);
+        let utils = new ThUtils();
+        return utils.roundNumberToTwoDecimals(total);
     }
 }

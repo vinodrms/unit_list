@@ -26,7 +26,7 @@ import { InvoiceMetaFactory } from "../../../../../../../../../../../services/in
 import { AddInvoicePaymentModalService } from "./modal/services/AddInvoicePaymentModalService";
 import { HotelOperationsPageControllerService } from "../../../../services/HotelOperationsPageControllerService";
 import { InvoiceItemVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM";
-import {ThServerApi} from "../../../../../../../../../../../../../common/utils/http/ThServerApi";
+import { ThServerApi } from "../../../../../../../../../../../../../common/utils/http/ThServerApi";
 import { PaginationOptions } from "../../utils/PaginationOptions";
 
 export interface InvoiceChangedOptions {
@@ -366,7 +366,6 @@ export class InvoiceOverviewComponent implements OnInit {
         return 'api/invoices/download?invoiceId='
             + this.currentInvoice.invoice.id
             + '&customerId=' + payer.id
-            + '&payerIndex=' + payerIndex 
             + '&token=' + accessToken;
     }
 }

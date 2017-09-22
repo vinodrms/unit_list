@@ -12,13 +12,12 @@ import { BaseEmailTemplateDO, EmailTemplateTypes } from '../../../services/email
 import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
 import { InvoiceEmailTemplateDO } from "../../../services/email/data-objects/InvoiceEmailTemplateDO";
 import { ThUtils } from "../../../utils/ThUtils";
-import { InvoiceDO } from "../../../data-layer/invoices-deprecated/data-objects/InvoiceDO";
-import { InvoicePaymentMethodType } from "../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO";
-import { InvoicePayerDO } from "../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO";
 
 import fs = require('fs');
 import path = require('path');
 import _ = require("underscore");
+import { InvoicePayerDO } from '../../../data-layer/invoices/data-objects/payer/InvoicePayerDO';
+import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
 
 
 export class InvoiceConfirmationEmailSender {
@@ -43,11 +42,11 @@ export class InvoiceConfirmationEmailSender {
         var hotel: HotelDO;
 
         this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id).then((loadedHotel: HotelDO) => {
-        hotel = loadedHotel;
-        var invoiceDataAggregator = new InvoiceDataAggregator(this._appContext, this._sessionContext);
+            hotel = loadedHotel;
+            var invoiceDataAggregator = new InvoiceDataAggregator(this._appContext, this._sessionContext);
 
-        return invoiceDataAggregator.getInvoiceAggregatedData(query);
-    }).then((invoiceAggregatedData: InvoiceAggregatedData) => {
+            return invoiceDataAggregator.getInvoiceAggregatedData(query);
+        }).then((invoiceAggregatedData: InvoiceAggregatedData) => {
             this._invoiceAggregatedData = invoiceAggregatedData;
             var invoiceConfirmationVMContainer = new InvoiceConfirmationVMContainer(this._thTranslation);
             invoiceConfirmationVMContainer.buildFromInvoiceAggregatedDataContainer(invoiceAggregatedData);
@@ -90,8 +89,8 @@ export class InvoiceConfirmationEmailSender {
         emailTemplateDO.hotelCountry = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.country.name") ? hotelDO.contactDetails.address.country.name : "";
         emailTemplateDO.hotelEmail = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.email") ? hotelDO.contactDetails.email : "";
         emailTemplateDO.hotelPhone = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.phone") ? hotelDO.contactDetails.phone : "";
-        emailTemplateDO.hotelName =  !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.phone") ? hotelDO.contactDetails.name : "";
-        emailTemplateDO.hotelAddressLine1 = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.streetAddress") ? hotelDO.contactDetails.address.streetAddress: "";
+        emailTemplateDO.hotelName = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.phone") ? hotelDO.contactDetails.name : "";
+        emailTemplateDO.hotelAddressLine1 = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.streetAddress") ? hotelDO.contactDetails.address.streetAddress : "";
         emailTemplateDO.hotelAddressLine2 = !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.postalCode") ? hotelDO.contactDetails.address.postalCode : "";
         emailTemplateDO.hotelAddressLine2 += !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.city") ? (" " + hotelDO.contactDetails.address.city) : "";
         emailTemplateDO.paymentDueInDays = hotelDO.paymentDueInDays;
@@ -102,7 +101,7 @@ export class InvoiceConfirmationEmailSender {
 
     private isCorporatePayerWithPayByAgreement() {
         return this._invoiceAggregatedData.payerCustomer.isCompanyOrTravelAgency
-                && _.find(this._invoiceAggregatedData.invoice.payerList, (payer: InvoicePayerDO) => {return this._invoiceAggregatedData.payerCustomer.id === payer.customerId}).paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement;
+            && _.find(this._invoiceAggregatedData.invoice.payerList, (payer: InvoicePayerDO) => { return this._invoiceAggregatedData.payerCustomer.id === payer.customerId }).paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement;
     }
 
 }

@@ -150,7 +150,7 @@ export class InvoiceConfirmationVMContainer {
         this.roomNameValues = [];
         if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.bookingAttachments.rooms)
             && this._invoiceAggregatedData.bookingAttachments.rooms.length > 0) {
-            this.roomNameValues = _.map(this._invoiceAggregatedData.bookingAttachments.rooms, (room: RoomDO) =>{return room.name;});
+            this.roomNameValues = _.map(this._invoiceAggregatedData.bookingAttachments.rooms, (room: RoomDO) => { return room.name; });
         }
     }
     private initLogoSrcs() {
@@ -166,8 +166,8 @@ export class InvoiceConfirmationVMContainer {
     private initHeaderLabelsAndValues() {
         this.invoiceLabel = this._thTranslation.translate('Invoice');
         this.dateLabel = this._thTranslation.translate('Date');
-        this.dateValue = this._thDateUtils.convertTimestampToThTimestamp(this._invoice.paidTimestamp).thDateDO.toString();
-        
+        let thTimestamp = this._thDateUtils.convertTimestampToLocalThTimestamp(this._invoice.paidTimestamp, this._invoiceAggregatedData.hotel.timezone);
+        this.dateValue = thTimestamp.thDateDO.toString();
     }
 
     private initHotelInfoLabelsAndValues() {
@@ -221,9 +221,9 @@ export class InvoiceConfirmationVMContainer {
         }
         this.additionalPayerDetails = "";
         var payer = this._invoice.payerList[this.payerIndex];
-       // if (_.isString(payer.additionalInvoiceDetails)) {
-      //      this.additionalPayerDetails = payer.additionalInvoiceDetails;
-      //  }
+        // if (_.isString(payer.additionalInvoiceDetails)) {
+        //      this.additionalPayerDetails = payer.additionalInvoiceDetails;
+        //  }
     }
 
     private initNotesFromBooking() {
@@ -368,7 +368,7 @@ export class InvoiceConfirmationVMContainer {
 
     private initTotalValues() {
         this.totalLabel = this._thTranslation.translate('Total');
-        this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.invoicePayer.totalAmountPlusTransactionFee());
+        this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.invoicePayer.totalAmountPlusTransactionFee);
         this.totalValueFormatted = this._thUtils.formatNumberToTwoDecimals(this.totalValue);
     }
 

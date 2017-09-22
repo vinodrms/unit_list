@@ -1,3 +1,4 @@
+import _ = require("underscore");
 import { AReportSectionGeneratorStrategy } from "../common/report-section-generator/AReportSectionGeneratorStrategy";
 import { AppContext } from "../../../utils/AppContext";
 import { SessionContext } from "../../../utils/SessionContext";
@@ -7,22 +8,17 @@ import { ThError } from "../../../utils/th-responses/ThError";
 import { LazyLoadRepoDO } from "../../../data-layer/common/repo-data-objects/LazyLoadRepoDO";
 import { ThDateIntervalDO } from "../../../utils/th-dates/data-objects/ThDateIntervalDO";
 import { BookingSearchCriteriaRepoDO, BookingSearchResultRepoDO } from "../../../data-layer/bookings/repositories/IBookingRepository";
-import { InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO } from "../../../data-layer/invoices-deprecated/repositories/IInvoiceGroupsRepository";
-import { InvoiceGroupDO } from "../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO";
-import { InvoiceDO } from "../../../data-layer/invoices-deprecated/data-objects/InvoiceDO";
 import { CustomerSearchResultRepoDO } from "../../../data-layer/customers/repositories/ICustomerRepository";
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 import { ThUtils } from "../../../utils/ThUtils";
 import { PaymentMethodDO } from "../../../data-layer/common/data-objects/payment-method/PaymentMethodDO";
-import { InvoicePayerDO } from "../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO";
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO";
 import { ShiftReportPaidInvoicesSectionGenerator } from "../shift-report/strategies/ShiftReportPaidInvoicesSectionGenerator";
 import { BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
 import { ThDateIntervalUtils } from "../../../utils/th-dates/ThDateIntervalUtils";
-import { InvoicePaymentMethodsUtils } from "../../invoices-deprecated/utils/InvoicePaymentMethodsUtils";
-
-import _ = require("underscore");
-
+import { InvoicePaymentMethodsUtils } from "../../invoices/utils/InvoicePaymentMethodsUtils";
+import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceSearchCriteriaRepoDO, InvoiceSearchResultRepoDO } from "../../../data-layer/invoices/repositories/IInvoiceRepository";
+import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payer/InvoicePayerDO";
 
 export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrategy {
     private _totalAmount: number;
@@ -80,9 +76,9 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
 
             return customerRepo.getCustomerList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { customerIdList: this._customerIdList });
         }).then((result: CustomerSearchResultRepoDO) => {
-            let invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepositoryDeprecated();
+            let invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceRepository();
 
-            let invoiceSearchCriteria: InvoiceGroupSearchCriteriaRepoDO = {
+            let invoiceSearchCriteria: InvoiceSearchCriteriaRepoDO = {
                 customerIdList: this._customerIdList,
                 paidInterval: interval
             }
@@ -93,21 +89,14 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                 this._customerMap[customer.id] = customer;
             });
 
-            return invoicesRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, invoiceSearchCriteria);
-        }).then((result: InvoiceGroupSearchResultRepoDO) => {
+            return invoicesRepo.getInvoiceList({ hotelId: this._sessionContext.sessionDO.hotel.id }, invoiceSearchCriteria);
+        }).then((result: InvoiceSearchResultRepoDO) => {
             let intervalUtils = new ThDateIntervalUtils([interval]);
-            let invoiceGroupsList = result.invoiceGroupList;
+            this._invoiceList = result.invoiceList;
 
-            this._invoiceList = _.chain(invoiceGroupsList).map((invoiceGroup: InvoiceGroupDO) => {
-                return invoiceGroup.invoiceList;
-            }).flatten().filter((invoice: InvoiceDO) => {
-                return intervalUtils.containsThDateDO(invoice.paidDate);
-            }).value();
-
-            let bookingIdList = _.filter(this._invoiceList, (invoice: InvoiceDO) => {
-                return invoice.bookingId;
-            }).map((invoice: InvoiceDO) => {
-                return invoice.bookingId;
+            let bookingIdList = [];
+            this._invoiceList.forEach(invoice => {
+                bookingIdList = bookingIdList.concat(invoice.indexedBookingIdList);
             });
 
             return this._appContext.getRepositoryFactory().getBookingRepository().getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { bookingIdList: bookingIdList });
@@ -125,9 +114,10 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
             let rawData: any[] = [];
 
             _.forEach(this._invoiceList, (invoice: InvoiceDO) => {
-                let payerCustomerIdList = _.filter(invoice.getPayerCustomerIdList(), (customerId: string) => {
-                    return _.contains(this._customerIdList, customerId);
+                let payerList = _.filter(invoice.payerList, (payer: InvoicePayerDO) => {
+                    return _.contains(this._customerIdList, payer.customerId);
                 });
+                let payerCustomerIdList = _.map(payerList, (payer: InvoicePayerDO) => { return payer.customerId; });
 
                 _.forEach(payerCustomerIdList, (customerId: string) => {
                     let customer = this._customerMap[customerId];
@@ -148,12 +138,12 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
 
                 let invoice1: InvoiceDO = a[0];
                 let invoice2: InvoiceDO = b[0];
-                if (invoice1.paidDateTimeUtcTimestamp != invoice2.paidDateTimeUtcTimestamp) {
-                    return invoice1.paidDateTimeUtcTimestamp > invoice2.paidDateTimeUtcTimestamp ? 1 : -1;
+                if (invoice1.paidTimestamp != invoice2.paidTimestamp) {
+                    return invoice1.paidTimestamp > invoice2.paidTimestamp ? 1 : -1;
                 }
 
-                if (invoice1.invoiceReference !== invoice2.invoiceReference) {
-                    return invoice1.invoiceReference > invoice2.invoiceReference ? 1 : -1;
+                if (invoice1.reference !== invoice2.reference) {
+                    return invoice1.reference > invoice2.reference ? 1 : -1;
                 }
 
                 return 0;
@@ -165,7 +155,7 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                 let invoicePayerDO = _.find(invoice.payerList, (invoicePayer: InvoicePayerDO) => {
                     return invoicePayer.customerId === customer.id;
                 });
-                let bookingGuest = (invoice.bookingId) ? this.getBookingGuestNameForInvoice(invoice) : "";
+                let bookingGuest = (invoice.indexedBookingIdList) ? this.getBookingGuestNamesForInvoice(invoice) : "";
 
                 let paymentMethodString = "";
                 if (!this._thUtils.isUndefinedOrNull(invoicePayerDO) && !this._thUtils.isUndefinedOrNull(invoicePayerDO.paymentMethod)) {
@@ -177,9 +167,9 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                 }
 
                 return [
-                    invoice.invoiceReference,
+                    invoice.reference,
                     customer.customerDetails.getName(),
-                    invoice.getPricePaidByCustomerId(customer.id),
+                    this.getPricePaidByCustomerId(invoice, customer.id),
                     invoice.paidTimestamp.toString(),
                     bookingGuest,
                     paymentMethodString
@@ -198,14 +188,28 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
         })
     }
 
-    private getBookingGuestNameForInvoice(invoice: InvoiceDO): string {
-        var associatedBooking: BookingDO = _.find(this._bookingList, (booking: BookingDO) => {
-            return invoice.bookingId === booking.id;
+    private getBookingGuestNamesForInvoice(invoice: InvoiceDO): string {
+        var associatedBookings: BookingDO[] = _.filter(this._bookingList, (booking: BookingDO) => {
+            return _.contains(invoice.indexedBookingIdList, booking.id);
         });
-        if (associatedBooking && associatedBooking.displayCustomerId) {
-            return this._bookingGuestCustomerMap[associatedBooking.defaultBillingDetails.customerIdDisplayedAsGuest].customerDetails.getName();
+        if (associatedBookings && associatedBookings.length > 0) {
+            let names: string[] = [];
+            associatedBookings.forEach(booking => {
+                if (booking.defaultBillingDetails && booking.defaultBillingDetails.customerIdDisplayedAsGuest) {
+                    names.push(this._bookingGuestCustomerMap[booking.defaultBillingDetails.customerIdDisplayedAsGuest].customerDetails.getName())
+                }
+            });
+            return names.join(", ");
         } else {
             return "";
         }
+    }
+
+    private getPricePaidByCustomerId(invoice: InvoiceDO, customerId: string): number {
+        let payer: InvoicePayerDO = _.find(invoice.payerList, (payer: InvoicePayerDO) => { return payer.customerId === customerId; });
+        if (this._thUtils.isUndefinedOrNull(payer)) {
+            return 0.0;
+        }
+        return payer.totalAmount;
     }
 }

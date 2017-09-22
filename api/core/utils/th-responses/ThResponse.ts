@@ -378,6 +378,7 @@ export enum ThStatusCode {
     InvoiceGroupsRepositoryBookingPriceLinkError,
     InvoiceGroupsRepositoryAddInvoiceFeeError,
     InvoiceEmailSenderErrorSendingEmail,
+    InvoiceDataAggregatorCustomerNotFoundAsPayer,
 
     SlackSendMessageError,
 
@@ -950,6 +951,7 @@ ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorSavingPaymentDate] 
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryBookingPriceLinkError] = "Error linking booking prices with the invoice groups.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryAddInvoiceFeeError] = "Error adding invoice fee to the invoices if necessary.";
 ThMessage[ThStatusCode.InvoiceEmailSenderErrorSendingEmail] = "Error sending invoice by email.";
+ThMessage[ThStatusCode.InvoiceDataAggregatorCustomerNotFoundAsPayer] = "The customer does not appear as a payer on the invoice.";
 ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";
 ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking list.";
 ThMessage[ThStatusCode.AddBookingsRepositoryNoBookingsLimitExceeded] = "You can't create more than 50 bookings at once.";

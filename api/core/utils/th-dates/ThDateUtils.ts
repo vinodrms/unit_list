@@ -49,7 +49,7 @@ export class ThDateUtils {
         }
         return moment(momentInitializer);
     }
-    
+
     public convertThDateDOToMoment(inDate: ThDateDO, timezone: string = null): moment.Moment {
         if (_.isString(timezone) && !_.isEmpty(timezone)) {
             return moment.tz([inDate.year, inDate.month, inDate.day], timezone);
@@ -85,11 +85,11 @@ export class ThDateUtils {
         let moment = this.convertThDateDOToMoment(inDate).endOf(unitOfTime);
         return this.convertMomentToThDateDO(moment);
     }
-    public convertTimestampToThTimestamp(timestamp: number): ThTimestampDO {
-		var thTimestamp = new ThTimestampDO();
-		var convertedMoment: moment.Moment = moment(timestamp);
-		thTimestamp.thDateDO = this.convertMomentToThDateDO(convertedMoment);
-		thTimestamp.thHourDO = this.convertMomentToThHourDO(convertedMoment);
-		return thTimestamp;
-	}
+    public convertTimestampToLocalThTimestamp(timestamp: number, timezone: string): ThTimestampDO {
+        var thTimestamp = new ThTimestampDO();
+        var convertedMoment: moment.Moment = moment.tz(timestamp, timezone);
+        thTimestamp.thDateDO = this.convertMomentToThDateDO(convertedMoment);
+        thTimestamp.thHourDO = this.convertMomentToThHourDO(convertedMoment);
+        return thTimestamp;
+    }
 }

@@ -1,18 +1,15 @@
+import _ = require("underscore");
 import { AppContext } from '../../../../../../utils/AppContext';
 import { SessionContext } from '../../../../../../utils/SessionContext';
-
 import { IValidationStructure } from '../../../../../../utils/th-validation/structure/core/IValidationStructure';
 import { ObjectValidationStructure } from '../../../../../../utils/th-validation/structure/ObjectValidationStructure';
 import { PrimitiveValidationStructure } from '../../../../../../utils/th-validation/structure/PrimitiveValidationStructure';
 import { StringValidationRule } from '../../../../../../utils/th-validation/rules/StringValidationRule';
-
 import { IEmailConfirmationStrategy } from '../IEmailConfirmationStrategy';
 import { EmailConfirmationDO } from '../../EmailConfirmationDO';
-import { InvoiceConfirmationEmailSender } from '../../../../../invoices-deprecated/invoice-confirmations/InvoiceConfirmationEmailSender';
-import { InvoiceDataAggregatorQuery } from '../../../../../invoices-deprecated/aggregators/InvoiceDataAggregator';
 import { EmailDistributionDO } from "../data-objects/EmailDistributionDO";
-
-import _ = require("underscore");
+import { InvoiceConfirmationEmailSender } from '../../../../../invoices/invoice-confirmations/InvoiceConfirmationEmailSender';
+import { InvoiceDataAggregatorQuery } from '../../../../../invoices/aggregators/InvoiceDataAggregator';
 
 export interface InvoiceEmailConfirmationParams {
     invoiceGroupId: string;
@@ -45,9 +42,7 @@ export class InvoiceEmailConfirmationStrategy implements IEmailConfirmationStrat
         var emailSender: InvoiceConfirmationEmailSender = new InvoiceConfirmationEmailSender(this._appContext, this._sessionContext);
         var invoiceQuery: InvoiceDataAggregatorQuery = {
             customerId: invoiceConfirmationParams.customerId,
-            invoiceGroupId: invoiceConfirmationParams.invoiceGroupId,
             invoiceId: invoiceConfirmationParams.invoiceId,
-            payerIndex: invoiceConfirmationParams.payerIndex
         };
         var emailList = this.buildEmailList(confirmationDO);
         return emailSender.sendInvoiceConfirmation(invoiceQuery, emailList);

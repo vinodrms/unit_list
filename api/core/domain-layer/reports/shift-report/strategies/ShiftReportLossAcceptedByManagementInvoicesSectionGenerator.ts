@@ -1,17 +1,17 @@
+import _ = require('underscore');
 import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
-import { InvoiceDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
-import { InvoicePayerDO } from '../../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
 import { CustomerSearchResultRepoDO } from '../../../../data-layer/customers/repositories/ICustomerRepository';
 import { CustomerDO } from '../../../../data-layer/customers/data-objects/CustomerDO';
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingDO";
 import { BookingSearchResultRepoDO } from "../../../../data-layer/bookings/repositories/IBookingRepository";
-
-import _ = require('underscore');
+import { InvoiceDO } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { ThDateUtils } from '../../../../utils/th-dates/ThDateUtils';
+import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
+import { InvoicePayerDO } from '../../../../data-layer/invoices/data-objects/payer/InvoicePayerDO';
 
 export class ShiftReportLossAcceptedByManagementInvoicesSectionGenerator extends AReportSectionGeneratorStrategy {
 
@@ -19,8 +19,9 @@ export class ShiftReportLossAcceptedByManagementInvoicesSectionGenerator extends
     private _indexedBookingById: { [id: string]: BookingDO };
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
-        private _allInvoiceGroupList: InvoiceGroupDO[],
-        private _lostByManagementInvoiceGroupList: InvoiceGroupDO[]) {
+        private _allInvoiceList: InvoiceDO[],
+        private _lostByManagementInvoiceList: InvoiceDO[],
+        private _hotel: HotelDO) {
         super(appContext, sessionContext, globalSummary);
     }
 
@@ -38,8 +39,8 @@ export class ShiftReportLossAcceptedByManagementInvoicesSectionGenerator extends
     }
     protected getMeta(): ReportSectionMeta {
         return {
-			title: "Loss Accepted By Management Invoices"
-		}
+            title: "Loss Accepted By Management Invoices"
+        }
     }
 
     protected getGlobalSummary(): Object {
@@ -68,41 +69,40 @@ export class ShiftReportLossAcceptedByManagementInvoicesSectionGenerator extends
             var data = [];
             var totalAmountLost = 0.0;
 
-            this._lostByManagementInvoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
-                invoiceGroup.invoiceList.forEach((invoice: InvoiceDO) => {
-                    var amountLost = 0.0;
-                    invoice.payerList.forEach(payer => {
-                        amountLost += payer.priceToPay;
-                    });
-
-                    amountLost = this._thUtils.roundNumberToTwoDecimals(amountLost);
-
-                    let payerString = this.getPayerString(invoice);
-                    var bookingRef = '';
-                    if (!this._thUtils.isUndefinedOrNull(invoice.bookingId)) {
-                        bookingRef = this._indexedBookingById[invoice.bookingId].displayedReservationNumber;
-                    }
-
-                    let paidTimestampStr = !invoice.paidTimestamp.isValid() ? '' : invoice.paidTimestamp.toString();
-
-                    let invoiceRefDisplayString = invoice.invoiceReference;
-
-                    if (invoice.isReinstatement()) {
-                        let unfilteredInvoiceGroup = _.find(this._allInvoiceGroupList, (group: InvoiceGroupDO) => {
-                            return group.id === invoiceGroup.id;
-                        });
-                        let reinstatedInvoiceRef = unfilteredInvoiceGroup.getReinstatedInvoiceReference(invoice.id);
-                        invoiceRefDisplayString += ' ' + this._appContext.thTranslate.translate('(reinstatement of %reinstatedInvoiceRef%)', {
-                            reinstatedInvoiceRef: reinstatedInvoiceRef
-                        });
-                    }
-
-                    let row = [invoiceRefDisplayString, payerString, amountLost, bookingRef, paidTimestampStr];
-
-                    data.push(row);
-
-                    totalAmountLost += amountLost;
+            this._lostByManagementInvoiceList.forEach((invoice: InvoiceDO) => {
+                var amountLost = 0.0;
+                invoice.payerList.forEach(payer => {
+                    amountLost += payer.totalAmount;
                 });
+
+                amountLost = this._thUtils.roundNumberToTwoDecimals(amountLost);
+
+                let payerString = this.getPayerString(invoice);
+                var bookingRef = '';
+                let bookingRefs: string[];
+                invoice.indexedBookingIdList.forEach((bookingId: string) => {
+                    bookingRefs.push(this._indexedBookingById[bookingId].displayedReservationNumber);
+                });
+                bookingRef = bookingRefs.join(", ");
+
+                let paidTimestampStr = '';
+                if (_.isNumber(invoice.paidTimestamp)) {
+                    let dateUtils = new ThDateUtils();
+                    paidTimestampStr = dateUtils.convertTimestampToLocalThTimestamp(invoice.paidTimestamp, this._hotel.timezone).toString();
+                }
+
+                let invoiceRefDisplayString = invoice.reference;
+
+                if (invoice.isReinstatement()) {
+                    invoiceRefDisplayString += ' ' + this._appContext.thTranslate.translate('reinstatement');
+                }
+
+                let row = [invoiceRefDisplayString, payerString, amountLost, bookingRef, paidTimestampStr];
+
+                data.push(row);
+
+                totalAmountLost += amountLost;
+
             });
             // sort by invoice reference
             data.sort((row1: string[], row2: string[]) => {
@@ -121,12 +121,8 @@ export class ShiftReportLossAcceptedByManagementInvoicesSectionGenerator extends
     private getBookingIdList(): string[] {
         let bookingIdList = [];
 
-        this._lostByManagementInvoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
-            invoiceGroup.invoiceList.forEach((invoice: InvoiceDO) => {
-                if (_.isString(invoice.bookingId) && !_.contains(bookingIdList, invoice.bookingId)) {
-                    bookingIdList.push(invoice.bookingId);
-                }
-            });
+        this._lostByManagementInvoiceList.forEach((invoice: InvoiceDO) => {
+            bookingIdList = bookingIdList.concat(invoice.indexedBookingIdList);
         });
 
         return bookingIdList;
@@ -134,15 +130,14 @@ export class ShiftReportLossAcceptedByManagementInvoicesSectionGenerator extends
 
     private getCustomerIdList(): string[] {
         let customerIdList: string[] = [];
-        this._lostByManagementInvoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
-            invoiceGroup.invoiceList.forEach((invoice: InvoiceDO) => {
-                customerIdList = customerIdList.concat(_.map(invoice.payerList, (payer: InvoicePayerDO) => {
-                    return payer.customerId;
-                }));
-            });
+        this._lostByManagementInvoiceList.forEach((invoice: InvoiceDO) => {
+            customerIdList = customerIdList.concat(_.map(invoice.payerList, (payer: InvoicePayerDO) => {
+                return payer.customerId;
+            }));
         });
         return _.uniq(customerIdList);
     }
+
     private getPayerString(invoice: InvoiceDO): string {
         return _.reduce(invoice.payerList, (payerString: string, payer: InvoicePayerDO) => {
             let customer = this._indexedCustomersById[payer.customerId];

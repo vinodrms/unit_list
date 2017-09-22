@@ -86,7 +86,6 @@ export class InvoicesController extends BaseController {
             let query: InvoiceDataAggregatorQuery = {
                 customerId: req.query['customerId'],
                 invoiceId: req.query['invoiceId'],
-                payerIndex: req.query['payerIndex']
             };
 
             return invoiceDataAggregator.getInvoiceAggregatedData(query);

@@ -119,14 +119,6 @@ module.exports.routes = {
     'POST /api/bookings/add': 'BookingsController.addBookings',
     'POST /api/bookings/occupancy': 'BookingsController.getOccupancy',
 
-    // deprecated invoice groups
-    'POST /api/invoiceGroups': 'InvoiceGroupsDeprecatedController.getInvoiceGroupList',
-    'POST /api/invoiceGroups/count': 'InvoiceGroupsDeprecatedController.getInvoiceGroupListCount',
-    'GET /api/invoiceGroups/invoiceGroupItem': 'InvoiceGroupsDeprecatedController.getInvoiceGroupById',
-    'GET /api/invoiceGroups/pdf': 'InvoiceGroupsDeprecatedController.downloadInvoicePdf',
-    'POST /api/invoiceGroups/saveInvoicegroupItem': 'InvoiceGroupsDeprecatedController.saveInvoiceGroupItem',
-    'POST /api/invoiceGroups/reinstate': 'InvoiceGroupsDeprecatedController.reinstateInvoice',
-
     'POST /api/invoices': 'InvoicesController.getInvoiceList',
     'POST /api/invoices/count': 'InvoicesController.getInvoiceListCount',
     'GET /api/invoices/item': 'InvoicesController.getInvoiceById',

@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
 import { ThError } from '../../../utils/th-responses/ThError';
 import { ThUtils } from '../../../utils/ThUtils';
@@ -21,14 +22,12 @@ import { RoomDO } from '../../../data-layer/rooms/data-objects/RoomDO';
 import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 import { RoomCategorySearchResultRepoDO } from "../../../data-layer/room-categories/repositories/IRoomCategoryRepository";
 import { RoomSearchResultRepoDO } from "../../../data-layer/rooms/repositories/IRoomRepository";
-
-import _ = require('underscore');
+import { InvoicePayerDO } from '../../../data-layer/invoices/data-objects/payer/InvoicePayerDO';
 
 
 export interface InvoiceDataAggregatorQuery {
     invoiceId: string;
     customerId: string;
-    payerIndex: number;
 }
 
 export class InvoiceDataAggregator {
@@ -73,12 +72,18 @@ export class InvoiceDataAggregator {
 
             return this.loadBookingDependencies();
         }).then((loadResult: boolean) => {
-            var invoicePayerDO = this._invoice.payerList[query.payerIndex];
-            var customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository()
-            return customerRepo.getCustomerById({ hotelId: this._hotel.id }, invoicePayerDO.customerId);
+            var customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
+            return customerRepo.getCustomerById({ hotelId: this._hotel.id }, query.customerId);
         }).then((customer: CustomerDO) => {
             this._payerCustomer = customer;
-            this._payerIndexOnInvoice = query.payerIndex;
+            this._payerIndexOnInvoice = _.findIndex(this._invoice.payerList, (payer: InvoicePayerDO) => {
+                return payer.customerId === customer.id;
+            });
+            if (this._payerIndexOnInvoice < 0) {
+                var thError = new ThError(ThStatusCode.InvoiceDataAggregatorCustomerNotFoundAsPayer, null);
+                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "the customer is not a payer on the invoice", query, thError);
+                throw thError;
+            }
 
             var addOnProductRepo = this._appContext.getRepositoryFactory().getAddOnProductRepository();
             return addOnProductRepo.getAddOnProductList({ hotelId: this._hotel.id }, { addOnProductIdList: this._invoice.getAddOnProductIdList() });
@@ -129,7 +134,7 @@ export class InvoiceDataAggregator {
         }
         this._loadedBookings = bookingList;
         var roomCategRepo = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
-        roomCategRepo.getRoomCategoryList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {categoryIdList: _.map(this._loadedBookings, (booking: BookingDO) => { return booking.roomCategoryId;})})
+        roomCategRepo.getRoomCategoryList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { categoryIdList: _.map(this._loadedBookings, (booking: BookingDO) => { return booking.roomCategoryId; }) })
             .then((roomCategorySearchResult: RoomCategorySearchResultRepoDO) => {
                 this._loadedRoomCateg = roomCategorySearchResult.roomCategoryList;
 
@@ -143,7 +148,7 @@ export class InvoiceDataAggregator {
                 });
 
                 var custRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
-                return custRepo.getCustomerList({ hotelId: this._hotel.id }, {customerIdList: customerIdList});
+                return custRepo.getCustomerList({ hotelId: this._hotel.id }, { customerIdList: customerIdList });
             }).then((customerRepoSearchResultDO: CustomerSearchResultRepoDO) => {
                 this._loadedGuestList = customerRepoSearchResultDO.customerList;
                 return this.getRoomsIfSet();
@@ -166,19 +171,13 @@ export class InvoiceDataAggregator {
                 roomIdList.push(booking.roomId);
             }
         });
-        /*
-        if (!_.isString(this._loadedBookings.roomId)) {
-            return new Promise<RoomDO>((resolve: { (result: RoomDO): void }, reject: { (err: ThError): void }) => {
-                resolve(null);
-            });
-        }*/
         if (roomIdList.length == 0) {
             return new Promise<RoomSearchResultRepoDO>((resolve: { (result: RoomSearchResultRepoDO): void }, reject: { (err: ThError): void }) => {
                 resolve(null);
-            });    
+            });
         }
         var roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
-        return roomRepo.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {roomIdList: roomIdList});
+        return roomRepo.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { roomIdList: roomIdList });
     }
 
     private buildInvoiceAggregatedDataContainerFromLoadedData(): InvoiceAggregatedData {

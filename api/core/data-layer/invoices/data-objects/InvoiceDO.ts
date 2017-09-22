@@ -205,4 +205,9 @@ export class InvoiceDO extends BaseDO {
     public isClosed(): boolean {
         return this.isPaid() || this.isLossAcceptedByManagement();
     }
+
+    public isReinstatement(): boolean {
+        var thUtils = new ThUtils();
+        return !thUtils.isUndefinedOrNull(this.reinstatedInvoiceId);
+    }
 }
