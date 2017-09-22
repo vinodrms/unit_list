@@ -12,10 +12,8 @@ import { InvoiceConfirmationEmailSender } from '../../../../../invoices/invoice-
 import { InvoiceDataAggregatorQuery } from '../../../../../invoices/aggregators/InvoiceDataAggregator';
 
 export interface InvoiceEmailConfirmationParams {
-    invoiceGroupId: string;
     invoiceId: string;
     customerId: string;
-    payerIndex: number;
 }
 export class InvoiceEmailConfirmationStrategy implements IEmailConfirmationStrategy {
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
