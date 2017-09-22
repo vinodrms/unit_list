@@ -130,9 +130,7 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
 
             mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.invoiceIdList);
             mongoQueryBuilder.addExactMatch("reference", searchCriteria.reference);
-            if (!this._thUtils.isUndefinedOrNull(searchCriteria.excludedInvoiceId)) {
-                mongoQueryBuilder.addNotEqualMatch("id", searchCriteria.excludedInvoiceId);
-            }
+            mongoQueryBuilder.addNotEqualMatch("id", searchCriteria.excludedInvoiceId);
         }
 
         return mongoQueryBuilder.processedQuery;

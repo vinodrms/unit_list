@@ -1032,5 +1032,6 @@ export var EnglishTranslations: Object = {
     "Reinstatement": "Reinstatement",
     "No transaction fee": "No transaction fee",
     "Price with transaction fee": "Price with transaction fee",
+    "Items moved succesfully": "Items moved succesfully",
 
 };

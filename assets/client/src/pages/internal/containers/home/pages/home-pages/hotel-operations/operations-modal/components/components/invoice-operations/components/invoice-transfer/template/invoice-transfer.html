@@ -151,6 +151,7 @@
 </div>
 <div class="invoice-transfer-footer m-t-24">
     <button type="button" class="btn btn-primary m-l-8" (click)="transferItems()">
+        <i *ngIf="transferInProgress" class="fa fa-spinner fa-pulse"></i>
         {{ 'Transfer Items' | translate }}
     </button>
 </div>
