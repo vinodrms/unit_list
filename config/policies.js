@@ -57,5 +57,8 @@ module.exports.policies = {
 	OAuthTokenController: {
 		'getToken': ['contextBuilder']
 	},
+	InvoicesController: {
+		'downloadInvoicePdf': ['contextBuilder']
+	},
 	
 };

@@ -108,6 +108,7 @@ export enum ThServerApi {
     InvoicesCount,
     InvoicesItem,
     InvoicesSave,
+    InvoicesDownload,
     InvoicesTransfer,
     InvoicesReinstate,
 
@@ -231,6 +232,7 @@ ThServerApiUrl[ThServerApi.Invoices] = "/invoices";
 ThServerApiUrl[ThServerApi.InvoicesCount] = "/invoices/count";
 ThServerApiUrl[ThServerApi.InvoicesItem] = "/invoices/item";
 ThServerApiUrl[ThServerApi.InvoicesSave] = "/invoices/save";
+ThServerApiUrl[ThServerApi.InvoicesDownload] = "/invoices/download";
 ThServerApiUrl[ThServerApi.InvoicesTransfer] = "/invoices/transfer";
 ThServerApiUrl[ThServerApi.InvoicesReinstate] = "/invoices/reinstate";
 

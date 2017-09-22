@@ -22,7 +22,7 @@ import { BookingChangeNoShowTime } from '../../../../../core/domain-layer/hotel-
 import { BookingChangeNoShowTimeDO } from '../../../../../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTimeDO';
 import { ThTimestampDO } from '../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
 import { ThHourDO } from '../../../../../core/utils/th-dates/data-objects/ThHourDO';
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../core/data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../core/data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
 import { FileAttachmentDO } from '../../../../../core/data-layer/common/data-objects/file/FileAttachmentDO';
 import { BookingStateChangeTriggerType } from '../../../../../core/data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 import { BookingChangeCapacity } from '../../../../../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacity';

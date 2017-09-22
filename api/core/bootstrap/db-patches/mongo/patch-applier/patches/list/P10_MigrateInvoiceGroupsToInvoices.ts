@@ -4,21 +4,21 @@ import { APaginatedTransactionalMongoPatch } from "../../utils/APaginatedTransac
 import { MongoRepository } from "../../../../../../data-layer/common/base/MongoRepository";
 import { MongoPatchType } from "../MongoPatchType";
 import { ThError } from "../../../../../../utils/th-responses/ThError";
-import { InvoiceGroupDO as LegacyInvoiceGroupDO, InvoiceGroupStatus as LegacyInvoiceGroupStatus } from "../../../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO";
+import { InvoiceGroupDO as LegacyInvoiceGroupDO, InvoiceGroupStatus as LegacyInvoiceGroupStatus } from "../../../../../../data-layer/invoices-legacy/data-objects/InvoiceGroupDO";
 import {
     InvoiceDO as LegacyInvoiceDO, InvoiceAccountingType as LegacyInvoiceAccountingType,
     InvoicePaymentStatus as LegacyInvoicePaymentStatus
-} from "../../../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO";
-import { InvoiceItemDO as LegacyInvoiceItemDO, InvoiceItemType as LegacyInvoiceItemType } from "../../../../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO";
+} from "../../../../../../data-layer/invoices-legacy/data-objects/InvoiceDO";
+import { InvoiceItemDO as LegacyInvoiceItemDO, InvoiceItemType as LegacyInvoiceItemType } from "../../../../../../data-layer/invoices-legacy/data-objects/items/InvoiceItemDO";
 import { InvoiceDO, InvoiceStatus, InvoicePaymentStatus } from "../../../../../../data-layer/invoices/data-objects/InvoiceDO";
 import { InvoiceItemDO, InvoiceItemType } from "../../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
 import { ThTimestampDO } from "../../../../../../utils/th-dates/data-objects/ThTimestampDO";
-import { AddOnProductInvoiceItemMetaDO as LegacyAddOnProductInvoiceItemMetaDO } from "../../../../../../data-layer/invoices-deprecated/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
+import { AddOnProductInvoiceItemMetaDO as LegacyAddOnProductInvoiceItemMetaDO } from "../../../../../../data-layer/invoices-legacy/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
 import { AddOnProductInvoiceItemMetaDO } from "../../../../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
 import { BookingPriceDO } from "../../../../../../data-layer/bookings/data-objects/price/BookingPriceDO";
 import { FeeInvoiceItemMetaDO } from "../../../../../../data-layer/invoices/data-objects/items/invoice-fee/FeeInvoiceItemMetaDO";
 import { RoomCommissionItemMetaDO } from "../../../../../../data-layer/invoices/data-objects/items/room-commission/RoomCommissionItemMetaDO";
-import { InvoicePayerDO as LegacyInvoicePayerDO } from "../../../../../../data-layer/invoices-deprecated/data-objects/payers/InvoicePayerDO";
+import { InvoicePayerDO as LegacyInvoicePayerDO } from "../../../../../../data-layer/invoices-legacy/data-objects/payers/InvoicePayerDO";
 import { InvoicePaymentDO } from "../../../../../../data-layer/invoices/data-objects/payer/InvoicePaymentDO";
 import { InvoicePaymentMethodDO } from "../../../../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO";
 import { InvoicePayerDO } from "../../../../../../data-layer/invoices/data-objects/payer/InvoicePayerDO";

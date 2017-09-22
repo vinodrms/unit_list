@@ -7,7 +7,7 @@ import { MongoBedRepository } from '../../../../../data-layer/beds/repositories/
 import { MongoPatchType } from '../patches/MongoPatchType';
 import { MongoHotelRepository } from "../../../../../data-layer/hotel/repositories/mongo/MongoHotelRepository";
 import { MongoCustomerRepository } from "../../../../../data-layer/customers/repositories/mongo/MongoCustomerRepository";
-import { MongoInvoiceGroupsRepository } from "../../../../../data-layer/invoices-deprecated/repositories/mongo/MongoInvoiceGroupsRepository";
+import { MongoInvoiceGroupsRepository as LegacyMongoInvoiceGroupsRepository } from "../../../../../data-layer/invoices-legacy/repositories/mongo/MongoInvoiceGroupsRepository";
 import { MongoRepository } from "../../../../../data-layer/common/base/MongoRepository";
 import { MongoBookingRepository } from "../../../../../data-layer/bookings/repositories/mongo/MongoBookingRepository";
 import { MongoInvoiceRepository } from '../../../../../data-layer/invoices/repositories/mongo/MongoInvoiceRepository';
@@ -23,7 +23,7 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
     protected bedRepository: MongoBedRepository;
     protected priceProductRepository: MongoPriceProductRepository;
     protected customerRepository: MongoCustomerRepository;
-    protected legacyInvoiceGroupsRepository: MongoInvoiceGroupsRepository;
+    protected legacyInvoiceGroupsRepository: LegacyMongoInvoiceGroupsRepository;
     protected invoiceRepository: MongoInvoiceRepositoryWithBookingPriceLink;
     protected bookingRepository: MongoBookingRepository;
 
@@ -34,7 +34,7 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
         this.bedRepository = new MongoBedRepository();
         this.priceProductRepository = new MongoPriceProductRepository();
         this.customerRepository = new MongoCustomerRepository();
-        this.legacyInvoiceGroupsRepository = new MongoInvoiceGroupsRepository(this.hotelRepository);
+        this.legacyInvoiceGroupsRepository = new LegacyMongoInvoiceGroupsRepository(this.hotelRepository);
         this.invoiceRepository = new MongoInvoiceRepositoryWithBookingPriceLink(new MongoInvoiceRepository(new MongoHotelRepository()), new MongoBookingRepository(), new MongoCustomerRepository());
         this.bookingRepository = new MongoBookingRepository();
     }

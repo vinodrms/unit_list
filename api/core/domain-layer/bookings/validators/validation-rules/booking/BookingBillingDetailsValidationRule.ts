@@ -1,14 +1,13 @@
+import _ = require('underscore');
 import { ThError } from '../../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
 import { ABusinessValidationRule } from '../../../../common/validation-rules/ABusinessValidationRule';
 import { BookingDO } from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import { BookingDOConstraints } from '../../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { PriceProductsContainer } from '../../../../price-products/validators/results/PriceProductsContainer';
-import { InvoicePaymentMethodValidatorDeprecated } from '../../../../invoices-deprecated/validators/InvoicePaymentMethodValidatorDeprecated';
 import { HotelDO } from '../../../../../data-layer/hotel/data-objects/HotelDO';
 import { CustomersContainer } from '../../../../customers/validators/results/CustomersContainer';
-
-import _ = require('underscore');
+import { InvoicePaymentMethodValidator } from '../../../../invoices/validators/InvoicePaymentMethodValidator';
 
 export class BookingBillingDetailsValidationRule extends ABusinessValidationRule<BookingDO> {
     constructor(private _hotelDO: HotelDO, private _priceProductsContainer: PriceProductsContainer, private _customersContainer: CustomersContainer) {
@@ -42,7 +41,7 @@ export class BookingBillingDetailsValidationRule extends ABusinessValidationRule
             resolve(booking);
             return;
         }
-        var invoicePMValidator = new InvoicePaymentMethodValidatorDeprecated(this._hotelDO, billedCustomer);
+        var invoicePMValidator = new InvoicePaymentMethodValidator(this._hotelDO, billedCustomer);
         invoicePMValidator.validate(booking.defaultBillingDetails.paymentMethod).then((validationResult: any) => {
             resolve(booking);
         }).catch((error: any) => {

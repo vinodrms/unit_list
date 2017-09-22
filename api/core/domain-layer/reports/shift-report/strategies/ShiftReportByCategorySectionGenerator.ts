@@ -1,19 +1,18 @@
 import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
-import { InvoicePaymentStatus } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceDO';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices-deprecated/data-objects/InvoiceGroupDO';
-import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { TaxDO } from '../../../../data-layer/taxes/data-objects/TaxDO';
-import { InvoiceItemVM } from '../../../invoices-deprecated/invoice-confirmations/InvoiceItemVM';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 import { AddOnProductItemContainer } from '../../../add-on-products/validators/AddOnProductLoader';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemVM } from '../../../invoices/invoice-confirmations/InvoiceItemVM';
 
 export class ShiftReportByCategorySectionGenerator extends AReportSectionGeneratorStrategy {
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
-        private _paidInvoiceGroupList: InvoiceGroupDO[], private _aopContainer: AddOnProductItemContainer,
+        private _paidInvoiceList: InvoiceDO[], private _aopContainer: AddOnProductItemContainer,
         private _sectionMeta: ReportSectionMeta) {
         super(appContext, sessionContext, globalSummary);
     }
@@ -73,36 +72,34 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 
     private getProductDetailsDict(): Object {
         let dic = {}
-        this._paidInvoiceGroupList.forEach((ig) => {
-            ig.invoiceList.forEach((invoice) => {
-                invoice.itemList.forEach((item) => {
-                    let details = this.getDisplayNameAndIdForItem(item);
-                    let price = item.meta.getTotalPrice();
+        this._paidInvoiceList.forEach((invoice) => {
+            invoice.itemList.forEach((item) => {
+                let details = this.getDisplayNameAndIdForItem(item);
+                let price = item.meta.getTotalPrice();
 
-                    let itemVM = new InvoiceItemVM(this._appContext.thTranslate);
-                    itemVM.buildFromInvoiceItemDO(item, ig.vatTaxListSnapshot);
+                let itemVM = new InvoiceItemVM(this._appContext.thTranslate);
+                itemVM.buildFromInvoiceItemDO(item, invoice.vatTaxListSnapshot);
 
-                    let itemNet = itemVM.subtotal;
-                    let itemVat = itemVM.vat;
-                    let itemTotal = itemNet + itemVat;
+                let itemNet = itemVM.subtotal;
+                let itemVat = itemVM.vat;
+                let itemTotal = itemNet + itemVat;
 
-                    let transactions = this.getQuantityForItem(item);
-                    if (!dic[details.id]) {
-                        dic[details.id] = {
-                            transactions: transactions,
-                            itemNet: itemNet,
-                            itemVat: itemVat,
-                            itemTotal: itemTotal,
-                            displayName: details.displayName
-                        }
+                let transactions = this.getQuantityForItem(item, invoice);
+                if (!dic[details.id]) {
+                    dic[details.id] = {
+                        transactions: transactions,
+                        itemNet: itemNet,
+                        itemVat: itemVat,
+                        itemTotal: itemTotal,
+                        displayName: details.displayName
                     }
-                    else {
-                        dic[details.id].transactions += transactions;
-                        dic[details.id].itemNet += itemNet;
-                        dic[details.id].itemVat += itemVat;
-                        dic[details.id].itemTotal += itemTotal;
-                    }
-                });
+                }
+                else {
+                    dic[details.id].transactions += transactions;
+                    dic[details.id].itemNet += itemNet;
+                    dic[details.id].itemVat += itemVat;
+                    dic[details.id].itemTotal += itemTotal;
+                }
             });
         });
         return dic;
@@ -141,8 +138,8 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
             id: aopItem.category.id
         };
     }
-    private getQuantityForItem(item: InvoiceItemDO): number {
-        let qtyFactor = item.accountingType === InvoiceItemAccountingType.Credit ? -1 : 1;
+    private getQuantityForItem(item: InvoiceItemDO, invoice: InvoiceDO): number {
+        let qtyFactor = invoice.paymentStatus === InvoicePaymentStatus.Credit ? -1 : 1;
 
         // we do not want to count the number of nights as separate rooms
         if (item.type == InvoiceItemType.Booking) {

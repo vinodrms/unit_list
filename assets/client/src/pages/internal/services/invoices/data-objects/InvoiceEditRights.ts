@@ -33,6 +33,11 @@ export enum InvoiceReinstateRight {
     None
 }
 
+export enum InvoiceDownloadRight {
+    Available,
+    None
+}
+
 export enum InvoiceTransferRight {
     Edit,
     None

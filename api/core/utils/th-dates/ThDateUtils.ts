@@ -85,4 +85,11 @@ export class ThDateUtils {
         let moment = this.convertThDateDOToMoment(inDate).endOf(unitOfTime);
         return this.convertMomentToThDateDO(moment);
     }
+    public convertTimestampToLocalThTimestamp(timestamp: number, timezone: string): ThTimestampDO {
+        var thTimestamp = new ThTimestampDO();
+        var convertedMoment: moment.Moment = moment.tz(timestamp, timezone);
+        thTimestamp.thDateDO = this.convertMomentToThDateDO(convertedMoment);
+        thTimestamp.thHourDO = this.convertMomentToThHourDO(convertedMoment);
+        return thTimestamp;
+    }
 }

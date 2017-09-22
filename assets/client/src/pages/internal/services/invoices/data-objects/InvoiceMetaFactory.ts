@@ -2,7 +2,7 @@ import { InvoiceMeta } from './InvoiceMeta';
 import { InvoicePaymentStatus } from './InvoiceDO';
 import {
     InvoicePayRight, InvoiceSetAsLossAcceptedByManagementRight, InvoiceEditItemsRight, InvoiceAddPaymentsRight,
-    InvoiceRemoveRight, InvoiceEditPayersRight, InvoiceReinstateRight, InvoiceTransferRight
+    InvoiceRemoveRight, InvoiceEditPayersRight, InvoiceReinstateRight, InvoiceDownloadRight, InvoiceTransferRight
 
 } from './InvoiceEditRights';
 
@@ -21,6 +21,7 @@ export class InvoiceMetaFactory {
                 invoiceRemoveRight: InvoiceRemoveRight.None,
                 invoiceEditPayersRight: InvoiceEditPayersRight.Edit,
                 invoiceReinstateRight: InvoiceReinstateRight.None,
+                invoiceDownloadRight: InvoiceDownloadRight.None,
                 invoiceTransferRight: InvoiceTransferRight.None,
             }),
             new InvoiceMeta({
@@ -33,6 +34,7 @@ export class InvoiceMetaFactory {
                 invoiceRemoveRight: InvoiceRemoveRight.None,
                 invoiceEditPayersRight: InvoiceEditPayersRight.None,
                 invoiceReinstateRight: InvoiceReinstateRight.Edit,
+                invoiceDownloadRight: InvoiceDownloadRight.Available,
                 invoiceTransferRight: InvoiceTransferRight.None,
             }),
             new InvoiceMeta({
@@ -43,8 +45,10 @@ export class InvoiceMetaFactory {
                 invoiceEditItemsRight: InvoiceEditItemsRight.None,
                 invoiceAddPaymentsRight: InvoiceAddPaymentsRight.Edit,
                 invoiceRemoveRight: InvoiceRemoveRight.None,
+
                 invoiceEditPayersRight: InvoiceEditPayersRight.Edit,
                 invoiceReinstateRight: InvoiceReinstateRight.None,
+                invoiceDownloadRight: InvoiceDownloadRight.Available,
                 invoiceTransferRight: InvoiceTransferRight.None,
             }),
             new InvoiceMeta({
@@ -57,6 +61,7 @@ export class InvoiceMetaFactory {
                 invoiceRemoveRight: InvoiceRemoveRight.Edit,
                 invoiceEditPayersRight: InvoiceEditPayersRight.Edit,
                 invoiceReinstateRight: InvoiceReinstateRight.None,
+                invoiceDownloadRight: InvoiceDownloadRight.None,
                 invoiceTransferRight: InvoiceTransferRight.Edit,
             }),
             new InvoiceMeta({
@@ -69,6 +74,7 @@ export class InvoiceMetaFactory {
                 invoiceRemoveRight: InvoiceRemoveRight.None,
                 invoiceEditPayersRight: InvoiceEditPayersRight.None,
                 invoiceReinstateRight: InvoiceReinstateRight.None,
+                invoiceDownloadRight: InvoiceDownloadRight.Available,
                 invoiceTransferRight: InvoiceTransferRight.None,
             })
         ];
