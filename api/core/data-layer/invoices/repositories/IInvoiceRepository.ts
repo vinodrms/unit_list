@@ -22,6 +22,7 @@ export interface InvoiceSearchCriteriaRepoDO {
     term?: string;
     invoiceIdList?: string[];
     reference?: string;
+    excludedInvoiceId?: string;
 }
 
 export interface InvoiceSearchResultRepoDO {

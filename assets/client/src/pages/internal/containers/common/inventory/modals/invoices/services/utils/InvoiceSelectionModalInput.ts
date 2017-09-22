@@ -2,6 +2,7 @@ export class InvoiceSelectionModalInput {
 
 	private _multiSelection: boolean;
 	private _onlyUnpaidInvoices: boolean;
+	private _excludedInvoiceId: string;
 
 	public get multiSelection(): boolean {
 		return this._multiSelection;
@@ -14,5 +15,11 @@ export class InvoiceSelectionModalInput {
 	}
 	public set onlyUnpaidInvoices(value: boolean) {
 		this._onlyUnpaidInvoices = value;
+	}
+	public get excludedInvoiceId(): string {
+		return this._excludedInvoiceId;
+	}
+	public set excludedInvoiceId(value: string) {
+		this._excludedInvoiceId = value;
 	}
 }

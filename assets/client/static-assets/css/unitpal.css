@@ -4464,6 +4464,10 @@ textarea.payer-details {
     color: #F66600;
 }
 
+.table-payment-items > tfoot > tr > td > span {
+    color: #F66600;
+}
+
 .invoice-edit-footer {
     height: 78px;
     min-height: 78px;

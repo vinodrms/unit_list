@@ -78,6 +78,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
             this.context.toaster.error(err.message);
             this.isLoading = false;
         };
+        this.context.analytics.logPageView("/operations/invoices");
     }
     private readExistingInvoice() {
         this.invoiceOperationsService.get(this.invoiceOperationsPageParam.invoiceId).flatMap((invoice: InvoiceDO) => {

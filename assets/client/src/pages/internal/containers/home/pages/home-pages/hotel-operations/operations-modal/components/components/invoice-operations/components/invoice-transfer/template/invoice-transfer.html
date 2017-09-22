@@ -39,12 +39,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of currentInvoice.invoice.itemList" class="selectable">
-                        <td>{{ getDisplayName(item) }}</td>
-                        <td>{{ item.meta.getNumberOfItems() }}</td>
-                        <td>{{ ccySymbol }}{{ item.meta.getUnitPrice() }}</td>
-                        <td>{{ ccySymbol }}{{ item.getTotalPrice() }}</td>
-                        <td><i class="fa fa-arrow-right transfer-right clickable"></i></td>
+                    <tr *ngFor="let itemVm of currentInvoice.invoiceItemVms" class="selectable">
+                        <td>
+                            <i *ngIf="itemVm.isRelatedToBooking" class="unitpal-font">%</i> {{ getInvoiceItemDisplayName(itemVm) }}
+                        </td>
+                        <td>{{ itemVm.numberOfItems }}</td>
+                        <td>{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
+                        <td>{{ ccySymbol }}{{ itemVm.totalPrice }}</td>
+                        <td><i *ngIf="itemVm.isMovable && isInvoiceSelectedForTransfer()" class="fa fa-arrow-right clickable" [ngClass]="{'transfer-left': isTransferedItem(itemVm.item), 'transfer-right': !isTransferedItem(itemVm.item)}" (click)="transferItemsToRight(itemVm.item)"></i></td>
                     </tr>
                 </tbody>
             </table>
@@ -61,7 +63,7 @@
                         <td>{{ 'TOTAL' | translate }}</td>
                         <td></td>
                         <td></td>
-                        <td>Dkr 6,522</td>
+                        <td>{{ ccySymbol }}{{ currentInvoice.invoice.amountToPay }}<span *ngIf="hasAtLeastOneTransientTransfer()"> / {{ currentInvoiceTransientAmountToPay }}</span></td>
                         <td></td>
                     </tr>
                 </tfoot>
@@ -78,10 +80,10 @@
                 </div>
                 <div class="invoice-transfer-payer-section m-l-16">
                     <div class="payer-name">
-                        {{ transferInvoice.getFirstPayerName() }}
+                        {{ transferInvoice.firstPayerName }}
                     </div>
                     <div class="payer-email">
-                        {{ transferInvoice.getFirstPayerEmail() }}
+                        {{ transferInvoice.firstPayerEmail }}
                     </div>
                 </div>
                 <div class="invoice-items-container m-t-12 m-l-16">
@@ -104,12 +106,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of transferInvoice.invoice.itemList" class="selectable">
-                                <td><i class="fa fa-arrow-left transfer-left clickable"></i></td>
-                                <td>{{ getDisplayName(item) }}</td>
-                                <td>{{ item.meta.getNumberOfItems() }}</td>
-                                <td>{{ ccySymbol }}{{ item.meta.getUnitPrice() }}</td>
-                                <td>{{ ccySymbol }}{{ item.getTotalPrice() }}</td>
+                            <tr *ngFor="let itemVm of transferInvoice.invoiceItemVms" class="selectable">
+                                <td><i *ngIf="itemVm.isMovable && isInvoiceSelectedForTransfer()" class="fa fa-arrow-left clickable" [ngClass]="{'transfer-right': isTransferedItem(itemVm.item), 'transfer-left': !isTransferedItem(itemVm.item)}" (click)="transferItemsToLeft(itemVm.item)"></i></td>
+                                <td>
+                                    <i *ngIf="itemVm.isRelatedToBooking" class="unitpal-font">%</i> {{ getInvoiceItemDisplayName(itemVm) }}
+                                </td>
+                                <td>{{ itemVm.numberOfItems }}</td>
+                                <td>{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
+                                <td>{{ ccySymbol }}{{ itemVm.totalPrice }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -127,7 +131,7 @@
                                 <td>{{ 'TOTAL' | translate }}</td>
                                 <td></td>
                                 <td></td>
-                                <td>{{ ccySymbol }}{{ currentInvoice.invoice.amountPaid }}</td>
+                                <td>{{ ccySymbol }}{{ transferInvoice.invoice.amountToPay }}<span *ngIf="hasAtLeastOneTransientTransfer()"> / {{ transferInvoiceTransientAmountToPay }}</span></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -147,6 +151,7 @@
 </div>
 <div class="invoice-transfer-footer m-t-24">
     <button type="button" class="btn btn-primary m-l-8" (click)="transferItems()">
+        <i *ngIf="transferInProgress" class="fa fa-spinner fa-pulse"></i>
         {{ 'Transfer Items' | translate }}
     </button>
 </div>
