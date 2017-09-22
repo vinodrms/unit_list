@@ -14,7 +14,7 @@ import { TestUtils } from '../../../../helpers/TestUtils';
 import { ThDateUtils } from '../../../../../core/utils/th-dates/ThDateUtils';
 import { ConfigCapacityDO } from '../../../../../core/data-layer/common/data-objects/bed-config/ConfigCapacityDO';
 import { DefaultBillingDetailsDO } from '../../../../../core/data-layer/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
-import { InvoicePaymentMethodType } from '../../../../../core/data-layer/invoices-deprecated/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodType } from '../../../../../core/data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
 import { DefaultPriceProductBuilder } from '../../../../db-initializers/builders/DefaultPriceProductBuilder';
 import { BookingSearchDO } from '../../../../../core/domain-layer/bookings/search-bookings/BookingSearchDO';
 import { CustomerDO } from '../../../../../core/data-layer/customers/data-objects/CustomerDO';

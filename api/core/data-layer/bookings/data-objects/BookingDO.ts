@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { BaseDO } from '../../common/base/BaseDO';
 import { ThUtils } from '../../../utils/ThUtils';
 import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
@@ -9,9 +10,7 @@ import { BookingStateChangeTriggerTimeDO } from './state-change-time/BookingStat
 import { DefaultBillingDetailsDO } from './default-billing/DefaultBillingDetailsDO';
 import { DocumentHistoryDO } from '../../common/data-objects/document-history/DocumentHistoryDO';
 import { BookingPriceDO } from './price/BookingPriceDO';
-import { IInvoiceItemMeta } from '../../invoices-deprecated/data-objects/items/IInvoiceItemMeta';
-
-import _ = require('underscore');
+import { IInvoiceItemMeta } from '../../invoices/data-objects/items/IInvoiceItemMeta';
 
 export enum BookingStatus {
     Active,

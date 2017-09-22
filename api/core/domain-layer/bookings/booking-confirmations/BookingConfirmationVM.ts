@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThTranslation } from '../../../utils/localization/ThTranslation';
 import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerDO';
 import { PriceProductDO } from '../../../data-layer/price-products/data-objects/PriceProductDO';
@@ -10,13 +11,11 @@ import { BedDO } from '../../../data-layer/common/data-objects/bed/BedDO';
 import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import { AddOnProductCategoryDO, AddOnProductCategoryType } from '../../../data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import { BookingAggregatedData } from '../aggregators/BookingAggregatedData';
-import { InvoiceItemDO } from '../../../data-layer/invoices-deprecated/data-objects/items/InvoiceItemDO';
 import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
 import { PriceProductCancellationPenaltyType } from "../../../data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty";
 import { PriceProductCancellationPolicyType } from "../../../data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy";
 import { AddOnProductBookingReservedItem } from "../../../data-layer/bookings/data-objects/BookingDO";
-
-import _ = require('underscore');
+import { InvoiceItemDO } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 
 export class BookingConfirmationVM {
     private _isoWeekDayUtils: ISOWeekDayUtils;
@@ -173,7 +172,7 @@ export class BookingConfirmationVM {
         this.reservedAops = '';
 
         var reservedAddOnProductList = this._bookingAggregatedData.booking.reservedAddOnProductList;
-        var reservedAopMap: { [id: string]: AddOnProductBookingReservedItem } = _.indexBy(reservedAddOnProductList, reservedAop => {return reservedAop.aopId});
+        var reservedAopMap: { [id: string]: AddOnProductBookingReservedItem } = _.indexBy(reservedAddOnProductList, reservedAop => { return reservedAop.aopId });
         var aopIdList: string[] = Object.keys(reservedAopMap);
         _.forEach(aopIdList, (aopId: string) => {
             var addOnProduct: AddOnProductDO = _.find(this._bookingAggregatedData.addOnProductList, (aop: AddOnProductDO) => {
@@ -221,10 +220,10 @@ export class BookingConfirmationVM {
         this.cancellationPolicyAndPenalty = '';
 
         let ppCancellationConditions = this._bookingAggregatedData.booking.priceProductSnapshot.conditions;
-        if(ppCancellationConditions.penaltyType != PriceProductCancellationPenaltyType.NoPenalty ||
+        if (ppCancellationConditions.penaltyType != PriceProductCancellationPenaltyType.NoPenalty ||
             ppCancellationConditions.policyType != PriceProductCancellationPolicyType.NoPolicy) {
-                this.cancellationPolicyAndPenalty = this._bookingAggregatedData.booking.priceProductSnapshot.conditions.getValueDisplayString(this._thTranslation);
-            }
+            this.cancellationPolicyAndPenalty = this._bookingAggregatedData.booking.priceProductSnapshot.conditions.getValueDisplayString(this._thTranslation);
+        }
     }
 
     public get hasCancellationPolicyOrPenalty(): boolean {
