@@ -1,4 +1,5 @@
 import _ = require('underscore');
+import { Observable } from 'rxjs/Observable';
 import { Component, Input, OnInit } from '@angular/core';
 import { HotelInvoiceOperationsPageParam } from "./utils/HotelInvoiceOperationsPageParam";
 import { CustomerVM } from "../../../../../../../../../services/customers/view-models/CustomerVM";
@@ -100,20 +101,27 @@ export class InvoiceOperationsPageComponent implements OnInit {
         });
     }
     private createNewInvoice() {
+        let newInvoiceVM = this.createNewInvoiceVM();
         this.relatedInvoices = [
-            this.createNewInvoiceVM()
+            newInvoiceVM
         ];
         this.updatePaginationOptions();
         if (this.context.thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
             this.isLoading = false;
             return;
         }
-        this.customersService.getCustomerById(this.invoiceOperationsPageParam.invoiceFilter.customerId)
-            .subscribe((customer: CustomerDO) => {
-                this.addCustomerToInvoiceVM(this.relatedInvoices[0], customer);
-            }, (err: ThError) => {
+        this.invoiceOperationsService.addPayer(newInvoiceVM.invoice, this.invoiceOperationsPageParam.invoiceFilter.customerId)
+            .flatMap((invoice: InvoiceDO) => {
+                var invoicesDO: InvoicesDO = new InvoicesDO();
+                invoicesDO.invoiceList = [invoice];
+                return this.invoiceVMHelper.convertToViewModels(invoicesDO);
+            }).subscribe((invoiceVMList: InvoiceVM[]) => {
+                this.relatedInvoices = invoiceVMList;
+                this.currentRelatedInvoiceIndex = 0;
+                this.updatePaginationOptions();
+            }, ((err: ThError) => {
                 this.context.toaster.error(err.message);
-            }, () => {
+            }), () => {
                 this.isLoading = false;
             });
     }

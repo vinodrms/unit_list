@@ -65,6 +65,14 @@ export class CustomerOperationsPageComponent implements OnInit {
     }
 
     public createInvoice() {
-        this.operationsPageControllerService.goToInvoice(null, this.customerVM.customer.id);
+        var title = this.context.thTranslation.translate("New Invoice");
+        var content = this.context.thTranslation.translate("Are you sure you want to create a new invoice for %customer%?",
+            { customer: this.customerOperationsPageData.customerVM.customerNameString });
+        this.context.modalService.confirm(title, content, {
+            positive: this.context.thTranslation.translate("Yes"),
+            negative: this.context.thTranslation.translate("No")
+        }, () => {
+            this.operationsPageControllerService.goToInvoice(null, this.customerVM.customer.id);
+        }, () => { });
     }
 }

@@ -686,6 +686,8 @@ export var EnglishTranslations: Object = {
     "Allow Public Price Products": "Allow Public Price Products",
     "Only Confidential Price Products": "Only Confidential Price Products",
     "Invoice History": "Invoice History",
+    "New Invoice": "New Invoice",
+    "Are you sure you want to create a new invoice for %customer%?": "Are you sure you want to create a new invoice for %customer%?",
     "Needs rollaway beds": "Needs rollaway beds",
     "Booking Capacity": "Booking Capacity",
     "The room needs rollaway beds to fit entire capacity": "The room needs rollaway beds to fit entire capacity",
