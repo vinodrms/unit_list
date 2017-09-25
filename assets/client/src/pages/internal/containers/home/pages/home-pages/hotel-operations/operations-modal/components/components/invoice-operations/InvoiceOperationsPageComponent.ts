@@ -1,6 +1,6 @@
 import _ = require('underscore');
 import { Observable } from 'rxjs/Observable';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { HotelInvoiceOperationsPageParam } from "./utils/HotelInvoiceOperationsPageParam";
 import { CustomerVM } from "../../../../../../../../../services/customers/view-models/CustomerVM";
 import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
@@ -22,6 +22,7 @@ import { InvoiceMetaFactory } from "../../../../../../../../../services/invoices
 import { HotelOperationsResultService } from "../../../services/HotelOperationsResultService";
 import { InvoiceChangedOptions } from "./components/invoice-overview/InvoiceOverviewComponent";
 import { PaginationOptions } from "./utils/PaginationOptions";
+import { HotelOperationsPageControllerService } from "../../services/HotelOperationsPageControllerService";
 
 enum PageType {
     InvoiceOverview,
@@ -36,6 +37,7 @@ enum PageType {
 export class InvoiceOperationsPageComponent implements OnInit {
 
     @Input() invoiceOperationsPageParam: HotelInvoiceOperationsPageParam;
+    @Output() exit = new EventEmitter();
 
     isLoading: boolean = true;
     relatedInvoices: InvoiceVM[] = [];
@@ -52,6 +54,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
         private customersService: EagerCustomersService,
         private invoiceOperationsService: HotelOperationsInvoiceService,
         private hotelOperationsResultService: HotelOperationsResultService,
+        private operationsPageControllerService: HotelOperationsPageControllerService,
     ) {
         this.currentRelatedInvoiceIndex = 0;
         this.relatedInvoices = [];
@@ -196,5 +199,13 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
     private showPagination(): boolean {
         return this.relatedInvoices.length > 1;
+    }
+
+    public onInvoiceDeleted() {
+        if (this.operationsPageControllerService.canGoBack()) {
+            this.operationsPageControllerService.goBack();
+        } else {
+            this.exit.emit();
+        }
     }
 }

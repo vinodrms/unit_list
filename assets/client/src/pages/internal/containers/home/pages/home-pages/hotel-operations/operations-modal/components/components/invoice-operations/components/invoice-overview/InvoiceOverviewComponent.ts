@@ -50,12 +50,14 @@ export class InvoiceOverviewComponent implements OnInit {
     @Output() showInvoiceTransferClicked = new EventEmitter();
     @Output() currentInvoiceChanged = new EventEmitter();
     @Output() invoiceChanged = new EventEmitter<InvoiceChangedOptions>();
+    @Output() invoiceDeleted = new EventEmitter();
 
     private pmGenerator: InvoicePaymentMethodVMGenerator;
     private invoiceMetaFactory: InvoiceMetaFactory;
     private lossByManagementPending: boolean;
     private payPending: boolean;
     private reinstatePending: boolean;
+    private deletePending: boolean;
 
     constructor(private context: AppContext,
         private numberOfAddOnProductsModalService: NumberOfAddOnProductsModalService,
@@ -128,6 +130,29 @@ export class InvoiceOverviewComponent implements OnInit {
                     this.context.toaster.error(err.message);
                 });
         }, content);
+    }
+
+    public onDeleteInvoice() {
+        if (this.deletePending) { return; }
+        let content = this.context.thTranslation.translate("Are you sure you want to delete this invoice?");
+        this.confirm("Delete Invoice", () => {
+            this.deletePending = true;
+            this.invoiceOperations.delete(this.currentInvoice.invoice)
+                .subscribe((invoice: InvoiceDO) => {
+                    this.emitInvoiceChanged({
+                        reloadInvoiceGroup: true,
+                        selectedInvoiceId: this.currentInvoice.invoice.id
+                    });
+                    this.deletePending = false;
+                    this.context.analytics.logEvent("invoice", "delete", "Deleted an invoice");
+                    this.context.toaster.info("The invoice was deleted.");
+                    this.emitInvoiceDeleted();
+                    
+                }, (err: ThError) => {
+                    this.deletePending = false;
+                    this.context.toaster.error(err.message);
+                });
+        }, content);        
     }
 
     private confirm(status: string, onConfirm: (() => void), content: string = null) {
@@ -362,6 +387,10 @@ export class InvoiceOverviewComponent implements OnInit {
 
     public emitInvoiceChanged(options: InvoiceChangedOptions = { reloadInvoiceGroup: false }) {
         this.invoiceChanged.emit(options);
+    }
+
+    public emitInvoiceDeleted() {
+        this.invoiceDeleted.emit();
     }
 
     public downloadInvoice(payer: CustomerDO) {
