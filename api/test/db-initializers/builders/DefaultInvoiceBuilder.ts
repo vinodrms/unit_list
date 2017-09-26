@@ -33,10 +33,8 @@ export class DefaultInvoiceBuilder implements IInvoiceDataSource {
             var bookingInvoice = this.buildBookingInvoiceFromBooking(hotel, booking, customerList);
             var invoicePayer = bookingInvoice.payerList[0];
             var aopOnlyInvoice = this.buildInvoiceWithTwoAddOnProducts(invoicePayer, aopList);
-            var invoiceWithNoItems = this.buildInvoiceWithNoItems();
             invoiceList.push(bookingInvoice);
             invoiceList.push(aopOnlyInvoice);
-            invoiceList.push(invoiceWithNoItems);
         });
         return invoiceList;
     }
@@ -70,13 +68,13 @@ export class DefaultInvoiceBuilder implements IInvoiceDataSource {
         return invoice;
     }
 
-    private buildInvoiceWithNoItems(): InvoiceDO {
-            var invoice = new InvoiceDO();
-            invoice.itemList = [];
-            invoice.groupId = this.context.appContext.thUtils.generateUniqueID();
-            invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
-            return invoice;
-        }
+    public buildInvoiceWithNoItems(): InvoiceDO {
+        var invoice = new InvoiceDO();
+        invoice.itemList = [];
+        invoice.groupId = this.context.appContext.thUtils.generateUniqueID();
+        invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
+        return invoice;
+    }
 
     private buildInvoiceWithTwoAddOnProducts(payerCustomer: InvoicePayerDO, aopList: AddOnProductDO[]): InvoiceDO {
         var invoice = new InvoiceDO();
