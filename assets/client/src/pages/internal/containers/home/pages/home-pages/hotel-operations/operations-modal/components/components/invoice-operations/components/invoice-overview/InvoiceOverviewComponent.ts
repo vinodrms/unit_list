@@ -368,6 +368,7 @@ export class InvoiceOverviewComponent implements OnInit {
         window.open(this.getInvoicePdfUrl(payer), '_blank');
         this.context.analytics.logEvent("invoice", "download", "Downloaded an invoice");
     }
+    
     private getInvoicePdfUrl(payer: CustomerDO): string {
         let payerIndex = _.findIndex(this.payerList, (item: CustomerDO) => {
             return payer.id === item.id;
@@ -387,5 +388,13 @@ export class InvoiceOverviewComponent implements OnInit {
                     this.context.analytics.logEvent("invoice", "send-confirmation", "Sent an invoice confirmation by email");
                 }, (err: any) => { });
             }).catch((err: any) => { });
+    }
+
+    public createInvoiceForPayer(customer: CustomerDO) {
+        this.operationsPageControllerService.goToInvoice(null, customer.id);
+    }
+
+    public canCreateWalkInInvoices(customer: CustomerDO): boolean {
+        return customer.canCreateWalkInInvoices();
     }
 }

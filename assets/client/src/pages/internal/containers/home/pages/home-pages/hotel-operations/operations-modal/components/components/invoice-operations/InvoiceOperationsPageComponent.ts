@@ -35,7 +35,16 @@ enum PageType {
 })
 export class InvoiceOperationsPageComponent implements OnInit {
 
-    @Input() invoiceOperationsPageParam: HotelInvoiceOperationsPageParam;
+    @Input()
+    set invoiceOperationsPageParam(param: HotelInvoiceOperationsPageParam) {
+        this.param = param;
+        if (!this.isLoading) {
+            this.setupInvoice();
+        }
+    };
+    get invoiceOperationsPageParam(): HotelInvoiceOperationsPageParam {
+        return this.param;
+    }
 
     isLoading: boolean = true;
     relatedInvoices: InvoiceVM[] = [];
@@ -45,6 +54,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
     private pageData: InvoiceOperationsPageData;
     private invoiceMetaFactory: InvoiceMetaFactory;
     private paginationOptions: PaginationOptions;
+    private param: HotelInvoiceOperationsPageParam;
 
     constructor(private context: AppContext,
         private invoiceVMHelper: InvoiceVMHelper,
@@ -63,6 +73,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        debugger
         this.pageType = PageType.InvoiceOverview;
         this.invoiceOperationsPageParam.updateTitle("Invoice Overview", "");
         this.pageData = new InvoiceOperationsPageData();
@@ -70,16 +81,19 @@ export class InvoiceOperationsPageComponent implements OnInit {
             this.pageData.ccy = hotelInfo.ccy;
             this.pageData.allowedPaymentMethods = hotelInfo.allowedPaymentMethods;
             this.pageData.allPaymentMethods = hotelInfo.allAvailablePaymentMethods;
-            if (!this.context.thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceId)) {
-                this.readExistingInvoice();
-            } else {
-                this.createNewInvoice();
-            }
+            this.setupInvoice();
         }), (err: ThError) => {
             this.context.toaster.error(err.message);
             this.isLoading = false;
         };
         this.context.analytics.logPageView("/operations/invoices");
+    }
+    private setupInvoice() {
+        if (!this.context.thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceId)) {
+            this.readExistingInvoice();
+        } else {
+            this.createNewInvoice();
+        }
     }
     private readExistingInvoice() {
         this.invoiceOperationsService.get(this.invoiceOperationsPageParam.invoiceId).flatMap((invoice: InvoiceDO) => {
