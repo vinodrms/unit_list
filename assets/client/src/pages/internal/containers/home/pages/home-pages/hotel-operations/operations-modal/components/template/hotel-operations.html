@@ -53,6 +53,7 @@
 	<invoice-operations-page class="full-height"
 		*ngIf="isInvoiceOperationsPage()"
 		[invoiceOperationsPageParam]="currentHotelOperationsPageParam"
+		(exit)="triggerOnExit()"
 		>
 	</invoice-operations-page>
 

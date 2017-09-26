@@ -126,6 +126,8 @@ module.exports.routes = {
     'GET /api/invoices/download': 'InvoicesController.downloadInvoicePdf',
     'POST /api/invoices/transfer': 'InvoicesController.transferItems',
     'POST /api/invoices/reinstate': 'InvoicesController.reinstateInvoice',
+    'POST /api/invoices/delete': 'InvoicesController.deleteInvoice',
+
 
     'POST /api/hotelOperations/dashboard/arrivals': 'HotelDashboardOperationsController.getArrivals',
     'POST /api/hotelOperations/dashboard/departures': 'HotelDashboardOperationsController.getDepartures',

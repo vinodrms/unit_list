@@ -1046,5 +1046,7 @@ export var EnglishTranslations: Object = {
     "Close the invoice by marking it as Loss by Management": "Close the invoice by marking it as Loss by Management",
     "Easily transfer items from/to this invoice to others": "Easily transfer items from/to this invoice to others",
     "Remove this item from the invoice": "Remove this item from the invoice",
+    "The invoice was deleted": "The invoice was deleted",
+    "Are you sure you want to delete this invoice?": "Are you sure you want to delete this invoice?",
 
 };
