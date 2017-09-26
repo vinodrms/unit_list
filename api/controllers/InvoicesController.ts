@@ -156,6 +156,6 @@ module.exports = {
     downloadInvoicePdf: invoicesController.downloadInvoicePdf.bind(invoicesController),
     transferItems: invoicesController.transferItems.bind(invoicesController),
     reinstateInvoice: invoicesController.reinstateInvoice.bind(invoicesController),
-    DeleteInvoice: invoicesController.deleteInvoice.bind(invoicesController),
+    deleteInvoice: invoicesController.deleteInvoice.bind(invoicesController),
 
 }

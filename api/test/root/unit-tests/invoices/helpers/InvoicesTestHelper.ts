@@ -62,13 +62,6 @@ export class InvoicesTestHelper {
         });
     }
 
-    getUnpaidInvoiceWithNoItems(): InvoiceDO {
-        return _.find(this.testDataBuilder.invoiceList, (invoice: InvoiceDO) => {
-            return invoice.paymentStatus === InvoicePaymentStatus.Unpaid
-                && invoice.itemList.length == 0
-        });
-    }
-
     getTotalPrice(items: InvoiceItemDO[]): number {
         let amount = 0.0;
         items.forEach(item => {

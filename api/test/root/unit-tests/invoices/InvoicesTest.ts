@@ -381,7 +381,7 @@ describe("Invoices Tests", function () {
             });
         });
     });
-    describe("Invoice Delete tests", function() {
+    describe("Invoice Delete tests", function () {
         it("Should delete an invoice", function (done) {
             let invoiceToSave = new InvoiceDO();
             let defaultInvoiceBuilder = new DefaultInvoiceBuilder(testContext);
@@ -391,16 +391,14 @@ describe("Invoices Tests", function () {
             saveInvoice.save(invoiceToSave)
                 .then((invoiceToDelete: InvoiceDO) => {
                     let deleteInvoice = new DeleteInvoice(testContext.appContext, testContext.sessionContext);
-                    deleteInvoice.delete(invoiceToDelete.id)
-                        .then((updatedInvoice: InvoiceDO) => {
-                            should.equal(updatedInvoice.status, InvoiceStatus.Deleted);
-                            done();
-                        }).catch((e: ThError) => {
-                            done(e);
-                        });
+                    return deleteInvoice.delete(invoiceToDelete.id);
+                }).then((updatedInvoice: InvoiceDO) => {
+                    should.equal(updatedInvoice.status, InvoiceStatus.Deleted);
+                    done();
+
                 }).catch((e: ThError) => {
-                done(e);
-            });
+                    done(e);
+                });
         });
     });
 });

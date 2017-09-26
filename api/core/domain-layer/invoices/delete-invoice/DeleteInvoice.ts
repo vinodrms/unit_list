@@ -15,73 +15,71 @@ import { ThUtils } from "../../../utils/ThUtils";
 import _ = require('underscore');
 
 export class DeleteInvoice {
-    private _invoiceMeta: InvoiceMetaRepoDO;
-    private _invoiceId: string;
+    private invoiceMeta: InvoiceMetaRepoDO;
+    private invoiceId: string;
 
-    private _loadedInvoice: InvoiceDO;
-    private _thUtils: ThUtils;
+    private loadedInvoice: InvoiceDO;
 
-    constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
-        this._invoiceMeta = {
-            hotelId: this._sessionContext.sessionDO.hotel.id
+    constructor(private appContext: AppContext, private sessionContext: SessionContext) {
+        this.invoiceMeta = {
+            hotelId: this.sessionContext.sessionDO.hotel.id
         }
-        this._thUtils = new ThUtils();
     }
 
     public delete(invoiceId: string): Promise<InvoiceDO> {
-        this._invoiceId = invoiceId;
+        this.invoiceId = invoiceId;
 
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
             try {
                 this.deleteCore(resolve, reject);
             } catch (error) {
                 var thError = new ThError(ThStatusCode.DeleteRoomItemError, error);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error deleting invoice", this._invoiceId, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error deleting invoice", { invoiceId: this.invoiceId }, thError);
                 reject(thError);
             }
         });
     }
     private deleteCore(resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) {
-        var invoiceRepo = this._appContext.getRepositoryFactory().getInvoiceRepository();
-        invoiceRepo.getInvoiceById(this._invoiceMeta, this._invoiceId)
+        var invoiceRepo = this.appContext.getRepositoryFactory().getInvoiceRepository();
+        invoiceRepo.getInvoiceById(this.invoiceMeta, this.invoiceId)
             .then((result: InvoiceDO) => {
-                this._loadedInvoice = result;
+                this.loadedInvoice = result;
 
-                if (!this._loadedInvoice.isUnpaid()) {
+                if (!this.loadedInvoice.isUnpaid()) {
                     var thError = new ThError(ThStatusCode.DeleteInvoiceNotUnpaid, null);
-                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to delete an invoice which is not Unpaid", { invoiceId: this._invoiceId }, thError);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to delete an invoice which is not Unpaid", { invoiceId: this.invoiceId }, thError);
                     throw thError;
                 }
-                var payerWithPayments = _.find(this._loadedInvoice.payerList, (payer: InvoicePayerDO) => {
+                var payerWithPayments = _.find(this.loadedInvoice.payerList, (payer: InvoicePayerDO) => {
                     return payer.paymentList && payer.paymentList.length > 0;
                 });
-                if (!this._thUtils.isUndefinedOrNull(payerWithPayments)) {
+                if (!this.appContext.thUtils.isUndefinedOrNull(payerWithPayments)) {
                     var thError = new ThError(ThStatusCode.DeleteInvoiceHasPayments, null);
-                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to delete an invoice which has payments", { invoiceId: this._invoiceId }, thError);
-                    throw thError;   
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to delete an invoice which has payments", { invoiceId: this.invoiceId }, thError);
+                    throw thError;
                 }
-                if (this._loadedInvoice.isReinstatement()) {
+                if (this.loadedInvoice.isReinstatement()) {
                     var thError = new ThError(ThStatusCode.DeleteInvoiceIsReinstatement, null);
-                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to delete an invoice which is reinstatement", { invoiceId: this._invoiceId }, thError);
-                    throw thError;                     
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to delete an invoice which is reinstatement", { invoiceId: this.invoiceId }, thError);
+                    throw thError;
                 }
-                if (this._loadedInvoice.itemList.length > 0) {
+                if (this.loadedInvoice.itemList.length > 0) {
                     var thError = new ThError(ThStatusCode.DeleteInvoiceHasItems, null);
-                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to delete an invoice which has items", { invoiceId: this._invoiceId }, thError);
-                    throw thError;                     
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to delete an invoice which has items", { invoiceId: this.invoiceId }, thError);
+                    throw thError;
                 }
-                this._loadedInvoice.status = InvoiceStatus.Deleted;
-                return invoiceRepo.updateInvoice({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-                    id: this._loadedInvoice.id,
-                    versionId: this._loadedInvoice.versionId
-                }, this._loadedInvoice);
+                this.loadedInvoice.status = InvoiceStatus.Deleted;
+                return invoiceRepo.updateInvoice({ hotelId: this.sessionContext.sessionDO.hotel.id }, {
+                    id: this.loadedInvoice.id,
+                    versionId: this.loadedInvoice.versionId
+                }, this.loadedInvoice);
             })
             .then((deletedInvoice: InvoiceDO) => {
                 resolve(deletedInvoice);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.DeleteRoomItemError, error);
                 if (thError.isNativeError()) {
-                    ThLogger.getInstance().logError(ThLogLevel.Error, "error deleting room", this._invoiceId, thError);
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "error deleting room", this.invoiceId, thError);
                 }
                 reject(thError);
             });

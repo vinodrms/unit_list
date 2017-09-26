@@ -145,14 +145,14 @@ export class InvoiceOverviewComponent implements OnInit {
                     });
                     this.deletePending = false;
                     this.context.analytics.logEvent("invoice", "delete", "Deleted an invoice");
-                    this.context.toaster.info("The invoice was deleted.");
+                    this.context.toaster.success("The invoice was deleted.");
                     this.emitInvoiceDeleted();
-                    
+
                 }, (err: ThError) => {
                     this.deletePending = false;
                     this.context.toaster.error(err.message);
                 });
-        }, content);        
+        }, content);
     }
 
     private confirm(status: string, onConfirm: (() => void), content: string = null) {

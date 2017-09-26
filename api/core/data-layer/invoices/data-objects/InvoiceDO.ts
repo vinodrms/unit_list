@@ -42,9 +42,9 @@ export class InvoiceDO extends BaseDO {
     paymentDueDate: ThDateDO;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "versionId", "hotelId", "groupId", "reference", "paymentStatus", "indexedCustomerIdList",
+        return ["id", "versionId", "hotelId", "status", "groupId", "reference", "paymentStatus", "indexedCustomerIdList",
             "indexedBookingIdList", "reinstatedInvoiceId", "notesFromBooking", "amountToPay", "amountPaid",
-            "paidTimestamp", "status"];
+            "paidTimestamp"];
     }
 
     public buildFromObject(object: Object) {
