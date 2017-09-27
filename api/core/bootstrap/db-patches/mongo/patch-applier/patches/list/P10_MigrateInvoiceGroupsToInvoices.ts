@@ -101,8 +101,14 @@ export class P10_MigrateInvoiceGroupsToInvoices extends APaginatedTransactionalM
             invoice.notesFromBooking = legacyInvoice.notesFromBooking;
 
             let defaultTimestamp: number;
-            if (_.isNumber(legacyInvoice.paidDateTimeUtcTimestamp)) {
-                let actualMoment: moment.Moment = moment.utc(legacyInvoice.paidDateTimeUtcTimestamp);
+
+            var paidDateTimeUtcTimestamp = legacyInvoice.paidDateTimeUtcTimestamp;
+            if (!_.isNumber(paidDateTimeUtcTimestamp)) {
+                paidDateTimeUtcTimestamp = legacyInvoice.paidDateUtcTimestamp;
+            }
+
+            if (_.isNumber(paidDateTimeUtcTimestamp)) {
+                let actualMoment: moment.Moment = moment.utc(paidDateTimeUtcTimestamp);
                 let thTimestamp = new ThTimestampDO();
                 thTimestamp.thDateDO = ThDateDO.buildThDateDO(actualMoment.year(), actualMoment.month(), actualMoment.date());
                 thTimestamp.thHourDO = ThHourDO.buildThHourDO(actualMoment.hour(), actualMoment.minute());
