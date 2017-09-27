@@ -16,6 +16,7 @@ import { ITokenService } from "../core/domain-layer/token/ITokenService";
 import { IUser } from "../core/bootstrap/oauth/OAuthServerInitializer";
 import { TransferInvoiceItems } from "../core/domain-layer/invoices/transfer-items/TransferInvoiceItems";
 import { ReinstateInvoice } from "../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
+import { DeleteInvoice } from "../core/domain-layer/invoices/delete-invoice/DeleteInvoice";
 
 export class InvoicesController extends BaseController {
 
@@ -132,6 +133,17 @@ export class InvoicesController extends BaseController {
                 this.returnErrorResponse(req, res, err, ThStatusCode.InvoicesControllerErrorReinstatingInvoice);
             });
     }
+
+    public deleteInvoice(req: any, res: any) {
+        let deleteInvoice = new DeleteInvoice(req.appContext, req.sessionContext);
+
+        deleteInvoice.delete(req.body.invoiceId)
+            .then((invoice: InvoiceDO) => {
+                this.returnSuccesfulResponse(req, res, invoice);
+            }).catch((err: any) => {
+                this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceControllerErrorDeletingInvoice);
+            });
+    }
 }
 
 
@@ -144,5 +156,6 @@ module.exports = {
     downloadInvoicePdf: invoicesController.downloadInvoicePdf.bind(invoicesController),
     transferItems: invoicesController.transferItems.bind(invoicesController),
     reinstateInvoice: invoicesController.reinstateInvoice.bind(invoicesController),
+    deleteInvoice: invoicesController.deleteInvoice.bind(invoicesController),
 
 }

@@ -9,7 +9,7 @@
             (click)="moveToNextRelatedInvoice()">
         </i>
 
-        <i *ngIf="hasInvoiceRemoveRight()" class="fa fa-trash invoice-change-button pull-right clickable" title="{{ 'Delete this invoice' | translate }}"></i>
+        <i *ngIf="hasInvoiceRemoveRight()" class="fa fa-trash invoice-change-button pull-right clickable" title="{{ 'Delete this invoice' | translate }}" (click)="onDeleteInvoice()"></i>
         <i *ngIf="hasInvoiceTransferRight()" class="fa fa-exchange invoice-change-button pull-right m-r-12 clickable"
             (click)="showInvoiceTransfer()" title="{{ 'Easily transfer items from/to this invoice to others' | translate }}"></i>
         <div>

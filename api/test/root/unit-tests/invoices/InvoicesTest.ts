@@ -5,7 +5,7 @@ import _ = require('underscore');
 import { TestUtils } from "../../../helpers/TestUtils";
 import { TestContext } from "../../../helpers/TestContext";
 import { DefaultDataBuilder } from "../../../db-initializers/DefaultDataBuilder";
-import { InvoiceDO, InvoicePaymentStatus } from "../../../../core/data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceDO, InvoicePaymentStatus, InvoiceStatus } from "../../../../core/data-layer/invoices/data-objects/InvoiceDO";
 import { InvoicePayerDO } from "../../../../core/data-layer/invoices/data-objects/payer/InvoicePayerDO";
 import { CustomerDO } from "../../../../core/data-layer/customers/data-objects/CustomerDO";
 import { SaveInvoice } from "../../../../core/domain-layer/invoices/save-invoice/SaveInvoice";
@@ -17,6 +17,9 @@ import { TransferInvoiceItemsDO } from "../../../../core/domain-layer/invoices/t
 import { InvoiceItemDO, InvoiceItemType } from "../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO";
 import { ReinstateInvoice } from "../../../../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
 import { ThStatusCode } from "../../../../core/utils/th-responses/ThResponse";
+import { DeleteInvoice } from "../../../../core/domain-layer/invoices/delete-invoice/DeleteInvoice";
+import { DefaultInvoiceBuilder } from "../../../db-initializers/builders/DefaultInvoiceBuilder";
+
 
 describe("Invoices Tests", function () {
     var testUtils: TestUtils;
@@ -378,5 +381,24 @@ describe("Invoices Tests", function () {
             });
         });
     });
+    describe("Invoice Delete tests", function () {
+        it("Should delete an invoice", function (done) {
+            let invoiceToSave = new InvoiceDO();
+            let defaultInvoiceBuilder = new DefaultInvoiceBuilder(testContext);
+            let unpaidInvoiceWithNoPayers: InvoiceDO = defaultInvoiceBuilder.buildInvoiceWithNoItems();
+            invoiceToSave.buildFromObject(unpaidInvoiceWithNoPayers);
+            let saveInvoice = new SaveInvoice(testContext.appContext, testContext.sessionContext);
+            saveInvoice.save(invoiceToSave)
+                .then((invoiceToDelete: InvoiceDO) => {
+                    let deleteInvoice = new DeleteInvoice(testContext.appContext, testContext.sessionContext);
+                    return deleteInvoice.delete(invoiceToDelete.id);
+                }).then((updatedInvoice: InvoiceDO) => {
+                    should.equal(updatedInvoice.status, InvoiceStatus.Deleted);
+                    done();
 
+                }).catch((e: ThError) => {
+                    done(e);
+                });
+        });
+    });
 });

@@ -180,6 +180,10 @@ export class HotelOperationsInvoiceService {
         });
     }
 
+    delete(invoice: InvoiceDO): Observable<InvoiceDO> {
+        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesDelete, { invoiceId: invoice.id });      
+    }
+
     private cloneInvoice(invoice: InvoiceDO): InvoiceDO {
         let clone = new InvoiceDO();
         clone.buildFromObject(invoice);
