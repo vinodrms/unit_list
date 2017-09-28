@@ -333,6 +333,7 @@ export enum ThStatusCode {
     GenerateCreditInvoiceError,
     ReinstateInvoiceError,
     ReinstateInvoiceInvoiceNotPaid,
+    ReinstateInvoiceInvoiceCredit,
     ReinstateInvoiceMoreCreditsFoundForTheSameReference,
     ReinstateInvoiceCreditExists,
     DeleteInvoiceNotUnpaid,
@@ -363,7 +364,6 @@ export enum ThStatusCode {
     SaveInvoiceError,
     SaveInvoiceSamePayerAddedMoreThanOnce,
     SaveInvoiceCannotDeletePayerWithPayments,
-    SaveInvoiceUnpaidInvoiceCannotBeMarkedAsCredit,
     SaveInvoiceAmountsNotMatching,
     SaveInvoiceCannotCloseInvoiceWithNoItems,
     SaveInvoiceCannotRemoveBookingItem,
@@ -911,6 +911,7 @@ ThMessage[ThStatusCode.GenerateBookingInvoiceErrorBuildingDefaultInvoice] = "Err
 ThMessage[ThStatusCode.GenerateCreditInvoiceError] = "Error crediting invoice.";
 ThMessage[ThStatusCode.ReinstateInvoiceError] = "Error reinstating invoice.";
 ThMessage[ThStatusCode.ReinstateInvoiceInvoiceNotPaid] = "Only Paid invoices can be reinstated.";
+ThMessage[ThStatusCode.ReinstateInvoiceInvoiceCredit] = "Credit invoice cannot be reinstated.";
 ThMessage[ThStatusCode.ReinstateInvoiceMoreCreditsFoundForTheSameReference] = "More credit invoices have been found for this invoice.";
 ThMessage[ThStatusCode.ReinstateInvoiceCreditExists] = "Credit already exists for this invoice.";
 ThMessage[ThStatusCode.DeleteInvoiceNotUnpaid] = "The invoice has to be unpaid in order to be deleted.";
@@ -941,7 +942,6 @@ ThMessage[ThStatusCode.SaveInvoiceItem] = "Error saving the invoice group item."
 ThMessage[ThStatusCode.SaveInvoiceError] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.SaveInvoiceSamePayerAddedMoreThanOnce] = "You cannot add the same payer more than once on the invoice.";
 ThMessage[ThStatusCode.SaveInvoiceCannotDeletePayerWithPayments] = "You cannot delete a payer that already has a posted payment on the invoice.";
-ThMessage[ThStatusCode.SaveInvoiceUnpaidInvoiceCannotBeMarkedAsCredit] = "An unpaid invoice cannot be marked as Credit.";
 ThMessage[ThStatusCode.SaveInvoiceAmountsNotMatching] = "The invoice cannot be closed because the paid amount is different than the amount to pay.";
 ThMessage[ThStatusCode.SaveInvoiceCannotCloseInvoiceWithNoItems] = "An invoice with no items cannot be closed.";
 ThMessage[ThStatusCode.SaveInvoiceCannotRemoveBookingItem] = "Booking items cannot be removed from the invoice.";

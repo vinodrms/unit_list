@@ -114,7 +114,6 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
         return item.meta.getDisplayName(this._appContext.thTranslate);
     }
     private getQuantityForItem(item: InvoiceItemDO, invoice: InvoiceDO): number {
-        let qtyFactor = invoice.paymentStatus === InvoicePaymentStatus​​.Credit ? -1 : 1;
-        return item.meta.getNumberOfItems() * qtyFactor;
+        return item.meta.getNumberOfItems() * invoice.getAccountingFactor();
     }
 }

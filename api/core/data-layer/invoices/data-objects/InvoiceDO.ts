@@ -17,7 +17,11 @@ export enum InvoiceStatus {
 }
 
 export enum InvoicePaymentStatus {
-    Unpaid, Paid, LossAcceptedByManagement, Credit
+    Unpaid, Paid, LossAcceptedByManagement
+}
+
+export enum InvoiceAccountingType {
+    Debit, Credit
 }
 
 export class InvoiceDO extends BaseDO {
@@ -25,6 +29,7 @@ export class InvoiceDO extends BaseDO {
     versionId: number;
     hotelId: string;
     status: InvoiceStatus;
+    accountingType: InvoiceAccountingType;
     groupId: string;
     reference: string;
     paymentStatus: InvoicePaymentStatus;
@@ -42,9 +47,9 @@ export class InvoiceDO extends BaseDO {
     paymentDueDate: ThDateDO;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "versionId", "hotelId", "status", "groupId", "reference", "paymentStatus", "indexedCustomerIdList",
-            "indexedBookingIdList", "reinstatedInvoiceId", "notesFromBooking", "amountToPay", "amountPaid",
-            "paidTimestamp"];
+        return ["id", "versionId", "hotelId", "status", "accountingType", "groupId", "reference", "paymentStatus",
+            "indexedCustomerIdList", "indexedBookingIdList", "reinstatedInvoiceId", "notesFromBooking", "amountToPay",
+            "amountPaid", "paidTimestamp"];
     }
 
     public buildFromObject(object: Object) {
@@ -206,8 +211,22 @@ export class InvoiceDO extends BaseDO {
         return this.isPaid() || this.isLossAcceptedByManagement();
     }
 
+    public isCredit(): boolean {
+        return this.accountingType === InvoiceAccountingType.Credit;
+    }
+    public isDebit(): boolean {
+        return this.accountingType === InvoiceAccountingType.Debit;
+    }
+
     public isReinstatement(): boolean {
         var thUtils = new ThUtils();
         return !thUtils.isUndefinedOrNull(this.reinstatedInvoiceId);
+    }
+
+    public getAccountingFactor(): number {
+        if (this.accountingType === InvoiceAccountingType.Credit) {
+            return -1;
+        }
+        return 1;
     }
 }

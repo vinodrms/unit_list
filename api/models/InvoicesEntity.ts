@@ -33,6 +33,10 @@ class InvoicesEntity extends BasePersistentEntity {
                 type: 'integer',
                 required: true
             },
+            accountingType: {
+                type: 'integer',
+                required: true
+            },
             indexedCustomerIdList: {
                 type: 'array',
                 defaultsTo: []

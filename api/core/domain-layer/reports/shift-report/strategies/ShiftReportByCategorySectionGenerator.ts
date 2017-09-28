@@ -139,7 +139,7 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
         };
     }
     private getQuantityForItem(item: InvoiceItemDO, invoice: InvoiceDO): number {
-        let qtyFactor = invoice.paymentStatus === InvoicePaymentStatus.Credit ? -1 : 1;
+        let qtyFactor = invoice.getAccountingFactor();
 
         // we do not want to count the number of nights as separate rooms
         if (item.type == InvoiceItemType.Booking) {

@@ -1,7 +1,7 @@
 import _ = require('underscore');
 import { AppContext } from "../../../utils/AppContext";
 import { SessionContext } from "../../../utils/SessionContext";
-import { InvoiceDO, InvoicePaymentStatus } from "../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 import { ThError } from "../../../utils/th-responses/ThError";
 import { ThStatusCode } from "../../../utils/th-responses/ThResponse";
 import { ThLogger, ThLogLevel } from "../../../utils/logging/ThLogger";
@@ -31,6 +31,11 @@ export class ReinstateInvoice {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to reinstante an invoice not Paid", { invoiceId: invoiceId }, thError);
                     throw thError;
                 }
+                if (invoice.isCredit()) {
+                    var thError = new ThError(ThStatusCode.ReinstateInvoiceInvoiceCredit, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to reinstante a Credit invoice", { invoiceId: invoiceId }, thError);
+                    throw thError;
+                }
                 this.invoice = invoice;
 
                 return this.getExistingCreditFor(invoice);
@@ -58,7 +63,8 @@ export class ReinstateInvoice {
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
             let invoiceRepo = this.appContext.getRepositoryFactory().getInvoiceRepository();
             invoiceRepo.getInvoiceList({ hotelId: this.sessionContext.sessionDO.hotel.id }, {
-                invoicePaymentStatus: InvoicePaymentStatus.Credit,
+                invoicePaymentStatus: InvoicePaymentStatus.Paid,
+                invoiceAccountingType: InvoiceAccountingType.Credit,
                 reference: invoice.reference
             }).then(result => {
                 if (result.invoiceList.length > 1) {
@@ -79,7 +85,8 @@ export class ReinstateInvoice {
     private getCreditInvoiceFor(invoice: InvoiceDO, timestamp: number): InvoiceDO {
         let credit = new InvoiceDO();
         credit.buildFromObject(invoice);
-        credit.paymentStatus = InvoicePaymentStatus.Credit;
+        credit.paymentStatus = InvoicePaymentStatus.Paid;
+        credit.accountingType = InvoiceAccountingType.Credit;
         delete credit.reinstatedInvoiceId;
         credit = this.prepare(credit, timestamp);
         return credit;
@@ -90,6 +97,7 @@ export class ReinstateInvoice {
         reinstated.buildFromObject(invoice);
         delete reinstated.reference;
         reinstated.paymentStatus = InvoicePaymentStatus.Unpaid;
+        reinstated.accountingType = InvoiceAccountingType.Debit;
         reinstated.reinstatedInvoiceId = invoice.id;
         reinstated.payerList.forEach(payer => {
             payer.paymentList = [];

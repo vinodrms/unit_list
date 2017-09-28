@@ -109,6 +109,7 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
             mongoQueryBuilder.addMultipleSelectOptionList("indexedBookingIdList", searchCriteria.bookingIdList);
             mongoQueryBuilder.addMultipleSelectOptionList("indexedCustomerIdList", searchCriteria.customerIdList);
             mongoQueryBuilder.addExactMatch("paymentStatus", searchCriteria.invoicePaymentStatus);
+            mongoQueryBuilder.addExactMatch("accountingType", searchCriteria.invoiceAccountingType);
             mongoQueryBuilder.addMultipleSelectOptionList("payerList.customerId", searchCriteria.payerCustomerIdList);
             if (!this._thUtils.isUndefinedOrNull(searchCriteria.paidInterval)) {
                 var searchInterval = new ThDateIntervalDO();

@@ -1,6 +1,6 @@
 import _ = require("underscore");
 import { AInvoiceStrategy } from "./AInvoiceStrategy";
-import { InvoiceDO, InvoicePaymentStatus } from "../../../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from "../../../../../data-layer/invoices/data-objects/InvoiceDO";
 import { ThError } from "../../../../../utils/th-responses/ThError";
 import { ThStatusCode } from "../../../../../utils/th-responses/ThResponse";
 import { ThLogger, ThLogLevel } from "../../../../../utils/logging/ThLogger";
@@ -40,9 +40,8 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
     }
 
     private updateAttributesOn(existingInvoice: InvoiceDO) {
-        // paid or credit invoices will always remain as they are
-        if (existingInvoice.paymentStatus == InvoicePaymentStatus.Paid
-            || existingInvoice.paymentStatus == InvoicePaymentStatus.Credit) {
+        // paid invoices will always remain as they are
+        if (existingInvoice.paymentStatus == InvoicePaymentStatus.Paid) {
             return;
         }
         // loss by management invoices can only be marked as Paid
@@ -59,12 +58,6 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
         }
         // otherwise the existing invoice is unpaid
         existingInvoice.paymentStatus = this.invoiceToSave.paymentStatus;
-
-        if (this.invoiceToSave.paymentStatus == InvoicePaymentStatus.Credit) {
-            var thError = new ThError(ThStatusCode.SaveInvoiceUnpaidInvoiceCannotBeMarkedAsCredit, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot mark an unpaid invoice as a credit", this.invoiceToSave, thError);
-            throw thError;
-        }
 
         this.deleteItemsFrom(existingInvoice);
         this.addNewItemsOn(existingInvoice);

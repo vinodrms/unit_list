@@ -6,7 +6,7 @@ import { ThError } from '../../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
 import { TaxResponseRepoDO } from '../../../../../data-layer/taxes/repositories/ITaxRepository';
 import { TaxDO } from '../../../../../data-layer/taxes/data-objects/TaxDO';
-import { InvoiceDO, InvoicePaymentStatus } from "../../../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from "../../../../../data-layer/invoices/data-objects/InvoiceDO";
 import { AInvoiceStrategy } from "./AInvoiceStrategy";
 
 export class InvoiceAddStrategy extends AInvoiceStrategy {
@@ -17,6 +17,7 @@ export class InvoiceAddStrategy extends AInvoiceStrategy {
             .then((result: TaxResponseRepoDO) => {
                 this.invoiceToSave.vatTaxListSnapshot = result.vatList;
                 this.invoiceToSave.paymentStatus = InvoicePaymentStatus.Unpaid;
+                this.invoiceToSave.accountingType = InvoiceAccountingType​​.Debit;
                 this.stampInvoice();
                 if (this.thUtils.isUndefinedOrNull(this.invoiceToSave.groupId)) {
                     this.invoiceToSave.groupId = this.thUtils.generateUniqueID();
