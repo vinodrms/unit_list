@@ -1013,7 +1013,7 @@ export var EnglishTranslations: Object = {
     "Taxes": "Taxes",
     "No Fee": "No Fee",
     "Please add a payment amount.": "Please add a payment amount.",
-    "Please select a payment amount lower or equal to the amount left to pay.": "Please select a payment amount lower or equal to the amount left to pay.",
+    "Please select a positive amount.": "Please select a positive amount.",
     "out of": "out of",
     "Are you sure you want to mark this invoice as %status%?": "Are you sure you want to mark this invoice as %status%?",
     "No items": "No items",

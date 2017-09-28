@@ -89,14 +89,12 @@
                     <td>{{ itemVm.numberOfItems }}</td>
                     <td>{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
                     <td>{{ ccySymbol }}{{ itemVm.totalPrice }}</td>
-                    <td><i *ngIf="hasInvoiceEditItemsRight() && itemVm.isRemovable" class="fa fa-trash remove-item clickable"
-                        (click)="openRemoveItemConfirmationModal(itemVm.item)" title="{{ 'Remove this item from the invoice' | translate }}"></i>
-                    </td>
+                    <td></td>
                 </tr>
                 <tr *ngIf="hasInvoiceEditItemsRight()" class="add-item">
                     <td>
                         <div class="clickable" (click)="openAddOnProductSelectModal()">
-                            <span class="fa fa-plus-circle m-r-6"></span>{{ 'Add item' | translate }}
+                            <span class="fa fa-plus-circle f-s-16 m-r-6"></span>{{ 'Add item' | translate }}
                         </div>
                     </td>
                     <td></td>

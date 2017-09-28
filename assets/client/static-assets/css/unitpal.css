@@ -3669,6 +3669,9 @@ a.btn.btn-square:focus {
 .f-s-14 {
     font-size: 14px;
 }
+.f-s-16 {
+    font-size: 16px;
+}
 .link-with-unitpal-font-icon {
     font-size: 12px;
 }
@@ -4125,13 +4128,13 @@ textarea.payer-details {
 .invoice-summary .invoice-change-button {
     color: #F66600;
     background: transparent;
-    width: 21px;
-    height: 19px;
-    line-height: 19px;
+    width: 31px;
+    height: 29px;
+    line-height: 29px;
     margin-left: 0px;
     text-align: center;
-    font-size: 16px;
-    margin-top: 17px;
+    font-size: 19px;
+    margin-top: 12px;
 }
 
 .invoice-payer-section {

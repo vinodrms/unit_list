@@ -11,7 +11,7 @@
 			(showInvoiceTransferClicked)="showInvoiceTransfer()"
 			(currentInvoiceChanged)="currentRelatedInvoiceIndex = $event"
 			(invoiceChanged)="markInvoiceChanged($event)"
-			(invoiceDeleted)="onInvoiceDeleted($event)"
+			(invoiceDeleted)="goBackOrExit()"
 		>
 		</invoice-overview>
 	</div>
@@ -22,6 +22,8 @@
             [paginationOptions]="paginationOptions"
 			(backToInvoiceOverviewClicked)="showInvoiceOverview()"
 			(relatedInvoiceIndexSelected)="selectRelatedInvoiceIndex($event)"
+			(invoiceChanged)="markInvoiceChanged($event)"
+			(noRelatedInvoicesLeft)="goBackOrExit()"
 		>
 		</related-invoices>
 	</div>

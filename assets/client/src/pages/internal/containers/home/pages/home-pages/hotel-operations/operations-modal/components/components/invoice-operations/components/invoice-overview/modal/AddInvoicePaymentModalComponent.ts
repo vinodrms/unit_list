@@ -36,7 +36,9 @@ export class AddInvoicePaymentModalComponent extends BaseComponent implements IC
     }
 
     ngOnInit() {
-        this.paymentAmount = this._modalInput.invoiceAmountLeftToPay;
+        if (this._modalInput.invoiceAmountLeftToPay > 0) {
+            this.paymentAmount = this._modalInput.invoiceAmountLeftToPay;
+        }
         this._pmGenerator = new InvoicePaymentMethodVMGenerator(this._modalInput.invoiceOperationsPageData.allowedPaymentMethods);
         this._customerPaymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this._modalInput.customer);
         this.selectedInvoicePaymentMethodVM = this._customerPaymentMethodVMList[0];
@@ -52,8 +54,8 @@ export class AddInvoicePaymentModalComponent extends BaseComponent implements IC
             this._appContext.toaster.error(errorMessage);
             return;
         }
-        if (this.paymentAmount <= 0 || this.paymentAmount > this._modalInput.invoiceAmountLeftToPay) {
-            let errorMessage = this._appContext.thTranslation.translate("Please select a payment amount lower or equal to the amount left to pay.");
+        if (this.paymentAmount <= 0) {
+            let errorMessage = this._appContext.thTranslation.translate("Please select a positive amount.");
             this._appContext.toaster.error(errorMessage);
             return;
         }
@@ -82,6 +84,10 @@ export class AddInvoicePaymentModalComponent extends BaseComponent implements IC
 
     public get maxPaymentAmountString(): string {
         return this.ccySymbol + this._modalInput.invoiceAmountLeftToPay;
+    }
+
+    public get invoiceAmountLeftToPay(): number {
+        return this._modalInput.invoiceAmountLeftToPay;
     }
 
     public get ccySymbol(): string {

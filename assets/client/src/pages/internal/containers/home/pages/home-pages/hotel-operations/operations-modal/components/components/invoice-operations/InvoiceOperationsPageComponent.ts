@@ -216,7 +216,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
         return this.relatedInvoices.length > 1;
     }
 
-    public onInvoiceDeleted() {
+    public goBackOrExit() {
         if (this.operationsPageControllerService.canGoBack()) {
             this.operationsPageControllerService.goBack();
         } else {
