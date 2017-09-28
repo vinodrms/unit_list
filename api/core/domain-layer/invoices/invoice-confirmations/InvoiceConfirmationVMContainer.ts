@@ -12,7 +12,7 @@ import { TransactionFeeDO, TransactionFeeType } from "../../../data-layer/common
 import { InvoiceItemVM } from "./InvoiceItemVM";
 import { InvoiceItemDO, InvoiceItemType } from "../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
 import { AddOnProductInvoiceItemMetaDO } from "../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
-import { InvoicePaymentStatus, InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoicePaymentStatus, InvoiceDO, InvoiceAccountingType } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 import { InvoicePaymentMethodType } from "../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO";
 import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payer/InvoicePayerDO";
 import { ThDateUtils } from "../../../utils/th-dates/ThDateUtils";
@@ -245,10 +245,10 @@ export class InvoiceConfirmationVMContainer {
         this.subtotalValue = 0;
         _.forEach(this._invoice.itemList, (itemDO: InvoiceItemDO) => {
             var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
-            invoiceItemVM.buildFromInvoiceItemDO(itemDO, this._invoiceAggregatedData.vatList);
+            invoiceItemVM.buildFromInvoiceItemDO(itemDO, this._invoiceAggregatedData.vatList, this._invoice.accountingType);
 
             if (this.displayBookingDateBreakdown(itemDO)) {
-                let bookingInvoiceItems = this.getBookingDateBreakdownItems(itemDO);
+                let bookingInvoiceItems = this.getBookingDateBreakdownItems(itemDO, this._invoice.accountingType);
                 this.itemVMList = this.itemVMList.concat(bookingInvoiceItems);
             }
             else {
@@ -300,7 +300,7 @@ export class InvoiceConfirmationVMContainer {
         let bookingPrice: BookingPriceDO = <BookingPriceDO>invoiceItemDO.meta;
         return !bookingPrice.isPenalty();
     }
-    private getBookingDateBreakdownItems(itemDO: InvoiceItemDO): InvoiceItemVM[] {
+    private getBookingDateBreakdownItems(itemDO: InvoiceItemDO, accountingType: InvoiceAccountingType): InvoiceItemVM[] {
         let bookingPrice: BookingPriceDO = <BookingPriceDO>itemDO.meta;
 
         let invoiceItemVMList: InvoiceItemVM[] = [];
@@ -316,7 +316,7 @@ export class InvoiceConfirmationVMContainer {
             item.meta = aopItemMeta;
 
             var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
-            invoiceItemVM.buildFromInvoiceItemDO(item, this._invoiceAggregatedData.vatList);
+            invoiceItemVM.buildFromInvoiceItemDO(item, this._invoiceAggregatedData.vatList, accountingType);
 
             invoiceItemVMList.push(invoiceItemVM);
         });

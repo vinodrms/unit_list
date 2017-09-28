@@ -4,7 +4,7 @@ import { GenerateBookingInvoiceDO, BookingInvoiceItem } from "./GenerateBookingI
 import { BookingDO, AddOnProductBookingReservedItem } from "../../../data-layer/bookings/data-objects/BookingDO";
 import { AppContext } from "../../../utils/AppContext";
 import { SessionContext } from "../../../utils/SessionContext";
-import { InvoiceDO, InvoicePaymentStatus } from "../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceDO, InvoiceAccountingType } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 import { ThError } from "../../../utils/th-responses/ThError";
 import { ValidationResultParser } from "../../common/ValidationResultParser";
 import { ThStatusCode } from "../../../utils/th-responses/ThResponse";
@@ -51,14 +51,12 @@ export class GenerateBookingInvoice {
 
                 let invoiceRepo = this.appContext.getRepositoryFactory().getInvoiceRepository();
                 return invoiceRepo.getInvoiceList({ hotelId: this.sessionContext.sessionDO.hotel.id }, {
-                    bookingId: this.loadedBooking.id
+                    bookingId: this.loadedBooking.id,
+                    invoiceAccountingType: InvoiceAccountingType.Debit
                 });
             }).then((invoiceSearchResult: InvoiceSearchResultRepoDO) => {
-                let existingInvoice = _.find(invoiceSearchResult.invoiceList, (invoice: InvoiceDO) => {
-                    return invoice.paymentStatus != InvoicePaymentStatus.Credit;
-                });
-                if (!this.appContext.thUtils.isUndefinedOrNull(existingInvoice)) {
-                    resolve(existingInvoice);
+                if (invoiceSearchResult.invoiceList.length > 0) {
+                    resolve(invoiceSearchResult.invoiceList[0]);
                     return;
                 }
                 let actionFactory = new GenerateBookingInvoiceActionFactory(this.appContext, this.sessionContext);

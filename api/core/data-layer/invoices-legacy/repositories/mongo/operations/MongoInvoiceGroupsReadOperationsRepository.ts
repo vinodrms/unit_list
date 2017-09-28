@@ -66,7 +66,7 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
     }
     private getInvoiceGroupListCore(resolve: { (result: InvoiceGroupSearchResultRepoDO): void }, reject: { (err: ThError): void }, invoiceGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria?: InvoiceGroupSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO) {
 
-        this.findMultipleDocuments({ criteria: this.buildSearchCriteria(invoiceGroupMeta, searchCriteria), lazyLoad: lazyLoad, sortCriteria: { createdAt: 1 } },
+        this.findMultipleDocuments({ criteria: this.buildSearchCriteria(invoiceGroupMeta, searchCriteria), lazyLoad: lazyLoad, sortCriteria: { id: 1 } },
             (err: Error) => {
                 var thError = new ThError(ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroupList, err);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting invoice group list.", searchCriteria, thError);

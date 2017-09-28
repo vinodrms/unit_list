@@ -2,7 +2,7 @@ import { AppContext } from "../../../../../utils/AppContext";
 import { SessionContext } from "../../../../../utils/SessionContext";
 import { ThError } from "../../../../../utils/th-responses/ThError";
 import { AGenerateBookingInvoiceActionStrategy } from "../AGenerateBookingInvoiceActionStrategy";
-import { InvoiceDO, InvoiceStatus, InvoicePaymentStatus } from "../../../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceDO, InvoiceStatus, InvoicePaymentStatus, InvoiceAccountingType } from "../../../../../data-layer/invoices/data-objects/InvoiceDO";
 import { BookingDO } from "../../../../../data-layer/bookings/data-objects/BookingDO";
 import { BookingInvoiceItem } from "../../GenerateBookingInvoiceDO";
 import { CustomerIdValidator } from "../../../../customers/validators/CustomerIdValidator";
@@ -65,6 +65,7 @@ export class GenerateBookingInvoiceByCreatingNewInvoiceStrategy extends AGenerat
         invoice.amountPaid = 0.0;
         invoice.amountToPay = 0.0;
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
+        invoice.accountingType = InvoiceAccountingType​​.Debit;
         invoice.vatTaxListSnapshot = this.vatTaxListSnapshot;
         invoice.notesFromBooking = this.params.booking.invoiceNotes;
         invoice.itemList = this.getInvoiceItemList();

@@ -5,7 +5,7 @@ import _ = require('underscore');
 import { TestUtils } from "../../../helpers/TestUtils";
 import { TestContext } from "../../../helpers/TestContext";
 import { DefaultDataBuilder } from "../../../db-initializers/DefaultDataBuilder";
-import { InvoiceDO, InvoicePaymentStatus, InvoiceStatus } from "../../../../core/data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceDO, InvoicePaymentStatus, InvoiceStatus, InvoiceAccountingType } from "../../../../core/data-layer/invoices/data-objects/InvoiceDO";
 import { InvoicePayerDO } from "../../../../core/data-layer/invoices/data-objects/payer/InvoicePayerDO";
 import { CustomerDO } from "../../../../core/data-layer/customers/data-objects/CustomerDO";
 import { SaveInvoice } from "../../../../core/domain-layer/invoices/save-invoice/SaveInvoice";
@@ -270,10 +270,13 @@ describe("Invoices Tests", function () {
             reinstateInvoice.reinstate(invoice.id)
                 .then((invoices: InvoiceDO[]) => {
                     should.equal(invoices.length, 2);
-                    let credit: InvoiceDO = _.find(invoices, (i: InvoiceDO) => { return i.paymentStatus === InvoicePaymentStatus​​.Credit });
+                    let credit: InvoiceDO = _.find(invoices, (i: InvoiceDO) => { return i.accountingType === InvoiceAccountingType​​.Credit });
                     should.exist(credit);
-                    let reinstatement: InvoiceDO = _.find(invoices, (i: InvoiceDO) => { return i.paymentStatus === InvoicePaymentStatus​​.Unpaid });
+                    should.equal(credit.paymentStatus, InvoicePaymentStatus.Paid);
+
+                    let reinstatement: InvoiceDO = _.find(invoices, (i: InvoiceDO) => { return i.accountingType === InvoiceAccountingType​​.Debit });
                     should.exist(reinstatement);
+                    should.equal(reinstatement.paymentStatus, InvoicePaymentStatus.Unpaid);
 
                     should.equal(reinstatement.reference.startsWith("TEMP"), true);
                     should.equal(_.isNumber(reinstatement.paidTimestamp), false);

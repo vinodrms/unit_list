@@ -10,7 +10,7 @@ import {
     InvoicePaymentStatus as LegacyInvoicePaymentStatus
 } from "../../../../../../data-layer/invoices-legacy/data-objects/InvoiceDO";
 import { InvoiceItemDO as LegacyInvoiceItemDO, InvoiceItemType as LegacyInvoiceItemType } from "../../../../../../data-layer/invoices-legacy/data-objects/items/InvoiceItemDO";
-import { InvoiceDO, InvoiceStatus, InvoicePaymentStatus } from "../../../../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceDO, InvoiceStatus, InvoicePaymentStatus, InvoiceAccountingType } from "../../../../../../data-layer/invoices/data-objects/InvoiceDO";
 import { InvoiceItemDO, InvoiceItemType } from "../../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
 import { ThTimestampDO } from "../../../../../../utils/th-dates/data-objects/ThTimestampDO";
 import { AddOnProductInvoiceItemMetaDO as LegacyAddOnProductInvoiceItemMetaDO } from "../../../../../../data-layer/invoices-legacy/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
@@ -81,16 +81,20 @@ export class P10_MigrateInvoiceGroupsToInvoices extends APaginatedTransactionalM
 
             if (legacyInvoice.paymentStatus === LegacyInvoicePaymentStatus.LossAcceptedByManagement) {
                 invoice.paymentStatus = InvoicePaymentStatus.LossAcceptedByManagement;
+                invoice.accountingType = InvoiceAccountingType.Debit;
             }
             else if (legacyInvoice.paymentStatus === LegacyInvoicePaymentStatus.Unpaid) {
                 invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
+                invoice.accountingType = InvoiceAccountingType.Debit;
             }
             else if (legacyInvoice.paymentStatus === LegacyInvoicePaymentStatus.Paid) {
+                invoice.paymentStatus = InvoicePaymentStatus.Paid;
+
                 if (legacyInvoice.accountingType === LegacyInvoiceAccountingType.Debit) {
-                    invoice.paymentStatus = InvoicePaymentStatus.Paid;
+                    invoice.accountingType = InvoiceAccountingType.Debit;
                 }
                 else if (legacyInvoice.accountingType === LegacyInvoiceAccountingType.Credit) {
-                    invoice.paymentStatus = InvoicePaymentStatus.Credit;
+                    invoice.accountingType = InvoiceAccountingType.Credit;
                 }
             }
             invoice.vatTaxListSnapshot = legacyInvoiceGroup.vatTaxListSnapshot;
@@ -101,8 +105,21 @@ export class P10_MigrateInvoiceGroupsToInvoices extends APaginatedTransactionalM
             invoice.notesFromBooking = legacyInvoice.notesFromBooking;
 
             let defaultTimestamp: number;
-            if (_.isNumber(legacyInvoice.paidDateTimeUtcTimestamp)) {
-                let actualMoment: moment.Moment = moment.utc(legacyInvoice.paidDateTimeUtcTimestamp);
+
+            var paidDateTimeUtcTimestamp = legacyInvoice.paidDateTimeUtcTimestamp;
+            // bug in the old system: sometimes the paidDateTimeUtcTimestamp is not completed
+            if (!_.isNumber(paidDateTimeUtcTimestamp)) {
+                paidDateTimeUtcTimestamp = legacyInvoice.paidDateUtcTimestamp;
+            }
+
+            // enforce a paidTimestamp if the invoice is already Paid
+            if (!_.isNumber(paidDateTimeUtcTimestamp) && invoice.isClosed()) {
+                var date = new Date(legacyInvoiceGroup.updatedAt);
+                paidDateTimeUtcTimestamp = date.getTime();
+            }
+
+            if (_.isNumber(paidDateTimeUtcTimestamp)) {
+                let actualMoment: moment.Moment = moment.utc(paidDateTimeUtcTimestamp);
                 let thTimestamp = new ThTimestampDO();
                 thTimestamp.thDateDO = ThDateDO.buildThDateDO(actualMoment.year(), actualMoment.month(), actualMoment.date());
                 thTimestamp.thHourDO = ThHourDO.buildThHourDO(actualMoment.hour(), actualMoment.minute());
@@ -127,7 +144,7 @@ export class P10_MigrateInvoiceGroupsToInvoices extends APaginatedTransactionalM
             legacyInvoice.payerList.forEach((legacyPayer: LegacyInvoicePayerDO) => {
                 let payment = this.convertPayer(legacyPayer, defaultTimestamp);
                 let customerId = legacyPayer.customerId;
-                var index = _.findIndex(invoice.payerList, (payer: InvoicePayerDO) => {
+                var index: number = _.findIndex(invoice.payerList, (payer: InvoicePayerDO) => {
                     return payer.customerId === customerId;
                 });
                 if (index < 0) {

@@ -3,7 +3,7 @@ import { ObjectValidationStructure } from "../../../utils/th-validation/structur
 import { PrimitiveValidationStructure } from "../../../utils/th-validation/structure/PrimitiveValidationStructure";
 import { StringValidationRule } from "../../../utils/th-validation/rules/StringValidationRule";
 import { NumberInListValidationRule } from "../../../utils/th-validation/rules/NumberInListValidationRule";
-import { InvoicePaymentStatus } from "../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoicePaymentStatus, InvoiceAccountingType } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 import { ArrayValidationStructure } from "../../../utils/th-validation/structure/ArrayValidationStructure";
 import { InvoiceItemType } from "../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
 import { InvoicePaymentMethodType } from "../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO";
@@ -31,7 +31,13 @@ export class SaveInvoiceDO {
                 key: "paymentStatus",
                 validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([
                     // the client uses -1 to map transient invoices
-                    -1, InvoicePaymentStatus.Unpaid, InvoicePaymentStatus.Paid, InvoicePaymentStatus.LossAcceptedByManagement, InvoicePaymentStatus.Credit
+                    -1, InvoicePaymentStatus.Unpaid, InvoicePaymentStatus.Paid, InvoicePaymentStatus.LossAcceptedByManagement
+                ]))
+            },
+            {
+                key: "accountingType",
+                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([
+                    InvoiceAccountingType.Debit, InvoiceAccountingType.Credit
                 ]))
             },
             {

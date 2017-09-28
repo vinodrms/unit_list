@@ -7,7 +7,7 @@ import { CustomerDO } from "../../../../../../../../../services/customers/data-o
 import { IndividualDetailsDO } from "../../../../../../../../../services/customers/data-objects/customer-details/IndividualDetailsDO";
 import { ContactDetailsDO } from "../../../../../../../../../services/customers/data-objects/customer-details/ContactDetailsDO";
 import { HotelOperationsInvoiceService } from "../../../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
-import { InvoiceDO, InvoiceStatus, InvoicePaymentStatus } from "../../../../../../../../../services/invoices/data-objects/InvoiceDO";
+import { InvoiceDO, InvoiceStatus, InvoicePaymentStatus, InvoiceAccountingType } from "../../../../../../../../../services/invoices/data-objects/InvoiceDO";
 import { ThError, AppContext } from "../../../../../../../../../../../common/utils/AppContext";
 import { CustomersDO } from "../../../../../../../../../services/customers/data-objects/CustomersDO";
 import { InvoicesDO } from "../../../../../../../../../services/invoices/data-objects/InvoicesDO";
@@ -152,8 +152,9 @@ export class InvoiceOperationsPageComponent implements OnInit {
         invoiceVM.invoice.indexedBookingIdList = [];
         invoiceVM.invoice.indexedCustomerIdList = [];
         invoiceVM.invoice.paymentStatus = InvoicePaymentStatus.Transient;
+        invoiceVM.invoice.accountingType = InvoiceAccountingType.Debit;
         invoiceVM.customerList = [];
-        invoiceVM.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(invoiceVM.invoice.paymentStatus);
+        invoiceVM.invoiceMeta = this.invoiceMetaFactory.getInvoiceMeta(invoiceVM.invoice.paymentStatus, invoiceVM.invoice.accountingType);
         return invoiceVM;
     }
     private updatePaginationOptions() {

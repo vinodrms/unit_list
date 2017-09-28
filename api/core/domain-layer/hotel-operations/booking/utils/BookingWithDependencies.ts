@@ -5,7 +5,7 @@ import { AllotmentDO, AllotmentStatus } from '../../../../data-layer/allotments/
 import { AllotmentsContainer } from '../../../allotments/validators/results/AllotmentsContainer';
 import { RoomDO } from '../../../../data-layer/rooms/data-objects/RoomDO';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceDO, InvoiceAccountingType } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { ThUtils } from '../../../../utils/ThUtils';
 import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
 
@@ -110,7 +110,7 @@ export class BookingWithDependencies {
     public getInvoice(): InvoiceDO {
         if (this.invoiceList.length == 0) { return null; }
         let debitInvoices = _.filter(this.invoiceList, (invoice: InvoiceDO) => {
-            return invoice.paymentStatus != InvoicePaymentStatus.Credit;
+            return invoice.accountingType === InvoiceAccountingType.Debit;
         });
         debitInvoices = _.sortBy(debitInvoices, (invoice: InvoiceDO) => {
             return invoice.paidTimestamp;
