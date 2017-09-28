@@ -6,7 +6,7 @@ import { CustomerDO } from "../../../../../../../../../../../services/customers/
 import { InvoiceOperationsPageData } from "../../utils/InvoiceOperationsPageData";
 import { PaginationOptions } from "../../utils/PaginationOptions";
 import { InvoiceDO } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceDO";
-import { InvoiceRemoveRight } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceEditRights";
+import { InvoiceRemoveRight, InvoiceDownloadRight } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceEditRights";
 import { HotelOperationsInvoiceService } from "../../../../../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
 import { InvoiceChangedOptions } from "../invoice-overview/InvoiceOverviewComponent";
 
@@ -41,7 +41,8 @@ export class RelatedInvoicesComponent implements OnInit {
     }
 
     public canDownloadInvoice(invoiceVM: InvoiceVM): boolean {
-        return invoiceVM.invoiceMeta.invoiceDownloadRight && invoiceVM.invoice.payerList.length > 0;
+        return invoiceVM.invoiceMeta.invoiceDownloadRight === InvoiceDownloadRight.Available
+            && invoiceVM.invoice.payerList.length > 0;
     }
 
     public downloadInvoice(invoiceVM: InvoiceVM) {
