@@ -398,7 +398,7 @@ export class InvoiceOverviewComponent implements OnInit {
         this.context.analytics.logEvent("invoice", "download", "Downloaded an invoice");
     }
     private getInvoicePdfUrl(payer: CustomerDO): string {
-        let payerIndex = _.findIndex(this.payerList, (item: CustomerDO) => {
+        let payerIndex: number = _.findIndex(this.payerList, (item: CustomerDO) => {
             return payer.id === item.id;
         });
         let accessToken = this.context.tokenService.accessToken;

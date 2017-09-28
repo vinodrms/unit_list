@@ -118,7 +118,7 @@ export class InvoiceIndexer {
         if (thUtils.isUndefinedOrNull(this._payerCustomerIdList) || this._payerCustomerIdList.length == 0) {
             return true;
         }
-        var payersInPayerCustomerIdList = _.filter(invoice.payerList, (payer: InvoicePayerDO) => {
+        var payersInPayerCustomerIdList: InvoicePayerDO[] = _.filter(invoice.payerList, (payer: InvoicePayerDO) => {
             return _.contains(this._payerCustomerIdList, payer.customerId);
         });
         return payersInPayerCustomerIdList.length > 0;

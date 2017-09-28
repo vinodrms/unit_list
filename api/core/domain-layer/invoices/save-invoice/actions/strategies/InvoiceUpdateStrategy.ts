@@ -121,7 +121,7 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
 
     private addNewPayersOn(existingInvoice: InvoiceDO) {
         this.invoiceToSave.payerList.forEach((payer: InvoicePayerDO) => {
-            let payerIndex = _.findIndex(existingInvoice.payerList, ((p: InvoicePayerDO) => { return p.customerId === payer.customerId; }));
+            let payerIndex: number = _.findIndex(existingInvoice.payerList, ((p: InvoicePayerDO) => { return p.customerId === payer.customerId; }));
             if (payerIndex < 0) {
                 let newPayer = new InvoicePayerDO();
                 newPayer.customerId = payer.customerId;
@@ -140,7 +140,7 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
                     payment.amountPlusTransactionFee = this.appContext.thUtils.roundNumberToTwoDecimals(payment.amountPlusTransactionFee);
                     this.ensurePayerExistsOn(payer.customerId, existingInvoice);
                     this.stampPayment(payment);
-                    let payerIndex = _.findIndex(existingInvoice.payerList, ((p: InvoicePayerDO) => { return p.customerId === payer.customerId; }));
+                    let payerIndex: number = _.findIndex(existingInvoice.payerList, ((p: InvoicePayerDO) => { return p.customerId === payer.customerId; }));
                     existingInvoice.payerList[payerIndex].paymentList.push(payment);
                 }
             });

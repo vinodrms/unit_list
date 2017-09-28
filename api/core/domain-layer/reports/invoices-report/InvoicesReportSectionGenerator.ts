@@ -123,7 +123,7 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
                 let rawData: any[] = [];
 
                 _.forEach(this.invoiceList, (invoice: InvoiceDO) => {
-                    let payerList = _.filter(invoice.payerList, (payer: InvoicePayerDO) => {
+                    let payerList: InvoicePayerDO[] = _.filter(invoice.payerList, (payer: InvoicePayerDO) => {
                         return _.contains(this.customerIdList, payer.customerId);
                     });
                     let payerCustomerIdList: string[] = _.map(payerList, (payer: InvoicePayerDO) => { return payer.customerId; });

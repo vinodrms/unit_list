@@ -144,7 +144,7 @@ export class P10_MigrateInvoiceGroupsToInvoices extends APaginatedTransactionalM
             legacyInvoice.payerList.forEach((legacyPayer: LegacyInvoicePayerDO) => {
                 let payment = this.convertPayer(legacyPayer, defaultTimestamp);
                 let customerId = legacyPayer.customerId;
-                var index = _.findIndex(invoice.payerList, (payer: InvoicePayerDO) => {
+                var index: number = _.findIndex(invoice.payerList, (payer: InvoicePayerDO) => {
                     return payer.customerId === customerId;
                 });
                 if (index < 0) {

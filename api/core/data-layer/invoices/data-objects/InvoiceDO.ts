@@ -81,7 +81,7 @@ export class InvoiceDO extends BaseDO {
     }
 
     public reindex() {
-        let customerIdList = _.map(this.payerList, (payer: InvoicePayerDO) => {
+        let customerIdList: string[] = _.map(this.payerList, (payer: InvoicePayerDO) => {
             return payer.customerId;
         });
         this.indexedCustomerIdList = _.uniq(customerIdList);
