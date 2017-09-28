@@ -77,7 +77,6 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        debugger
         this.pageType = PageType.InvoiceOverview;
         this.invoiceOperationsPageParam.updateTitle("Invoice Overview", "");
         this.pageData = new InvoiceOperationsPageData();
