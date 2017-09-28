@@ -1048,5 +1048,7 @@ export var EnglishTranslations: Object = {
     "Remove this item from the invoice": "Remove this item from the invoice",
     "The invoice was deleted": "The invoice was deleted",
     "Are you sure you want to delete this invoice?": "Are you sure you want to delete this invoice?",
+    "A new invoice for %customer% has been created. You have been moved automatically to this invoice.": "A new invoice for %customer% has been created. You have been moved automatically to this invoice.",
+
 
 };

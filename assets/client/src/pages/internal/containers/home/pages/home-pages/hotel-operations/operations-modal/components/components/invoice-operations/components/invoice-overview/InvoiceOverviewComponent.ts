@@ -375,7 +375,7 @@ export class InvoiceOverviewComponent implements OnInit {
         window.open(this.getInvoicePdfUrl(payer), '_blank');
         this.context.analytics.logEvent("invoice", "download", "Downloaded an invoice");
     }
-    
+
     private getInvoicePdfUrl(payer: CustomerDO): string {
         let payerIndex: number = _.findIndex(this.payerList, (item: CustomerDO) => {
             return payer.id === item.id;
@@ -399,6 +399,10 @@ export class InvoiceOverviewComponent implements OnInit {
 
     public createInvoiceForPayer(customer: CustomerDO) {
         this.operationsPageControllerService.goToInvoice(null, customer.id);
+        let message = this.context.thTranslation.translate("A new invoice for %customer% has been created. You have been moved automatically to this invoice.", {
+            customer: customer.customerName
+        })
+        this.context.toaster.info(message);
     }
 
     public canCreateWalkInInvoices(customer: CustomerDO): boolean {
