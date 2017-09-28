@@ -56,7 +56,7 @@ export class SaveInvoice {
             .then((loadedHotel: HotelDO) => {
                 this.hotel = loadedHotel;
 
-                let customerIdList = _.map(this.invoiceToSave.payerList, (payer: InvoicePayerDO) => { return payer.customerId; });
+                let customerIdList: string[] = _.map(this.invoiceToSave.payerList, (payer: InvoicePayerDO) => { return payer.customerId; });
                 var customerIdValidator = new CustomerIdValidator(this.appContext, this.sessionContext);
                 return customerIdValidator.validateCustomerIdList(customerIdList);
             }).then((customersContainer: CustomersContainer) => {

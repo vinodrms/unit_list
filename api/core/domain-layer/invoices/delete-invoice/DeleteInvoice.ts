@@ -50,7 +50,7 @@ export class DeleteInvoice {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to delete an invoice which is not Unpaid", { invoiceId: this.invoiceId }, thError);
                     throw thError;
                 }
-                var payerWithPayments = _.find(this.loadedInvoice.payerList, (payer: InvoicePayerDO) => {
+                var payerWithPayments: InvoicePayerDO = _.find(this.loadedInvoice.payerList, (payer: InvoicePayerDO) => {
                     return payer.paymentList && payer.paymentList.length > 0;
                 });
                 if (!this.appContext.thUtils.isUndefinedOrNull(payerWithPayments)) {

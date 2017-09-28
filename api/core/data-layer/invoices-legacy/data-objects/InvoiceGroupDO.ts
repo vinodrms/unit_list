@@ -26,9 +26,11 @@ export class InvoiceGroupDO extends BaseDO {
     status: InvoiceGroupStatus;
     vatTaxListSnapshot: TaxDO[];
     migrated: boolean;
+    createdAt: string;
+    updatedAt: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "invoiceGroupReference", "versionId", "hotelId", "groupBookingId", "indexedCustomerIdList", "status", "migrated"];
+        return ["id", "invoiceGroupReference", "versionId", "hotelId", "groupBookingId", "indexedCustomerIdList", "status", "migrated", "createdAt", "updatedAt"];
     }
 
     public buildFromObject(object: Object) {

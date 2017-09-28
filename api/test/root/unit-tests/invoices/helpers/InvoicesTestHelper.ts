@@ -1,6 +1,6 @@
 import _ = require('underscore');
 import { DefaultDataBuilder } from "../../../../db-initializers/DefaultDataBuilder";
-import { InvoiceDO, InvoicePaymentStatus } from "../../../../../core/data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from "../../../../../core/data-layer/invoices/data-objects/InvoiceDO";
 import { InvoicePayerDO } from "../../../../../core/data-layer/invoices/data-objects/payer/InvoicePayerDO";
 import { CustomerDO } from "../../../../../core/data-layer/customers/data-objects/CustomerDO";
 import { InvoiceItemDO } from "../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO";
@@ -25,6 +25,7 @@ export class InvoicesTestHelper {
             payer
         ];
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
+        invoice.accountingType = InvoiceAccountingType.Debit;
         return invoice;
     }
 

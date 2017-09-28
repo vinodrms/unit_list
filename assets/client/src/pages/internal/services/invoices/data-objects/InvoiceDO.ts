@@ -20,8 +20,11 @@ export enum InvoicePaymentStatus {
     Transient = -1,
     Unpaid,
     Paid,
-    LossAcceptedByManagement,
-    Credit
+    LossAcceptedByManagement
+}
+
+export enum InvoiceAccountingType {
+    Debit, Credit
 }
 
 export class InvoiceDO extends BaseDO {
@@ -29,6 +32,7 @@ export class InvoiceDO extends BaseDO {
     versionId: number;
     hotelId: string;
     status: InvoiceStatus;
+    accountingType: InvoiceAccountingType;
     groupId: string;
     reference: string;
     paymentStatus: InvoicePaymentStatus;
@@ -46,9 +50,9 @@ export class InvoiceDO extends BaseDO {
     paymentDueDate: ThDateDO;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "versionId", "hotelId", "groupId", "reference", "paymentStatus", "indexedCustomerIdList",
-            "indexedBookingIdList", "reinstatedInvoiceId", "notesFromBooking", "amountToPay", "amountPaid",
-            "paidTimestamp"];
+        return ["id", "versionId", "hotelId", "accountingType", "groupId", "reference", "paymentStatus",
+            "indexedCustomerIdList", "indexedBookingIdList", "reinstatedInvoiceId", "notesFromBooking", "amountToPay",
+            "amountPaid", "paidTimestamp"];
     }
 
     public buildFromObject(object: Object) {
@@ -104,7 +108,8 @@ export class InvoiceDO extends BaseDO {
     }
 
     public isPaid(): boolean {
-        return this.paymentStatus === InvoicePaymentStatus.Paid;
+        return this.paymentStatus === InvoicePaymentStatus.Paid
+            && this.accountingType === InvoiceAccountingType.Debit;
     }
     public isLossAcceptedByManagement(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement;
@@ -113,7 +118,8 @@ export class InvoiceDO extends BaseDO {
         return this.paymentStatus === InvoicePaymentStatus.Unpaid;
     }
     public isCredit(): boolean {
-        return this.paymentStatus === InvoicePaymentStatus.Credit;
+        return this.paymentStatus === InvoicePaymentStatus.Paid
+            && this.accountingType === InvoiceAccountingType.Credit;
     }
     public isClosed(): boolean {
         return this.isPaid() || this.isLossAcceptedByManagement();

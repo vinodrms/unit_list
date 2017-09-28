@@ -1,4 +1,4 @@
-import { InvoiceDO, InvoicePaymentStatus } from '../data-objects/InvoiceDO';
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../data-objects/InvoiceDO';
 import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../common/repo-data-objects/LazyLoadRepoDO';
 import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 
@@ -16,6 +16,7 @@ export interface InvoiceSearchCriteriaRepoDO {
     bookingIdList?: string[];
     customerIdList?: string[];
     invoicePaymentStatus?: InvoicePaymentStatus;
+    invoiceAccountingType?: InvoiceAccountingType;
     paidInterval?: ThDateIntervalDO;
     payerCustomerIdList?: string[];
     groupId?: string;

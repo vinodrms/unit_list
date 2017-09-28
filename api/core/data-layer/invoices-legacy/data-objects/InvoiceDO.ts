@@ -176,7 +176,7 @@ export class InvoiceDO extends BaseDO {
     }
 
     public getPricePaidByCustomerId(customerId: string) {
-        let payerDO = _.find(this.payerList, (payer: InvoicePayerDO) => {
+        let payerDO: InvoicePayerDO = _.find(this.payerList, (payer: InvoicePayerDO) => {
             return payer.customerId === customerId;
         });
 
@@ -184,7 +184,7 @@ export class InvoiceDO extends BaseDO {
         if(thUtils.isUndefinedOrNull(payerDO)) {
             return 0;
         }
-        
+
         return payerDO.priceToPay;
     }
 
@@ -202,7 +202,7 @@ export class InvoiceDO extends BaseDO {
         for (var i = 0; i < this.payerList.length; ++i) {
             if (this.payerList[i].paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
                 return true;
-            } 
+            }
         }
         return false;
     }

@@ -78,7 +78,7 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
                 let price = item.meta.getTotalPrice();
 
                 let itemVM = new InvoiceItemVM(this._appContext.thTranslate);
-                itemVM.buildFromInvoiceItemDO(item, invoice.vatTaxListSnapshot);
+                itemVM.buildFromInvoiceItemDO(item, invoice.vatTaxListSnapshot, invoice.accountingType);
 
                 let itemNet = itemVM.subtotal;
                 let itemVat = itemVM.vat;
@@ -139,7 +139,7 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
         };
     }
     private getQuantityForItem(item: InvoiceItemDO, invoice: InvoiceDO): number {
-        let qtyFactor = invoice.paymentStatus === InvoicePaymentStatus.Credit ? -1 : 1;
+        let qtyFactor = invoice.getAccountingFactor();
 
         // we do not want to count the number of nights as separate rooms
         if (item.type == InvoiceItemType.Booking) {
