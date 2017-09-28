@@ -19,89 +19,72 @@ import { HotelOperationsModalService } from "../../../../home/pages/home-pages/h
 import _ = require('underscore');
 
 @Component({
-	selector: 'invoice-selection-modal',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/modals/invoices/template/invoice-selection-modal.html',
-	providers: [InvoiceSelectionTableMetaBuilderService, InvoiceVMHelper, EagerCustomersService,
-		SETTINGS_PROVIDERS, InvoiceService]
+    selector: 'invoice-selection-modal',
+    templateUrl: '/client/src/pages/internal/containers/common/inventory/modals/invoices/template/invoice-selection-modal.html',
+    providers: [InvoiceSelectionTableMetaBuilderService, InvoiceVMHelper, EagerCustomersService,
+        SETTINGS_PROVIDERS, InvoiceService]
 })
 export class InvoiceSelectionModalComponent extends BaseComponent implements ICustomModalComponent, AfterViewInit {
-	@ViewChild(LazyLoadingTableComponent)
-	private _invoicesTableComponent: LazyLoadingTableComponent<InvoiceVM>;
-	private _selectedInvoiceList: InvoiceDO[] = [];
+    @ViewChild(LazyLoadingTableComponent)
+    private _invoicesTableComponent: LazyLoadingTableComponent<InvoiceVM>;
+    private _selectedInvoiceList: InvoiceDO[] = [];
 
-	constructor(private _appContext: AppContext,
-		private _modalDialogRef: ModalDialogRef<InvoiceDO[]>,
-		private _tableBuilder: InvoiceSelectionTableMetaBuilderService,
-		private _invoiceService: InvoiceService,
-		private _modalInput: InvoiceSelectionModalInput,
-		private _injector: Injector) {
-		super();
-	}
+    constructor(private _appContext: AppContext,
+        private _modalDialogRef: ModalDialogRef<InvoiceDO[]>,
+        private _tableBuilder: InvoiceSelectionTableMetaBuilderService,
+        private _invoiceService: InvoiceService,
+        private _modalInput: InvoiceSelectionModalInput,
+        private _injector: Injector) {
+        super();
+    }
 
-	ngAfterViewInit() {
-		if (this._modalInput.onlyUnpaidInvoices) {
-			this._invoiceService.setPaymentStatus(InvoicePaymentStatus.Unpaid);	
-		}
-		if (this._modalInput.excludedInvoiceId) {
-			this._invoiceService.excludeInvoiceId(this._modalInput.excludedInvoiceId);
-		}
-		this.bootstrapInvoicesTable();
-	}
-	private bootstrapInvoicesTable() {
-		var lazyLoadTableMeta: LazyLoadTableMeta = this._tableBuilder.buildLazyLoadTableMeta();
-		if (this._modalInput.multiSelection) {
-			lazyLoadTableMeta.supportedRowCommandList.push(TableRowCommand.MultipleSelect);
-		}
-		else {
-			lazyLoadTableMeta.supportedRowCommandList.push(TableRowCommand.Select);
-		}
-		lazyLoadTableMeta.autoSelectRows = true;
-		this._invoicesTableComponent.bootstrap(this._invoiceService, lazyLoadTableMeta);
-	}
+    ngAfterViewInit() {
+        if (this._modalInput.onlyUnpaidInvoices) {
+            this._invoiceService.setPaymentStatus(InvoicePaymentStatus.Unpaid);
+        }
+        if (this._modalInput.excludedInvoiceId) {
+            this._invoiceService.excludeInvoiceId(this._modalInput.excludedInvoiceId);
+        }
+        this.bootstrapInvoicesTable();
+    }
+    private bootstrapInvoicesTable() {
+        var lazyLoadTableMeta: LazyLoadTableMeta = this._tableBuilder.buildLazyLoadTableMeta();
+        if (this._modalInput.multiSelection) {
+            lazyLoadTableMeta.supportedRowCommandList.push(TableRowCommand.MultipleSelect);
+        }
+        else {
+            lazyLoadTableMeta.supportedRowCommandList.push(TableRowCommand.Select);
+        }
+        lazyLoadTableMeta.autoSelectRows = true;
+        this._invoicesTableComponent.bootstrap(this._invoiceService, lazyLoadTableMeta);
+    }
 
-	public closeDialog() {
-		this._modalDialogRef.closeForced();
-	}
-	public isBlocking(): boolean {
-		return false;
-	}
-	public getSize(): ModalSize {
-		return ModalSize.Large;
-	}
+    public closeDialog() {
+        this._modalDialogRef.closeForced();
+    }
+    public isBlocking(): boolean {
+        return false;
+    }
+    public getSize(): ModalSize {
+        return ModalSize.Large;
+    }
 
-	public didSelectInvoice(InvoiceVM: InvoiceVM) {
-		this._selectedInvoiceList = [InvoiceVM.invoice];
-	}
-	public didSelectInvoiceList(selectedInvoiceList: InvoiceVM[]) {
-		this._selectedInvoiceList = _.map(selectedInvoiceList, (invoiceVM: InvoiceVM) => {
-			return invoiceVM.invoice;
-		});
-	}
-	public hasSelectedInvoice(): boolean {
-		return this._selectedInvoiceList.length > 0;
-	}
-	public triggerSelectedInvoiceList() {
-		if (!this.hasSelectedInvoice()) {
-			return;
-		}
-		this._modalDialogRef.addResult(this._selectedInvoiceList);
-		this.closeDialog();
-	}
-
-	public openNewInvoice() {
-		let resolvedProviders = ReflectiveInjector.resolve([HotelOperationsModalService]);
-		let injector = ReflectiveInjector.fromResolvedProviders(resolvedProviders, this._injector);
-		let hotelOperationsModalService: HotelOperationsModalService = injector.get(HotelOperationsModalService);
-        hotelOperationsModalService.openInvoiceOperationsModal(null).then((modalDialogRef: ModalDialogRef<HotelOperationsResult>) => {
-            modalDialogRef.resultObservable
-                .subscribe((result: HotelOperationsResult) => {
-                    if (result.didChangeInvoice) {
-                        this._invoicesTableComponent.deselectItem();
-                        this._selectedInvoiceList = [];
-                        this._invoiceService.refreshData();
-                    }
-                }, (err: any) => {
-                });
-        }).catch((err: any) => { });
+    public didSelectInvoice(InvoiceVM: InvoiceVM) {
+        this._selectedInvoiceList = [InvoiceVM.invoice];
+    }
+    public didSelectInvoiceList(selectedInvoiceList: InvoiceVM[]) {
+        this._selectedInvoiceList = _.map(selectedInvoiceList, (invoiceVM: InvoiceVM) => {
+            return invoiceVM.invoice;
+        });
+    }
+    public hasSelectedInvoice(): boolean {
+        return this._selectedInvoiceList.length > 0;
+    }
+    public triggerSelectedInvoiceList() {
+        if (!this.hasSelectedInvoice()) {
+            return;
+        }
+        this._modalDialogRef.addResult(this._selectedInvoiceList);
+        this.closeDialog();
     }
 }

@@ -1,4 +1,4 @@
-<div class="invoice-overview">
+<div class="invoice-overview" *ngIf="currentInvoice">
     <div class="invoice-summary">
         <i [ngClass]="{'disabled': !paginationOptions.displayPaginator, 'clickable': paginationOptions.displayPaginator}"
             class="fa fa-angle-left cycle-related-invoices pull-left"
@@ -46,6 +46,9 @@
                     <li *ngIf="hasInvoiceDownloadRight()" class="clickable" (click)="sendInvoiceConfirmation(payer)" title="{{ 'Send the invoice PDF to email' | translate }}">
                         {{ 'Send' }}
                     </li>
+                    <li *ngIf="canCreateWalkInInvoices(payer)" class="clickable" (click)="createInvoiceForPayer(payer)" title="{{ 'Create a new invoice for this customer' }}">
+                        {{ 'Create Invoice'}}
+                    </li>
                     <li *ngIf="hasInvoiceEditPayersRight()" class="clickable" (click)="removePayer(payer)" title="{{ 'Remove this payer from the invoice' | translate }}">
                         {{ 'Remove Payer' | translate }}
                     </li>
@@ -86,14 +89,12 @@
                     <td>{{ itemVm.numberOfItems }}</td>
                     <td>{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
                     <td>{{ ccySymbol }}{{ itemVm.totalPrice }}</td>
-                    <td><i *ngIf="hasInvoiceEditItemsRight() && itemVm.isRemovable" class="fa fa-trash remove-item clickable"
-                        (click)="openRemoveItemConfirmationModal(itemVm.item)" title="{{ 'Remove this item from the invoice' | translate }}"></i>
-                    </td>
+                    <td></td>
                 </tr>
                 <tr *ngIf="hasInvoiceEditItemsRight()" class="add-item">
                     <td>
                         <div class="clickable" (click)="openAddOnProductSelectModal()">
-                            <span class="fa fa-plus-circle m-r-6"></span>{{ 'Add item' | translate }}
+                            <span class="fa fa-plus-circle f-s-16 m-r-6"></span>{{ 'Add item' | translate }}
                         </div>
                     </td>
                     <td></td>

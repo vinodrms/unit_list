@@ -1,10 +1,14 @@
 import _ = require('underscore');
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { AppContext } from "../../../../../../../../../../../../../common/utils/AppContext";
+import { AppContext, ThError } from "../../../../../../../../../../../../../common/utils/AppContext";
 import { InvoiceVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceVM";
 import { CustomerDO } from "../../../../../../../../../../../services/customers/data-objects/CustomerDO";
 import { InvoiceOperationsPageData } from "../../utils/InvoiceOperationsPageData";
 import { PaginationOptions } from "../../utils/PaginationOptions";
+import { InvoiceDO } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceDO";
+import { InvoiceRemoveRight, InvoiceDownloadRight } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceEditRights";
+import { HotelOperationsInvoiceService } from "../../../../../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
+import { InvoiceChangedOptions } from "../invoice-overview/InvoiceOverviewComponent";
 
 @Component({
     selector: 'related-invoices',
@@ -34,5 +38,27 @@ export class RelatedInvoicesComponent implements OnInit {
 
     public get ccySymbol(): string {
         return this.invoiceOperationsPageData.ccy.symbol;
+    }
+
+    public canDownloadInvoice(invoiceVM: InvoiceVM): boolean {
+        return invoiceVM.invoiceMeta.invoiceDownloadRight === InvoiceDownloadRight.Available
+            && invoiceVM.invoice.payerList.length > 0;
+    }
+
+    public downloadInvoice(invoiceVM: InvoiceVM) {
+        if (invoiceVM.invoice.payerList.length == 0) {
+            return;
+        }
+        var payerId = invoiceVM.invoice.payerList[0].customerId;
+        window.open(this.getInvoicePdfUrl(invoiceVM.invoice, payerId), '_blank');
+        this._appContext.analytics.logEvent("invoice", "download", "Downloaded an invoice");
+    }
+
+    private getInvoicePdfUrl(invoice: InvoiceDO, customerId: string): string {
+        let accessToken = this._appContext.tokenService.accessToken;
+        return 'api/invoices/download?invoiceId='
+            + invoice.id
+            + '&customerId=' + customerId
+            + '&token=' + accessToken;
     }
 }

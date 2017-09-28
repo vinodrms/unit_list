@@ -6,7 +6,7 @@ export class InvoiceSelectionTableMetaBuilderService {
 	constructor() { }
 	public buildLazyLoadTableMeta(): LazyLoadTableMeta {
 		return {
-			supportedRowCommandList: [TableRowCommand.Select, TableRowCommand.Add, TableRowCommand.Search],
+			supportedRowCommandList: [TableRowCommand.Select, TableRowCommand.Search],
 			rowIdPropertySelector: "invoice.id",
 			addButtonText: "Invoice",
 			searchInputPlaceholder: "Search by reference",

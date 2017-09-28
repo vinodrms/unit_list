@@ -6,7 +6,8 @@
     <div class="row">
         <div class="modal-text">{{ 'Payment Amount' | translate }}</div>
         <input [(ngModel)]="paymentAmount" class="modal-payment-input" type="number" min="0"/>
-        <span class="modal-total-payment-amount">{{ 'of' | translate }} {{ maxPaymentAmountString }}</span>
+        <span *ngIf="invoiceAmountLeftToPay > 0" class="modal-total-payment-amount">{{ 'of' | translate }} {{ maxPaymentAmountString }}</span>
+        <span *ngIf="invoiceAmountLeftToPay <= 0" class="modal-total-payment-amount">{{ ccySymbol }}</span>
     </div>
     <div class="row">
         <div class="modal-text">{{ 'Payment Method' | translate }}</div>

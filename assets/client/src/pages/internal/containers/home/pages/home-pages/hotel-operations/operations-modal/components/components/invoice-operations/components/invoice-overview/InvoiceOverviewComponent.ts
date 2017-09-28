@@ -279,28 +279,6 @@ export class InvoiceOverviewComponent implements OnInit {
         return invoiceItem;
     }
 
-    public openRemoveItemConfirmationModal(item: InvoiceItemDO) {
-        var removeInvoiceItemTitle = this.context.thTranslation.translate('Remove Item From Invoice');
-        var removeInvoiceItemString = this.context.thTranslation.translate('Are you sure you want to remove %itemDisplayName% from the invoice?', { itemDisplayName: item.meta.getDisplayName(this.context.thTranslation) });
-        this.context.modalService.confirm(removeInvoiceItemTitle, removeInvoiceItemString, { positive: this.context.thTranslation.translate("Yes"), negative: this.context.thTranslation.translate("No") },
-            () => {
-                this.removeItem(item);
-            },
-            () => {
-                return;
-            });
-    }
-
-    public removeItem(item: InvoiceItemDO) {
-        this.invoiceOperations.removeItem(this.currentInvoice.invoice, item.transactionId).subscribe((updatedInvoice: InvoiceDO) => {
-            this.currentInvoice.invoice = updatedInvoice;
-            this.emitInvoiceChanged();
-            this.context.analytics.logEvent("invoice", "remove-item", "Removed an item from an invoice");
-        }, (err: ThError) => {
-            this.context.toaster.error(err.message);
-        });
-    }
-
     public getPaymentMethodDisplayName(payment: InvoicePaymentDO): string {
         var invoicePaymentMethodVM: InvoicePaymentMethodVM = this.pmGenerator.generateInvoicePaymentMethodVMForPaymentMethod(payment.paymentMethod, this.invoiceOperationsPageData.allPaymentMethods);
         return invoicePaymentMethodVM ? invoicePaymentMethodVM.displayName : "";
@@ -397,6 +375,7 @@ export class InvoiceOverviewComponent implements OnInit {
         window.open(this.getInvoicePdfUrl(payer), '_blank');
         this.context.analytics.logEvent("invoice", "download", "Downloaded an invoice");
     }
+
     private getInvoicePdfUrl(payer: CustomerDO): string {
         let payerIndex: number = _.findIndex(this.payerList, (item: CustomerDO) => {
             return payer.id === item.id;
@@ -416,5 +395,17 @@ export class InvoiceOverviewComponent implements OnInit {
                     this.context.analytics.logEvent("invoice", "send-confirmation", "Sent an invoice confirmation by email");
                 }, (err: any) => { });
             }).catch((err: any) => { });
+    }
+
+    public createInvoiceForPayer(customer: CustomerDO) {
+        this.operationsPageControllerService.goToInvoice(null, customer.id);
+        let message = this.context.thTranslation.translate("A new invoice for %customer% has been created. You have been moved automatically to this invoice.", {
+            customer: customer.customerName
+        })
+        this.context.toaster.info(message);
+    }
+
+    public canCreateWalkInInvoices(customer: CustomerDO): boolean {
+        return customer.canCreateWalkInInvoices();
     }
 }

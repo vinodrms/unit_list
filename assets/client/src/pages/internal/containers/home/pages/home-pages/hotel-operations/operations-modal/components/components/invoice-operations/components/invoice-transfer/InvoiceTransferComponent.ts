@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { AppContext, ThError } from "../../../../../../../../../../../../../common/utils/AppContext";
 import { ThUtils } from "../../../../../../../../../../../../../common/utils/ThUtils";
@@ -12,9 +13,7 @@ import { InvoicesDO } from "../../../../../../../../../../../services/invoices/d
 import { InvoiceVMHelper } from "../../../../../../../../../../../services/invoices/view-models/utils/InvoiceVMHelper";
 import { HotelOperationsInvoiceService, Transfer } from "../../../../../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
 import { InvoiceItemVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM";
-
-import _ = require('underscore');
-
+import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
 
 @Component({
     selector: 'invoice-transfer',
@@ -37,7 +36,8 @@ export class InvoiceTransferComponent implements OnInit {
     constructor(private _appContext: AppContext,
         private _invoiceVMHelper: InvoiceVMHelper,
         private _invoiceSelectionModalService: InvoiceSelectionModalService,
-        private _invoiceOperations: HotelOperationsInvoiceService) {
+        private _invoiceOperations: HotelOperationsInvoiceService,
+        private operationsPageControllerService: HotelOperationsPageControllerService, ) {
         this._thUtils = new ThUtils();
         this.transfers = [];
         this.transferInProgress = false;
@@ -169,5 +169,9 @@ export class InvoiceTransferComponent implements OnInit {
         }, 0);
         amountToPay = this._thUtils.roundNumberToTwoDecimals(amountToPay);
         return amountToPay;
+    }
+
+    public goToCustomer(customerId: string) {
+        this.operationsPageControllerService.goToCustomer(customerId);
     }
 }
