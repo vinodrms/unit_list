@@ -1,9 +1,9 @@
+import _ = require("underscore");
 import { ThTranslation } from '../../../utils/localization/ThTranslation';
 import { ThUtils } from '../../../../core/utils/ThUtils';
 import { TaxDO } from '../../../data-layer/taxes/data-objects/TaxDO';
 import { InvoiceItemDO } from "../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
-import _ = require("underscore");
-
+import { InvoiceAccountingType } from '../../../data-layer/invoices/data-objects/InvoiceDO';
 
 export class InvoiceItemVM {
     private _thUtils: ThUtils;
@@ -30,9 +30,9 @@ export class InvoiceItemVM {
         this.isLastOne = false;
     }
 
-    public buildFromInvoiceItemDO(invoiceItemDO: InvoiceItemDO, vatTaxList: TaxDO[]) {
+    public buildFromInvoiceItemDO(invoiceItemDO: InvoiceItemDO, vatTaxList: TaxDO[], accountingType: InvoiceAccountingType) {
         this.name = invoiceItemDO.meta.getDisplayName(this._thTranslation);
-        this.qty = invoiceItemDO.meta.getNumberOfItems();
+        this.qty = invoiceItemDO.meta.getNumberOfItems() * this.getAccountingFactor(accountingType);
 
         var vatValue = this.getVatValue(invoiceItemDO.meta.getVatId(), vatTaxList);
         this.vatPercentage = this._thUtils.roundNumberToTwoDecimals(vatValue * 100);
@@ -43,7 +43,12 @@ export class InvoiceItemVM {
 
         this.formatPrices();
     }
-
+    private getAccountingFactor(accountingType: InvoiceAccountingType): number {
+        if (accountingType === InvoiceAccountingType.Credit) {
+            return -1;
+        }
+        return 1;
+    }
     public formatPrices() {
         this.vatPercentageFormatted = this._thUtils.formatNumberToTwoDecimals(this.vatPercentage);
         this.netUnitPriceFormatted = this._thUtils.formatNumberToTwoDecimals(this.netUnitPrice);

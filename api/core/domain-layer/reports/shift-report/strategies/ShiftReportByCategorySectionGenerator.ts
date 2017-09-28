@@ -78,7 +78,7 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
                 let price = item.meta.getTotalPrice();
 
                 let itemVM = new InvoiceItemVM(this._appContext.thTranslate);
-                itemVM.buildFromInvoiceItemDO(item, invoice.vatTaxListSnapshot);
+                itemVM.buildFromInvoiceItemDO(item, invoice.vatTaxListSnapshot, invoice.accountingType);
 
                 let itemNet = itemVM.subtotal;
                 let itemVat = itemVM.vat;

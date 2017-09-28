@@ -83,7 +83,7 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
                     let aopId = item.id;
 
                     let itemVM = new InvoiceItemVM(this._appContext.thTranslate);
-                    itemVM.buildFromInvoiceItemDO(item, invoice.vatTaxListSnapshot);
+                    itemVM.buildFromInvoiceItemDO(item, invoice.vatTaxListSnapshot, invoice.accountingType);
 
                     let itemNet = itemVM.subtotal;
                     let itemVat = itemVM.vat;

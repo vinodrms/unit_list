@@ -106,7 +106,7 @@ export class InvoiceIndexer {
                 if (this.invoicePayerInPayerCustomerIdList(invoice)
                     && dateStartTimestamp <= invoice.paidTimestamp
                     && dateEndTimestamp > invoice.paidTimestamp) {
-                    revenue.otherRevenue += this.getOtherRevenueFrom(invoice);
+                    revenue.otherRevenue += invoice.getAccountingFactor() * this.getOtherRevenueFrom(invoice);
                 }
             }
         });
