@@ -97,6 +97,9 @@ export class InvoiceVM {
     public get firstPayerEmail(): string {
         return (this._customerList.length > 0) ? this._customerList[0].emailString : "";
     }
+    public get firstPayerCustomerId(): string {
+        return (this._customerList.length > 0) ? this._customerList[0].id : "";
+    }
 
 
     public get payerListString(): string {

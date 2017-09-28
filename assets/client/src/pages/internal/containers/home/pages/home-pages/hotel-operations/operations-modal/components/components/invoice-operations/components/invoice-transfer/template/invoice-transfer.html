@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="invoice-transfer-payer-section m-r-16">
-            <div class="payer-name">
+            <div class="payer-name clickable" (click)="goToCustomer(currentInvoice.firstPayerCustomerId)">
                 {{ currentInvoice.firstPayerName }}
             </div>
             <div class="payer-email">
@@ -79,7 +79,7 @@
                     </div>
                 </div>
                 <div class="invoice-transfer-payer-section m-l-16">
-                    <div class="payer-name">
+                    <div class="payer-name clickable" (click)="goToCustomer(transferInvoice.firstPayerCustomerId)">
                         {{ transferInvoice.firstPayerName }}
                     </div>
                     <div class="payer-email">
