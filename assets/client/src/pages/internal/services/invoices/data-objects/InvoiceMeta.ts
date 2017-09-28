@@ -1,4 +1,4 @@
-import { InvoicePaymentStatus } from './InvoiceDO';
+import { InvoicePaymentStatus, InvoiceAccountingType } from './InvoiceDO';
 import {
     InvoicePayRight, InvoiceSetAsLossAcceptedByManagementRight, InvoiceEditItemsRight, InvoiceAddPaymentsRight,
     InvoiceRemoveRight, InvoiceEditPayersRight, InvoiceReinstateRight, InvoiceDownloadRight, InvoiceTransferRight
@@ -8,6 +8,7 @@ import {
 
 export interface InvoiceMetaOptions {
     invoicePaymentStatus: InvoicePaymentStatus;
+    invoiceAccountingType: InvoiceAccountingType;
     displayName: string;
     invoicePayRight: InvoicePayRight;
     invoiceSetAsLossAcceptedByManagementRight: InvoiceSetAsLossAcceptedByManagementRight;
@@ -22,6 +23,7 @@ export interface InvoiceMetaOptions {
 
 export class InvoiceMeta {
     invoicePaymentStatus: InvoicePaymentStatus;
+    invoiceAccountingType: InvoiceAccountingType;
     displayName: string;
     invoicePayRight: InvoicePayRight;
     invoiceSetAsLossAcceptedByManagementRight: InvoiceSetAsLossAcceptedByManagementRight;
@@ -35,6 +37,7 @@ export class InvoiceMeta {
 
     constructor(metaOptions: InvoiceMetaOptions) {
         this.invoicePaymentStatus = metaOptions.invoicePaymentStatus;
+        this.invoiceAccountingType = metaOptions.invoiceAccountingType;
         this.displayName = metaOptions.displayName;
         this.invoicePayRight = metaOptions.invoicePayRight;
         this.invoiceSetAsLossAcceptedByManagementRight = metaOptions.invoiceSetAsLossAcceptedByManagementRight;

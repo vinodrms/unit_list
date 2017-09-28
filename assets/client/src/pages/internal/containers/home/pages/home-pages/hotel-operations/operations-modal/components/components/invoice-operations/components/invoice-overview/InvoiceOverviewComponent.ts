@@ -84,7 +84,7 @@ export class InvoiceOverviewComponent implements OnInit {
             this.payPending = true;
             this.invoiceOperations.markAsPaid(this.currentInvoice.invoice).subscribe((updatedInvoice: InvoiceDO) => {
                 this.currentInvoice.invoice = updatedInvoice;
-                this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
+                this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMeta(this.currentInvoice.invoice.paymentStatus, this.currentInvoice.invoice.accountingType);
                 this.emitInvoiceChanged();
                 this.payPending = false;
                 this.context.analytics.logEvent("invoice", "paid", "Marked as Paid an invoice");
@@ -101,7 +101,7 @@ export class InvoiceOverviewComponent implements OnInit {
             this.lossByManagementPending = true;
             this.invoiceOperations.markAsLossByManagemnt(this.currentInvoice.invoice).subscribe((updatedInvoice: InvoiceDO) => {
                 this.currentInvoice.invoice = updatedInvoice;
-                this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(this.currentInvoice.invoice.paymentStatus);
+                this.currentInvoice.invoiceMeta = this.invoiceMetaFactory.getInvoiceMeta(this.currentInvoice.invoice.paymentStatus, this.currentInvoice.invoice.accountingType);
                 this.emitInvoiceChanged();
                 this.lossByManagementPending = false;
                 this.context.analytics.logEvent("invoice", "loss-by-management", "Marked as Loss By Management an invoice");

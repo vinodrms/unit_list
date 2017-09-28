@@ -30,7 +30,7 @@ export class InvoiceVM {
     public set invoice(value: InvoiceDO) {
         this._invoice = value;
         let factory = new InvoiceMetaFactory();
-        this._invoiceMeta = factory.getInvoiceMetaByPaymentStatus(this._invoice.paymentStatus);
+        this._invoiceMeta = factory.getInvoiceMeta(this._invoice.paymentStatus, this._invoice.accountingType);
 
         this.recreateInvoiceItemVms();
     }

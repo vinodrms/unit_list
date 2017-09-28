@@ -39,7 +39,7 @@ export class InvoiceVMHelper {
                 _.forEach(invoice.payerList, (payer: InvoicePayerDO) => {
                     invoiceVM.customerList.push(customers.getCustomerById(payer.customerId));
                 });
-                invoiceVM.invoiceMeta = this.invoiceMetaFactory.getInvoiceMetaByPaymentStatus(invoice.paymentStatus);
+                invoiceVM.invoiceMeta = this.invoiceMetaFactory.getInvoiceMeta(invoice.paymentStatus, invoice.accountingType);
 
                 invoiceVMList.push(invoiceVM);
             });
