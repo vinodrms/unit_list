@@ -31,7 +31,8 @@
 		<invoice-transfer
 			[relatedInvoices]="relatedInvoices"
     		[currentRelatedInvoiceIndex]="currentRelatedInvoiceIndex"
-			[invoiceOperationsPageData]="pageData"
+            [invoiceOperationsPageData]="pageData"
+            (invoiceChanged)="markInvoiceChanged($event)"
 			(backToInvoiceOverviewClicked)="showInvoiceOverview()"
 		>
 		</invoice-transfer>

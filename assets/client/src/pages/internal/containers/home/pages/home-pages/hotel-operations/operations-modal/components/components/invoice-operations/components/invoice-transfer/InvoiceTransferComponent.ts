@@ -14,6 +14,8 @@ import { InvoiceVMHelper } from "../../../../../../../../../../../services/invoi
 import { HotelOperationsInvoiceService, Transfer } from "../../../../../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
 import { InvoiceItemVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM";
 import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
+import { InvoiceMetaFactory } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory';
+import { InvoiceChangedOptions } from '../invoice-overview/InvoiceOverviewComponent';
 
 @Component({
     selector: 'invoice-transfer',
@@ -26,28 +28,33 @@ export class InvoiceTransferComponent implements OnInit {
     @Input() invoiceOperationsPageData: InvoiceOperationsPageData;
     @Input() currentRelatedInvoiceIndex: number;
     @Output() backToInvoiceOverviewClicked = new EventEmitter();
+    @Output() invoiceChanged = new EventEmitter<InvoiceChangedOptions>();
 
-    private _thUtils: ThUtils;
     private transferInProgress: boolean;
+    private invoiceMetaFactory: InvoiceMetaFactory;
 
     transferInvoice: InvoiceVM;
     transfers: Transfer[];
+    currentInvoice: InvoiceVM;
 
-    constructor(private _appContext: AppContext,
-        private _invoiceVMHelper: InvoiceVMHelper,
-        private _invoiceSelectionModalService: InvoiceSelectionModalService,
-        private _invoiceOperations: HotelOperationsInvoiceService,
+    constructor(private context: AppContext,
+        private invoiceVMHelper: InvoiceVMHelper,
+        private invoiceSelectionModalService: InvoiceSelectionModalService,
+        private invoiceOperations: HotelOperationsInvoiceService,
         private operationsPageControllerService: HotelOperationsPageControllerService, ) {
-        this._thUtils = new ThUtils();
         this.transfers = [];
         this.transferInProgress = false;
+        this.invoiceMetaFactory = new InvoiceMetaFactory();
     }
 
     ngOnInit() {
-    }
+        let invoiceVM = this.relatedInvoices[this.currentRelatedInvoiceIndex];
 
-    public get currentInvoice(): InvoiceVM {
-        return this.relatedInvoices[this.currentRelatedInvoiceIndex];
+        var currentInvoice = new InvoiceVM();
+        this.updateInvoiceOn(currentInvoice, invoiceVM.invoice);
+        currentInvoice.customerList = invoiceVM.customerList;
+        currentInvoice.recreateInvoiceItemVms();
+        this.currentInvoice = currentInvoice;
     }
 
     public get payerList(): CustomerDO[] {
@@ -55,19 +62,29 @@ export class InvoiceTransferComponent implements OnInit {
     }
 
     public backToInvoiceOverview() {
-        this.backToInvoiceOverviewClicked.emit();
+        if (!this.hasAtLeastOneTransientTransfer()) {
+            this.backToInvoiceOverviewClicked.emit();
+            return;
+        }
+        var title = this.context.thTranslation.translate("Transfers");
+        let content = this.context.thTranslation.translate("Are you sure you want to discard the transfers?");
+        var positiveLabel = this.context.thTranslation.translate("Yes");
+        var negativeLabel = this.context.thTranslation.translate("No");
+        this.context.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+            this.backToInvoiceOverviewClicked.emit();
+        });
     }
 
     public isInvoiceSelectedForTransfer(): boolean {
-        return !this._thUtils.isUndefinedOrNull(this.transferInvoice);
+        return !this.context.thUtils.isUndefinedOrNull(this.transferInvoice);
     }
 
     public openInvoiceSelectionModal() {
-        this._invoiceSelectionModalService.openInvoiceSelectionModal(false, true, this.currentInvoice.invoice.id).then((modalDialogInstance: ModalDialogRef<InvoiceDO[]>) => {
+        this.invoiceSelectionModalService.openInvoiceSelectionModal(false, true, this.currentInvoice.invoice.id).then((modalDialogInstance: ModalDialogRef<InvoiceDO[]>) => {
             modalDialogInstance.resultObservable.subscribe((selectedInvoiceList: InvoiceDO[]) => {
                 var invoicesDO: InvoicesDO = new InvoicesDO();
                 invoicesDO.invoiceList = [selectedInvoiceList[0]];
-                this._invoiceVMHelper.convertToViewModels(invoicesDO).subscribe((invoiceVMList: InvoiceVM[]) => {
+                this.invoiceVMHelper.convertToViewModels(invoicesDO).subscribe((invoiceVMList: InvoiceVM[]) => {
                     this.transferInvoice = invoiceVMList[0];
                 });
             });
@@ -79,29 +96,46 @@ export class InvoiceTransferComponent implements OnInit {
     }
 
     public getDisplayName(item: InvoiceItemDO): string {
-        return item.meta.getDisplayName(this._appContext.thTranslation);
+        return item.meta.getDisplayName(this.context.thTranslation);
     }
 
     private transferItems() {
         if (this.transfers.length == 0 || this.transferInProgress) { return; }
         this.transferInProgress = true;
-        this._invoiceOperations.transfer(this.transfers)
+
+        let currentInvoiceId = this.currentInvoice.invoice.id;
+        let transferInvoiceId = this.transferInvoice.invoice.id;
+
+        this.invoiceOperations.transfer(this.transfers)
             .subscribe((invoices: InvoiceDO[]) => {
-                this.currentInvoice.invoice = invoices[0];
-                this.transferInvoice.invoice = invoices[1];
+                this.currentInvoice.invoice = _.find(invoices, (invoice: InvoiceDO) => {
+                    return invoice.id === currentInvoiceId;
+                });
+                this.updateInvoiceOn(this.relatedInvoices[this.currentRelatedInvoiceIndex], this.currentInvoice.invoice);
+
+                this.transferInvoice.invoice = _.find(invoices, (invoice: InvoiceDO) => {
+                    return invoice.id === transferInvoiceId;
+                });
                 this.transfers = [];
                 this.transferInProgress = false;
-                let message = this._appContext.thTranslation.translate("Items moved succesfully");
-                this._appContext.toaster.success(message);
-                this._appContext.analytics.logEvent("invoice", "transfer", "Transferred items between invoices");
+                let message = this.context.thTranslation.translate("Items moved succesfully");
+                this.context.toaster.success(message);
+                this.context.analytics.logEvent("invoice", "transfer", "Transferred items between invoices");
+                this.emitInvoiceChanged();
             }, (error: ThError) => {
                 this.transferInProgress = false;
-                this._appContext.toaster.error(error.message);
+                this.context.toaster.error(error.message);
             });
+    }
+    private updateInvoiceOn(invoiceVm: InvoiceVM, newInvoice: InvoiceDO) {
+        invoiceVm.invoice = new InvoiceDO();
+        invoiceVm.invoice.buildFromObject(newInvoice);
+        invoiceVm.recreateInvoiceItemVms();
+        invoiceVm.invoiceMeta = this.invoiceMetaFactory.getInvoiceMeta(newInvoice.paymentStatus, newInvoice.accountingType);
     }
 
     public transferItemsToRight(item: InvoiceItemDO) {
-        if (this._thUtils.isUndefinedOrNull(this.transferInvoice)) {
+        if (this.context.thUtils.isUndefinedOrNull(this.transferInvoice)) {
             return;
         }
         var itemsToTransfer = _.filter(this.currentInvoice.invoice.itemList, (invoiceItem: InvoiceItemDO) => { return item.transactionId === invoiceItem.transactionId || item.transactionId === invoiceItem.parentTransactionId });
@@ -115,7 +149,7 @@ export class InvoiceTransferComponent implements OnInit {
     }
 
     public transferItemsToLeft(item: InvoiceItemDO) {
-        if (this._thUtils.isUndefinedOrNull(this.transferInvoice)) {
+        if (this.context.thUtils.isUndefinedOrNull(this.transferInvoice)) {
             return;
         }
         var itemsToTransfer = _.filter(this.transferInvoice.invoice.itemList, (invoiceItem: InvoiceItemDO) => { return item.transactionId === invoiceItem.transactionId || item.transactionId === invoiceItem.parentTransactionId });
@@ -134,7 +168,7 @@ export class InvoiceTransferComponent implements OnInit {
                 && transfer.destinationInvoiceId === sourceInvoiceId
                 && transfer.transactionId === transactionId;
         });
-        if (!this._thUtils.isUndefinedOrNull(existingTransfer)) {
+        if (!this.context.thUtils.isUndefinedOrNull(existingTransfer)) {
             this.transfers = _.without(this.transfers, existingTransfer);
             return;
         }
@@ -142,13 +176,13 @@ export class InvoiceTransferComponent implements OnInit {
     }
 
     public isTransferedItem(item: InvoiceItemDO): boolean {
-        return !this._thUtils.isUndefinedOrNull(_.find(this.transfers, (transfer: Transfer) => {
+        return !this.context.thUtils.isUndefinedOrNull(_.find(this.transfers, (transfer: Transfer) => {
             return (transfer.transactionId === item.transactionId) || (transfer.transactionId === item.parentTransactionId);
         }));
     }
 
     public getInvoiceItemDisplayName(itemVm: InvoiceItemVM): string {
-        return itemVm.getDisplayName(this._appContext.thTranslation);
+        return itemVm.getDisplayName(this.context.thTranslation);
     }
 
     public hasAtLeastOneTransientTransfer(): boolean {
@@ -159,7 +193,7 @@ export class InvoiceTransferComponent implements OnInit {
         var amountToPay = _.reduce(this.transferInvoice.invoice.itemList, function (sum, item: InvoiceItemDO) {
             return sum + item.meta.getTotalPrice();
         }, 0);
-        amountToPay = this._thUtils.roundNumberToTwoDecimals(amountToPay);
+        amountToPay = this.context.thUtils.roundNumberToTwoDecimals(amountToPay);
         return amountToPay;
     }
 
@@ -167,11 +201,17 @@ export class InvoiceTransferComponent implements OnInit {
         var amountToPay = _.reduce(this.currentInvoice.invoice.itemList, function (sum, item: InvoiceItemDO) {
             return sum + item.meta.getTotalPrice();
         }, 0);
-        amountToPay = this._thUtils.roundNumberToTwoDecimals(amountToPay);
+        amountToPay = this.context.thUtils.roundNumberToTwoDecimals(amountToPay);
         return amountToPay;
     }
 
     public goToCustomer(customerId: string) {
         this.operationsPageControllerService.goToCustomer(customerId);
+    }
+
+    public emitInvoiceChanged() {
+        this.invoiceChanged.emit({
+            reloadInvoiceGroup: false
+        });
     }
 }
