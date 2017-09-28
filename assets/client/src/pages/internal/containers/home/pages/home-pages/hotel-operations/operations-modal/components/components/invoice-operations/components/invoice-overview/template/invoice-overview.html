@@ -1,4 +1,4 @@
-<div class="invoice-overview">
+<div class="invoice-overview" *ngIf="currentInvoice">
     <div class="invoice-summary">
         <i [ngClass]="{'disabled': !paginationOptions.displayPaginator, 'clickable': paginationOptions.displayPaginator}"
             class="fa fa-angle-left cycle-related-invoices pull-left"
