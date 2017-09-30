@@ -52,6 +52,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
     isLoading: boolean = true;
     relatedInvoices: InvoiceVM[] = [];
     currentRelatedInvoiceIndex: number = 0;
+    transferInvoiceId: string;
 
     private pageType: PageType;
     private pageData: InvoiceOperationsPageData;
@@ -190,8 +191,22 @@ export class InvoiceOperationsPageComponent implements OnInit {
         this.pageType = PageType.RelatedInvoices;
     }
 
-    public showInvoiceTransfer() {
+    public showInvoiceTransfer(customerId?: string) {
         this.pageType = PageType.InvoiceTransfer;
+        if (this.context.thUtils.isUndefinedOrNull(customerId)) {
+            return;
+        }
+        this.isLoading = true;
+        let newInvoiceVM = this.createNewInvoiceVM();
+        this.invoiceOperationsService.addPayer(newInvoiceVM.invoice, customerId)
+            .subscribe((invoice: InvoiceDO) => {
+                this.transferInvoiceId = invoice.id;
+                this.hotelOperationsResultService.markInvoiceChanged(invoice);
+            }, ((err: ThError) => {
+                this.context.toaster.error(err.message);
+            }), () =>{
+                this.isLoading = false;
+            });
     }
 
     public selectRelatedInvoiceIndex(index: number) {

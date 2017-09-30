@@ -136,4 +136,8 @@ export class InvoiceVM {
     public get paidTimestamp(): ThTimestampDO {
         return !this._thUtils.isUndefinedOrNull(this.invoice.paidTimestamp) ? this._thDateUtils.convertTimestampToThTimestamp(this.invoice.paidTimestamp) : null;
     }
+
+    public hasMovableItems(): boolean {
+        return !this._thUtils.isUndefinedOrNull(_.find(this.invoiceItemVms, (item: InvoiceItemVM) => {return item.isMovable;}));
+    }
 }

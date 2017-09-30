@@ -47,7 +47,7 @@ export class InvoiceOverviewComponent implements OnInit {
     @Input() invoiceOperationsPageData: InvoiceOperationsPageData;
     @Input() paginationOptions: PaginationOptions;
     @Output() showRelatedInvoicesClicked = new EventEmitter();
-    @Output() showInvoiceTransferClicked = new EventEmitter();
+    @Output() showInvoiceTransferRequested = new EventEmitter<string>();
     @Output() currentInvoiceChanged = new EventEmitter();
     @Output() invoiceChanged = new EventEmitter<InvoiceChangedOptions>();
     @Output() invoiceDeleted = new EventEmitter();
@@ -199,7 +199,11 @@ export class InvoiceOverviewComponent implements OnInit {
     }
 
     public showInvoiceTransfer() {
-        this.showInvoiceTransferClicked.emit();
+        this.showInvoiceTransferRequested.emit();
+    }
+
+    public openTransferPageWithNewInvoice(customer: CustomerDO) {
+        this.showInvoiceTransferRequested.emit(customer.id);
     }
 
     public openCustomerSelectModal() {
@@ -407,5 +411,10 @@ export class InvoiceOverviewComponent implements OnInit {
 
     public canCreateWalkInInvoices(customer: CustomerDO): boolean {
         return customer.canCreateWalkInInvoices();
+    }
+
+    public canMoveItemsToNewInvoice(customer: CustomerDO): boolean {
+        return this.canCreateWalkInInvoices(customer) && this.currentInvoice.hasMovableItems()
+            && this.hasInvoiceEditItemsRight();
     }
 }

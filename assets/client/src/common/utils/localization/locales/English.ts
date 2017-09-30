@@ -1051,5 +1051,7 @@ export var EnglishTranslations: Object = {
     "A new invoice for %customer% has been created. You have been moved automatically to this invoice.": "A new invoice for %customer% has been created. You have been moved automatically to this invoice.",
     "Transfers": "Transfers",
     "Are you sure you want to discard the transfers?": "Are you sure you want to discard the transfers?",
+    "Move Items": "Move Items",
+    "Move items from this invoice to a new one for this customer": "Move items from this invoice to a new one for this customer",
 
 };
