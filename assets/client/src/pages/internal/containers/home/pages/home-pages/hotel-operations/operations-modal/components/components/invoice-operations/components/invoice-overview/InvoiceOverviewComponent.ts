@@ -414,6 +414,7 @@ export class InvoiceOverviewComponent implements OnInit {
     }
 
     public canMoveItemsToNewInvoice(customer: CustomerDO): boolean {
-        return this.canCreateWalkInInvoices(customer) && this.currentInvoice.hasMovableItems();
+        return this.canCreateWalkInInvoices(customer) && this.currentInvoice.hasMovableItems()
+            && this.hasInvoiceEditItemsRight();
     }
 }
