@@ -8,7 +8,7 @@
             [invoiceOperationsPageData]="pageData"
             [paginationOptions]="paginationOptions"
 			(showRelatedInvoicesClicked)="showRelatedInvoices()"
-			(showInvoiceTransferClicked)="showInvoiceTransfer()"
+			(showInvoiceTransferRequested)="showInvoiceTransfer($event)"
 			(currentInvoiceChanged)="currentRelatedInvoiceIndex = $event"
 			(invoiceChanged)="markInvoiceChanged($event)"
 			(invoiceDeleted)="goBackOrExit()"
@@ -31,6 +31,7 @@
 		<invoice-transfer
 			[relatedInvoices]="relatedInvoices"
     		[currentRelatedInvoiceIndex]="currentRelatedInvoiceIndex"
+			[transferInvoiceId]="transferInvoiceId"
             [invoiceOperationsPageData]="pageData"
             (invoiceChanged)="markInvoiceChanged($event)"
 			(backToInvoiceOverviewClicked)="showInvoiceOverview()"

@@ -27,11 +27,13 @@ export class InvoiceTransferComponent implements OnInit {
     @Input() relatedInvoices: InvoiceVM[];
     @Input() invoiceOperationsPageData: InvoiceOperationsPageData;
     @Input() currentRelatedInvoiceIndex: number;
+    @Input() transferInvoiceId: string;
     @Output() backToInvoiceOverviewClicked = new EventEmitter();
     @Output() invoiceChanged = new EventEmitter<InvoiceChangedOptions>();
 
     private transferInProgress: boolean;
     private invoiceMetaFactory: InvoiceMetaFactory;
+    private isLoading: boolean;
 
     transferInvoice: InvoiceVM;
     transfers: Transfer[];
@@ -55,6 +57,22 @@ export class InvoiceTransferComponent implements OnInit {
         currentInvoice.customerList = invoiceVM.customerList;
         currentInvoice.recreateInvoiceItemVms();
         this.currentInvoice = currentInvoice;
+
+        if (!this.context.thUtils.isUndefinedOrNull(this.transferInvoiceId)) {
+            this.isLoading = true;
+            this.invoiceOperations.get(this.transferInvoiceId).subscribe((invoice: InvoiceDO) => {
+                var invoicesDO: InvoicesDO = new InvoicesDO();
+                invoicesDO.invoiceList = [invoice];
+                this.invoiceVMHelper.convertToViewModels(invoicesDO).subscribe((invoiceVMList: InvoiceVM[]) => {
+                    this.transferInvoice = invoiceVMList[0];
+                });
+            }, (error: ThError) => {
+                this.transferInProgress = false;
+                this.context.toaster.error(error.message);
+            }, () => {
+                this.isLoading = false;
+            });
+        }
     }
 
     public get payerList(): CustomerDO[] {
