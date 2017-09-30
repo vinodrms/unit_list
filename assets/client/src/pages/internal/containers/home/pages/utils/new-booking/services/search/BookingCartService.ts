@@ -89,7 +89,8 @@ export class BookingCartService extends ABookingService {
     }
 
     public getTransientBookingItemList(): TransientBookingItem[] {
-        return _.map(this._bookingCartItemVMList, (bookingItemVM: BookingCartItemVM) => { return bookingItemVM.transientBookingItem });
+        var filteredbookingCartItemVMlist = _.filter(this._bookingCartItemVMList, (bookingItemVM: BookingCartItemVM) => { return bookingItemVM.isNew() });
+        return _.map(filteredbookingCartItemVMlist, (bookingItemVM: BookingCartItemVM) => { return bookingItemVM.transientBookingItem });
     }
 
     public get totalsBookingItem(): BookingCartItemVM {
