@@ -125,7 +125,8 @@
                     </td>
                     <td></td>
                     <td></td>
-                    <td>-{{ ccySymbol }}{{ payment.amount }}</td>
+                    <td *ngIf="payment.amount >= 0">-{{ ccySymbol }}{{ payment.amount }}</td>
+                    <td *ngIf="payment.amount < 0">{{ ccySymbol }}{{ payment.amount * (-1) }}</td>
                     <td></td>
                 </tr>
             </ng-container>
