@@ -142,7 +142,10 @@ export class InvoiceDO extends BaseDO {
         let bookingInvoiceItemList: InvoiceItemDO[] = [];
 
         booking.price.roomId = booking.roomId;
-        booking.price.customerId = booking.displayCustomerId;
+        booking.price.customerId = booking.defaultBillingDetails.customerIdDisplayedAsGuest;
+        if (!booking.price.customerId) {
+            booking.price.customerId = booking.defaultBillingDetails.customerId;
+        }
         booking.price.bookingReference = booking.displayedReservationNumber;
 
         item.meta = booking.price;
