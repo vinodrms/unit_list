@@ -98,11 +98,11 @@ export class SaveInvoiceDO {
                                     },
                                     {
                                         key: "amount",
-                                        validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
+                                        validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
                                     },
                                     {
                                         key: "amountPlusTransactionFee",
-                                        validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
+                                        validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
                                     },
                                     {
                                         key: "notes",
