@@ -141,7 +141,10 @@ export class InvoiceDO extends BaseDO {
     private getBookingInvoiceItems(item: InvoiceItemDO, booking: BookingDO): InvoiceItemDO[] {
         let bookingInvoiceItemList: InvoiceItemDO[] = [];
 
-        booking.price.bookingId = booking.id;
+        booking.price.roomId = booking.roomId;
+        booking.price.customerId = booking.displayCustomerId;
+        booking.price.bookingReference = booking.displayedReservationNumber;
+
         item.meta = booking.price;
         bookingInvoiceItemList.push(item);
 

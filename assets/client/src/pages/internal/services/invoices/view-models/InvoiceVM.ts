@@ -10,18 +10,22 @@ import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
 import { ThDateUtils } from "../../common/data-objects/th-dates/ThDateUtils";
 import { ThTimestampDO } from "../../common/data-objects/th-dates/ThTimestampDO";
 import { ThUtils } from "../../../../../common/utils/ThUtils";
+import { RoomDO } from '../../rooms/data-objects/RoomDO';
 
 export class InvoiceVM {
     private _invoice: InvoiceDO;
     private _customerList: CustomerDO[];
     private _invoiceMeta: InvoiceMeta;
     private _invoiceItemVms: InvoiceItemVM[];
-    private _thDateUtils: ThDateUtils;
-    private _thUtils: ThUtils;
+    private _bookingCustomerList: CustomerDO[];
+    private _bookingRoomList: RoomDO[];
+
+    private thDateUtils: ThDateUtils;
+    private thUtils: ThUtils;
 
     constructor() {
-        this._thDateUtils = new ThDateUtils();
-        this._thUtils = new ThUtils();
+        this.thDateUtils = new ThDateUtils();
+        this.thUtils = new ThUtils();
     }
 
     public get invoice(): InvoiceDO {
@@ -45,6 +49,28 @@ export class InvoiceVM {
                     this._invoiceItemVms.push(itemVm);
                 }
                 else {
+                    let subtitle = "";
+
+                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.bookingReference)) {
+                        subtitle += bookingPrice.bookingReference;
+                    }
+
+                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.roomId)) {
+                        let room: RoomDO = _.find(this._bookingRoomList, (room: RoomDO) => { return room.id === bookingPrice.roomId; });
+                        if (!this.thUtils.isUndefinedOrNull(room)) {
+                            if (subtitle.length > 0) { subtitle += ", "; }
+                            subtitle += room.name;
+                        }
+                    }
+
+                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.customerId)) {
+                        let customer: CustomerDO = _.find(this._bookingCustomerList, (customer: CustomerDO) => { return customer.id === bookingPrice.customerId; });
+                        if (!this.thUtils.isUndefinedOrNull(customer)) {
+                            if (subtitle.length > 0) { subtitle += ", "; }
+                            subtitle += customer.customerName;
+                        }
+                    }
+
                     bookingPrice.roomPricePerNightList.forEach((price: PricePerDayDO, index: number) => {
                         let itemVm = new InvoiceItemVM();
                         itemVm.item = item;
@@ -56,6 +82,7 @@ export class InvoiceVM {
                         itemVm.totalPrice = price.price;
                         itemVm.displayText = "Accomodation for %date%";
                         itemVm.displayTextParams = { date: price.thDate.toString() };
+                        itemVm.subtitle = subtitle;
                         this._invoiceItemVms.push(itemVm);
                     });
                 }
@@ -89,6 +116,20 @@ export class InvoiceVM {
     }
     public set invoiceItemVms(value: InvoiceItemVM[]) {
         this._invoiceItemVms = value;
+    }
+
+    public get bookingCustomerList(): CustomerDO[] {
+        return this._bookingCustomerList;
+    }
+    public set bookingCustomerList(value: CustomerDO[]) {
+        this._bookingCustomerList = value;
+    }
+
+    public get bookingRoomList(): RoomDO[] {
+        return this._bookingRoomList;
+    }
+    public set bookingRoomList(value: RoomDO[]) {
+        this._bookingRoomList = value;
     }
 
     public get firstPayerName(): string {
@@ -134,10 +175,10 @@ export class InvoiceVM {
     }
 
     public get paidTimestamp(): ThTimestampDO {
-        return !this._thUtils.isUndefinedOrNull(this.invoice.paidTimestamp) ? this._thDateUtils.convertTimestampToThTimestamp(this.invoice.paidTimestamp) : null;
+        return !this.thUtils.isUndefinedOrNull(this.invoice.paidTimestamp) ? this.thDateUtils.convertTimestampToThTimestamp(this.invoice.paidTimestamp) : null;
     }
 
     public hasMovableItems(): boolean {
-        return !this._thUtils.isUndefinedOrNull(_.find(this.invoiceItemVms, (item: InvoiceItemVM) => {return item.isMovable;}));
+        return !this.thUtils.isUndefinedOrNull(_.find(this.invoiceItemVms, (item: InvoiceItemVM) => { return item.isMovable; }));
     }
 }

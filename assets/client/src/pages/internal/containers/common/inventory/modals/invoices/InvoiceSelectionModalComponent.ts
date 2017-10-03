@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { Component, AfterViewInit, ViewChild, ReflectiveInjector, Injector } from "@angular/core";
 import { BaseComponent } from "../../../../../../../common/base/BaseComponent";
 import { ICustomModalComponent, ModalSize } from "../../../../../../../common/utils/modals/utils/ICustomModalComponent";
@@ -15,13 +16,12 @@ import { InvoiceVMHelper } from "../../../../../services/invoices/view-models/ut
 import { EagerCustomersService } from "../../../../../services/customers/EagerCustomersService";
 import { HotelOperationsResult } from "../../../../home/pages/home-pages/hotel-operations/operations-modal/services/utils/HotelOperationsResult";
 import { HotelOperationsModalService } from "../../../../home/pages/home-pages/hotel-operations/operations-modal/services/HotelOperationsModalService";
-
-import _ = require('underscore');
+import { EagerRoomsService } from "../../../../../services/rooms/EagerRoomsService";
 
 @Component({
     selector: 'invoice-selection-modal',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/modals/invoices/template/invoice-selection-modal.html',
-    providers: [InvoiceSelectionTableMetaBuilderService, InvoiceVMHelper, EagerCustomersService,
+    providers: [EagerRoomsService, InvoiceSelectionTableMetaBuilderService, InvoiceVMHelper, EagerCustomersService,
         SETTINGS_PROVIDERS, InvoiceService]
 })
 export class InvoiceSelectionModalComponent extends BaseComponent implements ICustomModalComponent, AfterViewInit {

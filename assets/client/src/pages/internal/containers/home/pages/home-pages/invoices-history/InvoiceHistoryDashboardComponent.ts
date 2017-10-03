@@ -16,17 +16,18 @@ import { InvoicesDateFilterModule } from "./components/invoices-date-filter/Invo
 import { HotelAggregatedInfo } from "../../../../../services/hotel/utils/HotelAggregatedInfo";
 import { HotelAggregatorService } from "../../../../../services/hotel/HotelAggregatorService";
 import { CurrencyDO } from "../../../../../services/common/data-objects/currency/CurrencyDO";
+import { EagerRoomsService } from "../../../../../services/rooms/EagerRoomsService";
 
 @Component({
     selector: 'invoice-history-dashboard',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/invoices-history/template/invoice-history-dashboard.html',
-    providers: [InvoiceService, InvoiceVMHelper, EagerCustomersService, InvoicesTableMetaBuilderService, HotelOperationsModalService]
+    providers: [EagerRoomsService, InvoiceService, InvoiceVMHelper, EagerCustomersService, InvoicesTableMetaBuilderService, HotelOperationsModalService]
 })
 export class InvoiceHistoryDashboardComponent extends AHomeContainerComponent implements AfterViewInit {
     @ViewChild(LazyLoadingTableComponent)
     private _invoicesTableComponent: LazyLoadingTableComponent<InvoiceVM>;
     private _ccy: CurrencyDO;
-    
+
     isLoading: boolean = true;
 
     selectedInvoiceVM: InvoiceVM;

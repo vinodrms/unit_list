@@ -88,6 +88,9 @@
                 <tr *ngFor="let itemVm of currentInvoice.invoiceItemVms" class="selectable">
                     <td>
                         <i *ngIf="itemVm.isRelatedToBooking" class="unitpal-font">%</i> {{ getInvoiceItemDisplayName(itemVm) }}
+                        <div class="subtitle" *ngIf="itemVm.subtitle">
+                            <span> {{ itemVm.subtitle }}</span>
+                        </div>
                     </td>
                     <td>{{ itemVm.numberOfItems }}</td>
                     <td>{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
