@@ -37,7 +37,7 @@ export class InvoiceAggregatedData {
             var sharedInvoiceItem = new InvoiceItemDO();
             var sharedInvoiceItemMeta = new AddOnProductInvoiceItemMetaDO();
             sharedInvoiceItemMeta.aopDisplayName = this._thTranslation.translate(InvoiceAggregatedData.SHARED_INVOICE_ITEM_DISPLAY_NAME);
-            sharedInvoiceItemMeta.numberOfItems = 1;
+            sharedInvoiceItemMeta.numberOfItems = -1;
             sharedInvoiceItemMeta.pricePerItem = this._thUtils.roundNumberToTwoDecimals(this.invoice.amountToPay - this.invoice.payerList[this.payerIndexOnInvoice].totalAmount);
             sharedInvoiceItem.meta = sharedInvoiceItemMeta;
             this.invoice.itemList.push(sharedInvoiceItem);
