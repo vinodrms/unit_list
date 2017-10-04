@@ -51,8 +51,8 @@ export class InvoiceVM {
                 else {
                     let subtitle = "";
 
-                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.bookingReference)) {
-                        subtitle += bookingPrice.bookingReference;
+                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.displayedReservationNumber)) {
+                        subtitle += bookingPrice.displayedReservationNumber;
                     }
 
                     if (!this.thUtils.isUndefinedOrNull(bookingPrice.roomId)) {

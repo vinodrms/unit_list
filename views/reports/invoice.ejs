@@ -15,63 +15,63 @@
         margin:auto;
         padding-right: 20px;
         padding-left: 20px;
-        font-size:12px;
+        font-size:11px;
         line-height:18px;
         font-family: 'Roboto', sans-serif;
         color:#555;
     }
     .small-line-height {
-        line-height:13px;
+        line-height:12px;
     }
-    
+
     .invoice-box table{
         width:100%;
         line-height:inherit;
         text-align:left;
     }
-    
+
     .invoice-box table td{
         padding:4px;
         vertical-align:top;
     }
-    
+
     .invoice-box table tr td:nth-child(2){
         text-align:right;
     }
-    
+
     .invoice-box table tr.heading td{
         background:#eee;
         border-bottom:1px solid #ddd;
         font-weight:bold;
     }
-    
+
     .invoice-box table tr.details td{
         padding-bottom:10px;
     }
     td.title {
         padding-top: 20px;
     }
-    
+
     .invoice-box table tr.item td{
         border-bottom:1px solid #eee;
     }
-    
+
     .invoice-box table tr.item.last td{
         border-bottom:none;
     }
-    
+
     .invoice-box table tr.total td:nth-child(2){
         border-top:2px solid #eee;
         font-weight:bold;
     }
-    
+
     @media only screen and (max-width: 600px) {
         .invoice-box table tr.top table td{
             width:100%;
             display:block;
             text-align:center;
         }
-        
+
         .invoice-box table tr.information table td{
             width:100%;
             display:block;
@@ -93,7 +93,7 @@
     }
     .footer, .push {
         height: 130px; /* .push must be the same height as .footer */
-        font-size:12px;
+        font-size:11px;
         line-height:18px;
         font-family: 'Roboto', sans-serif;
         color:#555;
@@ -103,7 +103,7 @@
         white-space:pre-wrap;
     }
     .small-font {
-        font-size: 11px;
+        font-size: 9px;
         line-height: 13px;
     }
     .border-right {
@@ -144,7 +144,7 @@
                                 <%if (payerVatCodeValue.length > 0 || payerGovernmentCodeValue.length > 0 || additionalPayerDetails.length > 0) {%>
                                     <br>
                                 <%}%>
-                                
+
                                 <%if (payerVatCodeValue.length > 0) {%>
                                     <%= payerVatCodeLabel %>: <%= payerVatCodeValue %><br>
                                 <%}%>
@@ -154,25 +154,13 @@
                                 <%if (additionalPayerDetails.length > 0) {%>
                                     <span class="text-details"><%= additionalPayerDetails %></span>
                                 <%}%>
-                                
+
                                 <br>
-                                <% bookingReferenceValues.forEach(function(bookingReferenceValue, index) { %>
-                                    <%if (externalBookingReferenceValues[index] && externalBookingReferenceValues[index].length > 0) {%>
-                                        <%= externalBookingReferenceLabel %>: <%= externalBookingReferenceValues[index] %><br>
-                                    <%}%>
-                                    <%if (bookingReferenceValue.length > 0) {%>
-                                        <%= bookingReferenceLabel %>: <%= bookingReferenceValue %><br>
-                                    <%}%>
-                                    <%if (roomNameValues[index] && roomNameValues[index].length > 0) {%>
-                                        <%= roomNameLabel %>: <%= roomNameValues[index] %><br>
-                                    <%}%>
-                                    <br>
-                                <% }); %>
                                 <%if (notesFromBooking.length > 0) {%>
                                     Notes:<br>
                                     <%= notesFromBooking %>
                                 <% } %>
-                                
+
                             </td>
                             <td width="10%"></td>
                             <td width="45%" style="text-align:right;">
@@ -186,23 +174,6 @@
                 </td>
             </tr>
 
-            <tr class="information">
-                <td colspan="5">
-                    <table>
-                        <br><br><br><br>
-                        <tr>
-                            <td>
-                                <%if (addFieldValue1.length > 0) {%>
-                                    <%= addFieldName1 %>: <%= addFieldValue1 %><br>
-                                <%}%>
-                            </td>
-                            <td width="45%">
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            
             <tr class="heading">
                 <td>
                     <%= itemLabel %>
@@ -220,16 +191,20 @@
                     <%= vatLabel %>
                 </td>
             </tr>
-            
+
             <% itemVMList.forEach(function(itemVM){ %>
                 <%if (itemVM.isLastOne) {%>
                     <tr class="item last">
                 <% } else{ %>
                      <tr class="item">
                 <%}%>
-                
+
                     <td>
                         <%= itemVM.name %>
+                        <%if (itemVM.subtitle.length > 0) {%>
+                            <br>
+                            <span class="text-details small-font"><%=itemVM.subtitle%></span>
+                        <%}%>
                     </td>
                     <td>
                         <%= itemVM.qty %>
@@ -245,7 +220,7 @@
                     </td>
                 </tr>
             <% }); %>
-            
+
             <% paymentMethodValues.forEach(function(paymentMethod, index) { %>
             <tr class="total">
                 <td></td>
@@ -263,7 +238,6 @@
             <tr class="total">
                 <td></td>
                 <td colspan="4">
-                   <br>
                    <%= subtotalLabel %>: <%= ccySymbol %><%= subtotalValueFormatted %> <br>
                    <%= vatLabel %>: <%= ccySymbol %><%= totalVatFormatted %> <br>
                    <%= totalLabel %>: <%= ccySymbol %><%= totalValueFormatted %>
@@ -283,11 +257,11 @@
                     </table>
                 </td>
             </tr>
-            
+
 
             <tr class="top footer">
                 <td colspan="5">
-                    
+
                 </td>
             </tr>
         </table>

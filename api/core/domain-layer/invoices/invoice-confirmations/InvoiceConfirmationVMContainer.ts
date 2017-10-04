@@ -43,9 +43,6 @@ export class InvoiceConfirmationVMContainer {
     dateLabel: string;
     dateValue: string;
 
-    addFieldName1: string;
-    addFieldValue1: string;
-
     fromLabel: string;
     hotelNameValue: string;
     hotelAddressFirstLineValue: string;
@@ -94,13 +91,6 @@ export class InvoiceConfirmationVMContainer {
     hotelVatLabel: string;
     hotelVatValue: string;
 
-    externalBookingReferenceLabel: string;
-    externalBookingReferenceValues: string[];
-    bookingReferenceLabel: string;
-    bookingReferenceValues: string[];
-    roomNameLabel: string;
-    roomNameValues: string[];
-
     constructor(private _thTranslation: ThTranslation) {
         this._thUtils = new ThUtils();
         this._thDateUtils = new ThDateUtils();
@@ -122,36 +112,7 @@ export class InvoiceConfirmationVMContainer {
         this.initItemsTableLabelsAndValues();
         this.initPaymentMethodLabelsAndValues();
         this.initTotalValues();
-        this.initAdditionalFields();
         this.initHotelVatLabelAndValue();
-        this.initBookingInformationLabelsAndValues();
-    }
-    private initBookingInformationLabelsAndValues() {
-        this.bookingReferenceLabel = this._thTranslation.translate('Booking Reference');
-        this.externalBookingReferenceLabel = this._thTranslation.translate('External Booking Reference');
-        this.roomNameLabel = this._thTranslation.translate("Room");
-        this.externalBookingReferenceValues = [];
-        this.bookingReferenceValues = [];
-
-        if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.bookingAttachments.bookings)
-            && this._invoiceAggregatedData.bookingAttachments.bookings.length > 0) {
-            let bookings = this._invoiceAggregatedData.bookingAttachments.bookings;
-            _.forEach(bookings, (booking: BookingDO) => {
-                if (booking.externalBookingReference) {
-                    this.externalBookingReferenceValues.push(booking.externalBookingReference);
-                }
-            });
-            _.forEach(bookings, (booking: BookingDO) => {
-                if (booking.bookingReference) {
-                    this.bookingReferenceValues.push(booking.displayedReservationNumber);
-                }
-            });
-        }
-        this.roomNameValues = [];
-        if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.bookingAttachments.rooms)
-            && this._invoiceAggregatedData.bookingAttachments.rooms.length > 0) {
-            this.roomNameValues = _.map(this._invoiceAggregatedData.bookingAttachments.rooms, (room: RoomDO) => { return room.name; });
-        }
     }
     private initLogoSrcs() {
         if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.hotel.logoUrl)) {
@@ -244,14 +205,15 @@ export class InvoiceConfirmationVMContainer {
         this.totalVat = 0;
         this.subtotalValue = 0;
         _.forEach(this._invoice.itemList, (itemDO: InvoiceItemDO) => {
-            var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
-            invoiceItemVM.buildFromInvoiceItemDO(itemDO, this._invoiceAggregatedData.vatList, this._invoice.accountingType);
-
             if (this.displayBookingDateBreakdown(itemDO)) {
                 let bookingInvoiceItems = this.getBookingDateBreakdownItems(itemDO, this._invoice.accountingType);
                 this.itemVMList = this.itemVMList.concat(bookingInvoiceItems);
             }
             else {
+                var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
+                invoiceItemVM.buildFromInvoiceItemDO(itemDO, this._invoiceAggregatedData.vatList, this._invoice.accountingType);
+                invoiceItemVM.attachBookingDetailsIfNecessary(itemDO,
+                    this._invoiceAggregatedData.guestList, this._invoiceAggregatedData.roomList);
                 this.itemVMList.push(invoiceItemVM);
             }
         });
@@ -317,6 +279,8 @@ export class InvoiceConfirmationVMContainer {
 
             var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
             invoiceItemVM.buildFromInvoiceItemDO(item, this._invoiceAggregatedData.vatList, accountingType);
+            invoiceItemVM.attachBookingDetailsIfNecessary(itemDO,
+                this._invoiceAggregatedData.guestList, this._invoiceAggregatedData.roomList);
 
             invoiceItemVMList.push(invoiceItemVM);
         });
@@ -370,26 +334,6 @@ export class InvoiceConfirmationVMContainer {
         this.totalLabel = this._thTranslation.translate('Total');
         this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.invoicePayer.totalAmountPlusTransactionFee);
         this.totalValueFormatted = this._thUtils.formatNumberToTwoDecimals(this.totalValue);
-    }
-
-    private initAdditionalFields() {
-        this.addFieldName1 = "";
-        this.addFieldValue1 = "";
-        if (this._invoiceAggregatedData.bookingAttachments.exists) {
-            this.addFieldName1 = this._thTranslation.translate("Guests");
-            this.addFieldValue1 = this.getGuestListString();
-        }
-    }
-
-    private getGuestListString(): string {
-        var guestListString: string = "";
-        _.forEach(this._invoiceAggregatedData.bookingAttachments.guests, (customer: CustomerDO, index: number) => {
-            guestListString += customer.customerDetails.getName();
-            if (index < this._invoiceAggregatedData.bookingAttachments.guests.length - 1) {
-                guestListString += ", ";
-            }
-        });
-        return guestListString;
     }
 
     private initHotelVatLabelAndValue() {

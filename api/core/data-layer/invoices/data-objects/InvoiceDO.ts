@@ -146,7 +146,8 @@ export class InvoiceDO extends BaseDO {
         if (!booking.price.customerId) {
             booking.price.customerId = booking.defaultBillingDetails.customerId;
         }
-        booking.price.bookingReference = booking.displayedReservationNumber;
+        booking.price.displayedReservationNumber = booking.displayedReservationNumber;
+        booking.price.externalBookingReference = booking.externalBookingReference;
 
         item.meta = booking.price;
         bookingInvoiceItemList.push(item);

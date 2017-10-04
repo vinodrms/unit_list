@@ -1,26 +1,15 @@
-import {ThTranslation} from '../../../utils/localization/ThTranslation';
-import {ThUtils} from '../../../utils/ThUtils';
-import {SessionContext} from '../../../utils/SessionContext';
-import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
-import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
-import {TaxDO} from '../../../data-layer/taxes/data-objects/TaxDO';
-import {PaymentMethodDO} from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {RoomCategoryDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryDO';
-import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
+import { ThTranslation } from '../../../utils/localization/ThTranslation';
+import { ThUtils } from '../../../utils/ThUtils';
+import { SessionContext } from '../../../utils/SessionContext';
+import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerDO';
+import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
+import { TaxDO } from '../../../data-layer/taxes/data-objects/TaxDO';
+import { PaymentMethodDO } from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
 import { RoomDO } from '../../../data-layer/rooms/data-objects/RoomDO';
 import { InvoiceItemDO } from "../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
 import { AddOnProductInvoiceItemMetaDO } from "../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
 import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
-
-
-export interface BookingAttachment {
-    exists: boolean;
-    roomCategories?: RoomCategoryDO[];
-    guests?: CustomerDO[];
-    bookings?: BookingDO[];
-    rooms?: RoomDO[];
-}
 
 export class InvoiceAggregatedData {
     private static SHARED_INVOICE_ITEM_DISPLAY_NAME = "Shared Payment";
@@ -35,7 +24,8 @@ export class InvoiceAggregatedData {
     addOnProductList: AddOnProductDO[];
     vatList: TaxDO[];
     paymentMethodList: PaymentMethodDO[];
-    bookingAttachments: BookingAttachment;
+    guestList: CustomerDO[];
+    roomList: RoomDO[];
 
     constructor(private _sessionContext: SessionContext) {
         this._thTranslation = new ThTranslation(this._sessionContext.language);
@@ -43,7 +33,7 @@ export class InvoiceAggregatedData {
     }
 
     public addSharedInvoiceItemIfNecessary() {
-        if(this.invoice.payerList.length > 1) {
+        if (this.invoice.payerList.length > 1) {
             var sharedInvoiceItem = new InvoiceItemDO();
             var sharedInvoiceItemMeta = new AddOnProductInvoiceItemMetaDO();
             sharedInvoiceItemMeta.aopDisplayName = this._thTranslation.translate(InvoiceAggregatedData.SHARED_INVOICE_ITEM_DISPLAY_NAME);
