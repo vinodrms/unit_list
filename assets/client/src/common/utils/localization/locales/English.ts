@@ -1053,5 +1053,9 @@ export var EnglishTranslations: Object = {
     "Are you sure you want to discard the transfers?": "Are you sure you want to discard the transfers?",
     "Split Invoice": "Split Invoice",
     "Move items from this invoice to a new one for this customer": "Move items from this invoice to a new one for this customer",
-
+    "Generate Invoices For All Bookings From This Group": "Generate Invoices For All Bookings From This Group",
+    "Are you sure you want to generate invoices for all bookings from this group?": "Are you sure you want to generate invoices for all bookings from this group?",
+    "Generating Invoices...": "Generating Invoices...",
+    "Invoices Generated!": "Invoices Generated!",
+    
 };

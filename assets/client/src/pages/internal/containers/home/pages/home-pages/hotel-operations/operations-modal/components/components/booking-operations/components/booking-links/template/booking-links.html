@@ -11,7 +11,7 @@
         </div>
     </div>
 </div>
-<div class="col-xs-12 col-sm-12" *ngIf="hasInvoice">
+<div class="col-xs-12 col-sm-12" *ngIf="hasInvoice && !isSaving">
     <div class="row">
         <div class="col-xs-12 padding-top-5px">
             <button type="button" class="btn btn-danger btn-block oneline-text" (click)="viewInvoice()"> 
@@ -28,7 +28,7 @@
     </div>
 </div>
 
-<div class="col-xs-12 col-sm-12" *ngIf="hasGenerateInvoiceRight && !hasInvoice">
+<div class="col-xs-12 col-sm-12" *ngIf="canGenerateInvoice || isSaving">
     <div class="row">
         <div class="col-xs-12 padding-top-5px">
             <button type="button" class="btn btn-danger btn-block oneline-text" (click)="generateInvoice()">
@@ -39,3 +39,25 @@
         </div>
     </div>
 </div>
+
+<div class="col-xs-12 col-sm-12" *ngIf="canGenerateAllInvoicesForBookingGroup || isSaving">
+    <div class="row">
+        <div class="col-xs-12 padding-top-5px">
+            <button type="button" class="btn btn-danger btn-block oneline-text" (click)="generateAllInvoicesForBookingGroup()">
+				<i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i> 
+                <i *ngIf="!isSaving" class="fa unitpal-font">L</i> 
+                {{ 'Generate All Invoices For Booking Group' | translate }}
+			</button>
+        </div>
+    </div>
+</div>
+
+ <div *ngIf="showProgressBar" class="col-xs-12 col-sm-12">
+     <div class="row m-t-12 m-l-8 m-r-8">
+        <progress-bar
+            [progressStatusText]="'Generating Invoices...'"
+            [progressFinishedText]="'Invoices Generated!'"
+            [progressPercentage]="progressBarFillPercentage">
+        </progress-bar>
+     </div>
+ </div>
