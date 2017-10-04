@@ -33,8 +33,16 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     breakfast: InvoiceItemDO;
     includedInvoiceItemList: InvoiceItemDO[];
 
+    // populated via the invoices' repository decorator
+    roomId: string;
+    customerId: string;
+    displayedReservationNumber: string;
+    externalBookingReference: string;
+
     protected getPrimitivePropertyKeys(): string[] {
-        return ["priceType", "roomPricePerNightAvg", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "appliedDiscountValue", "deductedCommissionPrice", "totalBookingPrice", "vatId", "description"];
+        return ["priceType", "roomPricePerNightAvg", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "appliedDiscountValue",
+            "deductedCommissionPrice", "totalBookingPrice", "vatId", "description",
+            "roomId", "customerId", "displayedReservationNumber", "externalBookingReference"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);

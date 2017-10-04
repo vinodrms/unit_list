@@ -36,9 +36,7 @@ export class AddInvoicePaymentModalComponent extends BaseComponent implements IC
     }
 
     ngOnInit() {
-        if (this._modalInput.invoiceAmountLeftToPay > 0) {
-            this.paymentAmount = this._modalInput.invoiceAmountLeftToPay;
-        }
+        this.paymentAmount = this._modalInput.invoiceAmountLeftToPay;
         this._pmGenerator = new InvoicePaymentMethodVMGenerator(this._modalInput.invoiceOperationsPageData.allowedPaymentMethods);
         this._customerPaymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this._modalInput.customer);
         this.selectedInvoicePaymentMethodVM = this._customerPaymentMethodVMList[0];
@@ -54,8 +52,18 @@ export class AddInvoicePaymentModalComponent extends BaseComponent implements IC
             this._appContext.toaster.error(errorMessage);
             return;
         }
-        if (this.paymentAmount <= 0) {
+        if (this.paymentAmount === 0) {
+            let errorMessage = this._appContext.thTranslation.translate("Please select a non-zero amount.");
+            this._appContext.toaster.error(errorMessage);
+            return;
+        }
+        if (this._modalInput.invoiceAmountLeftToPay > 0 && this.paymentAmount <= 0) {
             let errorMessage = this._appContext.thTranslation.translate("Please select a positive amount.");
+            this._appContext.toaster.error(errorMessage);
+            return;
+        }
+        if (this._modalInput.invoiceAmountLeftToPay <= 0 && this.paymentAmount < this._modalInput.invoiceAmountLeftToPay) {
+            let errorMessage = this._appContext.thTranslation.translate("Please select a value not lower than the amount left.");
             this._appContext.toaster.error(errorMessage);
             return;
         }

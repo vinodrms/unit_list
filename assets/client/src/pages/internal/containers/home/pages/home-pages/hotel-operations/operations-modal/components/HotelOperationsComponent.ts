@@ -21,6 +21,7 @@ import { HotelOperationsPageControllerService } from './services/HotelOperations
 import { HotelOperationsInvoiceService } from "../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
 import { InvoiceService } from "../../../../../../../services/invoices/InvoiceService";
 import { InvoiceVMHelper } from "../../../../../../../services/invoices/view-models/utils/InvoiceVMHelper";
+import { EagerRoomsService } from '../../../../../../../services/rooms/EagerRoomsService';
 
 @Component({
     selector: 'hotel-operations',
@@ -30,7 +31,7 @@ import { InvoiceVMHelper } from "../../../../../../../services/invoices/view-mod
         EagerCustomersService, EagerAllotmentsService, EagerAddOnProductsService, EagerPriceProductsService,
         HotelService, HotelAggregatorService, EagerBookingsService, RoomCategoriesService,
 
-        InvoiceVMHelper, HotelOperationsInvoiceService, InvoiceService,
+        EagerRoomsService, InvoiceVMHelper, HotelOperationsInvoiceService, InvoiceService,
         HotelOperationsRoomService, HotelOperationsBookingService,
         HotelOperationsCustomerService, HotelOperationsPageControllerService]
 })

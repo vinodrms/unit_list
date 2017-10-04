@@ -4393,6 +4393,13 @@ textarea.payer-details {
     color: #F66600;
 }
 
+.table-invoice-items > tbody > tr > td .subtitle {
+    font-weight: 200;
+    font-style: normal;
+    font-size: 11px;
+    color: #999999;
+}
+
 .invoice-items-container {
     flex-grow: 2;
     overflow-y: auto;

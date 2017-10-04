@@ -1,3 +1,4 @@
+import * as _ from "underscore";
 import { BaseDO } from '../../../../../common/base/BaseDO';
 import { TaxDO } from "../../taxes/data-objects/TaxDO";
 import { InvoiceItemDO, InvoiceItemType } from "./items/InvoiceItemDO";
@@ -8,8 +9,7 @@ import { ThUtils } from '../../../../../common/utils/ThUtils';
 import { CustomerDO } from "../../customers/data-objects/CustomerDO";
 import { InvoicePaymentDO } from "./payer/InvoicePaymentDO";
 import { InvoicePaymentMethodType } from "./payer/InvoicePaymentMethodDO";
-
-import * as _ from "underscore";
+import { BookingPriceDO } from '../../bookings/data-objects/price/BookingPriceDO';
 
 export enum InvoiceStatus {
     Active,
@@ -127,5 +127,31 @@ export class InvoiceDO extends BaseDO {
 
     public isReinstatement(): boolean {
         return _.isString(this.reinstatedInvoiceId) && !_.isEmpty(this.reinstatedInvoiceId);
+    }
+
+    public getBookingCustomerIdList(): string[] {
+        var customerIdList: string[] = [];
+        this.itemList.forEach((item: InvoiceItemDO) => {
+            if (item.type === InvoiceItemType.Booking) {
+                let customerId: string = (<BookingPriceDO>item.meta).customerId;
+                if (_.isString(customerId) && customerId.length > 0) {
+                    customerIdList.push(customerId);
+                }
+            }
+        });
+        return customerIdList;
+    }
+
+    public getBookingRoomIdList(): string[] {
+        var roomIdList: string[] = [];
+        this.itemList.forEach((item: InvoiceItemDO) => {
+            if (item.type === InvoiceItemType.Booking) {
+                let roomId: string = (<BookingPriceDO>item.meta).roomId;
+                if (_.isString(roomId) && roomId.length > 0) {
+                    roomIdList.push(roomId);
+                }
+            }
+        });
+        return _.uniq(roomIdList);
     }
 }

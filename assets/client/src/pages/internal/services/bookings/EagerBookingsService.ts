@@ -1,3 +1,4 @@
+import * as _ from "underscore";
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
@@ -37,6 +38,24 @@ export class EagerBookingsService {
             body: JSON.stringify({
                 searchCriteria: {
                     confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_CheckedId
+                }
+            })
+        }).map((bookingsObject: Object) => {
+            var bookings = new BookingsDO();
+            bookings.buildFromObject(bookingsObject);
+            return bookings;
+        });
+    }
+
+    public getBookingsByIds(bookingIdList: string[]): Observable<BookingsDO> {
+        if (!bookingIdList || bookingIdList.length == 0) {
+            return Observable.from([]);
+        }
+        return this._appContext.thHttp.post({
+            serverApi: ThServerApi.Bookings,
+            body: JSON.stringify({
+                searchCriteria: {
+                    bookingIdList: bookingIdList
                 }
             })
         }).map((bookingsObject: Object) => {

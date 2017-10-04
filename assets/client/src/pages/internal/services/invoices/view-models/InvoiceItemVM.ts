@@ -12,6 +12,7 @@ export class InvoiceItemVM {
     totalPrice: number;
     displayText: string;
     displayTextParams: Object;
+    subtitle: string;
 
     public static build(item: InvoiceItemDO, isRelatedToBooking: boolean): InvoiceItemVM {
         let itemVm = new InvoiceItemVM();

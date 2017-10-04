@@ -16,11 +16,12 @@ import { InvoiceItemVM } from "../../../../../../../../../../../services/invoice
 import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
 import { InvoiceMetaFactory } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory';
 import { InvoiceChangedOptions } from '../invoice-overview/InvoiceOverviewComponent';
+import { EagerRoomsService } from '../../../../../../../../../../../services/rooms/EagerRoomsService';
 
 @Component({
     selector: 'invoice-transfer',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-transfer/template/invoice-transfer.html',
-    providers: [InvoiceSelectionModalService, InvoiceVMHelper, HotelOperationsInvoiceService]
+    providers: [EagerRoomsService, InvoiceSelectionModalService, InvoiceVMHelper, HotelOperationsInvoiceService]
 })
 export class InvoiceTransferComponent implements OnInit {
 
@@ -55,6 +56,8 @@ export class InvoiceTransferComponent implements OnInit {
         var currentInvoice = new InvoiceVM();
         this.updateInvoiceOn(currentInvoice, invoiceVM.invoice);
         currentInvoice.customerList = invoiceVM.customerList;
+        currentInvoice.bookingCustomerList = invoiceVM.bookingCustomerList;
+        currentInvoice.bookingRoomList = invoiceVM.bookingRoomList;
         currentInvoice.recreateInvoiceItemVms();
         this.currentInvoice = currentInvoice;
 
@@ -101,9 +104,27 @@ export class InvoiceTransferComponent implements OnInit {
         this.invoiceSelectionModalService.openInvoiceSelectionModal(false, true, this.currentInvoice.invoice.id).then((modalDialogInstance: ModalDialogRef<InvoiceDO[]>) => {
             modalDialogInstance.resultObservable.subscribe((selectedInvoiceList: InvoiceDO[]) => {
                 var invoicesDO: InvoicesDO = new InvoicesDO();
-                invoicesDO.invoiceList = [selectedInvoiceList[0]];
+                invoicesDO.invoiceList = [this.currentInvoice.invoice, selectedInvoiceList[0]];
+
+                let currentInvoiceId = this.currentInvoice.invoice.id;
+                let transferInvoiceId = selectedInvoiceList[0].id;
+
                 this.invoiceVMHelper.convertToViewModels(invoicesDO).subscribe((invoiceVMList: InvoiceVM[]) => {
-                    this.transferInvoice = invoiceVMList[0];
+                    let currentInvoice: InvoiceVM = _.find(invoiceVMList, (invoiceVM: InvoiceVM) => {
+                        return invoiceVM.invoice.id === currentInvoiceId;
+                    });
+                    let transferInvoice: InvoiceVM = _.find(invoiceVMList, (invoiceVM: InvoiceVM) => {
+                        return invoiceVM.invoice.id === transferInvoiceId;
+                    });
+
+                    // make sure the 2 invoices contain the same booking items
+                    currentInvoice.bookingCustomerList = currentInvoice.bookingCustomerList.concat(transferInvoice.bookingCustomerList);
+                    currentInvoice.bookingRoomList = currentInvoice.bookingRoomList.concat(transferInvoice.bookingRoomList);
+                    transferInvoice.bookingCustomerList = currentInvoice.bookingCustomerList;
+                    transferInvoice.bookingRoomList = currentInvoice.bookingRoomList;
+
+                    this.transferInvoice = transferInvoice;
+                    this.currentInvoice = currentInvoice;
                 });
             });
         }).catch((e: any) => { });

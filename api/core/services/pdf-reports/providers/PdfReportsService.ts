@@ -60,6 +60,15 @@ export class PdfReportsService extends APdfReportsService {
     private generateHtmlCore(resolve: { (generatedHtmlPath: string): void }, reject: { (err: ThError): void }) {
 
         ejs.renderFile(this._reportConfig.getHtmlTemplateUrl(), this._reportsServiceRequest.reportData, {}, (err, str) => {
+            if (err) {
+                var thError = new ThError(ThStatusCode.PdfReportServiceErrorRenderingDataInTemplate, err);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error rendering data in template", {
+                    template: this._reportConfig.getHtmlTemplateUrl(),
+                    data: this._reportsServiceRequest.reportData
+                }, thError);
+                reject(thError);
+                return;
+            }
             var htmlOutputPath = this._reportConfig.getOutputHtmlAbsolutePath(this._reportsServiceRequest.reportData);
             var htmlOutputDir = path.parse(htmlOutputPath).dir;
 
@@ -69,6 +78,7 @@ export class PdfReportsService extends APdfReportsService {
                         var thError = new ThError(ThStatusCode.PdfReportServiceErrorWritingHtmlToFile, err);
                         ThLogger.getInstance().logError(ThLogLevel.Error, "error writing html file on disk", { outputPath: outputPath }, thError);
                         reject(thError);
+                        return;
                     }
                     resolve(outputPath);
                 });
