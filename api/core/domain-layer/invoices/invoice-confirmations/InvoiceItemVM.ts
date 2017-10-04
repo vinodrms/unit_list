@@ -33,6 +33,7 @@ export class InvoiceItemVM {
     constructor(private translation: ThTranslation) {
         this._thUtils = new ThUtils();
         this.isLastOne = false;
+        this.subtitle = "";
     }
 
     public buildFromInvoiceItemDO(invoiceItemDO: InvoiceItemDO, vatTaxList: TaxDO[], accountingType: InvoiceAccountingType) {
@@ -53,7 +54,7 @@ export class InvoiceItemVM {
         if (invoiceItemDO.type != InvoiceItemType.Booking) {
             return;
         }
-        let price = <BookingPriceDO​​>invoiceItemDO.meta;
+        let price = <BookingPriceDO>invoiceItemDO.meta;
 
         if (_.isString(price.externalBookingReference) && price.externalBookingReference.length > 0) {
             this.subtitle += this.translation.translate("Ext Ref %extRef%", {
