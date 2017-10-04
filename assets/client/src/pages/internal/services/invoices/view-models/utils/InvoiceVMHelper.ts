@@ -26,7 +26,7 @@ export class InvoiceVMHelper {
 
     public convertToViewModels(invoices: InvoicesDO): Observable<InvoiceVM[]> {
         var customerIdList: string[] = invoices.getUniqueCustomerIdList();
-        customerIdList = customerIdList.concat(invoices.getBookingRoomIdList());
+        customerIdList = customerIdList.concat(invoices.getBookingCustomerIdList());
         customerIdList = _.uniq(customerIdList);
 
         var bookingRoomIdList: string[] = invoices.getBookingRoomIdList();
