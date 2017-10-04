@@ -1034,7 +1034,7 @@ export var EnglishTranslations: Object = {
     "No transaction fee": "No transaction fee",
     "Price with transaction fee": "Price with transaction fee",
     "Items moved succesfully": "Items moved succesfully",
-    "View the first booking from this invoice": "View the first booking from this invoice",
+    "View the first booking from this invoice where this customer is a guest": "View the first booking from this invoice where this customer is a guest",
     "Add a new payment for this customer": "Add a new payment for this customer",
     "Download the invoice PDF": "Download the invoice PDF",
     "Send the invoice PDF to email": "Send the invoice PDF to email",

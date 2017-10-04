@@ -154,6 +154,8 @@ export class InvoiceOperationsPageComponent implements OnInit {
         invoiceVM.invoice.paymentStatus = InvoicePaymentStatus.Transient;
         invoiceVM.invoice.accountingType = InvoiceAccountingType.Debit;
         invoiceVM.customerList = [];
+        invoiceVM.bookingCustomerList = [];
+        invoiceVM.bookingRoomList = [];
         invoiceVM.invoiceMeta = this.invoiceMetaFactory.getInvoiceMeta(invoiceVM.invoice.paymentStatus, invoiceVM.invoice.accountingType);
         return invoiceVM;
     }
@@ -204,7 +206,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
                 this.hotelOperationsResultService.markInvoiceChanged(invoice);
             }, ((err: ThError) => {
                 this.context.toaster.error(err.message);
-            }), () =>{
+            }), () => {
                 this.isLoading = false;
             });
     }

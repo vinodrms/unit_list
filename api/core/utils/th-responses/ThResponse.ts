@@ -323,6 +323,7 @@ export enum ThStatusCode {
 
     //Pdf report service
     PdfReportServiceErrorCreatingOutputFolder,
+    PdfReportServiceErrorRenderingDataInTemplate,
     PdfReportServiceErrorWritingHtmlToFile,
     PdfReportServiceHtmlToPdfError,
     PhantomHtmlToPdfConverter,
@@ -902,6 +903,7 @@ ThMessage[ThStatusCode.NotificationsRepositoryErrorAddingNotification] = "Error 
 ThMessage[ThStatusCode.NotificationsRepositoryErrorGettingUndelivered] = "Error getting undelivered notifications.";
 ThMessage[ThStatusCode.NotificationsRepositoryErrorMarkingAsRead] = "Error marking notification as read.";
 ThMessage[ThStatusCode.PdfReportServiceErrorCreatingOutputFolder] = "Error creating report output directory.";
+ThMessage[ThStatusCode.PdfReportServiceErrorRenderingDataInTemplate] = "Error rendering data in the template.";
 ThMessage[ThStatusCode.PdfReportServiceErrorWritingHtmlToFile] = "Error writing html file on disk.";
 ThMessage[ThStatusCode.PdfReportServiceHtmlToPdfError] = "Error in the following flow: generate html -> convert html to pdf.";
 ThMessage[ThStatusCode.PhantomHtmlToPdfConverter] = "Error converting html to pdf with phantom js.";
