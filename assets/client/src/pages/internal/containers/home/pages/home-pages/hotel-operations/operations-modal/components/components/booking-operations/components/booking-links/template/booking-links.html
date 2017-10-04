@@ -1,8 +1,8 @@
 <div class="col-xs-12 col-sm-12" *ngIf="hasRoom">
     <div class="row">
         <div class="col-xs-12 padding-top-5px">
-            <button type="button" class="btn btn-primary btn-block oneline-text" (click)="viewRoom()"> 
-                <i class="fa unitpal-font">@</i> 
+            <button type="button" class="btn btn-primary btn-block oneline-text" (click)="viewRoom()">
+                <i class="fa unitpal-font">@</i>
                 {{ 'View' | translate }}
                 <small>
                     {{ bookingOperationsPageData.roomVM.room.name }}
@@ -14,8 +14,8 @@
 <div class="col-xs-12 col-sm-12" *ngIf="hasInvoice && !isSaving">
     <div class="row">
         <div class="col-xs-12 padding-top-5px">
-            <button type="button" class="btn btn-danger btn-block oneline-text" (click)="viewInvoice()"> 
-                <i class="fa unitpal-font">L</i> 
+            <button type="button" class="btn btn-danger btn-block oneline-text" (click)="viewInvoice()">
+                <i class="fa unitpal-font">L</i>
                 {{ 'Invoice' | translate }}
                 <small class="uppercase" *ngIf="invoiceIsPaid">
                     ({{ 'Paid' | translate }})
@@ -32,8 +32,7 @@
     <div class="row">
         <div class="col-xs-12 padding-top-5px">
             <button type="button" class="btn btn-danger btn-block oneline-text" (click)="generateInvoice()">
-				<i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i> 
-                <i *ngIf="!isSaving" class="fa unitpal-font">L</i> 
+                <i class="fa unitpal-font">L</i>
                 {{ 'Generate Invoice' | translate }}
 			</button>
         </div>
@@ -44,8 +43,8 @@
     <div class="row">
         <div class="col-xs-12 padding-top-5px">
             <button type="button" class="btn btn-danger btn-block oneline-text" (click)="generateAllInvoicesForBookingGroup()">
-				<i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i> 
-                <i *ngIf="!isSaving" class="fa unitpal-font">L</i> 
+				<i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i>
+                <i *ngIf="!isSaving" class="fa unitpal-font">L</i>
                 {{ 'Generate All Invoices For Booking Group' | translate }}
 			</button>
         </div>
