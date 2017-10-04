@@ -29,6 +29,7 @@ import { InvoiceItemVM } from "../../../../../../../../../../../services/invoice
 import { ThServerApi } from "../../../../../../../../../../../../../common/utils/http/ThServerApi";
 import { PaginationOptions } from "../../utils/PaginationOptions";
 import { EmailSenderModalService } from '../../../../../../email-sender/services/EmailSenderModalService';
+import { BookingPriceDO } from '../../../../../../../../../../../services/bookings/data-objects/price/BookingPriceDO';
 
 export interface InvoiceChangedOptions {
     reloadInvoiceGroup: boolean;
@@ -303,19 +304,20 @@ export class InvoiceOverviewComponent implements OnInit {
     public hasInvoiceTransferRight(): boolean {
         return this.currentInvoice.invoiceMeta.invoiceTransferRight === InvoiceTransferRight.Edit;
     }
-    public hasBookings(): boolean {
-        let item = this.getFirstBookingItem();
+    public hasBookings(customer: CustomerDO): boolean {
+        let item = this.getFirstBookingItem(customer.id);
         return !this.context.thUtils.isUndefinedOrNull(item);
     }
-    public viewFirstBooking() {
-        let item = this.getFirstBookingItem();
+    public viewFirstBooking(customer: CustomerDO) {
+        let item = this.getFirstBookingItem(customer.id);
         if (!this.context.thUtils.isUndefinedOrNull(item)) {
             this.operationsPageControllerService.goToBooking(item.id);
         }
     }
-    private getFirstBookingItem(): InvoiceItemDO {
+    private getFirstBookingItem(customerId: string): InvoiceItemDO {
         return _.find(this.currentInvoice.invoice.itemList, (item: InvoiceItemDO) => {
-            return item.type === InvoiceItemType.Booking;
+            return item.type === InvoiceItemType.Booking &&
+                (<BookingPriceDO>item.meta).customerId === customerId;
         });
     }
     public hasItems(): boolean {

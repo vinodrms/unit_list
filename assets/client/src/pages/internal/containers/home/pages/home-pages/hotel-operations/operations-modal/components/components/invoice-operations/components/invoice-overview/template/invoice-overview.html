@@ -31,10 +31,10 @@
     <div class="invoice-payer-section row m-b-16">
         <div class="payer-box col-xs-5 col-md-3" *ngFor="let payer of payerList">
             <i class="fa fa-user payer-icon"></i>
-            <div class="payer-dropdown" *ngIf="hasBookings() || hasInvoiceAddPaymentsRight() || hasInvoiceEditPayersRight() || hasInvoiceDownloadRight()">
+            <div class="payer-dropdown" *ngIf="hasBookings(payer) || hasInvoiceAddPaymentsRight() || hasInvoiceEditPayersRight() || hasInvoiceDownloadRight()">
                 <button class="fa fa-angle-down clickable"></button>
                 <ul>
-                    <li *ngIf="hasBookings()" class="clickable" (click)="viewFirstBooking()" title="{{ 'View the first booking from this invoice' | translate }}">
+                    <li *ngIf="hasBookings(payer)" class="clickable" (click)="viewFirstBooking(payer)" title="{{ 'View the first booking from this invoice where this customer is a guest' | translate }}">
                         {{ 'View Booking' | translate }}
                     </li>
                     <li *ngIf="hasInvoiceAddPaymentsRight()" class="clickable" (click)="openAddInvoicePaymentModal(payer)" title="{{ 'Add a new payment for this customer' | translate }}">
