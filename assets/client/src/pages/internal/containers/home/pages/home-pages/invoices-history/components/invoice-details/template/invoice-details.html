@@ -5,7 +5,7 @@
     <div class="col-xs-12 invoice-details-row">
         <i class="fa unitpal-font" title="{{'Status' | translate}}">+</i> {{ invoiceVM.invoiceMeta.displayName }}
     </div>
-    <div class="col-xs-12 invoice-details-row">
+    <div class="col-xs-12 invoice-details-row" *ngIf="invoiceVM.paidTimestamp">
         <i class="fa fa-calendar" title="{{ 'Paid At' | translate }}"></i> {{ invoiceVM.paidTimestamp | thtimestamp }}
     </div>
     <div class="col-xs-12 invoice-details-row">
