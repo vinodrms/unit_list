@@ -109,8 +109,11 @@ export class InvoiceDO extends BaseDO {
         let updatedItems: InvoiceItemDO[] = [];
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
             if (item.type === InvoiceItemType.Booking) {
-                delete item.meta;
-                updatedItems.push(item);
+                // use a cloned object to make sure the initial one remains unchanged
+                let clone = new InvoiceItemDO();
+                clone.buildFromObject(item);
+                delete clone.meta;
+                updatedItems.push(clone);
             }
             else if (!item.meta.isDerivedFromBooking()) {
                 updatedItems.push(item);
