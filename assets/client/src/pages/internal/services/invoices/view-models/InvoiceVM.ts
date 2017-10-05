@@ -51,7 +51,12 @@ export class InvoiceVM {
                 else {
                     let subtitle = "";
 
+                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.externalBookingReference)) {
+                        subtitle += bookingPrice.externalBookingReference;
+                    }
+
                     if (!this.thUtils.isUndefinedOrNull(bookingPrice.displayedReservationNumber)) {
+                        if (subtitle.length > 0) { subtitle += ", "; }
                         subtitle += bookingPrice.displayedReservationNumber;
                     }
 
