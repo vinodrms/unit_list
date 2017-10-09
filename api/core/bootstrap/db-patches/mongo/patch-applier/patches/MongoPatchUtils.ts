@@ -10,6 +10,7 @@ import { P7_AddIndexForBookingsSort } from "./list/P7_AddIndexForBookingsSort";
 import { P8_AddSignupCodes } from "./list/P8_AddSignupCodes";
 import { P9_AddMergeInvoiceToBookings } from "./list/P9_AddMergeInvoiceToBookings";
 import { P10_MigrateInvoiceGroupsToInvoices } from './list/P10_MigrateInvoiceGroupsToInvoices';
+import { P11_AddBookingsIndexForYMPerformance } from "./list/P11_AddBookingsIndexForYMPerformance";
 
 export class MongoPatchUtils {
     public static get PatchList(): ATransactionalMongoPatch[] {
@@ -25,6 +26,7 @@ export class MongoPatchUtils {
             new P8_AddSignupCodes(),
             new P9_AddMergeInvoiceToBookings(),
             new P10_MigrateInvoiceGroupsToInvoices(),
+            new P11_AddBookingsIndexForYMPerformance()
 
         ];
     }

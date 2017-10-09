@@ -10,5 +10,6 @@ export enum MongoPatchType {
     AddSignupCodes,
     AddMergeInvoiceToBookings,
     MigrateInvoiceGroupsToInvoices,
+    AddBookingsIndexForYMPerformance,
 
 }
