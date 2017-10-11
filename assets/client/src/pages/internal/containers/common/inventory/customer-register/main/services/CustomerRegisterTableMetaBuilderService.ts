@@ -23,7 +23,7 @@ export class CustomerRegisterTableMetaBuilderService {
 					}
 				},
 				{
-					displayName: "Booking Code",
+					displayName: "Profile Number",
 					valueMeta: {
 						objectPropertyId: "customer.priceProductDetails.bookingCode",
 						propertyType: TablePropertyType.StringType,
