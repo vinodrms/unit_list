@@ -29,7 +29,7 @@ export class MongoInvoiceRepositoryWithBookingPriceLink extends MongoInvoiceRepo
     getInvoiceById(invoiceMeta: InvoiceMetaRepoDO, invoiceId: string): Promise<InvoiceDO> {
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
             this.invoiceRepo.getInvoiceById(invoiceMeta, invoiceId).then((invoice: InvoiceDO) => {
-                this.linkBookingPricesToInvoiceItem(invoiceMeta, invoice).then((updatedInvoice: InvoiceDO) => {
+                this.linkBookingsToInvoice(invoiceMeta, invoice).then((updatedInvoice: InvoiceDO) => {
                     resolve(updatedInvoice);
                 }).catch((err: ThError) => {
                     reject(err);
@@ -42,7 +42,7 @@ export class MongoInvoiceRepositoryWithBookingPriceLink extends MongoInvoiceRepo
     getInvoiceList(invoiceMeta: InvoiceMetaRepoDO, searchCriteria?: InvoiceSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<InvoiceSearchResultRepoDO> {
         return new Promise<InvoiceSearchResultRepoDO>((resolve: { (result: InvoiceSearchResultRepoDO): void }, reject: { (err: ThError): void }) => {
             this.invoiceRepo.getInvoiceList(invoiceMeta, searchCriteria, lazyLoad).then((result: InvoiceSearchResultRepoDO) => {
-                this.linkBookingPricesToInvoiceSearchResultRepoDO(invoiceMeta, result).then((updatedResult: InvoiceSearchResultRepoDO) => {
+                this.linkBookingsToInvoiceSearchResult(invoiceMeta, result).then((updatedResult: InvoiceSearchResultRepoDO) => {
                     resolve(updatedResult);
                 }).catch((err: ThError) => {
                     reject(err);
@@ -55,7 +55,7 @@ export class MongoInvoiceRepositoryWithBookingPriceLink extends MongoInvoiceRepo
     addInvoice(invoiceMeta: InvoiceMetaRepoDO, invoice: InvoiceDO): Promise<InvoiceDO> {
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
             this.invoiceRepo.addInvoice(invoiceMeta, invoice).then((invoice: InvoiceDO) => {
-                this.linkBookingPricesToInvoiceItem(invoiceMeta, invoice).then((updatedInvoice: InvoiceDO) => {
+                this.linkBookingsToInvoice(invoiceMeta, invoice).then((updatedInvoice: InvoiceDO) => {
                     resolve(updatedInvoice);
                 }).catch((err: ThError) => {
                     reject(err);
@@ -69,7 +69,7 @@ export class MongoInvoiceRepositoryWithBookingPriceLink extends MongoInvoiceRepo
         invoice.removeItemsPopulatedFromBooking();
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
             this.invoiceRepo.updateInvoice(invoiceMeta, invoiceItemMeta, invoice).then((invoice: InvoiceDO) => {
-                this.linkBookingPricesToInvoiceItem(invoiceMeta, invoice).then((updatedInvoice: InvoiceDO) => {
+                this.linkBookingsToInvoice(invoiceMeta, invoice).then((updatedInvoice: InvoiceDO) => {
                     resolve(updatedInvoice);
                 }).catch((err: ThError) => {
                     reject(err);
@@ -80,18 +80,19 @@ export class MongoInvoiceRepositoryWithBookingPriceLink extends MongoInvoiceRepo
         });
     }
 
-    private linkBookingPricesToInvoiceItem(invoiceMeta: InvoiceMetaRepoDO, invoice: InvoiceDO): Promise<InvoiceDO> {
+    private linkBookingsToInvoice(invoiceMeta: InvoiceMetaRepoDO, invoice: InvoiceDO): Promise<InvoiceDO> {
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
-            this.linkBookingPricesToInvoiceList(invoiceMeta, [invoice]).then((invoiceList: InvoiceDO[]) => {
+            this.linkBookingsToInvoiceList(invoiceMeta, [invoice]).then((invoiceList: InvoiceDO[]) => {
                 resolve(invoiceList[0]);
             }).catch((err: ThError) => {
                 reject(err);
             });
         });
     }
-    private linkBookingPricesToInvoiceSearchResultRepoDO(invoiceMeta: InvoiceMetaRepoDO, invoiceSearchResult: InvoiceSearchResultRepoDO): Promise<InvoiceSearchResultRepoDO> {
+
+    private linkBookingsToInvoiceSearchResult(invoiceMeta: InvoiceMetaRepoDO, invoiceSearchResult: InvoiceSearchResultRepoDO): Promise<InvoiceSearchResultRepoDO> {
         return new Promise<InvoiceSearchResultRepoDO>((resolve: { (result: InvoiceSearchResultRepoDO): void }, reject: { (err: ThError): void }) => {
-            this.linkBookingPricesToInvoiceList(invoiceMeta, invoiceSearchResult.invoiceList).then((invoiceList: InvoiceDO[]) => {
+            this.linkBookingsToInvoiceList(invoiceMeta, invoiceSearchResult.invoiceList).then((invoiceList: InvoiceDO[]) => {
                 invoiceSearchResult.invoiceList = invoiceList;
                 resolve(invoiceSearchResult);
             }).catch((err: ThError) => {
@@ -100,19 +101,19 @@ export class MongoInvoiceRepositoryWithBookingPriceLink extends MongoInvoiceRepo
         });
     }
 
-    private linkBookingPricesToInvoiceList(invoiceMeta: InvoiceMetaRepoDO, invoiceList: InvoiceDO[]): Promise<InvoiceDO[]> {
+    private linkBookingsToInvoiceList(invoiceMeta: InvoiceMetaRepoDO, invoiceList: InvoiceDO[]): Promise<InvoiceDO[]> {
         return new Promise<InvoiceDO[]>((resolve: { (result: InvoiceDO[]): void }, reject: { (err: ThError): void }) => {
-            this.linkBookingPricesToInvoiceListCore(resolve, reject, invoiceMeta, invoiceList);
+            this.linkBookingsToInvoiceListCore(resolve, reject, invoiceMeta, invoiceList);
         });
     }
-    private linkBookingPricesToInvoiceListCore(resolve: { (result: InvoiceDO[]): void }, reject: { (err: ThError): void }, invoiceMeta: InvoiceMetaRepoDO, invoiceList: InvoiceDO[]) {
+    private linkBookingsToInvoiceListCore(resolve: { (result: InvoiceDO[]): void }, reject: { (err: ThError): void }, invoiceMeta: InvoiceMetaRepoDO, invoiceList: InvoiceDO[]) {
         let meta = this.buildBookingMetaFromInvoiceMeta(invoiceMeta);
         let searchCriteria = this.buildBookingListSearchCriteria(invoiceList);
         this.bookingsRepo.getBookingList(meta, searchCriteria)
             .then((result: BookingSearchResultRepoDO) => {
                 let indexedBookingsById: { [id: string]: BookingDO; } = _.indexBy(result.bookingList, (booking: BookingDO) => { return booking.id });
                 _.forEach(invoiceList, (invoice: InvoiceDO) => {
-                    invoice.linkBookingPrices(indexedBookingsById);
+                    invoice.linkBookings(indexedBookingsById);
                 });
                 return this.addInvoiceFeeIfNecessary(invoiceMeta, invoiceList);
             }).then((invoiceList: InvoiceDO[]) => {
