@@ -54,7 +54,7 @@ npm run build-all
 ```
 
 To run the e2e tests
-``` 
+```
  - Terminal 1
 	> npm run test
  - Terminal 2
@@ -77,21 +77,21 @@ Certificate generation for Nginx:
 ```
 sudo apt-get install letsencrypt
 ```
-    
- 2. While having only the default site configuration enabled on Nginx, run the 
+
+ 2. While having only the default site configuration enabled on Nginx, run the
 following coomand in order to generate the certificates:
 ```
 sudo letsencrypt certonly --webroot -w /var/www/html -d app.unitpal.com -d www.app.unitpal.com
 ```
  3. The certificates will be generated in:
-    
+
     `/etc/letsencrypt/live/app.unitpal.com`
 
     `fullchain.pem` will be used as certificate chain
     `privkey.pem` will be used as private key
-    
+
  4. For cert renewal read:
-    
+
     https://certbot.eff.org/#ubuntuxenial-nginx
 
     For manual renew:
@@ -101,14 +101,14 @@ sudo letsencrypt certonly --webroot -w /var/www/html -d app.unitpal.com -d www.a
     sudo cp /etc/nginx/sites-available/unitpal /etc/nginx/sites-available/unitpal_bkp
     sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/unitpal
     sudo letsencrypt renew
-    sudo service nginx startW
+    sudo service nginx start
     ```
-    
+
 ### Ansible
 ansible 2.1.3.0
 
 1. In order to perform an application update (app code + dependencies) on all production application server nodes you can run the following command from your machine:
-```    
+```
 ansible-playbook -i production --private-key=~/.ssh/unitpal_rsa -u unitpal unitpal_update.yml
 ```
 

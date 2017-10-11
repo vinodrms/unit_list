@@ -9,11 +9,6 @@ import { BookingDO } from '../../../data-layer/bookings/data-objects/BookingDO';
 import { InvoiceDO, InvoicePaymentStatus } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 import { InvoiceSearchResultRepoDO } from "../../../data-layer/invoices/repositories/IInvoiceRepository";
 
-enum BookingInvoiceSyncType {
-    Pricing,
-    Notes,
-};
-
 export class BookingInvoiceSync {
     private _thUtils: ThUtils;
 
@@ -23,17 +18,10 @@ export class BookingInvoiceSync {
 
     public syncInvoiceWithBookingPrice(booking: BookingDO): Promise<InvoiceDO> {
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
-            this.syncInvoiceWithBookingCore(resolve, reject, booking, BookingInvoiceSyncType.Pricing);
+            this.syncInvoiceWithBookingPriceCore(resolve, reject, booking);
         });
     }
-
-    public syncInvoiceWithBookingNotes(booking: BookingDO): Promise<InvoiceDO> {
-        return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
-            this.syncInvoiceWithBookingCore(resolve, reject, booking, BookingInvoiceSyncType.Notes);
-        });
-    }
-
-    private syncInvoiceWithBookingCore(resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }, booking: BookingDO, syncType: BookingInvoiceSyncType) {
+    private syncInvoiceWithBookingPriceCore(resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
         let invoiceRepository = this._appContext.getRepositoryFactory().getInvoiceRepository();
         invoiceRepository.getInvoiceList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
             bookingId: booking.id,
@@ -45,12 +33,7 @@ export class BookingInvoiceSync {
                 });
             }
             let invoice = searchResult.invoiceList[0];
-            let syncIsRequired = false;
-            switch (syncType) {
-                case BookingInvoiceSyncType.Pricing: syncIsRequired = this.syncInvoiceWithBookingPriceForInvoice(invoice, booking); break;
-                case BookingInvoiceSyncType.Notes: syncIsRequired = this.syncInvoiceWithBookingNotesForInvoice(invoice, booking); break;
-                default: syncIsRequired = false;
-            }
+            let syncIsRequired = this.syncInvoiceWithBookingPriceForInvoice(invoice, booking);
 
             if (!syncIsRequired) {
                 return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
@@ -73,17 +56,6 @@ export class BookingInvoiceSync {
             return false;
         }
         invoice.recomputePrices();
-        return true;
-    }
-
-    private syncInvoiceWithBookingNotesForInvoice(invoice: InvoiceDO, booking: BookingDO): boolean {
-        if (invoice.notesFromBooking == booking.invoiceNotes) {
-            return false;
-        }
-        if (invoice.isClosed()) {
-            return false;
-        }
-        invoice.notesFromBooking = booking.invoiceNotes;
         return true;
     }
 }

@@ -67,7 +67,6 @@ export class GenerateBookingInvoiceByCreatingNewInvoiceStrategy extends AGenerat
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
         invoice.accountingType = InvoiceAccountingType​​.Debit;
         invoice.vatTaxListSnapshot = this.vatTaxListSnapshot;
-        invoice.notesFromBooking = this.params.booking.invoiceNotes;
         invoice.itemList = this.getInvoiceItemList();
         let payer = new InvoicePayerDO();
         payer.customerId = this.defaultBillingCustomer.id;

@@ -37,7 +37,10 @@ export class InvoiceDO extends BaseDO {
     indexedBookingIdList: string[];
     vatTaxListSnapshot: TaxDO[];
     reinstatedInvoiceId: string;
+
+    // populated via the invoices' repository decorator
     notesFromBooking: string;
+
     itemList: InvoiceItemDO[];
     amountToPay: number;
     amountPaid: number;
@@ -122,17 +125,23 @@ export class InvoiceDO extends BaseDO {
         this.itemList = updatedItems;
     }
 
-    public linkBookingPrices(indexedBookingsById: { [id: string]: BookingDO }) {
+    public linkBookings(indexedBookingsById: { [id: string]: BookingDO }) {
         let thUtils = new ThUtils();
         let actualItemList: InvoiceItemDO[] = [];
+        this.notesFromBooking = "";
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
             if (item.type === InvoiceItemType.Booking) {
                 let booking = indexedBookingsById[item.id];
                 if (thUtils.isUndefinedOrNull(booking)) {
                     actualItemList.push(item);
                 } else {
+                    // items
                     let bookingInvoiceItemList = this.getBookingInvoiceItems(item, booking);
                     actualItemList = actualItemList.concat(bookingInvoiceItemList);
+
+                    // invoice notes
+                    if (this.notesFromBooking.length > 0) { this.notesFromBooking += "\n"; }
+                    this.notesFromBooking += booking.invoiceNotes;
                 }
             }
             else {

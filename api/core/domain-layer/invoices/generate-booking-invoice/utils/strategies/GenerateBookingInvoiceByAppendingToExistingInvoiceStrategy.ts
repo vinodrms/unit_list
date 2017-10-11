@@ -24,7 +24,6 @@ export class GenerateBookingInvoiceByAppendingToExistingInvoiceStrategy extends 
         let invoiceToUpdate = this.params.invoice;
         let newItemList = this.getInvoiceItemList();
         invoiceToUpdate.itemList = invoiceToUpdate.itemList.concat(newItemList);
-        this.appendBookingNotesTo(invoiceToUpdate);
 
         let invoiceRepo = this.appContext.getRepositoryFactory().getInvoiceRepository();
         invoiceRepo.updateInvoice({ hotelId: this.sessionContext.sessionDO.hotel.id }, {
@@ -42,16 +41,5 @@ export class GenerateBookingInvoiceByAppendingToExistingInvoiceStrategy extends 
         }).catch(e => {
             reject(e);
         });
-    }
-    private appendBookingNotesTo(invoice: InvoiceDO) {
-        if (_.isEmpty(this.booking.invoiceNotes)) {
-            return;
-        }
-        if (_.isEmpty(invoice.notesFromBooking)) {
-            invoice.notesFromBooking = this.booking.invoiceNotes;
-        }
-        else {
-            invoice.notesFromBooking += "\n" + this.booking.invoiceNotes;
-        }
     }
 }

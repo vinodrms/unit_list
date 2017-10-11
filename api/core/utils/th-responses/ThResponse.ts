@@ -504,7 +504,6 @@ export enum ThStatusCode {
     HotelBookingOperationsControllerErrorAddingPaymentGuarantee,
     BookingChangeDetailsInvalidState,
     BookingChangeInvoiceNotesInvalidState,
-    BookingChangeDetailsInvoiceSyncError,
     BookingChangeDetailsError,
     HotelBookingOperationsControllerErrorChangingDetails,
     BookingChangeCustomersInvalidState,
@@ -1081,7 +1080,6 @@ ThMessage[ThStatusCode.BookingPaymentGuaranteeInvalidState] = "A payment guarant
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorAddingPaymentGuarantee] = "Error adding payment guarantee.";
 ThMessage[ThStatusCode.BookingChangeDetailsInvalidState] = "You cannot change details for checked out or cancelled bookings.";
 ThMessage[ThStatusCode.BookingChangeInvoiceNotesInvalidState] = "You cannot change invoice notes on bookings that have the invoice paid.";
-ThMessage[ThStatusCode.BookingChangeDetailsInvoiceSyncError] = "There was an error updating notes on the invoice.";
 ThMessage[ThStatusCode.BookingChangeDetailsError] = "Error changing booking details.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDetails] = "Error changing booking details.";
 ThMessage[ThStatusCode.BookingChangeCustomersInvalidState] = "The customers can be changed only for checked in, confirmed or guaranteed bookings.";
