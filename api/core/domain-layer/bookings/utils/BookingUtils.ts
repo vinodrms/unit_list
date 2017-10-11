@@ -47,7 +47,7 @@ export class BookingUtils {
         });
     }
     public updateDisplayCustomerId(booking: BookingDO, customersContainer: CustomersContainer) {
-        booking.displayCustomerId = booking.defaultBillingDetails.customerId;
+        booking.displayCustomerId = booking.defaultBillingDetails.customerIdDisplayedAsGuest;
         var customer = customersContainer.getCustomerById(booking.displayCustomerId);
         if (customer.isIndividual()) {
             return;
