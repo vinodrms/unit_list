@@ -8,6 +8,7 @@ export class BookingChangeGuestOnInvoiceDO {
     groupBookingId: string;
     id: string;
     customerIdDisplayedOnInvoice: string;
+    customerIdList: string[];
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
@@ -22,6 +23,10 @@ export class BookingChangeGuestOnInvoiceDO {
             {
                 key: "customerIdDisplayedOnInvoice",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+            },
+            {
+                key: "customerIdList",
+                validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
             }
         ]);
     }

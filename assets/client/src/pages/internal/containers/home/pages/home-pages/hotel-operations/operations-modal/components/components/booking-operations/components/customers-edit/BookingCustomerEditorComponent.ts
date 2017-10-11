@@ -141,10 +141,18 @@ export class BookingCustomerEditorComponent implements OnInit {
             this.readonly = true;
             this.isSaving = false;
 
+            let customerIdDisplayedAsGuest = this.bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest;
+            let customerIdList: string[] = [customerIdDisplayedAsGuest];
+            if (_.isArray(this.bookingDO.customerIdList)) {
+                customerIdList = customerIdList.concat(this.bookingDO.customerIdList);
+                customerIdList = _.uniq(customerIdList);
+            }
+
             let bookingChangeGuestOnInvoiceDO = {
                 groupBookingId: this._bookingOperationsPageData.bookingDO.groupBookingId,
                 id: this._bookingOperationsPageData.bookingDO.id,
-                customerIdDisplayedOnInvoice: this.bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest
+                customerIdDisplayedOnInvoice: customerIdDisplayedAsGuest,
+                customerIdList: customerIdList
             };
 
             return this._hotelOperationsBookingService.changeGuestOnInvoice(bookingChangeGuestOnInvoiceDO);
