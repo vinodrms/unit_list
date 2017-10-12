@@ -4,13 +4,14 @@ import { InvoicePaymentDO } from './InvoicePaymentDO';
 export class InvoicePayerDO extends BaseDO {
     customerId: string;
     paymentList: InvoicePaymentDO[];
+    notes: string;
 
     constructor() {
         super();
     }
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["customerId"];
+        return ["customerId", "notes"];
     }
 
     public buildFromObject(object: Object) {

@@ -1059,5 +1059,11 @@ export var EnglishTranslations: Object = {
     "Please select a non-zero amount.": "Please select a non-zero amount.",
     "Please select a positive amount.": "Please select a positive amount.",
     "Please select a value not lower than the amount left.": "Please select a value not lower than the amount left.",
-
+    "Add Notes": "Add Notes",
+    "Edit Notes": "Edit Notes",
+    "Add payer notes": "Add payer notes",
+    "Edit payer notes": "Edit payer notes",
+    "Add Payer Notes": "Add Payer Notes",
+    "Payer Notes": "Payer Notes",
+    "Please add a note.": "Please add a note.",
 };

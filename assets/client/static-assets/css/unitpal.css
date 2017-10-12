@@ -4179,7 +4179,7 @@ textarea.payer-details {
     max-width: calc(100% - 58px);
 }
 
-.invoice-payer-section .payer-box .payer-email {
+.invoice-payer-section .payer-box .payer-notes {
     font-weight: 200;
     font-style: normal;
     font-size: 11px;

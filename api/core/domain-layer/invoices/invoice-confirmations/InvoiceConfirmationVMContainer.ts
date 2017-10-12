@@ -64,7 +64,7 @@ export class InvoiceConfirmationVMContainer {
     payerVatCodeValue: string;
     payerGovernmentCodeLabel: string;
     payerGovernmentCodeValue: string;
-    additionalPayerDetails: string;
+    payerNotes: string;
     notesFromBooking: string;
 
     itemLabel: string;
@@ -180,11 +180,11 @@ export class InvoiceConfirmationVMContainer {
         if (!_.isString(this.payerGovernmentCodeValue)) {
             this.payerGovernmentCodeValue = "";
         }
-        this.additionalPayerDetails = "";
+        this.payerNotes = "";
         var payer = this._invoice.payerList[this.payerIndex];
-        // if (_.isString(payer.additionalInvoiceDetails)) {
-        //      this.additionalPayerDetails = payer.additionalInvoiceDetails;
-        //  }
+        if (_.isString(payer.notes)) {
+              this.payerNotes = payer.notes;
+        }
     }
 
     private initNotesFromBooking() {
