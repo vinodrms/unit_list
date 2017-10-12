@@ -1,5 +1,5 @@
 cache:
-  key: "PIPELINE-$CI_BUILD_STAGE"
+  key: "PIPELINE-$CI_PIPELINE_ID"
   untracked: true
 
 stages:
