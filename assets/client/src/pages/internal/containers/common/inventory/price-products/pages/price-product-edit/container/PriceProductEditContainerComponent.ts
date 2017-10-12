@@ -30,157 +30,156 @@ import { AddOnProductCategoriesDO } from '../../../../../../../services/settings
 import { AddOnProductCategoryDO } from '../../../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
 
 @Component({
-	selector: 'price-product-edit-container',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/container/template/price-product-edit-container.html',
-	providers: [EagerAddOnProductsService]
+    selector: 'price-product-edit-container',
+    templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/container/template/price-product-edit-container.html',
+    providers: [EagerAddOnProductsService]
 })
 export class PriceProductEditContainerComponent extends BaseComponent implements AfterViewInit {
-	@ViewChild(PriceProductEditTopSectionComponent) private _topSectionComponent: PriceProductEditTopSectionComponent;
-	@ViewChild(PriceProductEditRoomCategoriesSectionComponent) private _roomCategoriesSectionComponent: PriceProductEditRoomCategoriesSectionComponent;
-	@ViewChild(PriceProductEditAddOnProductsSectionComponent) private _addOnProductsSection: PriceProductEditAddOnProductsSectionComponent;
-	@ViewChild(PriceProductEditTaxesSectionComponent) private _editTaxesSection: PriceProductEditTaxesSectionComponent;
-	@ViewChild(PriceProductEditPricesSectionComponent) private _editPricesSection: PriceProductEditPricesSectionComponent;
-	@ViewChild(PriceProductEditFiltersSectionComponent) private _editFiltersSection: PriceProductEditFiltersSectionComponent;
-	@ViewChild(PriceProductEditCancellationSectionComponent) private _editCancellationSection: PriceProductEditCancellationSectionComponent;
-	@ViewChild(PriceProductEditConstraintsSectionComponent) private _editConstraintsSection: PriceProductEditConstraintsSectionComponent;
-	@ViewChild(PriceProductEditDiscountsSectionComponent) private _editDiscountsSection: PriceProductEditDiscountsSectionComponent;
-	@ViewChild(PriceProductEditNotesSectionComponent) private _editNotesSection: PriceProductEditNotesSectionComponent;
+    @ViewChild(PriceProductEditTopSectionComponent) private _topSectionComponent: PriceProductEditTopSectionComponent;
+    @ViewChild(PriceProductEditRoomCategoriesSectionComponent) private _roomCategoriesSectionComponent: PriceProductEditRoomCategoriesSectionComponent;
+    @ViewChild(PriceProductEditAddOnProductsSectionComponent) private _addOnProductsSection: PriceProductEditAddOnProductsSectionComponent;
+    @ViewChild(PriceProductEditTaxesSectionComponent) private _editTaxesSection: PriceProductEditTaxesSectionComponent;
+    @ViewChild(PriceProductEditPricesSectionComponent) private _editPricesSection: PriceProductEditPricesSectionComponent;
+    @ViewChild(PriceProductEditFiltersSectionComponent) private _editFiltersSection: PriceProductEditFiltersSectionComponent;
+    @ViewChild(PriceProductEditCancellationSectionComponent) private _editCancellationSection: PriceProductEditCancellationSectionComponent;
+    @ViewChild(PriceProductEditConstraintsSectionComponent) private _editConstraintsSection: PriceProductEditConstraintsSectionComponent;
+    @ViewChild(PriceProductEditDiscountsSectionComponent) private _editDiscountsSection: PriceProductEditDiscountsSectionComponent;
+    @ViewChild(PriceProductEditNotesSectionComponent) private _editNotesSection: PriceProductEditNotesSectionComponent;
 
-	private _didInit = false;
-	isLoading: boolean = true;
-	isSavingPriceProduct: boolean = false;
-	saveAsDraft: boolean = true;
-	didSubmit = false;
+    private _didInit = false;
+    isLoading: boolean = true;
+    isSavingPriceProduct: boolean = false;
+    saveAsDraft: boolean = true;
+    didSubmit = false;
 
-	private _priceProductVM: PriceProductVM;
-	public get priceProductVM(): PriceProductVM {
-		return this._priceProductVM;
-	}
-	@Input()
-	public set priceProductVM(priceProductVM: PriceProductVM) {
-		this._priceProductVM = priceProductVM;
-		this.initializeDependentData();
-	}
+    private _priceProductVM: PriceProductVM;
+    public get priceProductVM(): PriceProductVM {
+        return this._priceProductVM;
+    }
+    @Input()
+    public set priceProductVM(priceProductVM: PriceProductVM) {
+        this._priceProductVM = priceProductVM;
+        this.initializeDependentData();
+    }
 
-	@Output() onExit = new EventEmitter();
-	public showViewScreen() {
-		this.onExit.next(true);
-	}
+    @Output() onExit = new EventEmitter();
+    public showViewScreen() {
+        this.onExit.next(true);
+    }
 
-	private _editSectionContainer: PriceProductEditSectionContainer;
-	private _dependentDataSubscription: Subscription;
+    private _editSectionContainer: PriceProductEditSectionContainer;
+    private _dependentDataSubscription: Subscription;
 
-	constructor(private _appContext: AppContext,
-		private _yieldFiltersService: YieldFiltersService,
-		private _eagerAddOnProductsService: EagerAddOnProductsService,
-		private _hotelAggregatorService: HotelAggregatorService,
-		private _priceProductsService: PriceProductsService,
-		private _addOnProductCategoriesService: AddOnProductCategoriesService) {
-		super();
-	}
-	ngAfterViewInit() {
-		setTimeout(() => {
-			this._didInit = true;
-			this._editSectionContainer = new PriceProductEditSectionContainer(
-				[
-					this._topSectionComponent,
-					this._roomCategoriesSectionComponent,
-					this._addOnProductsSection,
-					this._editTaxesSection,
-					this._editPricesSection,
-					this._editFiltersSection,
-					this._editCancellationSection,
-					this._editConstraintsSection,
-					this._editDiscountsSection,
-					this._editNotesSection
-				]
-			);
-			this.initializeDependentData();
-		});
-	}
+    constructor(private _appContext: AppContext,
+        private _yieldFiltersService: YieldFiltersService,
+        private _eagerAddOnProductsService: EagerAddOnProductsService,
+        private _hotelAggregatorService: HotelAggregatorService,
+        private _priceProductsService: PriceProductsService,
+        private _addOnProductCategoriesService: AddOnProductCategoriesService) {
+        super();
+    }
+    ngAfterViewInit() {
+        setTimeout(() => {
+            this._didInit = true;
+            this._editSectionContainer = new PriceProductEditSectionContainer(
+                [
+                    this._topSectionComponent,
+                    this._roomCategoriesSectionComponent,
+                    this._addOnProductsSection,
+                    this._editTaxesSection,
+                    this._editPricesSection,
+                    this._editFiltersSection,
+                    this._editCancellationSection,
+                    this._editConstraintsSection,
+                    this._editDiscountsSection,
+                    this._editNotesSection
+                ]
+            );
+            this.initializeDependentData();
+        });
+    }
 
-	private initializeDependentData() {
-		if (!this._didInit || !this._priceProductVM) {
-			return;
-		}
-		this.isLoading = true;
+    private initializeDependentData() {
+        if (!this._didInit || !this._priceProductVM) {
+            return;
+        }
+        this.isLoading = true;
 
-		if (this._dependentDataSubscription) {
-			this._dependentDataSubscription.unsubscribe();
-		}
-		this._dependentDataSubscription = Observable.combineLatest(
-			this._hotelAggregatorService.getHotelAggregatedInfo(),
-			this._addOnProductCategoriesService.getAddOnProductCategoriesDO()
-		).subscribe((result: [HotelAggregatedInfo, AddOnProductCategoriesDO]) => {
-			this._priceProductVM.ccy = result[0].ccy;
+        if (this._dependentDataSubscription) {
+            this._dependentDataSubscription.unsubscribe();
+        }
+        this._dependentDataSubscription = Observable.combineLatest(
+            this._hotelAggregatorService.getHotelAggregatedInfo(),
+            this._addOnProductCategoriesService.getAddOnProductCategoriesDO()
+        ).subscribe((result: [HotelAggregatedInfo, AddOnProductCategoriesDO]) => {
+            this._priceProductVM.ccy = result[0].ccy;
 
-			this._editSectionContainer.initializeFrom(this._priceProductVM, result[1]);
-			this._editSectionContainer.readonly = this.isReadOnly();
+            this._editSectionContainer.initializeFrom(this._priceProductVM, result[1]);
+            this._editSectionContainer.readonly = this.isReadOnly();
 
-			// set custom readonly flags for specific edit sections
-			this._editFiltersSection.readonly = this.yieldFiltersAreReadOnly();
-			this._editNotesSection.readonly = this.yieldFiltersAreReadOnly();
-			this._roomCategoriesSectionComponent.readonly = this.isReadOnly() || this._priceProductVM.priceProduct.hasParent();
-			this._editPricesSection.readonly = this.isReadOnly() || this._priceProductVM.priceProduct.hasParent();
-			this._editPricesSection.editDynamicPrices = !this._priceProductVM.priceProduct.hasParent();
+            // set custom readonly flags for specific edit sections
+            this._editFiltersSection.readonly = this.yieldFiltersAreReadOnly();
+            this._editNotesSection.readonly = this.yieldFiltersAreReadOnly();
+            this._roomCategoriesSectionComponent.readonly = this.isReadOnly() || this._priceProductVM.priceProduct.hasParent();
+            this._editPricesSection.readonly = this.isReadOnly() || this._priceProductVM.priceProduct.hasParent();
+            this._editPricesSection.editDynamicPrices = !this._priceProductVM.priceProduct.hasParent();
 
-			this._editCancellationSection.cancellationHour = result[0].hotelDetails.hotel.operationHours.cancellationHour;
-			this.isLoading = false;
-			this.didSubmit = false;
-		}, (error: ThError) => {
-			this.isLoading = false;
-			this._appContext.toaster.error(this._appContext.thTranslation.translate(error.message));
-		});
-	}
-	private isReadOnly(): boolean {
-		return this._priceProductVM != null && this._priceProductVM.priceProduct.status !== PriceProductStatus.Draft;
-	}
-	private yieldFiltersAreReadOnly(): boolean {
-		return this.isReadOnly() && this._priceProductVM.priceProduct.status !== PriceProductStatus.Active;
-	}
-	public handleRoomCategoryChange(roomCategoryList: RoomCategoryDO[]) {
-		this._editPricesSection.updatePricesForRoomCategories(roomCategoryList);
-	}
+            this.isLoading = false;
+            this.didSubmit = false;
+        }, (error: ThError) => {
+            this.isLoading = false;
+            this._appContext.toaster.error(this._appContext.thTranslation.translate(error.message));
+        });
+    }
+    private isReadOnly(): boolean {
+        return this._priceProductVM != null && this._priceProductVM.priceProduct.status !== PriceProductStatus.Draft;
+    }
+    private yieldFiltersAreReadOnly(): boolean {
+        return this.isReadOnly() && this._priceProductVM.priceProduct.status !== PriceProductStatus.Active;
+    }
+    public handleRoomCategoryChange(roomCategoryList: RoomCategoryDO[]) {
+        this._editPricesSection.updatePricesForRoomCategories(roomCategoryList);
+    }
 
-	public isNewOrDraftPriceProduct() {
-		return this._priceProductVM != null &&
-			(!this._priceProductVM.priceProduct.id ||
-				this._priceProductVM.priceProduct.status === PriceProductStatus.Draft
-			);
-	}
-	public canSavePriceProduct(): boolean {
-		return this._priceProductVM != null &&
-			(this._priceProductVM.priceProduct.status === PriceProductStatus.Draft ||
-				this._priceProductVM.priceProduct.status === PriceProductStatus.Active
-			);
-	}
+    public isNewOrDraftPriceProduct() {
+        return this._priceProductVM != null &&
+            (!this._priceProductVM.priceProduct.id ||
+                this._priceProductVM.priceProduct.status === PriceProductStatus.Draft
+            );
+    }
+    public canSavePriceProduct(): boolean {
+        return this._priceProductVM != null &&
+            (this._priceProductVM.priceProduct.status === PriceProductStatus.Draft ||
+                this._priceProductVM.priceProduct.status === PriceProductStatus.Active
+            );
+    }
 
-	public savePriceProduct() {
-		this.didSubmit = true;
-		if (!this._editSectionContainer.isValid() || !this.canSavePriceProduct()) {
-			var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
-			this._appContext.toaster.error(errorMessage);
-			return;
-		}
-		this._editSectionContainer.updateDataOn(this._priceProductVM);
-		this.updateStatusForNewPriceProductOn(this._priceProductVM);
+    public savePriceProduct() {
+        this.didSubmit = true;
+        if (!this._editSectionContainer.isValid() || !this.canSavePriceProduct()) {
+            var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
+            this._appContext.toaster.error(errorMessage);
+            return;
+        }
+        this._editSectionContainer.updateDataOn(this._priceProductVM);
+        this.updateStatusForNewPriceProductOn(this._priceProductVM);
 
-		this.isSavingPriceProduct = true;
-		this._priceProductsService.savePriceProductDO(this._priceProductVM.priceProduct)
-			.subscribe((updatedPriceProduct: PriceProductDO) => {
-				this.isSavingPriceProduct = false;
-				this.showViewScreen();
-			}, (error: ThError) => {
-				this.isSavingPriceProduct = false;
-				this._appContext.toaster.error(error.message);
-			});
-	}
-	private updateStatusForNewPriceProductOn(priceProductVM: PriceProductVM) {
-		if (!this.isNewOrDraftPriceProduct()) { return };
-		if (this.saveAsDraft) {
-			priceProductVM.priceProduct.status = PriceProductStatus.Draft;
-			return;
-		}
-		priceProductVM.priceProduct.status = PriceProductStatus.Active;
-	}
+        this.isSavingPriceProduct = true;
+        this._priceProductsService.savePriceProductDO(this._priceProductVM.priceProduct)
+            .subscribe((updatedPriceProduct: PriceProductDO) => {
+                this.isSavingPriceProduct = false;
+                this.showViewScreen();
+            }, (error: ThError) => {
+                this.isSavingPriceProduct = false;
+                this._appContext.toaster.error(error.message);
+            });
+    }
+    private updateStatusForNewPriceProductOn(priceProductVM: PriceProductVM) {
+        if (!this.isNewOrDraftPriceProduct()) { return };
+        if (this.saveAsDraft) {
+            priceProductVM.priceProduct.status = PriceProductStatus.Draft;
+            return;
+        }
+        priceProductVM.priceProduct.status = PriceProductStatus.Active;
+    }
 }
