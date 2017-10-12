@@ -2389,6 +2389,10 @@ a.btn.btn-square:focus {
             color: rgb(251, 103, 8);
         }
 
+        .room-card .card-header .section1 {
+            min-height: 50px;
+        }
+
         /* Free */
         .room-card.free {
             border-left: 6px solid rgb(29, 205, 140);
