@@ -1,3 +1,4 @@
+import * as _ from "underscore";
 import { ThTranslation } from '../../../../../../../../../../common/utils/localization/ThTranslation';
 import { ThUtils } from '../../../../../../../../../../common/utils/ThUtils';
 import { CurrencyDO } from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
@@ -12,11 +13,9 @@ import { TransientBookingItem } from '../../data-objects/TransientBookingItem';
 import { BookingSearchParams } from '../../data-objects/BookingSearchParams';
 import { DefaultBillingDetailsDO } from '../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
 import { CustomerDO } from '../../../../../../../../services/customers/data-objects/CustomerDO';
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../services/invoices/data-objects/payer/InvoicePaymentMethodDO';
 import { HotelAggregatedInfo } from '../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import { BookingVM } from "../../../../../../../../services/bookings/view-models/BookingVM";
-
-import * as _ from "underscore";
 
 export class BookingViewModelConverter {
     private _thUtils: ThUtils;

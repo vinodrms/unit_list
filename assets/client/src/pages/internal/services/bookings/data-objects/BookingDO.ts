@@ -1,3 +1,4 @@
+import * as _ from "underscore";
 import { BaseDO } from '../../../../../common/base/BaseDO';
 import { ThUtils } from '../../../../../common/utils/ThUtils';
 import { ThDateIntervalDO } from '../../common/data-objects/th-dates/ThDateIntervalDO';
@@ -8,10 +9,8 @@ import { BookingStateChangeTriggerTimeDO } from './state-change-time/BookingStat
 import { DefaultBillingDetailsDO } from './default-billing/DefaultBillingDetailsDO';
 import { DocumentHistoryDO } from '../../common/data-objects/document-history/DocumentHistoryDO';
 import { BookingPriceDO } from './price/BookingPriceDO';
-import { IInvoiceItemMeta } from '../../invoices/data-objects/items/IInvoiceItemMeta';
 import { ThDateDO } from "../../common/data-objects/th-dates/ThDateDO";
-
-import * as _ from "underscore";
+import { IInvoiceItemMeta } from "../../invoices/data-objects/items/IInvoiceItemMeta";
 
 export enum BookingStatus {
     Active,
@@ -58,9 +57,9 @@ export class TravelActivityTypeOption {
 }
 
 class TravelTypeDisplayedNameContainer {
-    private static _TravelTypeDisplayedNames: { [type: number] : string } = {
-        [TravelType.Individual] : "Individual",
-        [TravelType.Group] : "Group",
+    private static _TravelTypeDisplayedNames: { [type: number]: string } = {
+        [TravelType.Individual]: "Individual",
+        [TravelType.Group]: "Group",
     };
 
     public static getDisplayedName(travelType: TravelType) {
@@ -118,11 +117,13 @@ export class BookingDO extends BaseDO {
     indexedSearchTerms: string[];
     travelActivityType: TravelActivityType;
     travelType: TravelType;
+    // whether all the bookings from the group this booking belongs to will be posted on the same invoice
+    mergeInvoice: boolean;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "versionId", "status", "inputChannel", "noOfRooms", "id", "bookingReference", "externalBookingReference", "confirmationStatus",
-            "customerIdList", "displayCustomerId",  "corporateDisplayCustomerId", "creationDateUtcTimestamp", "startUtcTimestamp", "endUtcTimestamp", "checkInUtcTimestamp", "checkOutUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
-            "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType", "travelType"];
+            "customerIdList", "displayCustomerId", "corporateDisplayCustomerId", "creationDateUtcTimestamp", "startUtcTimestamp", "endUtcTimestamp", "checkInUtcTimestamp", "checkOutUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
+            "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType", "travelType", "mergeInvoice"];
     }
 
     public buildFromObject(object: Object) {
@@ -188,14 +189,14 @@ export class BookingDO extends BaseDO {
     }
 
     public get travelActivityTypeDisplayedName(): string {
-       var option= _.find(TravelActivityTypeOption.getValues(), (option: TravelActivityTypeOption) => {
+        var option = _.find(TravelActivityTypeOption.getValues(), (option: TravelActivityTypeOption) => {
             return option.type == this.travelActivityType;
         });
         return option.displayName;
     }
 
     public get travelTypeDisplayedName(): string {
-       return TravelTypeDisplayedNameContainer.getDisplayedName(this.travelType);
+        return TravelTypeDisplayedNameContainer.getDisplayedName(this.travelType);
     }
 
     public get reservedAddOnProductIdList(): string[] {

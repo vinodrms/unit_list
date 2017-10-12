@@ -12,7 +12,7 @@ export class TransactionFeeDO extends BaseDO {
     constructor() {
         super();
     }
-    
+
     protected getPrimitivePropertyKeys(): string[] {
         return ["type", "amount"];
     }
@@ -21,11 +21,11 @@ export class TransactionFeeDO extends BaseDO {
         super.buildFromObject(object);
     }
 
-    public getAmountWihtTransactionFeeIncluded(amount: number): number {
-        let totalAmount = 
-            this.type === TransactionFeeType.Fixed ? 
+    public getAmountWithTransactionFeeIncluded(amount: number): number {
+        let totalAmount =
+            this.type === TransactionFeeType.Fixed ?
                 amount + this.amount : amount * (1 + this.amount);
-        
+
         let thUtils = new ThUtils();
         return thUtils.roundNumberToTwoDecimals(totalAmount);
     }

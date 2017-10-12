@@ -33,7 +33,7 @@ export class MongoBookingRepository extends MongoRepository implements IBookingR
     public getBookingList(meta: BookingMetaRepoDO, searchCriteria: BookingSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<BookingSearchResultRepoDO> {
         return this.readRepository.getBookingList(meta, searchCriteria, lazyLoad);
     }
-    public getBookingById(meta: BookingMetaRepoDO, groupBookingId: string, bookingId: string): Promise<BookingDO> {
-        return this.editRepository.getBookingById(meta, groupBookingId, bookingId);
+    public getBookingById(meta: BookingMetaRepoDO, bookingId: string): Promise<BookingDO> {
+        return this.editRepository.getBookingById(meta, bookingId);
     }
 }

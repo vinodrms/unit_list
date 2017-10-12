@@ -1,12 +1,11 @@
+import * as _ from "underscore";
 import { HotelPaymentMethodsDO } from '../../../settings/data-objects/HotelPaymentMethodsDO';
 import { PaymentMethodDO } from '../../../common/data-objects/payment-method/PaymentMethodDO';
 import { InvoicePaymentMethodVM } from '../InvoicePaymentMethodVM';
 import { CustomerDO } from '../../../customers/data-objects/CustomerDO';
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../data-objects/payer/InvoicePaymentMethodDO';
 import { HotelAggregatedPaymentMethodsDO } from "../../../settings/data-objects/HotelAggregatedPaymentMethodsDO";
 import { AggregatedPaymentMethodDO } from "../../../common/data-objects/payment-method/AggregatedPaymentMethodDO";
-
-import * as _ from "underscore";
 
 export class InvoicePaymentMethodVMGenerator {
     private _allowedPaymentMethodVMList: InvoicePaymentMethodVM[];

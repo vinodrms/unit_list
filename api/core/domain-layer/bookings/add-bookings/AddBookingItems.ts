@@ -159,7 +159,7 @@ export class AddBookingItems {
             }
             var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, bookingItemsConverterParams);
 
-            return bookingItemsConverter.convert(this._addBookingItems.bookingList, this._inputChannel);
+            return bookingItemsConverter.convert(this._addBookingItems.bookingList, this._inputChannel, this._addBookingItems.mergeInvoice);
         }).then((convertedBookingList: BookingDO[]) => {
             this._bookingList = convertedBookingList;
             this._noOfRooms = this._bookingList.length;
@@ -177,7 +177,7 @@ export class AddBookingItems {
             var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
 
             if (!this.newBookingGroup) {
-                // the existing bookings were kept in the array in order to validate 
+                // the existing bookings were kept in the array in order to validate
                 // the bookings as a whole
                 this.removeExistingBookingsFromTheBookingListSentToServer();
 

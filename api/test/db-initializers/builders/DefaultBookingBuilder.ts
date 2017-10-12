@@ -1,3 +1,4 @@
+import _ = require("underscore");
 import { ThError } from '../../../core/utils/th-responses/ThError';
 import { TestContext } from '../../helpers/TestContext';
 import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus, BookingStatus, TravelActivityType, TravelType, AddOnProductBookingReservedItem } from '../../../core/data-layer/bookings/data-objects/BookingDO';
@@ -10,7 +11,6 @@ import { ConfigCapacityDO } from '../../../core/data-layer/common/data-objects/b
 import { TestUtils } from '../../helpers/TestUtils';
 import { ThDateUtils } from '../../../core/utils/th-dates/ThDateUtils';
 import { DefaultBillingDetailsDO } from '../../../core/data-layer/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
-import { InvoicePaymentMethodType } from '../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { ThDateIntervalDO } from '../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
 import { ThTimestampDO } from '../../../core/utils/th-dates/data-objects/ThTimestampDO';
 import { AddBookingItemsDO, BookingItemDO } from '../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
@@ -19,8 +19,7 @@ import { IndexedBookingInterval } from '../../../core/data-layer/price-products/
 import { BookingUtils } from '../../../core/domain-layer/bookings/utils/BookingUtils';
 import { PaymentMethodInstanceDO } from "../../../core/data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 import { AddOnProductDO } from "../../../core/data-layer/add-on-products/data-objects/AddOnProductDO";
-
-import _ = require("underscore");
+import { InvoicePaymentMethodType } from '../../../core/data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
 
 export interface IBookingDataSource {
     getBookingList(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryStatsList: RoomCategoryStatsDO[],
@@ -107,6 +106,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.notes = "This is an automatic booking";
         booking.travelActivityType = TravelActivityType.Leisure;
         booking.travelType = TravelType.Individual;
+        booking.mergeInvoice = false;
 
         let billedCustomer = _.find(customerList, customer => { return customer.id === customerId });
         this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(booking, roomCategoryStatsList, priceProduct, billedCustomer);

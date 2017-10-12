@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {IHotelOperationsPageParam} from '../../services/utils/IHotelOperationsPageParam';
-import {HotelRoomOperationsPageParam} from '../components/room-operations/utils/HotelRoomOperationsPageParam';
-import {HotelBookingOperationsPageParam} from '../components/booking-operations/utils/HotelBookingOperationsPageParam';
-import {HotelCustomerOperationsPageParam} from '../components/customer-operations/utils/HotelCustomerOperationsPageParam';
-import {HotelInvoiceOperationsPageParam, HotelInvoiceOperationsPageFilterParam} from '../components/invoice-operations/utils/HotelInvoiceOperationsPageParam';
+import { Injectable } from '@angular/core';
+import { IHotelOperationsPageParam } from '../../services/utils/IHotelOperationsPageParam';
+import { HotelRoomOperationsPageParam } from '../components/room-operations/utils/HotelRoomOperationsPageParam';
+import { HotelBookingOperationsPageParam } from '../components/booking-operations/utils/HotelBookingOperationsPageParam';
+import { HotelCustomerOperationsPageParam } from '../components/customer-operations/utils/HotelCustomerOperationsPageParam';
+import { HotelInvoiceOperationsPageParam, HotelInvoiceOperationsPageFilterParam } from '../components/invoice-operations/utils/HotelInvoiceOperationsPageParam';
 
 @Injectable()
 export class HotelOperationsPageControllerService {
@@ -29,16 +29,18 @@ export class HotelOperationsPageControllerService {
         var roomOperationsParam = new HotelRoomOperationsPageParam(roomId);
         this.goToPage(roomOperationsParam);
     }
-    public goToBooking(groupBookingId: string, bookingId: string) {
-        var bookingOperationsPageParam = new HotelBookingOperationsPageParam(groupBookingId, bookingId);
+    public goToBooking(bookingId: string) {
+        var bookingOperationsPageParam = new HotelBookingOperationsPageParam(bookingId);
         this.goToPage(bookingOperationsPageParam);
     }
     public goToCustomer(customerId: string) {
         var custOperationsPageParam = new HotelCustomerOperationsPageParam(customerId);
         this.goToPage(custOperationsPageParam);
     }
-    public goToInvoice(invoiceGroupId: string, invoiceFilter: HotelInvoiceOperationsPageFilterParam, openInEditMode: boolean) {
-        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, invoiceFilter, openInEditMode);
+    public goToInvoice(invoiceId: string, customerId: string = null) {
+        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceId, {
+            customerId: customerId
+        });
         this.goToPage(invoiceOperationsPageParam);
     }
     private goToPage(operationsPageParam: IHotelOperationsPageParam) {

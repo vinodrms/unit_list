@@ -1,17 +1,16 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../../../../common/base/BaseComponent';
-import {AppContext} from '../../../../../../../../../../../common/utils/AppContext';
-import {BookingCartItemVM} from '../../../../services/search/view-models/BookingCartItemVM';
-import {BookingControllerService} from '../../utils/BookingControllerService';
-import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
-import {BookingDOConstraints} from '../../../../../../../../../services/bookings/data-objects/BookingDOConstraints';
-import {IBookingCustomerRegisterSelector} from '../../utils/IBookingCustomerRegister';
-import {InvoicePaymentMethodVMGenerator} from '../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
-import {InvoicePaymentMethodVM} from '../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import { TravelActivityType, TravelActivityTypeOption, TravelType } from "../../../../../../../../../services/bookings/data-objects/BookingDO";
-
 import * as _ from "underscore";
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { BaseComponent } from '../../../../../../../../../../../common/base/BaseComponent';
+import { AppContext } from '../../../../../../../../../../../common/utils/AppContext';
+import { BookingCartItemVM } from '../../../../services/search/view-models/BookingCartItemVM';
+import { BookingControllerService } from '../../utils/BookingControllerService';
+import { CustomerDO } from '../../../../../../../../../services/customers/data-objects/CustomerDO';
+import { BookingDOConstraints } from '../../../../../../../../../services/bookings/data-objects/BookingDOConstraints';
+import { IBookingCustomerRegisterSelector } from '../../utils/IBookingCustomerRegister';
+import { TravelActivityType, TravelActivityTypeOption, TravelType } from "../../../../../../../../../services/bookings/data-objects/BookingDO";
+import { InvoicePaymentMethodVM } from "../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM";
+import { InvoicePaymentMethodVMGenerator } from "../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator";
+import { InvoicePaymentMethodDO } from "../../../../../../../../../services/invoices/data-objects/payer/InvoicePaymentMethodDO";
 
 @Component({
     selector: 'new-booking-details-editor',
@@ -180,11 +179,11 @@ export class NewBookingDetailsEditorComponent extends BaseComponent {
         this._bookingCartItem.transientBookingItem.defaultBillingDetails.paymentMethod = paymentMethod;
         this.triggerBookingCartItemChange();
     }
-    
-    public get externalBookingReference() : string {
+
+    public get externalBookingReference(): string {
         return this._bookingCartItem.transientBookingItem.externalBookingReference;
     }
-    public set externalBookingReference(externalBookingReference : string) {
+    public set externalBookingReference(externalBookingReference: string) {
         this._bookingCartItem.transientBookingItem.externalBookingReference = externalBookingReference;
     }
     public get bookingNotes(): string {
@@ -208,7 +207,7 @@ export class NewBookingDetailsEditorComponent extends BaseComponent {
         return TravelActivityTypeOption.getValues();
     }
 
-    public get travelActivityType() : TravelActivityType {
+    public get travelActivityType(): TravelActivityType {
         return this._bookingCartItem.transientBookingItem.travelActivityType;
     }
     public setTravelActivityType(travelActivityType: string) {

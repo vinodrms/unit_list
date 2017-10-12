@@ -1,16 +1,16 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
 import { BookingDO, AddOnProductBookingReservedItem } from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
-import {ValidationResultParser} from '../../../common/ValidationResultParser';
-import {AddOnProductIdValidator} from '../../../add-on-products/validators/AddOnProductIdValidator';
-import {AddOnProductsContainer} from '../../../add-on-products/validators/results/AddOnProductsContainer';
-import {BookingReserveAddOnProductsDO} from './BookingReserveAddOnProductsDO';
-import {BookingUtils} from '../../../bookings/utils/BookingUtils';
+import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { ValidationResultParser } from '../../../common/ValidationResultParser';
+import { AddOnProductIdValidator } from '../../../add-on-products/validators/AddOnProductIdValidator';
+import { AddOnProductsContainer } from '../../../add-on-products/validators/results/AddOnProductsContainer';
+import { BookingReserveAddOnProductsDO } from './BookingReserveAddOnProductsDO';
+import { BookingUtils } from '../../../bookings/utils/BookingUtils';
 
 import _ = require('underscore');
 
@@ -39,13 +39,13 @@ export class BookingReserveAddOnProducts {
             parser.logAndReject("Error validating reserve add on products", reject);
             return;
         }
-        var uniqueAddOnProductIdList = _.map(this._reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => {return addOnProduct.aopId;});
+        var uniqueAddOnProductIdList = _.map(this._reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => { return addOnProduct.aopId; });
         var addOnProductValidator = new AddOnProductIdValidator(this._appContext, this._sessionContext);
         addOnProductValidator.validateAddOnProductIdList(uniqueAddOnProductIdList).then((addOnProductsContainer: AddOnProductsContainer) => {
             this._loadedAddOnProductsContainer = addOnProductsContainer;
 
             var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-            return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._reserveAddOnProductsDO.groupBookingId, this._reserveAddOnProductsDO.id)
+            return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._reserveAddOnProductsDO.id)
         }).then((booking: BookingDO) => {
             this._loadedBooking = booking;
 

@@ -1,7 +1,6 @@
-import {InvoiceItemDO, InvoiceItemType} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
-
 import _ = require('underscore');
 import { TaxDO } from "../../../data-layer/taxes/data-objects/TaxDO";
+import { InvoiceItemDO } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 
 export class IncludedBookingItems {
     private _breakfast: InvoiceItemDO;

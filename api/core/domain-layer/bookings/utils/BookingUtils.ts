@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThUtils } from '../../../utils/ThUtils';
 import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
 import { BookingDO, BookingConfirmationStatus } from '../../../data-layer/bookings/data-objects/BookingDO';
@@ -10,8 +11,6 @@ import { CustomersContainer } from '../../customers/validators/results/Customers
 import { BookingPriceDO, BookingPriceType } from '../../../data-layer/bookings/data-objects/price/BookingPriceDO';
 import { PricePerDayDO } from '../../../data-layer/bookings/data-objects/price/PricePerDayDO';
 import { IndexedBookingInterval } from '../../../data-layer/price-products/utils/IndexedBookingInterval';
-import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
-import { AddOnProductInvoiceItemMetaDO } from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import { AddOnProductSnapshotDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductSnapshotDO';
 import { AttachedAddOnProductItemDO } from '../../../data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
 import { IncludedBookingItems } from './IncludedBookingItems';
@@ -20,8 +19,8 @@ import { RoomCategoryStatsDO } from '../../../data-layer/room-categories/data-ob
 import { StringOccurenciesIndexer } from "../../../utils/indexers/StringOccurenciesIndexer";
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 import { CommissionDO } from "../../../data-layer/common/data-objects/commission/CommissionDO";
-
-import _ = require('underscore');
+import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { AddOnProductInvoiceItemMetaDO } from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 
 export class BookingUtils {
     private _thUtils: ThUtils;
@@ -48,7 +47,7 @@ export class BookingUtils {
         });
     }
     public updateDisplayCustomerId(booking: BookingDO, customersContainer: CustomersContainer) {
-        booking.displayCustomerId = booking.defaultBillingDetails.customerId;
+        booking.displayCustomerId = booking.defaultBillingDetails.customerIdDisplayedAsGuest;
         var customer = customersContainer.getCustomerById(booking.displayCustomerId);
         if (customer.isIndividual()) {
             return;
@@ -87,9 +86,9 @@ export class BookingUtils {
         bookingDO.noShowTime = params.priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
     }
 
-    /** 
+    /**
      * Function used to update the price on a booking using its attached Price Product
-     * 
+     *
      * `bookingDO`: the booking on which the price will be recomputed
      * `roomCategoryStatsList`: the list of room category stats of the hotel; are needed because some prices depend on the room's configuration
      * `groupBookingRoomCategoryIdList`: the list of room category ids that are inside the same group booking; it needs to be passed only when the bookings are initially added to apply the min no rooms discount constraints if they exist
@@ -206,7 +205,7 @@ export class BookingUtils {
         itemMeta.numberOfItems = numberOfItems;
         itemMeta.pricePerItem = addOnProductSnapshot.price;
         itemMeta.includedInBooking = true;
-        
+
         if (_.isArray(addOnProductSnapshot.taxIdList) && addOnProductSnapshot.taxIdList.length > 0) {
             itemMeta.vatId = addOnProductSnapshot.taxIdList[0];
         }

@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { BaseDO } from '../../common/base/BaseDO';
 import { ThUtils } from '../../../utils/ThUtils';
 import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
@@ -10,8 +11,6 @@ import { DefaultBillingDetailsDO } from './default-billing/DefaultBillingDetails
 import { DocumentHistoryDO } from '../../common/data-objects/document-history/DocumentHistoryDO';
 import { BookingPriceDO } from './price/BookingPriceDO';
 import { IInvoiceItemMeta } from '../../invoices/data-objects/items/IInvoiceItemMeta';
-
-import _ = require('underscore');
 
 export enum BookingStatus {
     Active,
@@ -105,11 +104,13 @@ export class BookingDO extends BaseDO {
     indexedSearchTerms: string[];
     travelActivityType: TravelActivityType;
     travelType: TravelType;
+    // whether all the bookings from the group this booking belongs to will be posted on the same invoice
+    mergeInvoice: boolean;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "id", "bookingReference", "externalBookingReference", "confirmationStatus",
             "customerIdList", "displayCustomerId", "corporateDisplayCustomerId", "creationDateUtcTimestamp", "startUtcTimestamp", "endUtcTimestamp", "checkInUtcTimestamp", "checkOutUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
-            "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType", "travelType"];
+            "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms", "travelActivityType", "travelType", "mergeInvoice"];
     }
 
     public buildFromObject(object: Object) {

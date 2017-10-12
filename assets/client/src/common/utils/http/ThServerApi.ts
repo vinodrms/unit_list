@@ -1,114 +1,124 @@
 export enum ThServerApi {
-	AccountIsAuthenticated,
-	AccountSignUp,
-	AccountLogIn,
-	AccountLogOut,
-	AccountRequestResetPassword,
-	AccountResetPassword,
-	AccountRefreshToken,
-	HotelDetails,
-	HotelDetailsUpdateBasicInfo,
-	HotelDetailsUpdatePaymentsAndPolicies,
-	HotelDetailsUpdatePropertyDetails,
-	HotelDetailsMarkConfigurationCompleted,
-	SettingsHotelAmenities,
-	SettingsPaymentMethods,
-	SettingsCountries,
-	SettingsCurrencies,
-	SettingsAddOnProductCategories,
-	SettingsBedTemplates,
-	SettingsRoomAmenities,
-	SettingsRoomAttributes,
-	ServiceUploadFile,
-	ServiceVatVerifier,
-	ServiceTimezones,
-	Taxes,
-	TaxesSaveItem,
-	AddOnProducts,
-	AddOnProductsCount,
-	AddOnProductsSaveItem,
-	AddOnProductsDeleteItem,
-	Beds,
-	BedsCount,
-	BedsSaveItem,
-	BedsDeleteItem,
-	Rooms,
-	RoomsCount,
-	RoomsSaveItem,
-	RoomsDeleteItem,
-	RoomCategories,
-	RoomCategoriesSaveItem,
-	RoomCategoriesStats,
-	UsedRoomCategoriesStats,
-	RoomsUsedRoomCategories,
-	HotelConfigurationsYieldFilters,
-	HotelConfigurationsSaveYieldFilterValue,
-	PriceProducts,
-	PriceProductsCount,
-	PriceProductsSaveItem,
-	PriceProductsArchiveItem,
-	PriceProductsDeleteItem,
-	PriceProductsDraftItem,
-	Customers,
-	CustomersCount,
-	CustomersSaveItem,
-	Allotments,
-	AllotmentItem,
-	AllotmentsCount,
-	AllotmentsSaveItem,
-	AllotmentsArchiveItem,
+    AccountIsAuthenticated,
+    AccountSignUp,
+    AccountLogIn,
+    AccountLogOut,
+    AccountRequestResetPassword,
+    AccountResetPassword,
+    AccountRefreshToken,
+    HotelDetails,
+    HotelDetailsUpdateBasicInfo,
+    HotelDetailsUpdatePaymentsAndPolicies,
+    HotelDetailsUpdatePropertyDetails,
+    HotelDetailsMarkConfigurationCompleted,
+    SettingsHotelAmenities,
+    SettingsPaymentMethods,
+    SettingsCountries,
+    SettingsCurrencies,
+    SettingsAddOnProductCategories,
+    SettingsBedTemplates,
+    SettingsRoomAmenities,
+    SettingsRoomAttributes,
+    ServiceUploadFile,
+    ServiceVatVerifier,
+    ServiceTimezones,
+    Taxes,
+    TaxesSaveItem,
+    AddOnProducts,
+    AddOnProductsCount,
+    AddOnProductsSaveItem,
+    AddOnProductsDeleteItem,
+    Beds,
+    BedsCount,
+    BedsSaveItem,
+    BedsDeleteItem,
+    Rooms,
+    RoomsCount,
+    RoomsSaveItem,
+    RoomsDeleteItem,
+    RoomCategories,
+    RoomCategoriesSaveItem,
+    RoomCategoriesStats,
+    UsedRoomCategoriesStats,
+    RoomsUsedRoomCategories,
+    HotelConfigurationsYieldFilters,
+    HotelConfigurationsSaveYieldFilterValue,
+    PriceProducts,
+    PriceProductsCount,
+    PriceProductsSaveItem,
+    PriceProductsArchiveItem,
+    PriceProductsDeleteItem,
+    PriceProductsDraftItem,
+    Customers,
+    CustomersCount,
+    CustomersSaveItem,
+    Allotments,
+    AllotmentItem,
+    AllotmentsCount,
+    AllotmentsSaveItem,
+    AllotmentsArchiveItem,
 
-	Notifications,
-	NotificationsCount,
-	NotificationsMarkAsRead,
-	BookingsSearch,
-	BookingsAdd,
-	Bookings,
-	BookingsCount,
-	BookingsOccupancy,
-	BookingsItem,
+    Notifications,
+    NotificationsCount,
+    NotificationsMarkAsRead,
+    BookingsSearch,
+    BookingsAdd,
+    Bookings,
+    BookingsCount,
+    BookingsOccupancy,
+    BookingsItem,
 
-	HotelOperationsDashboardArrivals,
-	HotelOperationsDashboardDepartures,
-	HotelOperationsDashboardRooms,
+    HotelOperationsDashboardArrivals,
+    HotelOperationsDashboardDepartures,
+    HotelOperationsDashboardRooms,
 
-	HotelOperationsRoomCheckIn,
-	HotelOperationsRoomReserve,
-	HotelOperationsRoomUnreserve,
-	HotelOperationsRoomChange,
-	HotelOperationsRoomCheckOut,
-	HotelOperationsRoomChangeMaintenanceStatus,
-	HotelOperationsRoomChangeRollawayBedStatus,
-	HotelOperationsRoomGetAttachedBooking,
+    HotelOperationsRoomCheckIn,
+    HotelOperationsRoomReserve,
+    HotelOperationsRoomUnreserve,
+    HotelOperationsRoomChange,
+    HotelOperationsRoomCheckOut,
+    HotelOperationsRoomChangeMaintenanceStatus,
+    HotelOperationsRoomChangeRollawayBedStatus,
+    HotelOperationsRoomGetAttachedBooking,
 
-	HotelOperationsBookingPossiblePrices,
-	HotelOperationsBookingChangeDates,
-	HotelOperationsBookingChangeNoShowTime,
-	HotelOperationsBookingChangeCapacity,
-	HotelOperationsBookingAddPaymentGuarantee,
-	HotelOperationsBookingChangeDetails,
-	HotelOperationsBookingChangeGuestOnInvoice,
-	HotelOperationsBookingChangeCustomers,
-	HotelOperationsBookingCancel,
-	HotelOperationsBookingReactivate,
-	HotelOperationsCommonSendEmail,
-	HotelOperationsBookingReserveAddOnProducts,
-	HotelOperationsBookingChangePriceProduct,
-	HotelOperationsBookingUndoCheckIn,
-	HotelOperationsBookingGenerateInvoice,
+    HotelOperationsBookingPossiblePrices,
+    HotelOperationsBookingChangeDates,
+    HotelOperationsBookingChangeNoShowTime,
+    HotelOperationsBookingChangeCapacity,
+    HotelOperationsBookingAddPaymentGuarantee,
+    HotelOperationsBookingChangeDetails,
+    HotelOperationsBookingChangeGuestOnInvoice,
+    HotelOperationsBookingChangeCustomers,
+    HotelOperationsBookingCancel,
+    HotelOperationsBookingReactivate,
+    HotelOperationsCommonSendEmail,
+    HotelOperationsBookingReserveAddOnProducts,
+    HotelOperationsBookingChangePriceProduct,
+    HotelOperationsBookingUndoCheckIn,
+    HotelOperationsBookingGenerateInvoice,
 
-	InvoiceGroups,
-	InvoiceGroupsCount,
-	InvoiceGroupItem,
-	InvoiceGroupsReinstate,
-	InvoiceGroupsSaveItem,
+    // deprecated invoice groups
+    InvoiceGroups,
+    InvoiceGroupsCount,
+    InvoiceGroupItem,
+    InvoiceGroupsReinstate,
+    InvoiceGroupsSaveItem,
 
-	YieldManagerYieldPriceProducts,
-	YieldManagerOpenDynamicPrice,
-	YieldManagerYieldGetPriceProductItems,
-	YieldManagerGetKeyMetrics,
+    Invoices,
+    InvoicesCount,
+    InvoicesItem,
+    InvoicesSave,
+    InvoicesDownload,
+    InvoicesTransfer,
+    InvoicesReinstate,
+    InvoicesDelete,
 
-	Report
+    YieldManagerYieldPriceProducts,
+    YieldManagerOpenDynamicPrice,
+    YieldManagerYieldGetPriceProductItems,
+    YieldManagerGetKeyMetrics,
+
+    Report
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -219,6 +229,15 @@ ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem"
 ThServerApiUrl[ThServerApi.InvoiceGroupsReinstate] = "/invoiceGroups/reinstate";
 ThServerApiUrl[ThServerApi.InvoiceGroupsSaveItem] = "/invoiceGroups/saveInvoicegroupItem";
 
+ThServerApiUrl[ThServerApi.Invoices] = "/invoices";
+ThServerApiUrl[ThServerApi.InvoicesCount] = "/invoices/count";
+ThServerApiUrl[ThServerApi.InvoicesItem] = "/invoices/item";
+ThServerApiUrl[ThServerApi.InvoicesSave] = "/invoices/save";
+ThServerApiUrl[ThServerApi.InvoicesDownload] = "/invoices/download";
+ThServerApiUrl[ThServerApi.InvoicesTransfer] = "/invoices/transfer";
+ThServerApiUrl[ThServerApi.InvoicesReinstate] = "/invoices/reinstate";
+ThServerApiUrl[ThServerApi.InvoicesDelete] = "/invoices/delete";
+
 /* URLs prefixed with yManager instead of yieldManager because of AdBlock rules (EasyList) which contain the following definition: "/yieldmanager/*" */
 ThServerApiUrl[ThServerApi.YieldManagerYieldPriceProducts] = "/yManager/yieldPriceProducts";
 ThServerApiUrl[ThServerApi.YieldManagerOpenDynamicPrice] = "/yManager/openDynamicPrice";
@@ -228,13 +247,13 @@ ThServerApiUrl[ThServerApi.YieldManagerGetKeyMetrics] = "/yManager/getKeyMetrics
 ThServerApiUrl[ThServerApi.Report] = '/reports/report';
 
 export class ServerApiBuilder {
-	public static ClientId = "UnitPal-Web";
-	public static ApiRoot = "/api";
+    public static ClientId = "UnitPal-Web";
+    public static ApiRoot = "/api";
 
-	constructor(private _thServerApi: ThServerApi) {
-	}
+    constructor(private _thServerApi: ThServerApi) {
+    }
 
-	public getBaseUrl(): string {
-		return ServerApiBuilder.ApiRoot + ThServerApiUrl[this._thServerApi];
-	}
+    public getBaseUrl(): string {
+        return ServerApiBuilder.ApiRoot + ThServerApiUrl[this._thServerApi];
+    }
 }

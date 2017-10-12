@@ -1,40 +1,41 @@
-<loading-component [isLoading]="isLoading && !didInitOnce"></loading-component>
+<loading-component [isLoading]="isLoading"></loading-component>
 
-<div class="full-height" *ngIf="didInitOnce">
-	<div class="invoice-container">
-		<span class="horizontal-align-center" *ngIf="noEditableInvoicesExist" class="full-width"> 
-			<div>
-				{{ 'Only unpaid invoices are editable. No unpaid invoices exist in this invoice group.' | translate }}
-			</div> 
-		</span>
-		<invoice-edit *ngFor="let displayedInvoiceIndex of displayedInvoiceIndexList" 
-			[invoiceUniqueId]="getInvoiceUniqueIdentifier(displayedInvoiceIndex)" 
-			[groupBookingId]="groupBookingId"
-			(newlyAddedInvoiceRemoved)="newlyAddedInvoiceRemoved($event)"
-			(invoiceAdded)="invoiceAdded($event)">
-		</invoice-edit>
-
+<div class="full-height" *ngIf="!isLoading">
+	<div class="full-height" *ngIf="shouldShowCurrentInvoice()">
+		<invoice-overview
+			[relatedInvoices]="relatedInvoices"
+    		[currentRelatedInvoiceIndex]="currentRelatedInvoiceIndex"
+            [invoiceOperationsPageData]="pageData"
+            [paginationOptions]="paginationOptions"
+			(showRelatedInvoicesClicked)="showRelatedInvoices()"
+			(showInvoiceTransferRequested)="showInvoiceTransfer($event)"
+			(currentInvoiceChanged)="currentRelatedInvoiceIndex = $event"
+			(invoiceChanged)="markInvoiceChanged($event)"
+			(invoiceDeleted)="goBackOrExit()"
+		>
+		</invoice-overview>
 	</div>
-	<div class="invoice-operations-footer">
-
-		<item-list-navigator 
-			(displayedItemsUpdated)="displayedItemsUpdated($event)" 
-			[config]="itemListNavigatorConfig"
-			[reset]="resetItemNavigator" 
-			[itemsAdded]="itemsAddedObservable" 
-			[itemRemoved]="itemRemovedObservable"
-			[selectItemTriggered]="selectItemObservable">
-		</item-list-navigator>
-
-		<div *ngIf="editMode" class="invoice-operations-btn-group">
-			<th-button [upFont]="'\''" [text]="'Add Invoice'" (onButtonClick)="onAddInvoice()"></th-button>
-			<button class="btn btn-primary" type="button" (click)="onSave()"> {{ 'Save Changes' | translate }}</button>
-			<button class="btn btn-danger" type="button" (click)="onCancel()"> {{ 'Cancel' | translate }}</button>
-		</div>
-
-		<div *ngIf="payOnlyModeWithEditOption" class="invoice-operations-btn-group">
-			<button class="btn btn-danger" type="button" (click)="onEdit()"> {{ 'Edit' | translate }}</button>
-		</div>
-
+	<div class="full-height" *ngIf="shouldShowRelatedInvoices()">
+		<related-invoices
+			[relatedInvoices]="relatedInvoices"
+            [invoiceOperationsPageData]="pageData"
+            [paginationOptions]="paginationOptions"
+			(backToInvoiceOverviewClicked)="showInvoiceOverview()"
+			(relatedInvoiceIndexSelected)="selectRelatedInvoiceIndex($event)"
+			(invoiceChanged)="markInvoiceChanged($event)"
+			(noRelatedInvoicesLeft)="goBackOrExit()"
+		>
+		</related-invoices>
+	</div>
+	<div class="full-height" *ngIf="shouldShowInvoiceTransfer()">
+		<invoice-transfer
+			[relatedInvoices]="relatedInvoices"
+    		[currentRelatedInvoiceIndex]="currentRelatedInvoiceIndex"
+			[transferInvoiceId]="transferInvoiceId"
+            [invoiceOperationsPageData]="pageData"
+            (invoiceChanged)="markInvoiceChanged($event)"
+			(backToInvoiceOverviewClicked)="showInvoiceOverview()"
+		>
+		</invoice-transfer>
 	</div>
 </div>

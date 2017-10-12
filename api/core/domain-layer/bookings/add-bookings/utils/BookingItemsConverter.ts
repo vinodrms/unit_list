@@ -19,7 +19,6 @@ import { BookingPriceDO, BookingPriceType } from '../../../../data-layer/booking
 import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
 import { AddOnProductItemContainer, AddOnProductItem } from '../../../add-on-products/validators/AddOnProductLoader';
 import { AddOnProductDO } from '../../../../data-layer/add-on-products/data-objects/AddOnProductDO';
-import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { TaxDO, TaxType } from '../../../../data-layer/taxes/data-objects/TaxDO';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import { IHotelRepository, SequenceValue } from "../../../../data-layer/hotel/repositories/IHotelRepository";
@@ -49,14 +48,16 @@ export class BookingItemsConverter {
 
     private _bookingItems: BookingItemDO[];
     private _inputChannel: GroupBookingInputChannel;
+    private _mergeInvoice: boolean;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _converterParams: BookingItemsConverterParams) {
         this._thUtils = new ThUtils();
         this._bookingUtils = new BookingUtils();
     }
-    public convert(bookingItems: BookingItemDO[], inputChannel: GroupBookingInputChannel): Promise<BookingDO[]> {
+    public convert(bookingItems: BookingItemDO[], inputChannel: GroupBookingInputChannel, mergeInvoice: boolean): Promise<BookingDO[]> {
         this._bookingItems = bookingItems;
         this._inputChannel = inputChannel;
+        this._mergeInvoice = mergeInvoice;
 
         return new Promise<BookingDO[]>((resolve: { (result: BookingDO[]): void }, reject: { (err: ThError): void }) => {
             try {
@@ -114,6 +115,7 @@ export class BookingItemsConverter {
                 bookingDO.invoiceNotes = bookingItem.invoiceNotes;
                 bookingDO.travelActivityType = bookingItem.travelActivityType;
                 bookingDO.travelType = bookingItem.travelType;
+                bookingDO.mergeInvoice = this._mergeInvoice;
                 bookingDO.interval = bookingInterval;
                 bookingDO.creationDate = this._converterParams.currentHotelTimestamp.thDateDO;
                 bookingDO.creationDateUtcTimestamp = bookingDO.creationDate.getUtcTimestamp();
@@ -142,7 +144,7 @@ export class BookingItemsConverter {
                     priceProduct, billingCustomer, groupBookingRoomCategoryIdList);
 
                 this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
-                this._bookingUtils.updateCorporateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);                
+                this._bookingUtils.updateCorporateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
                 bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest = bookingDO.displayCustomerId;
                 this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
 

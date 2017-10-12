@@ -8,66 +8,65 @@ import { HotelOperationsModalService } from '../../operations-modal/services/Hot
 
 import { HotelOperationsResult } from '../../operations-modal/services/utils/HotelOperationsResult';
 import { HotelOperationsDashboardService } from '../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
-import { HotelInvoiceOperationsPageFilterParam } from "../../operations-modal/components/components/invoice-operations/utils/HotelInvoiceOperationsPageParam";
 
 @Injectable()
 export class HotelDashboardModalService {
-	constructor(private _assignRoomModalService: AssignRoomModalService,
-		private _hotelOperationsModalService: HotelOperationsModalService,
-		private _hotelOperationsDashboardService: HotelOperationsDashboardService) {
+    constructor(private _assignRoomModalService: AssignRoomModalService,
+        private _hotelOperationsModalService: HotelOperationsModalService,
+        private _hotelOperationsDashboardService: HotelOperationsDashboardService) {
 
-	}
+    }
 
-	public openCustomerModal(customerId: string) {
-		var p = this._hotelOperationsModalService.openCustomerOperationsModal(customerId);
-		this.handleHotelOperationsModalPromise(p)
-	}
+    public openCustomerModal(customerId: string) {
+        var p = this._hotelOperationsModalService.openCustomerOperationsModal(customerId);
+        this.handleHotelOperationsModalPromise(p)
+    }
 
-	public openBookingModal(bookingId: string, groupBookingId: string) {
-		var p = this._hotelOperationsModalService.openBookingOperationsModal(groupBookingId, bookingId);
-		this.handleHotelOperationsModalPromise(p)
-	}
+    public openBookingModal(bookingId: string) {
+        var p = this._hotelOperationsModalService.openBookingOperationsModal(bookingId);
+        this.handleHotelOperationsModalPromise(p)
+    }
 
-	public openRoomModal(roomId: string) {
-		var p = this._hotelOperationsModalService.openRoomOperationsModal(roomId);
-		this.handleHotelOperationsModalPromise(p)
-	}
+    public openRoomModal(roomId: string) {
+        var p = this._hotelOperationsModalService.openRoomOperationsModal(roomId);
+        this.handleHotelOperationsModalPromise(p)
+    }
 
-	public openInvoiceModal(invoiceGroupId: string, filter: HotelInvoiceOperationsPageFilterParam) {
-		var p = this._hotelOperationsModalService.openInvoiceGroupOperationsModal(invoiceGroupId, filter);
-		this.handleHotelOperationsModalPromise(p)
-	}
+    public openInvoiceModal(invoiceId: string) {
+        var p = this._hotelOperationsModalService.openInvoiceOperationsModal(invoiceId);
+        this.handleHotelOperationsModalPromise(p);
+    }
 
-	public openCheckInModal(bookingId: string, groupBookingId: string, roomId?: string) {
-		this._assignRoomModalService.checkIn({
-			bookingId: bookingId,
-			groupBookingId: groupBookingId,
-			roomId: roomId
-		}).then((modalDialogRef: ModalDialogRef<BookingDO>) => {
-			modalDialogRef.resultObservable.subscribe((updatedBooking: BookingDO) => {
-				this._hotelOperationsDashboardService.refreshArrivals();
-				this._hotelOperationsDashboardService.refreshRooms();
-			}, (err: any) => { });
-		}).catch((err: any) => { });
-	}
+    public openCheckInModal(bookingId: string, groupBookingId: string, roomId?: string) {
+        this._assignRoomModalService.checkIn({
+            bookingId: bookingId,
+            groupBookingId: groupBookingId,
+            roomId: roomId
+        }).then((modalDialogRef: ModalDialogRef<BookingDO>) => {
+            modalDialogRef.resultObservable.subscribe((updatedBooking: BookingDO) => {
+                this._hotelOperationsDashboardService.refreshArrivals();
+                this._hotelOperationsDashboardService.refreshRooms();
+            }, (err: any) => { });
+        }).catch((err: any) => { });
+    }
 
-	public openBookingNotesModal(bookingNotes: string) {
-		this._hotelOperationsModalService.openBookingNotesModal(bookingNotes);
-	}
+    public openBookingNotesModal(bookingNotes: string) {
+        this._hotelOperationsModalService.openBookingNotesModal(bookingNotes);
+    }
 
-	private handleHotelOperationsModalPromise(modalPromise: Promise<ModalDialogRef<HotelOperationsResult>>) {
-		modalPromise.then((modalDialogRef: ModalDialogRef<HotelOperationsResult>) => {
-			modalDialogRef.resultObservable.subscribe((operationsResult: HotelOperationsResult) => {
-				this.refreshObservablesIfNecessary(operationsResult);
-			}, (err: any) => { });
-		}).catch((err: any) => { });
-	}
+    private handleHotelOperationsModalPromise(modalPromise: Promise<ModalDialogRef<HotelOperationsResult>>) {
+        modalPromise.then((modalDialogRef: ModalDialogRef<HotelOperationsResult>) => {
+            modalDialogRef.resultObservable.subscribe((operationsResult: HotelOperationsResult) => {
+                this.refreshObservablesIfNecessary(operationsResult);
+            }, (err: any) => { });
+        }).catch((err: any) => { });
+    }
 
-	private refreshObservablesIfNecessary(operationsResult: HotelOperationsResult) {
-		if (operationsResult.didSomethingChange) {
-			this._hotelOperationsDashboardService.refreshArrivals();
-			this._hotelOperationsDashboardService.refreshRooms();
-			this._hotelOperationsDashboardService.refreshDepartures();
-		}
-	}
+    private refreshObservablesIfNecessary(operationsResult: HotelOperationsResult) {
+        if (operationsResult.didSomethingChange) {
+            this._hotelOperationsDashboardService.refreshArrivals();
+            this._hotelOperationsDashboardService.refreshRooms();
+            this._hotelOperationsDashboardService.refreshDepartures();
+        }
+    }
 }

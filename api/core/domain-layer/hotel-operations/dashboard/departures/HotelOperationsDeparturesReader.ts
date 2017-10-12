@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
@@ -5,10 +6,6 @@ import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { BookingSearchResultRepoDO, BookingSearchCriteriaRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
-import { InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
-import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { CustomerIdValidator } from '../../../customers/validators/CustomerIdValidator';
 import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
 import { HotelOperationsQueryDO, HotelOperationsQueryType } from '../utils/HotelOperationsQueryDO';
@@ -16,14 +13,14 @@ import { HotelOperationsQueryDOParser } from '../utils/HotelOperationsQueryDOPar
 import { HotelOperationsDeparturesInfo } from './utils/HotelOperationsDeparturesInfo';
 import { HotelOperationsDeparturesInfoBuilder } from './utils/HotelOperationsDeparturesInfoBuilder';
 import { ThUtils } from '../../../../utils/ThUtils';
-
-import _ = require('underscore');
+import { InvoiceDO, InvoicePaymentStatus } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoiceSearchResultRepoDO } from "../../../../data-layer/invoices/repositories/IInvoiceRepository";
 
 export class HotelOperationsDeparturesReader {
     private _thUtils: ThUtils;
 
     private _parsedQuery: HotelOperationsQueryDO;
-    private _invoiceGroupList: InvoiceGroupDO[];
+    private _invoiceList: InvoiceDO[];
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
@@ -51,12 +48,12 @@ export class HotelOperationsDeparturesReader {
             var bookingList = bookingSearchResult.bookingList;
             departuresInfoBuilder.appendBookingList(bookingList);
 
-            var invoiceRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-            return invoiceRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+            var invoiceRepo = this._appContext.getRepositoryFactory().getInvoiceRepository();
+            return invoiceRepo.getInvoiceList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                 invoicePaymentStatus: InvoicePaymentStatus.Unpaid
             });
-        }).then((invoiceSearchResult: InvoiceGroupSearchResultRepoDO) => {
-            this._invoiceGroupList = invoiceSearchResult.invoiceGroupList;
+        }).then((invoiceSearchResult: InvoiceSearchResultRepoDO) => {
+            this._invoiceList = invoiceSearchResult.invoiceList;
 
             var linkedBookingIdList = this.getBookingIdListLinkedToUnpaidInvoices();
             var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
@@ -64,7 +61,7 @@ export class HotelOperationsDeparturesReader {
                 bookingIdList: linkedBookingIdList
             });
         }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
-            departuresInfoBuilder.appendInvoiceInformation(this._invoiceGroupList, bookingSearchResult.bookingList);
+            departuresInfoBuilder.appendInvoiceInformation(this._invoiceList, bookingSearchResult.bookingList);
 
             var customerIdList: string[] = departuresInfoBuilder.getCustomerIdList();
             var customerValidator = new CustomerIdValidator(this._appContext, this._sessionContext);
@@ -73,7 +70,7 @@ export class HotelOperationsDeparturesReader {
             departuresInfoBuilder.appendCustomerInformation(customersContainer);
 
             var departuresInfo = departuresInfoBuilder.getBuiltHotelOperationsDeparturesInfo();
-            departuresInfo.referenceDate = this._parsedQuery.referenceDate;        
+            departuresInfo.referenceDate = this._parsedQuery.referenceDate;
             resolve(departuresInfo);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.HotelOperationsDeparturesReaderError, error);
@@ -86,12 +83,10 @@ export class HotelOperationsDeparturesReader {
 
     private getBookingIdListLinkedToUnpaidInvoices(): string[] {
         var bookingIdList: string[] = [];
-        _.forEach(this._invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
-            _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-                if (!invoice.isClosed() && !this._thUtils.isUndefinedOrNull(invoice.bookingId)) {
-                    bookingIdList.push(invoice.bookingId);
-                }
-            });
+        _.forEach(this._invoiceList, (invoice: InvoiceDO) => {
+            if (_.isArray(invoice.indexedBookingIdList)) {
+                bookingIdList = bookingIdList.concat(invoice.indexedBookingIdList);
+            }
         });
         return _.uniq(bookingIdList);
     }

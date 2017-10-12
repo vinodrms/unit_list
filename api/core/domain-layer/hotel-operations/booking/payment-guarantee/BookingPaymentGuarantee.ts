@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
@@ -8,7 +9,6 @@ import { CustomerIdValidator } from '../../../customers/validators/CustomerIdVal
 import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
 import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import { InvoicePaymentMethodDO } from '../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { BookingWithDependenciesLoader } from '../utils/BookingWithDependenciesLoader';
@@ -16,8 +16,7 @@ import { BookingWithDependencies } from '../utils/BookingWithDependencies';
 import { BookingPaymentGuaranteeDO } from './BookingPaymentGuaranteeDO';
 import { BusinessValidationRuleContainer } from '../../../common/validation-rules/BusinessValidationRuleContainer';
 import { BookingBillingDetailsValidationRule } from '../../../bookings/validators/validation-rules/booking/BookingBillingDetailsValidationRule';
-
-import _ = require('underscore');
+import { InvoicePaymentMethodDO } from '../../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
 
 export class BookingPaymentGuarantee {
     private _bookingPaymentGuaranteeDO: BookingPaymentGuaranteeDO;

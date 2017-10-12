@@ -1,4 +1,4 @@
-import { InvoicePaymentMethodDO } from '../data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodDO } from '../data-objects/payer/InvoicePaymentMethodDO';
 import { TransactionFeeDO } from "../../common/data-objects/payment-method/TransactionFeeDO";
 
 export class InvoicePaymentMethodVM {

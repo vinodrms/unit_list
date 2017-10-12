@@ -5,9 +5,9 @@ import { AppContext, ThServerApi } from '../../../../../common/utils/AppContext'
 import { BookingPossiblePriceItemsDO } from './data-objects/BookingPossiblePriceItemsDO';
 import { BookingDO } from '../../bookings/data-objects/BookingDO';
 import { ThTimestampDO } from '../../common/data-objects/th-dates/ThTimestampDO';
-import { InvoicePaymentMethodDO } from '../../invoices/data-objects/payers/InvoicePaymentMethodDO';
-import { InvoiceGroupDO } from "../../invoices/data-objects/InvoiceGroupDO";
 import { CustomerDO } from "../../customers/data-objects/CustomerDO";
+import { InvoiceDO } from "../../invoices/data-objects/InvoiceDO";
+import { InvoicePaymentMethodDO } from "../../invoices/data-objects/payer/InvoicePaymentMethodDO";
 
 @Injectable()
 export class HotelOperationsBookingService {
@@ -171,16 +171,16 @@ export class HotelOperationsBookingService {
         );
     }
 
-    public generateInvoice(booking: BookingDO): Observable<InvoiceGroupDO> {
+    public generateInvoice(booking: BookingDO): Observable<InvoiceDO> {
         return this._appContext.thHttp.post({
             serverApi: ThServerApi.HotelOperationsBookingGenerateInvoice,
             body: JSON.stringify({
                 booking: booking
             })
-        }).map(invoiceGroupObject => {
-            var updatedInvoiceGroupDO = new InvoiceGroupDO();
-            updatedInvoiceGroupDO.buildFromObject(invoiceGroupObject["invoiceGroup"]);
-            return updatedInvoiceGroupDO;
+        }).map(invoiceObject => {
+            var updatedInvoiceDO = new InvoiceDO();
+            updatedInvoiceDO.buildFromObject(invoiceObject["invoice"]);
+            return updatedInvoiceDO;
         });
     }
 

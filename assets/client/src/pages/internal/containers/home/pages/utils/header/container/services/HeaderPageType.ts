@@ -2,5 +2,6 @@ export enum HeaderPageType {
 	None,
 	HotelOperations,
 	YieldManager,
-	BookingHistory
+	BookingHistory,
+	InvoiceHistory
 }

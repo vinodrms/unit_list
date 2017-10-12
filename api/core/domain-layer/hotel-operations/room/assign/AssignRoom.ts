@@ -9,7 +9,6 @@ import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { AssignRoomDO } from './AssignRoomDO';
 import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { BookingSearchResultRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
 import { RoomCategoryStatsAggregator } from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';

@@ -32,13 +32,13 @@
 	"The room was marked as Pick Up": "The room was marked as Pick Up",
 	"The room was marked as Out Of Order": "The room was marked as Out Of Order",
 	"The room was marked as Out Of Service": "The room was marked as Out Of Service",
-	
+
 	"The room was marked as Clean (%maintenanceMessage%)": "The room was marked as Clean (%maintenanceMessage%)",
 	"The room was marked as Dirty (%maintenanceMessage%)": "The room was marked as Dirty (%maintenanceMessage%)",
 	"The room was marked as Pick Up (%maintenanceMessage%)": "The room was marked as Pick Up (%maintenanceMessage%)",
 	"The room was marked as Out Of Order (%maintenanceMessage%)": "The room was marked as Out Of Order (%maintenanceMessage%)",
 	"The room was marked as Out Of Service (%maintenanceMessage%)": "The room was marked as Out Of Service (%maintenanceMessage%)",
-	
+
 	"The room was marked as Dirty (Checked Out)": "The room was marked as Dirty (Checked Out)",
 	"The room was marked as Dirty (Occupied)": "The room was marked as Dirty (Occupied)",
 
@@ -140,7 +140,7 @@
 	"Accomodation for %date%": "Accomodation for %date%",
 	"Transaction fee": "Transaction fee",
 	"transaction fee": "transaction fee",
-	
+
 	// Reports
 	"TotalOccupancy" : "TotalOccupancy",
 	"ConfirmedOccupancy" : "ConfirmedOccupancy",
@@ -225,7 +225,10 @@
 	"Amount (fee included)": "Amount (fee included)",
 	"Amount (without fee)": "Amount (without fee)",
 	"Bookings by Interval": "Bookings by Interval",
-	"Booking No": "Booking No",
+    "Booking No": "Booking No",
+    "Ext Ref %extRef%": "Ext Ref %extRef%",
+    "Ref %ref%": "Ref %ref%",
+    "Guest %guest%": "Guest %guest%",
 	"External Booking No": "External Booking No",
 	"Guest Name": "Guest Name",
 	"Nights Billed": "Nights Billed",
@@ -268,9 +271,10 @@
 	"Room Nights by Purpose of Stay": "Room Nights by Purpose of Stay",
 	"Avg Rate Total": "Avg Rate Total",
 	"Paid by Agreement": "Paid by Agreement",
-	"Booking Guest": "Booking Guest",
+    "Booking Guest": "Booking Guest",
+    "reinstatement": "reinstatement",
 
 	// Booking confirmations
-	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
-	
+    "Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
+
 }

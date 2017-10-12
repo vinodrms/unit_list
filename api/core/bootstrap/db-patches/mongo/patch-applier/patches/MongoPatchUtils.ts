@@ -8,20 +8,26 @@ import { P5_ChangeReservedAddOnProductListStructureForBookings } from "./list/P5
 import { P6_AddPaymentDueInDaysToHotels } from "./list/P6_AddPaymentDueInDaysToHotels";
 import { P7_AddIndexForBookingsSort } from "./list/P7_AddIndexForBookingsSort";
 import { P8_AddSignupCodes } from "./list/P8_AddSignupCodes";
+import { P9_AddMergeInvoiceToBookings } from "./list/P9_AddMergeInvoiceToBookings";
+import { P10_MigrateInvoiceGroupsToInvoices } from './list/P10_MigrateInvoiceGroupsToInvoices';
+import { P11_AddBookingsIndexForYMPerformance } from "./list/P11_AddBookingsIndexForYMPerformance";
 
 export class MongoPatchUtils {
-	public static get PatchList(): ATransactionalMongoPatch[] {
-		return [
-			new P0_CreateUniqueIndexes(),
-			new P1_PopulateCountriesAndCurrencyCodes(),
-			new P2_AddCreationDateUtcTimestampToBookings(),
-			new P3_AddTravelActivityTypeToBookings(),
-			new P4_AddTravelTypeToBookings(),
-			new P5_ChangeReservedAddOnProductListStructureForBookings(),
-			new P6_AddPaymentDueInDaysToHotels(),
-			new P7_AddIndexForBookingsSort(),
-			new P8_AddSignupCodes(),
-			
-		];
-	}
+    public static get PatchList(): ATransactionalMongoPatch[] {
+        return [
+            new P0_CreateUniqueIndexes(),
+            new P1_PopulateCountriesAndCurrencyCodes(),
+            new P2_AddCreationDateUtcTimestampToBookings(),
+            new P3_AddTravelActivityTypeToBookings(),
+            new P4_AddTravelTypeToBookings(),
+            new P5_ChangeReservedAddOnProductListStructureForBookings(),
+            new P6_AddPaymentDueInDaysToHotels(),
+            new P7_AddIndexForBookingsSort(),
+            new P8_AddSignupCodes(),
+            new P9_AddMergeInvoiceToBookings(),
+            new P10_MigrateInvoiceGroupsToInvoices(),
+            new P11_AddBookingsIndexForYMPerformance()
+
+        ];
+    }
 }

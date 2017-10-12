@@ -8,7 +8,7 @@ import { IHotelOperationsPageParam } from './utils/IHotelOperationsPageParam';
 import { HotelRoomOperationsPageParam } from '../components/components/room-operations/utils/HotelRoomOperationsPageParam';
 import { HotelBookingOperationsPageParam } from '../components/components/booking-operations/utils/HotelBookingOperationsPageParam';
 import { HotelCustomerOperationsPageParam } from '../components/components/customer-operations/utils/HotelCustomerOperationsPageParam';
-import { HotelInvoiceOperationsPageParam, HotelInvoiceOperationsPageFilterParam } from '../components/components/invoice-operations/utils/HotelInvoiceOperationsPageParam';
+import { HotelInvoiceOperationsPageParam } from '../components/components/invoice-operations/utils/HotelInvoiceOperationsPageParam';
 
 @Injectable()
 export class HotelOperationsModalService {
@@ -19,8 +19,8 @@ export class HotelOperationsModalService {
         return this.openOperationsModal(roomOperationsParam);
     }
 
-    public openBookingOperationsModal(groupBookingId: string, bookingId: string): Promise<ModalDialogRef<HotelOperationsResult>> {
-        var bookingOperationsPageParam = new HotelBookingOperationsPageParam(groupBookingId, bookingId);
+    public openBookingOperationsModal(bookingId: string): Promise<ModalDialogRef<HotelOperationsResult>> {
+        var bookingOperationsPageParam = new HotelBookingOperationsPageParam(bookingId);
         return this.openOperationsModal(bookingOperationsPageParam);
     }
 
@@ -29,8 +29,8 @@ export class HotelOperationsModalService {
         return this.openOperationsModal(custOperationsPageParam);
     }
 
-    public openInvoiceGroupOperationsModal(invoiceGroupId: string, filter: HotelInvoiceOperationsPageFilterParam): Promise<ModalDialogRef<HotelOperationsResult>> {
-        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, filter, false);
+    public openInvoiceOperationsModal(invoiceId: string): Promise<ModalDialogRef<HotelOperationsResult>> {
+        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceId, {});
         return this.openOperationsModal(invoiceOperationsPageParam);
     }
 

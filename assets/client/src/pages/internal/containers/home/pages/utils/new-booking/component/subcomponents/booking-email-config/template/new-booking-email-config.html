@@ -5,11 +5,28 @@
 	</div>
 	<div class="col-xs-5 full-height">
 		<div class="row full-height" customScroll>
+            <div class="col-sm-12 col-xs-12 booking-details-header" *ngIf="showMergeInvoiceOption">
+                <span class="first-line"><span class="unitpal-font p-r-6">L</span> {{ 'Invoice Options' | translate }}</span>
+            </div>
+            <div class="col-xs-12 form-group padding-top-10px" *ngIf="showMergeInvoiceOption">
+                <label for="roomname">{{ 'Generate the bookings on only one invoice' | translate }}</label>
+                <div class="input-group">
+                    <div class="btn-group" data-toggle="buttons">
+                        <button class="btn btn-default" (click)="mergeInvoice=true" [ngClass]="{'active': mergeInvoice===true}">
+                            {{ 'Yes' | translate }}
+                        </button>
+                        <button class="btn btn-default" (click)="mergeInvoice=false" [ngClass]="{'active': mergeInvoice===false}">
+                            {{ 'No' | translate }}
+                        </button>
+                    </div>
+                </div>
+                <small class="text-muted"><i class="fa fa-info-circle"></i> {{ "If marked Yes, all the bookings from this group will be generated on the same invoice." | translate }} </small>
+            </div>
             <div class="col-sm-12 col-xs-12 booking-details-header">
                 <span class="first-line"><i class="fa fa-envelope"></i> {{ 'Recipients' | translate }}</span>
             </div>
 			<email-selector [customerList]="customerList" [disabled]="bookingConfirmationsBlocked" (onEmailListChanged)="emailRecipientList=$event"></email-selector>
-			<div class="col-xs-12" [hidden]="!bookingConfirmationsBlocked">
+			<div class="col-xs-12 padding-top-10px" [hidden]="!bookingConfirmationsBlocked">
     			<small class="text-muted">
         			<i class="fa fa-info-circle"></i> {{ 'When a company/travel agent on a booking has booking confirmations disabled, booking confirmations are blocked for that booking.' | translate }}
     			</small>

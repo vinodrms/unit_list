@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
@@ -5,7 +6,6 @@ import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { BookingChangeDatesDO } from './BookingChangeDatesDO';
 import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
@@ -22,8 +22,7 @@ import { PriceProductConstraintsValidationRule, PriceProductConstraintsParams } 
 import { PriceProductYieldIntervalsValidationRule } from '../../../bookings/validators/validation-rules/price-product/PriceProductYieldIntervalsValidationRule';
 import { PriceProductDO } from '../../../../data-layer/price-products/data-objects/PriceProductDO';
 import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
-
-import _ = require('underscore');
+import { InvoiceDO } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
 
 export class BookingChangeDates {
     private _bookingUtils: BookingUtils;
@@ -104,7 +103,7 @@ export class BookingChangeDates {
             }).then((updatedBooking: BookingDO) => {
                 this._bookingWithDependencies.bookingDO = updatedBooking;
                 return this._bookingInvoiceSync.syncInvoiceWithBookingPrice(updatedBooking);
-            }).then((updatedGroup: InvoiceGroupDO) => {
+            }).then((updatedInvoice: InvoiceDO) => {
                 resolve(this._bookingWithDependencies.bookingDO);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingChangeDatesError, error);

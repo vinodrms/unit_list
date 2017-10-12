@@ -1,9 +1,9 @@
-import {IValidationStructure} from '../../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {StringValidationRule} from '../../../../utils/th-validation/rules/StringValidationRule';
-import {NumberInListValidationRule} from '../../../../utils/th-validation/rules/NumberInListValidationRule';
-import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { IValidationStructure } from '../../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { StringValidationRule } from '../../../../utils/th-validation/rules/StringValidationRule';
+import { NumberInListValidationRule } from '../../../../utils/th-validation/rules/NumberInListValidationRule';
+import { InvoicePaymentMethodType, InvoicePaymentMethodDO } from '../../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
 
 export class BookingPaymentGuaranteeDO {
     groupBookingId: string;

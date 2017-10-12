@@ -23,6 +23,7 @@ import {ThButtonComponent} from '../ThButtonComponent';
 import {ThDatePickerComponent} from '../ThDatePickerComponent';
 import {ThDateIntervalPickerComponent} from '../ThDateIntervalPickerComponent';
 import {VATComponent} from '../VATComponent';
+import {ProgressBarComponent} from '../ProgressBarComponent';
 
 const SharedComponents = [
     EditSaveButtonGroupComponent,
@@ -42,7 +43,8 @@ const SharedComponents = [
     ThButtonComponent,
     ThDatePickerComponent,
     ThDateIntervalPickerComponent,
-    VATComponent
+    VATComponent,
+    ProgressBarComponent
 ];
 
 @NgModule({

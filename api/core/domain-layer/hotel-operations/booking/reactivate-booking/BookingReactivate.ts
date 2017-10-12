@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
@@ -8,7 +9,6 @@ import { ThHourDO } from '../../../../utils/th-dates/data-objects/ThHourDO';
 import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
 import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { BookingStateChangeTriggerTimeDO, BookingStateChangeTriggerType } from '../../../../data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 import { CustomerIdValidator } from '../../../customers/validators/CustomerIdValidator';
 import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
@@ -21,8 +21,7 @@ import { BookingUtils } from '../../../bookings/utils/BookingUtils';
 import { BookingInvoiceSync } from '../../../bookings/invoice-sync/BookingInvoiceSync';
 import { ThDateUtils } from '../../../../utils/th-dates/ThDateUtils';
 import { NewBookingsValidationRules } from '../../../bookings/add-bookings/utils/NewBookingsValidationRules';
-
-import _ = require('underscore');
+import { InvoiceDO } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
 
 export class BookingReactivate {
     private _bookingUtils: BookingUtils;
@@ -105,7 +104,7 @@ export class BookingReactivate {
             }).then((updatedBooking: BookingDO) => {
                 this._bookingWithDependencies.bookingDO = updatedBooking;
                 return this._bookingInvoiceSync.syncInvoiceWithBookingPrice(updatedBooking);
-            }).then((updatedGroup: InvoiceGroupDO) => {
+            }).then((updated: InvoiceDO) => {
                 resolve(this._bookingWithDependencies.bookingDO);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingReactivateError, error);

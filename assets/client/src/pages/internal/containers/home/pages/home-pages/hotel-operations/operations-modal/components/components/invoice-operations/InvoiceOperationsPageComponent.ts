@@ -1,371 +1,243 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
-import { LoadingComponent } from '../../../../../../../../../../../common/utils/components/LoadingComponent';
-import { CustomScroll } from '../../../../../../../../../../../common/utils/directives/CustomScroll';
-import { ThError, AppContext } from '../../../../../../../../../../../common/utils/AppContext';
-import { ThUtils } from '../../../../../../../../../../../common/utils/ThUtils';
-import { HotelInvoiceOperationsPageParam } from './utils/HotelInvoiceOperationsPageParam';
-import { HotelOperationsPageFilterMeta } from '../../../services/utils/IHotelOperationsPageParam';
-import { IHotelOperationsOnFilterRemovedHandler } from '../../../services/utils/IHotelOperationsOnFilterRemovedHandler';
-import { ItemListNavigatorConfig } from '../../../../../../../../../../../common/utils/components/item-list-navigator/ItemListNavigatorConfig';
-import { InvoiceOperationsPageService } from './services/InvoiceOperationsPageService';
-import { InvoiceOperationsPageData } from './services/utils/InvoiceOperationsPageData';
-import { InvoiceGroupControllerService } from './services/InvoiceGroupControllerService';
-import { InvoiceDO } from '../../../../../../../../../services/invoices/data-objects/InvoiceDO';
-import { InvoiceGroupDO } from '../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceGroupVM } from '../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
-import { InvoiceVM } from '../../../../../../../../../services/invoices/view-models/InvoiceVM';
-import { InvoicePayerVM } from '../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
-import { CustomerDO } from '../../../../../../../../../services/customers/data-objects/CustomerDO';
-import { Subject } from 'rxjs/Subject';
+import _ = require('underscore');
 import { Observable } from 'rxjs/Observable';
-import { InvoiceMeta } from './components/invoice-edit/InvoiceMeta';
-import { InvoiceGroupsService } from '../../../../../../../../../services/invoices/InvoiceGroupsService';
-import { HotelOperationsResultService } from '../../../../operations-modal/services/HotelOperationsResultService';
-import { ModalDialogRef } from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import { HotelOperationsResult } from '../../../services/utils/HotelOperationsResult';
-import { ItemAdditionMeta } from "../../../../../../../../../../../common/utils/components/item-list-navigator/ItemAdditionMeta";
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { HotelInvoiceOperationsPageParam } from "./utils/HotelInvoiceOperationsPageParam";
+import { CustomerVM } from "../../../../../../../../../services/customers/view-models/CustomerVM";
+import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
+import { IndividualDetailsDO } from "../../../../../../../../../services/customers/data-objects/customer-details/IndividualDetailsDO";
+import { ContactDetailsDO } from "../../../../../../../../../services/customers/data-objects/customer-details/ContactDetailsDO";
+import { HotelOperationsInvoiceService } from "../../../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
+import { InvoiceDO, InvoiceStatus, InvoicePaymentStatus, InvoiceAccountingType } from "../../../../../../../../../services/invoices/data-objects/InvoiceDO";
+import { ThError, AppContext } from "../../../../../../../../../../../common/utils/AppContext";
+import { CustomersDO } from "../../../../../../../../../services/customers/data-objects/CustomersDO";
+import { InvoicesDO } from "../../../../../../../../../services/invoices/data-objects/InvoicesDO";
+import { InvoiceVM } from "../../../../../../../../../services/invoices/view-models/InvoiceVM";
+import { InvoiceVMHelper } from "../../../../../../../../../services/invoices/view-models/utils/InvoiceVMHelper";
+import { EagerCustomersService } from "../../../../../../../../../services/customers/EagerCustomersService";
+import { HotelAggregatedInfo } from "../../../../../../../../../services/hotel/utils/HotelAggregatedInfo";
+import { HotelAggregatorService } from "../../../../../../../../../services/hotel/HotelAggregatorService";
+import { InvoiceOperationsPageData } from "./utils/InvoiceOperationsPageData";
+import { InvoicePayerDO } from "../../../../../../../../../services/invoices/data-objects/payer/InvoicePayerDO";
+import { InvoiceMetaFactory } from "../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory";
+import { HotelOperationsResultService } from "../../../services/HotelOperationsResultService";
+import { InvoiceChangedOptions } from "./components/invoice-overview/InvoiceOverviewComponent";
+import { PaginationOptions } from "./utils/PaginationOptions";
+import { HotelOperationsPageControllerService } from "../../services/HotelOperationsPageControllerService";
 
-import * as _ from "underscore";
-
-export enum FilterType {
-    Customer,
-    InvoiceRef
+enum PageType {
+    InvoiceOverview,
+    RelatedInvoices,
+    InvoiceTransfer
 }
 
 @Component({
     selector: 'invoice-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/template/invoice-operations-page.html',
-    providers: [InvoiceOperationsPageService, InvoiceGroupControllerService]
 })
 export class InvoiceOperationsPageComponent implements OnInit {
-    @Input() invoiceOperationsPageParam: HotelInvoiceOperationsPageParam;
 
-    private static MAX_NO_OF_INVOICES = 100;
-
-    private _thUtils: ThUtils;
-    private _invoiceGroupVMCopy: InvoiceGroupVM;
-    private _title: string;
-
-    isLoading: boolean;
-    didInitOnce: boolean = false;
-
-    itemListNavigatorConfig: ItemListNavigatorConfig;
-
-    invoiceNavigatorWindowSize = 6;
-    numberOfSimultaneouslyDisplayedInvoices = 2;
-
-    firstDisplayedInvoiceIndex = 0;
-
-    resetItemNavigator: Subject<ItemListNavigatorConfig>;
-    resetItemNavigatorObservable: Observable<ItemListNavigatorConfig>;
-    itemsAdded: Subject<ItemAdditionMeta>;
-    itemsAddedObservable: Observable<ItemAdditionMeta>;
-    itemRemoved: Subject<number>;
-    itemRemovedObservable: Observable<number>;
-    selectItem: Subject<number>;
-    selectItemObservable: Observable<number>;
-
-    constructor(private _appContext: AppContext,
-        private _modalDialogRef: ModalDialogRef<HotelOperationsResult>,
-        private _hotelOperationsResultService: HotelOperationsResultService,
-        private _invoiceOperationsPageService: InvoiceOperationsPageService,
-        private _invoiceGroupControllerService: InvoiceGroupControllerService,
-        private _invoiceGroupsService: InvoiceGroupsService) {
-
-        this._thUtils = new ThUtils();
-        this._title = "Invoice Group";
-
-        this.resetItemNavigator = new Subject<ItemListNavigatorConfig>();
-        this.resetItemNavigatorObservable = this.resetItemNavigator.asObservable();
-        this.itemsAdded = new Subject<ItemAdditionMeta>();
-        this.itemsAddedObservable = this.itemsAdded.asObservable();
-        this.itemRemoved = new Subject<number>();
-        this.itemRemovedObservable = this.itemRemoved.asObservable();
-        this.selectItem = new Subject<number>();
-        this.selectItemObservable = this.selectItem.asObservable();
+    @Input()
+    set invoiceOperationsPageParam(param: HotelInvoiceOperationsPageParam) {
+        this.param = param;
+        if (!this.isLoading) {
+            this.setupInvoice();
+        }
+    };
+    get invoiceOperationsPageParam(): HotelInvoiceOperationsPageParam {
+        return this.param;
     }
 
-    ngOnInit() {
-        this.loadPageData();
-        this._appContext.analytics.logPageView("/operations/invoice");
+    @Output() exit = new EventEmitter();
+
+    isLoading: boolean = true;
+    relatedInvoices: InvoiceVM[] = [];
+    currentRelatedInvoiceIndex: number = 0;
+    transferInvoiceId: string;
+
+    private pageType: PageType;
+    private pageData: InvoiceOperationsPageData;
+    private invoiceMetaFactory: InvoiceMetaFactory;
+    private paginationOptions: PaginationOptions;
+    private param: HotelInvoiceOperationsPageParam;
+
+    constructor(private context: AppContext,
+        private invoiceVMHelper: InvoiceVMHelper,
+        private hotelAggregatorService: HotelAggregatorService,
+        private customersService: EagerCustomersService,
+        private invoiceOperationsService: HotelOperationsInvoiceService,
+        private hotelOperationsResultService: HotelOperationsResultService,
+        private operationsPageControllerService: HotelOperationsPageControllerService,
+    ) {
+        this.currentRelatedInvoiceIndex = 0;
+        this.relatedInvoices = [];
+        this.invoiceMetaFactory = new InvoiceMetaFactory();
+        this.paginationOptions = {
+            totalNumberOfPages: 0,
+            displayPaginator: false
+        }
     }
-    private loadPageData() {
+
+    ngOnInit(): void {
+        this.pageType = PageType.InvoiceOverview;
+        this.invoiceOperationsPageParam.updateTitle("Invoice Overview", "");
+        this.pageData = new InvoiceOperationsPageData();
+        this.hotelAggregatorService.getHotelAggregatedInfo().subscribe((hotelInfo: HotelAggregatedInfo) => {
+            this.pageData.ccy = hotelInfo.ccy;
+            this.pageData.allowedPaymentMethods = hotelInfo.allowedPaymentMethods;
+            this.pageData.allPaymentMethods = hotelInfo.allAvailablePaymentMethods;
+            this.setupInvoice();
+        }), (err: ThError) => {
+            this.context.toaster.error(err.message);
+            this.isLoading = false;
+        };
+        this.context.analytics.logPageView("/operations/invoices");
+    }
+    private setupInvoice() {
+        if (!this.context.thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceId)) {
+            this.readExistingInvoice();
+        } else {
+            this.createNewInvoice();
+        }
+    }
+    private readExistingInvoice() {
+        this.invoiceOperationsService.get(this.invoiceOperationsPageParam.invoiceId).flatMap((invoice: InvoiceDO) => {
+            return this.invoiceOperationsService.getInvoicesByGroup(invoice.groupId).flatMap((invoices: InvoiceDO[]) => {
+                var invoicesDO: InvoicesDO = new InvoicesDO();
+                invoicesDO.invoiceList = invoices;
+                return this.invoiceVMHelper.convertToViewModels(invoicesDO);
+            });
+        }).subscribe((invoiceVMList: InvoiceVM[]) => {
+            this.relatedInvoices = invoiceVMList;
+            this.currentRelatedInvoiceIndex = _.findIndex(this.relatedInvoices, (invoiceVM: InvoiceVM) => {
+                return invoiceVM.invoice.id == this.invoiceOperationsPageParam.invoiceId;
+            });
+            this.updatePaginationOptions();
+        }, ((err: ThError) => {
+            this.context.toaster.error(err.message);
+        }), () => {
+            this.isLoading = false;
+        });
+    }
+    private createNewInvoice() {
+        let newInvoiceVM = this.createNewInvoiceVM();
+        this.relatedInvoices = [
+            newInvoiceVM
+        ];
+        this.updatePaginationOptions();
+        if (this.context.thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
+            this.isLoading = false;
+            return;
+        }
+        this.invoiceOperationsService.addPayer(newInvoiceVM.invoice, this.invoiceOperationsPageParam.invoiceFilter.customerId)
+            .flatMap((invoice: InvoiceDO) => {
+                var invoicesDO: InvoicesDO = new InvoicesDO();
+                invoicesDO.invoiceList = [invoice];
+                return this.invoiceVMHelper.convertToViewModels(invoicesDO);
+            }).subscribe((invoiceVMList: InvoiceVM[]) => {
+                this.relatedInvoices = invoiceVMList;
+                this.currentRelatedInvoiceIndex = 0;
+                this.updatePaginationOptions();
+            }, ((err: ThError) => {
+                this.context.toaster.error(err.message);
+            }), () => {
+                this.isLoading = false;
+            });
+    }
+
+    private createNewInvoiceVM(): InvoiceVM {
+        var invoiceVM = new InvoiceVM();
+        invoiceVM.invoice = new InvoiceDO();
+        invoiceVM.invoice.payerList = [];
+        invoiceVM.invoice.itemList = [];
+        invoiceVM.invoice.indexedBookingIdList = [];
+        invoiceVM.invoice.indexedCustomerIdList = [];
+        invoiceVM.invoice.paymentStatus = InvoicePaymentStatus.Transient;
+        invoiceVM.invoice.accountingType = InvoiceAccountingType.Debit;
+        invoiceVM.customerList = [];
+        invoiceVM.bookingCustomerList = [];
+        invoiceVM.bookingRoomList = [];
+        invoiceVM.invoiceMeta = this.invoiceMetaFactory.getInvoiceMeta(invoiceVM.invoice.paymentStatus, invoiceVM.invoice.accountingType);
+        return invoiceVM;
+    }
+    private updatePaginationOptions() {
+        this.paginationOptions = {
+            totalNumberOfPages: this.relatedInvoices.length,
+            displayPaginator: this.relatedInvoices.length > 1
+        }
+    }
+
+    private addCustomerToInvoiceVM(invoiceVM: InvoiceVM, customer: CustomerDO) {
+        invoiceVM.invoice.payerList[0] = new InvoicePayerDO();
+        invoiceVM.invoice.payerList[0].customerId = customer.id;
+        invoiceVM.invoice.payerList[0].paymentList = [];
+        invoiceVM.addCustomer(customer);
+    }
+
+    public shouldShowCurrentInvoice(): boolean {
+        return this.pageType == PageType.InvoiceOverview;
+    }
+
+    public shouldShowRelatedInvoices(): boolean {
+        return this.pageType == PageType.RelatedInvoices;
+    }
+
+    public shouldShowInvoiceTransfer(): boolean {
+        return this.pageType == PageType.InvoiceTransfer;
+    }
+
+    public showInvoiceOverview() {
+        this.pageType = PageType.InvoiceOverview;
+    }
+
+    public showRelatedInvoices() {
+        this.pageType = PageType.RelatedInvoices;
+    }
+
+    public showInvoiceTransfer(customerId?: string) {
+        this.pageType = PageType.InvoiceTransfer;
+        if (this.context.thUtils.isUndefinedOrNull(customerId)) {
+            return;
+        }
         this.isLoading = true;
-        this._invoiceOperationsPageService.getPageData(this.invoiceOperationsPageParam).subscribe((pageData: InvoiceOperationsPageData) => {
-            this._invoiceGroupControllerService.invoiceOperationsPageData = pageData;
-
-            this.isLoading = false;
-            this.didInitOnce = true;
-            this.updateContainerData();
-        }, (err: ThError) => {
-            this._appContext.toaster.error(err.message);
-            this.isLoading = false;
-
-        });
-    }
-    private updateContainerData() {
-        var subtitle = "";
-
-        this.editMode = this.invoiceOperationsPageParam.openInEditMode;
-
-        this.invoiceOperationsPageParam.onFilterRemovedHandler = (() => {
-            this.editMode = true;
-        });
-
-        if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceGroupId) && (
-            !this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)
-            || !this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.invoiceId))) {
-
-            this.invoiceOperationsPageParam.updateTitle(this._title, subtitle, this.filterMetaForEnabledFilter);
-            this.itemListNavigatorConfig = {
-                initialNumberOfItems: this.invoiceVMList.length,
-                maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
-                numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
-            }
-        }
-        else {
-            this.invoiceOperationsPageParam.updateTitle(this._title, subtitle);
-            this.itemListNavigatorConfig = {
-                initialNumberOfItems: this.totalNumberOfInvoices,
-                maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
-                numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
-            };
-        }
-    }
-
-    public onEdit() {
-        this.editMode = true;
-    }
-    public onSave() {
-        if (this.totalNumberOfInvoices === 0) {
-            var title = this._appContext.thTranslation.translate("Info");
-            var content = this._appContext.thTranslation.translate("You cannot save an invoice group if it does not contain at least an invoice.");
-            var positiveLabel = this._appContext.thTranslation.translate("OK");
-
-            this._appContext.modalService.confirm(title, content, { positive: positiveLabel }, () => {
-
+        let newInvoiceVM = this.createNewInvoiceVM();
+        this.invoiceOperationsService.addPayer(newInvoiceVM.invoice, customerId)
+            .subscribe((invoice: InvoiceDO) => {
+                this.transferInvoiceId = invoice.id;
+                this.hotelOperationsResultService.markInvoiceChanged(invoice);
+            }, ((err: ThError) => {
+                this.context.toaster.error(err.message);
+            }), () => {
+                this.isLoading = false;
             });
-        }
-        else {
-            var firstInvalidInvoice = this.invoiceGroupVM.checkValidations();
-            if (firstInvalidInvoice === -1) {
-                var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
-                var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
-                this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
-                    this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
-                    this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice group was saved successfully."));
-                    this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
-                    this.editMode = false;
-                }, (error: ThError) => {
-                    this._appContext.toaster.error(error.message);
-                });
-
-            }
-            else {
-                this.selectItem.next(firstInvalidInvoice);
-            }
-        }
     }
-    public onCancel() {
-        var title = 'Info';
-        var content = 'You might have unsaved changes. Are you sure you want to cancel?';
-        var positiveLabel = 'Yes';
-        var negativeLabel = 'No';
 
-        this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-            if (this.invoiceGroupVM.allInvoicesAreNewlyAdded()) {
-                this._modalDialogRef.closeForced();
-            }
-            else {
-                this.resetItemNavigator.next({
-                    initialNumberOfItems: this._invoiceGroupVMCopy.invoiceVMList.length,
-                    maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
-                    numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
-                });
-                this.invoiceGroupVM = this._invoiceGroupVMCopy;
-            }
-        });
+    public selectRelatedInvoiceIndex(index: number) {
+        this.currentRelatedInvoiceIndex = index;
+        this.showInvoiceOverview();
     }
-    public onAddInvoice() {
-        if (this.maxNoOfInvoicesLimitExceeeded()) {
-            var title = this._appContext.thTranslation.translate("Info");
-            var content = this._appContext.thTranslation.translate("The maximum number of %maxNoOfInvoices% invoices was exceeded.", {
-                maxNoOfInvoices: InvoiceOperationsPageComponent.MAX_NO_OF_INVOICES
-            });
-            var positiveLabel = this._appContext.thTranslation.translate("OK");
+    public markInvoiceChanged(options: InvoiceChangedOptions) {
+        this.hotelOperationsResultService.markInvoiceChanged(this.relatedInvoices[this.currentRelatedInvoiceIndex]);
 
-            this._appContext.modalService.confirm(title, content, { positive: positiveLabel }, () => {
-
-            });
+        if (!options.reloadInvoiceGroup) {
+            return;
         }
-        else {
-            var invoiceVM = new InvoiceVM(this._appContext.thTranslation);
-            invoiceVM.buildCleanInvoiceVM(this.newInvoiceRef);
-            this.invoiceGroupVM.addInvoiceVM(invoiceVM);
-            this.itemsAdded.next({
-                noOfAddedItems: 1,
-                shouldSelectLastElement: true
-            });
+        if (!this.context.thUtils.isUndefinedOrNull(options.selectedInvoiceId)) {
+            this.invoiceOperationsPageParam.invoiceId = options.selectedInvoiceId;
+        }
+        if (!this.context.thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceId)) {
+            this.readExistingInvoice();
         }
     }
 
-    private maxNoOfInvoicesLimitExceeeded(): boolean {
-        return this.invoiceGroupVM.invoiceVMList.length >= InvoiceOperationsPageComponent.MAX_NO_OF_INVOICES;
+    private showPagination(): boolean {
+        return this.relatedInvoices.length > 1;
     }
 
-    private get newInvoiceRef(): string {
-        return 'iv' + this.invoiceGroupVM.newInvoiceSeq;
-    }
-
-    public displayedItemsUpdated(firstDisplayedInvoiceIndex) {
-        this.firstDisplayedInvoiceIndex = firstDisplayedInvoiceIndex;
-    }
-
-    public newlyAddedInvoiceRemoved(newlyAddedInvoiceMeta: InvoiceMeta) {
-        this.itemRemoved.next(newlyAddedInvoiceMeta.indexInDisplayedInvoiceList);
-        this.invoiceGroupVM.removeInvoiceVMByUniqueId(newlyAddedInvoiceMeta.uniqueId);
-    }
-
-    public invoiceAdded() {
-        this.itemsAdded.next({
-            noOfAddedItems: 1,
-            shouldSelectLastElement: false
-        });
-    }
-
-    public get noEditableInvoicesExist(): boolean {
-        return _.isEmpty(this.displayedInvoiceIndexList);
-    }
-
-    public get displayedInvoiceIndexList(): number[] {
-        var indexList = [];
-
-        if (!_.isEmpty(this.invoiceVMList)) {
-            for (var index = this.firstDisplayedInvoiceIndex; index < Math.min(this.firstDisplayedInvoiceIndex + this.numberOfSimultaneouslyDisplayedInvoices, this.invoiceVMList.length); ++index) {
-                indexList.push(index);
-            }
-        }
-        return indexList;
-    }
-
-    public get groupBookingId(): string {
-        return this.invoiceGroupVM.invoiceGroupDO.groupBookingId;
-    }
-
-    public getInvoiceUniqueIdentifier(invoiceIndex: number): string {
-        return this.invoiceVMList[invoiceIndex].invoiceDO.getUniqueIdentifier();
-    }
-
-    public get filterMetaForEnabledFilter(): HotelOperationsPageFilterMeta {
-        let fontName = '';
-        switch(this.filterType) {
-            case FilterType.Customer: fontName = '('; break;
-            case FilterType.InvoiceRef: fontName = '-'; break;
-            default: fontName = '-';
-        }
-        
-        return {
-            filterInfo: 'filtered by:',
-            filterValue: this.invoiceFilterValue,
-            filterFontName: fontName,
-            filterRemoveInfo: 'Remove filter in order to edit.',
-        }
-    }
-
-    public get invoiceFilterValue(): string {
-        var customerDO = _.chain(this.invoiceGroupVM.invoiceVMList).map((invoiceVM: InvoiceVM) => {
-            return invoiceVM.invoicePayerVMList;
-        }).flatten().map((invoicePayerVM: InvoicePayerVM) => {
-            return invoicePayerVM.customerDO;
-        }).find((customerDO: CustomerDO) => {
-            return customerDO.id === this.invoiceOperationsPageParam.invoiceFilter.customerId;
-        }).value();
-
-        if (!this._thUtils.isUndefinedOrNull(customerDO)) {
-            return customerDO.customerName;
-        }
-        else if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.invoiceId)) {
-            let invoiceVM = _.find(this.invoiceGroupVM.invoiceVMList, (invoiceVM: InvoiceVM) => {
-                return invoiceVM.invoiceDO.id === this.invoiceOperationsPageParam.invoiceFilter.invoiceId;
-            });
-            return invoiceVM.invoiceDO.invoiceReference;
-        }
-
-        return null;
-    }
-
-    public get invoiceGroupVM(): InvoiceGroupVM {
-        return this._invoiceGroupControllerService.invoiceGroupVM;
-    }
-    public set invoiceGroupVM(invoiceGroupVM: InvoiceGroupVM) {
-        this._invoiceGroupControllerService.invoiceGroupVM = invoiceGroupVM;
-    }
-
-    public get invoiceVMList(): InvoiceVM[] {
-        if (this.filterEnabled) {
-            if (this.filterType === FilterType.Customer) {
-                return _.filter(this.invoiceGroupVM.invoiceVMList, (invoiceVM: InvoiceVM) => {
-                    var customerIdList = _.map(invoiceVM.invoicePayerVMList, (invoicePayerVM: InvoicePayerVM) => {
-                        return invoicePayerVM.invoicePayerDO.customerId;
-                    })
-                    return _.contains(customerIdList, this.invoiceOperationsPageParam.invoiceFilter.customerId);
-                });
-            }
-            else if (this.filterType === FilterType.InvoiceRef) {
-                return _.filter(this.invoiceGroupVM.invoiceVMList, (invoiceVM: InvoiceVM) => {
-                    return invoiceVM.invoiceDO.id === this.invoiceOperationsPageParam.invoiceFilter.invoiceId;
-                });
-            }
-        }
-        return this.invoiceGroupVM.invoiceVMList;
-    }
-    public get totalNumberOfInvoices(): number {
-        return this.invoiceVMList.length;
-    }
-
-    public get filterEnabled(): boolean {
-        var filterMeta = this.invoiceOperationsPageParam.titleMeta.filterMeta;
-        return !this._thUtils.isUndefinedOrNull(filterMeta) &&
-            !this._thUtils.isUndefinedOrNull(filterMeta.filterValue)
-    }
-
-    public get payOnlyMode(): boolean {
-        return this.filterEnabled;
-    }
-    public get payOnlyModeWithEditOption(): boolean {
-        return !this.filterEnabled && !this.invoiceGroupVM.editMode;
-    }
-
-    public get editMode(): boolean {
-        return !this.filterEnabled && this.invoiceGroupVM.editMode;
-    }
-    public set editMode(editMode: boolean) {
-        if (editMode) {
-            this._invoiceGroupVMCopy = this.invoiceGroupVM.buildPrototype();
-            this.invoiceOperationsPageParam.updateTitle(this._title, 'Edit');
-            this.resetPaginationCount(this.invoiceGroupVM.getOpenInvoiceVMList().length);
-        }
-        else {
-            this.invoiceOperationsPageParam.updateTitle(this._title, '');
-            this.resetPaginationCount(this.invoiceGroupVM.invoiceVMList.length);
-        }
-        this.invoiceGroupVM.editMode = editMode;
-    }
-    private resetPaginationCount(noOfItems: number) {
-        this.resetItemNavigator.next({
-            initialNumberOfItems: noOfItems,
-            maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
-            numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
-        });
-    }
-
-    private get filterType(): FilterType {
-        if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
-            return FilterType.Customer;
-        }
-        else if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.invoiceId)) {
-            return FilterType.InvoiceRef;
+    public goBackOrExit() {
+        if (this.operationsPageControllerService.canGoBack()) {
+            this.operationsPageControllerService.goBack();
+        } else {
+            this.exit.emit();
         }
     }
 }

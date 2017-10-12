@@ -1,7 +1,7 @@
-import { BaseDO } from "../../../../../../../common/base/BaseDO";
-import { IInvoiceItemMeta } from "../IInvoiceItemMeta";
-import { ThTranslation } from "../../../../../../../common/utils/localization/ThTranslation";
-import { ThUtils } from "../../../../../../../common/utils/ThUtils";
+import { ThUtils } from '../../../../../../../common/utils/ThUtils';
+import { BaseDO } from '../../../../../../../common/base/BaseDO';
+import { IInvoiceItemMeta } from '../IInvoiceItemMeta';
+import { ThTranslation } from '../../../../../../../common/utils/localization/ThTranslation';
 
 export class RoomCommissionItemMetaDO extends BaseDO implements IInvoiceItemMeta {
     pricePerItem: number;
@@ -24,9 +24,6 @@ export class RoomCommissionItemMetaDO extends BaseDO implements IInvoiceItemMeta
     }
     public getDisplayName(thTranslation: ThTranslation): string {
         return thTranslation.translate(this.displayName);
-    }
-    public isMovableByDefault(): boolean {
-        return false;
     }
     public isDerivedFromBooking(): boolean {
         return true;

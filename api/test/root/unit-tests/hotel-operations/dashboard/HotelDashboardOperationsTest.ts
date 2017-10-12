@@ -135,7 +135,7 @@ describe("Hotel Dashboard Operations Tests", function () {
                 let unreserveRoomDO = new UnreserveRoomDO();
                 unreserveRoomDO.bookingId = booking.id;
                 unreserveRoomDO.groupBookingId = booking.groupBookingId;
-                let unreserveRoom = new UnreserveRoom​​(testContext.appContext, testContext.sessionContext);
+                let unreserveRoom = new UnreserveRoom(testContext.appContext, testContext.sessionContext);
                 return unreserveRoom.unreserve(unreserveRoomDO);
             }).then((updatedBooking: BookingDO) => {
                 should.equal(_.isEmpty(updatedBooking.roomId), true);

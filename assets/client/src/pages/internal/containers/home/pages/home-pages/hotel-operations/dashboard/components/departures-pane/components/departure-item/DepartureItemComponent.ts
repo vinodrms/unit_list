@@ -6,10 +6,6 @@ import { AppContext, ThError } from "../../../../../../../../../../../../common/
 import { HotelOperationsRoomService } from "../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService";
 import { CheckOutRoomParam } from "../../../../../../../../../../services/hotel-operations/room/utils/CheckOutRoomParam";
 import { BookingDO } from "../../../../../../../../../../services/bookings/data-objects/BookingDO";
-import { InvoicePaymentStatus, InvoiceDO } from "../../../../../../../../../../services/invoices/data-objects/InvoiceDO";
-import { EagerInvoiceGroupsService } from "../../../../../../../../../../services/invoices/EagerInvoiceGroupsService";
-import { InvoiceGroupDO } from "../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO";
-import { InvoiceGroupsService } from "../../../../../../../../../../services/invoices/InvoiceGroupsService";
 
 declare var $: any;
 
@@ -19,9 +15,7 @@ declare var $: any;
     host: {
         '(document:click)': 'onClick($event)',
     },
-    providers: [EagerInvoiceGroupsService, InvoiceGroupsService]
 })
-
 export class DepartureItemComponent {
     @Input() departureItemVM: DepartureItemInfoVM;
     @Output() onCheckOut = new EventEmitter();
@@ -35,8 +29,6 @@ export class DepartureItemComponent {
         private _modalService: HotelDashboardModalService,
         private _appContext: AppContext,
         private _hotelOperationsRoomService: HotelOperationsRoomService,
-        private _eagerInvoiceGroupsService: EagerInvoiceGroupsService,
-        private _invoiceGroupsService: InvoiceGroupsService
     ) {
     }
 
@@ -49,8 +41,7 @@ export class DepartureItemComponent {
 
     public openInvoiceModal(invoiceInfo: DepartureItemInvoiceInfoVM) {
         this.shouldShowPayDropdown = false;
-        
-        this._modalService.openInvoiceModal(invoiceInfo.invoiceGroupId, { invoiceId: invoiceInfo.invoiceId });
+        this._modalService.openInvoiceModal(invoiceInfo.invoiceId);
     }
 
     public openCustomerModal() {

@@ -22,7 +22,7 @@ import { BookingChangeNoShowTime } from '../../../../../core/domain-layer/hotel-
 import { BookingChangeNoShowTimeDO } from '../../../../../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTimeDO';
 import { ThTimestampDO } from '../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
 import { ThHourDO } from '../../../../../core/utils/th-dates/data-objects/ThHourDO';
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../core/data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
 import { FileAttachmentDO } from '../../../../../core/data-layer/common/data-objects/file/FileAttachmentDO';
 import { BookingStateChangeTriggerType } from '../../../../../core/data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 import { BookingChangeCapacity } from '../../../../../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacity';
@@ -50,7 +50,7 @@ import { AssignRoom } from '../../../../../core/domain-layer/hotel-operations/ro
 import { AssignRoomDO } from '../../../../../core/domain-layer/hotel-operations/room/assign/AssignRoomDO';
 import { BookingUndoCheckIn } from '../../../../../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckIn';
 import { BookingUndoCheckInDO } from '../../../../../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckInDO';
-import { InvoiceGroupSearchResultRepoDO } from "../../../../../core/data-layer/invoices/repositories/IInvoiceGroupsRepository";
+import { InvoiceSearchResultRepoDO } from "../../../../../core/data-layer/invoices/repositories/IInvoiceRepository";
 import { InvoiceItemType } from "../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO";
 import { RoomCommissionItemMetaDO } from "../../../../../core/data-layer/invoices/data-objects/items/room-commission/RoomCommissionItemMetaDO";
 
@@ -95,7 +95,7 @@ describe("Hotel Booking Operations Tests", function () {
             bookingToChange = testUtils.getRandomListElement(createdBookingList);
             var emailConfirmationDO = new EmailConfirmationDO();
             emailConfirmationDO.type = EmailConfirmationType.Booking;
-            emailConfirmationDO.emailList = [{email: "ionut.paraschiv@3angle.tech"}];
+            emailConfirmationDO.emailList = [{ email: "ionut.paraschiv@3angle.tech" }];
             var parameters: BookingConfirmationEmailParameters = {
                 bookingId: bookingToChange.id,
                 groupBookingId: bookingToChange.groupBookingId
@@ -185,7 +185,7 @@ describe("Hotel Booking Operations Tests", function () {
             var paymentGuaranteeDO = new BookingPaymentGuaranteeDO();
             paymentGuaranteeDO.groupBookingId = bookingToChange.groupBookingId;
             paymentGuaranteeDO.id = bookingToChange.id;
-            paymentGuaranteeDO.billedCustomerId = bookingToChange.defaultBillingDetails.customerId; 
+            paymentGuaranteeDO.billedCustomerId = bookingToChange.defaultBillingDetails.customerId;
             paymentGuaranteeDO.paymentMethod = new InvoicePaymentMethodDO();
             paymentGuaranteeDO.paymentMethod.type = InvoicePaymentMethodType.DefaultPaymentMethod;
             var paymentMethod = testUtils.getRandomListElement(testDataBuilder.paymentMethodList);
@@ -292,7 +292,7 @@ describe("Hotel Booking Operations Tests", function () {
             });
             var reserveAddOnProducts = new BookingReserveAddOnProducts(testContext.appContext, testContext.sessionContext);
             reserveAddOnProducts.reserve(reserveAddOnProductsDO).then((updatedBooking: BookingDO) => {
-                var equality = testUtils.stringArraysAreEqual(updatedBooking.reservedAddOnProductIdList, _.map(reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => {return addOnProduct.aopId;}));
+                var equality = testUtils.stringArraysAreEqual(updatedBooking.reservedAddOnProductIdList, _.map(reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => { return addOnProduct.aopId; }));
                 should.equal(equality, true);
                 bookingToChange = updatedBooking;
                 done();
@@ -324,7 +324,7 @@ describe("Hotel Booking Operations Tests", function () {
             reserveAddOnProductsDO.reservedAddOnProductList = [];
             var reserveAddOnProducts = new BookingReserveAddOnProducts(testContext.appContext, testContext.sessionContext);
             reserveAddOnProducts.reserve(reserveAddOnProductsDO).then((updatedBooking: BookingDO) => {
-                var equality = testUtils.stringArraysAreEqual(updatedBooking.reservedAddOnProductIdList, _.map(reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => {return addOnProduct.aopId;}));
+                var equality = testUtils.stringArraysAreEqual(updatedBooking.reservedAddOnProductIdList, _.map(reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => { return addOnProduct.aopId; }));
                 should.equal(equality, true);
                 bookingToChange = updatedBooking;
                 done();
@@ -355,19 +355,16 @@ describe("Hotel Booking Operations Tests", function () {
         });
 
         it("Should check the invoice of the checked in booking", function (done) {
-            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-            invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceRepository();
+            invoiceGroupsRepo.getInvoiceList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
                 bookingId: bookingToChange.id
-            }).then((result: InvoiceGroupSearchResultRepoDO) => {
-                should.equal(result.invoiceGroupList.length, 1);
+            }).then((result: InvoiceSearchResultRepoDO) => {
+                should.equal(result.invoiceList.length, 1);
 
-                let invoice = _.find(result.invoiceGroupList[0].invoiceList, invoice => {
-                    return invoice.bookingId === bookingToChange.id;
-                });
+                let invoice = result.invoiceList[0];
 
                 should.equal(invoice.payerList.length, 1);
-                should.equal(invoice.getPrice(), bookingToChange.price.totalBookingPrice);
-                should.equal(invoice.payerList[0].priceToPay, bookingToChange.price.totalBookingPrice);
+                should.equal(invoice.amountToPay, bookingToChange.price.totalBookingPrice);
 
                 var commissionItem = _.find(invoice.itemList, item => { return item.type === InvoiceItemType.RoomCommission });
                 should.exist(commissionItem);

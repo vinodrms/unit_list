@@ -7,43 +7,47 @@ import { MongoBedRepository } from '../../../../../data-layer/beds/repositories/
 import { MongoPatchType } from '../patches/MongoPatchType';
 import { MongoHotelRepository } from "../../../../../data-layer/hotel/repositories/mongo/MongoHotelRepository";
 import { MongoCustomerRepository } from "../../../../../data-layer/customers/repositories/mongo/MongoCustomerRepository";
-import { MongoInvoiceGroupsRepository } from "../../../../../data-layer/invoices/repositories/mongo/MongoInvoiceGroupsRepository";
+import { MongoInvoiceGroupsRepository as LegacyMongoInvoiceGroupsRepository } from "../../../../../data-layer/invoices-legacy/repositories/mongo/MongoInvoiceGroupsRepository";
 import { MongoRepository } from "../../../../../data-layer/common/base/MongoRepository";
 import { MongoBookingRepository } from "../../../../../data-layer/bookings/repositories/mongo/MongoBookingRepository";
+import { MongoInvoiceRepository } from '../../../../../data-layer/invoices/repositories/mongo/MongoInvoiceRepository';
+import { MongoInvoiceRepositoryWithBookingPriceLink } from '../../../../../data-layer/invoices/repositories/mongo/decorators/MongoInvoiceRepositoryWithBookingPriceLink';
 
 /**
  * Extend this class when the multi update can be made with a simple MongoDB Query
  */
 export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IMongoPatch {
-	protected _thUtils: ThUtils;
+    protected thUtils: ThUtils;
 
-	protected _hotelRepository: MongoHotelRepository;
-	protected _bedRepository: MongoBedRepository;
-	protected _priceProductRepository: MongoPriceProductRepository;
-	protected _customerRepository: MongoCustomerRepository;
-	protected _invoiceGroupsRepository: MongoInvoiceGroupsRepository;
-	protected _bookingRepository: MongoBookingRepository;
+    protected hotelRepository: MongoHotelRepository;
+    protected bedRepository: MongoBedRepository;
+    protected priceProductRepository: MongoPriceProductRepository;
+    protected customerRepository: MongoCustomerRepository;
+    protected legacyInvoiceGroupsRepository: LegacyMongoInvoiceGroupsRepository;
+    protected invoiceRepository: MongoInvoiceRepositoryWithBookingPriceLink;
+    protected bookingRepository: MongoBookingRepository;
 
-	constructor() {
-		this._thUtils = new ThUtils();
+    constructor() {
+        this.thUtils = new ThUtils();
 
-		this._hotelRepository = new MongoHotelRepository();
-		this._bedRepository = new MongoBedRepository();
-		this._priceProductRepository = new MongoPriceProductRepository();
-		this._customerRepository = new MongoCustomerRepository();
-		this._invoiceGroupsRepository = new MongoInvoiceGroupsRepository(this._hotelRepository);
-		this._bookingRepository = new MongoBookingRepository();
-	}
+        this.hotelRepository = new MongoHotelRepository();
+        this.bedRepository = new MongoBedRepository();
+        this.priceProductRepository = new MongoPriceProductRepository();
+        this.customerRepository = new MongoCustomerRepository();
+        this.legacyInvoiceGroupsRepository = new LegacyMongoInvoiceGroupsRepository(this.hotelRepository);
+        this.invoiceRepository = new MongoInvoiceRepositoryWithBookingPriceLink(new MongoInvoiceRepository(new MongoHotelRepository()), new MongoBookingRepository(), new MongoCustomerRepository());
+        this.bookingRepository = new MongoBookingRepository();
+    }
 
-	public apply(): Promise<boolean> {
-		return new Promise<boolean>((resolve, reject) => {
-			try {
-				this.applyCore(resolve, reject);
-			} catch (e) {
-				reject(e);
-			}
-		});
-	}
-	public abstract getPatchType(): MongoPatchType;
-	protected abstract applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void });
+    public apply(): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            try {
+                this.applyCore(resolve, reject);
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+    public abstract getPatchType(): MongoPatchType;
+    protected abstract applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void });
 }

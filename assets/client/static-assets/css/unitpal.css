@@ -11,7 +11,7 @@
 }*/
 
 .unitpal-font { font-family: UnitpalIcons !important; font-weight:normal; font-size:larger; }
-.unitpal-large { font-size:xx-large;  line-height:100%; } 
+.unitpal-large { font-size:xx-large;  line-height:100%; }
 
 .menu_section .unitpal-font {
     font-size: x-large;
@@ -19,7 +19,7 @@
 }
 
 .signup-step {
-    background-color: white; 
+    background-color: white;
 }
 
 body,html {
@@ -150,7 +150,7 @@ header {
 }
 @media screen and (max-width: 450px) {
     .side-menu-item {
-        display: none;   
+        display: none;
     }
 }
 @media screen and (max-width: 800px) and (min-width: 450px) {
@@ -456,7 +456,7 @@ table .buttons,table button,table .btn {
     height: 100%;
 }
 .overview-right h1 {
-    font-size: 22px; 
+    font-size: 22px;
 }
 
 .overview-left {
@@ -582,7 +582,7 @@ lazy-loading-table {
 
 .overview-right-body{
     height: calc(100% - 82px);
-    overflow-y: hidden;    
+    overflow-y: hidden;
 }
 
 .wizard-nav  {
@@ -590,7 +590,7 @@ lazy-loading-table {
     color:#0b2139;
     padding: 0px;
     height: 100%;
-    /*TODO: Use scroll*/ 
+    /*TODO: Use scroll*/
     overflow-y: hidden;
 }
 
@@ -875,7 +875,7 @@ td .room-categ-capacity {
 
 .modal-body lazy-loading-table {
     flex-grow: 1;
-} 
+}
 
 .modal-dialog.vertical-align-center:not(.modal-xlg) {
     margin-top: 61px;
@@ -1340,19 +1340,19 @@ table.lazy-loading tfoot {
 }
 
 table.lazy-loading th:nth-child(even) {
-  background: rgba(225, 225, 225, 0.6);  
+  background: rgba(225, 225, 225, 0.6);
 }
 
 table.lazy-loading th:nth-child(odd) {
-  background: rgba(244, 244, 244, 0.6);  
+  background: rgba(244, 244, 244, 0.6);
 }
 
 table.lazy-loading.odd-columns th:last-child {
-  background: rgba(225, 225, 225, 0.6);  
+  background: rgba(225, 225, 225, 0.6);
 }
 
 table.lazy-loading.even-columns th:last-child {
-  background: rgba(244, 244, 244, 0.6);  
+  background: rgba(244, 244, 244, 0.6);
 }
 
 table.lazy-loading tbody td:nth-child(even) {
@@ -1364,11 +1364,11 @@ table.lazy-loading tbody td:nth-child(odd) {
 }
 
 table.lazy-loading.odd-columns tbody td:last-child {
-  background: rgba(244, 244, 244, 0.6);  
+  background: rgba(244, 244, 244, 0.6);
 }
 
 table.lazy-loading.even-columns tbody td:last-child {
-  background: rgba(255, 255, 255, 0.6);  
+  background: rgba(255, 255, 255, 0.6);
 }
 
 table.lazy-loading tfoot {
@@ -1391,7 +1391,7 @@ table.lazy-loading td.right {
 }
 
 table.lazy-loading .pagination-container {
-    padding-right: 10px;       
+    padding-right: 10px;
 }
 
 /* This is to override default pagination style */
@@ -1427,7 +1427,7 @@ table.lazy-loading .th-pagination {
 }
 
 .lazy-loading-table-filter {
-    margin-bottom: 5px;    
+    margin-bottom: 5px;
 }
 .lazy-loading-table-sort {
     float: right;
@@ -1436,7 +1436,7 @@ table.lazy-loading .th-pagination {
 }
 
 .up-col-0p {
-    display: none !important;   
+    display: none !important;
 }
 .up-col-5p {
     flex-grow: 1 !important;
@@ -1472,10 +1472,10 @@ table.lazy-loading .th-pagination {
     flex-grow: 14 !important;
 }
 .up-col-80p {
-    flex-grow: 16 !important;   
+    flex-grow: 16 !important;
 }
 .up-col-85p {
-    flex-grow: 17 !important;   
+    flex-grow: 17 !important;
 }
 .up-col-90p {
     flex-grow: 18 !important;
@@ -1498,12 +1498,12 @@ table.lazy-loading .th-pagination {
 }
 
 .basic-info-settings-tabbar {
-    margin-top: 10px;            
+    margin-top: 10px;
 }
 
 .basic-info-settings-edit-container {
     height: calc(100% - 53px);
-    padding: 5px 0 5px 0;       
+    padding: 5px 0 5px 0;
 }
 
 .allotment-availability-overview {
@@ -1597,7 +1597,7 @@ table.lazy-loading .th-pagination {
 
 @media screen and (max-width: 800px) {
     .home-header-button>p {
-        display: none;   
+        display: none;
     }
     .home-header-button {
         width: 55px;
@@ -1619,7 +1619,7 @@ table.lazy-loading .th-pagination {
 .home-header-logo>p {
     font-size: 22px;
     display: inline-block;
-    color: white; 
+    color: white;
     position:relative;
     top: 17px;
     left: 3px;
@@ -1640,7 +1640,7 @@ table.lazy-loading .th-pagination {
  .home-header-name {
      display: inline-block;
      float: right;
-     width: 300px;
+     width: 170px;
      text-align: right;
      white-space: nowrap;
      overflow: hidden;
@@ -1651,25 +1651,20 @@ table.lazy-loading .th-pagination {
  }
 @media screen and (min-width: 1700px) {
     .home-header-name {
-        width: 500px;
+        width: 370px;
     }
 }
 @media screen and (min-width: 1400px) and (max-width: 1700px) {
     .home-header-name {
-        width: 400px;
+        width: 270px;
     }
 }
 @media screen and (max-width: 1160px) and (min-width: 1000px) {
     .home-header-name {
-        width: 200px;
+        width: 70px;
     }
 }
 @media screen and (max-width: 1000px) {
-    .home-header-name {
-        width: 150px;
-    }
-}
-@media screen and (max-width: 920px) {
     .home-header-name {
         display: none;
     }
@@ -1864,7 +1859,7 @@ ul.msg_list li .text-center a {
     top: 0px;
 }
 .btn-square.btn-square-next-prev {
-    background-color: rgb(251, 103, 8);    
+    background-color: rgb(251, 103, 8);
 }
 
 a.btn.btn-square:hover,
@@ -1882,10 +1877,10 @@ a.btn.btn-square:focus {
     width: 190px;
 }
 .btn.btn-square.disabled {
-    background-color: #c1c1c1;   
+    background-color: #c1c1c1;
 }
 .btn.btn-square>i {
-    font-size: 30px;  
+    font-size: 30px;
     position: relative;
 }
 .btn.btn-square>i {
@@ -1929,7 +1924,7 @@ a.btn.btn-square:focus {
     font-weight: bold;
     text-transform: uppercase;
     overflow: hidden;
-    text-overflow: ellipsis;   
+    text-overflow: ellipsis;
  }
  @media screen and (max-width: 630px) {
     .btn-err-container>i {
@@ -1937,7 +1932,7 @@ a.btn.btn-square:focus {
     }
 }
 .float-right {
-    float: right;   
+    float: right;
 }
 .right-margin {
     border-right: 1px solid #DBDBDB;
@@ -2053,48 +2048,60 @@ a.btn.btn-square:focus {
     padding-top: 15px;
     padding-bottom: 15px;
 }
-.booking-details-header {
+.booking-details-header,
+.invoice-details-header {
     padding-top: 10px;
     font-size: 15px;
 }
-.booking-details-header>.first-line {
+.booking-details-header>.first-line,
+.invoice-details-header>.first-line {
     color: rgb(251, 103, 8);
 }
-.booking-details-container {
+.booking-details-container,
+.invoice-details-container {
     font-size: 12px;
 }
-.booking-details-table {
+.booking-details-table,
+.invoice-details-table {
     padding-left: 0px;
     padding-right: 0px;
 }
-.booking-details-table table {
+.booking-details-table table,
+.invoice-details-table table {
     table-layout:fixed;
     margin-bottom: 5px;
 }
-.booking-details-table table td {
+.booking-details-table table td,
+.invoice-details-table table td {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.booking-details-table>table>thead {
+.booking-details-table>table>thead,
+.invoice-details-table>table>thead {
     background-color: #E6E6E6;
     font-size: 11px;
 }
-.booking-details-table>table>tfoot>td>a {
+.booking-details-table>table>tfoot>td>a,
+.invoice-details-table>table>tfoot>td>a {
     padding-left: 6px;
     padding-top: 6px !important;
 }
-.booking-details-table>table>thead>tr>th {
+.booking-details-table>table>thead>tr>th,
+.invoice-details-table>table>thead>tr>th {
     font-weight: normal !important;
 }
-.booking-details-table>table>tbody {
+.booking-details-table>table>tbody,
+.invoice-details-table>table>tbody {
     background-color: #F5F5F5;
     font-size: 11px;
 }
-.booking-details-table td.name-field {
+.booking-details-table td.name-field,
+.invoice-details-table td.name-field {
     padding-top: 11px;
 }
-.booking-details-table .font-size-small {
+.booking-details-table .font-size-small,
+.invoice-details-table .font-size-small {
     font-size: 11px !important;
 }
 
@@ -2112,7 +2119,8 @@ a.btn.btn-square:focus {
     padding-top: 7px !important;
     padding-left: 13px;
 }
-.booking-details-row {
+.booking-details-row,
+.invoice-details-row {
     padding-top: 5px;
     padding-bottom: 5px;
 }
@@ -2160,7 +2168,7 @@ a.btn.btn-square:focus {
 }
 .search-input-text {
     display: block;
-    width: 100%; 
+    width: 100%;
     height: 34px !important;
 }
 .input-group .select2-selection {
@@ -2229,7 +2237,7 @@ a.btn.btn-square:focus {
             display: flex;
             flex-direction: column;
         }
-        
+
         .operations-dashboard .header .pane-title{
             display: flex;
             align-items: center;
@@ -2261,7 +2269,7 @@ a.btn.btn-square:focus {
             flex-basis: 48px;
             background-color: white;
         }
-        
+
     .hotel-operations-dashboard .customer-name{
         font-size: 14px;
         color: #7c7c81;
@@ -2273,10 +2281,8 @@ a.btn.btn-square:focus {
     }
     .hotel-operations-dashboard .corporate-customer-name{
         font-size: 12px;
-        color: #7c7c81;
+        color: black;
         max-width: 150px;
-        padding-left: 3px;
-        vertical-align: middle;
     }
 
     .hotel-operations-dashboard .room-type{
@@ -2351,7 +2357,7 @@ a.btn.btn-square:focus {
         text-align: center;
         flex-grow: 1;
     }
-    
+
     rooms-canvas > .header > .notification .notification-close{
         flex-basis: 32;
         flex-grow: 0;
@@ -2372,31 +2378,35 @@ a.btn.btn-square:focus {
     }
 
         /* Room cards */
-        
+
         /* Occupied */
         .room-card.occupied {
             border-left: 6px solid rgb(251, 103, 8);
             line-height: normal;
         }
-       
+
         .room-card.occupied .card-header .section1 .room-number{
-            color: rgb(251, 103, 8);  
+            color: rgb(251, 103, 8);
+        }
+
+        .room-card .card-header .section1 {
+            min-height: 50px;
         }
 
         /* Free */
         .room-card.free {
             border-left: 6px solid rgb(29, 205, 140);
         }
-    
+
         .room-card.free .card-header .section1 .room-number{
-            color: rgb(29, 205, 140);  
+            color: rgb(29, 205, 140);
         }
 
         /*Out of service */
         .room-card.out-of-service {
             border-left: 6px solid #555;
         }
-    
+
         .room-card.out-of-service .card-header .section1 .room-number{
             color: #555;
         }
@@ -2405,7 +2415,7 @@ a.btn.btn-square:focus {
         .room-card.out-of-order {
             border-left: 6px solid #9A9A9A;
         }
-    
+
         .room-card.out-of-order .card-header .section1 .room-number{
             color: #9A9A9A;
         }
@@ -2414,13 +2424,13 @@ a.btn.btn-square:focus {
         .room-card.reserved {
             border-left: 6px solid rgb(255, 190, 1);
         }
-    
+
         .room-card.reserved .card-header .section1 .room-number{
             color: rgb(255, 190, 1);
         }
 
         .room-card .info-icon {
-            padding-left: 3px;   
+            padding-left: 3px;
         }
 
         .page{
@@ -2492,13 +2502,13 @@ a.btn.btn-square:focus {
         .room-card .card-header{
            padding: 6px 12px 6px 12px;
         }
-        
+
         .room-card .card-header .section1{
             display: flex;
             flex-direction: column;
             flex-grow: 1;
         }
-        
+
             .room-card .card-header .section1 .room-number{
                 font-size: 24px;
                 max-width: 150px;
@@ -2826,7 +2836,7 @@ a.btn.btn-square:focus {
         position: absolute;
         z-index: 1;
         margin-top: -12px;
-    }    
+    }
 
     .yield-manager-dashboard .view-mode-toggle-container .view-mode-button{
         position: relative !important;
@@ -2922,9 +2932,9 @@ a.btn.btn-square:focus {
             justify-content: space-between;
             border-bottom: 1px solid #DBDBDB;
         }
-        
+
         .yield-manager-dashboard .price-products-table .default-row-select-color{
-            background-color: #FFFAD8; 
+            background-color: #FFFAD8;
         }
 
         .yield-manager-dashboard .price-products-table .filter-indicator{
@@ -2943,7 +2953,7 @@ a.btn.btn-square:focus {
 
         /* This is a quick way to accomodate the selected-indicator*/
         .yield-manager-dashboard .price-products-row .price-products-col.wide {
-            padding: 0px; 
+            padding: 0px;
         }
 
         .yield-manager-dashboard .key-metrics-col,
@@ -2965,7 +2975,7 @@ a.btn.btn-square:focus {
             /*width: 50px;*/
             width: 100%;
         }
-        
+
         .key-metrics-col .key-metric-value{
             color: #555;
             text-align: center;
@@ -2986,7 +2996,7 @@ a.btn.btn-square:focus {
         {
             background-color:rgba(187, 187, 187, 0.1);
         }
-        
+
         .yield-actions-control {
             padding: 12px 12px 0px 12px;
             height: 56px;
@@ -3661,8 +3671,11 @@ a.btn.btn-square:focus {
 .f-s-14 {
     font-size: 14px;
 }
+.f-s-16 {
+    font-size: 16px;
+}
 .link-with-unitpal-font-icon {
-    font-size: 12px; 
+    font-size: 12px;
 }
 .link-with-unitpal-font-icon:hover {
     text-decoration: none;
@@ -3685,7 +3698,7 @@ a.btn.btn-square:focus {
      font-size: 20px;
  }
  .operational-page-container .right-sidebar .notes {
-     font-size: 11px; 
+     font-size: 11px;
  }
  textarea.notes {
      font-size: 11px;
@@ -3708,9 +3721,6 @@ a.btn.btn-square:focus {
     height: 100%;
     position: relative;
     text-align: center;
-    margin: 0 5px;
-    padding: 5px;
-    border: 1px solid #DBDBDB;
 }
 .center-absolute {
     position: absolute;
@@ -3782,33 +3792,7 @@ invoice-edit {
     text-align: left;
     margin: 0 0 5px 0;
 }
-.table-invoice-items > thead > tr {
-    width: 100%;
-    background-color: #9d9ca1;
-    color: white;
-}
-.table-invoice-items > tbody > tr, .table-invoice-items > tfoot > tr {
-    text-align: left;
-}
-.table-invoice-items > tbody > tr:not(:last-child) {
-    border-bottom: 1px solid #DBDBDB;
-}
-.table-invoice-items > tfoot > tr {
-    border-top: 2px solid #DBDBDB;
-}
-.table-invoice-items .add-item-cell {
-    padding: 0;
-    margin: 0;
-}
-p.invoice-item-small {
-    margin-top: 5px;
-    margin-bottom: 0px;
-}
 
-.table-invoice-items .th-button-box, .btn-add-invoice-payer .th-button-box {
-    padding-top:0; 
-    padding-bottom:0;
-}
 .move-invoice-item-btn {
     padding: 3px 6px;
     background-color: rgb(251, 103, 8);
@@ -3828,7 +3812,7 @@ p.invoice-item-small {
     color: rgb(251, 103, 8);
 }
 tr.selected-invoice-item {
-    background-color: #ededed;        
+    background-color: #ededed;
 }
 .move-left-invoice-item-cell {
     text-align: left;
@@ -3864,16 +3848,6 @@ tr.selected-invoice-item {
     font-weight: 500;
     color: white;
     font-size: 14px;
-}
-.invoice-edit-wrap {
-    height: calc(100% - 80px); 
-}
-.invoice-edit-wrap:after {
-    content: "";
-    display: block;
-}
-.invoice-edit-footer, .invoice-edit-wrap:after {
-	height: 80px; 
 }
 
 .rotate-45 {
@@ -3911,14 +3885,6 @@ table.small-margin {
     margin-bottom: 5px;
 }
 
-.table-invoice-items tr.selected {
-    background-color: #ededed;
-}
-.table-invoice-items tr.selectable:hover {
-    cursor: pointer;
-    background-color: #ededed;
-}
-
 .filter {
     font-size: 16px;
 }
@@ -3944,7 +3910,7 @@ table.small-margin {
     font-size: 11px;
 }
 .read-only-invoice {
-    background: #f0f0f0;
+/*    background: #f0f0f0;*/
 }
 .payment-container {
     display: flex;
@@ -3979,13 +3945,13 @@ textarea.payer-details {
 }
 
 /* Use this class with the bootstrap row class to force all the columns to have the same height */
-.row-eq-height { 
-    display: flex; 
-    flex-wrap: wrap; 
+.row-eq-height {
+    display: flex;
+    flex-wrap: wrap;
 }
-.row-eq-height > [class*='col-'] { 
-    display: flex; 
-    flex-direction: column; 
+.row-eq-height > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
 }
 /* Needed for Safari */
 .row.row-eq-height:before, .row.row-eq-height:after {
@@ -4065,4 +4031,812 @@ textarea.payer-details {
 
 .travel-activity-type {
     width: auto !important;
+}
+
+.invoice-summary {
+    height: 76px;
+    min-height: 76px;
+    border-top: 1px solid  rgba(242, 242, 242, 1);
+    border-bottom: 1px solid rgba(242, 242, 242, 1);
+    position: relative;
+}
+
+.invoice-summary .cycle-related-invoices {
+    background: transparent;
+    font-weight: 700;
+    font-size: 16px;
+    color: #333333;
+    height: 27px;
+    width: 30px;
+    border: 1px solid rgba(201, 215, 223, 1);
+    border-radius: 3px;
+    line-height: 27px;
+    text-align: center;
+    margin-right: 0px;
+    position: relative;
+    top: 17px;
+}
+
+.invoice-summary .invoice-title {
+    font-weight: 700;
+    font-style: normal;
+    font-size: 13px;
+    position: absolute;
+    left: 81px;
+    top: 23px;
+    color: #333333;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 200px);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.invoice-summary .invoice-status,
+.related-invoice .invoice-status {
+    font-weight: 200;
+    font-style: normal;
+    font-size: 11px;
+    border: none;
+    border-radius: 3px;
+    padding: 3px 6px 3px 6px;
+    margin-left: 10px;
+}
+
+.invoice-summary .paid-invoice-status,
+.related-invoice .paid-invoice-status {
+    color: #ffffff;
+    background-color: rgba(54, 206, 141, 1);
+}
+
+.invoice-summary .loss-accepted-by-management-invoice-status,
+.related-invoice .loss-accepted-by-management-invoice-status {
+    color: #ffffff;
+    background-color: rgba(246, 102, 0, 1);
+}
+
+.invoice-summary .unpaid-invoice-status,
+.related-invoice .unpaid-invoice-status {
+    color: #ffffff;
+    background-color: rgba(204, 204, 204, 1);
+}
+
+.invoice-summary .credit-invoice-status,
+.related-invoice .credit-invoice-status {
+    color: #ffffff;
+    background-color: rgb(255, 190, 1);
+}
+
+.invoice-summary .reinstatement,
+.related-invoice .reinstatement {
+    color: #999999;
+    font-weight: 200;
+}
+
+.invoice-summary .disabled,
+.related-invoice .disabled {
+    color: rgb(201, 215, 223);
+}
+
+.invoice-summary .related-invoices {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 11px;
+    color: #F66600;
+    position: absolute;
+    left: 81px;
+    top: 46px;
+}
+
+.invoice-summary .invoice-change-button {
+    color: #F66600;
+    background: transparent;
+    width: 31px;
+    height: 29px;
+    line-height: 29px;
+    margin-left: 0px;
+    text-align: center;
+    font-size: 19px;
+    margin-top: 12px;
+}
+
+.invoice-payer-section {
+    padding-top: 9px;
+    margin-left: 0px;
+    width: 100%;
+}
+
+.invoice-payer-section .payer-box {
+    background-color: transparent;
+    border: 1px solid rgba(201, 215, 223, 1);
+    border-radius: 3px;
+    height: 58px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.invoice-payer-section .payer-box .payer-icon {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    left: 11px;
+    top: 12px;
+    line-height: 15px;
+    padding: 0px;
+    color: #F66600;
+    text-align: center;
+}
+
+.invoice-payer-section .payer-box .payer-name {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    color: #333333;
+    text-overflow: ellipsis;
+    position: absolute;
+    left: 32px;
+    top: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: calc(100% - 58px);
+}
+
+.invoice-payer-section .payer-box .payer-email {
+    font-weight: 200;
+    font-style: normal;
+    font-size: 11px;
+    color: #999999;
+    text-overflow: ellipsis;
+    position: absolute;
+    left: 32px;
+    top: 31px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: calc(100% - 58px);
+}
+
+.invoice-payer-section .payer-box .payer-dropdown {
+    color: #333333;
+    position: absolute;
+    top: 12px;
+    padding: 7px;
+    right: 10px;
+    font-size: 15px;
+    width: auto;
+}
+
+.invoice-payer-section .payer-box .payer-dropdown > button {
+    background-color: transparent;
+    border: none;
+    padding: 0px;
+    outline: none;
+}
+
+.invoice-payer-section .payer-box .payer-dropdown > ul {
+    padding: 4px 0px 4px 0px;
+    width: 114px;
+    display: none;
+    background: white;
+    position: absolute;
+    left: -85px;
+    z-index: 1;
+    border: 1px solid rgba(201, 215, 223, 1);
+    border-radius: 3px;
+}
+
+.invoice-payer-section .payer-box .payer-dropdown > ul > li {
+    height: 32px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    color: #333333;
+    text-align: center;
+    line-height: 32px;
+    list-style: none;
+}
+
+.invoice-payer-section .payer-box .payer-dropdown > ul:hover {
+    display: block;
+}
+
+.invoice-payer-section .payer-box .payer-dropdown:hover > ul {
+    display: block;
+}
+
+.invoice-payer-section .add-payer {
+    border: 1px dashed #F66600;
+    color: #F66600;
+    text-align: center;
+    height: 58px;
+    width: 92px;
+    float: left;
+    position: relative;
+    margin-top: 10px;
+}
+
+.invoice-payer-section .add-payer .add-payer-text {
+    font-weight: 700;
+    font-style: normal;
+    font-size: 11px;
+    position: relative;
+    top: 14px;
+}
+
+.invoice-payer-section .add-payer-icon {
+    color: #FF6810;
+    position: relative;
+    top: 14px;
+}
+
+.table-invoice-items {
+    color: #333333;
+    background-color: transparent;
+    font-size: 13px;
+    overflow: auto;
+    margin-bottom: 0px;
+}
+
+.table-invoice-items > thead > tr {
+    width: 100%;
+    background-color: rgba(242, 242, 242, 1);
+    border: none;
+}
+
+.table-invoice-items > thead > tr > th {
+    border-bottom: none;
+    font-weight: 400;
+    font-style: normal;
+    border-top: none;
+}
+
+.table-invoice-items > tbody > tr,
+.table-invoice-items > thead > tr {
+    height: 35px;
+}
+
+.table-invoice-items > tbody > tr > td,
+.table-invoice-items > thead > tr > th {
+    vertical-align: middle;
+}
+
+.table-invoice-items > tbody > tr:last-child {
+    height: 45px;
+}
+
+.table-invoice-items > tbody > tr > td {
+    border-top: none;
+}
+
+.table-invoice-items > tbody > tr:nth-child(even) {
+    background-color: rgba(242, 242, 242, 0.3);
+}
+
+.table-invoice-items > tbody > tr:nth-child(odd) {
+    background-color: transparent;
+}
+
+.table-invoice-items > tbody > tr:last-child {
+    background-color: transparent;
+}
+
+.table-invoice-items tr > td,
+.table-payment-items tr > td,
+.table-invoice-items tr > th,
+.table-payment-items tr > th {
+    text-align: center;
+}
+
+.table-invoice-items tr > td:first-child,
+.table-payment-items tr > td:first-child,
+.table-invoice-items tr > th:first-child,
+.table-payment-items tr > th:first-child {
+    text-align: left;
+}
+
+.table-invoice-items tr > td:nth-last-child(2),
+.table-invoice-items tr > td:nth-last-child(3),
+.table-payment-items tr > td:nth-last-child(2),
+.table-payment-items tr > td:nth-last-child(3),
+.table-invoice-items tr > th:nth-last-child(2),
+.table-invoice-items tr > th:nth-last-child(3),
+.table-payment-items tr > th:nth-last-child(2),
+.table-payment-items tr > th:nth-last-child(3) {
+    text-align: right;
+}
+
+.table-invoice-items > tfoot > tr > td {
+    border-top: none;
+    font-size: 13px;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.table-invoice-items > tfoot::before
+{
+    content: '';
+    display: block;
+    height: 15px;
+    line-height: 15px;
+}
+
+.table-invoice-items th:first-child {
+  border-radius: 3px 0 0 0;
+}
+
+.table-invoice-items tr.selected {
+    background-color: #ededed;
+}
+.table-invoice-items tr.selectable:hover {
+    cursor: pointer;
+    background-color: #ededed;
+}
+
+.table-invoice-items .transfer-right {
+    color: #F66600;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.table-invoice-items .transfer-left {
+    color: rgba(54, 206, 141, 1);
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.table-invoice-items .add-item {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    color: #F66600;
+}
+
+.table-invoice-items .remove-item {
+    color: #F66600;
+}
+
+.table-invoice-items > tbody > tr > td .subtitle {
+    font-weight: 200;
+    font-style: normal;
+    font-size: 11px;
+    color: #999999;
+}
+
+.invoice-items-container {
+    flex-grow: 2;
+    overflow-y: auto;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
+.table-payment-items {
+    color: #333333;
+    background-color: transparent;
+    font-size: 13px;
+    overflow: auto;
+}
+
+.table-payment-items > thead > tr > th {
+    height: 0px;
+    border-bottom: none;
+    border-top: none;
+}
+
+
+.table-payment-items > tbody > tr {
+    height: 50px;
+}
+
+.table-payment-items > tbody > tr > td {
+    vertical-align: middle;
+}
+
+.table-payment-items > tbody > tr > td {
+    border-top: none;
+}
+
+.table-payment-items > tbody > tr > td .payment-type {
+    font-weight: 200;
+    font-style: normal;
+    font-size: 11px;
+    color: #999999;
+}
+
+.table-payment-items > tbody > tr {
+    background-color: transparent;
+}
+
+.table-payment-items > tfoot > tr > td {
+    border-top: none;
+    font-size: 13px;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.table-payment-items > tfoot::before
+{
+    content: '';
+    display: block;
+    height: 15px;
+    line-height: 15px;
+}
+
+.table-payment-items tr.selected {
+    background-color: #ededed;
+}
+
+.table-payment-items tr.selectable:hover {
+    cursor: pointer;
+    background-color: #ededed;
+}
+
+.table-payment-items .remove-payment {
+    color: #F66600;
+}
+
+.table-payment-items > tfoot > tr > td > span {
+    color: #F66600;
+}
+
+.invoice-edit-footer {
+    height: 78px;
+    min-height: 78px;
+}
+
+.invoice-overview {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+.related-invoices-menu {
+    margin-left: 13px;
+    margin-right: 13px;
+    border-bottom: 1px solid rgba(201, 215, 223, 1);
+    height: 67px;
+}
+
+.related-invoices-menu .related-invoices-menu-back {
+    outline: none;
+    position: absolute;
+    left: 24px;
+    top: 23px;
+    width: 15px;
+    height: 15px;
+    border: none;
+    text-align: center;
+    line-height: 15px;
+    background-color: transparent;
+    color: #F66600;
+    font-size: 28px;
+}
+
+.related-invoices-menu .related-invoices-menu-title {
+    position: absolute;
+    left: 53px;
+    top: 19px;
+    height: 19px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    color: #F66600;
+}
+
+.related-invoices-menu .related-invoices-count {
+    position: absolute;
+    left: 53px;
+    top: 40px;
+    height: 16px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    color: #999999;
+}
+
+.related-invoices-list {
+    overflow-y: auto;
+    height: calc(100% - 67px);
+}
+
+.related-invoice {
+    height: 90px;
+    margin-left: 13px;
+    margin-right: 13px;
+    border-bottom: 1px solid rgba(201, 215, 223, 1);
+    position: relative;
+}
+
+.related-invoice .related-invoice-info {
+    height: 100%;
+    width: calc(100% - 50px);
+}
+
+.related-invoice .related-invoice-title {
+    font-weight: 700;
+    font-style: normal;
+    font-size: 13px;
+    color: #333333;
+    top: 18px;
+    position: absolute;
+}
+
+.related-invoice .related-invoice-payer {
+    font-weight: 200;
+    font-style: normal;
+    font-size: 11px;
+    color: #999999;
+    top: 40px;
+    position: absolute;
+}
+
+.related-invoice .related-invoice-total {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 11px;
+    top: 58px;
+    position: absolute;
+}
+
+.related-invoice .related-invoice-button {
+    position: relative;
+    top: 40px;
+    right: 10px;
+    height: 15px;
+    width: 15px;
+    color: #F66600;
+    background-color: transparent;
+    text-align: center;
+    line-height: 15px;
+    float: right;
+}
+
+.invoice-transfer-summary {
+    height: 60px;
+    border-bottom: 1px solid rgba(201, 215, 223, 1);
+    position: relative;
+}
+
+.invoice-transfer-summary .invoice-title {
+    font-weight: 700;
+    font-style: normal;
+    font-size: 13px;
+    color: #333333;
+    position: absolute;
+    left: 0px;
+    top: 23px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: calc(100% - 30px);
+}
+
+.invoice-transfer-payer-section {
+    position: relative;
+    height: 66px;
+}
+
+.invoice-transfer-payer-section .payer-name {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    color: #333333;
+    position: absolute;
+    left: 0px;
+    top: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: calc(100% - 30px);
+}
+
+.invoice-transfer-payer-section .payer-email {
+    font-weight: 200;
+    font-style: normal;
+    font-size: 11px;
+    color: #999999;
+    position: absolute;
+    left: 0px;
+    top: 33px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: calc(100% - 30px);
+}
+
+.table-invoice-items.right-transfer-invoice-items tr > td,
+.table-invoice-items.right-transfer-invoice-items tr > th,
+.table-payment-items.right-transfer-payment-items tr > td,
+.table-payment-items.right-transfer-payment-items tr > th {
+    text-align: center;
+}
+
+.table-invoice-items.right-transfer-invoice-items tr > td:nth-child(2),
+.table-invoice-items.right-transfer-invoice-items tr > th:nth-child(2),
+.table-payment-items.right-transfer-payment-items tr > td:nth-child(2),
+.table-payment-items.right-transfer-payment-items tr > th:nth-child(2) {
+    text-align: left;
+}
+
+.table-invoice-items.right-transfer-invoice-items tr > td:last-child,
+.table-invoice-items.right-transfer-invoice-items tr > td:nth-last-child(2),
+.table-invoice-items.right-transfer-invoice-items tr > th:last-child,
+.table-invoice-items.right-transfer-invoice-items tr > th:nth-last-child(2),
+.table-payment-items.right-transfer-payment-items tr > td:last-child,
+.table-payment-items.right-transfer-payment-items tr > td:nth-last-child(2),
+.table-payment-items.right-transfer-payment-items tr > th:last-child,
+.table-payment-items.right-transfer-payment-items tr > th:nth-last-child(2) {
+    text-align: right;
+}
+
+
+.transfer-invoices-menu {
+    margin-left: 13px;
+    margin-right: 13px;
+    border-bottom: 1px solid rgba(201, 215, 223, 1);
+    height: 67px;
+}
+
+.transfer-invoices-menu .transfer-invoices-menu-back {
+    outline: none;
+    position: absolute;
+    left: 24px;
+    top: 23px;
+    width: 15px;
+    height: 15px;
+    border: none;
+    text-align: center;
+    line-height: 15px;
+    background-color: transparent;
+    color: #F66600;
+    font-size: 28px;
+}
+
+.transfer-invoices-menu .transfer-invoices-menu-title {
+    position: absolute;
+    left: 53px;
+    top: 19px;
+    height: 19px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    color: #F66600;
+}
+
+
+.select-invoice {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    color: #333333;
+    outline: none;
+    border: none;
+    padding: 4px;
+    background-color: transparent;
+    position: relative;
+    top: 18px;
+}
+
+.no-invoice-selected-explanation {
+    text-align: center;
+    position: relative;
+    top: 154px;
+}
+
+.no-invoice-selected-explanation .subtitle {
+    font-weight: 200;
+    font-style: normal;
+    font-size: 11px;
+    color: #999999;
+}
+
+.no-invoice-selected-explanation .title {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    color: #333333;
+}
+
+.invoice-transfer-footer {
+    height: 78px;
+    min-height: 78px;
+}
+
+.invoice-transfer-row {
+    height: calc(100% - 145px);
+}
+
+.invoice-transfer-column {
+    overflow-y: auto;
+    height: 100%;
+}
+
+.add-invoice-payment-modal-body {
+    padding-left: 28px;
+}
+
+.add-invoice-payment-modal-body .row:first-child {
+    margin-top: 15px;
+}
+
+.add-invoice-payment-modal-body .row {
+    margin-top: 20px;
+    margin-left: 0px;
+}
+
+.add-invoice-payment-modal-body .modal-text {
+    height: 30px;
+    width: 138px;
+    line-height: 30px;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 13px;
+    color: #333333;
+    float: left;
+}
+
+.add-invoice-payment-modal-body .modal-payment-input {
+    height: 30px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(228, 228, 228, 1);
+    background-color: rgba(255, 255, 255, 1);
+    width: 164px;
+    float: left;
+}
+
+.add-invoice-payment-modal-body .modal-total-payment-amount {
+    margin-left: 17px;
+    font-weight: 200;
+    font-style: normal;
+    font-size: 13px;
+    color: #999999;
+    float: left;
+    height: 30px;
+    line-height: 30px;
+}
+
+.add-invoice-payment-modal-body .modal-payment-method-select {
+    width: 164px;
+    height: 30px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+}
+
+.add-invoice-payment-modal-body .select-taxes-btn {
+    width: 99px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    color: #333333;
+    background: transparent;
+    margin: 0px;
+    padding: 0px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(228, 228, 228, 1);
+    cursor: pointer;
+    float: left;
+    outline: none;
+}
+
+.add-invoice-payment-modal-body .select-taxes-btn.active {
+    background-color: #333333;
+    color: white;
+}
+
+.add-invoice-payment-modal-body .modal-notes-textarea {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(228, 228, 228, 1);
+    background-color: rgba(255, 255, 255, 1);
+    background-color: transparent;
+    width: 295px;
+    height: 88px;
+    outline: none;
 }

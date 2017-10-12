@@ -1,55 +1,35 @@
-import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../data-objects/items/InvoiceItemDO';
-import { ThTranslation } from '../../../../../common/utils/localization/ThTranslation';
-import { ThUtils } from '../../../../../common/utils/ThUtils';
-import { BookingPriceDO } from "../../bookings/data-objects/price/BookingPriceDO";
+import { InvoiceItemDO } from "../data-objects/items/InvoiceItemDO";
+import { ThTranslation } from "../../../../../common/utils/localization/ThTranslation";
 
 export class InvoiceItemVM {
-    private _thUtils: ThUtils;
+    item: InvoiceItemDO;
 
-    invoiceItemDO: InvoiceItemDO;
+    isRemovable: boolean;
+    isMovable: boolean;
+    isRelatedToBooking: boolean;
+    numberOfItems: number;
+    unitPrice: number;
+    totalPrice: number;
+    displayText: string;
+    displayTextParams: Object;
+    subtitle: string;
 
-    constructor(private _thTranslation: ThTranslation) {
-        this._thUtils = new ThUtils();
+    public static build(item: InvoiceItemDO, isRelatedToBooking: boolean): InvoiceItemVM {
+        let itemVm = new InvoiceItemVM();
+        itemVm.item = item;
+        itemVm.isRemovable = true;
+        itemVm.isMovable = true;
+        itemVm.isRelatedToBooking = isRelatedToBooking;
+        itemVm.numberOfItems = item.meta.getNumberOfItems();
+        itemVm.unitPrice = item.meta.getUnitPrice();
+        itemVm.totalPrice = item.meta.getTotalPrice();
+        return itemVm;
     }
 
-    public buildFromInvoiceItem(invoiceItemDO: InvoiceItemDO) {
-        this.invoiceItemDO = invoiceItemDO;
-    }
-
-    public get itemDisplayText(): string {
-        return this.invoiceItemDO.meta.getDisplayName(this._thTranslation);
-    }
-    public get qty(): number {
-        let noOfItems = this.invoiceItemDO.meta.getNumberOfItems();
-        return this.invoiceItemDO.accountingType === InvoiceItemAccountingType.Credit? noOfItems * -1 : noOfItems;
-    }
-    public get price(): number {
-        return this.invoiceItemDO.meta.getUnitPrice();
-    }
-    public get totalPrice(): number {
-        return this.invoiceItemDO.getTotalPrice();
-    }
-    public isMovable(): boolean {
-        return this.invoiceItemDO.meta.isMovableByDefault() 
-            && this.invoiceItemDO.accountingType === InvoiceItemAccountingType.Debit;
-    }
-    public displayBookingDateBreakdown(): boolean {
-        if (!(this.invoiceItemDO.type === InvoiceItemType.Booking)) {
-            return false;
+    getDisplayName(thTranslation: ThTranslation): string {
+        if (!this.displayText) {
+            return this.item.meta.getDisplayName(thTranslation);
         }
-        let bookingPrice: BookingPriceDO = <BookingPriceDO>this.invoiceItemDO.meta;
-        return !bookingPrice.isPenalty();
-    }
-
-    public buildPrototype(): InvoiceItemVM {
-        var invoiceItemVMCopy = new InvoiceItemVM(this._thTranslation);
-        var invoiceItemDOCopy = new InvoiceItemDO();
-        invoiceItemDOCopy.buildFromObject(this.invoiceItemDO);
-        invoiceItemVMCopy.invoiceItemDO = invoiceItemDOCopy;
-        return invoiceItemVMCopy;
-    }
-
-    public buildFromInvoiceItemDO(invoiceItemDO: InvoiceItemDO) {
-        this.invoiceItemDO = invoiceItemDO;
+        return thTranslation.translate(this.displayText, this.displayTextParams);
     }
 }

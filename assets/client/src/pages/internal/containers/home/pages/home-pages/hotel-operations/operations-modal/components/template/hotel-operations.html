@@ -10,11 +10,11 @@
 				<small>{{ titleMeta.subtitle }}</small>
 				<small *ngIf="titleMeta.filterMeta && titleMeta.filterMeta.filterValue" class="filter">{{ titleMeta.filterMeta.filterInfo | translate}}</small>
 				<span *ngIf="titleMeta.filterMeta && titleMeta.filterMeta.filterValue" class="filter filter-label">
-					<i class="fa fa-2x unitpal-font">{{ titleMeta.filterMeta.filterFontName }}</i> {{ titleMeta.filterMeta.filterValue }} 
+					<i class="fa fa-2x unitpal-font">{{ titleMeta.filterMeta.filterFontName }}</i> {{ titleMeta.filterMeta.filterValue }}
 					<a class="clickable-item" (click)="removeHeaderFilter()">
 						<i class="fa unitpal-font">C</i>
 					</a>
-				</span>	
+				</span>
 				<small *ngIf="titleMeta.filterMeta && titleMeta.filterMeta.filterRemoveInfo" class="filter-remove-info m-l-6"> {{ titleMeta.filterMeta.filterRemoveInfo | translate }} </small>
 			</h1>
 		</div>
@@ -32,27 +32,28 @@
 </div>
 <div class="modal-lg-body container operational-page-container">
 
-	<room-operations-page class="full-height" 
+	<room-operations-page class="full-height"
         *ngIf="isRoomOperationsPage()"
         [roomOperationsPageParam]="currentHotelOperationsPageParam"
 		>
     </room-operations-page>
 
-	<booking-operations-page class="full-height" 
+	<booking-operations-page class="full-height"
 		*ngIf="isBookingOperationsPage()"
 		[bookingOperationsPageParam]="currentHotelOperationsPageParam"
 		>
 	</booking-operations-page>
 
-	<customer-operations-page class="full-height" 
+	<customer-operations-page class="full-height"
 		*ngIf="isCustomerOperationsPage()"
 		[customerOperationsPageParam]="currentHotelOperationsPageParam"
 		>
 	</customer-operations-page>
 
-	<invoice-operations-page class="full-height" 
+	<invoice-operations-page class="full-height"
 		*ngIf="isInvoiceOperationsPage()"
 		[invoiceOperationsPageParam]="currentHotelOperationsPageParam"
+		(exit)="triggerOnExit()"
 		>
 	</invoice-operations-page>
 

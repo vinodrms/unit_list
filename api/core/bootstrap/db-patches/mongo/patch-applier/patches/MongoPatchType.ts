@@ -8,5 +8,8 @@ export enum MongoPatchType {
     AddPaymentDueInDaysToHotels,
     AddIndexForBookingsSort,
     AddSignupCodes,
-    
+    AddMergeInvoiceToBookings,
+    MigrateInvoiceGroupsToInvoices,
+    AddBookingsIndexForYMPerformance,
+
 }

@@ -1,254 +1,189 @@
-import { InvoiceDO, InvoiceAccountingType } from '../data-objects/InvoiceDO';
-import {InvoicePayerDO} from '../data-objects/payers/InvoicePayerDO';
-import {InvoiceItemDO, InvoiceItemType} from '../data-objects/items/InvoiceItemDO';
-import {InvoicePayerVM} from './InvoicePayerVM';
-import {InvoiceItemVM} from './InvoiceItemVM';
-import {CustomersDO} from '../../customers/data-objects/CustomersDO';
-import {CustomerDO} from '../../customers/data-objects/CustomerDO';
-import {ThTranslation} from '../../../../../common/utils/localization/ThTranslation';
-import {AddOnProductDO} from '../../add-on-products/data-objects/AddOnProductDO';
-import {AddOnProductInvoiceItemMetaDO} from '../data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
-import {ThUtils} from '../../../../../common/utils/ThUtils';
-import {InvoicePaymentMethodType} from '../data-objects/payers/InvoicePaymentMethodDO';
-
-import * as _ from "underscore";
+import _ = require('underscore');
+import { InvoiceDO } from "../data-objects/InvoiceDO";
+import { CustomerDO } from "../../customers/data-objects/CustomerDO";
+import { InvoiceMeta } from "../data-objects/InvoiceMeta";
+import { InvoiceMetaFactory } from "../data-objects/InvoiceMetaFactory";
+import { InvoiceItemVM } from "./InvoiceItemVM";
+import { InvoiceItemDO, InvoiceItemType } from "../data-objects/items/InvoiceItemDO";
+import { BookingPriceDO } from "../../bookings/data-objects/price/BookingPriceDO";
+import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
+import { ThDateUtils } from "../../common/data-objects/th-dates/ThDateUtils";
+import { ThTimestampDO } from "../../common/data-objects/th-dates/ThTimestampDO";
+import { ThUtils } from "../../../../../common/utils/ThUtils";
+import { RoomDO } from '../../rooms/data-objects/RoomDO';
 
 export class InvoiceVM {
-    private static NO_ITEMS_ADDED_ERROR = 'Add at least an item.';
-    private static NO_PAYERS_ADDED_ERROR = 'Add at least a payer.';
-    private static EACH_PAYER_ENTRY_SHOULD_HAVE_A_CUSTOMER_SELECTED_ERROR = 'Select a customer for each payer entry.';
-    private static SHARED_AND_PAY_BY_AGREEMENT_SELECTED_ERROR = 'You cannot share an invoice if one of the payers has \'pay invoice by agreement\' as payment method.';
-    private static TOTAL_PRICE_DIFFERENT_THAN_TOTAL_PAID = 'Total amount paid should equal total price.';
+    private _invoice: InvoiceDO;
+    private _customerList: CustomerDO[];
+    private _invoiceMeta: InvoiceMeta;
+    private _invoiceItemVms: InvoiceItemVM[];
+    private _bookingCustomerList: CustomerDO[];
+    private _bookingRoomList: RoomDO[];
 
-    errorMessageList: string[];
-    invoiceDO: InvoiceDO;
-    invoicePayerVMList: InvoicePayerVM[];
-    invoceItemVMList: InvoiceItemVM[];
-    newlyAdded: boolean;
+    private thDateUtils: ThDateUtils;
+    private thUtils: ThUtils;
 
-    private _credited: boolean;
-
-    constructor(private _thTranslation: ThTranslation) {
-        this.errorMessageList = [];
+    constructor() {
+        this.thDateUtils = new ThDateUtils();
+        this.thUtils = new ThUtils();
     }
 
-    public buildCleanInvoiceVM(invoiceReference: string) {
-        this.invoiceDO = new InvoiceDO();
-        this.invoiceDO.buildCleanInvoice();
-        this.invoiceDO.invoiceReference = invoiceReference;
-        this.invoicePayerVMList = [];
-        var invoicePayerVM = new InvoicePayerVM(this._thTranslation);
-        invoicePayerVM.invoicePayerDO = this.invoiceDO.payerList[0];
-        this.invoicePayerVMList.push(invoicePayerVM);
-        this.invoceItemVMList = [];
-        this.newlyAdded = true;
+    public get invoice(): InvoiceDO {
+        return this._invoice;
+    }
+    public set invoice(value: InvoiceDO) {
+        this._invoice = value;
+        let factory = new InvoiceMetaFactory();
+        this._invoiceMeta = factory.getInvoiceMeta(this._invoice.paymentStatus, this._invoice.accountingType);
+
+        this.recreateInvoiceItemVms();
     }
 
-    public buildFromInvoiceDOAndCustomersDO(invoice: InvoiceDO, customersDO: CustomersDO) {
-        this.invoiceDO = invoice;
+    public recreateInvoiceItemVms() {
+        this._invoiceItemVms = [];
+        _.forEach(this._invoice.itemList, (item: InvoiceItemDO) => {
+            if (item.type === InvoiceItemType.Booking) {
+                let bookingPrice: BookingPriceDO = <BookingPriceDO>item.meta;
+                if (bookingPrice.isPenalty()) {
+                    let itemVm = InvoiceItemVM.build(item, true);
+                    this._invoiceItemVms.push(itemVm);
+                }
+                else {
+                    let subtitle = "";
 
-        this.invoicePayerVMList = [];
-        _.forEach(this.invoiceDO.payerList, (invoicePayerDO: InvoicePayerDO) => {
-            var invoicePayerVM = new InvoicePayerVM(this._thTranslation);
-            invoicePayerVM.buildFromInvoicePayerDOAndCustomersDO(invoicePayerDO, customersDO);
-            this.invoicePayerVMList.push(invoicePayerVM);
-        });
-
-        this.invoceItemVMList = [];
-        _.forEach(this.invoiceDO.itemList, (invoiceItemDO: InvoiceItemDO) => {
-            var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
-            invoiceItemVM.buildFromInvoiceItem(invoiceItemDO);
-            this.invoceItemVMList.push(invoiceItemVM);
-        });
-    }
-
-    public get totalPrice(): number {
-        return this.invoiceDO.getPrice();
-    }
-    public get isNewlyAdded(): boolean {
-        return this.newlyAdded;
-    }
-
-    public addInvoicePayer(customerDO: CustomerDO) {
-        var newInvoicePayerVM = new InvoicePayerVM(this._thTranslation);
-        newInvoicePayerVM.buildFromCustomerDO(customerDO);
-        this.invoicePayerVMList.push(newInvoicePayerVM);
-        var thUtils = new ThUtils();
-        var equalSharePrice = thUtils.roundNumberToTwoDecimals(this.totalPrice / this.invoicePayerVMList.length);
-        _.forEach(this.invoicePayerVMList, (invoicePayerVM: InvoicePayerVM) => {
-            invoicePayerVM.invoicePayerDO.priceToPay = equalSharePrice;
-        });
-
-        this.invoicePayerVMList[0].invoicePayerDO.priceToPay = 
-            thUtils.roundNumberToTwoDecimals(this.invoicePayerVMList[0].invoicePayerDO.priceToPay + this.totalPrice - this.amountPaid);
-
-        this.isValid();
-    }
-
-    public addItemOnInvoice(aop: AddOnProductDO, qty: number) {
-        var newInvoiceItem = new InvoiceItemDO();
-        newInvoiceItem.id = aop.id;
-        newInvoiceItem.type = InvoiceItemType.AddOnProduct;
-
-        var invoiceItemMeta = new AddOnProductInvoiceItemMetaDO();
-        invoiceItemMeta.aopDisplayName = aop.name;
-        invoiceItemMeta.numberOfItems = qty;
-        invoiceItemMeta.pricePerItem = aop.price;
-        if(_.isArray(aop.taxIdList) && !_.isEmpty(aop.taxIdList)) {
-            invoiceItemMeta.vatId = aop.taxIdList[0];
-        }
-        else {
-            invoiceItemMeta.vatId = null;
-        }
-        newInvoiceItem.meta = invoiceItemMeta;
-
-        var newInvoiceItemVM = new InvoiceItemVM(this._thTranslation);
-        newInvoiceItemVM.buildFromInvoiceItem(newInvoiceItem);
-
-        this.invoiceDO.itemList.push(newInvoiceItem);
-        this.invoceItemVMList.push(newInvoiceItemVM);
-
-        this.isValid();
-    }
-
-    public set credited(value: boolean) {
-        this._credited = value;
-    }
-    public get credited(): boolean {
-        return this._credited;
-    }
-
-    public isValid(): boolean {
-        this.errorMessageList = [];
-
-        this.validateNumberOfPayers();
-        this.validateNumberOfItems();
-        this.validateAmountPaid();
-        this.validateNumberOfCompanyPayersWithPayByAgreementAsPM();
-
-        return _.isEmpty(this.errorMessageList);
-    }
-
-    private validateNumberOfItems() {
-        if (_.isEmpty(this.invoceItemVMList)) {
-            this.errorMessageList.push(InvoiceVM.NO_ITEMS_ADDED_ERROR);
-        }
-    }
-    private validateNumberOfPayers() {
-        if (_.isEmpty(this.invoicePayerVMList)) {
-            this.errorMessageList.push(InvoiceVM.NO_PAYERS_ADDED_ERROR);
-            return;
-        }
-
-        var thUtils = new ThUtils();
-        var noOfEmptyPayers = _.reduce(this.invoicePayerVMList, (totalNo: number, invoicePayerVM: InvoicePayerVM) => {
-            if (thUtils.isUndefinedOrNull(invoicePayerVM.customerDO)) {
-                return totalNo + 1;
-            }
-            return totalNo;
-        }, 0);
-        if (noOfEmptyPayers === this.invoicePayerVMList.length) {
-            this.errorMessageList.push(InvoiceVM.EACH_PAYER_ENTRY_SHOULD_HAVE_A_CUSTOMER_SELECTED_ERROR);
-        }
-    }
-    private validateAmountPaid() {
-        if (this.amountPaid != this.totalPrice) {
-            this.errorMessageList.push(InvoiceVM.TOTAL_PRICE_DIFFERENT_THAN_TOTAL_PAID);
-        }
-    }
-    private get amountPaid(): number {
-        var amountPaid = 0;
-        _.forEach(this.invoicePayerVMList, (invoicePayerVM: InvoicePayerVM) => {
-            amountPaid += invoicePayerVM.invoicePayerDO.priceToPay;
-        });
-        return amountPaid;
-    }
-
-    private validateNumberOfCompanyPayersWithPayByAgreementAsPM() {
-        if (this.invoicePayerVMList.length < 2) return;
-
-        var thUtils = new ThUtils();
-        var hasAtLeastOnePayerWithPayByAgreement = false;
-        for (var i = 0; i < this.invoicePayerVMList.length; ++i) {
-            var invoicePayerVM = this.invoicePayerVMList[i];
-            if (!thUtils.isUndefinedOrNull(invoicePayerVM.customerDO)) {
-                if (invoicePayerVM.customerDO.isCompanyOrTravelAgency()) {
-                    if (thUtils.isUndefinedOrNull(invoicePayerVM.invoicePayerDO.paymentMethod)) {
-                        continue;
+                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.externalBookingReference)) {
+                        subtitle += bookingPrice.externalBookingReference;
                     }
-                    if (invoicePayerVM.invoicePayerDO.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
-                        this.errorMessageList.push(InvoiceVM.SHARED_AND_PAY_BY_AGREEMENT_SELECTED_ERROR);
-                        return;
+
+                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.displayedReservationNumber)) {
+                        if (subtitle.length > 0) { subtitle += ", "; }
+                        subtitle += bookingPrice.displayedReservationNumber;
                     }
+
+                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.roomId)) {
+                        let room: RoomDO = _.find(this._bookingRoomList, (room: RoomDO) => { return room.id === bookingPrice.roomId; });
+                        if (!this.thUtils.isUndefinedOrNull(room)) {
+                            if (subtitle.length > 0) { subtitle += ", "; }
+                            subtitle += room.name;
+                        }
+                    }
+
+                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.customerId)) {
+                        let customer: CustomerDO = _.find(this._bookingCustomerList, (customer: CustomerDO) => { return customer.id === bookingPrice.customerId; });
+                        if (!this.thUtils.isUndefinedOrNull(customer)) {
+                            if (subtitle.length > 0) { subtitle += ", "; }
+                            subtitle += customer.customerName;
+                        }
+                    }
+
+                    bookingPrice.roomPricePerNightList.forEach((price: PricePerDayDO, index: number) => {
+                        let itemVm = new InvoiceItemVM();
+                        itemVm.item = item;
+                        itemVm.isRemovable = false;
+                        itemVm.isMovable = (index == 0);
+                        itemVm.isRelatedToBooking = true;
+                        itemVm.numberOfItems = 1;
+                        itemVm.unitPrice = price.price;
+                        itemVm.totalPrice = price.price;
+                        itemVm.displayText = "Accomodation for %date%";
+                        itemVm.displayTextParams = { date: price.thDate.toString() };
+                        itemVm.subtitle = subtitle;
+                        this._invoiceItemVms.push(itemVm);
+                    });
                 }
             }
-        }
-    }
-
-    public buildPrototype(): InvoiceVM {
-        var invoiceVMCopy = new InvoiceVM(this._thTranslation);
-
-        invoiceVMCopy.newlyAdded = this.newlyAdded;
-
-        var invoiceDOCopy = new InvoiceDO();
-        invoiceDOCopy.buildFromObject(this.invoiceDO);
-        invoiceVMCopy.invoiceDO = invoiceDOCopy;
-
-        invoiceVMCopy.invoceItemVMList = [];
-        _.forEach(this.invoceItemVMList, (invoiceItemVM: InvoiceItemVM) => {
-            invoiceVMCopy.invoceItemVMList.push(invoiceItemVM.buildPrototype());
+            else {
+                let isRelatedToBooking = item.meta.isDerivedFromBooking();
+                let itemVm = InvoiceItemVM.build(item, isRelatedToBooking);
+                itemVm.isRemovable = !isRelatedToBooking;
+                itemVm.isMovable = !isRelatedToBooking;
+                this._invoiceItemVms.push(itemVm);
+            }
         });
-
-        invoiceVMCopy.invoicePayerVMList = [];
-        _.forEach(this.invoicePayerVMList, (invoicePayerVM: InvoicePayerVM) => {
-            invoiceVMCopy.invoicePayerVMList.push(invoicePayerVM.buildPrototype());
-        })
-
-        return invoiceVMCopy;
     }
 
-    public addOrRemoveInvoiceFeeIfNecessary(customerDOList: CustomerDO[]) {
-        if (!this.hasPayInvoiceByAgreementAsPM()) {
-            var index = _.findIndex(this.invoceItemVMList, (invoiceItemVM: InvoiceItemVM) => {
-                return invoiceItemVM.invoiceItemDO.type === InvoiceItemType.InvoiceFee;
-            });
-            if (index != -1) {
-                this.invoceItemVMList.splice(index, 1);
-                this.invoiceDO.itemList.splice(index, 1);
-            }
-            return;
-        }
-
-        for (var i = 0; i < this.invoicePayerVMList.length; ++i) {
-            if (this.invoicePayerVMList[i].invoicePayerDO.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
-                var customerDO = _.find(customerDOList, (customerDO: CustomerDO) => {
-                    return customerDO.id === this.invoicePayerVMList[i].invoicePayerDO.customerId;
-                });
-
-                var index = _.findIndex(this.invoceItemVMList, (invoiceItemVM: InvoiceItemVM) => {
-                    return invoiceItemVM.invoiceItemDO.type === InvoiceItemType.InvoiceFee;
-                });
-                if (index === -1) {
-                    var invoiceFeeItem = new InvoiceItemDO();
-                    invoiceFeeItem.buildFeeItemFromCustomerDO(customerDO);
-
-                    var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
-                    invoiceItemVM.buildFromInvoiceItem(invoiceFeeItem);
-
-                    this.invoceItemVMList.push(invoiceItemVM);
-                    this.invoiceDO.itemList.push(invoiceFeeItem);
-                }
-                return;
-            }
-        }
+    public get invoiceMeta(): InvoiceMeta {
+        return this._invoiceMeta;
+    }
+    public set invoiceMeta(value: InvoiceMeta) {
+        this._invoiceMeta = value;
     }
 
-    public hasPayInvoiceByAgreementAsPM(): boolean {
-        for (var i = 0; i < this.invoicePayerVMList.length; ++i) {
-            if (this.invoicePayerVMList[i].invoicePayerDO.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
-                return true;
+    public get customerList(): CustomerDO[] {
+        return this._customerList;
+    }
+    public set customerList(value: CustomerDO[]) {
+        this._customerList = value;
+    }
+
+    public get invoiceItemVms(): InvoiceItemVM[] {
+        return this._invoiceItemVms;
+    }
+    public set invoiceItemVms(value: InvoiceItemVM[]) {
+        this._invoiceItemVms = value;
+    }
+
+    public get bookingCustomerList(): CustomerDO[] {
+        return this._bookingCustomerList;
+    }
+    public set bookingCustomerList(value: CustomerDO[]) {
+        this._bookingCustomerList = value;
+    }
+
+    public get bookingRoomList(): RoomDO[] {
+        return this._bookingRoomList;
+    }
+    public set bookingRoomList(value: RoomDO[]) {
+        this._bookingRoomList = value;
+    }
+
+    public get firstPayerName(): string {
+        return (this._customerList.length > 0) ? this._customerList[0].customerName : "";
+    }
+    public get firstPayerEmail(): string {
+        return (this._customerList.length > 0) ? this._customerList[0].emailString : "";
+    }
+    public get firstPayerCustomerId(): string {
+        return (this._customerList.length > 0) ? this._customerList[0].id : "";
+    }
+
+
+    public get payerListString(): string {
+        var payerListString: string = "";
+        _.forEach(this.customerList, (customer: CustomerDO, index: number) => {
+            payerListString += customer.customerName;
+            if (index < this.customerList.length - 1) {
+                payerListString += ", ";
             }
-        }
-        return false;
+        });
+        return payerListString;
+    }
+
+    public getCustomerDO(id: string): CustomerDO {
+        return _.find(this.customerList, (customer: CustomerDO) => {
+            return customer.id === id;
+        });
+    }
+
+    public addCustomer(customerToAdd: CustomerDO) {
+        if (!_.find(this.customerList, (customer: CustomerDO) => {
+            return customer.id === customerToAdd.id;
+        })) {
+            this.customerList.push(customerToAdd);
+        };
+    }
+
+    public removeCustomer(customerId: string) {
+        this.customerList = _.without(this.customerList, _.findWhere(this.customerList, {
+            id: customerId
+        }));
+    }
+
+    public get paidTimestamp(): ThTimestampDO {
+        return !this.thUtils.isUndefinedOrNull(this.invoice.paidTimestamp) ? this.thDateUtils.convertTimestampToThTimestamp(this.invoice.paidTimestamp) : null;
+    }
+
+    public hasMovableItems(): boolean {
+        return !this.thUtils.isUndefinedOrNull(_.find(this.invoiceItemVms, (item: InvoiceItemVM) => { return item.isMovable; }));
     }
 }

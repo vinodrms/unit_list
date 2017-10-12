@@ -18,11 +18,11 @@
 		</div>
 		<div class="col-xs-4 col-md-4" *ngIf="!tableOptions.canSearch && !isCollapsed">
 		</div>
-		<div class="col-xs-4 col-md-4" [hidden]="isCollapsed">
+		<div class="col-xs-6 col-md-6" [hidden]="isCollapsed">
 			<div #topTableCenter>
 			</div>
 		</div>
-		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
+		<div class="col-xs-2 col-md-2" *ngIf="!isCollapsed">
 			<th-button *ngIf="tableOptions.canAdd" [upFont]="'\''" [text]="tableMeta.addButtonText" [pullRight]="true" (onButtonClick)="addItem()"></th-button>
 		</div>
 	</div>
@@ -76,6 +76,9 @@
 					<span *ngIf="isFontIconWithText(columnMeta.valueMeta)">
 							<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span>
 							{{ getDependentItemValue(item, columnMeta.valueMeta) }}
+					</span>
+					<span *ngIf="isTimestamp(columnMeta.valueMeta)">
+							{{ getItemValue(item, columnMeta.valueMeta) | thtimestamp }}
 					</span>
 				</td>
 				<td *ngIf="tableOptions.showRowActionsCell()" class="table-item-action-group" [ngClass]="tableOptions.getRowActionsCellClass(isCollapsed)">

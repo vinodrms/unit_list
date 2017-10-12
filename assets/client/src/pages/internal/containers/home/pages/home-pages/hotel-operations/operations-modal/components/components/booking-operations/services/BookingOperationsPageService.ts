@@ -1,3 +1,4 @@
+import * as _ from "underscore";
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -13,37 +14,33 @@ import { RoomsService } from '../../../../../../../../../../services/rooms/Rooms
 import { RoomVM } from '../../../../../../../../../../services/rooms/view-models/RoomVM';
 import { EagerCustomersService } from '../../../../../../../../../../services/customers/EagerCustomersService';
 import { EagerAllotmentsService } from '../../../../../../../../../../services/allotments/EagerAllotmentsService';
-import { EagerInvoiceGroupsService } from '../../../../../../../../../../services/invoices/EagerInvoiceGroupsService';
-import { InvoiceGroupDO } from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO, InvoiceAccountingType } from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
 import { AllotmentDO } from '../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
 import { CustomersDO } from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
 import { EagerAddOnProductsService } from '../../../../../../../../../../services/add-on-products/EagerAddOnProductsService';
 import { AddOnProductsDO } from '../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
 import { BookingOperationsPageData } from './utils/BookingOperationsPageData';
 import { HotelBookingOperationsPageParam } from '../utils/HotelBookingOperationsPageParam';
-
-import * as _ from "underscore";
+import { HotelOperationsInvoiceService } from "../../../../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
+import { InvoiceDO } from "../../../../../../../../../../services/invoices/data-objects/InvoiceDO";
 
 @Injectable()
 export class BookingOperationsPageService {
 
-    constructor(private _appContext: AppContext,
-        private _eagerBookingsService: EagerBookingsService,
-        private _hotelAggregatorService: HotelAggregatorService,
-        private _roomCategoriesStatsService: RoomCategoriesStatsService,
-        private _roomsService: RoomsService,
-        private _eagerCustomersService: EagerCustomersService,
-        private _eagerAllotmentsService: EagerAllotmentsService,
-        private _eagerInvoiceGroupsService: EagerInvoiceGroupsService,
-        private _eagerAddOnProductsService: EagerAddOnProductsService) {
+    constructor(private context: AppContext,
+        private eagerBookingsService: EagerBookingsService,
+        private hotelAggregatorService: HotelAggregatorService,
+        private roomCategoriesStatsService: RoomCategoriesStatsService,
+        private roomsService: RoomsService,
+        private eagerCustomersService: EagerCustomersService,
+        private eagerAllotmentsService: EagerAllotmentsService,
+        private invoiceService: HotelOperationsInvoiceService,
+        private eagerAddOnProductsService: EagerAddOnProductsService) {
     }
-
 
     public getPageData(pageParam: HotelBookingOperationsPageParam): Observable<BookingOperationsPageData> {
         return Observable.combineLatest(
-            this._eagerBookingsService.getBooking(pageParam.groupBookingId, pageParam.bookingId),
-            this._hotelAggregatorService.getHotelAggregatedInfo()
+            this.eagerBookingsService.getBooking(pageParam.bookingId),
+            this.hotelAggregatorService.getHotelAggregatedInfo()
         ).flatMap((result: [BookingDO, HotelAggregatedInfo]) => {
             var pageData = new BookingOperationsPageData();
             pageData.bookingDO = result[0];
@@ -54,42 +51,35 @@ export class BookingOperationsPageService {
 
             return Observable.combineLatest(
                 Observable.from([pageData]),
-                this._eagerCustomersService.getCustomersById(pageData.bookingDO.customerIdList),
+                this.eagerCustomersService.getCustomersById(pageData.bookingDO.customerIdList),
                 this.getAttachedRoom(pageData.bookingDO),
-                this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryId(pageData.bookingDO.roomCategoryId),
+                this.roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryId(pageData.bookingDO.roomCategoryId),
                 this.getAttachedAllotment(pageData.bookingDO),
-                this._eagerInvoiceGroupsService.getInvoiceGroupList({
-                    groupBookingId: pageData.bookingDO.groupBookingId,
-                    bookingId: pageData.bookingDO.id
-                }),
-                this._eagerAddOnProductsService.getAddOnProductsById(pageData.bookingDO.reservedAddOnProductIdList)
+                this.invoiceService.getDefaultInvoiceForBooking(pageData.bookingDO.id),
+                this.eagerAddOnProductsService.getAddOnProductsById(pageData.bookingDO.reservedAddOnProductIdList),
             );
-        }).map((result: [BookingOperationsPageData, CustomersDO, RoomVM, RoomCategoryStatsDO, AllotmentDO, InvoiceGroupDO[], AddOnProductsDO]) => {
+        }).map((result: [BookingOperationsPageData, CustomersDO, RoomVM, RoomCategoryStatsDO, AllotmentDO, InvoiceDO, AddOnProductsDO]) => {
             var pageData = result[0];
             pageData.customersContainer = result[1];
             pageData.roomVM = result[2];
             pageData.roomCategoryStats = result[3];
             pageData.allotmentDO = result[4];
-            var invoiceGroupList: InvoiceGroupDO[] = result[5];
-            if (invoiceGroupList.length > 0) {
-                pageData.invoiceGroupDO = invoiceGroupList[0];
-                pageData.invoiceDO = pageData.invoiceGroupDO.getInvoiceForBooking(pageData.bookingDO.id);
-            }
+            pageData.invoiceDO = result[5];
             pageData.reservedAddOnProductsContainer = result[6];
             return pageData;
         });
     }
 
     private getAttachedRoom(bookingDO: BookingDO): Observable<RoomVM> {
-        if (this._appContext.thUtils.isUndefinedOrNull(bookingDO.roomId) || !_.isString(bookingDO.roomId)) {
+        if (this.context.thUtils.isUndefinedOrNull(bookingDO.roomId) || !_.isString(bookingDO.roomId)) {
             return Observable.from([new RoomVM()]);
         }
-        return this._roomsService.getRoomById(bookingDO.roomId);
+        return this.roomsService.getRoomById(bookingDO.roomId);
     }
     private getAttachedAllotment(booking: BookingDO): Observable<AllotmentDO> {
         if (!booking.isMadeThroughAllotment()) {
             return Observable.from([new AllotmentDO()]);
         }
-        return this._eagerAllotmentsService.getAllotmentById(booking.allotmentId);
+        return this.eagerAllotmentsService.getAllotmentById(booking.allotmentId);
     }
 }

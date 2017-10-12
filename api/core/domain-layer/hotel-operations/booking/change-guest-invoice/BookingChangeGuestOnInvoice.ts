@@ -31,14 +31,14 @@ export class BookingChangeGuestOnInvoice {
 
     public changeGuestDisplayedOnInvoice(bookingChangeGuestOnInvoiceDO: BookingChangeGuestOnInvoiceDO): Promise<BookingDO> {
         this._bookingChangeGuestOnInvoiceDO = bookingChangeGuestOnInvoiceDO;
-        
+
         return new Promise<BookingDO>((resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }) => {
             this.changeGuestDisplayedOnInvoiceCore(resolve, reject);
         });
     }
     private changeGuestDisplayedOnInvoiceCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }) {
         var validationResult = BookingChangeGuestOnInvoiceDO.getValidationStructure().validateStructure(this._bookingChangeGuestOnInvoiceDO);
-        
+
         if (!validationResult.isValid()) {
             var parser = new ValidationResultParser(validationResult, this._bookingChangeGuestOnInvoiceDO);
             parser.logAndReject("Error validating change guest displayed on invoice", reject);
@@ -46,7 +46,9 @@ export class BookingChangeGuestOnInvoice {
         }
 
         var customerValidator = new CustomerIdValidator(this._appContext, this._sessionContext);
-        customerValidator.validateCustomerIdList([this._bookingChangeGuestOnInvoiceDO.customerIdDisplayedOnInvoice]).then((customersContainer: CustomersContainer) => {
+        let customerIdList = [this._bookingChangeGuestOnInvoiceDO.customerIdDisplayedOnInvoice].concat(this._bookingChangeGuestOnInvoiceDO.customerIdList);
+        customerIdList = _.uniq(customerIdList);
+        customerValidator.validateCustomerIdList(customerIdList).then((customersContainer: CustomersContainer) => {
             this._loadedCustomersContainer = customersContainer;
 
             var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
@@ -57,24 +59,24 @@ export class BookingChangeGuestOnInvoice {
 
             if (!this.bookingHasValidStatus()) {
                 var thError = new ThError(ThStatusCode.BookingChangeGuestOnInvoiceInvalidState, null);
-                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, 
-                    "change guest displayed on invoice: invalid booking state", 
-                    this._bookingChangeGuestOnInvoiceDO, 
+                ThLogger.getInstance().logBusiness(ThLogLevel.Warning,
+                    "change guest displayed on invoice: invalid booking state",
+                    this._bookingChangeGuestOnInvoiceDO,
                     thError);
                 throw thError;
             }
 
-            if(!this.guestDisplayedOnInvoiceAlreadyOnBooking()) {
+            if (!this.guestDisplayedOnInvoiceAlreadyOnBooking()) {
                 var thError = new ThError(ThStatusCode.BookingChangeGuestOnInvoiceGuestNotOnBooking, null);
-                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, 
-                    "change guest displayed on invoice: the guest that should be displayed on the invoice is not on the booking", 
-                    this._bookingChangeGuestOnInvoiceDO, 
+                ThLogger.getInstance().logBusiness(ThLogLevel.Warning,
+                    "change guest displayed on invoice: the guest that should be displayed on the invoice is not on the booking",
+                    this._bookingChangeGuestOnInvoiceDO,
                     thError);
                 throw thError;
             }
 
             this.updateBooking();
-            
+
             var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
             return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                 groupBookingId: this._loadedBooking.groupBookingId,
@@ -99,11 +101,12 @@ export class BookingChangeGuestOnInvoice {
     private bookingHasValidStatus(): boolean {
         return _.contains(BookingDOConstraints.ConfirmationStatuses_CanChangeCustomerDisplayedOnInvoice, this._loadedBooking.confirmationStatus);
     }
-    
+
     private updateBooking() {
-        this._loadedBooking.defaultBillingDetails.customerIdDisplayedAsGuest = 
-                    this._bookingChangeGuestOnInvoiceDO.customerIdDisplayedOnInvoice;
-        
+        this._loadedBooking.defaultBillingDetails.customerIdDisplayedAsGuest =
+            this._bookingChangeGuestOnInvoiceDO.customerIdDisplayedOnInvoice;
+        this._bookingUtils.updateDisplayCustomerId(this._loadedBooking, this._loadedCustomersContainer);
+
         this._loadedBooking.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {},
             actionString: "The guest customer displayed on invoice has been changed",

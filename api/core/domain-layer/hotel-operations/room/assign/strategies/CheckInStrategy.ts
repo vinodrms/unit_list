@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
@@ -6,12 +7,9 @@ import { SessionContext } from '../../../../../utils/SessionContext';
 import { IAssignRoomStrategy, AssignRoomValidationDO } from './IAssignRoomStrategy';
 import { BookingDO, BookingConfirmationStatus } from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import { AAssignRoomStrategy } from './AAssignRoomStrategy';
-import { GenerateBookingInvoice } from '../../../../invoices/generate-booking-invoice/GenerateBookingInvoice';
-import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { GenerateBookingInvoiceAopMeta } from '../../../../invoices/generate-booking-invoice/GenerateBookingInvoiceDO';
 import { AddOnProductLoader, AddOnProductItemContainer, AddOnProductItem } from '../../../../add-on-products/validators/AddOnProductLoader';
-
-import _ = require('underscore');
+import { GenerateBookingInvoice } from "../../../../invoices/generate-booking-invoice/GenerateBookingInvoice";
+import { InvoiceDO } from "../../../../../data-layer/invoices/data-objects/InvoiceDO";
 
 export class CheckInStrategy extends AAssignRoomStrategy {
     constructor(private _appContext: AppContext, sessionContext: SessionContext) {
@@ -57,7 +55,7 @@ export class CheckInStrategy extends AAssignRoomStrategy {
         generateBookingInvoice.generate({
             groupBookingId: booking.groupBookingId,
             id: booking.id
-        }).then((invoiceGroup: InvoiceGroupDO) => {
+        }).then((invoice: InvoiceDO) => {
             resolve(booking);
         }).catch((error: ThError) => {
             reject(error);

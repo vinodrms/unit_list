@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { DefaultDataBuilder } from '../../../../db-initializers/DefaultDataBuilder';
 import { TestContext } from '../../../../helpers/TestContext';
 import { PriceProductDO, PriceProductStatus } from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
@@ -14,15 +15,13 @@ import { TestUtils } from '../../../../helpers/TestUtils';
 import { ThDateUtils } from '../../../../../core/utils/th-dates/ThDateUtils';
 import { ConfigCapacityDO } from '../../../../../core/data-layer/common/data-objects/bed-config/ConfigCapacityDO';
 import { DefaultBillingDetailsDO } from '../../../../../core/data-layer/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
-import { InvoicePaymentMethodType } from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { DefaultPriceProductBuilder } from '../../../../db-initializers/builders/DefaultPriceProductBuilder';
 import { BookingSearchDO } from '../../../../../core/domain-layer/bookings/search-bookings/BookingSearchDO';
 import { CustomerDO } from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
 import { AddOnProductDO } from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 import { TransientBookingItemDO } from '../../../../../core/domain-layer/bookings/search-bookings/TransientBookingItemDO';
 import { TravelActivityType, TravelType } from "../../../../../core/data-layer/bookings/data-objects/BookingDO";
-
-import _ = require('underscore');
+import { InvoicePaymentMethodType } from '../../../../../core/data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
 
 export class BookingTestHelper {
     public static NoBookingGroups = 10;
@@ -70,7 +69,8 @@ export class BookingTestHelper {
         }
         return {
             bookingList: bookingItemList,
-            confirmationEmailList: [{email: testDataBuilder.hotelDO.contactDetails.email}]
+            confirmationEmailList: [{ email: testDataBuilder.hotelDO.contactDetails.email }],
+            mergeInvoice: false
         }
     }
 

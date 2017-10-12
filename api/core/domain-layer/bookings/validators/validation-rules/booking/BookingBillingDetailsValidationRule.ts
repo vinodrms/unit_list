@@ -1,14 +1,13 @@
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {ABusinessValidationRule} from '../../../../common/validation-rules/ABusinessValidationRule';
-import {BookingDO} from '../../../../../data-layer/bookings/data-objects/BookingDO';
-import {BookingDOConstraints} from '../../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {PriceProductsContainer} from '../../../../price-products/validators/results/PriceProductsContainer';
-import {InvoicePaymentMethodValidator} from '../../../../invoices/validators/InvoicePaymentMethodValidator';
-import {HotelDO} from '../../../../../data-layer/hotel/data-objects/HotelDO';
-import {CustomersContainer} from '../../../../customers/validators/results/CustomersContainer';
-
 import _ = require('underscore');
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { ABusinessValidationRule } from '../../../../common/validation-rules/ABusinessValidationRule';
+import { BookingDO } from '../../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingDOConstraints } from '../../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { PriceProductsContainer } from '../../../../price-products/validators/results/PriceProductsContainer';
+import { HotelDO } from '../../../../../data-layer/hotel/data-objects/HotelDO';
+import { CustomersContainer } from '../../../../customers/validators/results/CustomersContainer';
+import { InvoicePaymentMethodValidator } from '../../../../invoices/validators/InvoicePaymentMethodValidator';
 
 export class BookingBillingDetailsValidationRule extends ABusinessValidationRule<BookingDO> {
     constructor(private _hotelDO: HotelDO, private _priceProductsContainer: PriceProductsContainer, private _customersContainer: CustomersContainer) {

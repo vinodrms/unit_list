@@ -1,131 +1,135 @@
-import { ReinstateInvoiceMetaDO } from "./ReinstateInvoiceMetaDO";
+import _ = require('underscore');
 import { AppContext } from "../../../utils/AppContext";
 import { SessionContext } from "../../../utils/SessionContext";
-import { ThUtils } from "../../../utils/ThUtils";
-import { InvoiceGroupDO } from "../../../data-layer/invoices/data-objects/InvoiceGroupDO";
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 import { ThError } from "../../../utils/th-responses/ThError";
-import { InvoiceDO, InvoiceAccountingType, InvoicePaymentStatus } from "../../../data-layer/invoices/data-objects/InvoiceDO";
-import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from "../../../data-layer/invoices/repositories/IInvoiceGroupsRepository";
 import { ThStatusCode } from "../../../utils/th-responses/ThResponse";
-import { ThLogLevel, ThLogger } from "../../../utils/logging/ThLogger";
-import { InvoiceItemDO, InvoiceItemAccountingType } from "../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
-import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
-
-import _ = require('underscore');
+import { ThLogger, ThLogLevel } from "../../../utils/logging/ThLogger";
 
 export class ReinstateInvoice {
-    private _thUtils: ThUtils;
-    private _reinstatedInvoiceMeta: ReinstateInvoiceMetaDO;
-    private _loadedInvoiceGroup: InvoiceGroupDO;
+    private invoice: InvoiceDO;
 
-    constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
-        this._thUtils = new ThUtils();
-
+    constructor(private appContext: AppContext, private sessionContext: SessionContext) {
     }
 
-    public reinstate(reinstatedInvoiceMeta: ReinstateInvoiceMetaDO) {
-        this._reinstatedInvoiceMeta = reinstatedInvoiceMeta;
-
-        return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
-            this.reinstateCore(resolve, reject);
+    /**
+     * Returns the credit and the reinstated invoices
+     * @param invoiceId The id of the invoice that will be reinstated
+     */
+    public reinstate(invoiceId: string): Promise<InvoiceDO[]> {
+        return new Promise<InvoiceDO[]>((resolve: { (result: InvoiceDO[]): void }, reject: { (err: ThError): void }) => {
+            this.reinstateCore(resolve, reject, invoiceId);
         });
     }
 
-    public reinstateCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-        let invoiceToBeReinstated: InvoiceDO;
-        let invoiceToBeReinstatedIndex: number;
+    private reinstateCore(resolve: { (result: InvoiceDO[]): void }, reject: { (err: ThError): void }, invoiceId: string) {
+        let invoiceRepo = this.appContext.getRepositoryFactory().getInvoiceRepository();
+        invoiceRepo.getInvoiceById({ hotelId: this.sessionContext.sessionDO.hotel.id }, invoiceId)
+            .then((invoice: InvoiceDO) => {
+                if (!invoice.isPaid()) {
+                    var thError = new ThError(ThStatusCode.ReinstateInvoiceInvoiceNotPaid, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to reinstante an invoice not Paid", { invoiceId: invoiceId }, thError);
+                    throw thError;
+                }
+                if (invoice.isCredit()) {
+                    var thError = new ThError(ThStatusCode.ReinstateInvoiceInvoiceCredit, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "tried to reinstante a Credit invoice", { invoiceId: invoiceId }, thError);
+                    throw thError;
+                }
+                this.invoice = invoice;
 
-        let invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-        invoiceGroupRepo.getInvoiceGroupById(this.invoiceGroupMeta,
-            this._reinstatedInvoiceMeta.invoiceGroupId).then((loadedInvoiceGroup: InvoiceGroupDO) => {
-                this._loadedInvoiceGroup = loadedInvoiceGroup;
+                return this.getExistingCreditFor(invoice);
+            }).then((existingCredit: InvoiceDO) => {
+                if (!this.appContext.thUtils.isUndefinedOrNull(existingCredit)) {
+                    var thError = new ThError(ThStatusCode.ReinstateInvoiceCreditExists, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "credit already exists for this invoice", { invoiceId: invoiceId }, thError);
+                    throw thError;
+                }
 
-                _.forEach(this._loadedInvoiceGroup.invoiceList, (invoiceDO: InvoiceDO, index: number) => {
-                    if(invoiceDO.id === this._reinstatedInvoiceMeta.invoiceId) {
-                        invoiceToBeReinstated = invoiceDO;
-                        invoiceToBeReinstatedIndex = index;
-                    }
-                });
-
-                let creditInvoice = this.getCreditInvoice(invoiceToBeReinstated);
-                this._loadedInvoiceGroup.invoiceList.splice(invoiceToBeReinstatedIndex + 1, 0, creditInvoice);
-
-                let reinstatementInvoice = this.getReinstatementInvoice(invoiceToBeReinstated);
-                this._loadedInvoiceGroup.invoiceList.splice(invoiceToBeReinstatedIndex + 2, 0, reinstatementInvoice);
-
-                this._loadedInvoiceGroup.removeItemsPopulatedFromBooking();
-
-                let invoiceGroupitemMeta = this.buildInvoiceGroupItemMetaRepoDO();
-                return invoiceGroupRepo.updateInvoiceGroup(this.invoiceGroupMeta, invoiceGroupitemMeta, this._loadedInvoiceGroup);
-
-            }).then((updatedInvoiceGroupDO: InvoiceGroupDO) => {
-                resolve(updatedInvoiceGroupDO);
+                let timestamp = (new Date()).getTime();
+                let credit = this.getCreditInvoiceFor(this.invoice, timestamp);
+                let reinstatement = this.getReinstatedInvoiceFor(this.invoice, timestamp);
+                return this.addInvoices([credit, reinstatement]);
+            }).then((invoices: InvoiceDO[]) => {
+                resolve(invoices);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.ReinstateInvoiceError, error);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error reinstating invoice", this._reinstatedInvoiceMeta, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error reinstating invoice", { invoiceId: invoiceId }, thError);
                 reject(thError);
             });
     }
 
-    private getReinstatementInvoice(invoiceToBeReinstated: InvoiceDO): InvoiceDO {
-        let reinstatementInvoice = new InvoiceDO();
-        reinstatementInvoice.buildFromObject(invoiceToBeReinstated);
-        reinstatementInvoice.reinstatedInvoiceId = invoiceToBeReinstated.id;
-        reinstatementInvoice.accountingType = InvoiceAccountingType.Debit;
-        reinstatementInvoice.paymentStatus = InvoicePaymentStatus.Unpaid;
-
-        _.forEach(reinstatementInvoice.itemList, (item: InvoiceItemDO) => {
-            item.accountingType = InvoiceItemAccountingType.Debit;
+    private getExistingCreditFor(invoice: InvoiceDO): Promise<InvoiceDO> {
+        return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
+            let invoiceRepo = this.appContext.getRepositoryFactory().getInvoiceRepository();
+            invoiceRepo.getInvoiceList({ hotelId: this.sessionContext.sessionDO.hotel.id }, {
+                invoicePaymentStatus: InvoicePaymentStatus.Paid,
+                invoiceAccountingType: InvoiceAccountingType.Credit,
+                reference: invoice.reference
+            }).then(result => {
+                if (result.invoiceList.length > 1) {
+                    var thError = new ThError(ThStatusCode.ReinstateInvoiceMoreCreditsFoundForTheSameReference, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Error, "more than 1 credit invoice found for the same reference", { invoiceId: invoice.id }, thError);
+                    reject(thError);
+                }
+                else if (result.invoiceList.length == 1) {
+                    resolve(result.invoiceList[0]);
+                }
+                else if (result.invoiceList.length == 0) {
+                    resolve(null);
+                }
+            }).catch(err => { reject(err); })
         });
-
-        delete reinstatementInvoice.id;
-        delete reinstatementInvoice.paidDateUtcTimestamp;
-        delete reinstatementInvoice.paidDateTimeUtcTimestamp;
-        delete reinstatementInvoice.invoiceReference;
-        delete reinstatementInvoice.paidDate;
-        delete reinstatementInvoice.paidTimestamp;
-        delete reinstatementInvoice.paymentDueDate;
-        return reinstatementInvoice;
     }
 
-    private getCreditInvoice(invoiceToBeCredited: InvoiceDO): InvoiceDO {
-        let creditInvoice = new InvoiceDO();
-        creditInvoice.buildFromObject(invoiceToBeCredited);
-        creditInvoice.accountingType = InvoiceAccountingType.Credit;
-        creditInvoice.paymentStatus = InvoicePaymentStatus.Paid;
-        
-        delete creditInvoice.reinstatedInvoiceId;
-
-        _.forEach(creditInvoice.itemList, (item: InvoiceItemDO) => {
-            item.accountingType = InvoiceItemAccountingType.Credit;
-        });
-        
-        _.forEach(creditInvoice.payerList, (payer: InvoicePayerDO) => {
-            payer.shouldApplyTransactionFee = true;
-            payer.priceToPay = payer.priceToPay * -1;
-            payer.priceToPayPlusTransactionFee = payer.priceToPayPlusTransactionFee * -1;
-        });
-
-        delete creditInvoice.id;
-        delete creditInvoice.paidDateUtcTimestamp;
-        delete creditInvoice.paidDateTimeUtcTimestamp;
-        delete creditInvoice.paidDate;
-        delete creditInvoice.paidTimestamp;
-        delete creditInvoice.paymentDueDate;
-        
-        return creditInvoice;
-    }    
-
-    private get invoiceGroupMeta(): InvoiceGroupMetaRepoDO {
-        return {
-            hotelId: this._sessionContext.sessionDO.hotel.id
-        }
+    private getCreditInvoiceFor(invoice: InvoiceDO, timestamp: number): InvoiceDO {
+        let credit = new InvoiceDO();
+        credit.buildFromObject(invoice);
+        credit.paymentStatus = InvoicePaymentStatus.Paid;
+        credit.accountingType = InvoiceAccountingType.Credit;
+        delete credit.reinstatedInvoiceId;
+        credit = this.prepare(credit, timestamp);
+        return credit;
     }
 
-    private buildInvoiceGroupItemMetaRepoDO(): InvoiceGroupItemMetaRepoDO {
-        return {
-            id: this._loadedInvoiceGroup.id,
-			versionId: this._loadedInvoiceGroup.versionId
-        }
+    private getReinstatedInvoiceFor(invoice: InvoiceDO, timestamp: number): InvoiceDO {
+        let reinstated = new InvoiceDO();
+        reinstated.buildFromObject(invoice);
+        delete reinstated.reference;
+        reinstated.paymentStatus = InvoicePaymentStatus.Unpaid;
+        reinstated.accountingType = InvoiceAccountingType.Debit;
+        reinstated.reinstatedInvoiceId = invoice.id;
+        reinstated.payerList.forEach(payer => {
+            payer.paymentList = [];
+        });
+        reinstated = this.prepare(reinstated, timestamp);
+        reinstated.recomputePrices();
+        return reinstated;
+    }
+
+    private prepare(invoice: InvoiceDO, timestamp: number): InvoiceDO {
+        delete invoice.id;
+        delete invoice.paidTimestamp;
+        delete invoice.paymentDueDate;
+        invoice.itemList.forEach(item => {
+            item.transactionId = this.appContext.thUtils.generateUniqueID();
+            item.timestamp = timestamp;
+        });
+        invoice.payerList.forEach(payer => {
+            payer.paymentList.forEach(payment => {
+                payment.transactionId = this.appContext.thUtils.generateUniqueID();
+                payment.timestamp = timestamp;
+            });
+        });
+        return invoice;
+    }
+
+    private addInvoices(invoices: InvoiceDO[]): Promise<InvoiceDO[]> {
+        let promises: Promise<InvoiceDO>[] = [];
+        invoices.forEach((invoice: InvoiceDO) => {
+            let repo = this.appContext.getRepositoryFactory().getInvoiceRepository();
+            promises.push(repo.addInvoice({ hotelId: this.sessionContext.sessionDO.hotel.id }, invoice));
+        });
+        return Promise.all(promises);
     }
 }

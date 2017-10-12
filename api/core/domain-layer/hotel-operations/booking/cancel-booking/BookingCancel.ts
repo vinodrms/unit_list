@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
@@ -12,13 +13,11 @@ import { DocumentActionDO } from '../../../../data-layer/common/data-objects/doc
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
 import { BookingCancelDO } from './BookingCancelDO';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
-import { GenerateBookingInvoice } from '../../../invoices/generate-booking-invoice/GenerateBookingInvoice';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { BookingInvoiceSync } from "../../../bookings/invoice-sync/BookingInvoiceSync";
 import { BookingWithDependencies } from "../utils/BookingWithDependencies";
 import { BookingWithDependenciesLoader } from "../utils/BookingWithDependenciesLoader";
-
-import _ = require('underscore');
+import { InvoiceDO } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
+import { GenerateBookingInvoice } from "../../../invoices/generate-booking-invoice/GenerateBookingInvoice";
 
 export interface BookingCancelUpdateResult {
     hasPenalty: boolean;
@@ -80,7 +79,7 @@ export class BookingCancel {
 
                 let bookingInvoiceSync = new BookingInvoiceSync(this._appContext, this._sessionContext);
                 return bookingInvoiceSync.syncInvoiceWithBookingPrice(this._bookingWithDeps.bookingDO);
-            }).then((updatedGroup: InvoiceGroupDO) => {
+            }).then((updatedInvoice: InvoiceDO) => {
                 resolve(this._bookingWithDeps.bookingDO);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingCancelError, error);
@@ -144,7 +143,7 @@ export class BookingCancel {
         generateBookingInvoice.generate({
             groupBookingId: this._cancelDO.groupBookingId,
             id: this._cancelDO.id
-        }).then((invoiceGroup: InvoiceGroupDO) => {
+        }).then((invoice: InvoiceDO) => {
             resolve(true);
         }).catch((error: ThError) => {
             reject(error);

@@ -12,8 +12,8 @@ import { AllotmentsContainer } from '../../../allotments/validators/results/Allo
 import { RoomSearchResultRepoDO } from '../../../../data-layer/rooms/repositories/IRoomRepository';
 import { RoomCategoryStatsAggregator } from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
+import { InvoiceSearchResultRepoDO } from "../../../../data-layer/invoices/repositories/IInvoiceRepository";
 
 export class BookingWithDependenciesLoader {
     private _groupBookingId: string;
@@ -32,7 +32,7 @@ export class BookingWithDependenciesLoader {
     private loadCore(resolve: { (result: BookingWithDependencies): void }, reject: { (err: ThError): void }) {
         var bookingWithDependencies = new BookingWithDependencies();
         var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._groupBookingId, this._bookingId)
+        bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._bookingId)
             .then((bookingDO: BookingDO) => {
                 bookingWithDependencies.bookingDO = bookingDO;
 
@@ -64,13 +64,12 @@ export class BookingWithDependenciesLoader {
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 bookingWithDependencies.roomCategoryStatsList = roomCategoryStatsList;
 
-                var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-                return invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-                    groupBookingId: this._groupBookingId,
+                var invoiceRepo = this._appContext.getRepositoryFactory().getInvoiceRepository();
+                return invoiceRepo.getInvoiceList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     bookingId: this._bookingId
                 });
-            }).then((invoiceGroupSearchResult: InvoiceGroupSearchResultRepoDO) => {
-                bookingWithDependencies.invoiceGroupList = invoiceGroupSearchResult.invoiceGroupList;
+            }).then((invoiceSearchResult: InvoiceSearchResultRepoDO) => {
+                bookingWithDependencies.invoiceList = invoiceSearchResult.invoiceList;
 
                 let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
                 return customerRepo.getCustomerById({ hotelId: this._sessionContext.sessionDO.hotel.id }, bookingWithDependencies.bookingDO.defaultBillingDetails.customerId);

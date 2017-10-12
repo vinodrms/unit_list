@@ -1,93 +1,96 @@
-import { BaseDO } from '../../../../../common/base/BaseDO';
-import { ThUtils } from '../../../../../common/utils/ThUtils';
-import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from './items/InvoiceItemDO';
-import { InvoicePayerDO } from './payers/InvoicePayerDO';
-import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
-import { CustomerDO } from '../../customers/data-objects/CustomerDO';
-import { BookingPriceDO } from "../../bookings/data-objects/price/BookingPriceDO";
-import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
-import { ThDateDO } from "../../common/data-objects/th-dates/ThDateDO";
-import { ThTimestampDO } from "../../common/data-objects/th-dates/ThTimestampDO";
-
 import * as _ from "underscore";
+import { BaseDO } from '../../../../../common/base/BaseDO';
+import { TaxDO } from "../../taxes/data-objects/TaxDO";
+import { InvoiceItemDO, InvoiceItemType } from "./items/InvoiceItemDO";
+import { InvoicePayerDO } from "./payer/InvoicePayerDO";
+import { ThDateDO } from "../../common/data-objects/th-dates/ThDateDO";
+import { BookingDO } from "../../bookings/data-objects/BookingDO";
+import { ThUtils } from '../../../../../common/utils/ThUtils';
+import { CustomerDO } from "../../customers/data-objects/CustomerDO";
+import { InvoicePaymentDO } from "./payer/InvoicePaymentDO";
+import { InvoicePaymentMethodType } from "./payer/InvoicePaymentMethodDO";
+import { BookingPriceDO } from '../../bookings/data-objects/price/BookingPriceDO';
+
+export enum InvoiceStatus {
+    Active,
+    Deleted
+}
+
+export enum InvoicePaymentStatus {
+    Transient = -1,
+    Unpaid,
+    Paid,
+    LossAcceptedByManagement
+}
 
 export enum InvoiceAccountingType {
     Debit, Credit
 }
 
-export enum InvoicePaymentStatus {
-    Unpaid, Paid, LossAcceptedByManagement
-}
-
 export class InvoiceDO extends BaseDO {
     id: string;
+    versionId: number;
+    hotelId: string;
+    status: InvoiceStatus;
     accountingType: InvoiceAccountingType;
-    bookingId: string;
-    invoiceReference: string;
-    payerList: InvoicePayerDO[];
-    itemList: InvoiceItemDO[];
+    groupId: string;
+    reference: string;
     paymentStatus: InvoicePaymentStatus;
-    notesFromBooking: string;
+    indexedCustomerIdList: string[];
+    indexedBookingIdList: string[];
+    vatTaxListSnapshot: TaxDO[];
     reinstatedInvoiceId: string;
-
-    paidDate: ThDateDO;
-    paidTimestamp: ThTimestampDO;
-    paidDateUtcTimestamp: number;
-    paidDateTimeUtcTimestamp: number;
+    notesFromBooking: string;
+    itemList: InvoiceItemDO[];
+    amountToPay: number;
+    amountPaid: number;
+    payerList: InvoicePayerDO[];
+    // the actual UTC timestamp when the invoice was paid
+    paidTimestamp: number;
     paymentDueDate: ThDateDO;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "reinstatedInvoiceId", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
+        return ["id", "versionId", "hotelId", "accountingType", "groupId", "reference", "paymentStatus",
+            "indexedCustomerIdList", "indexedBookingIdList", "reinstatedInvoiceId", "notesFromBooking", "amountToPay",
+            "amountPaid", "paidTimestamp"];
     }
 
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
 
-        this.payerList = [];
-        this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "payerList"), (payerObject: Object) => {
-            var payerDO = new InvoicePayerDO();
-            payerDO.buildFromObject(payerObject);
-            this.payerList.push(payerDO);
+        this.vatTaxListSnapshot = [];
+        this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "vatTaxListSnapshot"), (vatTaxSnapshotObject: Object) => {
+            var taxDO = new TaxDO();
+            taxDO.buildFromObject(vatTaxSnapshotObject);
+            this.vatTaxListSnapshot.push(taxDO);
         });
+
         this.itemList = [];
         this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "itemList"), (itemObject: Object) => {
-            var itemDO = new InvoiceItemDO();
-            itemDO.buildFromObject(itemObject);
-            this.itemList.push(itemDO);
+            var item = new InvoiceItemDO();
+            item.buildFromObject(itemObject);
+            this.itemList.push(item);
         });
 
-        this.paidDate = new ThDateDO();
-        this.paidDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidDate"));
-
-        this.paidTimestamp = new ThTimestampDO();
-        this.paidTimestamp.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidTimestamp"));
+        this.payerList = [];
+        this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "payerList"), (payerObject: Object) => {
+            var payer = new InvoicePayerDO();
+            payer.buildFromObject(payerObject);
+            this.payerList.push(payer);
+        });
 
         this.paymentDueDate = new ThDateDO();
         this.paymentDueDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentDueDate"));
     }
 
-    public buildCleanInvoice(accountingType: InvoiceAccountingType = InvoiceAccountingType.Debit) {
-        this.accountingType = accountingType;
-        this.payerList = [];
-        var cleanInvoicePayerDO = new InvoicePayerDO();
-        cleanInvoicePayerDO.priceToPay = this.getPrice();
-        this.payerList.push(cleanInvoicePayerDO);
-        this.itemList = [];
-        this.paymentStatus = InvoicePaymentStatus.Unpaid;
+    public getCustomerIdList(): string[] {
+        return _.map(this.payerList, (payer: InvoicePayerDO) => {
+            return payer.customerId;
+        });
     }
-
-    public getPayerCustomerIdList(): string[] {
-        return _.chain(this.payerList)
-            .map((payerDO: InvoicePayerDO) => {
-                return payerDO.customerId;
-            })
-            .uniq().value();
-    }
-
     public getAddOnProductIdList(): string[] {
         return this.getItemIdListByItemType(InvoiceItemType.AddOnProduct);
     }
-
     private getItemIdListByItemType(itemType: InvoiceItemType): string[] {
         return _.chain(this.itemList)
             .filter((invoiceItem: InvoiceItemDO) => {
@@ -96,77 +99,59 @@ export class InvoiceDO extends BaseDO {
             .map((invoiceItem: InvoiceItemDO) => {
                 return invoiceItem.id;
             })
+            .uniq()
             .value();
     }
 
-    public getPrice(): number {
-        let totalPrice = 0;
-        _.forEach(this.itemList, (item: InvoiceItemDO) => {
-            let factor = item.accountingType === InvoiceItemAccountingType.Credit ? -1 : 1;
-            totalPrice += item.meta.getTotalPrice() * factor;
-        });
-        var thUtils = new ThUtils();
-        return thUtils.roundNumberToTwoDecimals(totalPrice);
+    public isWalkInInvoice(): boolean {
+        return this.indexedBookingIdList.length == 0;
     }
 
-    public getAmountPaid(): number {
-        var thUtils = new ThUtils();
-        return _.reduce(this.payerList, (amountPaid: number, payerDO: InvoicePayerDO) => {
-            return amountPaid + payerDO.priceToPay;
-        }, 0);
+    public isPaid(): boolean {
+        return this.paymentStatus === InvoicePaymentStatus.Paid
+            && this.accountingType === InvoiceAccountingType.Debit;
     }
-    
-    public get isPaid(): boolean {
-        return this.paymentStatus === InvoicePaymentStatus.Paid;
-    }
-    public get isLossAcceptedByManagement(): boolean {
+    public isLossAcceptedByManagement(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement;
     }
-    public get isClosed(): boolean {
-        return this.isPaid || this.isLossAcceptedByManagement;
+    public isUnpaid(): boolean {
+        return this.paymentStatus === InvoicePaymentStatus.Unpaid;
     }
-
-    public allAmountWasPaid(): boolean {
-        return this.getPrice() === this.getAmountPaid();
+    public isCredit(): boolean {
+        return this.paymentStatus === InvoicePaymentStatus.Paid
+            && this.accountingType === InvoiceAccountingType.Credit;
     }
-
-    public removeItemsPopulatedFromBooking() {
-        var itemsToRemoveIdList = [];
-        _.forEach(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
-            if (invoiceItemDO.type === InvoiceItemType.Booking) {
-                delete invoiceItemDO.meta;
-            }
-            else if (invoiceItemDO.meta.isDerivedFromBooking()) {
-                itemsToRemoveIdList.push(invoiceItemDO.id);
-            }
-        });
-        _.forEach(itemsToRemoveIdList, (id: string) => {
-            var index = _.findIndex(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
-                return invoiceItemDO.id === id;
-            });
-            if (index != -1) {
-                this.itemList.splice(index, 1);
-            }
-        });
-    }
-
-    public isWalkInInvoice(): boolean {
-        return !_.isString(this.bookingId) || this.bookingId.length == 0;
-    }
-
-    public getUniqueIdentifier(): string {
-        let thUtils = new ThUtils();
-        return thUtils.isUndefinedOrNull(this.id) ? this.invoiceReference : this.id;
-    }
-
-    public uniqueIdentifierEquals(uniqueId: string): boolean {
-        let thUtils = new ThUtils();
-        return thUtils.isUndefinedOrNull(this.id) ?
-            this.invoiceReference === uniqueId : this.id === uniqueId;
+    public isClosed(): boolean {
+        return this.isPaid() || this.isLossAcceptedByManagement();
     }
 
     public isReinstatement(): boolean {
-        var thUtils = new ThUtils();
-        return !thUtils.isUndefinedOrNull(this.reinstatedInvoiceId);
+        return _.isString(this.reinstatedInvoiceId) && !_.isEmpty(this.reinstatedInvoiceId);
+    }
+
+    public getBookingCustomerIdList(): string[] {
+        var customerIdList: string[] = [];
+        this.itemList.forEach((item: InvoiceItemDO) => {
+            if (item.type === InvoiceItemType.Booking) {
+                let customerId: string = (<BookingPriceDO>item.meta).customerId;
+                if (_.isString(customerId) && customerId.length > 0) {
+                    customerIdList.push(customerId);
+                }
+            }
+        });
+        return customerIdList;
+    }
+
+    public getBookingRoomIdList(): string[] {
+        var roomIdList: string[] = [];
+        this.itemList.forEach((item: InvoiceItemDO) => {
+            if (item.type === InvoiceItemType.Booking) {
+                let roomId: string = (<BookingPriceDO>item.meta).roomId;
+                if (_.isString(roomId) && roomId.length > 0) {
+                    roomIdList.push(roomId);
+                }
+            }
+        });
+        return _.uniq(roomIdList);
     }
 }

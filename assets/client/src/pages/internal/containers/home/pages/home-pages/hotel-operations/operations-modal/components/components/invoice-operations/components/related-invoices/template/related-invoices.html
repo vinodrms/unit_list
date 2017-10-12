@@ -1,0 +1,30 @@
+<div class="related-invoices-menu">
+    <button class="fa fa-angle-left related-invoices-menu-back clickable" (click)="backToInvoiceOverview()"></button>
+    <div class="related-invoices-menu-title">
+        {{ 'Related Invoices' | translate }}
+    </div>
+    <div class="related-invoices-count">
+    {{ relatedInvoices.length }} {{ 'Invoices' | translate }}
+    </div>
+</div>
+<div class="related-invoices-list">
+    <div class="related-invoice" *ngFor="let relatedInvoice of relatedInvoices; let i = index">
+        <i *ngIf="canDownloadInvoice(relatedInvoice)" class="fa fa-download related-invoice-button clickable" (click)="downloadInvoice(relatedInvoice)"></i>
+        <div class="related-invoice-info clickable" (click)="selectRelatedInvoiceIndex(i)">
+            <div class="related-invoice-title">
+                <span *ngIf="paginationOptions.displayPaginator">
+                    #{{i + 1}} {{'of'| translate}} {{paginationOptions.totalNumberOfPages}}
+                </span>
+                {{ 'Invoice' | translate }} {{ relatedInvoice.invoice.reference }}
+                <span *ngIf="relatedInvoice.invoice.isPaid()" class="invoice-status paid-invoice-status">{{ 'Paid' | translate }}</span>
+                <span *ngIf="relatedInvoice.invoice.isLossAcceptedByManagement()" class="invoice-status loss-accepted-by-management-invoice-status">{{ 'Loss Management' | translate }}</span>
+                <span *ngIf="relatedInvoice.invoice.isUnpaid()" class="invoice-status unpaid-invoice-status">{{ 'Unpaid' | translate }}</span>
+                <span *ngIf="relatedInvoice.invoice.isCredit()" class="invoice-status credit-invoice-status">{{ 'Credit' | translate }}</span>
+
+                <span *ngIf="relatedInvoice.invoice.isReinstatement()" class="reinstatement">{{ 'Reinstatement' | translate }}</span>
+            </div>
+            <div class="related-invoice-payer">{{ relatedInvoice.payerListString }}</div>
+            <div class="related-invoice-total">{{ ccySymbol }}{{ relatedInvoice.invoice.amountToPay }}</div>
+        </div>
+    </div>
+</div>

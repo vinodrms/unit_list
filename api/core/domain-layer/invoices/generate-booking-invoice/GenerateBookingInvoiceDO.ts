@@ -5,25 +5,25 @@ import { PrimitiveValidationStructure } from "../../../utils/th-validation/struc
 import { StringValidationRule } from "../../../utils/th-validation/rules/StringValidationRule";
 import { BooleanValidationRule } from "../../../utils/th-validation/rules/BooleanValidationRule";
 
-export interface GenerateBookingInvoiceAopMeta {
-	addOnProductDO: AddOnProductDO;
-	noOfItems: number;
+export interface BookingInvoiceItem {
+    addOnProduct: AddOnProductDO;
+    noOfItems: number;
 }
 
 export class GenerateBookingInvoiceDO {
-	groupBookingId: string;
-	id: string;
+    groupBookingId: string;
+    id: string;
 
-	public static getValidationStructure(): IValidationStructure {
-		return new ObjectValidationStructure([
-			{
-				key: "groupBookingId",
-				validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
-			},
-			{
-				key: "id",
-				validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
-			}
-		]);
-	}
+    public static getValidationStructure(): IValidationStructure {
+        return new ObjectValidationStructure([
+            {
+                key: "groupBookingId",
+                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+            },
+            {
+                key: "id",
+                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+            }
+        ]);
+    }
 }

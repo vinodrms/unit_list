@@ -1,9 +1,7 @@
+import _ = require("underscore");
 import { AppContext } from '../../../utils/AppContext';
 import { SessionContext } from '../../../utils/SessionContext';
 import { ThError } from '../../../utils/th-responses/ThError';
-import { InvoiceGroupSearchResultRepoDO } from '../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import { InvoiceGroupDO } from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../data-layer/invoices/data-objects/InvoiceDO';
 import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
 import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
 import { BookingValidationStructures } from '../../bookings/validators/BookingValidationStructures';
@@ -23,124 +21,118 @@ import { ShiftReportPaidInvoicesSectionGenerator } from './strategies/ShiftRepor
 import { CommonValidationStructures } from "../../common/CommonValidations";
 import { ShiftReportPaidByAgreementSectionGenerator } from "./strategies/ShiftReportPaidByAgreementSectionGenerator";
 import { ShiftReportLossAcceptedByManagementInvoicesSectionGenerator } from "./strategies/ShiftReportLossAcceptedByManagementInvoicesSectionGenerator";
-
-import _ = require("underscore");
+import { InvoiceDO } from '../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceSearchResultRepoDO } from "../../../data-layer/invoices/repositories/IInvoiceRepository";
+import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
 
 export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
-	private _shiftReportParams: ShiftReportParams;
-	private _allInvoiceGroupList: InvoiceGroupDO[];
-	private _paidInvoiceGroupList: InvoiceGroupDO[];
-	private _lossAcceptedByManagementInvoiceGroupList: InvoiceGroupDO[];
-	private _aopContainer: AddOnProductItemContainer;
+    private _shiftReportParams: ShiftReportParams;
+    private _allInvoiceList: InvoiceDO[];
+    private _paidInvoiceList: InvoiceDO[];
+    private _lossAcceptedByManagementInvoiceList: InvoiceDO[];
+    private _aopContainer: AddOnProductItemContainer;
+    private _hotel: HotelDO;
 
-	protected getParamsValidationStructure(): IValidationStructure {
-		return new ObjectValidationStructure([
-			{
-				key: "startDate",
-				validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
-			},
-			{
-				key: "endDate",
-				validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
-			},
-			{
-				key: "startDateTime",
-				validationStruct: BookingValidationStructures.getThHourDOValidationStructure()
-			},
-			{
-				key: "endDateTime",
-				validationStruct: BookingValidationStructures.getThHourDOValidationStructure()
-			}
-		]);
-	}
+    protected getParamsValidationStructure(): IValidationStructure {
+        return new ObjectValidationStructure([
+            {
+                key: "startDate",
+                validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
+            },
+            {
+                key: "endDate",
+                validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
+            },
+            {
+                key: "startDateTime",
+                validationStruct: BookingValidationStructures.getThHourDOValidationStructure()
+            },
+            {
+                key: "endDateTime",
+                validationStruct: BookingValidationStructures.getThHourDOValidationStructure()
+            }
+        ]);
+    }
 
-	protected loadParameters(params: any) {
-		var startDate = new ThDateDO();
-		startDate.buildFromObject(params.startDate);
-		var endDate = new ThDateDO();
-		endDate.buildFromObject(params.endDate);
+    protected loadParameters(params: any) {
+        var startDate = new ThDateDO();
+        startDate.buildFromObject(params.startDate);
+        var endDate = new ThDateDO();
+        endDate.buildFromObject(params.endDate);
 
-		let startHour = new ThHourDO();
-		startHour.buildFromObject(params.startDateTime);
-		let endHour = new ThHourDO();
-		endHour.buildFromObject(params.endDateTime);
+        let startHour = new ThHourDO();
+        startHour.buildFromObject(params.startDateTime);
+        let endHour = new ThHourDO();
+        endHour.buildFromObject(params.endDateTime);
 
-		this._shiftReportParams = {
-			dateInterval: ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate),
-			startTime: ThTimestampDO.buildThTimestampDO(startDate, startHour),
-			endTime: ThTimestampDO.buildThTimestampDO(endDate, endHour)
-		}
-	}
+        this._shiftReportParams = {
+            dateInterval: ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate),
+            startTime: ThTimestampDO.buildThTimestampDO(startDate, startHour),
+            endTime: ThTimestampDO.buildThTimestampDO(endDate, endHour)
+        }
+    }
 
-	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-		let igRepository = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-		let igMeta = { hotelId: this._sessionContext.sessionDO.hotel.id };
-		let searchCriteria = {
-			paidInterval: this._shiftReportParams.dateInterval
-		};
-		igRepository.getInvoiceGroupList(igMeta, searchCriteria)
-			.then((result: InvoiceGroupSearchResultRepoDO) => {
-				let invoiceGroupList = result.invoiceGroupList;
-				this._allInvoiceGroupList = invoiceGroupList;
-				this._paidInvoiceGroupList = this.getFilteredInvoiceGroupList(invoiceGroupList, (invoice: InvoiceDO) => { return invoice.isPaid(); });
-				this._lossAcceptedByManagementInvoiceGroupList = this.getFilteredInvoiceGroupList(invoiceGroupList, (invoice: InvoiceDO) => { return invoice.isLossAcceptedByManagement(); });
+    protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
 
-				let aopLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
-				return aopLoader.loadAll();
-			}).then((aopContainer: AddOnProductItemContainer) => {
-				this._aopContainer = aopContainer;
-				resolve(true);
-			}).catch((e) => {
-				reject(e);
-			});
-	}
+        let hotelRepo = this._appContext.getRepositoryFactory().getHotelRepository();
+        hotelRepo.getHotelById(this._sessionContext.sessionDO.hotel.id).then((hotel: HotelDO) => {
+            this._hotel = hotel;
+            let invoiceRepository = this._appContext.getRepositoryFactory().getInvoiceRepository();
+            let igMeta = { hotelId: this._sessionContext.sessionDO.hotel.id };
+            let searchCriteria = {
+                paidInterval: this._shiftReportParams.dateInterval
+            };
+            return invoiceRepository.getInvoiceList(igMeta, searchCriteria)
+        }).then((result: InvoiceSearchResultRepoDO) => {
+            let startTimestamp = this._shiftReportParams.startTime.getTimestamp(this._hotel.timezone);
+            let endTimestamp = this._shiftReportParams.endTime.getTimestamp(this._hotel.timezone);
+            let invoiceList = _.filter(result.invoiceList, (invoice: InvoiceDO) => {
+                return invoice.paidTimestamp >= startTimestamp && invoice.paidTimestamp <= endTimestamp;
+            });
+            this._allInvoiceList = invoiceList;
+            this._paidInvoiceList = _.filter(invoiceList, (invoice: InvoiceDO) => {
+                return invoice.isPaid();
+            });
+            this._lossAcceptedByManagementInvoiceList = _.filter(invoiceList, (invoice: InvoiceDO) => {
+                return invoice.isLossAcceptedByManagement();
+            });
 
-	private getFilteredInvoiceGroupList(invoiceGroupList: InvoiceGroupDO[], checkInvoice: { (invoice: InvoiceDO): boolean }): InvoiceGroupDO[] {
-		var filteredInvoiceGroupList: InvoiceGroupDO[] = [];
-		invoiceGroupList.forEach((ig) => {
-			let filteredInvoiceList = _.filter(ig.invoiceList, (invoice: InvoiceDO) => {
-				return checkInvoice(invoice) &&
-					this.invoicePaidInTimeFrame(invoice, this._shiftReportParams.startTime, this._shiftReportParams.endTime);
-			});
-			if (filteredInvoiceList.length > 0) {
-				let igCopy = new InvoiceGroupDO();
-				igCopy.buildFromObject(ig);
-				igCopy.invoiceList = filteredInvoiceList;
-				filteredInvoiceGroupList.push(igCopy);
-			}
-		});
-		return filteredInvoiceGroupList;
-	}
+            let aopLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
+            return aopLoader.loadAll();
+        }).then((aopContainer: AddOnProductItemContainer) => {
+            this._aopContainer = aopContainer;
+            resolve(true);
+        }).catch((e) => {
+            reject(e);
+        });
+    }
 
-	private invoicePaidInTimeFrame(invoice: InvoiceDO, startTime: ThTimestampDO, endTime: ThTimestampDO) {
-		return (invoice.paidDateTimeUtcTimestamp >= startTime.getUtcTimestamp() && invoice.paidDateTimeUtcTimestamp < endTime.getUtcTimestamp());
-	}
+    protected getMeta(): ReportGroupMeta {
+        var startNameKey: string = this._appContext.thTranslate.translate("Start Time");
+        var endNameKey: string = this._appContext.thTranslate.translate("End Time");
+        var displayParams = {};
+        displayParams[startNameKey] = this._shiftReportParams.startTime;
+        displayParams[endNameKey] = this._shiftReportParams.endTime;
+        return {
+            name: "Shift Report",
+            displayParams: displayParams
+        }
+    }
+    protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
+        return [
+            new ShiftReportByPaymentMethodSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._paidInvoiceList),
+            new ShiftReportPaidByAgreementSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._paidInvoiceList),
+            new ShiftReportPaidInvoicesSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._allInvoiceList, this._paidInvoiceList, this._hotel),
+            new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._paidInvoiceList, this._aopContainer, {
+                title: "Transactions Grouped by Category"
+            }),
+            new ShiftReportByAopNameSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._paidInvoiceList),
+            new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._lossAcceptedByManagementInvoiceList, this._aopContainer, {
+                title: "Loss Accepted By Management Transactions Grouped by Category"
+            }),
+            new ShiftReportLossAcceptedByManagementInvoicesSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._allInvoiceList,
+                this._lossAcceptedByManagementInvoiceList, this._hotel),
 
-	protected getMeta(): ReportGroupMeta {
-		var startNameKey: string = this._appContext.thTranslate.translate("Start Time");
-		var endNameKey: string = this._appContext.thTranslate.translate("End Time");
-		var displayParams = {};
-		displayParams[startNameKey] = this._shiftReportParams.startTime;
-		displayParams[endNameKey] = this._shiftReportParams.endTime;		
-		return {
-			name: "Shift Report",
-			displayParams: displayParams
-		}
-	}
-	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
-		return [
-			new ShiftReportByPaymentMethodSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._paidInvoiceGroupList),
-			new ShiftReportPaidByAgreementSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._paidInvoiceGroupList),
-			new ShiftReportPaidInvoicesSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._allInvoiceGroupList, this._paidInvoiceGroupList),
-			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._paidInvoiceGroupList, this._aopContainer, {
-				title: "Transactions Grouped by Category"
-			}),
-			new ShiftReportByAopNameSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._paidInvoiceGroupList),
-			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._lossAcceptedByManagementInvoiceGroupList, this._aopContainer, {
-				title: "Loss Accepted By Management Transactions Grouped by Category"
-			}),
-			new ShiftReportLossAcceptedByManagementInvoicesSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, this._allInvoiceGroupList, this._lossAcceptedByManagementInvoiceGroupList)
-			
-		];
-	}
+        ];
+    }
 }

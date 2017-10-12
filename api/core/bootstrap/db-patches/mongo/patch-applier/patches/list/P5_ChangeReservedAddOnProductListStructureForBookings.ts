@@ -8,7 +8,7 @@ import _ = require('underscore');
 export class P5_ChangeReservedAddOnProductListStructureForBookings extends APaginatedTransactionalMongoPatch {
 
     protected getMongoRepository(): MongoRepository {
-        return this._bookingRepository;
+        return this.bookingRepository;
     }
 
     public getPatchType(): MongoPatchType {

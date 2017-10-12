@@ -1,21 +1,19 @@
+import _ = require('underscore');
 import { AReportSectionGeneratorStrategy } from "../../common/report-section-generator/AReportSectionGeneratorStrategy";
 import { ReportSectionHeader, ReportSectionMeta } from "../../common/result/ReportSection";
 import { ThError } from "../../../../utils/th-responses/ThError";
 import { AppContext } from "../../../../utils/AppContext";
 import { SessionContext } from "../../../../utils/SessionContext";
-import { InvoiceGroupDO } from "../../../../data-layer/invoices/data-objects/InvoiceGroupDO";
-import { InvoiceDO } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
-import { InvoicePayerDO } from "../../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
-import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO";
 import { CustomerSearchResultRepoDO, CustomerMetaRepoDO } from "../../../../data-layer/customers/repositories/ICustomerRepository";
 import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
 import { BaseCorporateDetailsDO } from "../../../../data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO";
-
-import _ = require('underscore');
+import { InvoiceDO } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoicePayerDO } from '../../../../data-layer/invoices/data-objects/payer/InvoicePayerDO';
+import { InvoicePaymentMethodType } from '../../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
 
 export class ShiftReportPaidByAgreementSectionGenerator extends AReportSectionGeneratorStrategy {
 
-    constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object, private _paidInvoiceGroupList: InvoiceGroupDO[]) {
+    constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object, private _paidInvoiceList: InvoiceDO[]) {
         super(appContext, sessionContext, globalSummary);
     }
 
@@ -37,35 +35,35 @@ export class ShiftReportPaidByAgreementSectionGenerator extends AReportSectionGe
     }
 
     protected getGlobalSummary(): Object {
-		return {}
-	}
+        return {}
+    }
 
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
         let data = [];
 
-        let allInvoicePayers: InvoicePayerDO[] = 
-            _.chain(this._paidInvoiceGroupList).map((invoiceGroupDO: InvoiceGroupDO) => {
-                return invoiceGroupDO.invoiceList;
-            }).flatten().map((invoiceDO: InvoiceDO) => {
-                return invoiceDO.payerList;
-            }).flatten().value();
+        let allInvoicePayers: InvoicePayerDO[] = [];
+        this._paidInvoiceList.forEach(invoice => {
+            allInvoicePayers = allInvoicePayers.concat(invoice.payerList);
+        });
 
         let payByAgreementCustomerIdMap = {};
         _.forEach(allInvoicePayers, (invoicePayer: InvoicePayerDO) => {
-            if (invoicePayer.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
-                if (_.isUndefined(payByAgreementCustomerIdMap[invoicePayer.customerId])) {
-                    payByAgreementCustomerIdMap[invoicePayer.customerId] = {
-                        amount: invoicePayer.priceToPay,
-                        transactions: 1
-                    };
+            invoicePayer.paymentList.forEach(payment => {
+                if (payment.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                    if (_.isUndefined(payByAgreementCustomerIdMap[invoicePayer.customerId])) {
+                        payByAgreementCustomerIdMap[invoicePayer.customerId] = {
+                            amount: invoicePayer.totalAmount,
+                            transactions: 1
+                        };
+                    }
+                    else {
+                        payByAgreementCustomerIdMap[invoicePayer.customerId]["amount"] += invoicePayer.totalAmount;
+                        payByAgreementCustomerIdMap[invoicePayer.customerId]["transactions"] += 1;
+                    }
                 }
-                else {
-                    payByAgreementCustomerIdMap[invoicePayer.customerId]["amount"] += invoicePayer.priceToPay;
-                    payByAgreementCustomerIdMap[invoicePayer.customerId]["transactions"] += 1;
-                }
-            }
+            });
         });
-            
+
         this.convertCustomerIdMapToCustomerMap(payByAgreementCustomerIdMap).then((payByAgreementCustomerNameMap: Object) => {
             _.forEach(Object.keys(payByAgreementCustomerNameMap), (companyLabel: string) => {
                 let paymentsDetails = payByAgreementCustomerNameMap[companyLabel];

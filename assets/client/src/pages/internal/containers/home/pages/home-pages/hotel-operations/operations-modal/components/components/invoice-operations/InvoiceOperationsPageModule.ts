@@ -7,13 +7,14 @@ import {SharedDirectivesModule} from '../../../../../../../../../../../common/ut
 import {SharedComponentsModule} from '../../../../../../../../../../../common/utils/components/modules/SharedComponentsModule';
 
 import {InvoiceOperationsPageComponent} from './InvoiceOperationsPageComponent';
-import {InvoiceEditComponent} from './components/invoice-edit/InvoiceEditComponent';
-import {InvoicePayerComponent} from './components/invoice-payer/InvoicePayerComponent';
+import { InvoiceOverviewComponent } from './components/invoice-overview/InvoiceOverviewComponent';
+import { RelatedInvoicesComponent } from "./components/related-invoices/RelatedInvoicesComponent";
+import { InvoiceTransferComponent } from "./components/invoice-transfer/InvoiceTransferComponent";
 
 @NgModule({
     imports: [CommonModule, FormsModule,
         SharedPipesModule, SharedDirectivesModule, SharedComponentsModule],
-    declarations: [InvoiceOperationsPageComponent, InvoiceEditComponent, InvoicePayerComponent],
+    declarations: [InvoiceOperationsPageComponent, InvoiceOverviewComponent, RelatedInvoicesComponent, InvoiceTransferComponent ],
     exports: [InvoiceOperationsPageComponent]
 })
 export class InvoiceOperationsPageModule { }

@@ -1,12 +1,11 @@
+import _ = require('underscore');
 import { BaseDO } from '../../../common/base/BaseDO';
 import { ThTranslation } from '../../../../utils/localization/ThTranslation';
-import { IInvoiceItemMeta } from '../../../invoices/data-objects/items/IInvoiceItemMeta';
-import { InvoiceItemDO, InvoiceItemAccountingType } from '../../../invoices/data-objects/items/InvoiceItemDO';
 import { ThUtils } from '../../../../utils/ThUtils';
 import { PricePerDayDO } from './PricePerDayDO';
 import { CommissionDO } from "../../../common/data-objects/commission/CommissionDO";
-
-import _ = require('underscore');
+import { IInvoiceItemMeta } from '../../../invoices/data-objects/items/IInvoiceItemMeta';
+import { InvoiceItemDO } from '../../../invoices/data-objects/items/InvoiceItemDO';
 
 export enum BookingPriceType {
     BookingStay,
@@ -34,8 +33,16 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     breakfast: InvoiceItemDO;
     includedInvoiceItemList: InvoiceItemDO[];
 
+    // populated via the invoices' repository decorator
+    roomId: string;
+    customerId: string;
+    displayedReservationNumber: string;
+    externalBookingReference: string;
+
     protected getPrimitivePropertyKeys(): string[] {
-        return ["priceType", "roomPricePerNightAvg", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "appliedDiscountValue", "deductedCommissionPrice", "totalBookingPrice", "vatId", "description"];
+        return ["priceType", "roomPricePerNightAvg", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "appliedDiscountValue",
+            "deductedCommissionPrice", "totalBookingPrice", "vatId", "description",
+            "roomId", "customerId", "displayedReservationNumber", "externalBookingReference"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
@@ -76,10 +83,10 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         return this.numberOfNights;
     }
     public getTotalPrice(): number {
-        if(this.priceType === BookingPriceType.Penalty) {
+        if (this.priceType === BookingPriceType.Penalty) {
             return this.roomPricePerNightAvg;
         }
-        return _.reduce(this.roomPricePerNightList, function(sum, pricePerDay: PricePerDayDO){ return sum + pricePerDay.price; }, 0);
+        return _.reduce(this.roomPricePerNightList, function (sum, pricePerDay: PricePerDayDO) { return sum + pricePerDay.price; }, 0);
     }
     public getDisplayName(thTranslation: ThTranslation): string {
         return thTranslation.translate(this.getDisplayNameCore(thTranslation));
