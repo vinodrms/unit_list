@@ -13,7 +13,7 @@ environment=$1
 case $environment in
   staging)
     inventory="staging"
-    branch="invoices-v2"
+    branch="development"
     ;;
   production)
     inventory="production"

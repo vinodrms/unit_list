@@ -33,7 +33,7 @@ deploy on staging:
   environment:
     name: staging
   only:
-    - invoices-v2
+    - development
 
 deploy on production:
   stage: deploy
