@@ -1,8 +1,8 @@
-import {ThDateUtils} from '../../../../../../utils/th-dates/ThDateUtils';
-import {ThDateDO} from '../../../../../../utils/th-dates/data-objects/ThDateDO';
-import {ThHourDO} from '../../../../../../utils/th-dates/data-objects/ThHourDO';
-import {ThTimestampDO} from '../../../../../../utils/th-dates/data-objects/ThTimestampDO';
-import {BookingStateChangeTriggerTimeDO, BookingStateChangeTriggerType} from '../../../../../bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
+import { ThDateUtils } from '../../../../../../utils/th-dates/ThDateUtils';
+import { ThDateDO } from '../../../../../../utils/th-dates/data-objects/ThDateDO';
+import { ThHourDO } from '../../../../../../utils/th-dates/data-objects/ThHourDO';
+import { ThTimestampDO } from '../../../../../../utils/th-dates/data-objects/ThTimestampDO';
+import { BookingStateChangeTriggerTimeDO, BookingStateChangeTriggerType } from '../../../../../bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 
 export class CancellationPolicyUtils {
     thDateUtils: ThDateUtils;

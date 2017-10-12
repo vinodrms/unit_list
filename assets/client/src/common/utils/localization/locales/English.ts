@@ -333,7 +333,7 @@ export var EnglishTranslations: Object = {
     "Percentage from booking": "Percentage from booking",
     "Enter a valid percentage": "Enter a valid percentage",
     "Select the time of arrival": "Select the time of arrival",
-    "Days until day of arrival at": "Days until day of arrival at",
+    "Days until day of arrival": "Days until day of arrival",
     "Price Product Constraints": "Price Product Constraints",
     "Price Exceptions": "Price Exceptions",
     "Save Exception": "Save Exception",

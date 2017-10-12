@@ -11,5 +11,6 @@ export enum MongoPatchType {
     AddMergeInvoiceToBookings,
     MigrateInvoiceGroupsToInvoices,
     AddBookingsIndexForYMPerformance,
+    UpdateBookingsGuaranteedTime,
 
 }

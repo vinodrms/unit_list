@@ -7,7 +7,7 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<small class="text-muted">
-				<i class="fa fa-info-circle"></i> {{ 'Conditions for cancelling' | translate }} 
+				<i class="fa fa-info-circle"></i> {{ 'Conditions for cancelling' | translate }}
 			</small>
 		</div>
 	</div>
@@ -23,10 +23,10 @@
 	<div class="row">
 		<div class="col-xs-12" *ngIf="isCancelBeforeTimeOnDayOfArrivalPolicy()">
 			<label>{{ 'Time on day of arrival' | translate }}</label>
-			<th-hour-select 
+			<th-hour-select
 				[readonly]="readonly"
-				[initialHour]="conditions.policy.timeOfArrival"  
-				[isRequired]="true" errorMessage="{{ 'Select the time of arrival' | translate }}" 
+				[initialHour]="conditions.policy.timeOfArrival"
+				[isRequired]="true" errorMessage="{{ 'Select the time of arrival' | translate }}"
 				[didSubmitForm]="didSubmit"
 				(onHourSelected)="diChangeTimeOnDayOfArrival($event)"
 				>
@@ -34,7 +34,7 @@
 		</div>
 		<div class="col-xs-12 form-group" *ngIf="isCanCancelDaysBeforePolicy()">
 			<div class="input-group" [ngClass]="{'form-warning': (didSubmit&&!conditions.policy.isValid())}">
-				<label>{{ 'Days until day of arrival at' | translate }} {{ cancellationHour | thhour }}</label>
+				<label>{{ 'Days until day of arrival' | translate }}</label>
 				<input type="number" placeholder="{{ 'Number of days' | translate }}" class="form-control input-group-lg" [(ngModel)]="conditions.policy.daysBefore" name="daysBefore" [readonly]="readonly">
 			</div>
 			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the number of days' | translate }}</small></label>
@@ -51,7 +51,7 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<small class="text-muted">
-				<i class="fa fa-info-circle"></i> {{ 'What is the cancellation penalty?' | translate }} 
+				<i class="fa fa-info-circle"></i> {{ 'What is the cancellation penalty?' | translate }}
 			</small>
 		</div>
 		<div class="col-xs-12 form-group">
@@ -68,11 +68,11 @@
 				[initialPercentage]="conditions.penalty.percentage"
 				[readonly]="readonly"
 				[isRequired]="true"
-				[errorMessage]="'Enter a valid percentage'" 
+				[errorMessage]="'Enter a valid percentage'"
 				(onPercentageChanged)="didSetPercentageFromBooking($event)"
 				>
 			</percentage-input-number>
 		</div>
 	</div>
-	
+
 </div>

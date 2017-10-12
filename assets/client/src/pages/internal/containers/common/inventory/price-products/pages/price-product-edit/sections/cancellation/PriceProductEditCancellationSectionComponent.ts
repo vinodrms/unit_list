@@ -19,8 +19,6 @@ import * as _ from "underscore";
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/cancellation/template/price-product-edit-cancellation-section.html'
 })
 export class PriceProductEditCancellationSectionComponent extends BaseComponent implements IPriceProductEditSection {
-	cancellationHour: ThHourDO;
-
 	readonly: boolean;
 	@Input() didSubmit: boolean;
 
