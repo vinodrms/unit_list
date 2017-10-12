@@ -2281,10 +2281,8 @@ a.btn.btn-square:focus {
     }
     .hotel-operations-dashboard .corporate-customer-name{
         font-size: 12px;
-        color: #7c7c81;
+        color: black;
         max-width: 150px;
-        padding-left: 3px;
-        vertical-align: middle;
     }
 
     .hotel-operations-dashboard .room-type{
@@ -2389,6 +2387,10 @@ a.btn.btn-square:focus {
 
         .room-card.occupied .card-header .section1 .room-number{
             color: rgb(251, 103, 8);
+        }
+
+        .room-card .card-header .section1 {
+            min-height: 50px;
         }
 
         /* Free */
