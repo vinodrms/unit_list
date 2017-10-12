@@ -1,17 +1,17 @@
-import {ArrivalItemInfoDO} from '../data-objects/ArrivalItemInfoDO';
-import {RoomVM} from '../../../../rooms/view-models/RoomVM';
-import {RoomCategoryStatsDO} from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
+import { ArrivalItemInfoDO } from '../data-objects/ArrivalItemInfoDO';
+import { RoomVM } from '../../../../rooms/view-models/RoomVM';
+import { RoomCategoryStatsDO } from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
 
-import {ConfigCapacityDO} from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
+import { ConfigCapacityDO } from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
 
-import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
+import { ThTranslation } from '../../../../../../../common/utils/localization/ThTranslation';
 
 export class ArrivalItemInfoVM {
     private _arrivalItemDO: ArrivalItemInfoDO;
     private _reservedRoomCategoryStats: RoomCategoryStatsDO;
     private _hasReservedRoom: boolean;
     private _reservedRoomVM: RoomVM;
-    
+
 
     constructor(private _thTranslation: ThTranslation) {
     }
@@ -19,7 +19,7 @@ export class ArrivalItemInfoVM {
     public get arrivalItemDO(): ArrivalItemInfoDO {
         return this._arrivalItemDO;
     }
-    
+
     public set arrivalItemDO(arrivalItemDO: ArrivalItemInfoDO) {
         this._arrivalItemDO = arrivalItemDO;
     }
@@ -42,43 +42,43 @@ export class ArrivalItemInfoVM {
     public get reservedRoomVM(): RoomVM {
         return this._reservedRoomVM;
     }
-    
+
     public set reservedRoomVM(reservedRoomVM: RoomVM) {
         this._reservedRoomVM = reservedRoomVM;
     }
 
-    public get customerName():string {
+    public get customerName(): string {
         var arrivalItemDO = this.arrivalItemDO;
         return (arrivalItemDO.customerFirstName && arrivalItemDO.customerLastName) ?
-            arrivalItemDO.customerLastName + " " + arrivalItemDO.customerFirstName : arrivalItemDO.customerName;
+            arrivalItemDO.customerFirstName + " " + arrivalItemDO.customerLastName : arrivalItemDO.customerName;
     }
 
-    public get corporateCustomerName():string {
+    public get corporateCustomerName(): string {
         return this.arrivalItemDO.corporateCustomerName;
     }
 
-    public get roomCategoryLabel() : string {
+    public get roomCategoryLabel(): string {
         return this._reservedRoomCategoryStats.roomCategory.displayName;
     }
 
-    public get numberOfPeople() : number {
-        return this.arrivalItemDO.bookingCapacity.noAdults + this.arrivalItemDO.bookingCapacity.noChildren; 
+    public get numberOfPeople(): number {
+        return this.arrivalItemDO.bookingCapacity.noAdults + this.arrivalItemDO.bookingCapacity.noChildren;
     }
 
-    public get numberOfNights() : number {
+    public get numberOfNights(): number {
         return this.arrivalItemDO.bookingInterval.getNumberOfDays();
     }
 
-    public get arrivalLabel() : string {
-        return this.arrivalItemDO.bookingInterval.start.getShortDisplayString(this._thTranslation) 
+    public get arrivalLabel(): string {
+        return this.arrivalItemDO.bookingInterval.start.getShortDisplayString(this._thTranslation)
     }
 
-    public get departureLabel() : string {
-        return this.arrivalItemDO.bookingInterval.end.getShortDisplayString(this._thTranslation) 
+    public get departureLabel(): string {
+        return this.arrivalItemDO.bookingInterval.end.getShortDisplayString(this._thTranslation)
     }
 
-    
-    public get bookingCapacity() : ConfigCapacityDO {
+
+    public get bookingCapacity(): ConfigCapacityDO {
         return this.arrivalItemDO.bookingCapacity;
     }
 }
