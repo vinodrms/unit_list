@@ -1,6 +1,6 @@
 <div class="header">
 	<div class="pane-title p-t-6">
-		<div class="unitpal-font f-12 f-32 clickable" (click)="previousDay()">&lt;</div>
+		<div class="unitpal-font f-12 f-32 clickable" (click)="previousDay()" th-clickable>&lt;</div>
 		<div class="flex-row">
 			<span class="unitpal-font orange-color p-r-12 f-32">/</span>
 			<div class="">
@@ -17,7 +17,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()">&gt;</div>
+		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()" th-clickable>&gt;</div>
 	</div>
 	<div class="pane-search-bar">
 		<input class="remove-auto-border" type="text" placeholder="Search here" [ngModel]="searchText" (ngModelChange)="searchTextChangeHandler($event)" name="arrivalsSearchText">
@@ -27,8 +27,8 @@
 <div customScroll class="body">
 	<arrival-item
 		*ngFor="let arrivalItemVM of filteredArrivalsVMList"
-		[ngClass]="{'selected': isArrivalItemSelected(arrivalItemVM)}" 
-		[arrivalItemVM] = "arrivalItemVM" 
+		[ngClass]="{'selected': isArrivalItemSelected(arrivalItemVM)}"
+		[arrivalItemVM] = "arrivalItemVM"
 		(click) = "selectArrivalItem(arrivalItemVM)"
 		(startedDragging)="startedDragging($event)"
 		(stoppedDragging)="stoppedDragging($event)"

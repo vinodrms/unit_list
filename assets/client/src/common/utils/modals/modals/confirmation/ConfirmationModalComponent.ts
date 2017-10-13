@@ -17,10 +17,10 @@ import {SharedPipesModule} from '../../../pipes/modules/SharedPipesModule';
 			<hr/>
 			<span class="horizontal-align-center">
 				<div>
-					<button *ngIf="buttons.positive" class="btn btn-primary btn-lg" (click)="didConfirm()">
+					<button *ngIf="buttons.positive" class="btn btn-primary btn-lg" (click)="didConfirm()" th-clickable>
 						{{ buttons.positive }}
 					</button>
-					<button *ngIf="buttons.negative" class="btn btn-danger btn-lg" (click)="didNotConfirm()">
+					<button *ngIf="buttons.negative" class="btn btn-danger btn-lg" (click)="didNotConfirm()" th-clickable>
 						{{ buttons.negative }}
 					</button>
 				</div>

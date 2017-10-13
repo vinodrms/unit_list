@@ -1,6 +1,6 @@
 <div class="header">
 	<div class="pane-title p-t-6">
-		<div class="unitpal-font f-12 f-32 clickable" (click)="previousDay()">&lt;</div>
+		<div class="unitpal-font f-12 f-32 clickable" (click)="previousDay()" th-clickable>&lt;</div>
 		<div class="flex-row">
 			<span class="unitpal-font green-color p-r-12 f-32">.</span>
 			<div>
@@ -17,7 +17,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()">&gt;</div>
+		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()" th-clickable>&gt;</div>
 	</div>
 
 	<div class="pane-search-bar">
@@ -29,8 +29,8 @@
 <div customScroll class="body">
 	<departure-item
 		*ngFor="let departureItemVM of filteredDeparturesVMList"
-		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
-		[departureItemVM] = "departureItemVM" 
+		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}"
+		[departureItemVM] = "departureItemVM"
 		(onCheckOut)="refreshParent($event)"
 		(click) = "selectDepartureItem(departureItemVM)">
 	</departure-item>

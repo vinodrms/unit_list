@@ -1,7 +1,7 @@
 <div class="modal-lg-header container">
 	<div class="row full-height">
 		<div class="col-xs-7 col-md-7 full-height">
-            <a class="btn btn-square btn-square-next-prev back" *ngIf="canGoBack()" (click)="goBack()">
+            <a class="btn btn-square btn-square-next-prev back" *ngIf="canGoBack()" (click)="goBack()" th-clickable>
                 <i class="fa unitpal-font"><</i>
             </a>
             <span class="operational-page-font-container"><i class="fa fa-2x unitpal-font">{{ titleMeta.fontName }}</i></span>
@@ -11,7 +11,7 @@
 				<small *ngIf="titleMeta.filterMeta && titleMeta.filterMeta.filterValue" class="filter">{{ titleMeta.filterMeta.filterInfo | translate}}</small>
 				<span *ngIf="titleMeta.filterMeta && titleMeta.filterMeta.filterValue" class="filter filter-label">
 					<i class="fa fa-2x unitpal-font">{{ titleMeta.filterMeta.filterFontName }}</i> {{ titleMeta.filterMeta.filterValue }}
-					<a class="clickable-item" (click)="removeHeaderFilter()">
+					<a class="clickable-item" (click)="removeHeaderFilter()" th-clickable>
 						<i class="fa unitpal-font">C</i>
 					</a>
 				</span>
@@ -22,7 +22,7 @@
 			<div class="row full-height">
 				<div class="col-xs-8"></div>
 				<div class="col-xs-4 full-height">
-					<a class="btn btn-square float-right" (click)="triggerOnExit()">
+					<a class="btn btn-square float-right" (click)="triggerOnExit()" th-clickable>
 						<i class="fa unitpal-font">C</i>
 					</a>
 				</div>
