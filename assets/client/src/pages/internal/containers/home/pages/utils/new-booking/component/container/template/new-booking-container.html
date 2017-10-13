@@ -10,14 +10,14 @@
 			<div class="row full-height">
 				<div class="col-xs-8">
 					<p class="btn-square-container" [ngClass]="{small: !isLastStep(), large: isLastStep()}">
-						<a class="btn btn-square btn-square-next-prev" [ngClass]="{disabled: !hasPreviousPage()}" (click)="movePrevious()">
+						<a class="btn btn-square btn-square-next-prev" [ngClass]="{disabled: !hasPreviousPage()}" (click)="movePrevious()" th-clickable>
 							<i class="fa unitpal-font"><</i>
 						</a>
-						<a class="btn btn-square btn-square-next-prev" *ngIf="!isLastStep()" [ngClass]="{disabled: !canMoveNext()}" (click)="moveNext()" >
+						<a class="btn btn-square btn-square-next-prev" *ngIf="!isLastStep()" [ngClass]="{disabled: !canMoveNext()}" (click)="moveNext()" th-clickable>
 							<i class="fa unitpal-font">></i>
 						</a>
-						<a class="btn btn-square btn-square-finalize" *ngIf="isLastStep()" [ngClass]="{disabled: !canMoveNext()}" (click)="addBookings()" >
-							<i *ngIf="!isAddingBookings" class="fa fa-envelope"></i> 
+						<a class="btn btn-square btn-square-finalize" *ngIf="isLastStep()" [ngClass]="{disabled: !canMoveNext()}" (click)="addBookings()" th-clickable>
+							<i *ngIf="!isAddingBookings" class="fa fa-envelope"></i>
 							<i *ngIf="isAddingBookings" class="fa fa-spinner fa-pulse"></i>
 							{{'Save Bookings' | translate}}
 						</a>
@@ -28,7 +28,7 @@
 					</p>
 				</div>
 				<div class="col-xs-4 full-height">
-					<a class="btn btn-square float-right" *ngIf="showCloseButton" (click)="triggerOnCloseButtonPressed(false)">
+					<a class="btn btn-square float-right" *ngIf="showCloseButton" (click)="triggerOnCloseButtonPressed(false)" th-clickable>
 						<i class="fa unitpal-font">C</i>
 					</a>
 				</div>
@@ -40,6 +40,6 @@
 	<new-booking-search class="full-height" [newBookingInput]="newBookingInput" [hidden]="!isBookingSearch()"> </new-booking-search>
 	<new-booking-fill-details class="full-height" [hidden]="!isFillDetails()"> </new-booking-fill-details>
 	<new-booking-email-config class="full-height" [hidden]="!isEmailConfig()"></new-booking-email-config>
-	
+
 	<new-booking-customer-register class="full-height" *ngIf="isCustomerRegister()"> </new-booking-customer-register>
 </div>

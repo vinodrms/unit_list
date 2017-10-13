@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 @Component({
 	selector: 'th-button',
 	template: `
-		<a class="btn th-button-box" [ngClass]="{'pull-right': pullRight}" (click)="triggerOnButtonClick()">
+		<a class="btn th-button-box" [ngClass]="{'pull-right': pullRight}" (click)="triggerOnButtonClick()" th-clickable>
 			<i class="fa fa-2x unitpal-font">{{ upFont }}</i>
 			<span>{{ text | translate }}</span>
 		</a>

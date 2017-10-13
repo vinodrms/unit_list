@@ -15,7 +15,7 @@
                                 </select>
                             </div>
                             <div class="col-xs-3 padding-right-0px">
-                                <a class="btn search-button" (click)="searchBookings()">
+                                <a class="btn search-button" (click)="searchBookings()" th-clickable>
                                     <i class="fa unitpal-font" *ngIf="!isSearching">=</i>
                                     <i *ngIf="isSearching" class="fa fa-spinner fa-pulse"></i>
                                     <span>{{'Search' | translate}}</span>

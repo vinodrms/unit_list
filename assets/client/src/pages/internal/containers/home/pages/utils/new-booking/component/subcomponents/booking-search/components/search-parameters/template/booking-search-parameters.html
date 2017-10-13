@@ -21,10 +21,14 @@
     <div class="form-group">
         <label>{{ 'Customer' | translate }}</label>
         <div class="input-group">
-            <search-input-text [placeholder]="'Customer Name'" [preselectedItem]="customer" (onItemSelected)="didSelectCustomer($event)"
+            <search-input-text
+                [placeholder]="'Customer Name'"
+                [preselectedItem]="customer"
+                [autofocus]="true"
+                (onItemSelected)="didSelectCustomer($event)"
                 (onItemDeselected)="didDeselectCustomer()">
             </search-input-text>
-            <span class="input-group-addon th-addon-button" (click)="selectCustomer()">
+            <span class="input-group-addon th-addon-button" (click)="selectCustomer()" th-clickable>
                 <i class="fa unitpal-font">(</i>  {{ 'Register' | translate }}
             </span>
         </div>
@@ -78,7 +82,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-xs-12 padding-right-0px">
-                    <a class="btn search-button" (click)="searchBookings()">
+                    <a class="btn search-button" (click)="searchBookings()" th-clickable>
                         <i class="fa unitpal-font" *ngIf="!isSearching">=</i>
                         <i *ngIf="isSearching" class="fa fa-spinner fa-pulse"></i>
                         <span>{{'Search' | translate}}</span>
