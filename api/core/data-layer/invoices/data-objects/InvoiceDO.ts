@@ -140,8 +140,10 @@ export class InvoiceDO extends BaseDO {
                     actualItemList = actualItemList.concat(bookingInvoiceItemList);
 
                     // invoice notes
-                    if (this.notesFromBooking.length > 0) { this.notesFromBooking += "\n"; }
-                    this.notesFromBooking += booking.invoiceNotes;
+                    if (_.isString(booking.invoiceNotes) && booking.invoiceNotes.length > 0) {
+                        if (this.notesFromBooking.length > 0) { this.notesFromBooking += "\n"; }
+                        this.notesFromBooking += booking.invoiceNotes;
+                    }
                 }
             }
             else {
