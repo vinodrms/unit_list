@@ -141,7 +141,7 @@
                                     <br>
                                 </div>
 
-                                <%if (payerVatCodeValue.length > 0 || payerGovernmentCodeValue.length > 0 || additionalPayerDetails.length > 0) {%>
+                                <%if (payerVatCodeValue.length > 0 || payerGovernmentCodeValue.length > 0 || payerNotes.length > 0) {%>
                                     <br>
                                 <%}%>
 
@@ -151,8 +151,8 @@
                                 <%if (payerGovernmentCodeValue.length > 0) {%>
                                     <%= payerGovernmentCodeLabel %>: <%= payerGovernmentCodeValue %><br>
                                 <%}%>
-                                <%if (additionalPayerDetails.length > 0) {%>
-                                    <span class="text-details"><%= additionalPayerDetails %></span>
+                                <%if (payerNotes.length > 0) {%>
+                                    <span class="text-details"><%= payerNotes %></span>
                                 <%}%>
 
                                 <br>

@@ -52,6 +52,7 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
             }
             this.addNewPayersOn(existingInvoice);
             this.addNewPaymentsOn(existingInvoice);
+            this.updatePayerNotesOn(existingInvoice);
             this.deletePayersFrom(existingInvoice);
             existingInvoice.recomputePrices();
             return;
@@ -63,6 +64,7 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
         this.addNewItemsOn(existingInvoice);
         this.addNewPayersOn(existingInvoice);
         this.addNewPaymentsOn(existingInvoice);
+        this.updatePayerNotesOn(existingInvoice);
         this.deletePayersFrom(existingInvoice);
         existingInvoice.recomputePrices();
 
@@ -80,6 +82,14 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
                 throw thError;
             }
         }
+    }
+    private updatePayerNotesOn(existingInvoice: InvoiceDO) {
+        this.invoiceToSave.payerList.forEach((payer: InvoicePayerDO) => {
+            if (!this.thUtils.isUndefinedOrNull(payer.notes)) {
+                let payerIndex: number = _.findIndex(existingInvoice.payerList, ((p: InvoicePayerDO) => { return p.customerId === payer.customerId; }));
+                existingInvoice.payerList[payerIndex].notes = payer.notes;
+            }
+        });
     }
     private checkAmountsEqualityOn(existingInvoice: InvoiceDO) {
         if (existingInvoice.amountPaid != existingInvoice.amountToPay) {

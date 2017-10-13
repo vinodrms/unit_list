@@ -52,13 +52,19 @@
                     <li *ngIf="canMoveItemsToNewInvoice(payer)" class="clickable" (click)="openTransferPageWithNewInvoice(payer)" title="{{ 'Move items from this invoice to a new one for this customer' }}">
                         {{ 'Split Invoice'}}
                     </li>
+                    <li *ngIf="hasInvoiceEditPayersRight() && !hasNotes(payer)" class="clickable" (click)="openAddPayerNotesModal(payer)" title="{{ 'Add payer notes' | translate }}">
+                        {{ 'Add Notes'}}
+                    </li>
+                    <li *ngIf="hasInvoiceEditPayersRight() && hasNotes(payer)" class="clickable" (click)="openAddPayerNotesModal(payer)" title="{{ 'Edit payer notes' | translate }}">
+                        {{ 'Edit Notes'}}
+                    </li>
                     <li *ngIf="hasInvoiceEditPayersRight()" class="clickable" (click)="removePayer(payer)" title="{{ 'Remove this payer from the invoice' | translate }}">
                         {{ 'Remove Payer' | translate }}
                     </li>
                 </ul>
             </div>
             <div class="payer-name clickable" (click)="goToCustomer(payer)">{{ payer.customerName }}</div>
-            <div class="payer-email">{{ payer.emailString }}</div>
+            <div class="payer-notes">{{ getPayerNotes(payer) }}</div>
         </div>
             <div *ngIf="hasInvoiceEditPayersRight()" class="add-payer clickable" (click)="openCustomerSelectModal()">
                 <span class="fa fa-plus-circle add-payer-icon"></span>

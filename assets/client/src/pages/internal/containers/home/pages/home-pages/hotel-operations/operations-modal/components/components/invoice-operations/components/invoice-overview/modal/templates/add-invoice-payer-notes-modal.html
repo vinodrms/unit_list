@@ -1,0 +1,14 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Add Payer Notes' | translate }}</h4>
+</div>
+<div class="modal-body">
+    <div class="modal-text">{{ 'Payer Notes' | translate }}</div>
+    <textarea class="modal-notes-textarea full-width" [(ngModel)]="notes"></textarea>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary"
+		(click)="addNotes()">
+		{{ 'Add Notes' | translate }}
+	</button>
+</div>

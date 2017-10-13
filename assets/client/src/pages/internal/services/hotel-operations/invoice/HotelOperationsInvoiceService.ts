@@ -77,6 +77,22 @@ export class HotelOperationsInvoiceService {
         return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: clonedInvoice });
     }
 
+    addPayerNotes(invoice: InvoiceDO, customerId: string, notes: string): Observable<InvoiceDO> {
+        let payer: InvoicePayerDO = _.find(invoice.payerList, (payer: InvoicePayerDO) => {
+            return payer.customerId == customerId;
+        });
+        if (this.context.thUtils.isUndefinedOrNull(payer)) {
+            let msg = this.context.thTranslation.translate("Can't find the invoice payer.");
+            return Observable.throw(new ThError(msg));
+        }
+        let clonedInvoice = this.cloneInvoice(invoice);
+        payer = _.find(clonedInvoice.payerList, (payer: InvoicePayerDO) => {
+            return payer.customerId == customerId;
+        });
+        payer.notes = notes;
+        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesSave, { invoice: clonedInvoice });
+    }
+
     removePayer(invoice: InvoiceDO, customerId: string): Observable<InvoiceDO> {
         let payer: InvoicePayerDO = _.find(invoice.payerList, (payer: InvoicePayerDO) => {
             return payer.customerId == customerId;

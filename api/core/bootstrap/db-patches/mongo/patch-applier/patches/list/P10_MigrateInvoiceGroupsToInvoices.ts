@@ -152,6 +152,9 @@ export class P10_MigrateInvoiceGroupsToInvoices extends APaginatedTransactionalM
                     let payer = new InvoicePayerDO();
                     payer.customerId = customerId;
                     payer.paymentList = [];
+                    if (legacyPayer.additionalInvoiceDetails) {
+                        payer.notes = legacyPayer.additionalInvoiceDetails;
+                    }
                     invoice.payerList.push(payer);
                 }
                 if (!invoice.isUnpaid()) {

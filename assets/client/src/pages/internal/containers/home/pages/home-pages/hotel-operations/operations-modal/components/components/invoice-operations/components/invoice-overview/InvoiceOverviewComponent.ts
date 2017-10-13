@@ -30,6 +30,9 @@ import { ThServerApi } from "../../../../../../../../../../../../../common/utils
 import { PaginationOptions } from "../../utils/PaginationOptions";
 import { EmailSenderModalService } from '../../../../../../email-sender/services/EmailSenderModalService';
 import { BookingPriceDO } from '../../../../../../../../../../../services/bookings/data-objects/price/BookingPriceDO';
+import { InvoicePayerDO } from "../../../../../../../../../../../services/invoices/data-objects/payer/InvoicePayerDO";
+import { AddInvoicePayerNotesModalService } from "./modal/AddInvoicePayerNotesModalService";
+import { AddInvoicePayerNotesModalInput } from "./modal/services/utils/AddInvoicePayerNotesModalInput";
 
 export interface InvoiceChangedOptions {
     reloadInvoiceGroup: boolean;
@@ -39,7 +42,7 @@ export interface InvoiceChangedOptions {
 @Component({
     selector: 'invoice-overview',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-overview/template/invoice-overview.html',
-    providers: [CustomerRegisterModalService, HotelOperationsInvoiceService, NumberOfAddOnProductsModalService, AddOnProductsModalService, AddInvoicePaymentModalService, EmailSenderModalService]
+    providers: [CustomerRegisterModalService, HotelOperationsInvoiceService, NumberOfAddOnProductsModalService, AddOnProductsModalService, AddInvoicePaymentModalService, EmailSenderModalService, AddInvoicePayerNotesModalService]
 })
 export class InvoiceOverviewComponent implements OnInit {
 
@@ -68,6 +71,7 @@ export class InvoiceOverviewComponent implements OnInit {
         private addInvoicePaymentModalService: AddInvoicePaymentModalService,
         private operationsPageControllerService: HotelOperationsPageControllerService,
         private emailSenderModalService: EmailSenderModalService,
+        private addInvoicePayerNotesModalService: AddInvoicePayerNotesModalService
     ) {
         this.invoiceMetaFactory = new InvoiceMetaFactory();
         this.lossByManagementPending = false;
@@ -418,5 +422,33 @@ export class InvoiceOverviewComponent implements OnInit {
     public canMoveItemsToNewInvoice(customer: CustomerDO): boolean {
         return this.canCreateWalkInInvoices(customer) && this.currentInvoice.hasMovableItems()
             && this.hasInvoiceEditItemsRight();
+    }
+
+    public hasNotes(customer: CustomerDO): boolean {
+        var invoicePayer: InvoicePayerDO = _.find(this.currentInvoice.invoice.payerList, (payer: InvoicePayerDO) => {
+            return payer.customerId === customer.id;
+        });
+        return !this.context.thUtils.isUndefinedOrNull(invoicePayer.notes);
+    }
+
+    public getPayerNotes(customer: CustomerDO): string {
+        var invoicePayer: InvoicePayerDO = _.find(this.currentInvoice.invoice.payerList, (payer: InvoicePayerDO) => {
+            return payer.customerId === customer.id;
+        });
+        return invoicePayer.notes;
+    }
+
+    public openAddPayerNotesModal(customer: CustomerDO) {
+        var payer: InvoicePayerDO = _.find(this.currentInvoice.invoice.payerList, (payer: InvoicePayerDO) => {return payer.customerId === customer.id});
+
+        this.addInvoicePayerNotesModalService.openAddInvoicePayerNotesModal(payer.notes).then((modalDialogInstance: ModalDialogRef<string>) => {
+            modalDialogInstance.resultObservable.subscribe((notes: string) => {
+                this.invoiceOperations.addPayerNotes(this.currentInvoice.invoice, payer.customerId, notes)
+                    .subscribe((updatedInvoice: InvoiceDO) => {
+                        this.currentInvoice.invoice = updatedInvoice;
+                        this.emitInvoiceChanged();
+                    });
+            });
+        }).catch((e: any) => { });
     }
 }
