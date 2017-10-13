@@ -54,8 +54,8 @@
                         <td width="50%">
                             <!-- Change customer -->
                             <span *ngIf="!bookingCartItem.isInitialCustomer(customer)"
-                                (click)="changeCustomer(customer)">
-                                <span class="booking-details-action-button input-group-addon th-addon-button"> 
+                                (click)="changeCustomer(customer)" th-clickable>
+                                <span class="booking-details-action-button input-group-addon th-addon-button">
                                     <i class="fa unitpal-font">(</i>  {{ 'Change' | translate }}
                                 </span>
                             </span>
@@ -65,8 +65,8 @@
                                 {{ 'Billed To' | translate }}  <i class="fa unitpal-font">D</i>
                             </span>
                             <span *ngIf="!isBilledCustomer(customer) && canBeBilledCustomer(customer)" title="{{'Generate the bill with this customer' | translate}}"
-                                (click)="updateBilledCustomerFromTemplate(customer)">
-                                <span class="booking-details-action-button input-group-addon th-addon-button"> 
+                                (click)="updateBilledCustomerFromTemplate(customer)" th-clickable>
+                                <span class="booking-details-action-button input-group-addon th-addon-button">
                                     {{ 'Bill' | translate }}  <i class="fa unitpal-font">D</i>
                                 </span>
                             </span>
@@ -81,8 +81,8 @@
                 <label class="form-warning" *ngIf="!didSelectBilledToCustomer()"><small><i class="fa fa-info-circle"></i> {{ 'Add at least one billed customer' | translate }}</small></label>
                 <tfoot>
                     <td>
-                        <a class="link-with-unitpal-font-icon" (click)="addCustomer()">
-                            <i class="fa unitpal-font">'</i> 
+                        <a class="link-with-unitpal-font-icon" (click)="addCustomer()" th-clickable>
+                            <i class="fa unitpal-font">'</i>
                             <span>{{ 'Add Customer' | translate }}</span>
                         </a>
                     </td>
