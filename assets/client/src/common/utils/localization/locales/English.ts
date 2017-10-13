@@ -1066,4 +1066,6 @@ export var EnglishTranslations: Object = {
     "Add Payer Notes": "Add Payer Notes",
     "Payer Notes": "Payer Notes",
     "Please add a note.": "Please add a note.",
+    "Can't find the invoice payer.": "Can't find the invoice payer.",
+
 };

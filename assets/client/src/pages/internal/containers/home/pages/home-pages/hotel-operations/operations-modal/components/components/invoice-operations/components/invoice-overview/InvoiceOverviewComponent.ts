@@ -434,7 +434,7 @@ export class InvoiceOverviewComponent implements OnInit {
     public getPayerNotes(customer: CustomerDO): string {
         var invoicePayer: InvoicePayerDO = _.find(this.currentInvoice.invoice.payerList, (payer: InvoicePayerDO) => {
             return payer.customerId === customer.id;
-        }); 
+        });
         return invoicePayer.notes;
     }
 
@@ -443,13 +443,12 @@ export class InvoiceOverviewComponent implements OnInit {
 
         this.addInvoicePayerNotesModalService.openAddInvoicePayerNotesModal(payer.notes).then((modalDialogInstance: ModalDialogRef<string>) => {
             modalDialogInstance.resultObservable.subscribe((notes: string) => {
-                debugger
                 this.invoiceOperations.addPayerNotes(this.currentInvoice.invoice, payer.customerId, notes)
                     .subscribe((updatedInvoice: InvoiceDO) => {
                         this.currentInvoice.invoice = updatedInvoice;
                         this.emitInvoiceChanged();
                     });
             });
-        }).catch((e: any) => { });        
+        }).catch((e: any) => { });
     }
 }
