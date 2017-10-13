@@ -927,7 +927,16 @@ td .room-categ-capacity {
 }
 
 .table-item-action-group {
-    text-align:right;
+    text-align: right;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+}
+
+.table-item-action-group > a {
+    flex: 1;
+    padding: 0px;
+    line-height: 100%;
 }
 
 .white {
