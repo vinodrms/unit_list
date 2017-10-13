@@ -8,12 +8,12 @@ declare var $: any;
 
 @Component({
 	selector: 'th-date-picker',
-	template: `   
+	template: `
 		<div class="form-group">
-			<label *ngIf="showLabel">{{ label | translate }} 
+			<label *ngIf="showLabel">{{ label | translate }}
 				<span *ngIf="labelFont" class="unitpal-font" style="font-size: 18px;">{{labelFont}}</span>
 			</label>
-			<div class="input-group">
+			<div class="input-group" th-clickable>
 				<span *ngIf="showIcon" class="input-group-addon"><small></small> <i class="fa fa-calendar-o"></i></span>
 				<span class="form-control" [ngClass]="{'disabled-text': readonly}">{{ selectedThDate | thdate }}</span>
 			</div>

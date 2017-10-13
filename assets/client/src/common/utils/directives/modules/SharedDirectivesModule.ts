@@ -1,8 +1,10 @@
-import {NgModule} from '@angular/core';
-import {CustomScroll} from '../CustomScroll';
+import { NgModule } from '@angular/core';
+import { CustomScroll } from '../CustomScroll';
+import { ThClickableDirective } from '../ThClickable';
 
 const SharedDirectives = [
-    CustomScroll
+    CustomScroll,
+    ThClickableDirective,
 ];
 @NgModule({
     declarations: [SharedDirectives],
