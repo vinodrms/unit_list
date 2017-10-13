@@ -14,13 +14,13 @@
 		<div class="interval flex-row flex-center-v dark-gray-color m-r-12" *ngIf="!forever && actionDateInterval">
 			<div class="form-group dark-gray-color ellipsis-text m-r-12">{{'apply to selected from' | translate}}</div>
 			<th-date-picker
-				[initialThDate]="actionDateInterval.start" [showLabel]="false"
+				[initialThDate]="actionDateInterval.start" [showLabel]="false" [showIcon]="false"
 				(didSelectThDate)="didSelectActionStartDate($event)"
 				>
 			</th-date-picker>
 			<div class="form-group dark-gray-color m-l-12 m-r-12"> {{'to' | translate}} </div>
 			<th-date-picker
-				[initialThDate]="actionDateInterval.end" [minThDate]="actionDateInterval.start" [showLabel]="false"
+				[initialThDate]="actionDateInterval.end" [minThDate]="actionDateInterval.start" [showLabel]="false" [showIcon]="false"
 				(didSelectThDate)="didSelectActionEndDate($event)"
 				>
 			</th-date-picker>
@@ -29,7 +29,7 @@
 			<input type="checkbox" class="dark-gray-color m-r-12" [(ngModel)]="forever" name="forever">
 			<span class="ellipsis-text m-r-12">{{'Forever' | translate}}</span>
 			<div class="btn btn-danger uppercase f-10 clickable" (click)="applyChanges()">
-				<i class="fa fa-refresh fa-spin" *ngIf="isYielding"></i> 
+				<i class="fa fa-refresh fa-spin" *ngIf="isYielding"></i>
 				{{'Apply changes' | translate}}
 			</div>
 		</div>
