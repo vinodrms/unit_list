@@ -128,7 +128,7 @@
                 <tr *ngFor="let payment of payer.paymentList" class="selectable">
                     <td>{{ currentInvoice.getCustomerDO(payer.customerId).customerName }}
                         <div class="payment-type">
-                            <span>{{ 'Payment via' | translate}} {{getPaymentMethodDisplayName(payment) | translate}}   </span>
+                            <span>{{ 'Payment via' | translate}} {{getPaymentMethodDisplayName(payer, payment) | translate}}   </span>
                             <span *ngIf="!payment.shouldApplyTransactionFee"> ; {{ 'No transaction fee' | translate }} </span>
                             <span *ngIf="payment.shouldApplyTransactionFee"> ; {{ 'Price with transaction fee' | translate }}: {{ ccySymbol }} {{ payment.amountPlusTransactionFee }} </span>
                         </div>

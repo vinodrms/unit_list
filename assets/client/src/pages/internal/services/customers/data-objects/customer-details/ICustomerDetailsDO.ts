@@ -6,7 +6,8 @@ import { ContactDetailsDO } from './ContactDetailsDO';
 export interface ICustomerDetailsDO extends BaseDO {
 	getAddress(): AddressDO;
 	getName(): string;
-	canPayInvoiceByAgreement(): boolean;
+    canPayInvoiceByAgreement(): boolean;
+    getPayInvoiceByAgreementFee(): number;
 	canGuaranteePayment(): boolean;
 	canReceiveBookingConfirmations(): boolean;
 	getContactDetailsList(): ContactDetailsDO[];

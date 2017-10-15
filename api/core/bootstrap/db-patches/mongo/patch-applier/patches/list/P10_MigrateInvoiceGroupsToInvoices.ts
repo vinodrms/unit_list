@@ -20,10 +20,11 @@ import { FeeInvoiceItemMetaDO } from "../../../../../../data-layer/invoices/data
 import { RoomCommissionItemMetaDO } from "../../../../../../data-layer/invoices/data-objects/items/room-commission/RoomCommissionItemMetaDO";
 import { InvoicePayerDO as LegacyInvoicePayerDO } from "../../../../../../data-layer/invoices-legacy/data-objects/payers/InvoicePayerDO";
 import { InvoicePaymentDO } from "../../../../../../data-layer/invoices/data-objects/payer/InvoicePaymentDO";
-import { InvoicePaymentMethodDO } from "../../../../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO";
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO";
 import { InvoicePayerDO } from "../../../../../../data-layer/invoices/data-objects/payer/InvoicePayerDO";
 import { ThDateDO } from "../../../../../../utils/th-dates/data-objects/ThDateDO";
 import { ThHourDO } from "../../../../../../utils/th-dates/data-objects/ThHourDO";
+import { TransactionFeeType } from "../../../../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 export class P10_MigrateInvoiceGroupsToInvoices extends APaginatedTransactionalMongoPatch {
     private hotelTimezoneMap: { [index: string]: string } = {};
@@ -48,6 +49,7 @@ export class P10_MigrateInvoiceGroupsToInvoices extends APaginatedTransactionalM
             createdInvoices.forEach(invoice => {
                 // amountToPay and amountPaid computed through the recomputePrices function
                 invoice.recomputePrices();
+                this.checkAmounts(invoice);
 
                 promises.push(this.invoiceRepository.updateInvoice({ hotelId: invoice.hotelId }, {
                     id: invoice.id,
@@ -129,7 +131,7 @@ export class P10_MigrateInvoiceGroupsToInvoices extends APaginatedTransactionalM
                 }
             }
             if (!_.isNumber(defaultTimestamp)) {
-                defaultTimestamp = ThTimestampDO​​.buildThTimestampForTimezone(timezone).getTimestamp(timezone);
+                defaultTimestamp = ThTimestampDO.buildThTimestampForTimezone(timezone).getTimestamp(timezone);
             }
 
             invoice.paymentDueDate = legacyInvoice.paymentDueDate;
@@ -232,6 +234,27 @@ export class P10_MigrateInvoiceGroupsToInvoices extends APaginatedTransactionalM
                     reject(e);
                 })
         });
+    }
+
+    private checkAmounts(invoice: InvoiceDO) {
+        if (invoice.isPaid() && invoice.amountPaid > invoice.amountToPay) {
+            let diff: number = invoice.amountPaid - invoice.amountToPay;
+            let fixed: boolean = false;
+            invoice.payerList.forEach((payer: InvoicePayerDO) => {
+                payer.paymentList.forEach((payment: InvoicePaymentDO) => {
+                    if (payment.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                        if (!fixed) {
+                            payment.shouldApplyTransactionFee = true;
+                            payment.transactionFeeSnapshot.amount = this.thUtils.roundNumberToTwoDecimals(diff);
+                            payment.transactionFeeSnapshot.type = TransactionFeeType.Fixed;
+                            payment.amount = this.thUtils.roundNumberToTwoDecimals(payment.amount - diff);
+                            invoice.amountPaid = this.thUtils.roundNumberToTwoDecimals(invoice.amountPaid - diff);
+                            fixed = true;
+                        }
+                    }
+                });
+            });
+        }
     }
 
     public getPatchType(): MongoPatchType {

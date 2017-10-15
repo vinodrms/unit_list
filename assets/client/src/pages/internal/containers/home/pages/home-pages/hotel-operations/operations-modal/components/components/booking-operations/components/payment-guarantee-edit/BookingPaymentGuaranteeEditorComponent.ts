@@ -63,7 +63,8 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
         this._billedCustomer = this._bookingOperationsPageData.customersContainer.getCustomerById(billedCustomerId);
 
         this.paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this._billedCustomer);
-        this.selectedPaymentMethodVM = this._pmGenerator.generateInvoicePaymentMethodVMForPaymentMethod(this.defaultBillingDetailsDO.paymentMethod, this._bookingOperationsPageData.allPaymentMethods);
+        this.selectedPaymentMethodVM = this._pmGenerator.generateInvoicePaymentMethodVMForPaymentMethod(this.defaultBillingDetailsDO.paymentMethod,
+            this._bookingOperationsPageData.allPaymentMethods, this._billedCustomer);
     }
 
     public get customerList(): CustomerDO[] {

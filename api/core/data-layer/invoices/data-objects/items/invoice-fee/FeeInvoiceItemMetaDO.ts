@@ -28,7 +28,7 @@ export class FeeInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
         return thTranslation.translate(this.displayName);
     }
     public isDerivedFromBooking(): boolean {
-        return true;
+        return false;
     }
     public getVatId(): string {
         return this.vatId;
