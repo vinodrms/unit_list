@@ -185,21 +185,6 @@ export class InvoiceDO extends BaseDO {
         }
         return bookingInvoiceItemList;
     }
-    public addInvoiceFeeIfNecessary(indexedCustomersById: { [id: string]: CustomerDO }) {
-        let thUtils = new ThUtils();
-        this.payerList.forEach((payer: InvoicePayerDO) => {
-            payer.paymentList.forEach((payment: InvoicePaymentDO) => {
-                if (payment.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
-                    var customerDO = indexedCustomersById[payer.customerId];
-                    if (!thUtils.isUndefinedOrNull(customerDO)) {
-                        var invoiceFeeItem = new InvoiceItemDO();
-                        invoiceFeeItem.buildFeeItemFromCustomerDO(customerDO);
-                        this.itemList.push(invoiceFeeItem);
-                    }
-                }
-            });
-        });
-    }
 
     public getAddOnProductIdList(): string[] {
         return this.getItemIdListByItemType(InvoiceItemType.AddOnProduct);

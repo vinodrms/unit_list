@@ -115,8 +115,6 @@ export class MongoInvoiceRepositoryWithBookingPriceLink extends MongoInvoiceRepo
                 _.forEach(invoiceList, (invoice: InvoiceDO) => {
                     invoice.linkBookings(indexedBookingsById);
                 });
-                return this.addInvoiceFeeIfNecessary(invoiceMeta, invoiceList);
-            }).then((invoiceList: InvoiceDO[]) => {
                 resolve(invoiceList);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.InvoiceRepositoryBookingPriceLinkError, error);
@@ -141,57 +139,5 @@ export class MongoInvoiceRepositoryWithBookingPriceLink extends MongoInvoiceRepo
                 .uniq()
                 .value()
         };
-    }
-
-    private addInvoiceFeeIfNecessary(invoiceMeta: InvoiceMetaRepoDO, invoiceList: InvoiceDO[]): Promise<InvoiceDO[]> {
-        return new Promise<InvoiceDO[]>((resolve: { (result: InvoiceDO[]): void }, reject: { (err: ThError): void }) => {
-            this.addInvoiceFeeIfNecessaryCore(resolve, reject, invoiceMeta, invoiceList);
-        });
-    }
-    private addInvoiceFeeIfNecessaryCore(resolve: { (result: InvoiceDO[]): void }, reject: { (err: ThError): void }, invoiceMeta: InvoiceMetaRepoDO, invoiceList: InvoiceDO[]) {
-
-        // if no customer has paid by agreement an invoice from `invoiceList` we don't read them from the repository
-        let customerIdListToPayInvoiceByAgreement = this.getCustomerIdListToPayInvoiceByAgreement(invoiceList);
-        if (customerIdListToPayInvoiceByAgreement.length == 0) {
-            resolve(invoiceList);
-            return;
-        }
-
-        let meta = this.buildCustomerMetaFromInvoiceMeta(invoiceMeta);
-        let searchCriteria: CustomerSearchCriteriaRepoDO = {
-            customerIdList: customerIdListToPayInvoiceByAgreement
-        };
-        this.customersRepo.getCustomerList(meta, searchCriteria)
-            .then((result: CustomerSearchResultRepoDO) => {
-                let indexedCustomersById: { [id: string]: CustomerDO } = _.indexBy(result.customerList, (customer: CustomerDO) => { return customer.id });
-                _.forEach(invoiceList, (invoice: InvoiceDO) => {
-                    invoice.addInvoiceFeeIfNecessary(indexedCustomersById);
-                });
-                resolve(invoiceList);
-            }).catch((error: any) => {
-                var thError = new ThError(ThStatusCode.InvoiceRepositoryAddInvoiceFeeError, error);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error adding invoice fee to the invoices if necessary", context, thError);
-                reject(thError);
-            });
-    }
-    private buildCustomerMetaFromInvoiceMeta(invoidGroupMeta: InvoiceMetaRepoDO): CustomerMetaRepoDO {
-        return {
-            hotelId: invoidGroupMeta.hotelId
-        }
-    }
-    private getCustomerIdListToPayInvoiceByAgreement(invoiceList: InvoiceDO[]): string[] {
-        return _.chain(invoiceList)
-            .map((invoice: InvoiceDO) => {
-                return invoice.payerList;
-            }).flatten().filter((invoicePayer: InvoicePayerDO) => {
-                let matchedPaymentList: InvoicePaymentDO[] = _.filter(invoicePayer.paymentList, (payment: InvoicePaymentDO) => {
-                    return payment.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement;
-                });
-                return matchedPaymentList.length > 0;
-            }).map((invoicePayer: InvoicePayerDO) => {
-                return invoicePayer.customerId;
-            })
-            .uniq()
-            .value();
     }
 }

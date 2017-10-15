@@ -63,12 +63,7 @@ export class InvoiceItemDO extends BaseDO {
         this.type = InvoiceItemType.AddOnProduct;
         this.id = aop.id;
     }
-    public buildFeeItemFromCustomerDO(customerDO: CustomerDO) {
-        var meta = new FeeInvoiceItemMetaDO();
-        meta.buildFromCustomerDO(customerDO);
-        this.meta = meta;
-        this.type = InvoiceItemType.InvoiceFee;
-    }
+
     public buildItemFromRoomCommission(deductedCommissionPrice: number) {
         var meta = new RoomCommissionItemMetaDO();
         meta.buildFromRoomCommission(deductedCommissionPrice);
