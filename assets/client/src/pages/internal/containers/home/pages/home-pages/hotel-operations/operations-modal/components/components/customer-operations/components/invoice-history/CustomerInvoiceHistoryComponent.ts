@@ -26,7 +26,7 @@ export class CustomerInvoiceHistoryComponent implements OnInit {
     isLoading: boolean = false;
     private pageNumber = 0;
     private _totalCount: number;
-    private invoiceMetasByInvoiceStatus: { [index: number]: InvoiceMeta };
+    private invoiceMetasByInvoiceStatusAndAccType: { [index: string]: InvoiceMeta };
 
     invoiceList: InvoiceDO[] = [];
     ccySymbol: string = "";
@@ -38,8 +38,8 @@ export class CustomerInvoiceHistoryComponent implements OnInit {
     ) {
         let factory = new InvoiceMetaFactory();
         let invoiceMetas = factory.getInvoiceMetaList();
-        this.invoiceMetasByInvoiceStatus = _.indexBy(invoiceMetas, (meta: InvoiceMeta) => {
-            return meta.invoicePaymentStatus;
+        this.invoiceMetasByInvoiceStatusAndAccType = _.indexBy(invoiceMetas, (meta: InvoiceMeta) => {
+            return meta.invoicePaymentStatus + "-" + meta.invoiceAccountingType;
         });
     }
 
@@ -79,6 +79,7 @@ export class CustomerInvoiceHistoryComponent implements OnInit {
     }
 
     public getInvoiceStatus(invoice: InvoiceDO): string {
-        return this.invoiceMetasByInvoiceStatus[invoice.paymentStatus].displayName;
+        let key = invoice.paymentStatus + "-" + invoice.accountingType;
+        return this.invoiceMetasByInvoiceStatusAndAccType[key].displayName;
     }
 }
