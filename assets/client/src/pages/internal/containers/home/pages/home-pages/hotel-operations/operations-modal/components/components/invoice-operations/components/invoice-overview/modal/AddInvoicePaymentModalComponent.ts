@@ -18,7 +18,7 @@ import { TransactionFeeDO, TransactionFeeType } from "../../../../../../../../..
 })
 export class AddInvoicePaymentModalComponent extends BaseComponent implements ICustomModalComponent {
 
-    public applyFee: boolean = false;
+    public applyFee: boolean = true;
     public selectedInvoicePaymentMethodVM: InvoicePaymentMethodVM;
     public paymentAmount: number;
     public paymentNotes: string;
@@ -68,7 +68,6 @@ export class AddInvoicePaymentModalComponent extends BaseComponent implements IC
             return;
         }
         var invoicePaymentDO = new InvoicePaymentDO();
-        //invoicePaymentDO.amount = this._thUtils.roundNumberToTwoDecimals(this.paymentAmount);
         invoicePaymentDO.amount = this.paymentAmount;
         invoicePaymentDO.paymentMethod = this.selectedInvoicePaymentMethodVM.paymentMethod;
         invoicePaymentDO.shouldApplyTransactionFee = this.applyFee;

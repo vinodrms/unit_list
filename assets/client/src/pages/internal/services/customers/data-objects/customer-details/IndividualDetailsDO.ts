@@ -39,7 +39,10 @@ export class IndividualDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	}
 	public canPayInvoiceByAgreement(): boolean {
 		return false;
-	}
+    }
+    public getPayInvoiceByAgreementFee(): number {
+        return 0.0;
+    }
 	public canGuaranteePayment(): boolean {
 		return true;
 	}

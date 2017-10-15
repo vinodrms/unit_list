@@ -288,8 +288,10 @@ export class InvoiceOverviewComponent implements OnInit {
         return invoiceItem;
     }
 
-    public getPaymentMethodDisplayName(payment: InvoicePaymentDO): string {
-        var invoicePaymentMethodVM: InvoicePaymentMethodVM = this.pmGenerator.generateInvoicePaymentMethodVMForPaymentMethod(payment.paymentMethod, this.invoiceOperationsPageData.allPaymentMethods);
+    public getPaymentMethodDisplayName(payer: InvoicePayerDO, payment: InvoicePaymentDO): string {
+        let customer = this.currentInvoice.getCustomerDO(payer.customerId);
+        var invoicePaymentMethodVM: InvoicePaymentMethodVM = this.pmGenerator.generateInvoicePaymentMethodVMForPaymentMethod(payment.paymentMethod,
+            this.invoiceOperationsPageData.allPaymentMethods, customer);
         return invoicePaymentMethodVM ? invoicePaymentMethodVM.displayName : "";
     }
 
@@ -439,7 +441,7 @@ export class InvoiceOverviewComponent implements OnInit {
     }
 
     public openAddPayerNotesModal(customer: CustomerDO) {
-        var payer: InvoicePayerDO = _.find(this.currentInvoice.invoice.payerList, (payer: InvoicePayerDO) => {return payer.customerId === customer.id});
+        var payer: InvoicePayerDO = _.find(this.currentInvoice.invoice.payerList, (payer: InvoicePayerDO) => { return payer.customerId === customer.id });
 
         this.addInvoicePayerNotesModalService.openAddInvoicePayerNotesModal(payer.notes).then((modalDialogInstance: ModalDialogRef<string>) => {
             modalDialogInstance.resultObservable.subscribe((notes: string) => {
