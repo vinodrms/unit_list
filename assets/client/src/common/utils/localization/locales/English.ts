@@ -1068,5 +1068,6 @@ export var EnglishTranslations: Object = {
     "Please add a note.": "Please add a note.",
     "Can't find the invoice payer.": "Can't find the invoice payer.",
     "Add payment(s) on this invoice to mark is as Paid": "Add payment(s) on this invoice to mark is as Paid",
+    "Add item(s) on this invoice": "Add item(s) on this invoice",
 
 };
