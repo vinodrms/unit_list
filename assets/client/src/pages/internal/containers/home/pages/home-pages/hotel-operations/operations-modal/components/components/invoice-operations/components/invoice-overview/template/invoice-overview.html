@@ -160,7 +160,11 @@
             {{ 'Reinstate Invoice' | translate }}
         </button>
 
-        <button *ngIf="hasInvoicePayRight()" type="button" class="btn btn-primary m-l-8" (click)="onPayInvoice()" title="{{ 'Close the invoice by marking it as Paid' | translate }}">
+        <small class="text-muted" *ngIf="hasInvoicePayRight() && !invoiceAmountsMatch()">
+            <i class="fa fa-info-circle"></i> {{ 'Add payment(s) on this invoice to mark is as Paid' | translate }}
+        </small>
+
+        <button *ngIf="hasInvoicePayRight() && invoiceAmountsMatch() && invoiceHasItems()" type="button" class="btn btn-primary m-l-8" (click)="onPayInvoice()" title="{{ 'Close the invoice by marking it as Paid' | translate }}">
             <i *ngIf="payPending" class="fa fa-spinner fa-pulse"></i>
             <i *ngIf="!payPending" class="fa fa-2x unitpal-font rotate-45">L</i>
             {{ 'Pay Invoice' | translate }}
