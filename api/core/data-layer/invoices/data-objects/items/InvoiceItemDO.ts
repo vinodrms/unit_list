@@ -3,10 +3,10 @@ import { BaseDO } from '../../../common/base/BaseDO';
 import { IInvoiceItemMeta } from './IInvoiceItemMeta';
 import { AddOnProductInvoiceItemMetaDO } from './add-on-products/AddOnProductInvoiceItemMetaDO';
 import { FeeInvoiceItemMetaDO } from './invoice-fee/FeeInvoiceItemMetaDO';
-import { AddOnProductDO } from '../../../add-on-products/data-objects/AddOnProductDO';
 import { CustomerDO } from '../../../customers/data-objects/CustomerDO';
 import { RoomCommissionItemMetaDO } from "./room-commission/RoomCommissionItemMetaDO";
 import { BookingPriceDO } from "../../../bookings/data-objects/price/BookingPriceDO";
+import { AddOnProductSnapshotDO } from "../../../add-on-products/data-objects/AddOnProductSnapshotDO";
 
 export enum InvoiceItemType {
     AddOnProduct, Booking, InvoiceFee, RoomCommission
@@ -51,7 +51,7 @@ export class InvoiceItemDO extends BaseDO {
         }
     }
 
-    public buildFromAddOnProductDO(aop: AddOnProductDO, numberOfItems: number, vatId: string) {
+    public buildFromAddOnProductDO(aop: AddOnProductSnapshotDO, numberOfItems: number, vatId: string) {
 
         var aopInvoiceItemMeta = new AddOnProductInvoiceItemMetaDO();
         aopInvoiceItemMeta.aopDisplayName = aop.name;

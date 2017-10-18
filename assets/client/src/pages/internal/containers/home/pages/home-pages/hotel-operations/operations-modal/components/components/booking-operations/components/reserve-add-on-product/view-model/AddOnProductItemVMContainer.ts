@@ -1,9 +1,7 @@
-import {AddOnProductDO} from '../../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
-import {AddOnProductsDO} from '../../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
 import {ThUtils} from '../../../../../../../../../../../../../../common/utils/ThUtils';
 import { AddOnProductItemVM } from './AddOnProductItemVM';
 import { AddOnProductBookingReservedItem } from "../../../../../../../../../../../../services/bookings/data-objects/BookingDO";
-
+import { AddOnProductSnapshotDO } from "../../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductSnapshotDO";
 import * as _ from "underscore";
 
 export class AddOnProductItemVMContainer {
@@ -15,59 +13,37 @@ export class AddOnProductItemVMContainer {
         this._addOnProductVMList = [];
     }
 
-    public initItemList(addOnProductContainer: AddOnProductsDO, aopBookingReservedItemList: AddOnProductBookingReservedItem[]) {
+    public initItemList(aopBookingReservedItemList: AddOnProductBookingReservedItem[]) {
         _.forEach(aopBookingReservedItemList, (addOnProduct: AddOnProductBookingReservedItem) => {
-            var foundAddOnProduct: AddOnProductDO = addOnProductContainer.getAddOnProductById(addOnProduct.aopId);
-            if (!this._thUtils.isUndefinedOrNull(foundAddOnProduct)) {
-                this.addAddOnProduct(foundAddOnProduct, addOnProduct.noOfItems);
-            }
+            this.addAddOnProduct(addOnProduct.aopSnapshot, addOnProduct.noOfItems);
         });
     }
 
-    public addAddOnProduct(addOnProduct: AddOnProductDO, noOfItems: number) {
-        var exists: boolean = false;
-        var zeroItems: boolean = false;
-        _.forEach(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => {
-            if (itemVM.addOnProduct.id === addOnProduct.id) {
-                itemVM.noAdded += noOfItems;
-                if (itemVM.noAdded == 0) {
-                    zeroItems = true;
-                } else {
-                    itemVM.updateTotalPrice(this._ccySymbol);
-                }
-                exists = true;
-            }
-        });
-        if (zeroItems) {
-            this._addOnProductVMList = _.filter(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => {
-                return itemVM.addOnProduct.id !== addOnProduct.id;
-            });
-        }
-        if (exists) { return; }
+    public addAddOnProduct(addOnProduct: AddOnProductSnapshotDO, noOfItems: number) {
         var itemVM = new AddOnProductItemVM();
-        itemVM.addOnProduct = addOnProduct;
+        itemVM.addOnProductSnapshot = addOnProduct;
         itemVM.noAdded = noOfItems;
         itemVM.updateTotalPrice(this._ccySymbol);
         this._addOnProductVMList.push(itemVM);
     }
 
-    public removeAddOnProduct(addOnProduct: AddOnProductDO) {
-        this._addOnProductVMList = _.filter(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => { return itemVM.addOnProduct.id != addOnProduct.id });
+    public removeAddOnProduct(addOnProduct: AddOnProductSnapshotDO) {
+        this._addOnProductVMList = _.filter(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => { return itemVM.addOnProductSnapshot != addOnProduct });
     }
 
     public getAddOnProductBookingReservedItemList(): AddOnProductBookingReservedItem[] {
         var addOnProductBookingReservedItemList: AddOnProductBookingReservedItem[] = [];
         _.forEach(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => {
             var addonProductReservedItem = new AddOnProductBookingReservedItem();
-            addonProductReservedItem.aopId = itemVM.addOnProduct.id;
+            addonProductReservedItem.aopSnapshot = itemVM.addOnProductSnapshot;
             addonProductReservedItem.noOfItems = itemVM.noAdded;
             addOnProductBookingReservedItemList.push(addonProductReservedItem);
         });
         return addOnProductBookingReservedItemList;
     }
-    public getAddOnProductList(): AddOnProductDO[] {
+    public getAddOnProductList(): AddOnProductSnapshotDO[] {
         return _.map(this._addOnProductVMList, (itemVM: AddOnProductItemVM) => {
-            return itemVM.addOnProduct;
+            return itemVM.addOnProductSnapshot;
         });
     }
 

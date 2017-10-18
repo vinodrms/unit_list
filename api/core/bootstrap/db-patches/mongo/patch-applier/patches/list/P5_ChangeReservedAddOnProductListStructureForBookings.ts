@@ -22,14 +22,14 @@ export class P5_ChangeReservedAddOnProductListStructureForBookings extends APagi
                 _.forEach(booking.reservedAddOnProductIdList , (aopId: string) => {
                     var exists = false;
                     _.forEach(addOnProductBookingReservedItemList, (item: AddOnProductBookingReservedItem) => {
-                        if (item.aopId == aopId) {
+                        if (item.aopSnapshot.id == aopId) {
                             item.noOfItems++;
                             exists = true;
                         }
                     });
                     if (!exists) {
                         var item = new AddOnProductBookingReservedItem();
-                        item.aopId = aopId;
+                        item.aopSnapshot.id = aopId;
                         item.noOfItems = 1;
                         addOnProductBookingReservedItemList.push(item);
                     }

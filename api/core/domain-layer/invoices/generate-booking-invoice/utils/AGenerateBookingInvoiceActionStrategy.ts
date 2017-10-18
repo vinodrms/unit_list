@@ -37,7 +37,7 @@ export abstract class AGenerateBookingInvoiceActionStrategy implements IGenerate
         let itemList: InvoiceItemDO[] = [];
         _.forEach(this.initialInvoiceItemList, (item: BookingInvoiceItem) => {
             let aopInvoiceItem = new InvoiceItemDO();
-            aopInvoiceItem.buildFromAddOnProductDO(item.addOnProduct, item.noOfItems, item.addOnProduct.getVatId());
+            aopInvoiceItem.buildFromAddOnProductDO(item.addOnProductSnapshot, item.noOfItems, item.addOnProductSnapshot.getVatId());
             this.stampItem(aopInvoiceItem);
             itemList.push(aopInvoiceItem);
         });

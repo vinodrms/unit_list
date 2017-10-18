@@ -19,7 +19,6 @@ export class BookingReserveAddOnProducts {
 
     private _reserveAddOnProductsDO: BookingReserveAddOnProductsDO;
 
-    private _loadedAddOnProductsContainer: AddOnProductsContainer;
     private _loadedBooking: BookingDO;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
@@ -39,10 +38,9 @@ export class BookingReserveAddOnProducts {
             parser.logAndReject("Error validating reserve add on products", reject);
             return;
         }
-        var uniqueAddOnProductIdList = _.map(this._reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => { return addOnProduct.aopId; });
+        var uniqueAddOnProductIdList = _.map(this._reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => { return addOnProduct.aopSnapshot.id; });
         var addOnProductValidator = new AddOnProductIdValidator(this._appContext, this._sessionContext);
         addOnProductValidator.validateAddOnProductIdList(uniqueAddOnProductIdList).then((addOnProductsContainer: AddOnProductsContainer) => {
-            this._loadedAddOnProductsContainer = addOnProductsContainer;
 
             var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
             return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._reserveAddOnProductsDO.id)

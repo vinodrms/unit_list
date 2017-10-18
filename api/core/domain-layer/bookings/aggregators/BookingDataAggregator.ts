@@ -78,13 +78,6 @@ export class BookingDataAggregator {
             this._bedList = _.filter(result.bedList, (bed: BedDO) => {
                 return bed.storageType === BedStorageType.Stationary;
             });
-
-            var addOnProductLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
-            return addOnProductLoader.load(this.getDistinctAddOnProductIdListFromBookingList());
-        }).then((result: AddOnProductItemContainer) => {
-            this._addOnProductList = result.getAddOnProductList();
-            var addOnProductLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
-
             return this._appContext.getRepositoryFactory().getSettingsRepository().getAddOnProductCategories();
         }).then((result: AddOnProductCategoryDO[]) => {
             this._addOnProductCategoryList = result;
@@ -116,15 +109,6 @@ export class BookingDataAggregator {
             });
         }).flatten().uniq().value();
     }
-    private getDistinctAddOnProductIdListFromBookingList(): string[] {
-        return _.chain(this._bookingList).map((booking: BookingDO) => {
-            var addOnProductIdList = [];
-            if (booking.reservedAddOnProductIdList) {
-                addOnProductIdList = addOnProductIdList.concat(booking.reservedAddOnProductIdList);
-            }
-            return addOnProductIdList;
-        }).flatten().uniq().value();
-    }
 
     private buildBookingAggregatedDataContainerFromLoadedData(): BookingAggregatedDataContainer {
         var bookingAggregatedDataContainer = new BookingAggregatedDataContainer();
@@ -153,13 +137,7 @@ export class BookingDataAggregator {
             bookingAggregatedData.bedList = _.filter(this._bedList, (bed: BedDO) => {
                 return _.contains(bookingBedIdList, bed.id);
             });
-            bookingAggregatedData.addOnProductList = _.filter(this._addOnProductList, (aop: AddOnProductDO) => {
-                var addOnProductIdList = [];
-                if (booking.reservedAddOnProductIdList) {
-                    addOnProductIdList = addOnProductIdList.concat(booking.reservedAddOnProductIdList);
-                }
-                return _.contains(addOnProductIdList, aop.id);
-            });
+            
             bookingAggregatedData.addOnProductCategoyList = this._addOnProductCategoryList;
             bookingAggregatedData.ccyCode = this._hotel.ccyCode;
             bookingAggregatedDataList.push(bookingAggregatedData);

@@ -8,6 +8,7 @@ import { TestUtils } from "../../../../helpers/TestUtils";
 import { InvoicePaymentDO } from "../../../../../core/data-layer/invoices/data-objects/payer/InvoicePaymentDO";
 import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from "../../../../../core/data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO";
 import { TransactionFeeDO } from "../../../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
+import { AddOnProductSnapshotDO } from "../../../../../core/data-layer/add-on-products/data-objects/AddOnProductSnapshotDO";
 
 export class InvoicesTestHelper {
     private testUtils: TestUtils;
@@ -32,7 +33,9 @@ export class InvoicesTestHelper {
     getAddOnProductItem(): InvoiceItemDO {
         let addOnProduct = this.testUtils.getRandomListElement(this.testDataBuilder.addOnProductList);
         let invoiceItem = new InvoiceItemDO();
-        invoiceItem.buildFromAddOnProductDO(addOnProduct, 3, addOnProduct.getVatId());
+        var addOnProductSnapshot = new AddOnProductSnapshotDO();
+        addOnProductSnapshot.buildFromObject(addOnProduct);
+        invoiceItem.buildFromAddOnProductDO(addOnProductSnapshot, 3, addOnProduct.getVatId());
         return invoiceItem;
     }
 

@@ -16,11 +16,11 @@
             <tr *ngFor="let addOnProductItemVM of addOnProductItemVMList" class="operational-box">
                 <td width="10%"> <i class="fa unitpal-font">$</i>  </td>
                 <td width="70%" class="name-field f-s-14">
-                    {{addOnProductItemVM.noAdded}} x {{ addOnProductItemVM.addOnProduct.name }}
+                    {{addOnProductItemVM.noAdded}} x {{ addOnProductItemVM.addOnProductSnapshot.name }}
                     <small> - {{addOnProductItemVM.totalPriceString}} </small>
                 </td>
                 <td width="20%"> 
-                    <span class="unitpal-font clickable-item" *ngIf="!readonly" (click)="removeAddOnProduct(addOnProductItemVM.addOnProduct)">\</span>
+                    <span class="unitpal-font clickable-item" *ngIf="!readonly" (click)="removeAddOnProduct(addOnProductItemVM.addOnProductSnapshot)">\</span>
                 </td>
             </tr>
             <tr *ngIf="addOnProductListIsEmpty">

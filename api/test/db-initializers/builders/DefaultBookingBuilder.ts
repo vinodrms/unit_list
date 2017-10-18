@@ -20,6 +20,7 @@ import { BookingUtils } from '../../../core/domain-layer/bookings/utils/BookingU
 import { PaymentMethodInstanceDO } from "../../../core/data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 import { AddOnProductDO } from "../../../core/data-layer/add-on-products/data-objects/AddOnProductDO";
 import { InvoicePaymentMethodType } from '../../../core/data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
+import { AddOnProductSnapshotDO } from "../../../core/data-layer/add-on-products/data-objects/AddOnProductSnapshotDO";
 
 export interface IBookingDataSource {
     getBookingList(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryStatsList: RoomCategoryStatsDO[],
@@ -41,9 +42,9 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         priceProductList: PriceProductDO[], addOnProductList: AddOnProductDO[]): BookingDO[] {
         var bookingsList = [];
 
-        let reservedAddOnProductIdList: AddOnProductBookingReservedItem[] = _.map(addOnProductList, aop => {
+        let reservedAddOnProductIdList: AddOnProductBookingReservedItem[] = _.map(addOnProductList, (aop: AddOnProductDO) => {
             var item = new AddOnProductBookingReservedItem();
-            item.aopId = aop.id;
+            item.aopSnapshot = aop.getAddOnProductSnapshotDO();
             item.noOfItems = 1;
             return item;
         });
