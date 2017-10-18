@@ -54,7 +54,6 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
             this.addNewPaymentsOn(existingInvoice);
             this.updatePayerNotesOn(existingInvoice);
             this.deletePayersFrom(existingInvoice);
-            this.translateInvoiceHistoryOn(existingInvoice);
             existingInvoice.recomputePrices();
             return;
         }
@@ -67,7 +66,6 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
         this.addNewPaymentsOn(existingInvoice);
         this.updatePayerNotesOn(existingInvoice);
         this.deletePayersFrom(existingInvoice);
-        this.translateInvoiceHistoryOn(existingInvoice);
         existingInvoice.recomputePrices();
 
         // Only close the invoice if
@@ -85,9 +83,7 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
             }
         }
     }
-    private translateInvoiceHistoryOn(existingInvoice: InvoiceDO) {
-        existingInvoice.history.translateActions(this.appContext.thTranslate);
-    }
+
     private updatePayerNotesOn(existingInvoice: InvoiceDO) {
         this.invoiceToSave.payerList.forEach((payer: InvoicePayerDO) => {
             if (!this.thUtils.isUndefinedOrNull(payer.notes)) {

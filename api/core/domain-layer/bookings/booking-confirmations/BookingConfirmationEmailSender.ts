@@ -9,10 +9,6 @@ import { BaseEmailTemplateDO, EmailTemplateTypes } from '../../../services/email
 import { BookingConfirmationVMContainer } from './BookingConfirmationVMContainer';
 import { BookingDataAggregatorQuery, BookingDataAggregator } from '../aggregators/BookingDataAggregator';
 import { BookingAggregatedDataContainer } from '../aggregators/BookingAggregatedDataContainer';
-
-import fs = require('fs');
-import path = require('path');
-import _ = require("underscore");
 import { BookingAggregatedData } from "../aggregators/BookingAggregatedData";
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
@@ -21,6 +17,10 @@ import { ThUtils } from "../../../utils/ThUtils";
 import { EmailDistributionDO } from "../../hotel-operations/common/email-confirmations/utils/data-objects/EmailDistributionDO";
 import { DocumentActionDO } from "../../../data-layer/common/data-objects/document-history/DocumentActionDO";
 import { BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
+
+import fs = require('fs');
+import path = require('path');
+import _ = require("underscore");
 
 export class BookingConfirmationEmailSender {
     private static BOOKING_CONFIRMATION_EMAIL_SUBJECT = 'Booking Confirmation';
@@ -75,24 +75,19 @@ export class BookingConfirmationEmailSender {
             });
             return Promise.all(sendEmailPromiseList);
         }).then((result: any) => {
-            var emailList: string = "";
-            _.each(emailDistributionList, (emailDistribution: EmailDistributionDO, index: number) => {
-                emailList = emailList.concat(emailDistribution.email);
-                if (index != (emailDistributionList.length - 1)) {
-                    emailList = emailList.concat(",");
-                }
-            });
+            var emailList = _.map(emailDistributionList, e => { return e.email });
+            var emailListStr = emailList.join(", ");
+
             
             var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
             var updateBoookingPromises: Promise<BookingDO>[] =[];
             _.forEach(bookingAggregatedDataContainer.bookingAggregatedDataList, (bookingAggregatedData: BookingAggregatedData) => {
-                if (bookingAggregatedData.booking.bookingHistory) {
-                    bookingAggregatedData.booking.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
-                        actionParameterMap: { emailList: emailList },
-                        actionString: "A confirmation email was sent to: %emailList%.",
-                        userId: this._sessionContext.sessionDO.user.id
-                    }));
-                }
+                bookingAggregatedData.booking.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
+                    actionParameterMap: { emailList: emailListStr },
+                    actionString: "A confirmation email was sent to: %emailList%.",
+                    userId: this._sessionContext.sessionDO.user.id
+                }));
+
                 updateBoookingPromises.push(bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: bookingAggregatedDataContainer.bookingAggregatedDataList[0].booking.groupBookingId,
                     bookingId:  bookingAggregatedDataContainer.bookingAggregatedDataList[0].booking.id,

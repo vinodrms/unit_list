@@ -76,19 +76,13 @@ export class InvoiceConfirmationEmailSender {
             });
             return Promise.all(sendEmailPromiseList);
         }).then((result: any) => {
-            var emailList: string = "";
-            _.each(emailDistributionList, (email: string, index: number) => {
-                emailList = emailList.concat(email);
-                if (index != (emailDistributionList.length - 1)) {
-                    emailList = emailList.concat(",");
-                }
-            });
+            var emailListStr = emailDistributionList.join(", ");
+
             this._invoiceAggregatedData.invoice.history.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
-                actionParameterMap: { emailList: emailList },
+                actionParameterMap: { emailList: emailListStr },
                 actionString: "A confirmation email was sent to: %emailList%.",
                 userId: this._sessionContext.sessionDO.user.id
             }));
-            this.translateInvoiceHistoryOn(this._invoiceAggregatedData.invoice);
             var invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceRepository();
             return invoicesRepo.updateInvoice({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                 id: this._invoiceAggregatedData.invoice.id,
@@ -103,10 +97,6 @@ export class InvoiceConfirmationEmailSender {
             ThLogger.getInstance().logError(ThLogLevel.Error, "error sending invoice by email", { invoicesQuery: query, distributionList: emailDistributionList }, thError);
             resolve(false);
         });
-    }
-
-    private translateInvoiceHistoryOn(invoice: InvoiceDO) {
-        invoice.history.translateActions(this._appContext.thTranslate);
     }
 
     private getInvoiceEmailTemplateDO(hotelDO: HotelDO): InvoiceEmailTemplateDO {
