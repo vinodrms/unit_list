@@ -26,6 +26,12 @@ export class BookingSendConfirmationComponent implements OnInit {
         this.loadDependentData();
     }
 
+    @Output() onBookingConfirmationSent = new EventEmitter();
+    public triggerOnBookingConfirmationSent() {
+        this.onBookingConfirmationSent.next();
+    }
+
+
     private _didInit: boolean = false;
 
     constructor(private _appContext: AppContext,
@@ -77,6 +83,7 @@ export class BookingSendConfirmationComponent implements OnInit {
         this._emailSenderModalService.sendBookingConfirmation(customersAbleToReceiveConfirmations, groupBookingId, bookingId).then((modalDialogRef: ModalDialogRef<boolean>) => {
             modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
                 this._appContext.analytics.logEvent("booking", "send-confirmation", "Sent a booking confirmation by email");
+                this.triggerOnBookingConfirmationSent();
             }, (err: any) => { });
         }).catch((err: any) => { });
     }

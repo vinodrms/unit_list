@@ -11,7 +11,9 @@
 
         <i *ngIf="hasInvoiceRemoveRight()" class="fa fa-trash invoice-change-button pull-right clickable" title="{{ 'Delete this invoice' | translate }}" (click)="onDeleteInvoice()"></i>
         <i *ngIf="hasInvoiceTransferRight()" class="fa fa-exchange invoice-change-button pull-right m-r-12 clickable"
-            (click)="showInvoiceTransfer()" title="{{ 'Easily transfer items from/to this invoice to others' | translate }}"></i>
+            (click)="showInvoiceTransfer()" title="{{ 'Easily transfer items from/to this invoice to others' | translate }}">
+        </i>
+        <i *ngIf="hasInvoiceHistory()" class="fa fa-history invoice-change-button pull-right m-r-12 clickable" title="{{ 'View invoice history' | translate }}" (click)="onViewInvoiceHistory()"></i>
         <div>
             <div class="invoice-title">
                 <span *ngIf="paginationOptions.displayPaginator">

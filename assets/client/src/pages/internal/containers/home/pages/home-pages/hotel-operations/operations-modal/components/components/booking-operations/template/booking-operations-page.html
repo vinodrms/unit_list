@@ -78,7 +78,7 @@
 			<booking-cancel [bookingOperationsPageData]="bookingOperationsPageData" (onBookingCancel)="didChangeBooking($event) && loadPageData()"></booking-cancel>
 		</div>
 		<div class="row">
-			<booking-send-confirmation [bookingOperationsPageData]="bookingOperationsPageData"></booking-send-confirmation>
+			<booking-send-confirmation [bookingOperationsPageData]="bookingOperationsPageData" (onBookingConfirmationSent)="loadPageData()"></booking-send-confirmation>
 		</div>
 		<div class="row">
 			<booking-undo-checkin [bookingOperationsPageData]="bookingOperationsPageData" (onBookingUndoCheckIn)="didChangeBooking($event) && loadPageData()"></booking-undo-checkin>

@@ -18,6 +18,8 @@ import path = require('path');
 import _ = require("underscore");
 import { InvoicePayerDO } from '../../../data-layer/invoices/data-objects/payer/InvoicePayerDO';
 import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
+import { DocumentActionDO } from "../../../data-layer/common/data-objects/document-history/DocumentActionDO";
+import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 
 
 export class InvoiceConfirmationEmailSender {
@@ -74,6 +76,25 @@ export class InvoiceConfirmationEmailSender {
             });
             return Promise.all(sendEmailPromiseList);
         }).then((result: any) => {
+            var emailList: string = "";
+            _.each(emailDistributionList, (email: string, index: number) => {
+                emailList = emailList.concat(email);
+                if (index != (emailDistributionList.length - 1)) {
+                    emailList = emailList.concat(",");
+                }
+            });
+            this._invoiceAggregatedData.invoice.history.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
+                actionParameterMap: { emailList: emailList },
+                actionString: "A confirmation email was sent to: %emailList%.",
+                userId: this._sessionContext.sessionDO.user.id
+            }));
+            this.translateInvoiceHistoryOn(this._invoiceAggregatedData.invoice);
+            var invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceRepository();
+            return invoicesRepo.updateInvoice({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+                id: this._invoiceAggregatedData.invoice.id,
+                versionId: this._invoiceAggregatedData.invoice.versionId
+            },  this._invoiceAggregatedData.invoice);
+        }).then((updatedInvoice: InvoiceDO) => {
             let fileService = this._appContext.getServiceFactory().getFileService();
             fileService.deleteFile(generatedPdfAbsolutePath);
             resolve(true);
@@ -82,6 +103,10 @@ export class InvoiceConfirmationEmailSender {
             ThLogger.getInstance().logError(ThLogLevel.Error, "error sending invoice by email", { invoicesQuery: query, distributionList: emailDistributionList }, thError);
             resolve(false);
         });
+    }
+
+    private translateInvoiceHistoryOn(invoice: InvoiceDO) {
+        invoice.history.translateActions(this._appContext.thTranslate);
     }
 
     private getInvoiceEmailTemplateDO(hotelDO: HotelDO): InvoiceEmailTemplateDO {

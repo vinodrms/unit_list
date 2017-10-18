@@ -22,6 +22,8 @@ export class InvoiceAddStrategy extends AInvoiceStrategy {
                 if (this.thUtils.isUndefinedOrNull(this.invoiceToSave.groupId)) {
                     this.invoiceToSave.groupId = this.thUtils.generateUniqueID();
                 }
+
+                this.translateInvoiceHistory();
                 this.invoiceToSave.recomputePrices();
 
                 var invoiceRepo = this.appContext.getRepositoryFactory().getInvoiceRepository();
@@ -36,7 +38,9 @@ export class InvoiceAddStrategy extends AInvoiceStrategy {
                 reject(thError);
             });
     }
-
+    private translateInvoiceHistory() {
+        this.invoiceToSave.history.translateActions(this.appContext.thTranslate);
+    }
     private stampInvoice() {
         this.invoiceToSave.itemList.forEach(item => {
             this.stampItem(item);
