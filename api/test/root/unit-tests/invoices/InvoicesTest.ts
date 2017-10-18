@@ -19,6 +19,12 @@ import { ReinstateInvoice } from "../../../../core/domain-layer/invoices/reinsta
 import { ThStatusCode } from "../../../../core/utils/th-responses/ThResponse";
 import { DeleteInvoice } from "../../../../core/domain-layer/invoices/delete-invoice/DeleteInvoice";
 import { DefaultInvoiceBuilder } from "../../../db-initializers/builders/DefaultInvoiceBuilder";
+import { BookingTestHelper } from '../bookings/helpers/BookingTestHelper';
+import { BookingDO, GroupBookingInputChannel } from '../../../../core/data-layer/bookings/data-objects/BookingDO';
+import { AddBookingItems } from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
+import { AddBookingItemsDO } from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
+import { GenerateBookingInvoice } from '../../../../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoice';
+import { GenerateBookingInvoiceDO } from '../../../../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoiceDO';
 
 
 describe("Invoices Tests", function () {
@@ -26,10 +32,14 @@ describe("Invoices Tests", function () {
     var testContext: TestContext;
     var testDataBuilder: DefaultDataBuilder;
     var helper: InvoicesTestHelper;
+    var bookingTestHelper: BookingTestHelper;
 
     var invoice: InvoiceDO;
     var walkInInvoice: InvoiceDO;
     var bookingInvoice: InvoiceDO;
+
+    var bookings: BookingDO[];
+    var bookingsInvoice: InvoiceDO;
 
     before(function (done: any) {
         testUtils = new TestUtils();
@@ -41,6 +51,7 @@ describe("Invoices Tests", function () {
     describe("Basic walk-in invoices' flows", function () {
         it("Should create a new invoice with no items", function (done) {
             helper = new InvoicesTestHelper(testDataBuilder);
+            bookingTestHelper = new BookingTestHelper();
 
             let invoiceToCreate = helper.getUnpaidInvoiceWithOnePayer();
             let saveInvoice = new SaveInvoice(testContext.appContext, testContext.sessionContext);
@@ -400,6 +411,102 @@ describe("Invoices Tests", function () {
                     done();
 
                 }).catch((e: ThError) => {
+                    done(e);
+                });
+        });
+    });
+
+    describe("Bookings' invoice tests", function () {
+
+        it("Should create 3 bookings with the mergeInvoices option enabled", function (done) {
+            bookingTestHelper.createGenericPriceProduct(testDataBuilder, testContext).then((priceProduct) => {
+                var addBookings = new AddBookingItems(testContext.appContext, testContext.sessionContext);
+                let input = new AddBookingItemsDO();
+                input.bookingList = [
+                    bookingTestHelper.getBookingItemDO(testDataBuilder, priceProduct),
+                    bookingTestHelper.getBookingItemDO(testDataBuilder, priceProduct),
+                    bookingTestHelper.getBookingItemDO(testDataBuilder, priceProduct),
+                ];
+                input.confirmationEmailList = [];
+                input.mergeInvoice = true;
+                return addBookings.add(input, GroupBookingInputChannel.PropertyManagementSystem);
+            }).then((createdBookings: BookingDO[]) => {
+                bookings = createdBookings;
+                should.equal(bookings.length, 3);
+                should.equal(bookings[0].mergeInvoice, true);
+                should.equal(bookings[1].mergeInvoice, true);
+                should.equal(bookings[2].mergeInvoice, true);
+                done();
+            }).catch(e => {
+                done(e);
+            });
+        });
+
+        it("Should generate the invoice for the first booking from the group", function (done) {
+            let generateBookingInvoice = new GenerateBookingInvoice(testContext.appContext, testContext.sessionContext);
+            generateBookingInvoice.generate(new GenerateBookingInvoiceDO(bookings[0].id, bookings[0].groupBookingId))
+                .then((invoice: InvoiceDO) => {
+                    should.exist(invoice.id);
+                    should.equal(invoice.amountToPay, bookings[0].price.totalBookingPrice);
+                    testUtils.stringArraysAreEqual(invoice.indexedBookingIdList, [bookings[0].id]);
+                    should.equal(invoice.paymentStatus, InvoicePaymentStatus.Unpaid);
+
+                    bookingsInvoice = invoice;
+                    done();
+                }).catch(e => {
+                    done(e);
+                });
+        });
+
+        it("Should generate the invoice for the second booking on the same invoice", function (done) {
+            let generateBookingInvoice = new GenerateBookingInvoice(testContext.appContext, testContext.sessionContext);
+            generateBookingInvoice.generate(new GenerateBookingInvoiceDO(bookings[1].id, bookings[1].groupBookingId))
+                .then((invoice: InvoiceDO) => {
+                    should.equal(invoice.id, bookingsInvoice.id);
+                    let expectedPrice = testUtils.thUtils.roundNumberToTwoDecimals(bookings[0].price.totalBookingPrice + bookings[1].price.totalBookingPrice);
+                    should.equal(invoice.amountToPay, expectedPrice);
+                    testUtils.stringArraysAreEqual(invoice.indexedBookingIdList, [bookings[0].id, bookings[1].id]);
+                    should.equal(invoice.paymentStatus, InvoicePaymentStatus.Unpaid);
+
+                    bookingsInvoice = invoice;
+                    done();
+                }).catch(e => {
+                    done(e);
+                });
+        });
+
+        it("Should mark the bookings' invoice as Paid", function (done) {
+            let additionalPayment = helper.getPayment(bookingsInvoice.amountToPay);
+            bookingsInvoice.payerList[0].paymentList.push(additionalPayment);
+            bookingsInvoice.paymentStatus = InvoicePaymentStatus.Paid;
+
+            let saveInvoice = new SaveInvoice(testContext.appContext, testContext.sessionContext);
+            saveInvoice.save(bookingsInvoice)
+                .then((updatedInvoice: InvoiceDO) => {
+                    should.equal(updatedInvoice.amountPaid, updatedInvoice.amountToPay);
+                    should.equal(updatedInvoice.paymentStatus, InvoicePaymentStatus.Paid);
+
+                    bookingsInvoice = updatedInvoice;
+                    done();
+                }).catch((e: ThError) => {
+                    done(e);
+                });
+        });
+
+        it("Should generate a new invoice with the same group id for the third booking", function (done) {
+            let generateBookingInvoice = new GenerateBookingInvoice(testContext.appContext, testContext.sessionContext);
+            generateBookingInvoice.generate(new GenerateBookingInvoiceDO(bookings[2].id, bookings[2].groupBookingId))
+                .then((invoice: InvoiceDO) => {
+                    should.notEqual(invoice.id, bookingsInvoice.id);
+                    should.equal(invoice.groupId, bookingsInvoice.groupId);
+
+                    let expectedPrice = testUtils.thUtils.roundNumberToTwoDecimals(bookings[2].price.totalBookingPrice);
+                    should.equal(invoice.amountToPay, expectedPrice);
+                    testUtils.stringArraysAreEqual(invoice.indexedBookingIdList, [bookings[2].id]);
+                    should.equal(invoice.paymentStatus, InvoicePaymentStatus.Unpaid);
+
+                    done();
+                }).catch(e => {
                     done(e);
                 });
         });
