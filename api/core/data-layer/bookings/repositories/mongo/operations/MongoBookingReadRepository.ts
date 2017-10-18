@@ -205,9 +205,9 @@ export class MongoBookingReadRepository extends MongoRepository {
             return;
         }
 
-        let maxUtcTimestamp = IndexedBookingInterval.getOverlappingUtcTimestampIntervalForDate(maxThDate).minUtcTimestamp;
+        let maxThDateInterval = IndexedBookingInterval.getOverlappingUtcTimestampIntervalForDate(maxThDate);
         let query = {};
-        query["startUtcTimestamp"] = lte? { $lte: maxUtcTimestamp } : { $lt: maxUtcTimestamp };
+        query["startUtcTimestamp"] = lte ? { $lte: maxThDateInterval.maxUtcTimestamp } : { $lt: maxThDateInterval.minUtcTimestamp };
 
         var andQuery: Object[] = (mongoQueryBuilder.processedQuery["$and"]) ? mongoQueryBuilder.processedQuery["$and"] : [];
         andQuery.push(query);
@@ -225,9 +225,9 @@ export class MongoBookingReadRepository extends MongoRepository {
             return;
         }
 
-        let minUtcTimestamp = IndexedBookingInterval.getOverlappingUtcTimestampIntervalForDate(minThDate).maxUtcTimestamp;
+        let minThDateInterval = IndexedBookingInterval.getOverlappingUtcTimestampIntervalForDate(minThDate);
         let query = {};
-        query["endUtcTimestamp"] = gte? { $gte: minUtcTimestamp } : { $gt: minUtcTimestamp };
+        query["endUtcTimestamp"] = gte ? { $gte: minThDateInterval.minUtcTimestamp } : { $gt: minThDateInterval.maxUtcTimestamp };
 
         var andQuery: Object[] = (mongoQueryBuilder.processedQuery["$and"]) ? mongoQueryBuilder.processedQuery["$and"] : [];
         andQuery.push(query);

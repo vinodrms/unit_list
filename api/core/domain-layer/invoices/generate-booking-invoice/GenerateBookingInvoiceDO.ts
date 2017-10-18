@@ -14,6 +14,11 @@ export class GenerateBookingInvoiceDO {
     groupBookingId: string;
     id: string;
 
+    constructor(id: string, groupBookingId: string) {
+        this.id = id;
+        this.groupBookingId = groupBookingId;
+    }
+
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
             {
