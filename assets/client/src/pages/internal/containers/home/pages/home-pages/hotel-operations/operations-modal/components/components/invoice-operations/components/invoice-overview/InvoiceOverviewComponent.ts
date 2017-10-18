@@ -297,6 +297,12 @@ export class InvoiceOverviewComponent implements OnInit {
         return invoicePaymentMethodVM ? invoicePaymentMethodVM.displayName : "";
     }
 
+    public invoiceAmountsMatch(): boolean {
+        return this.currentInvoice.invoice.amountToPay === this.currentInvoice.invoice.amountPaid;
+    }
+    public invoiceHasItems(): boolean {
+        return this.currentInvoice.invoice.itemList.length > 0;
+    }
     public hasInvoicePayRight(): boolean {
         return this.currentInvoice.invoiceMeta.invoicePayRight === InvoicePayRight.Edit;
     }
