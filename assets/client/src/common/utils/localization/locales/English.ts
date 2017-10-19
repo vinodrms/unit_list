@@ -1065,6 +1065,8 @@ export var EnglishTranslations: Object = {
     "Payer Notes": "Payer Notes",
     "Please add a note.": "Please add a note.",
     "Can't find the invoice payer.": "Can't find the invoice payer.",
+    "A confirmation email was sent to: %emailList%." : "A confirmation email was sent to: %emailList%.",
+    "View invoice history": "View invoice history",
     "Add payment(s) on this invoice to mark is as Paid": "Add payment(s) on this invoice to mark is as Paid",
     "Add item(s) on this invoice": "Add item(s) on this invoice",
     "Click to View Booking": "Click to View Booking",

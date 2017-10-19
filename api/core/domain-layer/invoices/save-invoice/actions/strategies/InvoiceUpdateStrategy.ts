@@ -83,6 +83,7 @@ export class InvoiceUpdateStrategy extends AInvoiceStrategy {
             }
         }
     }
+
     private updatePayerNotesOn(existingInvoice: InvoiceDO) {
         this.invoiceToSave.payerList.forEach((payer: InvoicePayerDO) => {
             if (!this.thUtils.isUndefinedOrNull(payer.notes)) {

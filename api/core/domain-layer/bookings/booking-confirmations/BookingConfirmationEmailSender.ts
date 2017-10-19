@@ -9,16 +9,18 @@ import { BaseEmailTemplateDO, EmailTemplateTypes } from '../../../services/email
 import { BookingConfirmationVMContainer } from './BookingConfirmationVMContainer';
 import { BookingDataAggregatorQuery, BookingDataAggregator } from '../aggregators/BookingDataAggregator';
 import { BookingAggregatedDataContainer } from '../aggregators/BookingAggregatedDataContainer';
-
-import fs = require('fs');
-import path = require('path');
-import _ = require("underscore");
 import { BookingAggregatedData } from "../aggregators/BookingAggregatedData";
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
 import { BookingConfirmationEmailTemplateDO } from "../../../services/email/data-objects/BookingConfirmationEmailTemplateDO";
 import { ThUtils } from "../../../utils/ThUtils";
 import { EmailDistributionDO } from "../../hotel-operations/common/email-confirmations/utils/data-objects/EmailDistributionDO";
+import { DocumentActionDO } from "../../../data-layer/common/data-objects/document-history/DocumentActionDO";
+import { BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
+
+import fs = require('fs');
+import path = require('path');
+import _ = require("underscore");
 
 export class BookingConfirmationEmailSender {
     private static BOOKING_CONFIRMATION_EMAIL_SUBJECT = 'Booking Confirmation';
@@ -38,11 +40,17 @@ export class BookingConfirmationEmailSender {
     }
 
     private sendBookingConfirmationCore(resolve: { (emailSent: boolean): void }, reject: { (err: ThError): void }, bookingsQuery: BookingDataAggregatorQuery, emailDistributionList: EmailDistributionDO[]) {
+        if (emailDistributionList.length == 0 ) {
+            resolve(true);
+            return;
+        }
         var pdfReportsService = this._appContext.getServiceFactory().getPdfReportsService();
         var bookingDataAggregator = new BookingDataAggregator(this._appContext, this._sessionContext);
         var generatedPdfAbsolutePath: string;
+        var bookingAggregatedDataContainer: BookingAggregatedDataContainer;
 
-        bookingDataAggregator.getBookingAggregatedDataContainer(bookingsQuery).then((bookingAggregatedDataContainer: BookingAggregatedDataContainer) => {
+        bookingDataAggregator.getBookingAggregatedDataContainer(bookingsQuery).then((container: BookingAggregatedDataContainer) => {
+            bookingAggregatedDataContainer = container;
             var bookingConfirmationVMContainer = new BookingConfirmationVMContainer(this._thTranslation);
             bookingConfirmationVMContainer.buildFromBookingAggregatedDataContainer(bookingAggregatedDataContainer);
             this._hotelDO = bookingAggregatedDataContainer.hotel;
@@ -70,6 +78,28 @@ export class BookingConfirmationEmailSender {
                 }, this.getBookingConfirmationEmailTemplateDO(this._hotelDO, emailDistribution)));
             });
             return Promise.all(sendEmailPromiseList);
+        }).then((result: any) => {
+            var emailList = _.map(emailDistributionList, e => { return e.email });
+            var emailListStr = emailList.join(", ");
+
+            
+            var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+            var updateBoookingPromises: Promise<BookingDO>[] =[];
+            _.each(bookingAggregatedDataContainer.bookingAggregatedDataList, (bookingAggregatedData: BookingAggregatedData, index: number) => {
+                bookingAggregatedData.booking.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
+                    actionParameterMap: { emailList: emailListStr },
+                    actionString: "A confirmation email was sent to: %emailList%.",
+                    userId: this._sessionContext.sessionDO.user.id
+                }));
+
+                updateBoookingPromises.push(bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+                    groupBookingId: bookingAggregatedDataContainer.bookingAggregatedDataList[index].booking.groupBookingId,
+                    bookingId:  bookingAggregatedDataContainer.bookingAggregatedDataList[index].booking.id,
+                    versionId:  bookingAggregatedDataContainer.bookingAggregatedDataList[index].booking.versionId
+                },  bookingAggregatedDataContainer.bookingAggregatedDataList[index].booking));
+            });
+
+            return Promise.all(updateBoookingPromises);
         }).then((result: any) => {
             let fileService = this._appContext.getServiceFactory().getFileService();
             fileService.deleteFile(generatedPdfAbsolutePath);

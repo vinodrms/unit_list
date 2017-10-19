@@ -18,6 +18,8 @@ import { TransferInvoiceItems } from "../core/domain-layer/invoices/transfer-ite
 import { ReinstateInvoice } from "../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
 import { DeleteInvoice } from "../core/domain-layer/invoices/delete-invoice/DeleteInvoice";
 
+import _ = require('underscore');
+
 export class InvoicesController extends BaseController {
 
     public getInvoiceById(req: any, res: any) {
@@ -30,6 +32,7 @@ export class InvoicesController extends BaseController {
         var invoiceRepo = appContext.getRepositoryFactory().getInvoiceRepository();
         invoiceRepo.getInvoiceById({ hotelId: sessionContext.sessionDO.hotel.id }, invoiceId)
             .then((invoice: InvoiceDO) => {
+                this.translateInvoiceHistory(invoice, this.getThTranslation(sessionContext));
                 this.returnSuccesfulResponse(req, res, invoice);
             }).catch((err: any) => {
                 this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceControllerErrorGettingInvoiceById);
@@ -42,6 +45,7 @@ export class InvoicesController extends BaseController {
         var invoiceRepo = appContext.getRepositoryFactory().getInvoiceRepository();
         invoiceRepo.getInvoiceList({ hotelId: sessionContext.sessionDO.hotel.id }, req.body.searchCriteria, req.body.lazyLoad)
             .then((result: InvoiceSearchResultRepoDO) => {
+                this.translateInvoiceListHistory(result.invoiceList, sessionContext);
                 this.returnSuccesfulResponse(req, res, result);
             }).catch((err: any) => {
                 this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceControllerErrorGettingInvoices);
@@ -65,6 +69,7 @@ export class InvoicesController extends BaseController {
         var saveInvoice = new SaveInvoice(req.appContext, req.sessionContext);
         saveInvoice.save(req.body.invoice, req.body.itemTransactionIdListToDelete, req.body.payerCustomerIdListToDelete)
             .then((updatedInvoice: InvoiceDO) => {
+                this.translateInvoiceHistory(updatedInvoice, req.sessionContext);
                 this.returnSuccesfulResponse(req, res, { invoice: updatedInvoice });
             }).catch((err: any) => {
                 this.returnErrorResponse(req, res, err, ThStatusCode.InvoicesControllerErrorSavingInvoice);
@@ -117,6 +122,7 @@ export class InvoicesController extends BaseController {
         var transferInvoiceItems = new TransferInvoiceItems(req.appContext, req.sessionContext);
         transferInvoiceItems.transfer(req.body.transferDetails)
             .then((invoiceList: InvoiceDO[]) => {
+                this.translateInvoiceListHistory(invoiceList, req.sessionContext);
                 this.returnSuccesfulResponse(req, res, { invoiceList: invoiceList });
             }).catch((err: any) => {
                 this.returnErrorResponse(req, res, err, ThStatusCode.InvoicesControllerErrorTransferringItems);
@@ -143,6 +149,16 @@ export class InvoicesController extends BaseController {
             }).catch((err: any) => {
                 this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceControllerErrorDeletingInvoice);
             });
+    }
+
+    private translateInvoiceListHistory(invoiceList: InvoiceDO[], sessionContext: SessionContext) {
+        var thTranslation = this.getThTranslation(sessionContext);
+        _.forEach(invoiceList, (invoice: InvoiceDO) => {
+            this.translateInvoiceHistory(invoice, thTranslation);
+        });
+    }
+    private translateInvoiceHistory(invoice: InvoiceDO, thTranslation: ThTranslation) {
+        invoice.history.translateActions(thTranslation);
     }
 }
 

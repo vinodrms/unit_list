@@ -31,8 +31,9 @@ import { PaginationOptions } from "../../utils/PaginationOptions";
 import { EmailSenderModalService } from '../../../../../../email-sender/services/EmailSenderModalService';
 import { BookingPriceDO } from '../../../../../../../../../../../services/bookings/data-objects/price/BookingPriceDO';
 import { InvoicePayerDO } from "../../../../../../../../../../../services/invoices/data-objects/payer/InvoicePayerDO";
-import { AddInvoicePayerNotesModalService } from "./modal/AddInvoicePayerNotesModalService";
+import { AddInvoicePayerNotesModalService } from "./modal/services/AddInvoicePayerNotesModalService";
 import { AddInvoicePayerNotesModalInput } from "./modal/services/utils/AddInvoicePayerNotesModalInput";
+import { ViewInvoiceHistoryModalService } from "./modal/services/ViewInvoiceHistoryModalService";
 
 export interface InvoiceChangedOptions {
     reloadInvoiceGroup: boolean;
@@ -42,7 +43,7 @@ export interface InvoiceChangedOptions {
 @Component({
     selector: 'invoice-overview',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-overview/template/invoice-overview.html',
-    providers: [CustomerRegisterModalService, HotelOperationsInvoiceService, NumberOfAddOnProductsModalService, AddOnProductsModalService, AddInvoicePaymentModalService, EmailSenderModalService, AddInvoicePayerNotesModalService]
+    providers: [CustomerRegisterModalService, HotelOperationsInvoiceService, NumberOfAddOnProductsModalService, AddOnProductsModalService, AddInvoicePaymentModalService, EmailSenderModalService, AddInvoicePayerNotesModalService, ViewInvoiceHistoryModalService]
 })
 export class InvoiceOverviewComponent implements OnInit {
 
@@ -71,7 +72,8 @@ export class InvoiceOverviewComponent implements OnInit {
         private addInvoicePaymentModalService: AddInvoicePaymentModalService,
         private operationsPageControllerService: HotelOperationsPageControllerService,
         private emailSenderModalService: EmailSenderModalService,
-        private addInvoicePayerNotesModalService: AddInvoicePayerNotesModalService
+        private addInvoicePayerNotesModalService: AddInvoicePayerNotesModalService,
+        private viewInvoiceHistoryModalService: ViewInvoiceHistoryModalService
     ) {
         this.invoiceMetaFactory = new InvoiceMetaFactory();
         this.lossByManagementPending = false;
@@ -405,6 +407,7 @@ export class InvoiceOverviewComponent implements OnInit {
             .then((modalDialogRef: ModalDialogRef<boolean>) => {
                 modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
                     this.context.analytics.logEvent("invoice", "send-confirmation", "Sent an invoice confirmation by email");
+                    this.emitInvoiceChanged({selectedInvoiceId: this.currentInvoice.invoice.id, reloadInvoiceGroup: true});
                 }, (err: any) => { });
             }).catch((err: any) => { });
     }
@@ -452,5 +455,13 @@ export class InvoiceOverviewComponent implements OnInit {
                     });
             });
         }).catch((e: any) => { });
+    }
+
+    public onViewInvoiceHistory() {
+        this.viewInvoiceHistoryModalService.openViewInvoiceHistoryModal(this.currentInvoice.invoice);
+    }
+
+    public hasInvoiceHistory(): boolean {
+        return this.currentInvoice.invoice.history && this.currentInvoice.invoice.history.hasActionHistory();
     }
 }

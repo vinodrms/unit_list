@@ -1,9 +1,9 @@
 import { Injectable, ReflectiveInjector } from "@angular/core";
-import { AppContext } from "../../../../../../../../../../../../../../common/utils/AppContext";
-import { ModalDialogRef } from "../../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
-import { AddInvoicePayerNotesModalModule } from "./AddInvoicePayerNotesModalModule";
-import { AddInvoicePayerNotesModalComponent } from "./AddInvoicePayerNotesModalComponent";
-import { AddInvoicePayerNotesModalInput } from "./services/utils/AddInvoicePayerNotesModalInput";
+import { AppContext } from "../../../../../../../../../../../../../../../common/utils/AppContext";
+import { AddInvoicePayerNotesModalInput } from "./utils/AddInvoicePayerNotesModalInput";
+import { ModalDialogRef } from "../../../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
+import { AddInvoicePayerNotesModalModule } from "../AddInvoicePayerNotesModalModule";
+import { AddInvoicePayerNotesModalComponent } from "../AddInvoicePayerNotesModalComponent";
 
 @Injectable()
 export class AddInvoicePayerNotesModalService {

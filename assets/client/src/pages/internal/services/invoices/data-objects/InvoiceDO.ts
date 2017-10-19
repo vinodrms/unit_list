@@ -10,6 +10,7 @@ import { CustomerDO } from "../../customers/data-objects/CustomerDO";
 import { InvoicePaymentDO } from "./payer/InvoicePaymentDO";
 import { InvoicePaymentMethodType } from "./payer/InvoicePaymentMethodDO";
 import { BookingPriceDO } from '../../bookings/data-objects/price/BookingPriceDO';
+import { DocumentHistoryDO } from "../../common/data-objects/document-history/DocumentHistoryDO";
 
 export enum InvoiceStatus {
     Active,
@@ -48,6 +49,7 @@ export class InvoiceDO extends BaseDO {
     // the actual UTC timestamp when the invoice was paid
     paidTimestamp: number;
     paymentDueDate: ThDateDO;
+    history: DocumentHistoryDO;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["id", "versionId", "hotelId", "accountingType", "groupId", "reference", "paymentStatus",
@@ -81,6 +83,9 @@ export class InvoiceDO extends BaseDO {
 
         this.paymentDueDate = new ThDateDO();
         this.paymentDueDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentDueDate"));
+
+        this.history = new DocumentHistoryDO();
+        this.history.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "history"));
     }
 
     public getCustomerIdList(): string[] {
