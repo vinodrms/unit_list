@@ -9,7 +9,7 @@
 						<small>{{ 'All rates and prices will be in the selected currency' | translate }}</small>
 					</label>
 					<div class="form-group">
-						<div class="input-group" [ngClass]="{'form-warning': (!hotel.ccyCode || didSubmitPage)}">
+						<div class="input-group" [ngClass]="{'form-warning': (!hotel.ccyCode && didSubmitPage)}">
 							<select class="form-control" [ngModel]="hotel.ccyCode" (ngModelChange)="didChangeCurrencyCode($event)" name="hotelCcyCode">
 							<option value="" disabled>{{ 'Select a currency' | translate }}</option>
 							<option *ngFor="let currency of currencies.currencyList" [value]="currency.code">{{currency.code}} - {{currency.name}}</option>
@@ -17,7 +17,7 @@
 						</div>
 						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a currency' | translate }}</small></label>
 					</div>
-				</div>				
+				</div>
 			</div>
 			<hr>
 			<div class="row">
@@ -32,7 +32,7 @@
 					</div>
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'No more than 2000 characters' | translate }}</small></label>
 					</div>
-				</div>				
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
@@ -44,10 +44,10 @@
 							<input type="number" [(ngModel)]="paymentDueInDays" min="0" class="form-control">
 						</div>
 					</div>
-				</div>				
+				</div>
 			</div>
 		</div>
-		
+
 		<div class="col-xs-12 col-md-6 col-lg-3">
 			<div class="row">
 				<div class="col-xs-12">
@@ -61,14 +61,14 @@
 				</div>
 			</div>
 		</div>
-		
+
 
 		<div class="col-xs-12 col-md-12 col-lg-6">
 			<label class="control-label">
 				<h3>{{ 'Supported payments' | translate }}  </h3>
 				<small>{{ 'The payment methods that will be supported by the hotel. On payment methods a fee per transaction can be configured.' | translate }}</small>
 			</label>
-			
+
 			<div class="well margin-bottom-0px border-radius-0px form-group">
 				<div class="input-group">
 					<div class="row">
@@ -92,7 +92,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="col-md-4 col-xs-12">
 							<div class="input-group">
 								<div class="btn-group" data-toggle="buttons">
@@ -121,10 +121,10 @@
 					</div>
 				</div>
 				<label *ngIf="(!didSelectPaymentMethod() || !allSelectedPaymentMethodsHaveValidTransactionFees()) && didSubmitPage" class="text-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select at least a payment method and input fees where enabled' | translate }}</small></label>
-			
+
 			</div>
 		</div>
-		
+
 		<div *ngIf="!isLoading && canAutoSave" class="col-xs-12 col-md-offset-9 col-md-3">
 			<button type="button" class="btn btn-primary btn-block" (click)="savePaymentsAndPolicies()">
 			<i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
