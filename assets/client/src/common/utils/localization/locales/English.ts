@@ -815,7 +815,6 @@ export var EnglishTranslations: Object = {
     "By marking this invoice as lost by management you acknowledge that you did not receive any money from the customer. Continue?": "By marking this invoice as lost by management you acknowledge that you did not receive any money from the customer. Continue?",
     "The invoice was changed succesfully.": "The invoice was changed succesfully.",
     "LOSS ACCEPTED BY MANAGEMENT": "LOSS ACCEPTED BY MANAGEMENT",
-    "View Booking": "View Booking",
     "Accomodation for": "Accomodation for",
     "Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.": "Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.",
     "Additional payer details": "Additional payer details",
@@ -1034,7 +1033,6 @@ export var EnglishTranslations: Object = {
     "No transaction fee": "No transaction fee",
     "Price with transaction fee": "Price with transaction fee",
     "Items moved succesfully": "Items moved succesfully",
-    "View the first booking from this invoice where this customer is a guest": "View the first booking from this invoice where this customer is a guest",
     "Add a new payment for this customer": "Add a new payment for this customer",
     "Download the invoice PDF": "Download the invoice PDF",
     "Send the invoice PDF to email": "Send the invoice PDF to email",
@@ -1069,5 +1067,7 @@ export var EnglishTranslations: Object = {
     "Can't find the invoice payer.": "Can't find the invoice payer.",
     "Add payment(s) on this invoice to mark is as Paid": "Add payment(s) on this invoice to mark is as Paid",
     "Add item(s) on this invoice": "Add item(s) on this invoice",
+    "Click to View Booking": "Click to View Booking",
+
 
 };

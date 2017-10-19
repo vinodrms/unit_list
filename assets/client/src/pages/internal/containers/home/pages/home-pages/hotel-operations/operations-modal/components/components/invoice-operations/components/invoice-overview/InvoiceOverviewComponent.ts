@@ -316,21 +316,11 @@ export class InvoiceOverviewComponent implements OnInit {
     public hasInvoiceTransferRight(): boolean {
         return this.currentInvoice.invoiceMeta.invoiceTransferRight === InvoiceTransferRight.Edit;
     }
-    public hasBookings(customer: CustomerDO): boolean {
-        let item = this.getFirstBookingItem(customer.id);
-        return !this.context.thUtils.isUndefinedOrNull(item);
-    }
-    public viewFirstBooking(customer: CustomerDO) {
-        let item = this.getFirstBookingItem(customer.id);
-        if (!this.context.thUtils.isUndefinedOrNull(item)) {
-            this.operationsPageControllerService.goToBooking(item.id);
+    private getTitle(item: InvoiceItemVM): string {
+        if (!item.bookingId) {
+            return item.getDisplayName(this.context.thTranslation);
         }
-    }
-    private getFirstBookingItem(customerId: string): InvoiceItemDO {
-        return _.find(this.currentInvoice.invoice.itemList, (item: InvoiceItemDO) => {
-            return item.type === InvoiceItemType.Booking &&
-                (<BookingPriceDO>item.meta).customerId === customerId;
-        });
+        return this.context.thTranslation.translate("Click to View Booking");
     }
     private viewBooking(item: InvoiceItemVM) {
         if (!item.bookingId) { return; }
