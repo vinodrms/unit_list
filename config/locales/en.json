@@ -275,6 +275,8 @@
     "reinstatement": "reinstatement",
 
 	// Booking confirmations
-    "Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
+    "Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking.",
+
+    "No Customer": "No Customer"
 
 }
