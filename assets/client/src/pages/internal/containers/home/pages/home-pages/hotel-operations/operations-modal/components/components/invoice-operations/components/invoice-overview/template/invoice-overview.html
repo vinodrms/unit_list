@@ -91,7 +91,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let itemVm of currentInvoice.invoiceItemVms" class="selectable">
+                <tr *ngFor="let itemVm of currentInvoice.invoiceItemVms" [ngClass]="{'selectable': itemVm.bookingId}" (click)="viewBooking(itemVm)">
                     <td>
                         <i *ngIf="itemVm.isRelatedToBooking" class="unitpal-font">%</i> {{ getInvoiceItemDisplayName(itemVm) }}
                         <div class="subtitle" *ngIf="itemVm.subtitle">

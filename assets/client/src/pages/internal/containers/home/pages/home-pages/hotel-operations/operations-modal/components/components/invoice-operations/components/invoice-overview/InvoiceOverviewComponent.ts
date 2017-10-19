@@ -332,6 +332,10 @@ export class InvoiceOverviewComponent implements OnInit {
                 (<BookingPriceDO>item.meta).customerId === customerId;
         });
     }
+    private viewBooking(item: InvoiceItemVM) {
+        if (!item.bookingId) { return; }
+        this.operationsPageControllerService.goToBooking(item.bookingId);
+    }
     public hasItems(): boolean {
         return !_.isEmpty(this.currentInvoice.invoice.itemList);
     }

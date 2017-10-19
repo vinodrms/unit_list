@@ -48,6 +48,7 @@ export class InvoiceVM {
                 if (bookingPrice.isPenalty()) {
                     let itemVm = InvoiceItemVM.build(item, true);
                     itemVm.subtitle = subtitle;
+                    itemVm.bookingId = bookingPrice.bookingId;
                     this._invoiceItemVms.push(itemVm);
                 }
                 else {
@@ -63,6 +64,7 @@ export class InvoiceVM {
                         itemVm.displayText = "Accomodation for %date%";
                         itemVm.displayTextParams = { date: price.thDate.toString() };
                         itemVm.subtitle = subtitle;
+                        itemVm.bookingId = bookingPrice.bookingId;
                         this._invoiceItemVms.push(itemVm);
                     });
                 }
