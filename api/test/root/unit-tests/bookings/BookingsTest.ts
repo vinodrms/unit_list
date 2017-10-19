@@ -79,7 +79,7 @@ describe("New Bookings Tests", function () {
             for (var index = 0; index < BookingTestHelper.NoBookingGroups; index++) {
                 var addBookings = new AddBookingItems(testContext.appContext, testContext.sessionContext);
                 var bookingItems = bookingTestHelper.getBookingItems(testDataBuilder, genericPriceProduct);
-                promiseList.push(addBookings.add(bookingItems, GroupBookingInputChannel.PropertyManagementSystem));
+                promiseList.push(addBookings.add(bookingItems, GroupBookingInputChannel.PropertyManagementSystem, false));
             }
             Promise.all(promiseList).then((groupBookingsList: BookingDO[][]) => {
                 should.equal(groupBookingsList.length, BookingTestHelper.NoBookingGroups);
@@ -106,7 +106,7 @@ describe("New Bookings Tests", function () {
                     noOfNewBookings = addBookingsDO.bookingList.length;
 
                     let addBookings = new AddBookingItems(testContext.appContext, testContext.sessionContext);
-                    return addBookings.add(addBookingsDO, GroupBookingInputChannel.PropertyManagementSystem);
+                    return addBookings.add(addBookingsDO, GroupBookingInputChannel.PropertyManagementSystem, false);
                 }).then((result: BookingDO[]) => {
                     return bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: randomGroupBookingId });
                 }).then((result: BookingSearchResultRepoDO) => {
@@ -257,7 +257,7 @@ describe("New Bookings Tests", function () {
         it("Should create a booking with allotment", function (done) {
             var addBookings = new AddBookingItems(testContext.appContext, testContext.sessionContext);
             var bookingItems = bookingTestHelper.getBookingItems(testDataBuilder, addedConfidentialPriceProduct, addedAllotment);
-            addBookings.add(bookingItems, GroupBookingInputChannel.PropertyManagementSystem)
+            addBookings.add(bookingItems, GroupBookingInputChannel.PropertyManagementSystem, false)
                 .then((bookingList: BookingDO[]) => {
                     addedBooking = bookingList[0];
                     done();

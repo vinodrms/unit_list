@@ -81,7 +81,7 @@ export class BookingConfirmationEmailSender {
             
             var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
             var updateBoookingPromises: Promise<BookingDO>[] =[];
-            _.forEach(bookingAggregatedDataContainer.bookingAggregatedDataList, (bookingAggregatedData: BookingAggregatedData) => {
+            _.each(bookingAggregatedDataContainer.bookingAggregatedDataList, (bookingAggregatedData: BookingAggregatedData, index: number) => {
                 bookingAggregatedData.booking.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
                     actionParameterMap: { emailList: emailListStr },
                     actionString: "A confirmation email was sent to: %emailList%.",
@@ -89,10 +89,10 @@ export class BookingConfirmationEmailSender {
                 }));
 
                 updateBoookingPromises.push(bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-                    groupBookingId: bookingAggregatedDataContainer.bookingAggregatedDataList[0].booking.groupBookingId,
-                    bookingId:  bookingAggregatedDataContainer.bookingAggregatedDataList[0].booking.id,
-                    versionId:  bookingAggregatedDataContainer.bookingAggregatedDataList[0].booking.versionId
-                },  bookingAggregatedDataContainer.bookingAggregatedDataList[0].booking));
+                    groupBookingId: bookingAggregatedDataContainer.bookingAggregatedDataList[index].booking.groupBookingId,
+                    bookingId:  bookingAggregatedDataContainer.bookingAggregatedDataList[index].booking.id,
+                    versionId:  bookingAggregatedDataContainer.bookingAggregatedDataList[index].booking.versionId
+                },  bookingAggregatedDataContainer.bookingAggregatedDataList[index].booking));
             });
 
             return Promise.all(updateBoookingPromises);
