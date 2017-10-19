@@ -1,3 +1,5 @@
+import { AppContext } from '../../../../../utils/AppContext';
+import { SessionContext } from '../../../../../utils/SessionContext';
 import _ = require('underscore');
 import { HotelOperationsDeparturesInfo, DeparturelItemInfo, DeparturelItemBookingStatus, DepartureItemCustomerInfo } from './HotelOperationsDeparturesInfo';
 import { BookingDO, BookingConfirmationStatus } from '../../../../../data-layer/bookings/data-objects/BookingDO';
@@ -9,7 +11,7 @@ export class HotelOperationsDeparturesInfoBuilder {
     private thUtils: ThUtils;
     private departuresInfo: HotelOperationsDeparturesInfo;
 
-    constructor() {
+    constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this.thUtils = new ThUtils();
         this.departuresInfo = new HotelOperationsDeparturesInfo();
     }
@@ -83,7 +85,7 @@ export class HotelOperationsDeparturesInfoBuilder {
                 return;
             }
             var departureItemInfo: DeparturelItemInfo = {
-                customerId: invoice.payerList[0].customerId,
+                customerId: invoice.payerList.length > 0 ? invoice.payerList[0].customerId : "",
                 bookingItemStatus: DeparturelItemBookingStatus.CanNotCheckOut,
                 invoiceGroupId: invoice.groupId,
                 invoiceId: invoice.id,
@@ -113,7 +115,9 @@ export class HotelOperationsDeparturesInfoBuilder {
                 return customerInfo.customerId;
             });
             customerIdList = customerIdList.concat(guestCustomerIdList);
-            customerIdList.push(departureInfoItem.customerId);
+            if (_.isString(departureInfoItem.customerId) && departureInfoItem.customerId.length > 0) {
+                customerIdList.push(departureInfoItem.customerId);
+            }
         });
 
         var departureInfoListWithCorporateCustomerId = _.filter(this.departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => { return departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0 });
@@ -127,8 +131,13 @@ export class HotelOperationsDeparturesInfoBuilder {
 
     public appendCustomerInformation(customersContainer: CustomersContainer) {
         _.forEach(this.departuresInfo.departureInfoList, (departureInfoItem: DeparturelItemInfo) => {
-            var customer = customersContainer.getCustomerById(departureInfoItem.customerId);
-            departureInfoItem.customerName = customer.customerDetails.getName();
+            if (departureInfoItem.customerId && departureInfoItem.customerId.length > 0) {
+                var customer = customersContainer.getCustomerById(departureInfoItem.customerId);
+                departureInfoItem.customerName = customer.customerDetails.getName();
+            }
+            else {
+                departureInfoItem.customerName = this._appContext.thTranslate.translate("No Customer");
+            }
             if (departureInfoItem.corporateCustomerId && departureInfoItem.corporateCustomerId.length > 0) {
                 var corporateCustomer = customersContainer.getCustomerById(departureInfoItem.corporateCustomerId);
                 departureInfoItem.corporateCustomerName = corporateCustomer.customerDetails.getName();

@@ -33,7 +33,7 @@ export class HotelOperationsDeparturesReader {
     }
 
     private readCore(resolve: { (result: HotelOperationsDeparturesInfo): void }, reject: { (err: ThError): void }, queryType: HotelOperationsQueryType, query: HotelOperationsQueryDO) {
-        var departuresInfoBuilder = new HotelOperationsDeparturesInfoBuilder();
+        var departuresInfoBuilder = new HotelOperationsDeparturesInfoBuilder(this._appContext, this._sessionContext);
 
         var queryParser = new HotelOperationsQueryDOParser(this._appContext, this._sessionContext);
         return queryParser.parse(query).then((parsedQuery: HotelOperationsQueryDO) => {
