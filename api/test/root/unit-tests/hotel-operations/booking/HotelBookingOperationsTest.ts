@@ -82,7 +82,7 @@ describe("Hotel Booking Operations Tests", function () {
                 bookingItems.bookingList.forEach((bookingItem: BookingItemDO) => {
                     bookingItem.interval = dashboardHelper.getTodayToTomorrowInterval(testDataBuilder);
                 });
-                return addBookings.add(bookingItems, GroupBookingInputChannel.PropertyManagementSystem, false);
+                return addBookings.add(bookingItems, GroupBookingInputChannel.PropertyManagementSystem);
             }).then((bookingList: BookingDO[]) => {
                 createdBookingList = bookingList;
                 should.equal(createdBookingList.length > 0, true);

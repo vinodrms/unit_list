@@ -40,6 +40,10 @@ export class BookingConfirmationEmailSender {
     }
 
     private sendBookingConfirmationCore(resolve: { (emailSent: boolean): void }, reject: { (err: ThError): void }, bookingsQuery: BookingDataAggregatorQuery, emailDistributionList: EmailDistributionDO[]) {
+        if (emailDistributionList.length == 0 ) {
+            resolve(true);
+            return;
+        }
         var pdfReportsService = this._appContext.getServiceFactory().getPdfReportsService();
         var bookingDataAggregator = new BookingDataAggregator(this._appContext, this._sessionContext);
         var generatedPdfAbsolutePath: string;

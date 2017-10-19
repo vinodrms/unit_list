@@ -59,13 +59,13 @@ export class AddBookingItems {
         this._existingBookingList = [];
     }
 
-    public add(addBookingItems: AddBookingItemsDO, inputChannel: GroupBookingInputChannel, shouldSendBookingConfirmations: boolean = true): Promise<BookingDO[]> {
+    public add(addBookingItems: AddBookingItemsDO, inputChannel: GroupBookingInputChannel): Promise<BookingDO[]> {
         this._addBookingItems = addBookingItems;
         this._inputChannel = inputChannel;
 
         return new Promise<BookingDO[]>((resolve: { (result: BookingDO[]): void }, reject: { (err: ThError): void }) => {
             try {
-                this.addCore(shouldSendBookingConfirmations, resolve, reject);
+                this.addCore(resolve, reject);
             } catch (error) {
                 var thError = new ThError(ThStatusCode.AddBookingItemsError, error);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "error adding bookings", this._addBookingItems, thError);
@@ -74,7 +74,7 @@ export class AddBookingItems {
         });
     }
 
-    private addCore(shouldSendBookingConfirmations: boolean, resolve: { (result: BookingDO[]): void }, reject: { (err: ThError): void }) {
+    private addCore(resolve: { (result: BookingDO[]): void }, reject: { (err: ThError): void }) {
         var validationResult = AddBookingItemsDO.getValidationStructure().validateStructure(this._addBookingItems);
         if (!validationResult.isValid()) {
             var parser = new ValidationResultParser(validationResult, this._addBookingItems);
@@ -188,9 +188,7 @@ export class AddBookingItems {
             }
         }).then((createdBookingList: BookingDO[]) => {
             this._bookingList = createdBookingList;
-            if (shouldSendBookingConfirmations) {
-                this.sendConfirmationAsync(createdBookingList);
-            }
+            this.sendConfirmationAsync(createdBookingList);
 
             this._existingBookingList.forEach(b => { b.noOfRooms = this._noOfRooms });
             let bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();

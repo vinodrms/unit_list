@@ -429,7 +429,7 @@ describe("Invoices Tests", function () {
                 ];
                 input.confirmationEmailList = [];
                 input.mergeInvoice = true;
-                return addBookings.add(input, GroupBookingInputChannel.PropertyManagementSystem, false);
+                return addBookings.add(input, GroupBookingInputChannel.PropertyManagementSystem);
             }).then((createdBookings: BookingDO[]) => {
                 bookings = createdBookings;
                 should.equal(bookings.length, 3);
