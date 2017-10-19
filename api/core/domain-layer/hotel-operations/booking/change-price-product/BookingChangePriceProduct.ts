@@ -28,6 +28,7 @@ import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { BookingChangePriceProductDO } from './BookingChangePriceProductDO';
 import { InvoiceDO } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
 import { InvoiceSearchResultRepoDO } from "../../../../data-layer/invoices/repositories/IInvoiceRepository";
+import { PaymentMethodDO } from '../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
 
 export class BookingChangePriceProduct {
     private _thUtils: ThUtils;
@@ -42,6 +43,7 @@ export class BookingChangePriceProduct {
     private _loadedAllotmentsContainer: AllotmentsContainer;
     private _loadedRoomList: RoomDO[];
     private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
+    private _loadedAllPaymentMethods: PaymentMethodDO[];
     private _loadedInvoiceList: InvoiceDO[];
 
     private _booking: BookingDO;
@@ -122,6 +124,11 @@ export class BookingChangePriceProduct {
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
+                let settingsRepo = this._appContext.getRepositoryFactory().getSettingsRepository();
+                return settingsRepo.getPaymentMethods();
+            }).then((allPaymentMethods: PaymentMethodDO[]) => {
+                this._loadedAllPaymentMethods = allPaymentMethods;
+
                 this.updateBookingUsingInputParams();
 
                 var newBookingValidationRules = new NewBookingsValidationRules(this._appContext, this._sessionContext, {
@@ -130,7 +137,9 @@ export class BookingChangePriceProduct {
                     customersContainer: this._loadedCustomersContainer,
                     allotmentsContainer: this._loadedAllotmentsContainer,
                     roomList: this._loadedRoomList,
-                    roomCategoryStatsList: this._loadedRoomCategoryStatsList
+                    roomCategoryStatsList: this._loadedRoomCategoryStatsList,
+                    allPaymentMethods: this._loadedAllPaymentMethods,
+                    enforceEnabledPaymentMethods: false
                 });
                 return newBookingValidationRules.validateBookingList([this._booking]);
             }).then((validatedBookingList: BookingDO[]) => {

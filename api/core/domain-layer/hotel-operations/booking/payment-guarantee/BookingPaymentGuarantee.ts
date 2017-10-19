@@ -17,12 +17,14 @@ import { BookingPaymentGuaranteeDO } from './BookingPaymentGuaranteeDO';
 import { BusinessValidationRuleContainer } from '../../../common/validation-rules/BusinessValidationRuleContainer';
 import { BookingBillingDetailsValidationRule } from '../../../bookings/validators/validation-rules/booking/BookingBillingDetailsValidationRule';
 import { InvoicePaymentMethodDO } from '../../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
+import { PaymentMethodDO } from '../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
 
 export class BookingPaymentGuarantee {
     private _bookingPaymentGuaranteeDO: BookingPaymentGuaranteeDO;
 
     private _loadedHotel: HotelDO;
     private _loadedCustomersContainer: CustomersContainer;
+    private _loadedAllPaymentMethods: PaymentMethodDO[];
     private _bookingWithDependencies: BookingWithDependencies;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
@@ -57,6 +59,11 @@ export class BookingPaymentGuarantee {
             }).then((loadedCustomersContainer: CustomersContainer) => {
                 this._loadedCustomersContainer = loadedCustomersContainer;
 
+                let settingsRepo = this._appContext.getRepositoryFactory().getSettingsRepository();
+                return settingsRepo.getPaymentMethods();
+            }).then((allPaymentMethods: PaymentMethodDO[]) => {
+                this._loadedAllPaymentMethods = allPaymentMethods;
+
                 if (!this.bookingHasValidStatus()) {
                     var thError = new ThError(ThStatusCode.BookingPaymentGuaranteeInvalidState, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "add payment guarantee: invalid booking state", this._bookingPaymentGuaranteeDO, thError);
@@ -65,7 +72,9 @@ export class BookingPaymentGuarantee {
                 this.updateBooking();
 
                 var bookingValidationRule = new BusinessValidationRuleContainer([
-                    new BookingBillingDetailsValidationRule(this._loadedHotel, this._bookingWithDependencies.priceProductsContainer, this._loadedCustomersContainer)
+                    // we enforce checking only enabled payment methods
+                    new BookingBillingDetailsValidationRule(this._loadedHotel, this._bookingWithDependencies.priceProductsContainer,
+                        this._loadedCustomersContainer, this._loadedAllPaymentMethods, true)
                 ]);
                 return bookingValidationRule.isValidOn(this._bookingWithDependencies.bookingDO);
             }).then((validatedBooking: BookingDO) => {

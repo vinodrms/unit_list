@@ -22,6 +22,7 @@ import { BookingInvoiceSync } from '../../../bookings/invoice-sync/BookingInvoic
 import { ThDateUtils } from '../../../../utils/th-dates/ThDateUtils';
 import { NewBookingsValidationRules } from '../../../bookings/add-bookings/utils/NewBookingsValidationRules';
 import { InvoiceDO } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
+import { PaymentMethodDO } from '../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
 
 export class BookingReactivate {
     private _bookingUtils: BookingUtils;
@@ -34,6 +35,7 @@ export class BookingReactivate {
     private _currentHotelTimestamp: ThTimestampDO;
     private _bookingWithDependencies: BookingWithDependencies;
     private _loadedCustomersContainer: CustomersContainer;
+    private _loadedAllPaymentMethods: PaymentMethodDO[];
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._bookingUtils = new BookingUtils();
@@ -85,13 +87,20 @@ export class BookingReactivate {
             }).then((customersContainer: CustomersContainer) => {
                 this._loadedCustomersContainer = customersContainer;
 
+                let settingsRepo = this._appContext.getRepositoryFactory().getSettingsRepository();
+                return settingsRepo.getPaymentMethods();
+            }).then((allPaymentMethods: PaymentMethodDO[]) => {
+                this._loadedAllPaymentMethods = allPaymentMethods;
+
                 var newBookingValidationRules = new NewBookingsValidationRules(this._appContext, this._sessionContext, {
                     hotel: this._loadedHotel,
                     priceProductsContainer: this._bookingWithDependencies.priceProductsContainer,
                     customersContainer: this._loadedCustomersContainer,
                     allotmentsContainer: this._bookingWithDependencies.allotmentsContainer,
                     roomList: this._bookingWithDependencies.roomList,
-                    roomCategoryStatsList: this._bookingWithDependencies.roomCategoryStatsList
+                    roomCategoryStatsList: this._bookingWithDependencies.roomCategoryStatsList,
+                    allPaymentMethods: this._loadedAllPaymentMethods,
+                    enforceEnabledPaymentMethods: false
                 });
                 return newBookingValidationRules.validateBookingList([this._bookingWithDependencies.bookingDO]);
             }).then((validatedBookingList: BookingDO[]) => {
