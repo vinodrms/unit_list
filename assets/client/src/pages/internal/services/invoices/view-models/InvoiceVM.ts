@@ -44,38 +44,13 @@ export class InvoiceVM {
         _.forEach(this._invoice.itemList, (item: InvoiceItemDO) => {
             if (item.type === InvoiceItemType.Booking) {
                 let bookingPrice: BookingPriceDO = <BookingPriceDO>item.meta;
+                let subtitle = this.getSubtitle(bookingPrice);
                 if (bookingPrice.isPenalty()) {
                     let itemVm = InvoiceItemVM.build(item, true);
+                    itemVm.subtitle = subtitle;
                     this._invoiceItemVms.push(itemVm);
                 }
                 else {
-                    let subtitle = "";
-
-                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.externalBookingReference)) {
-                        subtitle += bookingPrice.externalBookingReference;
-                    }
-
-                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.displayedReservationNumber)) {
-                        if (subtitle.length > 0) { subtitle += ", "; }
-                        subtitle += bookingPrice.displayedReservationNumber;
-                    }
-
-                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.roomId)) {
-                        let room: RoomDO = _.find(this._bookingRoomList, (room: RoomDO) => { return room.id === bookingPrice.roomId; });
-                        if (!this.thUtils.isUndefinedOrNull(room)) {
-                            if (subtitle.length > 0) { subtitle += ", "; }
-                            subtitle += room.name;
-                        }
-                    }
-
-                    if (!this.thUtils.isUndefinedOrNull(bookingPrice.customerId)) {
-                        let customer: CustomerDO = _.find(this._bookingCustomerList, (customer: CustomerDO) => { return customer.id === bookingPrice.customerId; });
-                        if (!this.thUtils.isUndefinedOrNull(customer)) {
-                            if (subtitle.length > 0) { subtitle += ", "; }
-                            subtitle += customer.customerName;
-                        }
-                    }
-
                     bookingPrice.roomPricePerNightList.forEach((price: PricePerDayDO, index: number) => {
                         let itemVm = new InvoiceItemVM();
                         itemVm.item = item;
@@ -100,6 +75,32 @@ export class InvoiceVM {
                 this._invoiceItemVms.push(itemVm);
             }
         });
+    }
+
+    private getSubtitle(bookingPrice: BookingPriceDO): string {
+        let subtitle = "";
+        if (!this.thUtils.isUndefinedOrNull(bookingPrice.externalBookingReference)) {
+            subtitle += bookingPrice.externalBookingReference;
+        }
+        if (!this.thUtils.isUndefinedOrNull(bookingPrice.displayedReservationNumber)) {
+            if (subtitle.length > 0) { subtitle += ", "; }
+            subtitle += bookingPrice.displayedReservationNumber;
+        }
+        if (!this.thUtils.isUndefinedOrNull(bookingPrice.roomId)) {
+            let room: RoomDO = _.find(this._bookingRoomList, (room: RoomDO) => { return room.id === bookingPrice.roomId; });
+            if (!this.thUtils.isUndefinedOrNull(room)) {
+                if (subtitle.length > 0) { subtitle += ", "; }
+                subtitle += room.name;
+            }
+        }
+        if (!this.thUtils.isUndefinedOrNull(bookingPrice.customerId)) {
+            let customer: CustomerDO = _.find(this._bookingCustomerList, (customer: CustomerDO) => { return customer.id === bookingPrice.customerId; });
+            if (!this.thUtils.isUndefinedOrNull(customer)) {
+                if (subtitle.length > 0) { subtitle += ", "; }
+                subtitle += customer.customerName;
+            }
+        }
+        return subtitle;
     }
 
     public get invoiceMeta(): InvoiceMeta {
