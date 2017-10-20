@@ -276,6 +276,8 @@
 
 	// Booking confirmations
     "Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking.",
+    "A confirmation email was sent to: %emailList%." : "A confirmation email was sent to: %emailList%.",
+    "The invoice was sent to: %emailList%.": "The invoice was sent to: %emailList%.",
 
     "No Customer": "No Customer"
 

@@ -80,7 +80,7 @@ export class InvoiceConfirmationEmailSender {
 
             this._invoiceAggregatedData.invoice.history.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
                 actionParameterMap: { emailList: emailListStr },
-                actionString: "A confirmation email was sent to: %emailList%.",
+                actionString: "The invoice was sent to: %emailList%.",
                 userId: this._sessionContext.sessionDO.user.id
             }));
             var invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceRepository();
