@@ -607,7 +607,7 @@ export var EnglishTranslations: Object = {
     "You cannot have more than %noCompOrTa% Company or Travel Agent on a booking": "You cannot have more than %noCompOrTa% Company or Travel Agent on a booking",
     "Booking": "Booking",
     "%description% (includes %breakfastName%)": "%description% (includes %breakfastName%)",
-    "Customer Name or References": "Customer Name or References",
+    "Customer Name, References or Notes": "Customer Name, References or Notes",
     "Status": "Status",
     "Confirmed": "Confirmed",
     "Guaranteed": "Guaranteed",
