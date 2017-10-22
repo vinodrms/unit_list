@@ -122,7 +122,7 @@ export class MongoBookingReadRepository extends MongoRepository {
         mongoQueryBuilder.addExactMatch("groupBookingId", searchCriteria.groupBookingId);
         mongoQueryBuilder.addMultipleSelectOptionList("groupBookingId", searchCriteria.groupBookingIdList);
         mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.bookingIdList);
-        mongoQueryBuilder.addRegex("indexedSearchTerms", searchCriteria.searchTerm);
+        this.appendSearchTermParams(mongoQueryBuilder, searchCriteria.searchTerm);
         mongoQueryBuilder.addExactMatch("roomId", searchCriteria.roomId);
         mongoQueryBuilder.addMultipleSelectOption("customerIdList", searchCriteria.customerId);
         mongoQueryBuilder.addMultipleSelectOptionList("customerIdList", searchCriteria.customerIdList);
@@ -246,5 +246,19 @@ export class MongoBookingReadRepository extends MongoRepository {
             { checkOutUtcTimestamp: { $gte: startThDate.getUtcTimestamp() } },
             { checkOutUtcTimestamp: null }]
         );
+    }
+    private appendSearchTermParams(mongoQueryBuilder: MongoQueryBuilder, searchTerm: string) {
+        if (this._thUtils.isUndefinedOrNull(searchTerm) || !_.isString(searchTerm)) {
+            return;
+        }
+        let regexValue = '/*' + searchTerm + '/*';
+        let regexQuery = { "$regex": regexValue, "$options": "i" };
+
+        mongoQueryBuilder.addCustomQuery("$or", [
+            { "indexedSearchTerms": regexQuery },
+            { "externalBookingReference": regexQuery },
+            { "notes": regexQuery },
+            { "invoiceNotes": regexQuery },
+        ]);
     }
 }

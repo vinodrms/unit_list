@@ -10,7 +10,7 @@ export class BookingsTableMetaBuilderService {
             supportedRowCommandList: [TableRowCommand.Edit, TableRowCommand.Select, TableRowCommand.Add, TableRowCommand.Search],
             rowIdPropertySelector: "booking.id",
             addButtonText: "Booking",
-            searchInputPlaceholder: "Customer Name or References",
+            searchInputPlaceholder: "Customer Name, References or Notes",
             autoSelectRows: true,
             columnMetaList: [
                 {
