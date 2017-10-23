@@ -99,7 +99,7 @@ export class InvoiceConfirmationVMContainer {
     public buildFromInvoiceAggregatedDataContainer(invoiceAggregatedData: InvoiceAggregatedData) {
         this._invoiceAggregatedData = invoiceAggregatedData;
 
-        this.invoiceReference = this._invoiceAggregatedData.invoice.reference;
+        this.invoiceReference = this._invoiceAggregatedData.processedInvoice.reference;
         this.payerIndex = this._invoiceAggregatedData.payerIndexOnInvoice;
         this.ccySymbol = this._invoiceAggregatedData.ccySymbol;
         this.unitpalLogoSrcValue = BookingConfirmationVMContainer.UNITPAL_LOGO_SRC;
@@ -183,7 +183,7 @@ export class InvoiceConfirmationVMContainer {
         this.payerNotes = "";
         var payer = this._invoice.payerList[this.payerIndex];
         if (_.isString(payer.notes)) {
-              this.payerNotes = payer.notes;
+            this.payerNotes = payer.notes;
         }
     }
 
@@ -342,7 +342,7 @@ export class InvoiceConfirmationVMContainer {
     }
 
     private get _invoice(): InvoiceDO {
-        return this._invoiceAggregatedData.invoice;
+        return this._invoiceAggregatedData.processedInvoice;
     }
     private get _payerCustomer(): CustomerDO {
         return this._invoiceAggregatedData.payerCustomer;
