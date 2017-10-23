@@ -41,6 +41,8 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
     readonly: boolean = true;
     isSaving: boolean = false;
 
+    private static MaximumReservedAddOnProducts = 10;
+
     private itemContainer: AddOnProductItemVMContainer;
     private _itemContainerCopy: AddOnProductItemVMContainer;
     private _didMakeChanges: boolean = false;
@@ -107,6 +109,10 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
         }).catch((e: any) => { });
     }
     private appendAddOnProduct(addOnProduct: AddOnProductSnapshotDO, noOfItems: number) {
+        if (this.itemContainer.getAddOnProductList().length >= BookingReserveAddOnProductEditorComponent.MaximumReservedAddOnProducts) {
+            this._appContext.toaster.error("You have reached the maximum number of reserved add-on products.");
+            return;
+        }
         this._didMakeChanges = true;
         this.itemContainer.addAddOnProduct(addOnProduct, noOfItems);
     }
@@ -128,7 +134,6 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
         this.isSaving = true;
         this._bookingOperationsPageData.bookingDO.reservedAddOnProductList = this.itemContainer.getAddOnProductBookingReservedItemList();
         this._bookingOperationsPageData.reservedAddOnProductsContainer = new AddOnProductsDO();
-        //this._bookingOperationsPageData.reservedAddOnProductsContainer.addOnProductList = this.itemContainer.getAddOnProductList();
         this._hotelOperationsBookingService.reserveAddOnProducts(this._bookingOperationsPageData.bookingDO).subscribe((updatedBooking: BookingDO) => {
             this._appContext.analytics.logEvent("booking", "reserve-add-on-products", "Reserved some Add-On-Products for a booking");
             this.readonly = true;

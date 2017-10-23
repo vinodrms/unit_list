@@ -12,6 +12,7 @@ import { P9_AddMergeInvoiceToBookings } from "./list/P9_AddMergeInvoiceToBooking
 import { P10_MigrateInvoiceGroupsToInvoices } from './list/P10_MigrateInvoiceGroupsToInvoices';
 import { P11_AddBookingsIndexForYMPerformance } from "./list/P11_AddBookingsIndexForYMPerformance";
 import { P12_UpdateBookingsGuaranteedTime } from './list/P12_UpdateBookingsGuaranteedTime';
+import {P13_AddReservedAddOnProductSnapshotsOnBookings } from './list/P13_AddReservedAddOnProductSnapshotsOnBookings';
 
 export class MongoPatchUtils {
     public static get PatchList(): ATransactionalMongoPatch[] {
@@ -29,6 +30,7 @@ export class MongoPatchUtils {
             new P10_MigrateInvoiceGroupsToInvoices(),
             new P11_AddBookingsIndexForYMPerformance(),
             new P12_UpdateBookingsGuaranteedTime(),
+            new P13_AddReservedAddOnProductSnapshotsOnBookings()
 
         ];
     }

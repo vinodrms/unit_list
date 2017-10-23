@@ -1069,5 +1069,5 @@ export var EnglishTranslations: Object = {
     "Can't find the invoice payer.": "Can't find the invoice payer.",
     "Add payment(s) on this invoice to mark is as Paid": "Add payment(s) on this invoice to mark is as Paid",
     "Add item(s) on this invoice": "Add item(s) on this invoice",
-
+    "You have reached the maximum number of reserved add-on products." : "You have reached the maximum number of reserved add-on products.",
 };

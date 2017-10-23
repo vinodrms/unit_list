@@ -173,15 +173,11 @@ export class BookingConfirmationVM {
         this.reservedAops = '';
 
         var reservedAddOnProductList = this._bookingAggregatedData.booking.reservedAddOnProductList;
-        var reservedAopMap: { [id: string]: AddOnProductBookingReservedItem } = _.indexBy(reservedAddOnProductList, (reservedAop: AddOnProductBookingReservedItem) => { return reservedAop.aopSnapshot.id });
-        var aopIdList: string[] = Object.keys(reservedAopMap);
-        _.forEach(aopIdList, (aopId: string) => {
-            var addOnProductSnapshot: AddOnProductSnapshotDO = _.find(this._bookingAggregatedData.booking.reservedAddOnProductList, (reservedAop: AddOnProductBookingReservedItem) => {
-                return reservedAop.aopSnapshot.id === aopId;
-            }).aopSnapshot;
+        _.forEach(reservedAddOnProductList, (reservedAop: AddOnProductBookingReservedItem) => {
+            var addOnProductSnapshot = reservedAop.aopSnapshot;
             if (!this._thUtils.isUndefinedOrNull(addOnProductSnapshot)) {
-                var noReserved = reservedAopMap[aopId].noOfItems;
-                var totalPrice = Math.round(noReserved * addOnProductSnapshot.price);
+                var noReserved = reservedAop.noOfItems;
+                var totalPrice = this._thUtils.formatNumberToTwoDecimals(noReserved * addOnProductSnapshot.price);
                 if (this.reservedAops.length > 0) { this.reservedAops += '; '; }
                 this.reservedAops += noReserved + " x " + addOnProductSnapshot.name + ' (' + this.ccyCode + ' ' + totalPrice + ')';
             }
