@@ -44,10 +44,7 @@ export class GenerateBookingInvoice {
         bookignRepo.getBookingById({ hotelId: this.sessionContext.sessionDO.hotel.id }, this.generateBookingInvoiceDO.id)
             .then((booking: BookingDO) => {
                 this.loadedBooking = booking;
-
-                return this.getInitialInvoiceItems();
-            }).then((reservedItemList: BookingInvoiceItem[]) => {
-                this.initialInvoiceItemList = reservedItemList;
+                this.initialInvoiceItemList = this.getInitialInvoiceItems();
 
                 let invoiceRepo = this.appContext.getRepositoryFactory().getInvoiceRepository();
                 return invoiceRepo.getInvoiceList({ hotelId: this.sessionContext.sessionDO.hotel.id }, {
@@ -71,38 +68,25 @@ export class GenerateBookingInvoice {
             });
     }
 
-    private getInitialInvoiceItems(): Promise<BookingInvoiceItem[]> {
-        return new Promise<BookingInvoiceItem[]>((resolve: { (result: BookingInvoiceItem[]): void }, reject: { (err: ThError): void }) => {
-            this.getInitialInvoiceItemsCore(resolve, reject);
-        });
-    }
-    private getInitialInvoiceItemsCore(resolve: { (result: BookingInvoiceItem[]): void }, reject: { (err: ThError): void }) {
+    private getInitialInvoiceItems(): BookingInvoiceItem[] {
         if (this.loadedBooking.price.isPenalty()) {
-            resolve([]);
             return;
         }
-        var addOnProductLoader = new AddOnProductLoader(this.appContext, this.sessionContext);
-        addOnProductLoader.load(this.loadedBooking.reservedAddOnProductIdList)
-            .then((addOnProductItemContainer: AddOnProductItemContainer) => {
-                let initialAddOnProducts = this.buildInitialInvoiceItemsCore(this.loadedBooking.reservedAddOnProductList, addOnProductItemContainer);
-                resolve(initialAddOnProducts);
-            }).catch((error: ThError) => {
-                reject(error);
-            });
-    }
-    private buildInitialInvoiceItemsCore(addOnProductList: AddOnProductBookingReservedItem[], addOnProductsContainer: AddOnProductItemContainer): BookingInvoiceItem[] {
+        let initialAddOnProducts = this.buildInitialInvoiceItems(this.loadedBooking.reservedAddOnProductList);
+        return initialAddOnProducts;
+        };
+
+    private buildInitialInvoiceItems(addOnProductList: AddOnProductBookingReservedItem[]): BookingInvoiceItem[] {
         if (this.thUtils.isUndefinedOrNull(addOnProductList) || !_.isArray(addOnProductList)) {
             return [];
         }
         var reservedItems: BookingInvoiceItem[] = [];
         addOnProductList.forEach((item: AddOnProductBookingReservedItem) => {
-            var addOnProductItem: AddOnProductItem = addOnProductsContainer.getAddOnProductItemById(item.aopId);
-            if (!this.thUtils.isUndefinedOrNull(addOnProductItem)) {
-                reservedItems.push({
-                    addOnProduct: addOnProductItem.addOnProduct,
-                    noOfItems: item.noOfItems
-                });
-            }
+            reservedItems.push({
+                addOnProductSnapshot: item.aopSnapshot,
+                noOfItems: item.noOfItems
+            });
+            
         });
         return reservedItems;
     }

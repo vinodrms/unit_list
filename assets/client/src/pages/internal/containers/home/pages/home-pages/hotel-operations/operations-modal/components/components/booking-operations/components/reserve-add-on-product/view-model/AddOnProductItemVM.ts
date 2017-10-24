@@ -1,15 +1,15 @@
-import {AddOnProductDO} from '../../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
+import { AddOnProductSnapshotDO } from "../../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductSnapshotDO";
 
 export class AddOnProductItemVM {
-    private _addOnProduct: AddOnProductDO;
+    private _addOnProductSnapshot: AddOnProductSnapshotDO;
     private _noAdded: number;
     private _totalPriceString: string;
 
-    public get addOnProduct(): AddOnProductDO {
-        return this._addOnProduct;
+    public get addOnProductSnapshot(): AddOnProductSnapshotDO {
+        return this._addOnProductSnapshot;
     }
-    public set addOnProduct(addOnProduct: AddOnProductDO) {
-        this._addOnProduct = addOnProduct;
+    public set addOnProductSnapshot(addOnProduct: AddOnProductSnapshotDO) {
+        this._addOnProductSnapshot = addOnProduct;
     }
     public get noAdded(): number {
         return this._noAdded;
@@ -25,13 +25,13 @@ export class AddOnProductItemVM {
     }
 
     public updateTotalPrice(ccySymbol: string) {
-        var totalPrice: number = this._addOnProduct.price * this._noAdded;
+        var totalPrice: number = this._addOnProductSnapshot.price * this._noAdded;
         this._totalPriceString = totalPrice + " " + ccySymbol;
     }
 
     public buildPrototype(): AddOnProductItemVM {
         var itemVM = new AddOnProductItemVM();
-        itemVM.addOnProduct = this._addOnProduct;
+        itemVM.addOnProductSnapshot = this._addOnProductSnapshot;
         itemVM.noAdded = this._noAdded;
         itemVM.totalPriceString = this._totalPriceString;
         return itemVM;

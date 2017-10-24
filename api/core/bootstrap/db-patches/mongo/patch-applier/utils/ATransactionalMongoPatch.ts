@@ -12,6 +12,7 @@ import { MongoRepository } from "../../../../../data-layer/common/base/MongoRepo
 import { MongoBookingRepository } from "../../../../../data-layer/bookings/repositories/mongo/MongoBookingRepository";
 import { MongoInvoiceRepository } from '../../../../../data-layer/invoices/repositories/mongo/MongoInvoiceRepository';
 import { MongoInvoiceRepositoryWithBookingPriceLink } from '../../../../../data-layer/invoices/repositories/mongo/decorators/MongoInvoiceRepositoryWithBookingPriceLink';
+import { MongoAddOnProductRepository } from '../../../../../data-layer/add-on-products/repositories/mongo/MongoAddOnProductRepository';
 
 /**
  * Extend this class when the multi update can be made with a simple MongoDB Query
@@ -21,6 +22,7 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
 
     protected hotelRepository: MongoHotelRepository;
     protected bedRepository: MongoBedRepository;
+    protected addOnProductRepository: MongoAddOnProductRepository;
     protected priceProductRepository: MongoPriceProductRepository;
     protected customerRepository: MongoCustomerRepository;
     protected legacyInvoiceGroupsRepository: LegacyMongoInvoiceGroupsRepository;
@@ -32,6 +34,7 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
 
         this.hotelRepository = new MongoHotelRepository();
         this.bedRepository = new MongoBedRepository();
+        this.addOnProductRepository = new MongoAddOnProductRepository();
         this.priceProductRepository = new MongoPriceProductRepository();
         this.customerRepository = new MongoCustomerRepository();
         this.legacyInvoiceGroupsRepository = new LegacyMongoInvoiceGroupsRepository(this.hotelRepository);

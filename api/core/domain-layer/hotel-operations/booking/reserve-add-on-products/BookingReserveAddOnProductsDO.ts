@@ -25,8 +25,29 @@ export class BookingReserveAddOnProductsDO {
                 key: "reservedAddOnProductList",
                 validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
                     {
-                        key: "aopId",
-                        validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+                        key: "aopSnapshot",
+                        validationStruct: new ObjectValidationStructure([
+                            {
+                                key: "id",
+                                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+                            },
+                            {
+                                key: "categoryId",
+                                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+                            },
+                            {
+                                key: "name",
+                                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+                            },
+                            {
+                                key: "price",
+                                validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
+                            },
+                            {
+                                key: "taxIdList",
+                                validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
+                            },
+                        ])
                     },
                     {
                         key: "noOfItems",

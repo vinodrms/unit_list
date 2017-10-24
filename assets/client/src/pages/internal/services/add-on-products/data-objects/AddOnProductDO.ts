@@ -28,6 +28,7 @@ export class AddOnProductDO extends BaseDO {
 		snapshot.name = this.name;
 		snapshot.price = this.price;
 		snapshot.internalCost = this.internalCost;
+		snapshot.taxIdList = this.taxIdList;
 		return snapshot;
 	}
 

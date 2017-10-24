@@ -16,6 +16,7 @@ import { PriceProductCancellationPenaltyType } from "../../../data-layer/price-p
 import { PriceProductCancellationPolicyType } from "../../../data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy";
 import { AddOnProductBookingReservedItem } from "../../../data-layer/bookings/data-objects/BookingDO";
 import { InvoiceItemDO } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { AddOnProductSnapshotDO } from "../../../data-layer/add-on-products/data-objects/AddOnProductSnapshotDO";
 
 export class BookingConfirmationVM {
     private _isoWeekDayUtils: ISOWeekDayUtils;
@@ -172,17 +173,13 @@ export class BookingConfirmationVM {
         this.reservedAops = '';
 
         var reservedAddOnProductList = this._bookingAggregatedData.booking.reservedAddOnProductList;
-        var reservedAopMap: { [id: string]: AddOnProductBookingReservedItem } = _.indexBy(reservedAddOnProductList, reservedAop => { return reservedAop.aopId });
-        var aopIdList: string[] = Object.keys(reservedAopMap);
-        _.forEach(aopIdList, (aopId: string) => {
-            var addOnProduct: AddOnProductDO = _.find(this._bookingAggregatedData.addOnProductList, (aop: AddOnProductDO) => {
-                return aop.id === aopId;
-            });
-            if (!this._thUtils.isUndefinedOrNull(addOnProduct)) {
-                var noReserved = reservedAopMap[aopId].noOfItems;
-                var totalPrice = Math.round(noReserved * addOnProduct.price);
+        _.forEach(reservedAddOnProductList, (reservedAop: AddOnProductBookingReservedItem) => {
+            var addOnProductSnapshot = reservedAop.aopSnapshot;
+            if (!this._thUtils.isUndefinedOrNull(addOnProductSnapshot)) {
+                var noReserved = reservedAop.noOfItems;
+                var totalPrice = this._thUtils.formatNumberToTwoDecimals(noReserved * addOnProductSnapshot.price);
                 if (this.reservedAops.length > 0) { this.reservedAops += '; '; }
-                this.reservedAops += noReserved + " x " + addOnProduct.name + ' (' + this.ccyCode + ' ' + totalPrice + ')';
+                this.reservedAops += noReserved + " x " + addOnProductSnapshot.name + ' (' + this.ccyCode + ' ' + totalPrice + ')';
             }
         });
         if (this.reservedAops.length > 0) {

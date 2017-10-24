@@ -12,6 +12,7 @@ import { HotelOperationsBookingService } from '../../../../../../../../../../../
 import { AddOnProductsModalService } from '../../../../../../../../../../common/inventory/add-on-products/modals/services/AddOnProductsModalService';
 import { NumberOfAddOnProductsModalOutput } from '../../../../../../../../../../common/inventory/add-on-products/modals/services/utils/NumberOfAddOnProductsModalOutput';
 import { NumberOfAddOnProductsModalService } from '../../../../../../../../../../common/inventory/add-on-products/modals/services/NumberOfAddOnProductsModalService';
+import { AddOnProductSnapshotDO } from "../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductSnapshotDO";
 
 import * as _ from "underscore";
 
@@ -40,6 +41,8 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
     readonly: boolean = true;
     isSaving: boolean = false;
 
+    private static MaximumReservedAddOnProducts = 10;
+
     private itemContainer: AddOnProductItemVMContainer;
     private _itemContainerCopy: AddOnProductItemVMContainer;
     private _didMakeChanges: boolean = false;
@@ -64,7 +67,7 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
     private loadDependentData() {
         if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._bookingOperationsPageData)) { return; }
         this.itemContainer = new AddOnProductItemVMContainer(this._bookingOperationsPageData.ccy.nativeSymbol);
-        this.itemContainer.initItemList(this._bookingOperationsPageData.reservedAddOnProductsContainer, this._bookingOperationsPageData.bookingDO.reservedAddOnProductList);
+        this.itemContainer.initItemList(this._bookingOperationsPageData.bookingDO.reservedAddOnProductList);
         this.readonly = true;
         this.isSaving = false;
     }
@@ -97,18 +100,23 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
                 if (!_.isEmpty(addOnProductList)) {
                     this._numberOfAddOnProductsModalService.openModal(addOnProductList[0].id).then((modalDialogInstance: ModalDialogRef<NumberOfAddOnProductsModalOutput>) => {
                         modalDialogInstance.resultObservable.subscribe((numberOfAopSelection: NumberOfAddOnProductsModalOutput) => {
-                            this.appendAddOnProduct(addOnProductList[0], numberOfAopSelection.noOfItems);
+                            var addOnProductSnapshot = addOnProductList[0].getAddOnProductSnapshotDO();
+                            this.appendAddOnProduct(addOnProductSnapshot, numberOfAopSelection.noOfItems);
                         });
                     });
                 }
             });
         }).catch((e: any) => { });
     }
-    private appendAddOnProduct(addOnProduct: AddOnProductDO, noOfItems: number) {
+    private appendAddOnProduct(addOnProduct: AddOnProductSnapshotDO, noOfItems: number) {
+        if (this.itemContainer.getAddOnProductList().length >= BookingReserveAddOnProductEditorComponent.MaximumReservedAddOnProducts) {
+            this._appContext.toaster.error("You have reached the maximum number of reserved add-on products.");
+            return;
+        }
         this._didMakeChanges = true;
         this.itemContainer.addAddOnProduct(addOnProduct, noOfItems);
     }
-    public removeAddOnProduct(addOnProduct: AddOnProductDO) {
+    public removeAddOnProduct(addOnProduct: AddOnProductSnapshotDO) {
         this._didMakeChanges = true;
         this.itemContainer.removeAddOnProduct(addOnProduct);
     }
@@ -126,7 +134,6 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
         this.isSaving = true;
         this._bookingOperationsPageData.bookingDO.reservedAddOnProductList = this.itemContainer.getAddOnProductBookingReservedItemList();
         this._bookingOperationsPageData.reservedAddOnProductsContainer = new AddOnProductsDO();
-        this._bookingOperationsPageData.reservedAddOnProductsContainer.addOnProductList = this.itemContainer.getAddOnProductList();
         this._hotelOperationsBookingService.reserveAddOnProducts(this._bookingOperationsPageData.bookingDO).subscribe((updatedBooking: BookingDO) => {
             this._appContext.analytics.logEvent("booking", "reserve-add-on-products", "Reserved some Add-On-Products for a booking");
             this.readonly = true;

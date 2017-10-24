@@ -53,6 +53,7 @@ import { BookingUndoCheckInDO } from '../../../../../core/domain-layer/hotel-ope
 import { InvoiceSearchResultRepoDO } from "../../../../../core/data-layer/invoices/repositories/IInvoiceRepository";
 import { InvoiceItemType } from "../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO";
 import { RoomCommissionItemMetaDO } from "../../../../../core/data-layer/invoices/data-objects/items/room-commission/RoomCommissionItemMetaDO";
+import { AddOnProductSnapshotDO } from "../../../../../core/data-layer/add-on-products/data-objects/AddOnProductSnapshotDO";
 
 describe("Hotel Booking Operations Tests", function () {
     var testContext: TestContext;
@@ -286,20 +287,29 @@ describe("Hotel Booking Operations Tests", function () {
             reserveAddOnProductsDO.id = bookingToChange.id;
             reserveAddOnProductsDO.reservedAddOnProductList = _.map(testDataBuilder.addOnProductList, (addOnProduct: AddOnProductDO) => {
                 var reservedAop = new AddOnProductBookingReservedItem();
-                reservedAop.aopId = addOnProduct.id;
+                reservedAop.aopSnapshot = addOnProduct.getAddOnProductSnapshotDO();
                 reservedAop.noOfItems = 1;
                 return reservedAop;
             });
             var reserveAddOnProducts = new BookingReserveAddOnProducts(testContext.appContext, testContext.sessionContext);
             reserveAddOnProducts.reserve(reserveAddOnProductsDO).then((updatedBooking: BookingDO) => {
-                var equality = testUtils.stringArraysAreEqual(updatedBooking.reservedAddOnProductIdList, _.map(reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => { return addOnProduct.aopId; }));
-                should.equal(equality, true);
+                _.each(updatedBooking.reservedAddOnProductList, (reservedAddOnProduct: AddOnProductBookingReservedItem, index: number) => {
+                    should.equal(reserveAddOnProductsDO.reservedAddOnProductList[index].aopSnapshot.id, reservedAddOnProduct.aopSnapshot.id);
+                    should.equal(reserveAddOnProductsDO.reservedAddOnProductList[index].aopSnapshot.categoryId, reservedAddOnProduct.aopSnapshot.categoryId);
+                    should.equal(reserveAddOnProductsDO.reservedAddOnProductList[index].aopSnapshot.internalCost, reservedAddOnProduct.aopSnapshot.internalCost);
+                    should.equal(reserveAddOnProductsDO.reservedAddOnProductList[index].aopSnapshot.name, reservedAddOnProduct.aopSnapshot.name);
+                    should.equal(reserveAddOnProductsDO.reservedAddOnProductList[index].aopSnapshot.price, reservedAddOnProduct.aopSnapshot.price);
+                    var equality = testUtils.stringArraysAreEqual(reserveAddOnProductsDO.reservedAddOnProductList[index].aopSnapshot.taxIdList, reservedAddOnProduct.aopSnapshot.taxIdList);
+                    should.equal(equality, true);
+                    should.equal(reserveAddOnProductsDO.reservedAddOnProductList[index].noOfItems, reservedAddOnProduct.noOfItems);
+                });
                 bookingToChange = updatedBooking;
                 done();
             }).catch((error: any) => {
                 done(error);
             });
         });
+
         it("Should change the price product for the booking", function (done) {
             var bookingChangePriceProductDO = new BookingChangePriceProductDO();
             bookingChangePriceProductDO.groupBookingId = bookingToChange.groupBookingId;
@@ -324,8 +334,7 @@ describe("Hotel Booking Operations Tests", function () {
             reserveAddOnProductsDO.reservedAddOnProductList = [];
             var reserveAddOnProducts = new BookingReserveAddOnProducts(testContext.appContext, testContext.sessionContext);
             reserveAddOnProducts.reserve(reserveAddOnProductsDO).then((updatedBooking: BookingDO) => {
-                var equality = testUtils.stringArraysAreEqual(updatedBooking.reservedAddOnProductIdList, _.map(reserveAddOnProductsDO.reservedAddOnProductList, (addOnProduct: AddOnProductBookingReservedItem) => { return addOnProduct.aopId; }));
-                should.equal(equality, true);
+                should.equal(updatedBooking.reservedAddOnProductList.length, 0);
                 bookingToChange = updatedBooking;
                 done();
             }).catch((error: any) => {

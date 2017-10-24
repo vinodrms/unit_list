@@ -11,6 +11,7 @@ import { DefaultBillingDetailsDO } from './default-billing/DefaultBillingDetails
 import { DocumentHistoryDO } from '../../common/data-objects/document-history/DocumentHistoryDO';
 import { BookingPriceDO } from './price/BookingPriceDO';
 import { IInvoiceItemMeta } from '../../invoices/data-objects/items/IInvoiceItemMeta';
+import { AddOnProductSnapshotDO } from "../../add-on-products/data-objects/AddOnProductSnapshotDO";
 
 export enum BookingStatus {
     Active,
@@ -47,11 +48,18 @@ BookingConfirmationStatusDisplayString[BookingConfirmationStatus.CheckedIn] = "C
 BookingConfirmationStatusDisplayString[BookingConfirmationStatus.CheckedOut] = "CheckedOut";
 
 export class AddOnProductBookingReservedItem extends BaseDO {
-    aopId: string;
+    aopSnapshot: AddOnProductSnapshotDO;
     noOfItems: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["aopId", "noOfItems"];
+        return ["noOfItems"];
+    }
+
+    public buildFromObject(object: Object) {
+        super.buildFromObject(object);
+        this.aopSnapshot = new AddOnProductSnapshotDO();
+        this.aopSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "aopSnapshot"));
+
     }
 }
 
@@ -194,11 +202,5 @@ export class BookingDO extends BaseDO {
 
     public getNumberOfNights(): number {
         return this.price.numberOfNights;
-    }
-
-    public get reservedAddOnProductIdList(): string[] {
-        return _.map(this.reservedAddOnProductList, (item: AddOnProductBookingReservedItem) => {
-            return item.aopId;
-        });
     }
 }
