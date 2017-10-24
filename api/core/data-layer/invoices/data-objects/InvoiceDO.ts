@@ -8,6 +8,7 @@ import { ThUtils } from "../../../utils/ThUtils";
 import { CustomerDO } from "../../customers/data-objects/CustomerDO";
 import { InvoicePaymentDO } from "./payer/InvoicePaymentDO";
 import { InvoicePaymentMethodType } from "./payer/InvoicePaymentMethodDO";
+import { DocumentHistoryDO } from "../../common/data-objects/document-history/DocumentHistoryDO";
 
 import _ = require('underscore');
 
@@ -48,6 +49,7 @@ export class InvoiceDO extends BaseDO {
     // the actual UTC timestamp when the invoice was paid
     paidTimestamp: number;
     paymentDueDate: ThDateDO;
+    history: DocumentHistoryDO;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["id", "versionId", "hotelId", "status", "accountingType", "groupId", "reference", "paymentStatus",
@@ -81,6 +83,9 @@ export class InvoiceDO extends BaseDO {
 
         this.paymentDueDate = new ThDateDO();
         this.paymentDueDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentDueDate"));
+
+        this.history = new DocumentHistoryDO();
+        this.history.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "history"));
     }
 
     public reindex() {
@@ -162,6 +167,7 @@ export class InvoiceDO extends BaseDO {
         }
         booking.price.displayedReservationNumber = booking.displayedReservationNumber;
         booking.price.externalBookingReference = booking.externalBookingReference;
+        booking.price.bookingId = booking.id;
 
         item.meta = booking.price;
         bookingInvoiceItemList.push(item);

@@ -13,6 +13,7 @@ export class InvoiceItemVM {
     displayText: string;
     displayTextParams: Object;
     subtitle: string;
+    bookingId: string;
 
     public static build(item: InvoiceItemDO, isRelatedToBooking: boolean): InvoiceItemVM {
         let itemVm = new InvoiceItemVM();

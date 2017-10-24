@@ -8,9 +8,14 @@ import { PriceProductsContainer } from '../../../../price-products/validators/re
 import { HotelDO } from '../../../../../data-layer/hotel/data-objects/HotelDO';
 import { CustomersContainer } from '../../../../customers/validators/results/CustomersContainer';
 import { InvoicePaymentMethodValidator } from '../../../../invoices/validators/InvoicePaymentMethodValidator';
+import { PaymentMethodDO } from '../../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
 
 export class BookingBillingDetailsValidationRule extends ABusinessValidationRule<BookingDO> {
-    constructor(private _hotelDO: HotelDO, private _priceProductsContainer: PriceProductsContainer, private _customersContainer: CustomersContainer) {
+    constructor(private hotel: HotelDO,
+        private priceProductsContainer: PriceProductsContainer,
+        private customersContainer: CustomersContainer,
+        private allPaymentMethods: PaymentMethodDO[],
+        private enforceEnabledPaymentMethods: boolean) {
         super({
             statusCode: ThStatusCode.BookingValidationError,
             errorMessage: "error validating booking"
@@ -20,8 +25,8 @@ export class BookingBillingDetailsValidationRule extends ABusinessValidationRule
     protected isValidOnCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, businessObject: BookingDO) {
         var booking = businessObject;
 
-        var priceProduct = this._priceProductsContainer.getPriceProductById(booking.priceProductId);
-        var billedCustomer = this._customersContainer.getCustomerById(booking.defaultBillingDetails.customerId);
+        var priceProduct = this.priceProductsContainer.getPriceProductById(booking.priceProductId);
+        var billedCustomer = this.customersContainer.getCustomerById(booking.defaultBillingDetails.customerId);
         if (!billedCustomer.hasAccessOnPriceProduct(priceProduct)) {
             this.logBusinessAndReject(reject, booking, {
                 statusCode: ThStatusCode.BookingsValidatorBilledCustomerInvalidRightsOnPriceProduct,
@@ -41,8 +46,8 @@ export class BookingBillingDetailsValidationRule extends ABusinessValidationRule
             resolve(booking);
             return;
         }
-        var invoicePMValidator = new InvoicePaymentMethodValidator(this._hotelDO, billedCustomer);
-        invoicePMValidator.validate(booking.defaultBillingDetails.paymentMethod).then((validationResult: any) => {
+        var invoicePMValidator = new InvoicePaymentMethodValidator(this.hotel, billedCustomer, this.allPaymentMethods);
+        invoicePMValidator.validate(booking.defaultBillingDetails.paymentMethod, this.enforceEnabledPaymentMethods).then((validationResult: any) => {
             resolve(booking);
         }).catch((error: any) => {
             reject(error);

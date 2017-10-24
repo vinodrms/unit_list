@@ -70,7 +70,7 @@ export class ReportsTestHelper {
         }
         return {
             bookingList: bookingItemList,
-            confirmationEmailList: [{ email: testDataBuilder.hotelDO.contactDetails.email }],
+            confirmationEmailList: [],
             mergeInvoice: false
         }
     }

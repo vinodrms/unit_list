@@ -45,6 +45,9 @@ export class DepartureItemComponent {
     }
 
     public openCustomerModal() {
+        if (!this.departureItemVM.departureItemContainingCustomerInfo.hasCustomer()) {
+            return;
+        }
         var customerId = this.departureItemVM.departureItemContainingCustomerInfo.customerId;
         this._modalService.openCustomerModal(customerId);
     }

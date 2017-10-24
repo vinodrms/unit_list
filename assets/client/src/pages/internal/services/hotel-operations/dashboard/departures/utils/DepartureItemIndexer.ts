@@ -47,6 +47,9 @@ export class DepartureItemIndexer {
                 && departureItemDO.isBookingBilledToCompany) {
                 return;
             }
+            if (!departureItemDO.hasCustomer()) {
+                return;
+            }
 
             let bookingId = indexedBookingsByCustomerId[departureItemDO.customerId];
             if (!this._thUtils.isUndefinedOrNull(bookingId)) {

@@ -1,26 +1,26 @@
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {ThDateDO} from '../../../../utils/th-dates/data-objects/ThDateDO';
-import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
-import {RoomDO} from '../../../../data-layer/rooms/data-objects/RoomDO';
-import {AllotmentStatus} from '../../../../data-layer/allotments/data-objects/AllotmentDO';
-import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductsContainer} from '../../../price-products/validators/results/PriceProductsContainer';
-import {AllotmentsContainer} from '../../../allotments/validators/results/AllotmentsContainer';
-import {BookingDO} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {RoomCategoryStatsDO} from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
-import {BusinessValidationRuleContainer} from '../../../common/validation-rules/BusinessValidationRuleContainer';
-import {BookingBillingDetailsValidationRule} from '../../validators/validation-rules/booking/BookingBillingDetailsValidationRule';
-import {BookingCustomersValidationRule} from '../../validators/validation-rules/booking/BookingCustomersValidationRule';
-import {BookingAllotmentValidationRule, BookingAllotmentValidationParams} from '../../validators/validation-rules/booking/BookingAllotmentValidationRule';
-import {BookingRoomCategoryValidationRule} from '../../validators/validation-rules/booking/BookingRoomCategoryValidationRule';
-import {PriceProductYieldIntervalsValidationRule} from '../../validators/validation-rules/price-product/PriceProductYieldIntervalsValidationRule';
-import {PriceProductConstraintsValidationRule, PriceProductConstraintsParams} from '../../validators/validation-rules/price-product/PriceProductConstraintsValidationRule';
-import {BookingUtils} from '../../utils/BookingUtils';
-
 import _ = require('underscore');
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { ThDateDO } from '../../../../utils/th-dates/data-objects/ThDateDO';
+import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
+import { RoomDO } from '../../../../data-layer/rooms/data-objects/RoomDO';
+import { AllotmentStatus } from '../../../../data-layer/allotments/data-objects/AllotmentDO';
+import { PriceProductDO } from '../../../../data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductsContainer } from '../../../price-products/validators/results/PriceProductsContainer';
+import { AllotmentsContainer } from '../../../allotments/validators/results/AllotmentsContainer';
+import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
+import { BusinessValidationRuleContainer } from '../../../common/validation-rules/BusinessValidationRuleContainer';
+import { BookingBillingDetailsValidationRule } from '../../validators/validation-rules/booking/BookingBillingDetailsValidationRule';
+import { BookingCustomersValidationRule } from '../../validators/validation-rules/booking/BookingCustomersValidationRule';
+import { BookingAllotmentValidationRule, BookingAllotmentValidationParams } from '../../validators/validation-rules/booking/BookingAllotmentValidationRule';
+import { BookingRoomCategoryValidationRule } from '../../validators/validation-rules/booking/BookingRoomCategoryValidationRule';
+import { PriceProductYieldIntervalsValidationRule } from '../../validators/validation-rules/price-product/PriceProductYieldIntervalsValidationRule';
+import { PriceProductConstraintsValidationRule, PriceProductConstraintsParams } from '../../validators/validation-rules/price-product/PriceProductConstraintsValidationRule';
+import { BookingUtils } from '../../utils/BookingUtils';
+import { PaymentMethodDO } from '../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
 
 export class ValidationParams {
     hotel: HotelDO;
@@ -29,6 +29,8 @@ export class ValidationParams {
     allotmentsContainer: AllotmentsContainer;
     roomList: RoomDO[];
     roomCategoryStatsList: RoomCategoryStatsDO[];
+    allPaymentMethods: PaymentMethodDO[];
+    enforceEnabledPaymentMethods: boolean;
 }
 
 export class NewBookingsValidationRules {
@@ -62,7 +64,8 @@ export class NewBookingsValidationRules {
     private validateBookingCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
         var bookingValidationRule = new BusinessValidationRuleContainer([
             new BookingCustomersValidationRule(this._validatorParams.customersContainer),
-            new BookingBillingDetailsValidationRule(this._validatorParams.hotel, this._validatorParams.priceProductsContainer, this._validatorParams.customersContainer),
+            new BookingBillingDetailsValidationRule(this._validatorParams.hotel, this._validatorParams.priceProductsContainer,
+                this._validatorParams.customersContainer, this._validatorParams.allPaymentMethods, this._validatorParams.enforceEnabledPaymentMethods),
             new BookingAllotmentValidationRule(this._appContext, this._sessionContext, this.getBookingAllotmentValidationParams(booking)),
             new BookingRoomCategoryValidationRule({
                 priceProductsContainer: this._validatorParams.priceProductsContainer,

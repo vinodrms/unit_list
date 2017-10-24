@@ -1,6 +1,7 @@
-import {BaseDO} from '../../../../../../../common/base/BaseDO';
-import {ConfigCapacityDO} from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
-import {ThDateIntervalDO} from '../../../../common/data-objects/th-dates/ThDateIntervalDO';
+import * as _ from 'underscore';
+import { BaseDO } from '../../../../../../../common/base/BaseDO';
+import { ConfigCapacityDO } from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
+import { ThDateIntervalDO } from '../../../../common/data-objects/th-dates/ThDateIntervalDO';
 
 export enum DepartureItemBookingStatus {
     CanCheckOut,
@@ -58,5 +59,9 @@ export class DepartureItemInfoDO extends BaseDO {
 
         this.bookingCapacity = new ConfigCapacityDO();
         this.bookingCapacity.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "bookingCapacity"));
+    }
+
+    public hasCustomer(): boolean {
+        return _.isString(this.customerId) && this.customerId.length > 0;
     }
 }

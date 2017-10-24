@@ -66,6 +66,9 @@ class InvoicesEntity extends BasePersistentEntity {
             },
             paidTimestamp: {
                 type: 'float'
+            },
+            history: {
+                type: 'json'               
             }
         }
     }

@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
 import { ThError } from '../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
@@ -33,8 +34,7 @@ import { TaxResponseRepoDO } from '../../../data-layer/taxes/repositories/ITaxRe
 import { TaxDO } from '../../../data-layer/taxes/data-objects/TaxDO';
 import { ThUtils } from "../../../utils/ThUtils";
 import { BookingSearchResultRepoDO, BookingMetaRepoDO, BookingSearchCriteriaRepoDO, BookingGroupMetaRepoDO } from "../../../data-layer/bookings/repositories/IBookingRepository";
-
-import _ = require('underscore');
+import { PaymentMethodDO } from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
 
 export class AddBookingItems {
     private _addBookingItems: AddBookingItemsDO;
@@ -164,13 +164,18 @@ export class AddBookingItems {
             this._bookingList = convertedBookingList;
             this._noOfRooms = this._bookingList.length;
 
+            let settingsRepo = this._appContext.getRepositoryFactory().getSettingsRepository();
+            return settingsRepo.getPaymentMethods();
+        }).then((allPaymentMethods: PaymentMethodDO[]) => {
             var newBookingValidationRules = new NewBookingsValidationRules(this._appContext, this._sessionContext, {
                 hotel: this._loadedHotel,
                 priceProductsContainer: this._loadedPriceProductsContainer,
                 customersContainer: this._loadedCustomersContainer,
                 allotmentsContainer: this._loadedAllotmentsContainer,
                 roomList: this._loadedRoomList,
-                roomCategoryStatsList: this._loadedRoomCategoryStatsList
+                roomCategoryStatsList: this._loadedRoomCategoryStatsList,
+                allPaymentMethods: allPaymentMethods,
+                enforceEnabledPaymentMethods: true
             });
             return newBookingValidationRules.validateBookingList(this._bookingList);
         }).then((validatedBookingList: BookingDO[]) => {

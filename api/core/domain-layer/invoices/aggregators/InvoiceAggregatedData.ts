@@ -18,7 +18,17 @@ export class InvoiceAggregatedData {
 
     hotel: HotelDO;
     ccySymbol: string;
-    invoice: InvoiceDO;
+    private _invoice: InvoiceDO;
+    public get invoice(): InvoiceDO {
+        return this._invoice;
+    }
+    public set invoice(value: InvoiceDO) {
+        this._invoice = value;
+        this.processedInvoice = new InvoiceDO();
+        this.processedInvoice.buildFromObject(value);
+    }
+    // the processed invoice contains some dynamic items e.g., the shared payment item
+    processedInvoice: InvoiceDO;
     payerIndexOnInvoice: number;
     payerCustomer: CustomerDO;
     addOnProductList: AddOnProductDO[];
@@ -33,14 +43,14 @@ export class InvoiceAggregatedData {
     }
 
     public addSharedInvoiceItemIfNecessary() {
-        if (this.invoice.payerList.length > 1) {
+        if (this.processedInvoice.payerList.length > 1) {
             var sharedInvoiceItem = new InvoiceItemDO();
             var sharedInvoiceItemMeta = new AddOnProductInvoiceItemMetaDO();
             sharedInvoiceItemMeta.aopDisplayName = this._thTranslation.translate(InvoiceAggregatedData.SHARED_INVOICE_ITEM_DISPLAY_NAME);
             sharedInvoiceItemMeta.numberOfItems = -1;
-            sharedInvoiceItemMeta.pricePerItem = this._thUtils.roundNumberToTwoDecimals(this.invoice.amountToPay - this.invoice.payerList[this.payerIndexOnInvoice].totalAmount);
+            sharedInvoiceItemMeta.pricePerItem = this._thUtils.roundNumberToTwoDecimals(this.processedInvoice.amountToPay - this.processedInvoice.payerList[this.payerIndexOnInvoice].totalAmount);
             sharedInvoiceItem.meta = sharedInvoiceItemMeta;
-            this.invoice.itemList.push(sharedInvoiceItem);
+            this.processedInvoice.itemList.push(sharedInvoiceItem);
         }
     }
 }

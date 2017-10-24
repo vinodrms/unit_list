@@ -18,6 +18,8 @@ import path = require('path');
 import _ = require("underscore");
 import { InvoicePayerDO } from '../../../data-layer/invoices/data-objects/payer/InvoicePayerDO';
 import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
+import { DocumentActionDO } from "../../../data-layer/common/data-objects/document-history/DocumentActionDO";
+import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 
 
 export class InvoiceConfirmationEmailSender {
@@ -74,6 +76,19 @@ export class InvoiceConfirmationEmailSender {
             });
             return Promise.all(sendEmailPromiseList);
         }).then((result: any) => {
+            var emailListStr = emailDistributionList.join(", ");
+
+            this._invoiceAggregatedData.invoice.history.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
+                actionParameterMap: { emailList: emailListStr },
+                actionString: "The invoice was sent to: %emailList%.",
+                userId: this._sessionContext.sessionDO.user.id
+            }));
+            var invoicesRepo = this._appContext.getRepositoryFactory().getInvoiceRepository();
+            return invoicesRepo.updateInvoice({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+                id: this._invoiceAggregatedData.invoice.id,
+                versionId: this._invoiceAggregatedData.invoice.versionId
+            },  this._invoiceAggregatedData.invoice);
+        }).then((updatedInvoice: InvoiceDO) => {
             let fileService = this._appContext.getServiceFactory().getFileService();
             fileService.deleteFile(generatedPdfAbsolutePath);
             resolve(true);

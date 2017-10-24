@@ -18,6 +18,7 @@ import { InvoicePayersValidator } from "../validators/InvoicePayersValidator";
 import { ThStatusCode } from "../../../utils/th-responses/ThResponse";
 import { ThLogger, ThLogLevel } from "../../../utils/logging/ThLogger";
 import { SaveInvoiceActionFactory } from "./actions/SaveInvoiceActionFactory";
+import { PaymentMethodDO } from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
 
 export class SaveInvoice {
     private invoiceToSave: InvoiceDO;
@@ -26,6 +27,7 @@ export class SaveInvoice {
 
     private hotel: HotelDO;
     private customersContainer: CustomersContainer;
+    private allPaymentMethods: PaymentMethodDO[];
 
     constructor(private appContext: AppContext, private sessionContext: SessionContext) {
     }
@@ -62,6 +64,11 @@ export class SaveInvoice {
             }).then((customersContainer: CustomersContainer) => {
                 this.customersContainer = customersContainer;
 
+                let settingsRepo = this.appContext.getRepositoryFactory().getSettingsRepository();
+                return settingsRepo.getPaymentMethods();
+            }).then((allPaymentMethods: PaymentMethodDO[]) => {
+                this.allPaymentMethods = allPaymentMethods;
+
                 var aopIdValidator = new AddOnProductIdValidator(this.appContext, this.sessionContext);
                 return aopIdValidator.validateAddOnProductIdList(this.invoiceToSave.getAddOnProductIdList());
             }).then((aopContainer: AddOnProductsContainer) => {
@@ -69,8 +76,13 @@ export class SaveInvoice {
                 this.invoiceToSave.payerList.forEach((payer: InvoicePayerDO) => {
                     let customer = this.customersContainer.getCustomerById(payer.customerId);
                     payer.paymentList.forEach((payment: InvoicePaymentDO) => {
-                        let pmValidator = new InvoicePaymentMethodValidator(this.hotel, customer);
-                        pmValidators.push(pmValidator.validate(payment.paymentMethod));
+                        // only check if the payment method is enabled on new payments
+                        let enforceEnabledPaymentMethods = true;
+                        if (_.isString(payment.transactionId) && payment.transactionId.length > 0) {
+                            enforceEnabledPaymentMethods = false;
+                        }
+                        let pmValidator = new InvoicePaymentMethodValidator(this.hotel, customer, this.allPaymentMethods);
+                        pmValidators.push(pmValidator.validate(payment.paymentMethod, enforceEnabledPaymentMethods));
                     });
                 });
                 return Promise.all(pmValidators);
