@@ -4747,13 +4747,8 @@ textarea.payer-details {
     color: #333333;
 }
 
-.invoice-transfer-footer {
-    height: 78px;
-    min-height: 78px;
-}
-
 .invoice-transfer-row {
-    height: calc(100% - 145px);
+    height: calc(100% - 67px);
 }
 
 .invoice-transfer-column {

@@ -42,24 +42,26 @@
     <table class="table table-invoice-items" style="width: 100%">
         <thead>
             <tr>
-                <th width="25%">
+                <th width="35%">
                     {{ 'Item Name'| translate }}
                 </th>
                 <th width="15%">
                     {{ 'Qty' | translate }}
                 </th>
-                <th width="20%">
+                <th width="25%">
                     {{ 'Unit Cost' | translate }}
                 </th>
-                <th width="20%">
+                <th width="25%">
                     {{ 'Total' | translate }}
                 </th>
-                <th width="20%"></th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let itemVm of invoiceVM.invoiceItemVms" [ngClass]="{'selectable': itemVm.bookingId}" (click)="viewBooking(itemVm)" title="{{getTitle(itemVm)}}">
                 <td>
+                    <i *ngIf="itemVm.isMovable && transferDirection === 'left' && hasInvoiceEditItemsRight() "
+                        class="fa fa-arrow-left clickable transfer-left p-r-6"
+                        (click)="transfer(itemVm)"></i>
                     <i *ngIf="itemVm.isRelatedToBooking" class="unitpal-font">%</i> {{ getInvoiceItemDisplayName(itemVm) }}
                     <div class="subtitle" *ngIf="itemVm.subtitle">
                         <span> {{ itemVm.subtitle }}</span>
@@ -67,8 +69,12 @@
                 </td>
                 <td>{{ itemVm.numberOfItems }}</td>
                 <td>{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
-                <td>{{ ccySymbol }}{{ itemVm.totalPrice }}</td>
-                <td></td>
+                <td>
+                    {{ ccySymbol }}{{ itemVm.totalPrice }}
+                    <i *ngIf="itemVm.isMovable && transferDirection === 'right' && hasInvoiceEditItemsRight() "
+                        class="fa fa-arrow-right clickable transfer-right p-l-6"
+                        (click)="transfer(itemVm)"></i>
+                </td>
             </tr>
             <tr *ngIf="hasInvoiceEditItemsRight()" class="add-item">
                 <td>
@@ -79,17 +85,13 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
         </tbody>
     </table>
     <hr>
     <table class="table table-payment-items">
         <colgroup>
+            <col width="75%">
             <col width="25%">
-            <col width="15%">
-            <col width="20%">
-            <col width="20%">
-            <col width="20%">
         </colgroup>
         <ng-container *ngFor="let payer of invoiceVM.invoice.payerList">
             <tr *ngFor="let payment of payer.paymentList" class="selectable">
@@ -100,21 +102,15 @@
                         <span *ngIf="payment.shouldApplyTransactionFee"> ; {{ 'Price with transaction fee' | translate }}: {{ ccySymbol }} {{ payment.amountPlusTransactionFee }} </span>
                     </div>
                 </td>
-                <td></td>
-                <td></td>
                 <td *ngIf="payment.amount >= 0">-{{ ccySymbol }}{{ payment.amount }}</td>
                 <td *ngIf="payment.amount < 0">{{ ccySymbol }}{{ payment.amount * (-1) }}</td>
-                <td></td>
             </tr>
         </ng-container>
         <tfoot>
             <tr>
                 <td>{{ 'TOTAL' | translate }}</td>
-                <td></td>
-                <td></td>
                 <td *ngIf="invoiceHasItems()">{{ ccySymbol }}{{ invoiceVM.invoice.amountPaid }} {{ "out of" }} {{ ccySymbol }}{{ invoiceVM.invoice.amountToPay }}</td>
                 <td *ngIf="!invoiceHasItems()">{{ 'No items' | translate }}</td>
-                <td></td>
             </tr>
         </tfoot>
     </table>

@@ -21,7 +21,6 @@ import { CustomerRegisterModalService } from '../../../../../../../../../../comm
 import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
 import { EmailSenderModalService } from '../../../../../../email-sender/services/EmailSenderModalService';
 import { AddInvoicePayerNotesModalService } from '../invoice-overview/modal/services/AddInvoicePayerNotesModalService';
-import { ViewInvoiceHistoryModalService } from '../invoice-overview/modal/services/ViewInvoiceHistoryModalService';
 import { InvoiceDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
 import { AddOnProductDO } from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
 import { NumberOfAddOnProductsModalOutput } from '../../../../../../../../../../common/inventory/add-on-products/modals/services/utils/NumberOfAddOnProductsModalOutput';
@@ -30,6 +29,13 @@ import { InvoiceItemDO, InvoiceItemType } from '../../../../../../../../../../..
 import { InvoicePayerDO } from '../../../../../../../../../../../services/invoices/data-objects/payer/InvoicePayerDO';
 import { InvoicePaymentMethodVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
 import { InvoiceItemVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM';
+
+export type InvoiceTransferDirection = "left" | "right";
+
+export interface Transaction {
+    invoiceId: string;
+    transactionId: string;
+}
 
 @Component({
     selector: 'invoice-edit',
@@ -40,10 +46,19 @@ import { InvoiceItemVM } from '../../../../../../../../../../../services/invoice
 export class InvoiceEditComponent implements OnInit {
     @Input() invoiceVM: InvoiceVM;
     @Input() invoiceOperationsPageData: InvoiceOperationsPageData;
+    @Input() disableInvoiceSplit: boolean = false;
+    @Input() transferDirection: InvoiceTransferDirection;
 
     @Output() invoiceChanged = new EventEmitter<InvoiceChangedOptions>();
     public emitInvoiceChanged(options: InvoiceChangedOptions = { reloadInvoiceGroup: false }) {
         this.invoiceChanged.emit(options);
+    }
+    @Output() onTransfer = new EventEmitter<Transaction>();
+    public transfer(item: InvoiceItemVM) {
+        this.onTransfer.emit({
+            invoiceId: this.invoiceVM.invoice.id,
+            transactionId: item.item.transactionId
+        });
     }
 
     @Output() showInvoiceTransferRequested = new EventEmitter<string>();
@@ -63,7 +78,6 @@ export class InvoiceEditComponent implements OnInit {
         private operationsPageControllerService: HotelOperationsPageControllerService,
         private emailSenderModalService: EmailSenderModalService,
         private addInvoicePayerNotesModalService: AddInvoicePayerNotesModalService,
-        private viewInvoiceHistoryModalService: ViewInvoiceHistoryModalService
     ) {
         this.invoiceMetaFactory = new InvoiceMetaFactory();
         this.lossByManagementPending = false;
@@ -109,7 +123,7 @@ export class InvoiceEditComponent implements OnInit {
     }
     public canMoveItemsToNewInvoice(customer: CustomerDO): boolean {
         return this.canCreateWalkInInvoices(customer) && this.invoiceVM.hasMovableItems()
-            && this.hasInvoiceEditItemsRight();
+            && this.hasInvoiceEditItemsRight() && !this.disableInvoiceSplit;
     }
 
     public onPayInvoice() {
