@@ -1070,5 +1070,7 @@ export var EnglishTranslations: Object = {
     "Add item(s) on this invoice": "Add item(s) on this invoice",
     "You have reached the maximum number of reserved add-on products.": "You have reached the maximum number of reserved add-on products.",
     "Click to View Booking": "Click to View Booking",
+    "Reserved Room Check-In": "Reserved Room Check-In",
+    "Are you sure you want to move the booking to %roomName%?": "Are you sure you want to move the booking to %roomName%?",
 
 };
