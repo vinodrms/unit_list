@@ -1,18 +1,14 @@
 import _ = require('underscore');
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { AppContext, ThError } from "../../../../../../../../../../../../../common/utils/AppContext";
-import { ThUtils } from "../../../../../../../../../../../../../common/utils/ThUtils";
 import { InvoiceVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceVM";
-import { CustomerDO } from "../../../../../../../../../../../services/customers/data-objects/CustomerDO";
 import { InvoiceOperationsPageData } from "../../utils/InvoiceOperationsPageData";
-import { InvoiceItemDO } from "../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO";
 import { ModalDialogRef } from "../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
 import { InvoiceDO } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceDO";
 import { InvoiceSelectionModalService } from "../../../../../../../../../../common/inventory/modals/invoices/services/InvoiceSelectionModalService";
 import { InvoicesDO } from "../../../../../../../../../../../services/invoices/data-objects/InvoicesDO";
 import { InvoiceVMHelper } from "../../../../../../../../../../../services/invoices/view-models/utils/InvoiceVMHelper";
 import { HotelOperationsInvoiceService, Transfer } from "../../../../../../../../../../../services/hotel-operations/invoice/HotelOperationsInvoiceService";
-import { InvoiceItemVM } from "../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM";
 import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
 import { InvoiceMetaFactory } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceMetaFactory';
 import { InvoiceChangedOptions } from '../invoice-overview/InvoiceOverviewComponent';
