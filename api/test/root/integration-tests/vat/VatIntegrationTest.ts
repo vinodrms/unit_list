@@ -24,7 +24,7 @@ describe("VAT Integration Tests", function () {
                 should.equal(vatDetails.fullVatNumber, "DK38418459");
                 done();
             }).catch((error: ThError) => {
-                console.err("[WARN] Check VAT function failed!");
+                console.error("[WARN] Check VAT function failed!");
                 done();
             });
         });
