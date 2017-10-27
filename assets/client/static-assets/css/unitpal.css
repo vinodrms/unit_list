@@ -4136,7 +4136,7 @@ textarea.payer-details {
     top: 46px;
 }
 
-.invoice-summary .invoice-change-button {
+.invoice-change-button {
     color: #F66600;
     background: transparent;
     width: 31px;
@@ -4607,6 +4607,10 @@ textarea.payer-details {
     position: relative;
 }
 
+.invoice-transfer-column > invoice-edit  {
+    height: calc(100% - 60px);
+}
+
 .invoice-transfer-summary .invoice-title {
     font-weight: 700;
     font-style: normal;
@@ -4715,16 +4719,10 @@ textarea.payer-details {
 
 
 .select-invoice {
-    font-weight: 400;
-    font-style: normal;
-    font-size: 16px;
-    color: #333333;
-    outline: none;
-    border: none;
-    padding: 4px;
-    background-color: transparent;
+    color: #F66600;
     position: relative;
-    top: 18px;
+    top: 22px;
+    font-weight: 400;
 }
 
 .no-invoice-selected-explanation {
@@ -4747,13 +4745,8 @@ textarea.payer-details {
     color: #333333;
 }
 
-.invoice-transfer-footer {
-    height: 78px;
-    min-height: 78px;
-}
-
 .invoice-transfer-row {
-    height: calc(100% - 145px);
+    height: calc(100% - 67px);
 }
 
 .invoice-transfer-column {
