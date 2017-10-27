@@ -113,24 +113,26 @@ export class ArrivalItemComponent {
     public checkIn() {
         if (this.arrivalItemVM.hasReservedRoom) {
             var title = this.appContext.thTranslation.translate("Reserved Room Check-In");
-            var content = this.appContext.thTranslation.translate("Are you sure you want to move the booking to %roomName%?",  {roomName: this.arrivalItemVM.reservedRoomVM.room.name});
-            this.appContext.modalService.confirm(title, content, { positive: this.appContext.thTranslation.translate("OK") },
-                () => {
-                    var checkInStrategy = new CheckInStrategy();
-                    var assignRoomParams: AssignRoomParam = {
-                        groupBookingId: this.arrivalItemVM.arrivalItemDO.groupBookingId,
-                        bookingId: this.arrivalItemVM.arrivalItemDO.bookingId,
-                        roomId: this.arrivalItemVM.reservedRoomVM.room.id,
-                        roomCategoryId: this.arrivalItemVM.reservedRoomVM.room.categoryId
-                    };
-                    checkInStrategy.applyStrategy(this.hotelOperationsRoomService, assignRoomParams).subscribe((updatedBooking: BookingDO) => {
-                        this.hotelOperationsDashboardService.refreshArrivals();
-                        this.hotelOperationsDashboardService.refreshRooms();
-                    }, (err: ThError) => {
-                        this.appContext.toaster.error(err.message);
-                        this.openCheckInModal();
+            var content = this.appContext.thTranslation.translate("Are you sure you want to move the booking to %roomName%?", { roomName: this.arrivalItemVM.reservedRoomVM.room.name });
+            this.appContext.modalService.confirm(title, content, {
+                positive: this.appContext.thTranslation.translate("Yes"),
+                negative: this.appContext.thTranslation.translate("No")
+            }, () => {
+                var checkInStrategy = new CheckInStrategy();
+                var assignRoomParams: AssignRoomParam = {
+                    groupBookingId: this.arrivalItemVM.arrivalItemDO.groupBookingId,
+                    bookingId: this.arrivalItemVM.arrivalItemDO.bookingId,
+                    roomId: this.arrivalItemVM.reservedRoomVM.room.id,
+                    roomCategoryId: this.arrivalItemVM.reservedRoomVM.room.categoryId
+                };
+                checkInStrategy.applyStrategy(this.hotelOperationsRoomService, assignRoomParams).subscribe((updatedBooking: BookingDO) => {
+                    this.hotelOperationsDashboardService.refreshArrivals();
+                    this.hotelOperationsDashboardService.refreshRooms();
+                }, (err: ThError) => {
+                    this.appContext.toaster.error(err.message);
+                    this.openCheckInModal();
                 });
-                }, () => { });
+            }, () => { });
         } else {
             this.openCheckInModal();
         }
