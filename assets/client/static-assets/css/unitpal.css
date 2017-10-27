@@ -4607,6 +4607,10 @@ textarea.payer-details {
     position: relative;
 }
 
+.invoice-transfer-column > invoice-edit  {
+    height: calc(100% - 60px);
+}
+
 .invoice-transfer-summary .invoice-title {
     font-weight: 700;
     font-style: normal;
