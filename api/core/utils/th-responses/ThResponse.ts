@@ -1158,7 +1158,7 @@ ThMessage[ThStatusCode.InvoiceRepositoryBookingPriceLinkError] = "Error linking 
 ThMessage[ThStatusCode.InvoiceRepositoryAddInvoiceFeeError] = "Error adding invoice fee to the invoices if necessary.";
 ThMessage[ThStatusCode.TransferInvoiceItemsTwoInvoicesRequired] = "Transfer can only be made between two invoices.";
 ThMessage[ThStatusCode.TransferInvoiceItemsError] = "Error transferring items.";
-ThMessage[ThStatusCode.TransferInvoiceItemsUnpaidInvoicesNotFound] = "The invoices have not been found. Transfer can only made between unpaid invoices.";
+ThMessage[ThStatusCode.TransferInvoiceItemsUnpaidInvoicesNotFound] = "Items can only be transferred between unpaid invoices.";
 ThMessage[ThStatusCode.TransferInvoiceItemsItemNotFound] = "Some items have not been found on the invoices.";
 ThMessage[ThStatusCode.TransferInvoiceItemsLinkedItemsCannotBeMoved] = "Items linked to others (e.g., included add on products) cannot be moved.";
 

@@ -27,7 +27,9 @@
         <div class="col-xs-6 invoice-transfer-column p-l-6 p-r-0 full-height" *ngIf="!isInvoiceSelectedForTransfer()">
             <div class="invoice-transfer-summary">
                 <div style="text-align: center">
-                    <button class="select-invoice clickable" (click)="openInvoiceSelectionModal()">{{ 'Select an Invoice' | translate }}</button>
+                    <div class="clickable select-invoice" (click)="openInvoiceSelectionModal()">
+                        <span class="fa fa-check-square-o f-s-16 m-r-6"></span>{{ 'Select an Invoice' | translate }}
+                    </div>
                 </div>
                 <div class="no-invoice-selected-explanation">
                     <div class="title">{{ 'No Invoice Selected' | translate }}</div>
@@ -41,6 +43,7 @@
                 <div class="invoice-title p-l-16">
                     {{ 'Invoice' | translate }} {{ transferInvoice.invoice.reference }}
                 </div>
+                <i class="fa fa-refresh invoice-change-button pull-right clickable" title="{{ 'Select another Invoice' | translate }}" (click)="openInvoiceSelectionModal()"></i>
                 <i *ngIf="hasInvoiceRemoveRight(transferInvoice)" class="fa fa-trash invoice-change-button pull-right clickable" title="{{ 'Delete this invoice' | translate }}" (click)="deleteTransferInvoice()"></i>
             </div>
             <invoice-edit
