@@ -7,160 +7,53 @@
         </div>
     </div>
     <div class="row invoice-transfer-row m-l-12 m-r-12">
-        <div class="col-xs-6 invoice-transfer-column p-l-0 p-r-0">
+        <div class="col-xs-6 invoice-transfer-column p-l-0 p-r-6 full-height">
             <div class="invoice-transfer-summary p-r-16">
                 <div class="invoice-title">
                     {{ 'Invoice' | translate }} {{ currentInvoice.invoice.reference }}
                 </div>
             </div>
-            <div class="invoice-transfer-payer-section m-r-16">
-                <div class="payer-name clickable" (click)="goToCustomer(currentInvoice.firstPayerCustomerId)">
-                    {{ currentInvoice.firstPayerName }}
-                </div>
-                <div class="payer-email">
-                    {{ currentInvoice.firstPayerEmail }}
-                </div>
-            </div>
-            <div class="invoice-items-container m-t-12 m-r-16">
-                <table class="table table-invoice-items" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <th width="30%">
-                                {{ 'Item Name'| translate }}
-                            </th>
-                            <th width="16%">
-                                {{ 'Qty' | translate }}
-                            </th>
-                            <th width="22%">
-                                {{ 'Unit Cost' | translate }}
-                            </th>
-                            <th width="22%">
-                                {{ 'Total' | translate }}
-                            </th>
-                            <th width="10%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let itemVm of currentInvoice.invoiceItemVms" class="selectable">
-                            <td>
-                                <i *ngIf="itemVm.isRelatedToBooking" class="unitpal-font">%</i> {{ getInvoiceItemDisplayName(itemVm) }}
-                                <div class="subtitle" *ngIf="itemVm.subtitle">
-                                    <span> {{ itemVm.subtitle }}</span>
-                                </div>
-                            </td>
-                            <td>{{ itemVm.numberOfItems }}</td>
-                            <td>{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
-                            <td>{{ ccySymbol }}{{ itemVm.totalPrice }}</td>
-                            <td><i *ngIf="itemVm.isMovable && isInvoiceSelectedForTransfer()" class="fa fa-arrow-right clickable" [ngClass]="{'transfer-left': isTransferedItem(itemVm.item), 'transfer-right': !isTransferedItem(itemVm.item)}" (click)="transferItemsToRight(itemVm.item)"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table class="table table-payment-items">
-                    <colgroup>
-                        <col width="30%">
-                        <col width="16%">
-                        <col width="22%">
-                        <col width="22%">
-                        <col width="10%">
-                    </colgroup>
-                    <tfoot>
-                        <tr>
-                            <td>{{ 'TOTAL' | translate }}</td>
-                            <td></td>
-                            <td></td>
-                            <td>{{ ccySymbol }}{{ currentInvoice.invoice.amountToPay }}<span *ngIf="hasAtLeastOneTransientTransfer()"> / {{ currentInvoiceTransientAmountToPay }}</span></td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+            <invoice-edit
+                [invoiceVM]="currentInvoice"
+                [invoiceOperationsPageData]="invoiceOperationsPageData"
+                [disableInvoiceSplit]="true"
+                [transferDirection]="transferInvoice ? 'right' : ''"
+                (invoiceChanged)="emitInvoiceChanged($event)"
+                (onTransfer)="transfer($event)"
+                >
+            </invoice-edit>
         </div>
-        <div class="col-xs-6 invoice-transfer-column p-l-0 p-r-0">
+
+        <div class="col-xs-6 invoice-transfer-column p-l-6 p-r-0 full-height" *ngIf="!isInvoiceSelectedForTransfer()">
             <div class="invoice-transfer-summary">
-                <div *ngIf="isInvoiceSelectedForTransfer()">
-                    <div class="invoice-transfer-summary p-l-16">
-                        <div class="invoice-title p-l-16">
-                            {{ 'Invoice' | translate }} {{ transferInvoice.invoice.reference }}
-                        </div>
-                    </div>
-                    <div class="invoice-transfer-payer-section m-l-16">
-                        <div class="payer-name clickable" (click)="goToCustomer(transferInvoice.firstPayerCustomerId)">
-                            {{ transferInvoice.firstPayerName }}
-                        </div>
-                        <div class="payer-email">
-                            {{ transferInvoice.firstPayerEmail }}
-                        </div>
-                    </div>
-                    <div class="invoice-items-container m-t-12 m-l-16">
-                        <table class="table table-invoice-items right-transfer-invoice-items" style="width: 100%">
-                            <thead>
-                                <tr>
-                                    <th width="10%"></th>
-                                    <th width="30%">
-                                        {{ 'Item Name'| translate }}
-                                    </th>
-                                    <th width="16%">
-                                        {{ 'Qty' | translate }}
-                                    </th>
-                                    <th width="22%">
-                                        {{ 'Unit Cost' | translate }}
-                                    </th>
-                                    <th width="22%">
-                                        {{ 'Total' | translate }}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let itemVm of transferInvoice.invoiceItemVms" class="selectable">
-                                    <td><i *ngIf="itemVm.isMovable && isInvoiceSelectedForTransfer()" class="fa fa-arrow-left clickable" [ngClass]="{'transfer-right': isTransferedItem(itemVm.item), 'transfer-left': !isTransferedItem(itemVm.item)}" (click)="transferItemsToLeft(itemVm.item)"></i></td>
-                                    <td>
-                                        <i *ngIf="itemVm.isRelatedToBooking" class="unitpal-font">%</i> {{ getInvoiceItemDisplayName(itemVm) }}
-                                        <div class="subtitle" *ngIf="itemVm.subtitle">
-                                            <span> {{ itemVm.subtitle }}</span>
-                                        </div>
-                                    </td>
-                                    <td>{{ itemVm.numberOfItems }}</td>
-                                    <td>{{ ccySymbol }}{{ itemVm.unitPrice }}</td>
-                                    <td>{{ ccySymbol }}{{ itemVm.totalPrice }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table class="table table-payment-items right-transfer-payment-items">
-                            <colgroup>
-                                <col width="10%">
-                                <col width="30%">
-                                <col width="16%">
-                                <col width="22%">
-                                <col width="22%">
-                            </colgroup>
-                            <tfoot>
-                                <tr>
-                                    <td></td>
-                                    <td>{{ 'TOTAL' | translate }}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>{{ ccySymbol }}{{ transferInvoice.invoice.amountToPay }}<span *ngIf="hasAtLeastOneTransientTransfer()"> / {{ transferInvoiceTransientAmountToPay }}</span></td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                <div style="text-align: center">
+                    <div class="clickable select-invoice" (click)="openInvoiceSelectionModal()">
+                        <span class="fa fa-check-square-o f-s-16 m-r-6"></span>{{ 'Select an Invoice' | translate }}
                     </div>
                 </div>
-                <div *ngIf="!isInvoiceSelectedForTransfer()">
-                    <div style="text-align: center">
-                        <button class="select-invoice clickable" (click)="openInvoiceSelectionModal()">{{ 'Select an Invoice' | translate }}</button>
-                    </div>
-                    <div class="no-invoice-selected-explanation">
-                        <div class="title">{{ 'No Invoice Selected' | translate }}</div>
-                        <div class="subtitle">{{ 'You can select an invoice to transfer items to or to transfer items from.' | translate }}</div>
-                    </div>
+                <div class="no-invoice-selected-explanation">
+                    <div class="title">{{ 'No Invoice Selected' | translate }}</div>
+                    <div class="subtitle">{{ 'You can select an invoice to transfer items to or to transfer items from.' | translate }}</div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="invoice-transfer-footer m-t-24">
-        <button type="button" class="btn btn-primary m-l-8" (click)="transferItems()" [disabled]="!hasAtLeastOneTransientTransfer()">
-            <i *ngIf="transferInProgress" class="fa fa-spinner fa-pulse"></i>
-            {{ 'Transfer Items' | translate }}
-        </button>
+
+        <div class="col-xs-6 invoice-transfer-column p-l-6 p-r-0 full-height" *ngIf="isInvoiceSelectedForTransfer()">
+            <div class="invoice-transfer-summary p-l-16">
+                <div class="invoice-title p-l-16">
+                    {{ 'Invoice' | translate }} {{ transferInvoice.invoice.reference }}
+                </div>
+                <i class="fa fa-refresh invoice-change-button pull-right clickable" title="{{ 'Select another Invoice' | translate }}" (click)="openInvoiceSelectionModal()"></i>
+                <i *ngIf="hasInvoiceRemoveRight(transferInvoice)" class="fa fa-trash invoice-change-button pull-right clickable" title="{{ 'Delete this invoice' | translate }}" (click)="deleteTransferInvoice()"></i>
+            </div>
+            <invoice-edit
+                [invoiceVM]="transferInvoice"
+                [invoiceOperationsPageData]="invoiceOperationsPageData"
+                [disableInvoiceSplit]="true"
+                [transferDirection]="'left'"
+                (onTransfer)="transfer($event)"
+                >
+            </invoice-edit>
+        </div>
     </div>
 </div>
