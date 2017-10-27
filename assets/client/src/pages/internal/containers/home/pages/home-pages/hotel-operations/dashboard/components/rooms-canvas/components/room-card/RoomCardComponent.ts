@@ -34,7 +34,6 @@ export class RoomCardComponent {
         private _root: ElementRef,
         private _operationRoomService: HotelOperationsRoomService,
         private _hotelOperationsDashboardService: HotelOperationsDashboardService,
-        private _hotelOperationsModalService: HotelOperationsModalService,
         private _modalService: HotelDashboardModalService,
         private _appContext: AppContext,
         private _roomMaintenanceStatusModalService: RoomMaintenanceStatusModalService
@@ -209,5 +208,18 @@ export class RoomCardComponent {
 
     public openRoomMaintenanceStatusModal() {
         this._roomMaintenanceStatusModalService.openRoomMaintenanceStatusModal(this.roomVM.roomVM, this._operationRoomService);
+    }
+
+    public openInvoiceModal() {
+        var invoiceId = this.roomVM.roomItemDO.invoiceId;
+        this._modalService.openInvoiceModal(invoiceId);
+    }
+
+    public get hasInvoice(): boolean {
+        return !this._appContext.thUtils.isUndefinedOrNull(this.roomVM.roomItemDO.invoiceId);
+    }
+
+    public get invoicePrice(): number {
+        return this.roomVM.roomItemDO.invoicePrice;
     }
 }

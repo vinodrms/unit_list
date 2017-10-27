@@ -19,6 +19,9 @@ export interface RoomItemInfo {
     groupBookingId: string;
     bookingInterval: ThDateIntervalDO;
     bookingCapacity: ConfigCapacityDO;
+
+    invoiceId?: string;
+    invoicePrice?: number;
 }
 
 export class HotelOperationsRoomInfo {

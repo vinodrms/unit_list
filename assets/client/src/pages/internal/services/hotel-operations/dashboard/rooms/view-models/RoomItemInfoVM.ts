@@ -6,7 +6,8 @@ import {RoomVM} from '../../../../rooms/view-models/RoomVM';
 import {RoomMaintenanceStatus} from '../../../../rooms/data-objects/RoomDO';
 import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
 
-import {ConfigCapacityDO} from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
+import { ConfigCapacityDO } from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
+import { CurrencyDO } from "../../../../common/data-objects/currency/CurrencyDO";
 
 export class RoomItemInfoVM_UI_Properties{
     constructor(
@@ -20,6 +21,7 @@ export class RoomItemInfoVM {
     private _roomItemDO: RoomItemInfoDO;
     private _roomVM: RoomVM;
     private _UI : RoomItemInfoVM_UI_Properties;
+    private _currency: CurrencyDO;
 
     constructor(
         private _thTranslation: ThTranslation
@@ -41,6 +43,13 @@ export class RoomItemInfoVM {
     
     public set roomVM(roomVM: RoomVM) {
         this._roomVM = roomVM;
+    }
+
+    public get currency(): CurrencyDO {
+        return this._currency;
+    }
+    public set currency(currency: CurrencyDO) {
+        this._currency = currency;
     }
 
     public get status() : RoomItemStatus {

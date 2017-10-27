@@ -137,6 +137,7 @@ export class RoomProperties{
     public set booking(v : RoomBooking) {
         this._booking = v;
     }
+    
 }
 
 export class RoomCardVM {
