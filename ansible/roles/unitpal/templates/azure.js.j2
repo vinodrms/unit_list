@@ -3,11 +3,7 @@ module.exports = {
 	connections: {
 		mongodbazure: {
 			adapter: 'sails-mongo',
-			host: "{{ mongo_host }}",
-			port: {{ mongo_port }},
-			user: "{{ mongo_user }}",
-			password: "{{ mongo_passwd }}",
-			database: "{{ mongo_db }}"
+			url: {{ mongo_url }}
 		}
 	},
 	models: {
