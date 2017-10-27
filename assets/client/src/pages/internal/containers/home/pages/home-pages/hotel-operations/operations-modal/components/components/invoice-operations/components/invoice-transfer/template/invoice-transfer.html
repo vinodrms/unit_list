@@ -30,6 +30,7 @@
                         <div class="invoice-title p-l-16">
                             {{ 'Invoice' | translate }} {{ transferInvoice.invoice.reference }}
                         </div>
+                        <i *ngIf="hasInvoiceRemoveRight(transferInvoice)" class="fa fa-trash invoice-change-button pull-right clickable" title="{{ 'Delete this invoice' | translate }}" (click)="deleteTransferInvoice()"></i>
                     </div>
                     <invoice-edit
                         [invoiceVM]="transferInvoice"

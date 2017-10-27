@@ -4136,7 +4136,7 @@ textarea.payer-details {
     top: 46px;
 }
 
-.invoice-summary .invoice-change-button {
+.invoice-change-button {
     color: #F66600;
     background: transparent;
     width: 31px;

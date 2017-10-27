@@ -75,8 +75,12 @@ export class InvoiceOverviewComponent {
     }
     public onDeleteInvoice() {
         if (this.deletePending) { return; }
+        let title = this.context.thTranslation.translate("Info");
         let content = this.context.thTranslation.translate("Are you sure you want to delete this invoice?");
-        this.confirm("Delete Invoice", () => {
+        this.context.modalService.confirm(title, content, {
+            positive: this.context.thTranslation.translate("Yes"),
+            negative: this.context.thTranslation.translate("No")
+        }, () => {
             this.deletePending = true;
             this.invoiceOperations.delete(this.currentInvoice.invoice)
                 .subscribe((invoice: InvoiceDO) => {
@@ -93,19 +97,6 @@ export class InvoiceOverviewComponent {
                     this.deletePending = false;
                     this.context.toaster.error(err.message);
                 });
-        }, content);
-    }
-
-    private confirm(status: string, onConfirm: (() => void), content: string = null) {
-        var title = this.context.thTranslation.translate("Info");
-        let translatedStatus = this.context.thTranslation.translate(status);
-        if (!content) {
-            content = this.context.thTranslation.translate("Are you sure you want to mark this invoice as %status%?", { status: translatedStatus });
-        }
-        var positiveLabel = this.context.thTranslation.translate("Yes");
-        var negativeLabel = this.context.thTranslation.translate("No");
-        this.context.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-            onConfirm();
         });
     }
 

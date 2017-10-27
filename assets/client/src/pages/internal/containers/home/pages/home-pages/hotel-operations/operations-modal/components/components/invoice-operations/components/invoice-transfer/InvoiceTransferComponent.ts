@@ -14,6 +14,7 @@ import { InvoiceMetaFactory } from '../../../../../../../../../../../services/in
 import { InvoiceChangedOptions } from '../invoice-overview/InvoiceOverviewComponent';
 import { EagerRoomsService } from '../../../../../../../../../../../services/rooms/EagerRoomsService';
 import { Transaction } from '../invoice-edit/InvoiceEditComponent';
+import { InvoiceRemoveRight } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceEditRights';
 
 @Component({
     selector: 'invoice-transfer',
@@ -32,6 +33,7 @@ export class InvoiceTransferComponent implements OnInit {
     private transferInProgress: boolean;
     private invoiceMetaFactory: InvoiceMetaFactory;
     private isLoading: boolean;
+    private deletePending: boolean;
 
     transferInvoice: InvoiceVM;
     public get currentInvoice(): InvoiceVM {
@@ -143,6 +145,31 @@ export class InvoiceTransferComponent implements OnInit {
     public emitInvoiceChanged() {
         this.invoiceChanged.emit({
             reloadInvoiceGroup: false
+        });
+    }
+
+    public hasInvoiceRemoveRight(invoiceVM: InvoiceVM): boolean {
+        return !this.context.thUtils.isUndefinedOrNull(invoiceVM) && this.transferInvoice.invoiceMeta.invoiceRemoveRight === InvoiceRemoveRight.Edit;
+    }
+    public deleteTransferInvoice() {
+        if (this.deletePending || !this.hasInvoiceRemoveRight(this.transferInvoice)) { return; }
+        let title = this.context.thTranslation.translate("Info");
+        let content = this.context.thTranslation.translate("Are you sure you want to delete this invoice?");
+        this.context.modalService.confirm(title, content, {
+            positive: this.context.thTranslation.translate("Yes"),
+            negative: this.context.thTranslation.translate("No")
+        }, () => {
+            this.deletePending = true;
+            this.invoiceOperations.delete(this.transferInvoice.invoice)
+                .subscribe((invoice: InvoiceDO) => {
+                    this.deletePending = false;
+                    this.transferInvoice = null;
+                    this.context.analytics.logEvent("invoice", "delete-from-transfer", "Deleted an invoice from the transfer screen");
+                    this.context.toaster.success("The invoice was deleted.");
+                }, (err: ThError) => {
+                    this.deletePending = false;
+                    this.context.toaster.error(err.message);
+                });
         });
     }
 }

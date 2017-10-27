@@ -17,9 +17,9 @@
                 <td width="10%"> <i class="fa unitpal-font">$</i>  </td>
                 <td width="70%" class="name-field f-s-14">
                     {{addOnProductItemVM.noAdded}} x {{ addOnProductItemVM.addOnProductSnapshot.name }}
-                    <small> - {{addOnProductItemVM.totalPriceString}} </small>
+                    <small>   {{addOnProductItemVM.totalPriceString}} </small>
                 </td>
-                <td width="20%"> 
+                <td width="20%">
                     <span class="unitpal-font clickable-item" *ngIf="!readonly" (click)="removeAddOnProduct(addOnProductItemVM.addOnProductSnapshot)">\</span>
                 </td>
             </tr>
@@ -34,7 +34,7 @@
 </div>
 <div class="col-xs-12" *ngIf="!readonly">
     <a class="link-with-unitpal-font-icon" (click)="addAddOnProducts()">
-        <i class="fa unitpal-font">'</i> 
+        <i class="fa unitpal-font">'</i>
         <span>{{ 'Add Add-On-Product' | translate }}</span>
     </a>
     <br/>
