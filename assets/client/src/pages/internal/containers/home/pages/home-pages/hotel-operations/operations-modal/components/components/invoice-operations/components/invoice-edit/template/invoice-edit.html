@@ -61,7 +61,7 @@
                 <td>
                     <i *ngIf="itemVm.isMovable && transferDirection === 'left' && hasInvoiceEditItemsRight() "
                         class="fa fa-arrow-left clickable transfer-left p-r-6"
-                        (click)="transfer(itemVm)"></i>
+                        (click)="transfer($event, itemVm)"></i>
                     <i *ngIf="itemVm.isRelatedToBooking" class="unitpal-font">%</i> {{ getInvoiceItemDisplayName(itemVm) }}
                     <div class="subtitle" *ngIf="itemVm.subtitle">
                         <span> {{ itemVm.subtitle }}</span>
@@ -73,7 +73,7 @@
                     {{ ccySymbol }}{{ itemVm.totalPrice }}
                     <i *ngIf="itemVm.isMovable && transferDirection === 'right' && hasInvoiceEditItemsRight() "
                         class="fa fa-arrow-right clickable transfer-right p-l-6"
-                        (click)="transfer(itemVm)"></i>
+                        (click)="transfer($event, itemVm)"></i>
                 </td>
             </tr>
             <tr *ngIf="hasInvoiceEditItemsRight()" class="add-item">

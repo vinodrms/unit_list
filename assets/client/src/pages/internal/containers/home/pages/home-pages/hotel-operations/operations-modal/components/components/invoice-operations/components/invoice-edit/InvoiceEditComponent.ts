@@ -54,11 +54,13 @@ export class InvoiceEditComponent implements OnInit {
         this.invoiceChanged.emit(options);
     }
     @Output() onTransfer = new EventEmitter<Transaction>();
-    public transfer(item: InvoiceItemVM) {
+    public transfer(event: Event, item: InvoiceItemVM) {
         this.onTransfer.emit({
             invoiceId: this.invoiceVM.invoice.id,
             transactionId: item.item.transactionId
         });
+        // do not trigger parent's click handler; e.g., on some items we can click & view their booking
+        event.stopPropagation();
     }
 
     @Output() showInvoiceTransferRequested = new EventEmitter<string>();
