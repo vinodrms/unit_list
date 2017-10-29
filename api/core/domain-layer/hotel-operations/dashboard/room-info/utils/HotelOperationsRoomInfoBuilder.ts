@@ -4,6 +4,7 @@ import {HotelOperationsRoomInfo, RoomItemInfo, RoomItemStatus} from './HotelOper
 import {CustomersContainer} from '../../../../customers/validators/results/CustomersContainer';
 
 import _ = require('underscore');
+import { InvoiceDO } from "../../../../../data-layer/invoices/data-objects/InvoiceDO";
 
 export class HotelOperationsRoomInfoBuilder {
     private _thUtils: ThUtils;
@@ -65,7 +66,23 @@ export class HotelOperationsRoomInfoBuilder {
         });
     }
 
+    public appendInvoiceInformation(invoiceList: InvoiceDO[]) {
+        _.forEach(this._roomInfo.roomInfoList, (roomInfoItem: RoomItemInfo) => {
+            var linkedInvoice = this.getLinkedInvoice(invoiceList, roomInfoItem);
+            if (!this._thUtils.isUndefinedOrNull(linkedInvoice)) {
+                roomInfoItem.invoiceId = linkedInvoice.id;
+                roomInfoItem.invoicePrice = linkedInvoice.amountToPay;
+            }
+        });        
+    }
+
     public getBuiltHotelOperationsRoomInfo(): HotelOperationsRoomInfo {
         return this._roomInfo;
+    }
+
+    private getLinkedInvoice(invoiceList: InvoiceDO[], roomItem: RoomItemInfo): InvoiceDO {
+        return _.find(invoiceList, (invoice: InvoiceDO) => {
+            return _.contains(invoice.indexedBookingIdList, roomItem.bookingId);
+        });
     }
 }

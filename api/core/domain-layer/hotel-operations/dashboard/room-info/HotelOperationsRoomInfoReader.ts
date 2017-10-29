@@ -11,12 +11,18 @@ import {HotelTime} from '../../common/hotel-time/HotelTime';
 import {CustomerIdValidator} from '../../../customers/validators/CustomerIdValidator';
 import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
 import {HotelOperationsRoomInfo} from './utils/HotelOperationsRoomInfo';
-import {HotelOperationsRoomInfoBuilder} from './utils/HotelOperationsRoomInfoBuilder';
+import { HotelOperationsRoomInfoBuilder } from './utils/HotelOperationsRoomInfoBuilder';
+import { InvoiceSearchResultRepoDO } from "../../../../data-layer/invoices/repositories/IInvoiceRepository";
+import { InvoicePaymentStatus } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
+
+import _ = require('underscore');
 
 export class HotelOperationsRoomInfoReader {
     private _currentHotelTimestamp: ThTimestampDO;
+    private bookingIdList: string[];
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+        this.bookingIdList = [];
     }
 
     public read(): Promise<HotelOperationsRoomInfo> {
@@ -38,6 +44,7 @@ export class HotelOperationsRoomInfoReader {
             });
         }).then((checkedInSearchResult: BookingSearchResultRepoDO) => {
             var checkedInBookingList: BookingDO[] = checkedInSearchResult.bookingList;
+            this.bookingIdList = _.map(checkedInBookingList, (booking: BookingDO) => {return booking.id});
             roomInfoBuilder.appendCheckedInBookingList(checkedInBookingList);
 
             var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
@@ -47,6 +54,8 @@ export class HotelOperationsRoomInfoReader {
             });
         }).then((canBeCheckedInSearchResult: BookingSearchResultRepoDO) => {
             var canBeCheckedInBookingList: BookingDO[] = canBeCheckedInSearchResult.bookingList;
+            this.bookingIdList = _.union(this.bookingIdList, _.map(canBeCheckedInBookingList, (booking: BookingDO) => {return booking.id}));
+
             roomInfoBuilder.appendCanBeCheckedInBookingList(canBeCheckedInBookingList);
 
             var customerIdList: string[] = roomInfoBuilder.getCustomerIdList();
@@ -55,6 +64,13 @@ export class HotelOperationsRoomInfoReader {
         }).then((customersContainer: CustomersContainer) => {
             roomInfoBuilder.appendCustomerInformation(customersContainer);
 
+            var invoiceRepo = this._appContext.getRepositoryFactory().getInvoiceRepository();
+            return invoiceRepo.getInvoiceList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+                bookingIdList: this.bookingIdList,
+                invoicePaymentStatus: InvoicePaymentStatus.Unpaid
+            });
+        }).then((invoiceSearchResult: InvoiceSearchResultRepoDO) => {
+            roomInfoBuilder.appendInvoiceInformation(invoiceSearchResult.invoiceList);
             var roomInfo = roomInfoBuilder.getBuiltHotelOperationsRoomInfo();
             roomInfo.referenceDate = this._currentHotelTimestamp.thDateDO;
             resolve(roomInfo);

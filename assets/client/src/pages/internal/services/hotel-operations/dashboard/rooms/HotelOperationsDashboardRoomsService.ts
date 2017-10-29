@@ -14,42 +14,47 @@ import { RoomItemInfoVM } from './view-models/RoomItemInfoVM';
 import { RoomsService } from '../../../rooms/RoomsService';
 import { RoomVM } from '../../../rooms/view-models/RoomVM';
 import { RoomDO } from '../../../rooms/data-objects/RoomDO';
+import { HotelAggregatorService } from "../../../hotel/HotelAggregatorService";
+import { HotelAggregatedInfo } from "../../../hotel/utils/HotelAggregatedInfo";
 
 @Injectable()
 export class HotelOperationsDashboardRoomsService extends ARequestService<RoomItemInfoVM[]> {
     constructor(
-        private _appContext: AppContext,
-        private _roomsService: RoomsService,
-        private _thTranslation: ThTranslation
+        private appContext: AppContext,
+        private roomsService: RoomsService,
+        private thTranslation: ThTranslation,
+        private hotelAggregatorService: HotelAggregatorService,
     ) {
         super();
     }
 
     protected sendRequest(): Observable<Object> {
         return Observable.combineLatest(
-            this._roomsService.getRoomList(),
-            this._appContext.thHttp.post({
+            this.roomsService.getRoomList(),
+            this.appContext.thHttp.post({
                 serverApi: ThServerApi.HotelOperationsDashboardRooms
-            })
-        ).map((result: [RoomVM[], Object]) => {
+            }),
+            this.hotelAggregatorService.getHotelAggregatedInfo(),
+        ).map((result: [RoomVM[], Object, HotelAggregatedInfo]) => {
             var roomVMList: RoomVM[] = result[0];
             var roomsInfoObject = result[1];
-
+            var hotelAggregatedInfo: HotelAggregatedInfo = result[2];
             var roomsInfo = new RoomsInfoDO();
             roomsInfo.buildFromObject(roomsInfoObject);
 
             var roomItemInfoVMList: RoomItemInfoVM[] = [];
             _.forEach(roomVMList, (roomVM: RoomVM) => {
-                var roomItemInfoVM = new RoomItemInfoVM(this._thTranslation);
+                var roomItemInfoVM = new RoomItemInfoVM(this.thTranslation);
                 roomItemInfoVM.roomVM = roomVM;
 
                 var roomItemDO: RoomItemInfoDO = roomsInfo.getRoomItemInfoDOByRoomId(roomVM.room.id);
-                if (this._appContext.thUtils.isUndefinedOrNull(roomItemDO)) {
+                if (this.appContext.thUtils.isUndefinedOrNull(roomItemDO)) {
                     roomItemDO = new RoomItemInfoDO();
                     roomItemDO.roomId = roomVM.room.id;
                     roomItemDO.roomStatus = RoomItemStatus.Free;
                 }
                 roomItemInfoVM.roomItemDO = roomItemDO;
+                roomItemInfoVM.currency = hotelAggregatedInfo.ccy;
 
                 roomItemInfoVMList.push(roomItemInfoVM);
             });

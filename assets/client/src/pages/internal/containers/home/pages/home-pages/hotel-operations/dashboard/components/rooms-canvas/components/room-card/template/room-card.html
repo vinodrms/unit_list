@@ -5,6 +5,14 @@
 		<div class="section1">
 			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
 			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
+			<div *ngIf="hasInvoice" class="invoice-info">
+				<div class="orange-color f-12">
+					<span class="ellipsis-text f-12" >{{ invoicePrice | price }}{{ roomVM.currency.nativeSymbol }}</span>
+				</div>
+				<button class="btn btn-sm btn-danger" (click)="openInvoiceModal()">
+					<span class="unitpal-font p-r-6" >L</span> <span class="uppercase">{{ 'Pay' | translate }}</span>
+				</button>
+			</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name ellipsis-text clickable" (click)="openCustomerModal()" title="{{ roomVM.customerName }}">{{ roomVM.customerName }}</div>
@@ -43,6 +51,14 @@
 		<div class="section1">
 			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
 			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
+			<div *ngIf="hasInvoice" class="invoice-info">
+				<div class="orange-color f-12">
+					<span class="ellipsis-text f-12" >{{ invoicePrice | price }}{{ roomVM.currency.nativeSymbol }}</span>
+				</div>
+				<button class="btn btn-sm btn-danger" (click)="openInvoiceModal()">
+					<span class="unitpal-font p-r-6" >L</span> <span class="uppercase">{{ 'Pay' | translate }}</span>
+				</button>
+			</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name ellipsis-text clickable"></div>
@@ -73,6 +89,14 @@
 		<div class="section1">
 			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
 			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
+			<div *ngIf="hasInvoice" class="invoice-info">
+				<div class="orange-color f-12">
+					<span class="ellipsis-text f-12" >{{ invoicePrice | price }}{{ roomVM.currency.nativeSymbol }}</span>
+				</div>
+				<button class="btn btn-sm btn-danger" (click)="openInvoiceModal()">
+					<span class="unitpal-font p-r-6" >L</span> <span class="uppercase">{{ 'Pay' | translate }}</span>
+				</button>
+			</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name ellipsis-text clickable"></div>
@@ -105,6 +129,14 @@
 		<div class="section1">
 			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
 			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
+			<div *ngIf="hasInvoice" class="invoice-info">
+				<div class="orange-color f-12">
+					<span class="ellipsis-text f-12" >{{ invoicePrice | price }}{{ roomVM.currency.nativeSymbol }}</span>
+				</div>
+				<button class="btn btn-sm btn-danger" (click)="openInvoiceModal()">
+					<span class="unitpal-font p-r-6" >L</span> <span class="uppercase">{{ 'Pay' | translate }}</span>
+				</button>
+			</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name ellipsis-text clickable"></div>
@@ -133,6 +165,14 @@
 		<div class="section1">
 			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
 			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
+			<div *ngIf="hasInvoice" class="invoice-info">
+				<div class="orange-color f-12">
+					<span class="ellipsis-text f-12" >{{ invoicePrice | price }}{{ roomVM.currency.nativeSymbol }}</span>
+				</div>
+				<button class="btn btn-sm btn-danger" (click)="openInvoiceModal()">
+					<span class="unitpal-font p-r-6" >L</span> <span class="uppercase">{{ 'Pay' | translate }}</span>
+				</button>
+			</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name ellipsis-text clickable"></div>

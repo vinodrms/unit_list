@@ -2297,7 +2297,7 @@ a.btn.btn-square:focus {
     .hotel-operations-dashboard .room-type{
         font-size: 12px;
         color: #a9a9ac;
-        width: 150px;
+        width: 134px;
         padding-top: 6px;
     }
 
@@ -2400,6 +2400,7 @@ a.btn.btn-square:focus {
 
         .room-card .card-header .section1 {
             min-height: 50px;
+            position: relative;
         }
 
         /* Free */
@@ -2520,7 +2521,7 @@ a.btn.btn-square:focus {
 
             .room-card .card-header .section1 .room-number{
                 font-size: 24px;
-                max-width: 150px;
+                max-width: 134px;
             }
 
         .room-card .card-header .section2{
@@ -4841,4 +4842,19 @@ textarea.payer-details {
     width: 295px;
     height: 88px;
     outline: none;
+}
+
+.card-header .section1 .invoice-info {
+    position: absolute;
+    left: 134px;
+    top: 4px;
+}
+
+.card-header .section1 .invoice-info > button {
+    margin: 2px 6px;
+}
+
+.card-header .section1 .invoice-info .invoice-price {
+    max-width: 60px;
+    padding-left: 2px;
 }
