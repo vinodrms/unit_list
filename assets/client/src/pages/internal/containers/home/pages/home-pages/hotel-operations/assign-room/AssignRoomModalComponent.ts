@@ -24,6 +24,8 @@ import { EagerBookingsService } from '../../../../../../services/bookings/EagerB
 import { RoomMaintenanceStatus } from '../../../../../../services/rooms/data-objects/RoomDO';
 import { RoomMaintenanceStatusModalService } from '../dashboard/components/rooms-canvas/components/room-card/modal/services/RoomMaintenanceStatusModalService';
 import { RoomMaintenanceUtils } from '../../../../../../services/rooms/utils/RoomMaintenanceUtils';
+import { PriceSelectionService } from "./components/price-selection/services/PriceSelectionService";
+import { HotelOperationsBookingService } from "../../../../../../services/hotel-operations/booking/HotelOperationsBookingService";
 
 
 @Component({
@@ -32,13 +34,16 @@ import { RoomMaintenanceUtils } from '../../../../../../services/rooms/utils/Roo
     providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService,
         RoomCategoriesStatsService, RoomsService, EagerCustomersService,
         EagerBookingsService, BookingOccupancyService,
-        HotelOperationsRoomService, RoomMaintenanceStatusModalService]
+        HotelOperationsRoomService, RoomMaintenanceStatusModalService,
+        HotelOperationsBookingService, PriceSelectionService]
 })
 export class AssignRoomModalComponent extends BaseComponent implements ICustomModalComponent, OnInit {
     selectedRoomVM: RoomVM;
     selectedRoomCategoryId: string;
     isAssigningRoom: boolean = false;
     isLoading: boolean = false;
+    isGettingRoomPrices: boolean = false;
+    showPriceSelection: boolean = false;
 
     private _getRoomByIdSubscription: Subscription;
     private _roomMaintenanceUtils: RoomMaintenanceUtils;
@@ -48,7 +53,8 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
         private _modalInput: AssignRoomModalInput,
         private _hotelOperationsRoomService: HotelOperationsRoomService,
         private _roomsService: RoomsService,
-        private _roomMaintenanceStatusModalService: RoomMaintenanceStatusModalService) {
+        private _roomMaintenanceStatusModalService: RoomMaintenanceStatusModalService,
+        private _priceSelectionService: PriceSelectionService) {
         super();
         this._roomMaintenanceUtils = new RoomMaintenanceUtils();
     }
@@ -63,7 +69,7 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
                 this._appContext.toaster.error(err.message);
                 this.isLoading = false;
             });
-        };
+        }
     }
 
     public ngOnDestroy() {
@@ -83,15 +89,30 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
     }
 
     public updateCurrentSelectedRoom(selectedRoomVM: RoomVM) {
+        this.selectedRoomCategoryId = null;
         this.selectedRoomVM = selectedRoomVM;
+        this._modalInput.selectRoom(this.selectedRoomVM.room.id);
+        this.isGettingRoomPrices = true;
+        this._priceSelectionService.buildPossiblePrices().subscribe((priceSelectionVMList: PriceSelectionVM[]) => {
+            if (priceSelectionVMList.length === 1) {
+                this.selectedRoomCategoryId = priceSelectionVMList[0].roomCategoryStats.roomCategory.id;
+            }
+            this.isGettingRoomPrices = false;
+        }, (err: ThError) => {
+            this._appContext.toaster.error(err.message);
+            this.isGettingRoomPrices = false;
+        })
+
     }
 
     public didSelectRoom(): boolean {
         return this._modalInput.didSelectRoom();
     }
-    public selectRoom() {
+    public moveToPriceSelection() {
         if (!this.selectedRoomVM) { return; }
-        this._modalInput.selectRoom(this.selectedRoomVM.room.id);
+        if (!this.selectedRoomCategoryId) {
+            this.showPriceSelection = true;
+        }
     }
 
     public didChangePriceSelection(priceSelection: PriceSelectionVM) {
@@ -167,5 +188,9 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
             this.isAssigningRoom = false;
             this._appContext.toaster.error(err.message);
         });
+    }
+
+    private get canAssignRoom(): boolean {
+        return this.didSelectRoom() && !this._appContext.thUtils.isUndefinedOrNull(this.selectedRoomCategoryId);
     }
 }
