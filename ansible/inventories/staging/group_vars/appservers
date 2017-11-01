@@ -11,7 +11,7 @@ ssl: true
 ssl_cert_chain_path: '/etc/letsencrypt/live/{{ host }}/fullchain.pem'
 ssl_private_key_path: '/etc/letsencrypt/live/{{ host }}/privkey.pem'
 
-mongo_url: 'mongodb://threeangle:threeangle_2015@ds042547-a0.mlab.com:42547,ds042547-a1.mlab.com:42541/unitpal?replicaSet=rs-ds042547'
+mongo_url: 'mongodb://threeangle:threeangle_2015@ds042567-a0.mlab.com:42567,ds042567-a1.mlab.com:42562/unitpal?replicaSet=rs-ds042567'
 
 cloudinary_cloud_name: hbpr8ossz
 cloudinary_api_key: 849423217949946
