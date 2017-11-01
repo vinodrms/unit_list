@@ -48,11 +48,6 @@ export class BookingChangeDetails {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "change details: invalid booking state", this.changeDetailsDO, thError);
                     throw thError;
                 }
-                if (this.bookingWithDependencies.hasClosedInvoice()) {
-                    var thError = new ThError(ThStatusCode.BookingChangeInvoiceNotesInvalidState, null);
-                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "change details: invoice already paid - cannot change invoice notes", this.changeDetailsDO, thError);
-                    throw thError;
-                }
 
                 this.updateDetailsOnLoadedBooking();
 
@@ -80,7 +75,9 @@ export class BookingChangeDetails {
     private updateDetailsOnLoadedBooking() {
         this.bookingWithDependencies.bookingDO.externalBookingReference = this.changeDetailsDO.externalBookingReference;
         this.bookingWithDependencies.bookingDO.notes = this.changeDetailsDO.notes;
-        this.bookingWithDependencies.bookingDO.invoiceNotes = this.changeDetailsDO.invoiceNotes;
+        if (!this.bookingWithDependencies.hasClosedInvoice()) {
+            this.bookingWithDependencies.bookingDO.invoiceNotes = this.changeDetailsDO.invoiceNotes;
+        }
         this.bookingWithDependencies.bookingDO.fileAttachmentList = this.changeDetailsDO.fileAttachmentList;
         this.bookingWithDependencies.bookingDO.travelActivityType = this.changeDetailsDO.travelActivityType;
         this.bookingWithDependencies.bookingDO.travelType = this.changeDetailsDO.travelType;
