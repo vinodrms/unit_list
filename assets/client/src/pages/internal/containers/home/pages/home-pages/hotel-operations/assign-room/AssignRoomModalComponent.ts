@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import { Subscription } from 'rxjs/Subscription';
 import { AppContext, ThError } from '../../../../../../../../common/utils/AppContext';
 import { BaseComponent } from '../../../../../../../../common/base/BaseComponent';
 import { ICustomModalComponent, ModalSize } from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
@@ -24,8 +24,6 @@ import { EagerBookingsService } from '../../../../../../services/bookings/EagerB
 import { RoomMaintenanceStatus } from '../../../../../../services/rooms/data-objects/RoomDO';
 import { RoomMaintenanceStatusModalService } from '../dashboard/components/rooms-canvas/components/room-card/modal/services/RoomMaintenanceStatusModalService';
 import { RoomMaintenanceUtils } from '../../../../../../services/rooms/utils/RoomMaintenanceUtils';
-import { PriceSelectionService } from "./components/price-selection/services/PriceSelectionService";
-import { HotelOperationsBookingService } from "../../../../../../services/hotel-operations/booking/HotelOperationsBookingService";
 
 
 @Component({
@@ -34,16 +32,13 @@ import { HotelOperationsBookingService } from "../../../../../../services/hotel-
     providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService,
         RoomCategoriesStatsService, RoomsService, EagerCustomersService,
         EagerBookingsService, BookingOccupancyService,
-        HotelOperationsRoomService, RoomMaintenanceStatusModalService,
-        HotelOperationsBookingService, PriceSelectionService]
+        HotelOperationsRoomService, RoomMaintenanceStatusModalService]
 })
 export class AssignRoomModalComponent extends BaseComponent implements ICustomModalComponent, OnInit {
     selectedRoomVM: RoomVM;
     selectedRoomCategoryId: string;
     isAssigningRoom: boolean = false;
     isLoading: boolean = false;
-    isGettingRoomPrices: boolean = false;
-    showPriceSelection: boolean = false;
 
     private _getRoomByIdSubscription: Subscription;
     private _roomMaintenanceUtils: RoomMaintenanceUtils;
@@ -53,8 +48,7 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
         private _modalInput: AssignRoomModalInput,
         private _hotelOperationsRoomService: HotelOperationsRoomService,
         private _roomsService: RoomsService,
-        private _roomMaintenanceStatusModalService: RoomMaintenanceStatusModalService,
-        private _priceSelectionService: PriceSelectionService) {
+        private _roomMaintenanceStatusModalService: RoomMaintenanceStatusModalService) {
         super();
         this._roomMaintenanceUtils = new RoomMaintenanceUtils();
     }
@@ -69,14 +63,14 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
                 this._appContext.toaster.error(err.message);
                 this.isLoading = false;
             });
-        }
+        };
     }
 
     public ngOnDestroy() {
-		if (this._getRoomByIdSubscription) {
+        if (this._getRoomByIdSubscription) {
             this._getRoomByIdSubscription.unsubscribe();
         }
-	}
+    }
 
     public closeDialog() {
         this._modalDialogRef.closeForced();
@@ -89,34 +83,23 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
     }
 
     public updateCurrentSelectedRoom(selectedRoomVM: RoomVM) {
-        this.selectedRoomCategoryId = null;
         this.selectedRoomVM = selectedRoomVM;
-        this._modalInput.selectRoom(this.selectedRoomVM.room.id);
-        this.isGettingRoomPrices = true;
-        this._priceSelectionService.buildPossiblePrices().subscribe((priceSelectionVMList: PriceSelectionVM[]) => {
-            if (priceSelectionVMList.length === 1) {
-                this.selectedRoomCategoryId = priceSelectionVMList[0].roomCategoryStats.roomCategory.id;
-            }
-            this.isGettingRoomPrices = false;
-        }, (err: ThError) => {
-            this._appContext.toaster.error(err.message);
-            this.isGettingRoomPrices = false;
-        })
-
     }
 
     public didSelectRoom(): boolean {
         return this._modalInput.didSelectRoom();
     }
-    public moveToPriceSelection() {
+    public selectRoom() {
         if (!this.selectedRoomVM) { return; }
-        if (!this.selectedRoomCategoryId) {
-            this.showPriceSelection = true;
-        }
+        this._modalInput.selectRoom(this.selectedRoomVM.room.id);
     }
 
     public didChangePriceSelection(priceSelection: PriceSelectionVM) {
         this.selectedRoomCategoryId = priceSelection.roomCategoryStats.roomCategory.id;
+    }
+    public setSinglePriceSelectionAvailable(priceSelection: PriceSelectionVM) {
+        this.selectedRoomCategoryId = priceSelection.roomCategoryStats.roomCategory.id;
+        this.applyRoomAssign();
     }
 
     public applyRoomAssign() {
@@ -150,18 +133,18 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
         if (this._getRoomByIdSubscription) this._getRoomByIdSubscription.unsubscribe();
         this._getRoomByIdSubscription = this._roomsService.getRoomById(this._modalInput.oldRoomId).subscribe((oldRoomVM: RoomVM) => {
             this._roomMaintenanceStatusModalService.openRoomMaintenanceStatusModal(oldRoomVM, this._hotelOperationsRoomService,
-            [
-                this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.PickUp), 
-                this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.Clean),
-                this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.Dirty)
-            ]).then((modalDialogInstance: ModalDialogRef<boolean>) => {
+                [
+                    this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.PickUp),
+                    this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.Clean),
+                    this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.Dirty)
+                ]).then((modalDialogInstance: ModalDialogRef<boolean>) => {
                     modalDialogInstance.resultObservable.subscribe((changeDone: boolean) => {
-                    this.finalizeAssignRoom();
-                    this._getRoomByIdSubscription.unsubscribe();
-                }, (err: any) => {});
-		    }).catch((err: ThError) => {
-                this._appContext.toaster.error(err.message);
-            });
+                        this.finalizeAssignRoom();
+                        this._getRoomByIdSubscription.unsubscribe();
+                    }, (err: any) => { });
+                }).catch((err: ThError) => {
+                    this._appContext.toaster.error(err.message);
+                });
         }, (err: ThError) => {
             this._appContext.toaster.error(err.message);
         });
@@ -188,9 +171,5 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
             this.isAssigningRoom = false;
             this._appContext.toaster.error(err.message);
         });
-    }
-
-    private get canAssignRoom(): boolean {
-        return this.didSelectRoom() && !this._appContext.thUtils.isUndefinedOrNull(this.selectedRoomCategoryId);
     }
 }

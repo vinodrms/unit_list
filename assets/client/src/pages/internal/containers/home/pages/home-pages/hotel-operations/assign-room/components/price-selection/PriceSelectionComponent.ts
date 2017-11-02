@@ -1,10 +1,10 @@
-import {Component, AfterViewInit, ViewChild, Output, EventEmitter, OnInit} from '@angular/core';
-import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
-import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
-import {PriceSelectionTableMetaBuilderService} from './services/PriceSelectionTableMetaBuilderService';
-import {HotelOperationsBookingService} from '../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
-import {PriceSelectionService, PriceSelectionType} from './services/PriceSelectionService';
-import {PriceSelectionVM} from './services/view-models/PriceSelectionVM';
+import { Component, AfterViewInit, ViewChild, Output, EventEmitter, OnInit } from '@angular/core';
+import { LazyLoadingTableComponent } from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
+import { AppContext } from '../../../../../../../../../../common/utils/AppContext';
+import { PriceSelectionTableMetaBuilderService } from './services/PriceSelectionTableMetaBuilderService';
+import { HotelOperationsBookingService } from '../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
+import { PriceSelectionService, PriceSelectionType } from './services/PriceSelectionService';
+import { PriceSelectionVM } from './services/view-models/PriceSelectionVM';
 
 import * as _ from "underscore";
 
@@ -15,6 +15,7 @@ import * as _ from "underscore";
 })
 export class PriceSelectionComponent implements AfterViewInit, OnInit {
     @Output() onPriceSelection = new EventEmitter<PriceSelectionVM>();
+    @Output() onSinglePriceSelectionAvailable = new EventEmitter<PriceSelectionVM>();
 
     didInit: boolean = false;
     pageMessage: string = "";
@@ -41,6 +42,9 @@ export class PriceSelectionComponent implements AfterViewInit, OnInit {
             this._priceSelectionService.refreshData();
 
             this.didInit = true;
+            if (priceSelectionVMList.length === 1) {
+                this.onSinglePriceSelectionAvailable.next(priceSelectionVMList[0]);
+            }
         });
     }
     private bootstrapTable() {

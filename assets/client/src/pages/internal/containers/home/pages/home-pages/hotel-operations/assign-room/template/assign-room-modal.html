@@ -1,24 +1,25 @@
 <div class="modal-header text-center">
 	<button type="button" class="close" (click)="closeDialog()">&times;</button>
-	<h4 class="modal-title" *ngIf="!showPriceSelection">{{ 'Select Room' | translate }}</h4>
-	<h4 class="modal-title" *ngIf="showPriceSelection">{{ 'Select Price' | translate }}</h4>
+	<h4 class="modal-title" *ngIf="!didSelectRoom()">{{ 'Select Room' | translate }}</h4>
+	<h4 class="modal-title" *ngIf="didSelectRoom()">{{ 'Select Price' | translate }}</h4>
 </div>
 <div>
 	<loading-component [isLoading]="isLoading"></loading-component>
 	<div *ngIf="!isLoading">
-   		<room-selection *ngIf="!showPriceSelection" (onRoomSelected)="updateCurrentSelectedRoom($event)" class="modal-body table-selection"></room-selection>
-		<price-selection *ngIf="showPriceSelection" (onPriceSelection)="didChangePriceSelection($event)" class="modal-body table-selection"></price-selection>
+   		<room-selection *ngIf="!didSelectRoom()" (onRoomSelected)="updateCurrentSelectedRoom($event)" class="modal-body table-selection"></room-selection>
+        <price-selection *ngIf="didSelectRoom()"
+            (onPriceSelection)="didChangePriceSelection($event)"
+            (onSinglePriceSelectionAvailable)="setSinglePriceSelectionAvailable($event)"
+            class="modal-body table-selection">
+        </price-selection>
 	</div>
 </div>
 <div class="modal-footer">
-	<i *ngIf="isGettingRoomPrices" class="fa fa-spinner fa-pulse"></i>
-	<div *ngIf="!isGettingRoomPrices">
-		<button *ngIf="!showPriceSelection && !canAssignRoom" [disabled]="!selectedRoomVM" (click)="moveToPriceSelection()" type="button" class="btn btn-primary">
-			{{ 'Select' | translate }}
-		</button>
-		<button *ngIf="showPriceSelection || canAssignRoom" [disabled]="!canAssignRoom" (click)="applyRoomAssign()" type="button" class="btn btn-primary">
-			<i *ngIf="isAssigningRoom" class="fa fa-spinner fa-pulse"></i>
-			{{ strategyButtonText | translate }}
-		</button>
-	</div>
+	<button *ngIf="!didSelectRoom()" [disabled]="!selectedRoomVM" (click)="selectRoom()" type="button" class="btn btn-primary">
+		{{ 'Select' | translate }}
+	</button>
+	<button *ngIf="didSelectRoom()" [disabled]="!selectedRoomCategoryId" (click)="applyRoomAssign()" type="button" class="btn btn-primary">
+		<i *ngIf="isAssigningRoom" class="fa fa-spinner fa-pulse"></i>
+		{{ strategyButtonText | translate }}
+	</button>
 </div>
