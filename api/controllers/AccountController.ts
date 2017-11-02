@@ -36,7 +36,7 @@ class AccountController extends BaseController {
     public logOut(req: any, res: any) {
         let appContext: AppContext = req.appContext;
         let sessionContext: SessionContext = req.sessionContext;
-        debugger
+
         let tokenService = appContext.getServiceFactory().getTokenService();
         tokenService.invalidateToken({
             accessToken: sessionContext.token.accessToken
