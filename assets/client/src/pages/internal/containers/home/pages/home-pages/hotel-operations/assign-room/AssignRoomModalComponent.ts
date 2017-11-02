@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import { Subscription } from 'rxjs/Subscription';
 import { AppContext, ThError } from '../../../../../../../../common/utils/AppContext';
 import { BaseComponent } from '../../../../../../../../common/base/BaseComponent';
 import { ICustomModalComponent, ModalSize } from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
@@ -67,10 +67,10 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
     }
 
     public ngOnDestroy() {
-		if (this._getRoomByIdSubscription) {
+        if (this._getRoomByIdSubscription) {
             this._getRoomByIdSubscription.unsubscribe();
         }
-	}
+    }
 
     public closeDialog() {
         this._modalDialogRef.closeForced();
@@ -96,6 +96,10 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
 
     public didChangePriceSelection(priceSelection: PriceSelectionVM) {
         this.selectedRoomCategoryId = priceSelection.roomCategoryStats.roomCategory.id;
+    }
+    public setSinglePriceSelectionAvailable(priceSelection: PriceSelectionVM) {
+        this.selectedRoomCategoryId = priceSelection.roomCategoryStats.roomCategory.id;
+        this.applyRoomAssign();
     }
 
     public applyRoomAssign() {
@@ -129,18 +133,18 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
         if (this._getRoomByIdSubscription) this._getRoomByIdSubscription.unsubscribe();
         this._getRoomByIdSubscription = this._roomsService.getRoomById(this._modalInput.oldRoomId).subscribe((oldRoomVM: RoomVM) => {
             this._roomMaintenanceStatusModalService.openRoomMaintenanceStatusModal(oldRoomVM, this._hotelOperationsRoomService,
-            [
-                this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.PickUp), 
-                this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.Clean),
-                this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.Dirty)
-            ]).then((modalDialogInstance: ModalDialogRef<boolean>) => {
+                [
+                    this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.PickUp),
+                    this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.Clean),
+                    this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.Dirty)
+                ]).then((modalDialogInstance: ModalDialogRef<boolean>) => {
                     modalDialogInstance.resultObservable.subscribe((changeDone: boolean) => {
-                    this.finalizeAssignRoom();
-                    this._getRoomByIdSubscription.unsubscribe();
-                }, (err: any) => {});
-		    }).catch((err: ThError) => {
-                this._appContext.toaster.error(err.message);
-            });
+                        this.finalizeAssignRoom();
+                        this._getRoomByIdSubscription.unsubscribe();
+                    }, (err: any) => { });
+                }).catch((err: ThError) => {
+                    this._appContext.toaster.error(err.message);
+                });
         }, (err: ThError) => {
             this._appContext.toaster.error(err.message);
         });

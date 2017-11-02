@@ -7,7 +7,11 @@
 	<loading-component [isLoading]="isLoading"></loading-component>
 	<div *ngIf="!isLoading">
    		<room-selection *ngIf="!didSelectRoom()" (onRoomSelected)="updateCurrentSelectedRoom($event)" class="modal-body table-selection"></room-selection>
-		<price-selection *ngIf="didSelectRoom()" (onPriceSelection)="didChangePriceSelection($event)" class="modal-body table-selection"></price-selection>
+        <price-selection *ngIf="didSelectRoom()"
+            (onPriceSelection)="didChangePriceSelection($event)"
+            (onSinglePriceSelectionAvailable)="setSinglePriceSelectionAvailable($event)"
+            class="modal-body table-selection">
+        </price-selection>
 	</div>
 </div>
 <div class="modal-footer">
