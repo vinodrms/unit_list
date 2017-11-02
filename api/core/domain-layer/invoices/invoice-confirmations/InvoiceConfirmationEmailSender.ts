@@ -20,6 +20,7 @@ import { InvoicePayerDO } from '../../../data-layer/invoices/data-objects/payer/
 import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payer/InvoicePaymentMethodDO';
 import { DocumentActionDO } from "../../../data-layer/common/data-objects/document-history/DocumentActionDO";
 import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
+import { InvoicePaymentDO } from '../../../data-layer/invoices/data-objects/payer/InvoicePaymentDO';
 
 
 export class InvoiceConfirmationEmailSender {
@@ -87,7 +88,7 @@ export class InvoiceConfirmationEmailSender {
             return invoicesRepo.updateInvoice({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                 id: this._invoiceAggregatedData.invoice.id,
                 versionId: this._invoiceAggregatedData.invoice.versionId
-            },  this._invoiceAggregatedData.invoice);
+            }, this._invoiceAggregatedData.invoice);
         }).then((updatedInvoice: InvoiceDO) => {
             let fileService = this._appContext.getServiceFactory().getFileService();
             fileService.deleteFile(generatedPdfAbsolutePath);
@@ -110,13 +111,23 @@ export class InvoiceConfirmationEmailSender {
         emailTemplateDO.hotelAddressLine2 += !this._thUtils.isUndefinedOrNull(hotelDO, "contactDetails.address.city") ? (" " + hotelDO.contactDetails.address.city) : "";
         emailTemplateDO.paymentDueInDays = hotelDO.paymentDueInDays;
         emailTemplateDO.paymentDueDateString = (this._invoiceAggregatedData.invoice) ? this._invoiceAggregatedData.invoice.paymentDueDate.toString() : "";
-        emailTemplateDO.shouldSendInvoiceDueDate = this._invoiceAggregatedData.invoice && this.isCorporatePayerWithPayByAgreement();
+        emailTemplateDO.shouldSendInvoiceDueDate = this._invoiceAggregatedData.invoice && this.hasPaymentPaidByAgreement();
         return emailTemplateDO;
     }
 
-    private isCorporatePayerWithPayByAgreement() {
-        return this._invoiceAggregatedData.payerCustomer.isCompanyOrTravelAgency()
-            && _.find(this._invoiceAggregatedData.invoice.payerList, (payer: InvoicePayerDO) => { return this._invoiceAggregatedData.payerCustomer.id === payer.customerId }).paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement;
+    private hasPaymentPaidByAgreement(): boolean {
+        if (!this._invoiceAggregatedData.payerCustomer.isCompanyOrTravelAgency()) {
+            return false;
+        }
+        let payer: InvoicePayerDO = _.find(this._invoiceAggregatedData.invoice.payerList, (payer: InvoicePayerDO) => {
+            return this._invoiceAggregatedData.payerCustomer.id === payer.customerId
+        });
+        if (this._appContext.thUtils.isUndefinedOrNull(payer)) {
+            return false;
+        }
+        let paymentPaidByAgreement: InvoicePaymentDO = _.find(payer.paymentList, (payment: InvoicePaymentDO) => {
+            return payment.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement;
+        });
+        return !this._appContext.thUtils.isUndefinedOrNull(paymentPaidByAgreement);
     }
-
 }

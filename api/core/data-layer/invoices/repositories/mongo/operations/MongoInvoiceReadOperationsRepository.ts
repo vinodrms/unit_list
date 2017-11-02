@@ -114,7 +114,7 @@ export class MongoInvoiceReadOperationsRepository extends MongoRepository {
             if (!this._thUtils.isUndefinedOrNull(searchCriteria.paidInterval)) {
                 var searchInterval = new ThDateIntervalDO();
                 searchInterval.buildFromObject(searchCriteria.paidInterval);
-                if (searchInterval.isValid()) {
+                if (searchInterval.start.isValid() && searchInterval.end.isValid()) {
                     let dateUtils = new ThDateUtils();
                     let endDate = dateUtils.addDaysToThDateDO(searchInterval.end, 1);
                     mongoQueryBuilder.addCustomQuery("$and",

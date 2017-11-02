@@ -105,9 +105,13 @@ export class ArrivalItemComponent {
     }
 
     public openCheckInModal() {
-        var bookingId = this.arrivalItemVM.arrivalItemDO.bookingId;
-        var groupBookingId = this.arrivalItemVM.arrivalItemDO.groupBookingId;
-        this.hotelDashboardModalService.openCheckInModal(bookingId, groupBookingId);
+        let bookingId = this.arrivalItemVM.arrivalItemDO.bookingId;
+        let groupBookingId = this.arrivalItemVM.arrivalItemDO.groupBookingId;
+        let roomId;
+        if (this.arrivalItemVM.hasReservedRoom) {
+            roomId = this.arrivalItemVM.arrivalItemDO.reservedRoomId;
+        }
+        this.hotelDashboardModalService.openCheckInModal(bookingId, groupBookingId, roomId);
     }
 
     public checkIn() {
@@ -129,7 +133,6 @@ export class ArrivalItemComponent {
                     this.hotelOperationsDashboardService.refreshArrivals();
                     this.hotelOperationsDashboardService.refreshRooms();
                 }, (err: ThError) => {
-                    this.appContext.toaster.error(err.message);
                     this.openCheckInModal();
                 });
             }, () => { });
