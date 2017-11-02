@@ -1,7 +1,7 @@
 import { Locales } from './localization/ThTranslation';
 import { UserRoles } from '../data-layer/hotel/data-objects/user/UserDO';
 import { HotelDO } from '../data-layer/hotel/data-objects/HotelDO';
-import { IUser } from "../bootstrap/oauth/OAuthServerInitializer";
+import { IUser, IToken } from "../bootstrap/oauth/OAuthServerInitializer";
 
 export class SessionDO {
 	user: {
@@ -25,6 +25,7 @@ export class SessionDO {
 	}
 }
 export class SessionContext {
-	language: Locales;
+    token: IToken;
+    language: Locales;
 	sessionDO: SessionDO;
 }

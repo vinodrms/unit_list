@@ -102,7 +102,7 @@ export class OAuthServerInitializer {
     }
 
     public register() {
-        // saving globally the oauthserver server instance 
+        // saving globally the oauthserver server instance
         sails.config.oauthserver = new OAuth2Server({
             model: {
                 //Request Authentication
@@ -124,9 +124,9 @@ export class OAuthServerInitializer {
                 },
 
                 /**
-                 * Invoked during request authentication to check if the provided access token was 
+                 * Invoked during request authentication to check if the provided access token was
                  * authorized the requested scopes.
-                 * 
+                 *
                  * This model function is required if scopes are used with OAuth2Server#authenticate().
                  */
                 verifyScope: (accessToken: string, scope: string[], callback) => {
@@ -169,14 +169,14 @@ export class OAuthServerInitializer {
                 },
 
                 revokeToken: (token: IToken, callback) => {
-                    this.tokenService.revokeToken(
-                        token.refreshToken
-                    ).then((deletedCount: number) => {
+                    this.tokenService.invalidateToken({
+                        refreshToken: token.refreshToken
+                    }).then((deletedCount: number) => {
                         callback(null, true);
                     }).catch((error: any) => {
                         callback(null, false);
                     });
-                    
+
                 },
 
                 //Password & Refresh Token Grant common

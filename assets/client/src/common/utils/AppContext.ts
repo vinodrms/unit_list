@@ -20,33 +20,39 @@ import { ITokenService } from "./oauth-token/ITokenService";
 
 @Injectable()
 export class AppContext {
-	public thUtils: ThUtils;
-	public countryCodeVatConvertor: CountryCodeVatConvertor;
+    public thUtils: ThUtils;
+    public countryCodeVatConvertor: CountryCodeVatConvertor;
 
-	constructor(
-		@Inject(IThCookie) public thCookie: IThCookie,
-		@Inject(IBrowserLocation) public browserLocation: IBrowserLocation,
-		@Inject(IRouterNavigator) public routerNavigator: IRouterNavigator,
-		public thTranslation: ThTranslation,
-		@Inject(ITokenService) public tokenService: ITokenService,
-		@Inject(IThHttp) public thHttp: IThHttp,
-		@Inject(IToaster) public toaster: IToaster,
-		@Inject(IModalService) public modalService: IModalService,
-		@Inject(IAnalytics) public analytics: IAnalytics
-	) {
-		this.thUtils = new ThUtils();
-		this.countryCodeVatConvertor = new CountryCodeVatConvertor();
-	}
+    constructor(
+        @Inject(IThCookie) public thCookie: IThCookie,
+        @Inject(IBrowserLocation) public browserLocation: IBrowserLocation,
+        @Inject(IRouterNavigator) public routerNavigator: IRouterNavigator,
+        public thTranslation: ThTranslation,
+        @Inject(ITokenService) public tokenService: ITokenService,
+        @Inject(IThHttp) public thHttp: IThHttp,
+        @Inject(IToaster) public toaster: IToaster,
+        @Inject(IModalService) public modalService: IModalService,
+        @Inject(IAnalytics) public analytics: IAnalytics
+    ) {
+        this.thUtils = new ThUtils();
+        this.countryCodeVatConvertor = new CountryCodeVatConvertor();
+    }
 
-	public logOut() {
-		this.thHttp.post({ serverApi: ThServerApi.AccountLogOut }).subscribe((result: any) => {
-			this.onLogoutPerformed();
-		}, (error: ThError) => {
-			this.onLogoutPerformed();
-		});
-	}
-	private onLogoutPerformed() {
-		this.tokenService.clearTokenData();
-		this.browserLocation.goToLoginPage(LoginStatusCode.Ok);
-	}
+    public logOut() {
+        let accessToken = this.tokenService.accessToken;
+        if (!this.thUtils.isUndefinedOrNull(accessToken)) {
+            this.thHttp.post({ serverApi: ThServerApi.AccountLogOut }).subscribe((result: any) => {
+                this.onLogoutPerformed();
+            }, (error: ThError) => {
+                this.onLogoutPerformed();
+            });
+        }
+        else {
+            this.onLogoutPerformed();
+        }
+    }
+    private onLogoutPerformed() {
+        this.tokenService.clearTokenData();
+        this.browserLocation.goToLoginPage(LoginStatusCode.Ok);
+    }
 }

@@ -19,6 +19,7 @@ module.exports = function (req: any, res: any, next: any) {
             let sessionContext: SessionContext = new SessionContext();
             sessionContext.sessionDO = new SessionDO();
             sessionContext.sessionDO.buildFromUserInfo(token.user);
+            sessionContext.token = token;
 
             req.sessionContext = sessionContext;
 

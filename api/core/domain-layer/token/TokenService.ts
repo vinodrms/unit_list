@@ -1,4 +1,4 @@
-import { ITokenService } from "./ITokenService";
+import { ITokenService, ITokenInvalidationCriteria } from "./ITokenService";
 import { AppContext } from "../../utils/AppContext";
 import { IOAuthTokenRepository } from "../../data-layer/oauth-tokens/IOAuthTokenRepository";
 import { ThError } from "../../utils/th-responses/ThError";
@@ -21,7 +21,11 @@ export class TokenService implements ITokenService {
         });
     }
 
-    private getUserInfoByAccessTokenCore(accessToken: string, resolve: { (result: IUser): void }, reject: { (err: ThError): void }) {
+    private getUserInfoByAccessTokenCore(
+        accessToken: string,
+        resolve: { (result: IUser): void },
+        reject: { (err: ThError): void }
+    ) {
         let oAuthRepo = this.repoFactory.getOAuthTokenRepository();
         let hotelRepository = this.repoFactory.getHotelRepository();
 
@@ -42,30 +46,36 @@ export class TokenService implements ITokenService {
         });
     }
 
-    public revokeToken(refreshToken: string): Promise<number> {
+    public invalidateToken(invalidationCriteria?: ITokenInvalidationCriteria): Promise<number> {
         return new Promise<number>((resolve: { (result: number): void }, reject: { (err: ThError): void }) => {
-            this.revokeTokenCore(refreshToken, resolve, reject);
+            this.invalidateTokenCore(invalidationCriteria, resolve, reject);
         });
     }
 
-    private revokeTokenCore(refreshToken: string, resolve: { (result: number): void }, reject: { (err: ThError): void }) {
+    private invalidateTokenCore(
+        invalidationCriteria: ITokenInvalidationCriteria,
+        resolve: { (result: number): void },
+        reject: { (err: ThError): void }
+    ) {
         let oAuthRepo = this.repoFactory.getOAuthTokenRepository();
-        oAuthRepo.deleteOAuthToken({
-            refreshToken: refreshToken
-        }).then((deletedCount: number) => {
+        oAuthRepo.deleteOAuthToken(invalidationCriteria).then((deletedCount: number) => {
             resolve(deletedCount);
         }).catch((error: any) => {
             reject(error);
         });
     }
 
-    public revokeAllTokensByUser(userId: string): Promise<number> {
+    public invalidateAllTokensByUser(userId: string): Promise<number> {
         return new Promise<number>((resolve: { (result: number): void }, reject: { (err: ThError): void }) => {
-            this.revokeAllTokensByUserCore(userId, resolve, reject);
+            this.invalidateAllTokensByUserCore(userId, resolve, reject);
         });
     }
 
-    private revokeAllTokensByUserCore(userId: string, resolve: { (result: number): void }, reject: { (err: ThError): void }) {
+    private invalidateAllTokensByUserCore(
+        userId: string,
+        resolve: { (result: number): void },
+        reject: { (err: ThError): void }
+    ) {
         let oAuthRepo = this.repoFactory.getOAuthTokenRepository();
         oAuthRepo.deleteMultipleOAuthTokens({
             userId: userId

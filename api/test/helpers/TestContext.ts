@@ -27,7 +27,8 @@ export class TestContext {
 
 		this.sessionContext = {
 			sessionDO: sessionDO,
-			language: loginData.user.language
+            language: loginData.user.language,
+            token: {}
 		};
 	}
 }

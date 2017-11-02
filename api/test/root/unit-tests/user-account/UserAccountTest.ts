@@ -375,7 +375,7 @@ describe("User Account Tests", function () {
 			tokenService.getUserInfoByAccessToken(reissuedAccessToken).then((userInfo) => {
 				if (!thUtils.isUndefinedOrNull(userInfo)) {
 					userId = userInfo.id;
-					return tokenService.revokeAllTokensByUser(userId);
+					return tokenService.invalidateAllTokensByUser(userId);
 				}
 				else {
 					done("The reissued token is not valid.");
