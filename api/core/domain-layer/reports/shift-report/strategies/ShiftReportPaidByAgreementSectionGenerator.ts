@@ -41,33 +41,30 @@ export class ShiftReportPaidByAgreementSectionGenerator extends AReportSectionGe
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
         let data = [];
 
-        let allInvoicePayers: InvoicePayerDO[] = [];
-        this._paidInvoiceList.forEach(invoice => {
-            allInvoicePayers = allInvoicePayers.concat(invoice.payerList);
-        });
-
         let payByAgreementCustomerIdMap = {};
-        _.forEach(allInvoicePayers, (invoicePayer: InvoicePayerDO) => {
-            invoicePayer.paymentList.forEach(payment => {
-                if (payment.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
-                    if (_.isUndefined(payByAgreementCustomerIdMap[invoicePayer.customerId])) {
-                        payByAgreementCustomerIdMap[invoicePayer.customerId] = {
-                            amount: invoicePayer.totalAmount,
-                            transactions: 1
-                        };
+        this._paidInvoiceList.forEach(invoice => {
+            _.forEach(invoice.payerList, (invoicePayer: InvoicePayerDO) => {
+                invoicePayer.paymentList.forEach(payment => {
+                    if (payment.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                        if (_.isUndefined(payByAgreementCustomerIdMap[invoicePayer.customerId])) {
+                            payByAgreementCustomerIdMap[invoicePayer.customerId] = {
+                                amount: invoicePayer.totalAmount * invoice.getAccountingFactor(),
+                                transactions: invoice.getAccountingFactor()
+                            };
+                        }
+                        else {
+                            payByAgreementCustomerIdMap[invoicePayer.customerId]["amount"] += invoicePayer.totalAmount * invoice.getAccountingFactor();
+                            payByAgreementCustomerIdMap[invoicePayer.customerId]["transactions"] += invoice.getAccountingFactor();
+                        }
                     }
-                    else {
-                        payByAgreementCustomerIdMap[invoicePayer.customerId]["amount"] += invoicePayer.totalAmount;
-                        payByAgreementCustomerIdMap[invoicePayer.customerId]["transactions"] += 1;
-                    }
-                }
+                });
             });
         });
 
         this.convertCustomerIdMapToCustomerMap(payByAgreementCustomerIdMap).then((payByAgreementCustomerNameMap: Object) => {
             _.forEach(Object.keys(payByAgreementCustomerNameMap), (companyLabel: string) => {
                 let paymentsDetails = payByAgreementCustomerNameMap[companyLabel];
-                let row = [companyLabel, paymentsDetails.transactions, paymentsDetails.amount];
+                let row = [companyLabel, paymentsDetails.transactions, this._thUtils.roundNumberToTwoDecimals(paymentsDetails.amount)];
 
                 data.push(row);
             })

@@ -98,15 +98,15 @@ export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGe
                     let pPriceWithFeesIncluded = payment.amountPlusTransactionFee;
                     if (!dic[pMethod]) {
                         dic[pMethod] = {
-                            transactions: 1,
-                            amountWithoutFee: pPrice,
-                            amountWithFee: pPriceWithFeesIncluded
+                            transactions: invoice.getAccountingFactor(),
+                            amountWithoutFee: pPrice * invoice.getAccountingFactor(),
+                            amountWithFee: pPriceWithFeesIncluded * invoice.getAccountingFactor()
                         }
                     }
                     else {
-                        dic[pMethod].transactions++;
-                        dic[pMethod].amountWithoutFee += pPrice;
-                        dic[pMethod].amountWithFee += pPriceWithFeesIncluded;
+                        dic[pMethod].transactions += invoice.getAccountingFactor();
+                        dic[pMethod].amountWithoutFee += pPrice * invoice.getAccountingFactor();
+                        dic[pMethod].amountWithFee += pPriceWithFeesIncluded * invoice.getAccountingFactor();
                     }
                 });
             })

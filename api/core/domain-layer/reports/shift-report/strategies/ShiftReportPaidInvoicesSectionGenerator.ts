@@ -83,8 +83,8 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
             this._paidInvoiceList.forEach((invoice: InvoiceDO) => {
                 var priceToPay = 0.0, priceToPayPlusTransactionFee = 0.0;
                 invoice.payerList.forEach(payer => {
-                    priceToPay += payer.totalAmount;
-                    priceToPayPlusTransactionFee += payer.totalAmountPlusTransactionFee;
+                    priceToPay += payer.totalAmount * invoice.getAccountingFactor();
+                    priceToPayPlusTransactionFee += payer.totalAmountPlusTransactionFee * invoice.getAccountingFactor();
                 });
                 var transactionFee = priceToPayPlusTransactionFee - priceToPay;
 
