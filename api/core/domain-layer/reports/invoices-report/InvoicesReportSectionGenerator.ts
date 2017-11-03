@@ -221,6 +221,6 @@ export class InvoicesReportSectionGenerator extends AReportSectionGeneratorStrat
         if (this._thUtils.isUndefinedOrNull(payer)) {
             return 0.0;
         }
-        return payer.totalAmount;
+        return payer.totalAmount * invoice.getAccountingFactor();
     }
 }
