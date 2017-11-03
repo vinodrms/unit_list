@@ -253,12 +253,14 @@ export class MongoBookingReadRepository extends MongoRepository {
         }
         let regexValue = '/*' + searchTerm + '/*';
         let regexQuery = { "$regex": regexValue, "$options": "i" };
-
-        mongoQueryBuilder.addCustomQuery("$or", [
+        
+        var andQuery: Object[] = (mongoQueryBuilder.processedQuery["$and"]) ? mongoQueryBuilder.processedQuery["$and"] : [];
+        andQuery.push({"$or": [
             { "indexedSearchTerms": regexQuery },
             { "externalBookingReference": regexQuery },
             { "notes": regexQuery },
             { "invoiceNotes": regexQuery },
-        ]);
+        ]});
+        mongoQueryBuilder.addCustomQuery("$and", andQuery);
     }
 }
