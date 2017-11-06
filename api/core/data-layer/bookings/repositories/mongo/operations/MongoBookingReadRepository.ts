@@ -136,9 +136,7 @@ export class MongoBookingReadRepository extends MongoRepository {
             andQuery.push({ "creationDateUtcTimestamp": { $gte: searchCriteria.creationInterval.start.getUtcTimestamp() } });
             andQuery.push({ "creationDateUtcTimestamp": { $lte: searchCriteria.creationInterval.end.getUtcTimestamp() } });
 
-            mongoQueryBuilder.addCustomQuery(
-                "$and", andQuery
-            );
+            mongoQueryBuilder.addCustomQuery("$and", andQuery);
         }
     }
     private appendTriggerParamsIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
@@ -253,14 +251,12 @@ export class MongoBookingReadRepository extends MongoRepository {
         }
         let regexValue = '/*' + searchTerm + '/*';
         let regexQuery = { "$regex": regexValue, "$options": "i" };
-        
-        var andQuery: Object[] = (mongoQueryBuilder.processedQuery["$and"]) ? mongoQueryBuilder.processedQuery["$and"] : [];
-        andQuery.push({"$or": [
+
+        mongoQueryBuilder.addCustomQuery("$or", [
             { "indexedSearchTerms": regexQuery },
             { "externalBookingReference": regexQuery },
             { "notes": regexQuery },
             { "invoiceNotes": regexQuery },
-        ]});
-        mongoQueryBuilder.addCustomQuery("$and", andQuery);
+        ]);
     }
 }
