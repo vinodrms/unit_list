@@ -44,7 +44,7 @@ export class CheckInStrategy extends AAssignRoomStrategy {
         }
         bookingDO.confirmationStatus = BookingConfirmationStatus.CheckedIn;
         bookingDO.checkInUtcTimestamp = validationDO.currentHotelTimestamp.getUtcTimestamp();
-        this.logRoomChangedOnBooking(bookingDO, "The customers were checked in room %roomName%", validationDO.roomList);
+        this.logRoomChangedOnBooking(bookingDO, "The customers were checked in room %roomName%.", validationDO.roomList);
         resolve(bookingDO);
     }
     public validateAlreadyCheckedInBooking(): boolean {
