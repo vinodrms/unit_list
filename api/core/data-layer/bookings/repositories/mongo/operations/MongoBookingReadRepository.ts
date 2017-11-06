@@ -136,9 +136,7 @@ export class MongoBookingReadRepository extends MongoRepository {
             andQuery.push({ "creationDateUtcTimestamp": { $gte: searchCriteria.creationInterval.start.getUtcTimestamp() } });
             andQuery.push({ "creationDateUtcTimestamp": { $lte: searchCriteria.creationInterval.end.getUtcTimestamp() } });
 
-            mongoQueryBuilder.addCustomQuery(
-                "$and", andQuery
-            );
+            mongoQueryBuilder.addCustomQuery("$and", andQuery);
         }
     }
     private appendTriggerParamsIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
