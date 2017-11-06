@@ -132,7 +132,7 @@ export class MongoBookingReadRepository extends MongoRepository {
     }
     private appendCreationDateTimestampParamsIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
         if (!this._thUtils.isUndefinedOrNull(searchCriteria.creationInterval)) {
-            var andQuery: Object[] = (mongoQueryBuilder.processedQuery["$and"]) ? mongoQueryBuilder.processedQuery["$and"] : [];
+            var andQuery: Object[] = [];
             andQuery.push({ "creationDateUtcTimestamp": { $gte: searchCriteria.creationInterval.start.getUtcTimestamp() } });
             andQuery.push({ "creationDateUtcTimestamp": { $lte: searchCriteria.creationInterval.end.getUtcTimestamp() } });
 
@@ -207,7 +207,7 @@ export class MongoBookingReadRepository extends MongoRepository {
         let query = {};
         query["startUtcTimestamp"] = lte ? { $lte: maxThDateInterval.maxUtcTimestamp } : { $lt: maxThDateInterval.minUtcTimestamp };
 
-        var andQuery: Object[] = (mongoQueryBuilder.processedQuery["$and"]) ? mongoQueryBuilder.processedQuery["$and"] : [];
+        var andQuery: Object[] = [];
         andQuery.push(query);
         mongoQueryBuilder.addCustomQuery("$and", andQuery);
     }
@@ -227,7 +227,7 @@ export class MongoBookingReadRepository extends MongoRepository {
         let query = {};
         query["endUtcTimestamp"] = gte ? { $gte: minThDateInterval.minUtcTimestamp } : { $gt: minThDateInterval.maxUtcTimestamp };
 
-        var andQuery: Object[] = (mongoQueryBuilder.processedQuery["$and"]) ? mongoQueryBuilder.processedQuery["$and"] : [];
+        var andQuery: Object[] = [];
         andQuery.push(query);
         mongoQueryBuilder.addCustomQuery("$and", andQuery);
     }
