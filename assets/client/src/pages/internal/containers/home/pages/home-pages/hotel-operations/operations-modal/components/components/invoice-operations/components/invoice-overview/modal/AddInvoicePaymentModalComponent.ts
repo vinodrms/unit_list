@@ -11,6 +11,7 @@ import { InvoicePaymentMethodVM } from "../../../../../../../../../../../../serv
 import { ThUtils } from "../../../../../../../../../../../../../../common/utils/ThUtils";
 import { TransactionFeeDO, TransactionFeeType } from "../../../../../../../../../../../../services/common/data-objects/payment-method/TransactionFeeDO";
 
+import _ = require('underscore');
 
 @Component({
     selector: 'add-invoice-payment-modal',
@@ -39,7 +40,9 @@ export class AddInvoicePaymentModalComponent extends BaseComponent implements IC
         this.paymentAmount = this._modalInput.invoiceAmountLeftToPay;
         this._pmGenerator = new InvoicePaymentMethodVMGenerator(this._modalInput.invoiceOperationsPageData.allowedPaymentMethods);
         this._customerPaymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this._modalInput.customer);
-        this.selectedInvoicePaymentMethodVM = this._customerPaymentMethodVMList[0];
+        this.selectedInvoicePaymentMethodVM = this._modalInput.defaultInvoicePaymentMethodDO ? _.find(this._customerPaymentMethodVMList, (pm: InvoicePaymentMethodVM) => {
+            return pm.paymentMethod.value === this._modalInput.defaultInvoicePaymentMethodDO.value && pm.paymentMethod.type === this._modalInput.defaultInvoicePaymentMethodDO.type;
+        }) : this.customerPaymentMethodVMList[0];
     }
 
     public closeDialog(closeWithoutConfirmation: boolean) {

@@ -29,6 +29,9 @@ import { InvoiceItemDO, InvoiceItemType } from '../../../../../../../../../../..
 import { InvoicePayerDO } from '../../../../../../../../../../../services/invoices/data-objects/payer/InvoicePayerDO';
 import { InvoicePaymentMethodVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
 import { InvoiceItemVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM';
+import { EagerBookingsService } from "../../../../../../../../../../../services/bookings/EagerBookingsService";
+import { BookingDO } from "../../../../../../../../../../../services/bookings/data-objects/BookingDO";
+import { InvoicePaymentMethodDO } from "../../../../../../../../../../../services/invoices/data-objects/payer/InvoicePaymentMethodDO";
 
 export type InvoiceTransferDirection = "left" | "right";
 
@@ -41,7 +44,7 @@ export interface Transaction {
     selector: 'invoice-edit',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-edit/template/invoice-edit.html',
     providers: [NumberOfAddOnProductsModalService, AddOnProductsModalService, CustomerRegisterModalService, AddInvoicePaymentModalService,
-        EmailSenderModalService, AddInvoicePayerNotesModalService]
+        EmailSenderModalService, AddInvoicePayerNotesModalService, EagerBookingsService]
 })
 export class InvoiceEditComponent implements OnInit {
     @Input() invoiceVM: InvoiceVM;
@@ -70,6 +73,8 @@ export class InvoiceEditComponent implements OnInit {
     private lossByManagementPending: boolean;
     private payPending: boolean;
     private reinstatePending: boolean;
+    private defaultInvoicePaymentMethod: InvoicePaymentMethodDO;
+    private isLoading: boolean;
 
     constructor(private context: AppContext,
         private numberOfAddOnProductsModalService: NumberOfAddOnProductsModalService,
@@ -80,14 +85,25 @@ export class InvoiceEditComponent implements OnInit {
         private operationsPageControllerService: HotelOperationsPageControllerService,
         private emailSenderModalService: EmailSenderModalService,
         private addInvoicePayerNotesModalService: AddInvoicePayerNotesModalService,
+        private eagerBookingsService: EagerBookingsService
     ) {
         this.invoiceMetaFactory = new InvoiceMetaFactory();
         this.lossByManagementPending = false;
         this.payPending = false;
         this.reinstatePending = false;
+        this.isLoading = false;
     }
     public ngOnInit() {
         this.pmGenerator = new InvoicePaymentMethodVMGenerator(this.invoiceOperationsPageData.allowedPaymentMethods);
+        if (this.invoiceVM.invoice.indexedBookingIdList && this.invoiceVM.invoice.indexedBookingIdList.length > 0) {
+            this.isLoading = true;
+            var bookingId = this.invoiceVM.invoice.indexedBookingIdList[0];
+            this.eagerBookingsService.getBooking(bookingId).subscribe((booking: BookingDO) =>{
+                this.defaultInvoicePaymentMethod = booking.defaultBillingDetails.paymentMethod;
+            }, () => {}, () => {
+                this.isLoading = false;
+            });
+        }
     }
 
     public invoiceAmountsMatch(): boolean {
@@ -275,7 +291,7 @@ export class InvoiceEditComponent implements OnInit {
             this.context.toaster.error(errorMessage);
             return;
         }
-        this.addInvoicePaymentModalService.openAddInvoicePaymentModal(this.invoiceVM.invoice, customer, this.invoiceOperationsPageData).then((modalDialogInstance: ModalDialogRef<InvoicePaymentDO>) => {
+        this.addInvoicePaymentModalService.openAddInvoicePaymentModal(this.invoiceVM.invoice, customer, this.invoiceOperationsPageData, this.defaultInvoicePaymentMethod).then((modalDialogInstance: ModalDialogRef<InvoicePaymentDO>) => {
             modalDialogInstance.resultObservable.subscribe((invoicePayment: InvoicePaymentDO) => {
                 this.addPayment(customer.id, invoicePayment);
                 this.emitInvoiceChanged();
