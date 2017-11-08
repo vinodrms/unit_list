@@ -67,7 +67,7 @@ export class BookingPeriodEditorComponent implements OnInit {
     }
     public get editIntervalAccess(): boolean {
         return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.EditInterval
-            && !this._bookingOperationsPageData.hasClosedInvoice;;
+            && !this._bookingOperationsPageData.hasClosedInvoice;
     }
     public get editEndDateAccess(): boolean {
         return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.EditEndDate

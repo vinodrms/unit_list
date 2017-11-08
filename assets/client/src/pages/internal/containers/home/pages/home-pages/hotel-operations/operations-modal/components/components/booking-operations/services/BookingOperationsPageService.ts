@@ -55,16 +55,20 @@ export class BookingOperationsPageService {
                 this.getAttachedRoom(pageData.bookingDO),
                 this.roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryId(pageData.bookingDO.roomCategoryId),
                 this.getAttachedAllotment(pageData.bookingDO),
-                this.invoiceService.getDefaultInvoiceForBooking(pageData.bookingDO.id),
+                this.invoiceService.getInvoicesForBooking(pageData.bookingDO.id),
                 this.eagerAddOnProductsService.getAddOnProductsById(pageData.bookingDO.reservedAddOnProductIdList),
             );
-        }).map((result: [BookingOperationsPageData, CustomersDO, RoomVM, RoomCategoryStatsDO, AllotmentDO, InvoiceDO, AddOnProductsDO]) => {
+        }).map((result: [BookingOperationsPageData, CustomersDO, RoomVM, RoomCategoryStatsDO, AllotmentDO, InvoiceDO[], AddOnProductsDO]) => {
             var pageData = result[0];
             pageData.customersContainer = result[1];
             pageData.roomVM = result[2];
             pageData.roomCategoryStats = result[3];
             pageData.allotmentDO = result[4];
-            pageData.invoiceDO = result[5];
+
+            let allInvoices = result[5];
+            this.setIfHasClosedInvoice(allInvoices, pageData);
+            this.setDefaultInvoice(allInvoices, pageData);
+
             pageData.reservedAddOnProductsContainer = result[6];
             return pageData;
         });
@@ -81,5 +85,27 @@ export class BookingOperationsPageService {
             return Observable.from([new AllotmentDO()]);
         }
         return this.eagerAllotmentsService.getAllotmentById(booking.allotmentId);
+    }
+    private setIfHasClosedInvoice(allInvoices: InvoiceDO[], pageData: BookingOperationsPageData) {
+        let paidInvoices: InvoiceDO[] = _.filter(allInvoices, (invoice: InvoiceDO) => {
+            return invoice.isPaid();
+        });
+        if (paidInvoices.length > 0) {
+            pageData.hasClosedInvoice = true;
+        }
+        else {
+            pageData.hasClosedInvoice = false;
+        }
+    }
+    private setDefaultInvoice(allInvoices: InvoiceDO[], pageData: BookingOperationsPageData) {
+        let unpaidInvoice: InvoiceDO = _.find(allInvoices, (invoice: InvoiceDO) => {
+            return invoice.isUnpaid();
+        });
+        if (!this.context.thUtils.isUndefinedOrNull(unpaidInvoice)) {
+            pageData.invoiceDO = unpaidInvoice;
+        }
+        else if (allInvoices.length > 0) {
+            pageData.invoiceDO = allInvoices[0];
+        }
     }
 }
