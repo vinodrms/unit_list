@@ -13,4 +13,5 @@ export enum MongoPatchType {
     AddBookingsIndexForYMPerformance,
     UpdateBookingsGuaranteedTime,
     AddReservedAddOnProductSnapshotsOnBookings,
+    FixIncorrectCreditInvoices,
 }
