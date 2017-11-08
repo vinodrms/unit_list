@@ -108,6 +108,10 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
 
                 let invoiceRefDisplayString = invoice.reference;
 
+                if (invoice.isCredit()) {
+                    invoiceRefDisplayString += ' ' + this._appContext.thTranslate.translate('credit');
+                }
+
                 if (invoice.isReinstatement()) {
                     invoiceRefDisplayString += ' ' + this._appContext.thTranslate.translate('reinstatement');
                 }
