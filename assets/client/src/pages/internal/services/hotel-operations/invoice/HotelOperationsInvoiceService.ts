@@ -197,7 +197,7 @@ export class HotelOperationsInvoiceService {
     }
 
     delete(invoice: InvoiceDO): Observable<InvoiceDO> {
-        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesDelete, { invoiceId: invoice.id });      
+        return this.runHttpPostActionOnInvoice(ThServerApi.InvoicesDelete, { invoiceId: invoice.id });
     }
 
     private cloneInvoice(invoice: InvoiceDO): InvoiceDO {
@@ -213,6 +213,8 @@ export class HotelOperationsInvoiceService {
             var invoices = new InvoicesDO();
             invoices.buildFromObject(resultObject);
             return invoices.invoiceList;
+        }).map((invoices: InvoiceDO[]) => {
+            return this.sort(invoices);
         });
     }
     private runHttpPostActionOnInvoice(apiAction: ThServerApi, postData: Object): Observable<InvoiceDO> {
@@ -227,5 +229,19 @@ export class HotelOperationsInvoiceService {
         var invoice = new InvoiceDO();
         invoice.buildFromObject(invoiceObject);
         return invoice;
+    }
+    private sort(invoices: InvoiceDO[]): InvoiceDO[] {
+        return invoices.sort((i1: InvoiceDO, i2: InvoiceDO) => {
+            if (_.isNumber(i1.paidTimestamp) && _.isNumber(i2.paidTimestamp)) {
+                return Math.sign(i1.paidTimestamp - i2.paidTimestamp);
+            }
+            if (_.isNumber(i1.paidTimestamp)) {
+                return -1;
+            }
+            if (_.isNumber(i2.paidTimestamp)) {
+                return 1;
+            }
+            return 0;
+        });
     }
 }

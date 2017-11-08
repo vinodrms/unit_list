@@ -274,6 +274,7 @@
 	"Paid by Agreement": "Paid by Agreement",
     "Booking Guest": "Booking Guest",
     "reinstatement": "reinstatement",
+    "credit": "credit",
 
 	// Booking confirmations
     "Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking.",

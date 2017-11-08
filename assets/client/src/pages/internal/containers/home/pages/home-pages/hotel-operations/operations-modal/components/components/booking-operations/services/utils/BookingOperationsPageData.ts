@@ -28,6 +28,7 @@ export class BookingOperationsPageData {
     private _roomCategoryStats: RoomCategoryStatsDO;
     private _invoiceDO: InvoiceDO;
     private _reservedAddOnProductsContainer: AddOnProductsDO;
+    private _hasClosedInvoice: boolean;
 
     constructor() {
         this._thUtils = new ThUtils();
@@ -107,12 +108,15 @@ export class BookingOperationsPageData {
     public set reservedAddOnProductsContainer(reservedAddOnProductsContainer: AddOnProductsDO) {
         this._reservedAddOnProductsContainer = reservedAddOnProductsContainer;
     }
+    public get hasClosedInvoice(): boolean {
+        return this._hasClosedInvoice;
+    }
+    public set hasClosedInvoice(value: boolean) {
+        this._hasClosedInvoice = value;
+    }
 
     public get hasInvoice(): boolean {
         return !this._thUtils.isUndefinedOrNull(this.invoiceDO);
-    }
-    public get hasClosedInvoice(): boolean {
-        return this.hasInvoice && this.invoiceDO.isClosed();
     }
     public get hasRoom(): boolean {
         return !this._thUtils.isUndefinedOrNull(this.roomVM) &&

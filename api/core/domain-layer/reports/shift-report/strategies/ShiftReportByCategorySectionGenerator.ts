@@ -80,8 +80,8 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
                 let itemVM = new InvoiceItemVM(this._appContext.thTranslate);
                 itemVM.buildFromInvoiceItemDO(item, invoice.vatTaxListSnapshot, invoice.accountingType);
 
-                let itemNet = itemVM.subtotal;
-                let itemVat = itemVM.vat;
+                let itemNet = itemVM.subtotal * invoice.getAccountingFactor();
+                let itemVat = itemVM.vat * invoice.getAccountingFactor();
                 let itemTotal = itemNet + itemVat;
 
                 let transactions = this.getQuantityForItem(item, invoice);

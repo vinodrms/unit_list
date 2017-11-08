@@ -102,9 +102,10 @@ export class BookingWithDependencies {
     }
 
     public hasClosedInvoice(): boolean {
-        let invoice = this.getInvoice();
-        if (this._thUtils.isUndefinedOrNull(invoice)) { return false; }
-        return invoice.isClosed();
+        let paidInvoices: InvoiceDO[] = _.filter(this.invoiceList, (invoice: InvoiceDO) => {
+            return invoice.isPaid();
+        });
+        return paidInvoices.length > 0;
     }
 
     public getInvoice(): InvoiceDO {
