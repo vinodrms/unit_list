@@ -20,25 +20,26 @@ import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
 import _ = require("underscore");
 
 export class BookingsReportGroupGenerator extends AReportGeneratorStrategy {
-    private _priceProductIdList: string[];
-    private _priceProductList: PriceProductDO[];
-    private _confirmationStatusList: BookingConfirmationStatus[];
-    private _startDate: ThDateDO;
-    private _endDate: ThDateDO;
-    private _bookingCreationStartDate: ThDateDO;
+    private priceProductIdList: string[];
+    private priceProductList: PriceProductDO[];
+    private confirmationStatusList: BookingConfirmationStatus[];
+    private startDate: ThDateDO;
+    private endDate: ThDateDO;
+    private bookingCreationStartDate: ThDateDO;
     private _bookingCreationEndDate: ThDateDO;
+    private customerIdList: string[];
 
 
     protected getParamsValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
             {
-				key: "startDate",
-				validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
-			},
-			{
-				key: "endDate",
-				validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
-			},
+                key: "startDate",
+                validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
+            },
+            {
+                key: "endDate",
+                validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
+            },
             {
                 key: "confirmationStatusList",
                 validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new NumberInListValidationRule(BookingDOConstraints.ConfirmationStatuses_All)))
@@ -47,16 +48,30 @@ export class BookingsReportGroupGenerator extends AReportGeneratorStrategy {
                 key: "priceProductIdList",
                 validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
             },
+        ],
+        [
+            {
+                key: "bookingCreationStartDate",
+                validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
+            },
+            {
+                key: "bookingCreationEndDate",
+                validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
+            },
+            {
+                key: "customerIdList",
+                validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
+            },
         ]);
     }
 
     protected loadParameters(params: any) {
-        this._priceProductIdList = params.priceProductIdList;
-        this._confirmationStatusList = params.confirmationStatusList;
-        this._startDate = new ThDateDO();
-        this._startDate.buildFromObject(params.startDate);
-        this._endDate = new ThDateDO();
-        this._endDate.buildFromObject(params.endDate);
+        this.priceProductIdList = params.priceProductIdList;
+        this.confirmationStatusList = params.confirmationStatusList;
+        this.startDate = new ThDateDO();
+        this.startDate.buildFromObject(params.startDate);
+        this.endDate = new ThDateDO();
+        this.endDate.buildFromObject(params.endDate);
         this.loadOptionalParameters(params);
     }
 
@@ -65,7 +80,7 @@ export class BookingsReportGroupGenerator extends AReportGeneratorStrategy {
             var date: ThDateDO = new ThDateDO();
             date.buildFromObject(params.bookingCreationStartDate);
             if (date.isValid()) {
-                this._bookingCreationStartDate = date;
+                this.bookingCreationStartDate = date;
             }
         }
         if (params.bookingCreationEndDate) {
@@ -75,6 +90,7 @@ export class BookingsReportGroupGenerator extends AReportGeneratorStrategy {
                 this._bookingCreationEndDate = date;
             }
         }
+        this.customerIdList = params.customerIdList;
     }
 
     protected getMeta(): ReportGroupMeta {
@@ -83,22 +99,22 @@ export class BookingsReportGroupGenerator extends AReportGeneratorStrategy {
         var priceProductListKey: string = this._appContext.thTranslate.translate("Price Products");
         var bookingStatusesKey: string = this._appContext.thTranslate.translate("Booking Statuses");
         var displayParams = {};
-        displayParams[startDateKey] = this._startDate;
-        displayParams[endDateKey] = this._endDate;
+        displayParams[startDateKey] = this.startDate;
+        displayParams[endDateKey] = this.endDate;
         displayParams[priceProductListKey] = "";
-        this._priceProductList.forEach((pp, index) => {
+        this.priceProductList.forEach((pp, index) => {
             displayParams[priceProductListKey] += pp.name;
-            displayParams[priceProductListKey] += (index != (this._priceProductList.length -1)) ? ", ": "";
+            displayParams[priceProductListKey] += (index != (this.priceProductList.length -1)) ? ", ": "";
         });
         displayParams[bookingStatusesKey] = "";
-        this._confirmationStatusList.forEach((bookingStatus, index) => {
+        this.confirmationStatusList.forEach((bookingStatus, index) => {
             displayParams[bookingStatusesKey] += BookingConfirmationStatusDisplayString[bookingStatus];
-            displayParams[bookingStatusesKey] += (index != (this._confirmationStatusList.length -1)) ? ", ": "";
+            displayParams[bookingStatusesKey] += (index != (this.confirmationStatusList.length -1)) ? ", ": "";
         });
 
-        if (this._bookingCreationStartDate) {
+        if (this.bookingCreationStartDate) {
             var bookingCreationStartDateKey = this._appContext.thTranslate.translate("Booking Created From");
-            displayParams[bookingCreationStartDateKey] = this._bookingCreationStartDate;
+            displayParams[bookingCreationStartDateKey] = this.bookingCreationStartDate;
         }
         if (this._bookingCreationEndDate) {
             var bookingCreationEndDateKey = this._appContext.thTranslate.translate("Booking Created Until");
@@ -113,9 +129,9 @@ export class BookingsReportGroupGenerator extends AReportGeneratorStrategy {
 
     protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
         let ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
-        ppRepo.getPriceProductList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {priceProductIdList: this._priceProductIdList})
+        ppRepo.getPriceProductList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {priceProductIdList: this.priceProductIdList})
             .then(ppList => {
-                this._priceProductList = ppList.priceProductList;
+                this.priceProductList = ppList.priceProductList;
                 resolve(true);
             }).catch(e => {
                 reject(e);
@@ -123,16 +139,16 @@ export class BookingsReportGroupGenerator extends AReportGeneratorStrategy {
     }
 
     private orderPriceProductListByName() {
-        this._priceProductList = _.sortBy(this._priceProductList, 'name');
+        this.priceProductList = _.sortBy(this.priceProductList, 'name');
     }
 
     protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
         this.orderPriceProductListByName();
         var sectionGenerators: BookingsReportSectionGenerator[] = [];
-        _.forEach(this._priceProductList, (pp: PriceProductDO) => {
-            sectionGenerators.push( (this._bookingCreationStartDate && this._bookingCreationEndDate) ?
-            new BookingsReportSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, pp, this._confirmationStatusList, this._startDate, this._endDate, this._bookingCreationStartDate, this._bookingCreationEndDate)
-            : new BookingsReportSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, pp, this._confirmationStatusList, this._startDate, this._endDate));
+        _.forEach(this.priceProductList, (pp: PriceProductDO) => {
+            sectionGenerators.push( (this.bookingCreationStartDate && this._bookingCreationEndDate) ?
+            new BookingsReportSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, pp, this.confirmationStatusList, this.startDate, this.endDate, this.customerIdList, this.bookingCreationStartDate, this._bookingCreationEndDate)
+            : new BookingsReportSectionGenerator(this._appContext, this._sessionContext, this._globalSummary, pp, this.confirmationStatusList, this.startDate, this.endDate, this.customerIdList));
         });
         return sectionGenerators;
     }

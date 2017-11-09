@@ -18,7 +18,7 @@ export class BookingsReportSectionGenerator extends AReportSectionGeneratorStrat
     private _bookingMetaByStatus: { [id: number]: BookingMeta };
 
     constructor(appContext: AppContext, sessionContext: SessionContext, globalSummary: Object,
-        private _priceProduct: PriceProductDO, private _confirmationStatusList: BookingConfirmationStatus[],  private _startDate: ThDateDO, private _endDate: ThDateDO, private _creationStartDate?: ThDateDO, private _creationEndDate?: ThDateDO) {
+        private _priceProduct: PriceProductDO, private _confirmationStatusList: BookingConfirmationStatus[],  private _startDate: ThDateDO, private _endDate: ThDateDO, private _customerIdList: string[], private _creationStartDate?: ThDateDO, private _creationEndDate?: ThDateDO) {
         super(appContext, sessionContext, globalSummary);
         this._bookingMetaByStatus = _.indexBy(BookingDOConstraints.BookingMetaList, meta => { return meta.status; });
     }
@@ -71,6 +71,9 @@ export class BookingsReportSectionGenerator extends AReportSectionGeneratorStrat
             bookingSearchCriteria.creationInterval = ThDateIntervalDO.buildThDateIntervalDO(
                 this._creationStartDate, this._creationEndDate
             );
+        }
+        if (this._customerIdList && this._customerIdList.length > 0) {
+            bookingSearchCriteria.customerIdList = this._customerIdList;
         }
         bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
             bookingSearchCriteria, {
