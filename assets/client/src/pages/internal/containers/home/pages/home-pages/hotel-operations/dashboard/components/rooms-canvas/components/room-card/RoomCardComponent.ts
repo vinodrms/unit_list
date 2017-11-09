@@ -136,7 +136,7 @@ export class RoomCardComponent {
                                     groupBookingId: arrivalItem.arrivalItemDO.groupBookingId,
                                     bookingId: arrivalItem.arrivalItemDO.bookingId,
                                     roomId: this.roomVM.roomVM.room.id,
-                                    roomCategoryId: this.roomVM.roomVM.room.categoryId
+                                    roomCategoryId: arrivalItem.arrivalItemDO.roomCategoryId
                                 };
                                 if (this.roomVM.roomVM.room.maintenanceStatus != RoomMaintenanceStatus.Clean) {
                                     var roomNotCleanWarningString = this._appContext.thTranslation.translate('%roomName% is not clean. Are you sure you want to move the booking to this room?', {

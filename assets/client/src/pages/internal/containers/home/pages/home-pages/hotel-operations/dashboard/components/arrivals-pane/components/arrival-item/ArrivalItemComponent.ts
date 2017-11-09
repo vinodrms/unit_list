@@ -127,7 +127,7 @@ export class ArrivalItemComponent {
                     groupBookingId: this.arrivalItemVM.arrivalItemDO.groupBookingId,
                     bookingId: this.arrivalItemVM.arrivalItemDO.bookingId,
                     roomId: this.arrivalItemVM.reservedRoomVM.room.id,
-                    roomCategoryId: this.arrivalItemVM.reservedRoomVM.room.categoryId
+                    roomCategoryId: this.arrivalItemVM.arrivalItemDO.roomCategoryId
                 };
                 checkInStrategy.applyStrategy(this.hotelOperationsRoomService, assignRoomParams).subscribe((updatedBooking: BookingDO) => {
                     this.hotelOperationsDashboardService.refreshArrivals();
