@@ -6,6 +6,7 @@ import { RoomItemInfo } from '../../../../../../core/domain-layer/hotel-operatio
 import { BookingItemDO } from '../../../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
 import { RoomCategoryDO } from '../../../../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import { RoomDO } from '../../../../../../core/data-layer/rooms/data-objects/RoomDO';
+import { CustomerDO } from "../../../../../data-layer/customers/data-objects/CustomerDO";
 
 import _ = require('underscore');
 
@@ -13,6 +14,7 @@ export class ReportInHouseItemInfoBuilder {
 	private _roomInfo: RoomItemInfo;
 	private _room: RoomDO;
 	private _booking: BookingDO;
+	private _companyOrTravelAgency: CustomerDO;
 
 	constructor() {
 	}
@@ -29,9 +31,14 @@ export class ReportInHouseItemInfoBuilder {
 		this._booking = booking;
 	}
 
+	public setCompanyOrTA(companyOrTA: CustomerDO) {
+		this._companyOrTravelAgency = companyOrTA;
+	}
+
 	build(): ReportInHouseItemInfo{
 		var report: ReportInHouseItemInfo = {
 			customerName: this._roomInfo.customerName,
+			companyOrTA: this._companyOrTravelAgency? this._companyOrTravelAgency.customerDetails.getName() : "",
 			roomNumber: this._room ? this._room.name : null,		// room[roomId].displayName -> make test to create bookings with reserver Room number
 			interval: this._roomInfo.bookingInterval ? this._roomInfo.bookingInterval.toString() : null,
 			noNights: this._roomInfo.bookingInterval ? this._roomInfo.bookingInterval.getNumberOfDays() : null,

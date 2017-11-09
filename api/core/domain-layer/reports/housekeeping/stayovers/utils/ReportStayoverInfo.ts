@@ -4,7 +4,6 @@ export interface ReportStayoverInfo {
 	floorNumber: number;
 	roomNumber: string;
 	customerName: string;
-	companyOrTA: string;
 	interval: string;
 	noNights: number;
 	noAdults: number;

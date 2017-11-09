@@ -103,11 +103,6 @@ export class ReportDeparturesReader {
                     departureInfoBuilder.setRoomCategoryStats(roomStats[0]);
                 }
 
-                return bookingCustomers.getCompanyOrTAForGuest(bookingDO);
-            }).then((companyOrTA) => {
-                if (!_.isUndefined(companyOrTA)) {
-                    departureInfoBuilder.setCompanyOrTA(companyOrTA);
-                }
                 resolve(departureInfoBuilder.build());
             }).catch((error: any) => {
                 let thError = new ThError(ThStatusCode.HotelOperationsRoomInfoReaderError, error);

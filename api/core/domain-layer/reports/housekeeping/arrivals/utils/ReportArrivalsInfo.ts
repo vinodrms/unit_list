@@ -5,7 +5,6 @@ export interface ReportArrivalItemInfo {
 	customerName: string;
 	interval: string;
 	noNights: number;
-	companyOrTA: string;
 	noAdults: number;
 	noChildren: number;
 	noBabies: number;

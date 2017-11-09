@@ -24,7 +24,6 @@ export class StayoversReportSectionGeneratorStrategy extends AReportSectionGener
                 "Floor",
                 "Room",
                 "Customer",
-				"Company/TA",
 				"Arrival/Departure",
 				"Number of Nights",
 				"Adults",
@@ -33,7 +32,6 @@ export class StayoversReportSectionGeneratorStrategy extends AReportSectionGener
 				"Babies (in baby beds)",
 				"Stationary Beds",
 				"Rollaway Beds",
-				"Departure date",
 				"Notes"
 			]
 		};
@@ -72,7 +70,6 @@ export class StayoversReportSectionGeneratorStrategy extends AReportSectionGener
 					item.floorNumber,
 					item.roomNumber,
 					item.customerName,
-					item.companyOrTA,
 					item.interval,
 					item.noNights,
 					item.noAdults,

@@ -2,6 +2,7 @@ import { ThDateDO } from '../../../../../utils/th-dates/data-objects/ThDateDO';
 
 export interface ReportInHouseItemInfo {
 	customerName: string;
+	companyOrTA: string;
 	roomNumber: string;
 	interval: string;
 	noNights: number;

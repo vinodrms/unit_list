@@ -18,6 +18,7 @@ import { HotelOperationsRoomInfoReader } from '../../../../../core/domain-layer/
 import { HotelOperationsRoomInfo, RoomItemInfo } from '../../../../../core/domain-layer/hotel-operations/dashboard/room-info/utils/HotelOperationsRoomInfo';
 import { RoomCategoryDO } from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import { RoomDO } from '../../../../../core/data-layer/rooms/data-objects/RoomDO';
+import { BookingCustomers } from "../../housekeeping/common/BookingCustomers";
 
 
 export class ReportInHouseReader {
@@ -41,7 +42,7 @@ export class ReportInHouseReader {
             .then((result: HotelOperationsRoomInfo) => {
                 let promiseList = [];
                 result.roomInfoList.forEach(roomInfo => {
-                    let p = this.buildReportInHouseItem(roomInfo)
+                    let p = this.buildReportInHouseItem(roomInfo);
                     promiseList.push(p);
                 });
                 Promise.all(promiseList).then((reportInHouseItems: ReportInHouseItemInfo[]) => {
@@ -70,6 +71,9 @@ export class ReportInHouseReader {
             let roomCategoryRepo = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
             let roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
             let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+            let bookingCustomers = new BookingCustomers(this._appContext, this._sessionContext);
+            let bookingDO: BookingDO;
+
 
             inHouseInfoBuilder.setRoomItemInfo(roomInfo);
 
@@ -83,21 +87,31 @@ export class ReportInHouseReader {
             if (roomInfo.groupBookingId && roomInfo.bookingId) {
                 let pBooking = bookingRepo.getBookingById(meta, roomInfo.bookingId).then((booking: BookingDO) => {
                     inHouseInfoBuilder.setBooking(booking);
+                    bookingDO = booking;
                 });
                 promiseList.push(pBooking);
             }
 
             Promise.all(promiseList).then(() => {
+                if (!bookingDO) {
+                    return;
+                }
+                return bookingCustomers.getCompanyOrTAForGuest(bookingDO);
+            })
+            .then((companyOrTA) => {
+                if (!_.isUndefined(companyOrTA)) {
+                    inHouseInfoBuilder.setCompanyOrTA(companyOrTA);
+                }
                 let report = inHouseInfoBuilder.build();
                 resolve(report);
             })
-                .catch((error: any) => {
-                    let thError = new ThError(ThStatusCode.HotelOperationsRoomInfoReaderError, error);
-                    if (thError.isNativeError()) {
-                        ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel room item information", this._sessionContext, thError);
-                    }
-                    reject(thError);
-                });
+            .catch((error: any) => {
+                let thError = new ThError(ThStatusCode.HotelOperationsRoomInfoReaderError, error);
+                if (thError.isNativeError()) {
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel room item information", this._sessionContext, thError);
+                }
+                reject(thError);
+            });
         });
 
     }

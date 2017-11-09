@@ -2,7 +2,6 @@ export interface ReportDepartureItemInfo {
 	floorNumber: number;
 	roomNumber: string;
 	customerName: string;
-	companyOrTA: string;
 	interval: string;
 	noNights: number;
 	noAdults: number;
