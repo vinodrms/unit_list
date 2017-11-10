@@ -53,12 +53,12 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([ThPeriodType.Day, ThPeriodType.Month, ThPeriodType.Week]))
 			},
 		],
-			[
-				{
-					key: "customerIdList",
-					validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
-				},
-			]);
+		[
+			{
+				key: "customerIdList",
+				validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
+			},
+		]);
 	}
 
 	protected loadParameters(params: any) {

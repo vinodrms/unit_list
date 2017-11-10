@@ -15,6 +15,7 @@ import { HotelDetailsDO } from "../../../../../../../../../services/hotel/data-o
 import { HotelService } from "../../../../../../../../../services/hotel/HotelService";
 import { Observable } from "rxjs/Observable";
 import { SettingsReportsUrlBuilderService } from "../../main/services/SettingsReportsUrlBuilderService";
+import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
 
 import * as _ from "underscore";
 
@@ -26,6 +27,7 @@ import * as _ from "underscore";
 export class BookingsReportComponent extends BaseComponent implements OnInit {
 
     public filterByBookingCreationDate: boolean;
+    private static MaxCustomers = 10;
     private format: ReportOutputFormatType;
     private isLoading: boolean = false;
 
@@ -37,6 +39,9 @@ export class BookingsReportComponent extends BaseComponent implements OnInit {
     private endDate: ThDateDO;
     private bookingCreationStartDate: ThDateDO;
     private bookingCreationEndDate: ThDateDO;
+    private customerIdList: string[] = [];
+    private _filterByCustomers: boolean;
+
 
     constructor(private _appContext: AppContext,
         private _pagesService: SettingsReportsPagesService,
@@ -45,11 +50,23 @@ export class BookingsReportComponent extends BaseComponent implements OnInit {
         private _urlBuilderService: SettingsReportsUrlBuilderService) {
         super();
         this.filterByBookingCreationDate = false;
+        this.filterByCustomers = false;
         this._pagesService.bootstrapSelectedTab(ReportGroupType.Bookings);
         let factory = new BookingMetaFactory();
         this.bookingMetaList = factory.getBookingMetaList();
         this.setDefaultConfirmationStatuses();
 
+    }
+
+    public set filterByCustomers(value: boolean) {
+        this._filterByCustomers = value;
+        if (!value) {
+            this.customerIdList = [];
+        }
+    }
+
+    public get filterByCustomers(): boolean {
+        return this._filterByCustomers;
     }
 
     private setDefaultConfirmationStatuses() {
@@ -67,7 +84,7 @@ export class BookingsReportComponent extends BaseComponent implements OnInit {
         this.isLoading = true;
         this._priceProductList = [];
 
-		Observable.combineLatest(
+        Observable.combineLatest(
         this._eagerPriceProductsService.getActivePriceProducts(),
         this._hotelService.getHotelDetailsDO())
         .subscribe((result: [PriceProductsDO, HotelDetailsDO]) => {
@@ -76,10 +93,10 @@ export class BookingsReportComponent extends BaseComponent implements OnInit {
             this.priceProductList = priceProducts.priceProductList;
             this.setDefaultPriceProducts();
             this.startDate = details.currentThTimestamp.thDateDO.buildPrototype();
-			this.endDate = this.startDate.buildPrototype();
-			this.endDate.addDays(1);
+            this.endDate = this.startDate.buildPrototype();
+            this.endDate.addDays(1);
             this.bookingCreationStartDate = details.currentThTimestamp.thDateDO.buildPrototype();
-			this.bookingCreationEndDate = this.startDate.buildPrototype();
+            this.bookingCreationEndDate = this.startDate.buildPrototype();
             this.isLoading = false;
         }, (error: ThError) => {
             this.isLoading = false;
@@ -148,7 +165,23 @@ export class BookingsReportComponent extends BaseComponent implements OnInit {
             params.properties["bookingCreationStartDate"] = this.bookingCreationStartDate;
             params.properties["bookingCreationEndDate"] = this.bookingCreationEndDate;
         }
+
+        if (this.filterByCustomers && this.customerIdList.length > 0) {
+            params.properties["customerIdList"] = this.customerIdList;
+        }
         
         return this._urlBuilderService.getReportUrl(params);
+    }
+
+    public didAddCustomer(customer: CustomerDO) {
+        this.customerIdList.push(customer.id);
+        this.customerIdList = _.uniq(this.customerIdList);
+    }
+    public didRemoveCustomer(customer: CustomerDO) {
+        this.customerIdList = _.filter(this.customerIdList, existingId => { return existingId != customer.id; });
+    }
+
+    public get maxCustomers(): number {
+        return BookingsReportComponent.MaxCustomers;
     }
 }

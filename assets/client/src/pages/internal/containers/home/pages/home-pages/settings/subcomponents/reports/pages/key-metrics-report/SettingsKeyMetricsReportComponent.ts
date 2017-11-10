@@ -36,7 +36,7 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 	private excludeVat: boolean;
 	private selectedPeriodType: ThPeriodType;
 	private format: ReportOutputFormatType;
-	private filterByCustomers: boolean = false;
+	private _filterByCustomers: boolean = false;
 	private customerIdList: string[] = [];
 
 	constructor(
@@ -61,6 +61,17 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 			this._appContext.toaster.error(error.message);
 		});
 	}
+
+	public set filterByCustomers(value: boolean) {
+        this._filterByCustomers = value;
+        if (!value) {
+            this.customerIdList = [];
+        }
+    }
+
+    public get filterByCustomers(): boolean {
+        return this._filterByCustomers;
+    }
 
 	public didSelectStartDate(startDate) {
 		this.startDate = startDate;
@@ -88,7 +99,7 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 				excludeVat: this.excludeVat,
 			}
 		}
-		if (this.filterByCustomers && this.customerIdList.length > 0) {
+		if (this._filterByCustomers && this.customerIdList.length > 0) {
 			params.properties["customerIdList"] = this.customerIdList;
 		}
 		

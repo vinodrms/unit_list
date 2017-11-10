@@ -81,6 +81,21 @@
                         >
                     </th-date-picker>
                 </div>
+                <div class="col-xs-12 col-sm-6 checkbox">
+					<label>
+						<input type="checkbox" 
+							[(ngModel)]="filterByCustomers" 
+							name="filterByCustomers"> {{'Filter by Customers' | translate}}
+					</label>
+				</div>
+				<div class="col-xs-12 col-md-6 form-group" *ngIf="filterByCustomers">
+					<label>{{ 'Select customers' | translate }}</label>
+					<customer-selector
+						(onCustomerAdded)="didAddCustomer($event)"
+						(onCustomerRemoved)="didRemoveCustomer($event)"
+						[maxCustomers]="maxCustomers">
+					</customer-selector>
+				</div>
                 <div class="col-xs-12 col-sm-6 form-group">
                     <label>{{ 'File Format' | translate }}</label>
                     <report-output-format (onFormatSelected)="didSelectFormat($event)"></report-output-format>
