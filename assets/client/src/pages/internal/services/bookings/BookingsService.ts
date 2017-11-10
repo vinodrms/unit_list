@@ -35,7 +35,7 @@ export class BookingsService extends ALazyLoadRequestService<BookingVM> {
         this.defaultSearchCriteria = { interval: this._interval };
     }
     private buildDefaultSearchInterval() {
-        var dateUtils = new ThDateUtils();
+        var dateUtils = new ThDateUtils(); 
         this._interval = dateUtils.getTodayToTomorrowInterval();
         this._interval.end = dateUtils.addDaysToThDateDO(this._interval.end, BookingsService.DefaultDayOffset);
     }
