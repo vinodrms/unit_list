@@ -37,17 +37,12 @@ export class ReportArrivalsItemInfoBuilder {
 		this._roomCategoryStats = roomCategoryStats;
 	}
 
-	public setCompanyOrTA(companyOrTA: CustomerDO) {
-		this._companyOrTravelAgency = companyOrTA;
-	}
-
 	build(): ReportArrivalItemInfo {
 		var report: ReportArrivalItemInfo = {
 			floorNumber: this._room ? this._room.floor : null,
 			roomNumber: this._room ? this._room.name : null,
 			roomCategory: this._roomCategory ? this._roomCategory.displayName : null,
 			customerName: this._arrivalInfo.customerName,
-			companyOrTA: this._companyOrTravelAgency ? this._companyOrTravelAgency.customerDetails.getName() : null,
 			interval: (this._booking && this._booking.interval) ? this._booking.interval.toString() : null,
 			noNights: (this._booking && this._booking.interval) ? this._booking.interval.getNumberOfDays() : null,
 			noAdults: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noAdults : null,

@@ -31,10 +31,6 @@ export class ReportDepartureInfoBuilder {
 	public setRoomCategoryStats(roomCategoryStats: RoomCategoryStatsDO) {
 		this._roomCategoryStats = roomCategoryStats;
 	}
-	
-	public setCompanyOrTA(companyOrTA: CustomerDO) {
-		this._companyOrTravelAgency = companyOrTA;
-	}
 
 	private defaults(value: any, defaultValue?: any) {
 		return (value) ? value : (defaultValue) ? defaultValue : null;
@@ -45,7 +41,6 @@ export class ReportDepartureInfoBuilder {
 			floorNumber: this._room ? this._room.floor : null,
 			roomNumber: this._room ? this._room.name : null,
 			customerName: this._departureInfo.customerName,
-			companyOrTA: this._companyOrTravelAgency ? this._companyOrTravelAgency.customerDetails.getName() : null,
 			interval: (this._departureInfo.bookingInterval) ? this._departureInfo.bookingInterval.toString() : null,
 			noNights: (this._departureInfo.bookingInterval) ? this._departureInfo.bookingInterval.getNumberOfDays() : null,
 			noAdults: this._departureInfo.bookingCapacity ? this._departureInfo.bookingCapacity.noAdults: null,

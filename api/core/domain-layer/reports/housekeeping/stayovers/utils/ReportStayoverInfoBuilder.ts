@@ -30,17 +30,12 @@ export class ReportStayoverInfoBuilder {
 	public setRoomCategoryStats(roomCategoryStats: RoomCategoryStatsDO) {
 		this._roomCategoryStats = roomCategoryStats;
 	}
-	
-	public setCompanyOrTA(companyOrTA: CustomerDO) {
-		this._companyOrTravelAgency = companyOrTA;
-	}
 
 	build(): ReportStayoverInfo {
 		var report: ReportStayoverInfo = {
 			floorNumber: this._room ? this._room.floor : null,
 			roomNumber: this._room ? this._room.name : null,
 			customerName: this._roomInfo.customerName,
-			companyOrTA: this._companyOrTravelAgency ? this._companyOrTravelAgency.customerDetails.getName() : null,
 			interval: (this._booking && this._booking.interval) ? this._booking.interval.toString() : null,
 			noNights: (this._booking && this._booking.interval) ? this._booking.interval.getNumberOfDays() : null,
 			noAdults: this._roomInfo.bookingCapacity ? this._roomInfo.bookingCapacity.noAdults: null,

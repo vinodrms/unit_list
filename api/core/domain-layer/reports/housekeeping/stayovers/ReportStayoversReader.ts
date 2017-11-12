@@ -99,11 +99,6 @@ export class ReportStayoversReader {
 				if(roomStats.length > 0) {
 					stayoversInfoBuilder.setRoomCategoryStats(roomStats[0]);
 				}
-				return bookingCustomers.getCompanyOrTAForGuest(bookingDO);
-			}).then((companyOrTA) => {
-            	if (!_.isUndefined(companyOrTA)) {
-					stayoversInfoBuilder.setCompanyOrTA(companyOrTA);
-            	}
 
 				resolve(stayoversInfoBuilder.build());
 			}).catch((error: any) => {

@@ -19,6 +19,7 @@ export class GuestsInHouseReportSectionGeneratorStrategy extends AReportSectionG
 			display: true,
 			values: [
 				"Customer name",
+				"Agency",
 				"Room number",
 				"Arrival/Departure",
 				"Number of Nights",
@@ -67,6 +68,7 @@ export class GuestsInHouseReportSectionGeneratorStrategy extends AReportSectionG
 				}
 				let row = [
 					item.customerName,
+					item.companyOrTA,
 					item.roomNumber,
 					item.interval,
 					item.noNights,

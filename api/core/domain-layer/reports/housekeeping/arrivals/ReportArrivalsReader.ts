@@ -112,11 +112,6 @@ export class ReportArrivalsReader {
             if (roomStats.length > 0) {
                 arrivalsInfoBuilder.setRoomCategoryStats(roomStats[0]);
             }
-            return bookingCustomers.getCompanyOrTAForGuest(bookingDO);
-        }).then((companyOrTA: CustomerDO) => {
-            if (!_.isUndefined(companyOrTA)) {
-                arrivalsInfoBuilder.setCompanyOrTA(companyOrTA);
-            }
 
             resolve(arrivalsInfoBuilder.build());
         }).catch((error: any) => {
