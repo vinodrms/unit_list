@@ -104,7 +104,7 @@ describe("Reports", function () {
 				should.equal(report.reportGroup.sectionList.length, 1);
 				// more than 1 metric
 				should.equal(report.reportGroup.sectionList[0].data.length > 0, true);
-				// first metric should have 5 months + the header `Metric` + 'Total'
+				// first metric should have 5 months + the header `Metric` + `Total`
 				should.equal(report.reportGroup.sectionList[0].data[0].length, 7);
 				done();
 			}).catch((e) => {

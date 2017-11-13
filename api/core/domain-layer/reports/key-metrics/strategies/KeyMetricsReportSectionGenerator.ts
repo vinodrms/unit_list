@@ -115,22 +115,22 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 				var totalInventory = new InventoryKeyMetric();
 				var price = _.reduce(metric.valueList, (s, value: InventoryKeyMetric) => { return s + value.total; }, 0);
 				var available = _.reduce(metric.valueList, (s, value: InventoryKeyMetric) => { return s + value.available; }, 0);
-				totalInventory.total = price;
-				totalInventory.available = available;
+				totalInventory.total = this._thUtils.roundNumberToNearestInteger(price);
+				totalInventory.available = this._thUtils.roundNumberToNearestInteger(available);
 				return totalInventory;
 			case KeyMetricValueType.Price:
 				var totalPrice = new PriceKeyMetric();
 				var price = _.reduce(metric.valueList, (s, value: PriceKeyMetric) => { return s + value.price; }, 0);
 				if (metric.type === KeyMetricType.TotalRevPar || metric.type === KeyMetricType.TotalAvgRate) {
 					//for these metrics, get the average
-					price = this._thUtils.roundNumberToNearestInteger(price/metric.valueList.length);
+					price = price/metric.valueList.length;
 				}
-				totalPrice.price = price
+				totalPrice.price = this._thUtils.roundNumberToNearestInteger(price);
 				return totalPrice;
 			case KeyMetricValueType.Counter:
 				var totalCounter = new CounterKeyMetric();
 				var counter = _.reduce(metric.valueList, (s, value: CounterKeyMetric) => { return s + value.total; }, 0);
-				totalCounter.total = counter;
+				totalCounter.total = this._thUtils.roundNumberToNearestInteger(counter);
 				return totalCounter;
 		}
 	}
