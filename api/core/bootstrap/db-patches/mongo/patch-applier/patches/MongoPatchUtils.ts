@@ -14,6 +14,7 @@ import { P11_AddBookingsIndexForYMPerformance } from "./list/P11_AddBookingsInde
 import { P12_UpdateBookingsGuaranteedTime } from './list/P12_UpdateBookingsGuaranteedTime';
 import { P13_AddReservedAddOnProductSnapshotsOnBookings } from './list/P13_AddReservedAddOnProductSnapshotsOnBookings';
 import { P14_FixIncorrectCreditInvoices } from './list/P14_FixIncorrectCreditInvoices';
+import { P15_AddDecimalsNoInCurrencies } from "./list/P15_AddDecimalsNoInCurrencies";
 
 export class MongoPatchUtils {
     public static get PatchList(): ATransactionalMongoPatch[] {
@@ -33,6 +34,7 @@ export class MongoPatchUtils {
             new P12_UpdateBookingsGuaranteedTime(),
             new P13_AddReservedAddOnProductSnapshotsOnBookings(),
             new P14_FixIncorrectCreditInvoices(),
+            new P15_AddDecimalsNoInCurrencies(),
 
         ];
     }

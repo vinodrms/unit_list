@@ -27,6 +27,9 @@ export class InvoiceConfirmationVMContainer {
     private static DEFAULT_VALUE_IF_EMPTY: string = '';
     private static PAY_INVOICE_BY_AGREEMENT_STR: string = 'PAY INVOICE BY AGREEMENT';
     private static LOSS_ACCEPTED_BY_MANAGEMENT_STR: string = 'LOSS ACCEPTED BY MANAGEMENT';
+    private static ITEMS_PER_PAGE: number = 20;
+    private static ITEMS_PER_FIRST_PAGE: number = 6;
+    private static ITEMS_PER_LAST_PAGE: number = 8;
 
     private _thUtils: ThUtils;
     private _thDateUtils: ThDateUtils;
@@ -69,7 +72,7 @@ export class InvoiceConfirmationVMContainer {
 
     itemLabel: string;
     qtyLabel: string;
-    netUnitPriceLabel: string;
+    unitPriceLabel: string;
     vatLabel: string;
     subtotalLabel: string;
     itemVMList: InvoiceItemVM[];
@@ -80,8 +83,7 @@ export class InvoiceConfirmationVMContainer {
     transactionFeeValues: string[];
     subtotalPerPaymentMethod: number[];
 
-    subtotalValue: number;
-    subtotalValueFormatted: string;
+
     totalVat: number;
     totalVatFormatted: string;
     totalLabel: string;
@@ -101,7 +103,7 @@ export class InvoiceConfirmationVMContainer {
 
         this.invoiceReference = this._invoiceAggregatedData.processedInvoice.reference;
         this.payerIndex = this._invoiceAggregatedData.payerIndexOnInvoice;
-        this.ccySymbol = this._invoiceAggregatedData.ccySymbol;
+        this.ccySymbol = this._invoiceAggregatedData.ccy.symbol;
         this.unitpalLogoSrcValue = BookingConfirmationVMContainer.UNITPAL_LOGO_SRC;
 
         this.initLogoSrcs();
@@ -197,13 +199,13 @@ export class InvoiceConfirmationVMContainer {
     private initItemsTableLabelsAndValues() {
         this.itemLabel = this._thTranslation.translate('Item');
         this.qtyLabel = this._thTranslation.translate('Qty');
-        this.netUnitPriceLabel = this._thTranslation.translate('Net Unit Price');
+        this.unitPriceLabel = this._thTranslation.translate('Unit Price');
         this.vatLabel = this._thTranslation.translate('VAT');
-        this.subtotalLabel = this._thTranslation.translate('Net Subtotal');
+        this.subtotalLabel = this._thTranslation.translate('Subtotal');
 
         this.itemVMList = [];
         this.totalVat = 0;
-        this.subtotalValue = 0;
+        var subtotalValue = 0;
         _.forEach(this._invoice.itemList, (itemDO: InvoiceItemDO) => {
             if (this.displayBookingDateBreakdown(itemDO)) {
                 let bookingInvoiceItems = this.getBookingDateBreakdownItems(itemDO, this._invoice.accountingType);
@@ -211,24 +213,23 @@ export class InvoiceConfirmationVMContainer {
             }
             else {
                 var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
-                invoiceItemVM.buildFromInvoiceItemDO(itemDO, this._invoiceAggregatedData.vatList, this._invoice.accountingType);
+                invoiceItemVM.buildFromInvoiceItemDO(itemDO, this._invoiceAggregatedData.vatList, this._invoice.accountingType, this._invoiceAggregatedData.ccy);
                 invoiceItemVM.attachBookingDetailsIfNecessary(itemDO,
                     this._invoiceAggregatedData.guestList, this._invoiceAggregatedData.roomList);
                 this.itemVMList.push(invoiceItemVM);
             }
         });
 
-        this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + _.reduce(this.itemVMList, function (sum, itemVM: InvoiceItemVM) { return sum + itemVM.vat; }, 0));
-        this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + _.reduce(this.itemVMList, function (sum, itemVM: InvoiceItemVM) { return sum + itemVM.subtotal; }, 0));
+        this.totalVat = this._thUtils.roundNumber(this.totalVat + _.reduce(this.itemVMList, function (sum, itemVM: InvoiceItemVM) { return sum + itemVM.vat; }, 0), this._invoiceAggregatedData.ccy.decimalsNo);
+        var subtotalValue = this._thUtils.roundNumber(subtotalValue + _.reduce(this.itemVMList, function (sum, itemVM: InvoiceItemVM) { return sum + itemVM.subtotal; }, 0), this._invoiceAggregatedData.ccy.decimalsNo);
 
         _.each(this.invoicePayer.paymentList, (payment: InvoicePaymentDO, index: number) => {
             if (this.hasTransactionFee(payment)) {
                 let transactionFeeInvoiceItemVM = this.getTransactonFeeInvoiceItem(payment);
                 this.itemVMList.push(transactionFeeInvoiceItemVM);
 
-                this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + transactionFeeInvoiceItemVM.vat);
-                this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + transactionFeeInvoiceItemVM.subtotal);
-                this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + transactionFeeInvoiceItemVM.subtotal);
+                this.totalVat = this._thUtils.roundNumber(this.totalVat + transactionFeeInvoiceItemVM.vat, this._invoiceAggregatedData.ccy.decimalsNo);
+                this.totalValue = this._thUtils.roundNumber(subtotalValue + transactionFeeInvoiceItemVM.subtotal, this._invoiceAggregatedData.ccy.decimalsNo);
             }
         });
 
@@ -237,21 +238,21 @@ export class InvoiceConfirmationVMContainer {
             this.itemVMList[this.itemVMList.length - 1].isLastOne = true;
         }
 
-        this.subtotalValueFormatted = this._thUtils.formatNumberToTwoDecimals(this.subtotalValue);
-        this.totalVatFormatted = this._thUtils.formatNumberToTwoDecimals(this.totalVat);
+        this.totalVatFormatted = this._thUtils.formatNumber(this.totalVat, this._invoiceAggregatedData.ccy.decimalsNo);
     }
     private getTransactonFeeInvoiceItem(payment: InvoicePaymentDO): InvoiceItemVM {
-        let transactionFee = this._thUtils.roundNumberToTwoDecimals(payment.amountPlusTransactionFee - payment.amount);
+        var decimalsNo = this._invoiceAggregatedData.ccy.decimalsNo;
+        let transactionFee = this._thUtils.roundNumber(payment.amountPlusTransactionFee - payment.amount, decimalsNo);
         var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
         invoiceItemVM.qty = 1;
         invoiceItemVM.name = this._thTranslation.translate("Transaction fee");
 
         let vatValue = 0;
-        invoiceItemVM.vat = this._thUtils.roundNumberToTwoDecimals(transactionFee - (transactionFee / (1 + vatValue)));
-        invoiceItemVM.netUnitPrice = this._thUtils.roundNumberToTwoDecimals(transactionFee - invoiceItemVM.vat);
+        invoiceItemVM.vat = this._thUtils.roundNumber(transactionFee - (transactionFee / (1 + vatValue)), decimalsNo);
+        invoiceItemVM.netUnitPrice = this._thUtils.roundNumber(transactionFee - invoiceItemVM.vat, decimalsNo);
         invoiceItemVM.subtotal = invoiceItemVM.netUnitPrice;
-        invoiceItemVM.vatPercentage = this._thUtils.roundNumberToTwoDecimals(vatValue * 100);
-
+        invoiceItemVM.vatPercentage = this._thUtils.roundNumber(vatValue * 100, decimalsNo);
+        invoiceItemVM.decimalsNo = decimalsNo;
         invoiceItemVM.formatPrices();
         return invoiceItemVM;
     }
@@ -278,7 +279,7 @@ export class InvoiceConfirmationVMContainer {
             item.meta = aopItemMeta;
 
             var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
-            invoiceItemVM.buildFromInvoiceItemDO(item, this._invoiceAggregatedData.vatList, accountingType);
+            invoiceItemVM.buildFromInvoiceItemDO(item, this._invoiceAggregatedData.vatList, accountingType, this._invoiceAggregatedData.ccy);
             invoiceItemVM.attachBookingDetailsIfNecessary(itemDO,
                 this._invoiceAggregatedData.guestList, this._invoiceAggregatedData.roomList);
 
@@ -310,7 +311,7 @@ export class InvoiceConfirmationVMContainer {
             else {
                 this.paymentMethodValues[index] = this._thTranslation.translate(InvoiceConfirmationVMContainer.PAY_INVOICE_BY_AGREEMENT_STR);
             }
-            this.subtotalPerPaymentMethod[index] = this._thUtils.roundNumberToTwoDecimals(payment.amount);
+            this.subtotalPerPaymentMethod[index] = this._thUtils.roundNumber(payment.amount, this._invoiceAggregatedData.ccy.decimalsNo);
         });
     }
 
@@ -332,8 +333,8 @@ export class InvoiceConfirmationVMContainer {
 
     private initTotalValues() {
         this.totalLabel = this._thTranslation.translate('Total');
-        this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.invoicePayer.totalAmountPlusTransactionFee);
-        this.totalValueFormatted = this._thUtils.formatNumberToTwoDecimals(this.totalValue);
+        this.totalValue = this._thUtils.roundNumber(this.invoicePayer.totalAmountPlusTransactionFee, this._invoiceAggregatedData.ccy.decimalsNo);
+        this.totalValueFormatted = this._thUtils.formatNumber(this.totalValue, this._invoiceAggregatedData.ccy.decimalsNo);
     }
 
     private initHotelVatLabelAndValue() {
@@ -380,5 +381,27 @@ export class InvoiceConfirmationVMContainer {
             return value;
         }
         return InvoiceConfirmationVMContainer.DEFAULT_VALUE_IF_EMPTY;
+    }
+
+    private getNumberOfItemsPerPage(): number {
+        return InvoiceConfirmationVMContainer.ITEMS_PER_PAGE;
+    }
+
+    private getNumberOfItemsPerFirstPage(): number {
+        return InvoiceConfirmationVMContainer.ITEMS_PER_FIRST_PAGE;
+    }
+
+    private getNumberOfItemsPerLastPage(): number {
+        return InvoiceConfirmationVMContainer.ITEMS_PER_LAST_PAGE;
+    }
+
+    private getNumberOfPages(): number {
+        if (this.itemVMList.length <= InvoiceConfirmationVMContainer.ITEMS_PER_FIRST_PAGE) {
+            return 1;
+        }
+        if (this.itemVMList.length <= InvoiceConfirmationVMContainer.ITEMS_PER_FIRST_PAGE + InvoiceConfirmationVMContainer.ITEMS_PER_LAST_PAGE) {
+            return 2;
+        }
+        return 2 + Math.ceil((this.itemVMList.length - InvoiceConfirmationVMContainer.ITEMS_PER_FIRST_PAGE - InvoiceConfirmationVMContainer.ITEMS_PER_LAST_PAGE) / InvoiceConfirmationVMContainer.ITEMS_PER_PAGE);
     }
 }

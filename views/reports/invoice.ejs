@@ -91,8 +91,10 @@
         height: 100%;
         margin: 0 auto -130px; /* the bottom margin is the negative value of the footer's height */
     }
-    .footer, .push {
-        height: 130px; /* .push must be the same height as .footer */
+    .footer {
+        position: absolute;
+        bottom: 0px;
+        height: 130px;
         font-size:11px;
         line-height:17px;
         font-family: 'Roboto', sans-serif;
@@ -114,113 +116,140 @@
         padding-left: 10px;
     }
 
+    .page {
+        height: 770px;
+        min-height: 770px;
+        max-height: 770px;
+        position: relative;
+    }
+
     </style>
 </head>
 
 <body>
     <div class="invoice-box wrapper">
-        <br>
-        <table cellpadding="0" cellspacing="0">
-            <tr class="top">
-                <td colspan="5">
-                    <table>
-                        <tr>
-                            <td class="title small-line-height" width="45%">
-                                <div class="envelope-address">
-                                    <br>
-                                    <%= payerNameValue %><br>
-                                    <%if (payerAddressFirstLineValue.length > 0) {%>
-                                        <%= payerAddressFirstLineValue %><br>
+
+    <% var isFirstPage = true; %>
+    <% var currentItemIndex = 0; %>
+    <% for (var pageNo = 0; pageNo < getNumberOfPages(); pageNo++) { %>
+        <div class="page">
+        <% if (isFirstPage) { %>
+            <table cellpadding="0" cellspacing="0">
+                <tr class="top">
+                    <td colspan="5">
+                        <table>
+                            <tr>
+                                <td class="title small-line-height" width="45%">
+                                    <div class="envelope-address">
+                                        <br>
+                                        <%= payerNameValue %><br>
+                                        <%if (payerAddressFirstLineValue.length > 0) {%>
+                                            <%= payerAddressFirstLineValue %><br>
+                                        <%}%>
+                                        <%if (payerAddressSecondLineValue.length > 0) {%>
+                                            <%= payerAddressSecondLineValue %><br>
+                                        <%}%>
+                                        <%if (payerContactValue.length > 0) {%>
+                                            <%= payerContactLabel %>: <%= payerContactValue %><br>
+                                        <%}%>
+                                        <br>
+                                    </div>
+
+                                    <%if (payerVatCodeValue.length > 0 || payerGovernmentCodeValue.length > 0 || payerNotes.length > 0) {%>
+                                        <br>
                                     <%}%>
-                                    <%if (payerAddressSecondLineValue.length > 0) {%>
-                                        <%= payerAddressSecondLineValue %><br>
+
+                                    <%if (payerVatCodeValue.length > 0) {%>
+                                        <%= payerVatCodeLabel %>: <%= payerVatCodeValue %><br>
                                     <%}%>
-                                    <%if (payerContactValue.length > 0) {%>
-                                        <%= payerContactLabel %>: <%= payerContactValue %><br>
+                                    <%if (payerGovernmentCodeValue.length > 0) {%>
+                                        <%= payerGovernmentCodeLabel %>: <%= payerGovernmentCodeValue %><br>
                                     <%}%>
+                                    <%if (payerNotes.length > 0) {%>
+                                        <span class="text-details"><%= payerNotes %></span>
+                                    <%}%>
+
                                     <br>
-                                </div>
+                                    <%if (notesFromBooking.length > 0) {%>
+                                        Notes:<br>
+                                        <%= notesFromBooking %>
+                                    <% } %>
 
-                                <%if (payerVatCodeValue.length > 0 || payerGovernmentCodeValue.length > 0 || payerNotes.length > 0) {%>
-                                    <br>
-                                <%}%>
-
-                                <%if (payerVatCodeValue.length > 0) {%>
-                                    <%= payerVatCodeLabel %>: <%= payerVatCodeValue %><br>
-                                <%}%>
-                                <%if (payerGovernmentCodeValue.length > 0) {%>
-                                    <%= payerGovernmentCodeLabel %>: <%= payerGovernmentCodeValue %><br>
-                                <%}%>
-                                <%if (payerNotes.length > 0) {%>
-                                    <span class="text-details"><%= payerNotes %></span>
-                                <%}%>
-
-                                <br>
-                                <%if (notesFromBooking.length > 0) {%>
-                                    Notes:<br>
-                                    <%= notesFromBooking %>
-                                <% } %>
-
-                            </td>
-                            <td width="10%"></td>
-                            <td width="45%" style="text-align:right;">
-                                <img src="<%= hotelLogoSrcValue %>" style="max-width:100%; max-height:160px; height:auto;"><br>
-                                <%= hotelVatLabel %>: <%= hotelVatValue %><br>
-                                <%= invoiceLabel %> : <%= invoiceReference %><br>
-                                <%= dateLabel %>: <%= dateValue %><br>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr class="heading">
-                <td>
-                    <%= itemLabel %>
-                </td>
-                <td>
-                    <%= qtyLabel %>
-                </td>
-                <td>
-                    <%= netUnitPriceLabel %>
-                </td>
-                <td>
-                    <%= subtotalLabel %>
-                </td>
-                <td>
-                    <%= vatLabel %>
-                </td>
-            </tr>
-
-            <% itemVMList.forEach(function(itemVM){ %>
-                <%if (itemVM.isLastOne) {%>
-                    <tr class="item last">
-                <% } else{ %>
-                     <tr class="item">
-                <%}%>
-
-                    <td>
-                        <%= itemVM.name %>
-                        <%if (itemVM.subtitle.length > 0) {%>
-                            <br>
-                            <span class="text-details small-font"><%=itemVM.subtitle%></span>
-                        <%}%>
-                    </td>
-                    <td>
-                        <%= itemVM.qty %>
-                    </td>
-                    <td>
-                        <%= ccySymbol %><%= itemVM.netUnitPriceFormatted %>
-                    </td>
-                    <td>
-                        <%= ccySymbol %><%= itemVM.subtotalFormatted %>
-                    </td>
-                    <td>
-                        <%= ccySymbol %><%= itemVM.vatFormatted %> / <%= itemVM.vatPercentageFormatted %>%
+                                </td>
+                                <td width="10%"></td>
+                                <td width="45%" style="text-align:right;">
+                                    <img src="<%= hotelLogoSrcValue %>" style="max-width:100%; max-height:160px; height:auto;"><br>
+                                    <%= hotelVatLabel %>: <%= hotelVatValue %><br>
+                                    <%= invoiceLabel %> : <%= invoiceReference %><br>
+                                    <%= dateLabel %>: <%= dateValue %><br>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
-            <% }); %>
 
+                <tr class="heading">
+                    <td>
+                        <%= itemLabel %>
+                    </td>
+                    <td>
+                        <%= qtyLabel %>
+                    </td>
+                    <td>
+                        <%= unitPriceLabel %>
+                    </td>
+                    <td>
+                        <%= subtotalLabel %>
+                    </td>
+                    <td>
+                        <%= vatLabel %>
+                    </td>
+                </tr>
+            </table>
+        <%}%>
+        <table cellpadding="0" cellspacing="0">
+        <% var isLastPage = false; %>
+        <% if (pageNo == getNumberOfPages() - 1) { isLastPage = true; } %>
+        <% var itemsPerPage; %>
+        <% if (isFirstPage) {%>
+            <% itemsPerPage = getNumberOfItemsPerFirstPage(); %>
+            <% isFirstPage = false; %>
+        <%} else if (isLastPage) {%>
+            <% itemsPerPage = getNumberOfItemsPerLastPage(); %>
+        <%} else {%>
+            <% itemsPerPage = getNumberOfItemsPerPage(); %>
+        <%}%>
+        <% for (var itemPerPageIndex = 0; itemPerPageIndex < itemsPerPage; itemPerPageIndex++) { %>
+            <% if (currentItemIndex >= itemVMList.length) {break;} %>
+            <% var itemVM = itemVMList[currentItemIndex++]; %>
+            <%if (itemVM.isLastOne) {%>
+                <tr class="item last">
+            <% } else{ %>
+                <tr class="item">
+            <%}%>
+
+                <td>
+                    <%= itemVM.name %>
+                    <%if (itemVM.subtitle.length > 0) {%>
+                        <br>
+                        <span class="text-details small-font"><%=itemVM.subtitle%></span>
+                    <%}%>
+                </td>
+                <td>
+                    <%= itemVM.qty %>
+                </td>
+                <td>
+                    <%= ccySymbol %><%= itemVM.unitPriceInclVatFormatted %>
+                </td>
+                <td>
+                    <%= ccySymbol %><%= itemVM.subtotalInclVatFormatted %>
+                </td>
+                <td>
+                    <%= ccySymbol %><%= itemVM.vatFormatted %> / <%= itemVM.vatPercentageFormatted %>%
+                </td>
+            </tr>
+        <%}%>
+        <% if (isLastPage) { %>
             <% paymentMethodValues.forEach(function(paymentMethod, index) { %>
             <tr class="total">
                 <td></td>
@@ -238,7 +267,6 @@
             <tr class="total">
                 <td></td>
                 <td colspan="4">
-                   <%= subtotalLabel %>: <%= ccySymbol %><%= subtotalValueFormatted %> <br>
                    <%= vatLabel %>: <%= ccySymbol %><%= totalVatFormatted %> <br>
                    <%= totalLabel %>: <%= ccySymbol %><%= totalValueFormatted %>
                 </td>
@@ -264,39 +292,42 @@
 
                 </td>
             </tr>
+        <%}%>
         </table>
-    </div>
-    <div class="footer">
-        <div style="text-align:center; width:100%; padding-top: 20px; padding-left: 35px; padding-right: 35px;">
-            <table style="width:93%;">
-                <tr>
-                    <td witdh="0%"></td>
-                    <td witdh="33%" class="border-right">
-                        <%= hotelNameValue %>
-                    </td>
-                    <td witdh="33%" class="border-right">
-                        <%= hotelAddressFirstLineValue %><br>
-                    </td>
-                    <td witdh="33%">
-                        <%= hotelAddressSecondLineValue %><br>
-                    </td>
-                    <td witdh="0%"></td>
-                </tr>
-                <tr>
-                    <td witdh="0%"></td>
-                    <td witdh="33%" class="border-right">
-                        <%= hotelPhoneLabel %>: <%= hotelPhoneValue %>
-                    </td>
-                    <td witdh="33%" class="border-right">
-                        <%= hotelEmailLabel %>: <%= hotelEmailValue %>
-                    </td>
-                    <td witdh="33%">
-                        <%= hotelWebsite %><br>
-                    </td>
-                    <td witdh="0%"></td>
-                </tr>
-            </table>
+        <div class="footer">
+            <div style="text-align:center; width:100%; padding-top: 20px; padding-left: 35px; padding-right: 35px;">
+                <table style="width:93%;">
+                    <tr>
+                        <td witdh="0%"></td>
+                        <td witdh="33%" class="border-right">
+                            <%= hotelNameValue %>
+                        </td>
+                        <td witdh="33%" class="border-right">
+                            <%= hotelAddressFirstLineValue %><br>
+                        </td>
+                        <td witdh="33%">
+                            <%= hotelAddressSecondLineValue %><br>
+                        </td>
+                        <td witdh="0%"></td>
+                    </tr>
+                    <tr>
+                        <td witdh="0%"></td>
+                        <td witdh="33%" class="border-right">
+                            <%= hotelPhoneLabel %>: <%= hotelPhoneValue %>
+                        </td>
+                        <td witdh="33%" class="border-right">
+                            <%= hotelEmailLabel %>: <%= hotelEmailValue %>
+                        </td>
+                        <td witdh="33%">
+                            <%= hotelWebsite %><br>
+                        </td>
+                        <td witdh="0%"></td>
+                    </tr>
+                </table>
+            </div>
         </div>
+        </div>
+        <%}%>
     </div>
 </body>
 </html>

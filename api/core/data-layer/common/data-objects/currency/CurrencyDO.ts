@@ -9,8 +9,9 @@ export class CurrencyDO extends BaseDO {
     nativeSymbol: string;
     name: string;
     namePlural: string;
+    decimalsNo: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["code", "symbol", "nativeSymbol", "name", "namePlural"];
+        return ["code", "symbol", "nativeSymbol", "name", "namePlural", "decimalsNo"];
     }
 }

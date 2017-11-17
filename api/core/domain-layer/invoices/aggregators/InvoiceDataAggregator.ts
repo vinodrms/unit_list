@@ -145,9 +145,9 @@ export class InvoiceDataAggregator {
     private buildInvoiceAggregatedDataContainerFromLoadedData(): InvoiceAggregatedData {
         var invoiceAggregatedData = new InvoiceAggregatedData(this._sessionContext);
         invoiceAggregatedData.hotel = this._hotel;
-        invoiceAggregatedData.ccySymbol = _.find(this._currencyList, (ccy: CurrencyDO) => {
+        invoiceAggregatedData.ccy = _.find(this._currencyList, (ccy: CurrencyDO) => {
             return ccy.code === this._hotel.ccyCode;
-        }).symbol;
+        });
         invoiceAggregatedData.invoice = this._invoice;
         invoiceAggregatedData.payerCustomer = this._payerCustomer;
         invoiceAggregatedData.addOnProductList = this._addOnProductList;

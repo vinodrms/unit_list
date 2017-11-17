@@ -13,6 +13,7 @@ import { MongoBookingRepository } from "../../../../../data-layer/bookings/repos
 import { MongoInvoiceRepository } from '../../../../../data-layer/invoices/repositories/mongo/MongoInvoiceRepository';
 import { MongoInvoiceRepositoryWithBookingPriceLink } from '../../../../../data-layer/invoices/repositories/mongo/decorators/MongoInvoiceRepositoryWithBookingPriceLink';
 import { MongoAddOnProductRepository } from '../../../../../data-layer/add-on-products/repositories/mongo/MongoAddOnProductRepository';
+import { MongoSettingsRepository } from "../../../../../data-layer/settings/repositories/mongo/MongoSettingsRepository";
 
 /**
  * Extend this class when the multi update can be made with a simple MongoDB Query
@@ -28,6 +29,7 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
     protected legacyInvoiceGroupsRepository: LegacyMongoInvoiceGroupsRepository;
     protected invoiceRepository: MongoInvoiceRepositoryWithBookingPriceLink;
     protected bookingRepository: MongoBookingRepository;
+    protected settingsRepository: MongoSettingsRepository;
 
     constructor() {
         this.thUtils = new ThUtils();
@@ -40,6 +42,7 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
         this.legacyInvoiceGroupsRepository = new LegacyMongoInvoiceGroupsRepository(this.hotelRepository);
         this.invoiceRepository = new MongoInvoiceRepositoryWithBookingPriceLink(new MongoInvoiceRepository(new MongoHotelRepository()), new MongoBookingRepository(), new MongoCustomerRepository());
         this.bookingRepository = new MongoBookingRepository();
+        this.settingsRepository = new MongoSettingsRepository();
     }
 
     public apply(): Promise<boolean> {

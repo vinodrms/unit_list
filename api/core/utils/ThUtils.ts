@@ -40,19 +40,13 @@ export class ThUtils {
 		return diffArray.length == 0;
 	}
 	public roundNumberToTwoDecimals(inputNumber: number): number {
-		if (this.isUndefinedOrNull(inputNumber) || !_.isNumber(inputNumber)) {
-			return inputNumber;
-		}
-		return Math.round(inputNumber * 100) / 100;
+		return this.roundNumber(inputNumber, 2);
 	}
 	public roundNumberToNearestInteger(inputNumber: number): number {
 		return Math.round(inputNumber);
 	}
 	public formatNumberToTwoDecimals(value: number): any {
-		if (!value) {
-			return value;
-		}
-		return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+		return this.formatNumber(value, 2);
 	}
 	public getArrayAverage(array: INumber[]): number {
 		if (!_.isArray(array) || array.length == 0) {
@@ -72,5 +66,17 @@ export class ThUtils {
 	public getDateFromUTCTimestamp(timestamp: number): Date {
 		let date = new Date(timestamp * 1000); 
 		return date;
+	}
+	public formatNumber(value: number, decimalsNo: number): any {
+		if (!value) {
+			return value;
+		}
+		return value.toLocaleString('en-US', { minimumFractionDigits: decimalsNo, maximumFractionDigits: decimalsNo });
+	}
+	public roundNumber(inputNumber: number, decimalsNo: number): number {
+		if (this.isUndefinedOrNull(inputNumber) || !_.isNumber(inputNumber)) {
+			return inputNumber;
+		}
+		return Math.round(inputNumber * Math.pow(10, decimalsNo)) / Math.pow(10, decimalsNo);
 	}
 }
