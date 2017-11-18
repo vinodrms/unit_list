@@ -30,6 +30,8 @@
         </div>
     </div>
     <invoice-edit
+        class="full-height"
+        customScroll
         [invoiceVM]="currentInvoice"
         [invoiceOperationsPageData]="invoiceOperationsPageData"
         (invoiceChanged)="emitInvoiceChanged($event)"
