@@ -189,19 +189,19 @@
                 </tr>
 
                 <tr class="heading">
-                    <td>
+                    <td width="40%">
                         <%= itemLabel %>
                     </td>
-                    <td>
+                    <td width="10%">
                         <%= qtyLabel %>
                     </td>
-                    <td>
+                    <td width="15%">
                         <%= unitPriceLabel %>
                     </td>
-                    <td>
+                    <td width="15%">
                         <%= subtotalLabel %>
                     </td>
-                    <td>
+                    <td width="20%">
                         <%= vatLabel %>
                     </td>
                 </tr>
@@ -228,23 +228,23 @@
                 <tr class="item">
             <%}%>
 
-                <td>
+                <td width="40%">
                     <%= itemVM.name %>
                     <%if (itemVM.subtitle.length > 0) {%>
                         <br>
                         <span class="text-details small-font"><%=itemVM.subtitle%></span>
                     <%}%>
                 </td>
-                <td>
+                <td width="10%">
                     <%= itemVM.qty %>
                 </td>
-                <td>
+                <td width="15%">
                     <%= ccySymbol %><%= itemVM.unitPriceInclVatFormatted %>
                 </td>
-                <td>
+                <td width="15%">
                     <%= ccySymbol %><%= itemVM.subtotalInclVatFormatted %>
                 </td>
-                <td>
+                <td width="20%">
                     <%= ccySymbol %><%= itemVM.vatFormatted %> / <%= itemVM.vatPercentageFormatted %>%
                 </td>
             </tr>
