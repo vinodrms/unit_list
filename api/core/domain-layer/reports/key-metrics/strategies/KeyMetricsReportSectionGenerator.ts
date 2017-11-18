@@ -10,6 +10,13 @@ import { KeyMetricsResultItem, KeyMetric, IKeyMetricValueGroup } from '../../../
 import { IKeyMetricValue, KeyMetricValueType } from '../../../yield-manager/key-metrics/utils/values/IKeyMetricValue';
 import { ThPeriodDO, ThPeriodType } from '../period-converter/ThPeriodDO';
 import { IThDateToThPeriodConverter } from '../period-converter/IThDateToThPeriodConverter';
+import { InventoryKeyMetric } from "../../../yield-manager/key-metrics/utils/values/InventoryKeyMetric";
+import { PercentageKeyMetric } from "../../../yield-manager/key-metrics/utils/values/PercentageKeyMetric";
+import { PriceKeyMetric } from "../../../yield-manager/key-metrics/utils/values/PriceKeyMetric";
+import { CounterKeyMetric } from "../../../yield-manager/key-metrics/utils/values/CounterKeyMetric";
+import { KeyMetricType } from "../../../yield-manager/key-metrics/utils/KeyMetricType";
+
+import _ = require('underscore');
 
 export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStrategy {
 	// use to keep the chronological order of the results 
@@ -51,6 +58,7 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 			}
 			this._thDateToThPeriodMap[thDate.toString()] = period;
 		});
+		headerValues.push(this._appContext.thTranslate.translate("Total"));
 		return {
 			display: true,
 			values: headerValues
@@ -89,9 +97,41 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 			for (var i = 0; i < metric.aggregatedValueList.length; i++) {				
 				row.push(metric.aggregatedValueList[i].metricValue.getDisplayValue(this._periodType));
 			}
+			row.push(this.getSummarizedValue(metric).getDisplayValue(this._periodType));
 			data.push(row);
 			row = [];
 		});
 		resolve(data);
+	}
+
+	private getSummarizedValue(metric: KeyMetric): IKeyMetricValue {
+		switch (metric.valueType) {
+			case KeyMetricValueType.Percentage:
+				var avgPercentage = new PercentageKeyMetric();
+				var sum = _.reduce(metric.valueList, (s, value: PercentageKeyMetric) => { return s + value.percentage; }, 0);
+				avgPercentage.percentage = sum/metric.valueList.length;
+				return avgPercentage;
+			case KeyMetricValueType.Inventory:
+				var totalInventory = new InventoryKeyMetric();
+				var price = _.reduce(metric.valueList, (s, value: InventoryKeyMetric) => { return s + value.total; }, 0);
+				var available = _.reduce(metric.valueList, (s, value: InventoryKeyMetric) => { return s + value.available; }, 0);
+				totalInventory.total = this._thUtils.roundNumberToNearestInteger(price);
+				totalInventory.available = this._thUtils.roundNumberToNearestInteger(available);
+				return totalInventory;
+			case KeyMetricValueType.Price:
+				var totalPrice = new PriceKeyMetric();
+				var price = _.reduce(metric.valueList, (s, value: PriceKeyMetric) => { return s + value.price; }, 0);
+				if (metric.type === KeyMetricType.TotalRevPar || metric.type === KeyMetricType.TotalAvgRate) {
+					//for these metrics, get the average
+					price = price/metric.valueList.length;
+				}
+				totalPrice.price = this._thUtils.roundNumberToNearestInteger(price);
+				return totalPrice;
+			case KeyMetricValueType.Counter:
+				var totalCounter = new CounterKeyMetric();
+				var counter = _.reduce(metric.valueList, (s, value: CounterKeyMetric) => { return s + value.total; }, 0);
+				totalCounter.total = this._thUtils.roundNumberToNearestInteger(counter);
+				return totalCounter;
+		}
 	}
 }
