@@ -10,6 +10,7 @@ import { RoomDO } from '../../../data-layer/rooms/data-objects/RoomDO';
 import { InvoiceItemDO } from "../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
 import { AddOnProductInvoiceItemMetaDO } from "../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
 import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
+import { CurrencyDO } from "../../../data-layer/common/data-objects/currency/CurrencyDO";
 
 export class InvoiceAggregatedData {
     private static SHARED_INVOICE_ITEM_DISPLAY_NAME = "Shared Payment";
@@ -17,7 +18,7 @@ export class InvoiceAggregatedData {
     private _thUtils: ThUtils;
 
     hotel: HotelDO;
-    ccySymbol: string;
+    ccy: CurrencyDO;
     private _invoice: InvoiceDO;
     public get invoice(): InvoiceDO {
         return this._invoice;

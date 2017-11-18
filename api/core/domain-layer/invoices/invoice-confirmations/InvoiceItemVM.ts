@@ -7,6 +7,7 @@ import { InvoiceAccountingType } from '../../../data-layer/invoices/data-objects
 import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 import { BookingPriceDO } from "../../../data-layer/bookings/data-objects/price/BookingPriceDO";
 import { RoomDO } from "../../../data-layer/rooms/data-objects/RoomDO";
+import { CurrencyDO } from "../../../data-layer/common/data-objects/currency/CurrencyDO";
 
 export class InvoiceItemVM {
     private _thUtils: ThUtils;
@@ -17,6 +18,9 @@ export class InvoiceItemVM {
     netUnitPrice: number;
     netUnitPriceFormatted: string;
 
+    unitPriceInclVat: number;
+    unitPriceInclVatFormatted: string;
+
     vat: number;
     vatFormatted: string;
 
@@ -26,9 +30,14 @@ export class InvoiceItemVM {
     subtotal: number;
     subtotalFormatted: string;
 
+    subtotalInclVat: number;
+    subtotalInclVatFormatted: string;
+
     isLastOne: boolean;
 
     subtitle: string;
+
+    decimalsNo: number;
 
     constructor(private translation: ThTranslation) {
         this._thUtils = new ThUtils();
@@ -36,16 +45,18 @@ export class InvoiceItemVM {
         this.subtitle = "";
     }
 
-    public buildFromInvoiceItemDO(invoiceItemDO: InvoiceItemDO, vatTaxList: TaxDO[], accountingType: InvoiceAccountingType) {
+    public buildFromInvoiceItemDO(invoiceItemDO: InvoiceItemDO, vatTaxList: TaxDO[], accountingType: InvoiceAccountingType, ccy?: CurrencyDO) {
         this.name = invoiceItemDO.meta.getDisplayName(this.translation);
         this.qty = invoiceItemDO.meta.getNumberOfItems() * this.getAccountingFactor(accountingType);
-
+        this.decimalsNo = (ccy) ? ccy.decimalsNo : 2;
         var vatValue = this.getVatValue(invoiceItemDO.meta.getVatId(), vatTaxList);
-        this.vatPercentage = this._thUtils.roundNumberToTwoDecimals(vatValue * 100);
-        this.netUnitPrice = this._thUtils.roundNumberToTwoDecimals(invoiceItemDO.meta.getUnitPrice() / (1 + vatValue));
-        var unitVat = this._thUtils.roundNumberToTwoDecimals(invoiceItemDO.meta.getUnitPrice() - this.netUnitPrice);
-        this.vat = this._thUtils.roundNumberToTwoDecimals(unitVat * this.qty);
-        this.subtotal = this._thUtils.roundNumberToTwoDecimals(this.qty * this.netUnitPrice);
+        this.vatPercentage = this._thUtils.roundNumber(vatValue * 100, 2);
+        this.unitPriceInclVat = this._thUtils.roundNumber(invoiceItemDO.meta.getUnitPrice(), this.decimalsNo);
+        this.netUnitPrice = this._thUtils.roundNumber(invoiceItemDO.meta.getUnitPrice() / (1 + vatValue), this.decimalsNo);
+        var unitVat = this._thUtils.roundNumber(invoiceItemDO.meta.getUnitPrice() - this.netUnitPrice, this.decimalsNo);
+        this.vat = this._thUtils.roundNumber(unitVat * this.qty, this.decimalsNo);
+        this.subtotal = this._thUtils.roundNumber(this.qty * this.netUnitPrice, this.decimalsNo);
+        this.subtotalInclVat = this._thUtils.roundNumber(this.qty * (this.netUnitPrice + unitVat), this.decimalsNo);
 
         this.formatPrices();
     }
@@ -97,10 +108,12 @@ export class InvoiceItemVM {
         return 1;
     }
     public formatPrices() {
-        this.vatPercentageFormatted = this._thUtils.formatNumberToTwoDecimals(this.vatPercentage);
-        this.netUnitPriceFormatted = this._thUtils.formatNumberToTwoDecimals(this.netUnitPrice);
-        this.vatFormatted = this._thUtils.formatNumberToTwoDecimals(this.vat);
-        this.subtotalFormatted = this._thUtils.formatNumberToTwoDecimals(this.subtotal);
+        this.vatPercentageFormatted = this._thUtils.formatNumber(this.vatPercentage, 2);
+        this.netUnitPriceFormatted = this._thUtils.formatNumber(this.netUnitPrice, this.decimalsNo);
+        this.vatFormatted = this._thUtils.formatNumber(this.vat, this.decimalsNo);
+        this.subtotalFormatted = this._thUtils.formatNumber(this.subtotal, this.decimalsNo);
+        this.unitPriceInclVatFormatted = this._thUtils.formatNumber(this.unitPriceInclVat, this.decimalsNo);
+        this.subtotalInclVatFormatted = this._thUtils.formatNumber(this.subtotalInclVat, this.decimalsNo);
     }
 
     private getVatValue(vatId: string, vatTaxList: TaxDO[]): number {

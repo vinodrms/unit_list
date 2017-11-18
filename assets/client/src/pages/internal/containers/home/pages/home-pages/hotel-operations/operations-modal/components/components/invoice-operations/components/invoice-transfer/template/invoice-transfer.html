@@ -14,6 +14,8 @@
                 </div>
             </div>
             <invoice-edit
+                class="full-height"
+                customScroll
                 [invoiceVM]="currentInvoice"
                 [invoiceOperationsPageData]="invoiceOperationsPageData"
                 [disableInvoiceSplit]="true"
@@ -47,6 +49,8 @@
                 <i *ngIf="hasInvoiceRemoveRight(transferInvoice)" class="fa fa-trash invoice-change-button pull-right clickable" title="{{ 'Delete this invoice' | translate }}" (click)="deleteTransferInvoice()"></i>
             </div>
             <invoice-edit
+                class="full-height"
+                customScroll
                 [invoiceVM]="transferInvoice"
                 [invoiceOperationsPageData]="invoiceOperationsPageData"
                 [disableInvoiceSplit]="true"
