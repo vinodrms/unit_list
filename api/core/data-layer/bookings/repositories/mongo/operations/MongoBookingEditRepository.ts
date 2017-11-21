@@ -1,3 +1,4 @@
+import _ = require("underscore");
 import { BookingMetaRepoDO, BookingGroupMetaRepoDO, BookingItemMetaRepoDO } from "../../IBookingRepository";
 import { BookingDO } from "../../../data-objects/BookingDO";
 import { ThError } from "../../../../../utils/th-responses/ThError";
@@ -49,6 +50,7 @@ export class MongoBookingEditRepository extends MongoRepository {
         meta: BookingMetaRepoDO, booking: BookingDO) {
         booking.hotelId = meta.hotelId;
         booking.versionId = 0;
+        this.prepareForSave(booking);
 
         this.createDocument(booking,
             (err: Error) => {
@@ -98,6 +100,7 @@ export class MongoBookingEditRepository extends MongoRepository {
         return Promise.all(promiseList);
     }
     public updateBooking(meta: BookingMetaRepoDO, itemMeta: BookingItemMetaRepoDO, booking: BookingDO): Promise<BookingDO> {
+        this.prepareForSave(booking);
         return this.findAndModifyBooking(meta, itemMeta, {},
             {
                 "status": booking.status,
@@ -163,5 +166,11 @@ export class MongoBookingEditRepository extends MongoRepository {
                 resolve(this.helper.buildBookingDOFrom(updatedDBBooking));
             }
         );
+    }
+
+    private prepareForSave(booking: BookingDO) {
+        if (_.isArray(booking.customerIdList)) {
+            booking.customerIdList = _.uniq(booking.customerIdList);
+        }
     }
 }
