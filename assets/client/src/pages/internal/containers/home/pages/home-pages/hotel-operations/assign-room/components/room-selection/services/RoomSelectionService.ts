@@ -19,6 +19,8 @@ import { BookingsDO } from '../../../../../../../../../services/bookings/data-ob
 import { AssignableRoomVMContainer } from './view-models/AssignableRoomVMContainer';
 import { AssignableRoomVMBuilder } from './view-models/AssignableRoomVMBuilder';
 import { AssignableRoomVM } from './view-models/AssignableRoomVM';
+import { SortOptions } from "../../../../../../../../../services/common/ILazyLoadRequestService";
+import { AssignableRoomVMSorter } from "../utils/AssignableRoomVMSorter";
 
 @Injectable()
 export class RoomSelectionService extends ASinglePageRequestService<AssignableRoomVM> {
@@ -27,6 +29,8 @@ export class RoomSelectionService extends ASinglePageRequestService<AssignableRo
     private _checkedInBookings: BookingsDO;
     private _bookingRoomCategoryStats: RoomCategoryStatsDO;
     private _assignableRoomVMContainer: AssignableRoomVMContainer;
+    private sortOptions: SortOptions;
+    private assignableRoomVMSorter: AssignableRoomVMSorter;
 
     constructor(private _appContext: AppContext,
         private _modalInput: AssignRoomModalInput,
@@ -36,6 +40,7 @@ export class RoomSelectionService extends ASinglePageRequestService<AssignableRo
         private _bookingOccupancyService: BookingOccupancyService) {
         super();
         this._assignableRoomVMContainer = new AssignableRoomVMContainer([]);
+        this.assignableRoomVMSorter = new AssignableRoomVMSorter();
     }
 
     protected getPageItemList(): Observable<AssignableRoomVM[]> {
@@ -45,6 +50,7 @@ export class RoomSelectionService extends ASinglePageRequestService<AssignableRo
     }
 
     public getRoomsWithOccupancyVM(): Observable<AssignableRoomVMContainer> {
+        this.sortOptions = null;
         return Observable.combineLatest(
             this._roomsService.getRoomList(),
             this._eagerBookingsService.getBooking(this._modalInput.assignRoomParam.bookingId),
@@ -106,5 +112,14 @@ export class RoomSelectionService extends ASinglePageRequestService<AssignableRo
     }
     public set assignableRoomVMContainer(asignableRoomVMContainer: AssignableRoomVMContainer) {
         this._assignableRoomVMContainer = asignableRoomVMContainer;
+    }
+    public sort(sortOptions: SortOptions) {
+        this.sortOptions = sortOptions;
+        this.assignableRoomVMContainer.assignableRoomVMList = this.assignableRoomVMSorter.sortRoomsBy(this.assignableRoomVMContainer.assignableRoomVMList, sortOptions);
+        this.refreshData();
+    }
+
+    public getSortedOptions(): SortOptions {
+        return this.sortOptions;
     }
 }

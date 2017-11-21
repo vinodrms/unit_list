@@ -32,7 +32,8 @@ export class RoomSelectionTableMetaBuilderService {
                         objectPropertyId: "roomCategoryName",
                         propertyType: TablePropertyType.StringType,
                         showInCollapsedView: false,
-                        normalStyle: "up-col-25p left"
+                        normalStyle: "up-col-25p left selectable-row",
+                        isSortable: true
                     }
                 },
                 {
@@ -46,7 +47,8 @@ export class RoomSelectionTableMetaBuilderService {
                             baby: "B"
                         },
                         showInCollapsedView: false,
-                        normalStyle: "up-col-20p center"
+                        normalStyle: "up-col-20p center selectable-row",
+                        isSortable: true
                     }
                 },
                 {
