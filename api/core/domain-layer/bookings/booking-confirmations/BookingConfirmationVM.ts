@@ -58,6 +58,8 @@ export class BookingConfirmationVM {
     constraints: string;
     cancellationPolicyAndPenalty: string;
 
+    confirmationNotes: string;
+
     constructor(private _thTranslation: ThTranslation) {
         this._thUtils = new ThUtils();
         this._isoWeekDayUtils = new ISOWeekDayUtils();
@@ -76,6 +78,7 @@ export class BookingConfirmationVM {
         this.initGuests();
         this.initConstraintsDisplayText();
         this.initCancellationPolicy();
+        this.initConfirmationNotes();
     }
 
     private initBookingReferences() {
@@ -245,5 +248,13 @@ export class BookingConfirmationVM {
 
     public get hasReservedAops(): boolean {
         return this.reservedAops.length > 0;
+    }
+
+    public initConfirmationNotes() {
+        this.confirmationNotes = this._bookingAggregatedData.booking.confirmationNotes;
+    }
+
+    public get hasConfirmationNotes(): boolean {
+        return this.confirmationNotes.length > 0;
     }
 }

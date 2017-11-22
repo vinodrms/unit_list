@@ -28,6 +28,7 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
     bookingConfirmationsBlocked: boolean;
     showMergeInvoiceOption: boolean;
 
+
     constructor(private _appContext: AppContext, private _bookingCartService: BookingCartService,
         private _cartTableMetaBuilder: BookingCartTableMetaBuilderService, private _bookingTableUtilsService: BookingTableUtilsService,
         private _wizardEmailConfigStepService: BookingEmailConfigStepService) {
@@ -112,5 +113,16 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
     }
     public set mergeInvoice(value: boolean) {
         this._wizardEmailConfigStepService.mergeInvoice = value;
+    }
+
+    public get confirmationNotes(): string {
+        return this._wizardEmailConfigStepService.bookingConfirmationNotes;
+    }
+    public set confirmationNotes(value: string) {
+        this._wizardEmailConfigStepService.bookingConfirmationNotes = value;
+    }
+
+    public confirmationNotesAreEmpty(): boolean {
+        return !this._wizardEmailConfigStepService.bookingConfirmationNotes || this._wizardEmailConfigStepService.bookingConfirmationNotes.length == 0;
     }
 }

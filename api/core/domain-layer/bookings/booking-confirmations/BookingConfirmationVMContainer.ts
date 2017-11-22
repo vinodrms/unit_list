@@ -49,6 +49,7 @@ export class BookingConfirmationVMContainer {
     bodyGuestsLabel: string;
     bodyCancellationPolicyLabel: string;
     bodyConstraintsLabel: string;
+    bodyConfirmationNotesLabel: string;
 
     constructor(private _thTranslation: ThTranslation) {
         this._thUtils = new ThUtils();
@@ -99,6 +100,7 @@ export class BookingConfirmationVMContainer {
         this.bodyGuestsLabel = this._thTranslation.translate('Guests');
         this.bodyCancellationPolicyLabel = this._thTranslation.translate('Cancellation Policy');
         this.bodyConstraintsLabel = this._thTranslation.translate('Constraints');
+        this.bodyConfirmationNotesLabel = this._thTranslation.translate('Notes');
     }
 
     private initLogoSrcs() {

@@ -29,6 +29,7 @@ export class BookingItemDO {
     invoiceNotes: string;
     travelActivityType: TravelActivityType;
     travelType: TravelType;
+    confirmationNotes: string;
 
     public static buildFromBookingDO(bookingDO: BookingDO): BookingItemDO {
         let bookingItemDO = new BookingItemDO();
@@ -44,6 +45,7 @@ export class BookingItemDO {
         bookingItemDO.invoiceNotes = bookingDO.invoiceNotes;
         bookingItemDO.travelActivityType = bookingDO.travelActivityType;
         bookingItemDO.travelType = bookingDO.travelType;
+        bookingItemDO.confirmationNotes = bookingDO.confirmationNotes;
         return bookingItemDO;
     }
 }
@@ -53,6 +55,7 @@ export class AddBookingItemsDO {
     bookingList: BookingItemDO[];
     confirmationEmailList: EmailDistributionDO[];
     mergeInvoice: boolean;
+    confirmationNotes?: string = "";
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
@@ -152,6 +155,10 @@ export class AddBookingItemsDO {
             {
                 key: "mergeInvoice",
                 validationStruct: new PrimitiveValidationStructure(new BooleanValidationRule())
+            },
+            {
+                key: "confirmationNotes",
+                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             }
         ]);
     }

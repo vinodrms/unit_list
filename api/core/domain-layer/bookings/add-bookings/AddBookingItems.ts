@@ -159,7 +159,7 @@ export class AddBookingItems {
             }
             var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, bookingItemsConverterParams);
 
-            return bookingItemsConverter.convert(this._addBookingItems.bookingList, this._inputChannel, this._addBookingItems.mergeInvoice);
+            return bookingItemsConverter.convert(this._addBookingItems.bookingList, this._inputChannel, this._addBookingItems.mergeInvoice, this._addBookingItems.confirmationNotes);
         }).then((convertedBookingList: BookingDO[]) => {
             this._bookingList = convertedBookingList;
             this._noOfRooms = this._bookingList.length;

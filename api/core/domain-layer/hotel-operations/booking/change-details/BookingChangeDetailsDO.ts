@@ -16,6 +16,7 @@ export class BookingChangeDetailsDO {
     fileAttachmentList: FileAttachmentDO[];
     travelActivityType: TravelActivityType;
     travelType: TravelType;
+    confirmationNotes: string;
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
@@ -59,6 +60,10 @@ export class BookingChangeDetailsDO {
             {
                 key: "travelType",
                 validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([TravelType.Individual, TravelType.Group]))
+            },
+            {
+                key: "confirmationNotes",
+                validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
             },
         ]);
     }

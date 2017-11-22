@@ -31,6 +31,12 @@
         			<i class="fa fa-info-circle"></i> {{ 'When a company/travel agent on a booking has booking confirmations disabled, booking confirmations are blocked for that booking.' | translate }}
     			</small>
 			</div>
+            <div class="col-sm-12 col-xs-12 booking-details-header">
+                <span class="first-line"><i class="fa fa-sticky-note"></i> {{ 'Confirmation Notes' | translate }}</span>
+            </div>
+            <div class="col-xs-12 padding-top-10px">
+                <textarea class="form-control notes" [(ngModel)]="confirmationNotes" name="confirmationNotes"></textarea>
+            </div>
 		</div>
 	</div>
 </div>

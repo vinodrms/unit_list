@@ -107,7 +107,8 @@ export class ReportsTestHelper {
             notes: "This is an automatic booking",
             invoiceNotes: "This is an automatic booking - invoice notes",
             travelActivityType: TravelActivityType.Leisure,
-            travelType: TravelType.Individual
+            travelType: TravelType.Individual,
+            confirmationNotes: "This is an automatic booking - confirmation notes",
         }
 
     }
