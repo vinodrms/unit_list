@@ -23,7 +23,8 @@ export class RoomSelectionTableMetaBuilderService {
                         propertyType: TablePropertyType.StringType,
                         showInCollapsedView: true,
                         normalStyle: "up-col-25p left",
-                        collapsedStyle: "up-col-70p left"
+                        collapsedStyle: "up-col-70p left",
+                        isSortable: true
                     }
                 },
                 {

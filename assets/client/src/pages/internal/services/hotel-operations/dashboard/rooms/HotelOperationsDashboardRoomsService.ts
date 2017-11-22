@@ -82,14 +82,18 @@ export class HotelOperationsDashboardRoomsService extends ARequestService<RoomIt
      * Most users expect their rooms sorted by the numbers from their names
      */
     private compareRoomNames(r1: RoomDO, r2: RoomDO): number {
-        let r1Value = this.getRoomNameNumber(r1.name);
-        let r2Value = this.getRoomNameNumber(r2.name);
+        let r1Value = HotelOperationsDashboardRoomsService.getRoomNameNumber(r1.name);
+        let r2Value = HotelOperationsDashboardRoomsService.getRoomNameNumber(r2.name);
         if (r1Value != -1 && r2Value != -1) {
             return r1Value > r2Value ? 1 : -1;
         }
         return r1.name > r2.name ? 1 : -1;
     }
-    private getRoomNameNumber(roomName: string): number {
+    /**
+     * Tries to extract the number from the room's name; returns -1 if no number is found.
+     * @param roomName The name of the room
+     */
+    public static getRoomNameNumber(roomName: string): number {
         let roomNameDigits: string = roomName.replace(/\D/g, '');
         if (roomNameDigits.length > 0) {
             let value = parseInt(roomNameDigits);

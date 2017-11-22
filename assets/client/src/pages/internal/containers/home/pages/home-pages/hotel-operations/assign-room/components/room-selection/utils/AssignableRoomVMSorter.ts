@@ -1,9 +1,9 @@
+import * as _ from "underscore";
 import { SortOptions, SortOrder } from "../../../../../../../../../services/common/ILazyLoadRequestService";
 import { ConfigCapacityDO } from "../../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO";
 import { RoomVM } from "../../../../../../../../../services/rooms/view-models/RoomVM";
 import { AssignableRoomVM } from "../services/view-models/AssignableRoomVM";
-
-import * as _ from "underscore";
+import { HotelOperationsDashboardRoomsService } from "../../../../../../../../../services/hotel-operations/dashboard/rooms/HotelOperationsDashboardRoomsService";
 
 export class AssignableRoomVMSorter {
     constructor() {
@@ -17,6 +17,11 @@ export class AssignableRoomVMSorter {
             }
             if (sortOptions.objectPropertyId === 'roomCategoryName') {
                 return assignableRoomVM.roomVM.category.displayName;
+            }
+            if (sortOptions.objectPropertyId === 'roomName') {
+                let roomName = assignableRoomVM.roomVM.room.name;
+                let roomNumber = HotelOperationsDashboardRoomsService.getRoomNameNumber(roomName);
+                return roomNumber < 0 ? roomName : roomNumber;
             }
             return assignableRoomVM[sortOptions.objectPropertyId];
         });
