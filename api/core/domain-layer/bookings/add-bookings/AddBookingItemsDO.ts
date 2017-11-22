@@ -55,7 +55,7 @@ export class AddBookingItemsDO {
     bookingList: BookingItemDO[];
     confirmationEmailList: EmailDistributionDO[];
     mergeInvoice: boolean;
-    confirmationNotes?: string = "";
+    confirmationNotes: string;
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
@@ -158,7 +158,7 @@ export class AddBookingItemsDO {
             },
             {
                 key: "confirmationNotes",
-                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+                validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
             }
         ]);
     }

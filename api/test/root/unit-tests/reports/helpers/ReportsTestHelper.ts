@@ -71,7 +71,8 @@ export class ReportsTestHelper {
         return {
             bookingList: bookingItemList,
             confirmationEmailList: [],
-            mergeInvoice: false
+            mergeInvoice: false,
+            confirmationNotes: ""
         }
     }
 

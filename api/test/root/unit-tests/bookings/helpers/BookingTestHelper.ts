@@ -70,7 +70,8 @@ export class BookingTestHelper {
         return {
             bookingList: bookingItemList,
             confirmationEmailList: [],
-            mergeInvoice: false
+            mergeInvoice: false,
+            confirmationNotes: ""
         }
     }
 

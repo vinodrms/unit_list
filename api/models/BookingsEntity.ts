@@ -139,7 +139,10 @@ class BookingsEntity extends BasePersistentEntity {
             travelType: {
                 type: 'integer',
                 required: true
-            }
+            },
+            confirmationNotes: {
+                type: 'string'
+            },
         }
     }
 }
