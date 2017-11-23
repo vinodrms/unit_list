@@ -64,9 +64,9 @@ export class InvoiceItemDO extends BaseDO {
         this.id = aop.id;
     }
 
-    public buildItemFromRoomCommission(deductedCommissionPrice: number) {
+    public buildItemFromRoomCommission(deductedCommissionPrice: number, vatId: string) {
         var meta = new RoomCommissionItemMetaDO();
-        meta.buildFromRoomCommission(deductedCommissionPrice);
+        meta.buildFromRoomCommission(deductedCommissionPrice, vatId);
         this.meta = meta;
         this.type = InvoiceItemType.RoomCommission;
     }
