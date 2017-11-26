@@ -174,7 +174,7 @@ export class InvoiceDO extends BaseDO {
 
         if (booking.price.hasDeductedCommission()) {
             var invoiceRoomCommissionItem = new InvoiceItemDO();
-            invoiceRoomCommissionItem.buildItemFromRoomCommission(booking.price.deductedCommissionPrice);
+            invoiceRoomCommissionItem.buildItemFromRoomCommission(booking.price.deductedCommissionPrice, booking.price.vatId);
             invoiceRoomCommissionItem.parentTransactionId = item.transactionId;
             bookingInvoiceItemList.push(invoiceRoomCommissionItem);
         }
