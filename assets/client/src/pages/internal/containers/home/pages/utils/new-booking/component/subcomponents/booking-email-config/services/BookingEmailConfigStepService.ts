@@ -25,6 +25,8 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
     didDisappearObservable: Observable<boolean>;
     private _didDisappearObserver: Observer<boolean>;
 
+    bookingConfirmationNotes: string;
+
     constructor(private _appContext: AppContext, private _bookingCartService: BookingCartService) {
         this._stepPath = [this._appContext.thTranslation.translate("Recipients")];
         this.didAppearObservable = new Observable<boolean>((didAppearObserver: Observer<boolean>) => {
@@ -33,6 +35,7 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
         this.didDisappearObservable = new Observable<boolean>((didDisappearObserver: Observer<boolean>) => {
             this._didDisappearObserver = didDisappearObserver;
         });
+        this.bookingConfirmationNotes = "";
     }
 
     public getBookingStepType(): BookingStepType {
@@ -96,6 +99,7 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
         bookingItems.bookingList = this.getOnlyTheNewTransientBookingItems();
         bookingItems.confirmationEmailList = this.emailRecipientList;
         bookingItems.mergeInvoice = this.mergeInvoice;
+        bookingItems.confirmationNotes = this.bookingConfirmationNotes;
         return bookingItems;
     }
 

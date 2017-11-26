@@ -10,4 +10,5 @@ export class AddBookingItemsDO {
     bookingList: TransientBookingItem[];
     confirmationEmailList: EmailDistributionDO[];
     mergeInvoice: boolean;
+    confirmationNotes: string;
 }

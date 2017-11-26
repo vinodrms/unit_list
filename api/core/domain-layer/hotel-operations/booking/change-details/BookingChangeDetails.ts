@@ -77,6 +77,7 @@ export class BookingChangeDetails {
         this.bookingWithDependencies.bookingDO.notes = this.changeDetailsDO.notes;
         if (!this.bookingWithDependencies.hasClosedInvoice()) {
             this.bookingWithDependencies.bookingDO.invoiceNotes = this.changeDetailsDO.invoiceNotes;
+            this.bookingWithDependencies.bookingDO.confirmationNotes = this.changeDetailsDO.confirmationNotes;
         }
         this.bookingWithDependencies.bookingDO.fileAttachmentList = this.changeDetailsDO.fileAttachmentList;
         this.bookingWithDependencies.bookingDO.travelActivityType = this.changeDetailsDO.travelActivityType;

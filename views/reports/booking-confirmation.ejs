@@ -164,6 +164,19 @@
                 </div>
             </div>
 
+            <%if (bookingConfirmationVM.hasConfirmationNotes) {%>
+            <hr/>
+
+             <div class="row" style="min-height: 30px;">
+                <div class="col-md-3" style="font-size: 12px;">
+                    <b><%= bodyConfirmationNotesLabel %></b>
+                </div>
+                <div class="col-md-9" style="font-size: 9px;">
+                    <span><%= bookingConfirmationVM.confirmationNotes %></span>
+                </div>
+            </div> 
+            <%}%>                  
+
             <%if (bookingConfirmationVM.hasCancellationPolicyOrPenalty || bookingConfirmationVM.hasConstraints) {%>
             <hr/>
             
