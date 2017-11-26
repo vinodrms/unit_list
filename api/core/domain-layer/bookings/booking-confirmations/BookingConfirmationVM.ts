@@ -251,7 +251,7 @@ export class BookingConfirmationVM {
     }
 
     public initConfirmationNotes() {
-        this.confirmationNotes = this._bookingAggregatedData.booking.confirmationNotes;
+        this.confirmationNotes = this._bookingAggregatedData.booking.confirmationNotes || "";
     }
 
     public get hasConfirmationNotes(): boolean {
