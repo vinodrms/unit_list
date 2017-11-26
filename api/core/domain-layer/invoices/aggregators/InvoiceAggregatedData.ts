@@ -12,6 +12,8 @@ import { AddOnProductInvoiceItemMetaDO } from "../../../data-layer/invoices/data
 import { InvoiceDO } from "../../../data-layer/invoices/data-objects/InvoiceDO";
 import { CurrencyDO } from "../../../data-layer/common/data-objects/currency/CurrencyDO";
 
+import _ = require('underscore');
+
 export class InvoiceAggregatedData {
     private static SHARED_INVOICE_ITEM_DISPLAY_NAME = "Shared Payment";
     private _thTranslation: ThTranslation;
@@ -47,11 +49,21 @@ export class InvoiceAggregatedData {
         if (this.processedInvoice.payerList.length > 1) {
             var sharedInvoiceItem = new InvoiceItemDO();
             var sharedInvoiceItemMeta = new AddOnProductInvoiceItemMetaDO();
+            sharedInvoiceItemMeta.vatId = this.getVatIdForSharedInvoiceItem();
             sharedInvoiceItemMeta.aopDisplayName = this._thTranslation.translate(InvoiceAggregatedData.SHARED_INVOICE_ITEM_DISPLAY_NAME);
             sharedInvoiceItemMeta.numberOfItems = -1;
             sharedInvoiceItemMeta.pricePerItem = this._thUtils.roundNumberToTwoDecimals(this.processedInvoice.amountToPay - this.processedInvoice.payerList[this.payerIndexOnInvoice].totalAmount);
             sharedInvoiceItem.meta = sharedInvoiceItemMeta;
             this.processedInvoice.itemList.push(sharedInvoiceItem);
         }
+    }
+
+    private getVatIdForSharedInvoiceItem(): string {
+        // get all the vat id's used in this invoice and return the first one
+        var vatIds = _.map(this.invoice.itemList, (item: InvoiceItemDO) => {return item.meta.getVatId();});
+        if (this._thUtils.isUndefinedOrNull(vatIds) || vatIds.length == 0) {
+            return null;
+        }
+        return vatIds[0];    
     }
 }
