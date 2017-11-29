@@ -20,8 +20,13 @@ import { RoomCategoryStatsDO } from '../../../room-categories/data-objects/RoomC
 import { ThTranslation } from '../../../../../../common/utils/localization/ThTranslation';
 import { DepartureItemContainer } from "./utils/DepartureItemContainer";
 
+export class DeparturesInfoVM {
+    public departureItems: DepartureItemInfoVM[];
+    public totalDeparturesForReferenceDate: number;
+}
+
 @Injectable()
-export class HotelOperationsDashboardDeparturesService extends ARequestService<DepartureItemInfoVM[]> {
+export class HotelOperationsDashboardDeparturesService extends ARequestService<DeparturesInfoVM> {
     private _referenceDate: ThDateDO;
 
     constructor(
@@ -59,15 +64,18 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
                 departuresInfo.departureInfoList, hotelAggregatedInfo, roomCategStatsList, roomVMList);
             let list = departureContainer.departureItemInfoVMList;
 
-            return list;
+            var departuresInfoVM = new DeparturesInfoVM();
+            departuresInfoVM.departureItems = list;
+            departuresInfoVM.totalDeparturesForReferenceDate = departuresInfo.totalDeparturesForReferenceDate;
+            return departuresInfoVM;
         });
     }
 
-    protected parseResult(result: Object): DepartureItemInfoVM[] {
-        return <DepartureItemInfoVM[]>result;
+    protected parseResult(result: Object): DeparturesInfoVM {
+        return <DeparturesInfoVM>result;
     }
 
-    public getDepartureItems(referenceDate?: ThDateDO): Observable<DepartureItemInfoVM[]> {
+    public getDepartureItems(referenceDate?: ThDateDO): Observable<DeparturesInfoVM> {
         this._referenceDate = referenceDate;
         return this.getServiceObservable();
     }

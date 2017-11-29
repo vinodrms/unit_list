@@ -27,8 +27,12 @@ export interface RoomItemInfo {
 export class HotelOperationsRoomInfo {
     roomInfoList: RoomItemInfo[];
     referenceDate: ThDateDO;
+    totalOccupiedRooms: number;
+    totalInHouseGuests: number;
 
     constructor() {
         this.roomInfoList = [];
+        this.totalOccupiedRooms = 0;
+        this.totalInHouseGuests = 0;
     }
 }

@@ -10,7 +10,7 @@ import {BookingSearchResultRepoDO} from '../../../../data-layer/bookings/reposit
 import {HotelTime} from '../../common/hotel-time/HotelTime';
 import {CustomerIdValidator} from '../../../customers/validators/CustomerIdValidator';
 import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
-import {HotelOperationsRoomInfo} from './utils/HotelOperationsRoomInfo';
+import {HotelOperationsRoomInfo, RoomItemInfo, RoomItemStatus} from './utils/HotelOperationsRoomInfo';
 import { HotelOperationsRoomInfoBuilder } from './utils/HotelOperationsRoomInfoBuilder';
 import { InvoiceSearchResultRepoDO } from "../../../../data-layer/invoices/repositories/IInvoiceRepository";
 import { InvoicePaymentStatus } from "../../../../data-layer/invoices/data-objects/InvoiceDO";

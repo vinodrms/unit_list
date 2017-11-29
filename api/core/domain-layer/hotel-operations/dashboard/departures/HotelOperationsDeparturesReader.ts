@@ -15,6 +15,7 @@ import { HotelOperationsDeparturesInfoBuilder } from './utils/HotelOperationsDep
 import { ThUtils } from '../../../../utils/ThUtils';
 import { InvoiceDO, InvoicePaymentStatus } from "../../../../data-layer/invoices/data-objects/InvoiceDO";
 import { InvoiceSearchResultRepoDO } from "../../../../data-layer/invoices/repositories/IInvoiceRepository";
+import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
 
 export class HotelOperationsDeparturesReader {
     private _thUtils: ThUtils;
@@ -34,7 +35,7 @@ export class HotelOperationsDeparturesReader {
 
     private readCore(resolve: { (result: HotelOperationsDeparturesInfo): void }, reject: { (err: ThError): void }, queryType: HotelOperationsQueryType, query: HotelOperationsQueryDO) {
         var departuresInfoBuilder = new HotelOperationsDeparturesInfoBuilder(this._appContext, this._sessionContext);
-
+        var totalDeparturesForReferenceDate: number;
         var queryParser = new HotelOperationsQueryDOParser(this._appContext, this._sessionContext);
         return queryParser.parse(query).then((parsedQuery: HotelOperationsQueryDO) => {
             this._parsedQuery = parsedQuery;
@@ -42,10 +43,11 @@ export class HotelOperationsDeparturesReader {
             var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
             return bookingRepository.getBookingList(
                 { hotelId: this._sessionContext.sessionDO.hotel.id },
-                this.getDeparturesQuery(queryType)
+                this.getDeparturesQuery()
             );
         }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
-            var bookingList = bookingSearchResult.bookingList;
+            totalDeparturesForReferenceDate = bookingSearchResult.bookingList.length;
+            var bookingList = this.getDepartureBookings(bookingSearchResult.bookingList, queryType);
             departuresInfoBuilder.appendBookingList(bookingList);
 
             var invoiceRepo = this._appContext.getRepositoryFactory().getInvoiceRepository();
@@ -71,6 +73,7 @@ export class HotelOperationsDeparturesReader {
 
             var departuresInfo = departuresInfoBuilder.getBuiltHotelOperationsDeparturesInfo();
             departuresInfo.referenceDate = this._parsedQuery.referenceDate;
+            departuresInfo.totalDeparturesForReferenceDate = totalDeparturesForReferenceDate;
             resolve(departuresInfo);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.HotelOperationsDeparturesReaderError, error);
@@ -91,19 +94,19 @@ export class HotelOperationsDeparturesReader {
         return _.uniq(bookingIdList);
     }
 
-    private getDeparturesQuery(queryType: HotelOperationsQueryType): BookingSearchCriteriaRepoDO {
+    private getDeparturesQuery(): BookingSearchCriteriaRepoDO {
+        return {
+            endDateEq: this._parsedQuery.referenceDate,
+            checkOutDateNullOrGreaterOrEqualThan: this._parsedQuery.referenceDate
+        }
+    }
+
+    private getDepartureBookings(bookings: BookingDO[], queryType: HotelOperationsQueryType) {
         switch (queryType) {
             case HotelOperationsQueryType.FixedForTheDay:
-                return {
-                    confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_FixedDepartures,
-                    endDateEq: this._parsedQuery.referenceDate,
-                    checkOutDateNullOrGreaterOrEqualThan: this._parsedQuery.referenceDate
-                }
+                return _.filter(bookings, (booking: BookingDO) => {return BookingDOConstraints.ConfirmationStatuses_FixedDepartures.indexOf(booking.confirmationStatus) >= 0;});
             default:
-                return {
-                    confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_ShowInDepartures,
-                    endDateEq: this._parsedQuery.referenceDate
-                }
+                return _.filter(bookings, (booking: BookingDO) => {return BookingDOConstraints.ConfirmationStatuses_ShowInDepartures.indexOf(booking.confirmationStatus) >= 0;});        
         }
     }
 }

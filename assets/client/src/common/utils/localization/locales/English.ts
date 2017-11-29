@@ -1074,5 +1074,9 @@ export var EnglishTranslations: Object = {
     "Reserved Room Check-In": "Reserved Room Check-In",
     "Are you sure you want to move the booking to %roomName%?": "Are you sure you want to move the booking to %roomName%?",
     "Confirmation Notes": "Confirmation Notes",
+    "Arrivals Left": "Arrivals Left",
+    "Departures Left": "Departures left",
+    "Total Occupied Rooms": "Total Occupied Rooms",
+    "Total In-House Guests": "Total In-House Guests",
 
 };

@@ -1,11 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {ThDateDO} from '../../common/data-objects/th-dates/ThDateDO';
-import {HotelOperationsDashboardArrivalsService} from './arrivals/HotelOperationsDashboardArrivalsService';
-import {ArrivalItemInfoVM} from './arrivals/view-models/ArrivalItemInfoVM';
-import {HotelOperationsDashboardDeparturesService} from './departures/HotelOperationsDashboardDeparturesService';
-import {DepartureItemInfoVM} from './departures/view-models/DepartureItemInfoVM';
-import {HotelOperationsDashboardRoomsService} from './rooms/HotelOperationsDashboardRoomsService';
+import {HotelOperationsDashboardArrivalsService, ArrivalsInfoVM} from './arrivals/HotelOperationsDashboardArrivalsService';
+import {HotelOperationsDashboardDeparturesService, DeparturesInfoVM} from './departures/HotelOperationsDashboardDeparturesService';
+import {HotelOperationsDashboardRoomsService, RoomsInfoVM} from './rooms/HotelOperationsDashboardRoomsService';
 import {RoomsService} from '../../rooms/RoomsService';
 import {RoomItemInfoVM} from './rooms/view-models/RoomItemInfoVM';
 
@@ -18,14 +16,14 @@ export class HotelOperationsDashboardService {
         private _roomsService: RoomsService) {
     }
 
-    public getArrivalItems(referenceDate?: ThDateDO): Observable<ArrivalItemInfoVM[]> {
+    public getArrivalItems(referenceDate?: ThDateDO): Observable<ArrivalsInfoVM> {
         return this._dashboardArrivalsService.getArrivalItems(referenceDate);
     }
     public refreshArrivals(referenceDate?: ThDateDO) {
         this._dashboardArrivalsService.refresh(referenceDate);
     }
 
-    public getDepartureItems(referenceDate?: ThDateDO): Observable<DepartureItemInfoVM[]> {
+    public getDepartureItems(referenceDate?: ThDateDO): Observable<DeparturesInfoVM> {
         return this._dashboardDeparturesService.getDepartureItems(referenceDate);
     }
 
@@ -33,7 +31,7 @@ export class HotelOperationsDashboardService {
         this._dashboardDeparturesService.refresh(referenceDate);
     }
 
-    public getRoomItems(): Observable<RoomItemInfoVM[]> {
+    public getRoomItems(): Observable<RoomsInfoVM> {
         return this._dashboardRoomsService.getRoomItems();
     }
     public refreshRooms() {

@@ -19,7 +19,7 @@
 		</div>
 		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()" th-clickable>&gt;</div>
 	</div>
-
+	<div class="status p-t-8 p-b-8 f-14 text-center">{{remainingDeparturesCount}}/{{totalDeparturesCount}} {{ 'Departures Left' | translate }}</div>
 	<div class="pane-search-bar">
 		<input class="remove-auto-border" type="text" placeholder="Search here" [ngModel]="searchText" (ngModelChange)="searchTextChangeHandler($event)" name="departuresSearchText">
 		<i class="fa fa-search gray-color p-l-6"></i>

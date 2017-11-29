@@ -38,8 +38,10 @@ export interface ArrivalItemInfo {
 export class HotelOperationsArrivalsInfo {
     arrivalInfoList: ArrivalItemInfo[];
     referenceDate: ThDateDO;
+    totalArrivalsForReferenceDate: number;    
 
     constructor() {
         this.arrivalInfoList = [];
+        this.totalArrivalsForReferenceDate = 0;
     }
 }

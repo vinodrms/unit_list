@@ -11,6 +11,7 @@ import {HotelDetailsDO} from '../../../../../../../../services/hotel/data-object
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
+import { ArrivalsInfoVM } from '../../../../../../../../services/hotel-operations/dashboard/arrivals/HotelOperationsDashboardArrivalsService';
 
 import * as _ from "underscore";
 
@@ -25,6 +26,7 @@ export class ArrivalsPaneComponent implements OnInit {
 	public filteredArrivalsVMList: ArrivalItemInfoVM[];
 	public selectedDate: ThDateDO;
 	public searchText: string = "";
+	public totalArrivalsCount: number;
 
 	@Input() hotelOperationsDashboard: IHotelOperationsDashboardArrivalsPaneMediator;
 	@Output() dragStarted = new EventEmitter();
@@ -41,10 +43,10 @@ export class ArrivalsPaneComponent implements OnInit {
 		this.hotelOperationsDashboard.registerArrivalsPane(this);
 		this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO) => {
 			this.selectedDate = details.currentThTimestamp.thDateDO.buildPrototype();
-
 			this._hotelOperationsDashboardService.getArrivalItems(this.selectedDate)
-				.subscribe((arrivals: ArrivalItemInfoVM[]) => {
-					this.arrivalItemsVMList = arrivals;
+				.subscribe((arrivalsInfo: ArrivalsInfoVM) => {
+					this.arrivalItemsVMList = arrivalsInfo.arrivalItems;
+					this.totalArrivalsCount = arrivalsInfo.totalArrivalsForReferenceDate;
 					this.updateFilterArrivals();
 				}, (error: ThError) => {
 					this._appContext.toaster.error(error.message);
@@ -134,5 +136,9 @@ export class ArrivalsPaneComponent implements OnInit {
 	public didSelectArrivalDate(date: ThDateDO) {
 		this.selectedDate = date;
 		this.refresh();
+	}
+
+	public get remainingArrivalsCount(): number {
+		return (this.arrivalItemsVMList)? this.arrivalItemsVMList.length : 0;
 	}
 }

@@ -16,6 +16,7 @@ import { RoomsCanvasUtils } from './utils/RoomsCanvasUtils';
 import { CustomScroll } from "../../../../../../../../../../common/utils/directives/CustomScroll";
 
 import * as _ from "underscore";
+import { RoomsInfoVM } from '../../../../../../../../services/hotel-operations/dashboard/rooms/HotelOperationsDashboardRoomsService';
 
 declare var $: any;
 
@@ -37,6 +38,8 @@ export class RoomsCanvasComponent implements OnInit, AfterViewInit {
 	public filteredRoomVMList: RoomItemInfoVM[];
 	public filterNotification: IFilterNotification;
 	public currentDate: ThDateDO;
+	public totalOccupiedRooms: number;
+	public totalInHouseGuests: number;
 
 	public enums;
 	private dragStyles: IDragStyles;
@@ -71,12 +74,14 @@ export class RoomsCanvasComponent implements OnInit, AfterViewInit {
 		this.hotelOperationsDashboard.registerRoomsCanvas(this);
 		this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO) => {
 			this.currentDate = details.currentThTimestamp.thDateDO.buildPrototype();
-			this._hotelOperationsDashboardService.getRoomItems().subscribe((r: any) => {
-				this._utils.setRoomsUIHighlight(r, this.dragStyles.default);
+			this._hotelOperationsDashboardService.getRoomItems().subscribe((r: RoomsInfoVM) => {
+				this._utils.setRoomsUIHighlight(r.roomList, this.dragStyles.default);
 				this.filterValue.currentValue = this.filterValue.newValue;
 				this._showNotificationBar = true;
-				this.filteredRoomVMList = this._utils.filterRoomsByStateType(this.filterValue.currentValue, r);
+				this.filteredRoomVMList = this._utils.filterRoomsByStateType(this.filterValue.currentValue, r.roomList);
 				this.updateFilterNotification();
+				this.totalOccupiedRooms = r.totalOccupiedRooms;
+				this.totalInHouseGuests = r.totalInHouseGuests;
 			}, (error: any) => {
 				this._appContext.toaster.error(error.message);
 			});

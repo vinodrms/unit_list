@@ -17,8 +17,15 @@ import { RoomDO } from '../../../rooms/data-objects/RoomDO';
 import { HotelAggregatorService } from "../../../hotel/HotelAggregatorService";
 import { HotelAggregatedInfo } from "../../../hotel/utils/HotelAggregatedInfo";
 
+export class RoomsInfoVM {
+    public roomList: RoomItemInfoVM[];
+    public totalOccupiedRooms: number;
+    public totalInHouseGuests: number;
+}
+
+
 @Injectable()
-export class HotelOperationsDashboardRoomsService extends ARequestService<RoomItemInfoVM[]> {
+export class HotelOperationsDashboardRoomsService extends ARequestService<RoomsInfoVM> {
     constructor(
         private appContext: AppContext,
         private roomsService: RoomsService,
@@ -58,24 +65,28 @@ export class HotelOperationsDashboardRoomsService extends ARequestService<RoomIt
 
                 roomItemInfoVMList.push(roomItemInfoVM);
             });
-
-            return roomItemInfoVMList;
+            var roomsInfoVM = new RoomsInfoVM();
+            roomsInfoVM.roomList = roomItemInfoVMList;
+            roomsInfoVM.totalOccupiedRooms = roomsInfo.totalOccupiedRooms;
+            roomsInfoVM.totalInHouseGuests = roomsInfo.totalInHouseGuests;
+            return roomsInfoVM;
         });
     }
 
-    protected parseResult(result: Object): RoomItemInfoVM[] {
-        return <RoomItemInfoVM[]>result;
+    protected parseResult(result: Object): RoomsInfoVM {
+        return <RoomsInfoVM>result;
     }
 
-    public getRoomItems(): Observable<RoomItemInfoVM[]> {
-        return this.getServiceObservable().map((roomItemVMList: RoomItemInfoVM[]) => {
-            var sortedRoomItemVMList = roomItemVMList.sort((firstItem: RoomItemInfoVM, secondItem: RoomItemInfoVM) => {
+    public getRoomItems(): Observable<RoomsInfoVM> {
+        return this.getServiceObservable().map((roomsInfoVM: RoomsInfoVM) => {
+            roomsInfoVM.roomList = roomsInfoVM.roomList.sort((firstItem: RoomItemInfoVM, secondItem: RoomItemInfoVM) => {
                 if (firstItem.roomVM.room.floor === secondItem.roomVM.room.floor) {
                     return this.compareRoomNames(firstItem.roomVM.room, secondItem.roomVM.room);
                 }
                 return firstItem.roomVM.room.floor - secondItem.roomVM.room.floor;
             });
-            return sortedRoomItemVMList;
+
+           return roomsInfoVM;
         });
     }
     /**
