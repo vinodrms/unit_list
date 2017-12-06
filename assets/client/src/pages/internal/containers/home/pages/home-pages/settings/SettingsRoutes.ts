@@ -11,6 +11,7 @@ import {SettingsPriceProductsModule} from './subcomponents/price-products/Settin
 import {SettingsCustomerRegisterModule} from './subcomponents/customer-register/SettingsCustomerRegisterModule';
 import {SettingsAllotmentsModule} from './subcomponents/allotments/SettingsAllotmentsModule';
 import {SettingsReportsModule} from './subcomponents/reports/SettingsReportsModule';
+import {SettingsIntegrationsModule} from './subcomponents/integrations/SettingsIntegrationsModule';
 
 const settingsRoutes: Routes = [
     {
@@ -25,7 +26,8 @@ const settingsRoutes: Routes = [
             { path: 'price-products', loadChildren: () => SettingsPriceProductsModule },
             { path: 'customer-register', loadChildren: () => SettingsCustomerRegisterModule },
             { path: 'allotments', loadChildren: () => SettingsAllotmentsModule },
-            { path: 'reports', loadChildren: () => SettingsReportsModule }
+            { path: 'reports', loadChildren: () => SettingsReportsModule },
+            { path: 'integrations', loadChildren: () => SettingsIntegrationsModule }
         ]
     }
 ];

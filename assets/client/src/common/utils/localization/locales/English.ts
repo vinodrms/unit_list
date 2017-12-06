@@ -1074,5 +1074,15 @@ export var EnglishTranslations: Object = {
     "Reserved Room Check-In": "Reserved Room Check-In",
     "Are you sure you want to move the booking to %roomName%?": "Are you sure you want to move the booking to %roomName%?",
     "Confirmation Notes": "Confirmation Notes",
-
+    "Booking.com Integration" : "Booking.com integration",
+    "Configure the integration with Booking.com platform.": "Configure the integration with Booking.com platform.",
+    "Enable Booking.com integration": "Enable Booking.com integration",
+    "Authentication": "Authentication",
+    "Account Name": "Account Name",
+    "Account ID": "Account ID",
+    "Inventory Code": "Inventory Code",
+    "Enabled": "Enabled",
+    "Fill your Booking.com authentication data": "Fill your Booking.com authentication data",
+    "For each room type, fill the associated inventory code from Booking.com.": "For each room type, fill the associated inventory code from Booking.com.",
+    "Enable the price products you want to make available for Booking.com.": "Enable the price products you want to make available for Booking.com.",
 };

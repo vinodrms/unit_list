@@ -23,7 +23,8 @@ export class SettingsNavbarService {
 			new SettingsPageVM(SettingsPageType.PriceProducts, "price-products", "Price Products", "%"),
 			new SettingsPageVM(SettingsPageType.CustomerRegister, "customer-register", "Customer Register", "&"),
 			new SettingsPageVM(SettingsPageType.Allotments, "allotments", "Allotments", "â"),
-			new SettingsPageVM(SettingsPageType.Reports, "reports", "Reports", "-")
+			new SettingsPageVM(SettingsPageType.Reports, "reports", "Reports", "-"),
+			new SettingsPageVM(SettingsPageType.Integrations, "integrations", "Integrations", "-"),
 		]
 	}
 

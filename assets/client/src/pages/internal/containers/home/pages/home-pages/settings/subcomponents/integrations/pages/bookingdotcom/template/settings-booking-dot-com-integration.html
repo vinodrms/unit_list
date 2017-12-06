@@ -1,0 +1,33 @@
+<div class="container full-height" customScroll>
+	<div class="row basic-info-form">
+		<div class="col-xs-12 col-md-9">
+			<label class="control-label">
+				<h3>{{ 'Booking.com Integration' | translate }}</h3><small>{{ 'Configure the integration with Booking.com platform.' | translate }}</small>
+			</label>
+			<hr>
+			<div class="row">
+				<div class="col-xs-12">
+					<input type="checkbox" [(ngModel)]="isIntegrationEnabled" name="isIntegrationEnabled"/>{{'Enable Booking.com integration' | translate}}
+				</div>
+			</div>
+			<div class="m-t-24" *ngIf="isIntegrationEnabled">
+				<ul class="nav nav-tabs sub-tabs">
+					<li [ngClass]="{active : isAuthenticationStepSelected()}">
+						<a (click)="selectAuthenticationStep()">{{ 'Authentication' | translate }}</a>
+					</li>
+					<li [ngClass]="{active : isRoomConfigurationStepSelected()}">
+						<a (click)="selectRoomConfigurationStep()">{{ 'Room Configuration' | translate }}</a>
+					</li>
+					<li [ngClass]="{active : isPriceProductConfigurationStepSelected()}">
+						<a (click)="selectPriceProductConfigurationStep()">{{ 'Price Product Configuration' | translate }}</a>
+					</li>
+				</ul>
+				<div class="m-t-16">
+					<booking-dot-com-integration-authentication-step *ngIf="isAuthenticationStepSelected()"></booking-dot-com-integration-authentication-step>
+					<booking-dot-com-integration-room-configuration-step *ngIf="isRoomConfigurationStepSelected()"></booking-dot-com-integration-room-configuration-step>
+					<booking-dot-com-integration-price-product-configuration-step *ngIf="isPriceProductConfigurationStepSelected()"></booking-dot-com-integration-price-product-configuration-step>										
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

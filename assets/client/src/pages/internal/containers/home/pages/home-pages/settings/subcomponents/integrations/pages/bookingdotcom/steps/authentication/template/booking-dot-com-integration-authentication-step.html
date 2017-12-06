@@ -1,0 +1,35 @@
+<div class="row row m-l-16 m-b-24">{{ 'Fill your Booking.com authentication data.' | translate }}</div>
+<form [formGroup]="getDefaultFormGroup()" class="integration-form col-xs-8 col-md-8">
+    <div class="row">
+        <div class="col-xs-12 col-md-6 form-group">
+            <label>{{ 'Account Name' | translate }}</label>
+            <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('accountName')}">
+                <input type="text" class="form-control" formControlName="accountName" />
+            </div>
+            <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the acccount name provided by Booking.com' | translate }}</small></label>
+        </div>
+        <div class="col-xs-12 col-md-6 form-group">
+            <label>{{ 'Account ID' | translate }}</label>
+            <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('accountId')}">
+                <input type="text" class="form-control" formControlName="accountId" />
+            </div>
+            <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the acccount ID provided by Booking.com' | translate }}</small></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6 form-group">
+            <label>{{ 'Password' | translate }}</label>
+            <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('accountPassword')}">
+                <input type="password" class="form-control" formControlName="accountPassword" />
+            </div>
+            <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the acccount password provided by Booking.com' | translate }}</small></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-3 col-xs-offset-9 col-md-3 col-md-offset-9">
+            <button type="button" class="btn btn-primary btn-block" (click)="save()">
+                <i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
+            </button>
+        </div>
+    </div>
+</form>

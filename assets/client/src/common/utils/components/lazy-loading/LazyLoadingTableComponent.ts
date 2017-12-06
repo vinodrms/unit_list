@@ -253,6 +253,12 @@ export class LazyLoadingTableComponent<T> {
     protected isTimestamp(valueMeta: TableColumnValueMeta): boolean {
         return valueMeta.propertyType === TablePropertyType.TimestampType;
     }
+    protected isTextInput(valueMeta: TableColumnValueMeta): boolean {
+        return valueMeta.propertyType === TablePropertyType.TextInputType;
+    }
+    protected isCheckboxInput(valueMeta: TableColumnValueMeta): boolean {
+        return valueMeta.propertyType === TablePropertyType.CheckboxInputType;
+    }
     protected noResultsExist(): boolean {
         return this.totalCount.numOfItems === 0 && this.itemList.length === 0;
     }

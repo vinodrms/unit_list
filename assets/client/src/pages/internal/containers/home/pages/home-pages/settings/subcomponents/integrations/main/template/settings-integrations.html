@@ -1,0 +1,14 @@
+<div class="basic-info-settings-container">
+	<div class="basic-info-settings-tabbar">
+		<ul class="nav nav-tabs">
+			<li *ngFor="let integrationPage of integrationsPageList" [ngClass]="{'active': integrationPage.selected}">
+				<a (click)="changePage(integrationPage)">
+					{{integrationPage.pageName | translate}}
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="basic-info-settings-edit-container" customScroll>
+		<router-outlet></router-outlet>
+	</div>
+</div>

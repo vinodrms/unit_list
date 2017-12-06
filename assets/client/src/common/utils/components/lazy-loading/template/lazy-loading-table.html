@@ -80,6 +80,12 @@
 					<span *ngIf="isTimestamp(columnMeta.valueMeta)">
 							{{ getItemValue(item, columnMeta.valueMeta) | thtimestamp }}
 					</span>
+					<span *ngIf="isTextInput(columnMeta.valueMeta)">
+							<input type="text" [(ngModel)]="item[columnMeta.valueMeta.objectPropertyId]"/>
+					</span>
+					<span *ngIf="isCheckboxInput(columnMeta.valueMeta)">
+							<input type="checkbox" [(ngModel)]="item[columnMeta.valueMeta.objectPropertyId]"/>
+					</span>
 				</td>
 				<td *ngIf="tableOptions.showRowActionsCell()" class="table-item-action-group" [ngClass]="tableOptions.getRowActionsCellClass(isCollapsed)">
 					<a th-clickable class="btn btn-xs" *ngIf="canPerformShowDetailsCommandOnItem(item)" (click)="showDetailsForItem(item)" title="{{ 'Show Details' | translate }}">

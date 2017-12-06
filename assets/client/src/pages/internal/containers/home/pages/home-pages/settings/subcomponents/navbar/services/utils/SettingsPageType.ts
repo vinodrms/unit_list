@@ -7,5 +7,6 @@ export enum SettingsPageType {
 	PriceProducts,
 	CustomerRegister,
 	Allotments,
-	Reports
+	Reports,
+	Integrations
 }
