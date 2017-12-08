@@ -12,6 +12,9 @@ import { HotelOperationsQueryDOParser } from '../utils/HotelOperationsQueryDOPar
 import { HotelOperationsArrivalsInfo } from './utils/HotelOperationsArrivalsInfo';
 import { HotelOperationsArrivalsInfoBuilder } from './utils/HotelOperationsArrivalsInfoBuilder';
 import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
+import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
+
+import _ = require('underscore');
 
 export class HotelOperationsArrivalsReader {
     private _parsedQuery: HotelOperationsQueryDO;
@@ -27,6 +30,7 @@ export class HotelOperationsArrivalsReader {
 
     private readCore(resolve: { (result: HotelOperationsArrivalsInfo): void }, reject: { (err: ThError): void }, queryType: HotelOperationsQueryType, query: HotelOperationsQueryDO) {
         var arrivalsInfoBuilder = new HotelOperationsArrivalsInfoBuilder();
+        var totalArrivalsForReferenceDate: number;
 
         var queryParser = new HotelOperationsQueryDOParser(this._appContext, this._sessionContext);
         return queryParser.parse(query).then((parsedQuery: HotelOperationsQueryDO) => {
@@ -40,10 +44,11 @@ export class HotelOperationsArrivalsReader {
             var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
             return bookingRepository.getBookingList(
                 { hotelId: this._sessionContext.sessionDO.hotel.id },
-                this.getArrivalsQuery(queryType)
+                this.getArrivalsQuery()
             );
-        }).then((canBeCheckedInSearchResult: BookingSearchResultRepoDO) => {
-            var canBeCheckedInBookingList = canBeCheckedInSearchResult.bookingList;
+        }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
+            totalArrivalsForReferenceDate = bookingSearchResult.bookingList.length;
+            var canBeCheckedInBookingList = this.getCanBeCheckedInBookings(bookingSearchResult.bookingList, queryType);
             arrivalsInfoBuilder.appendCanBeCheckedInBookingList(canBeCheckedInBookingList);
 
             var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
@@ -53,6 +58,7 @@ export class HotelOperationsArrivalsReader {
             });
         }).then((noShowSearchResult: BookingSearchResultRepoDO) => {
             var noShowBookingList = noShowSearchResult.bookingList;
+            totalArrivalsForReferenceDate += noShowSearchResult.bookingList.length;
             arrivalsInfoBuilder.appendNoShowBookingList(noShowBookingList);
 
             var customerIdList: string[] = arrivalsInfoBuilder.getCustomerIdList();
@@ -63,6 +69,7 @@ export class HotelOperationsArrivalsReader {
 
             var arrivalsInfo = arrivalsInfoBuilder.getBuiltHotelOperationsArrivalsInfo();
             arrivalsInfo.referenceDate = this._parsedQuery.referenceDate;
+            arrivalsInfo.totalArrivalsForReferenceDate = totalArrivalsForReferenceDate;
             resolve(arrivalsInfo);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.HotelOperationsArrivalsReaderError, error);
@@ -73,18 +80,18 @@ export class HotelOperationsArrivalsReader {
         });
     }
 
-    private getArrivalsQuery(queryType: HotelOperationsQueryType): BookingSearchCriteriaRepoDO {
+    private getArrivalsQuery(): BookingSearchCriteriaRepoDO {
+        return {
+            startDateEq: this._parsedQuery.referenceDate            
+        };
+    }
+
+    private getCanBeCheckedInBookings(bookings: BookingDO[], queryType: HotelOperationsQueryType): BookingDO[] {
         switch (queryType) {
             case HotelOperationsQueryType.FixedForTheDay:
-                return {
-                    confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_FixedArrivals,
-                    startDateEq: this._parsedQuery.referenceDate
-                }
+                return _.filter(bookings, (booking: BookingDO) => {return BookingDOConstraints.ConfirmationStatuses_FixedArrivals.indexOf(booking.confirmationStatus) >= 0;});
             default:
-                return {
-                    confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_CanBeCheckedIn,
-                    startDateEq: this._parsedQuery.referenceDate
-                }
+                return _.filter(bookings, (booking: BookingDO) => {return BookingDOConstraints.ConfirmationStatuses_CanBeCheckedIn.indexOf(booking.confirmationStatus) >= 0;});
         }
     }
 }

@@ -14,6 +14,7 @@ import { ThError } from '../../../../../../../../../../common/utils/responses/Th
 import { ThDateDO } from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
 import * as _ from "underscore";
+import { DeparturesInfoVM } from '../../../../../../../../services/hotel-operations/dashboard/departures/HotelOperationsDashboardDeparturesService';
 
 declare var $: any;
 @Component({
@@ -27,6 +28,7 @@ export class DeparturesPaneComponent implements OnInit {
 	public selectedDepartureItem: DepartureItemInfoVM;
 	public selectedDate: ThDateDO;
 	public searchText: string = "";
+	public totalDeparturesCount: number;
 
 	@Input() hotelOperationsDashboard: IHotelOperationsDashboardDeparturesMediator;
 	@Output() onRefresh = new EventEmitter();
@@ -43,8 +45,9 @@ export class DeparturesPaneComponent implements OnInit {
 			this.selectedDate = details.currentThTimestamp.thDateDO.buildPrototype();
 
 			this._hotelOperationsDashboardService.getDepartureItems(this.selectedDate)
-				.subscribe((departures: DepartureItemInfoVM[]) => {
-					this.departureItemsVMList = departures;
+				.subscribe((departures: DeparturesInfoVM) => {
+					this.departureItemsVMList = departures.departureItems;
+					this.totalDeparturesCount = departures.totalDeparturesForReferenceDate;
 					this.updateFilterDepartures();
 				}, (error: ThError) => {
 					this._appContext.toaster.error(error.message);
@@ -136,5 +139,9 @@ export class DeparturesPaneComponent implements OnInit {
 	public didSelectDepartureDate(date: ThDateDO) {
 		this.selectedDate = date;
 		this.refresh();
+	}
+
+	public get remainingDeparturesCount(): number {
+		return (this.departureItemsVMList)? _.filter(this.departureItemsVMList, (departureItem: DepartureItemInfoVM) => {return departureItem.hasBooking}).length : 0;
 	}
 }

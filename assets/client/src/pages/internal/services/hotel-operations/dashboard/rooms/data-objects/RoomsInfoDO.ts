@@ -7,9 +7,11 @@ import * as _ from "underscore";
 export class RoomsInfoDO extends BaseDO {
     roomInfoList: RoomItemInfoDO[];
     referenceDate: ThDateDO;
+    totalOccupiedRooms: number;
+    totalInHouseGuests: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return [];
+        return ["totalOccupiedRooms", "totalInHouseGuests"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);

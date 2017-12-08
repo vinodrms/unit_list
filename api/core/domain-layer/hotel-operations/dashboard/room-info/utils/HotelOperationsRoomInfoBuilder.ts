@@ -17,6 +17,7 @@ export class HotelOperationsRoomInfoBuilder {
 
     public appendCheckedInBookingList(bookingList: BookingDO[]) {
         this.appendBookingList(bookingList, RoomItemStatus.Occupied);
+        this._roomInfo.totalOccupiedRooms = _.filter(this._roomInfo.roomInfoList, (roomItemInfo: RoomItemInfo) => {return roomItemInfo.roomStatus == RoomItemStatus.Occupied}).length;        
     }
     public appendCanBeCheckedInBookingList(bookingList: BookingDO[]) {
         this.appendBookingList(bookingList, RoomItemStatus.Reserved);
@@ -36,6 +37,7 @@ export class HotelOperationsRoomInfoBuilder {
         }
         var roomItemInfo = this.buildRoomItemInfoFor(booking, roomItemStatus);
         this._roomInfo.roomInfoList.push(roomItemInfo);
+        this._roomInfo.totalInHouseGuests += booking.getNoOfGuests();
     }
     private containsInformationForRoomId(roomId: string): boolean {
         var foundRoomItemInfo = _.find(this._roomInfo.roomInfoList, (roomItem: RoomItemInfo) => {

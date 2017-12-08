@@ -5,9 +5,10 @@ import {DepartureItemInfoDO} from './DepartureItemInfoDO';
 export class DeparturesInfoDO extends BaseDO {
     departureInfoList: DepartureItemInfoDO[];
     referenceDate: ThDateDO;
+    totalDeparturesForReferenceDate: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return [];
+        return ["totalDeparturesForReferenceDate"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
