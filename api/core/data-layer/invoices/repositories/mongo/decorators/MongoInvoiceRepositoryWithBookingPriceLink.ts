@@ -53,6 +53,7 @@ export class MongoInvoiceRepositoryWithBookingPriceLink extends MongoInvoiceRepo
         });
     }
     addInvoice(invoiceMeta: InvoiceMetaRepoDO, invoice: InvoiceDO): Promise<InvoiceDO> {
+        invoice.removeItemsPopulatedFromBooking();
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
             this.invoiceRepo.addInvoice(invoiceMeta, invoice).then((invoice: InvoiceDO) => {
                 this.linkBookingsToInvoice(invoiceMeta, invoice).then((updatedInvoice: InvoiceDO) => {
