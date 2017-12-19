@@ -118,7 +118,15 @@ export enum ThServerApi {
     YieldManagerYieldGetPriceProductItems,
     YieldManagerGetKeyMetrics,
 
-    Report
+    Report,
+
+    BookingDotComIntegrationConfigureHotel,
+    BookingDotComIntegrationConfigureAuthentication,
+    BookingDotComGetConfiguration,
+    BookingDotComIntegrationConfigurePriceProducts,
+    BookingDotComIntegrationConfigureRooms,
+    EnableBookingDotComIntegration
+    
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -245,6 +253,13 @@ ThServerApiUrl[ThServerApi.YieldManagerYieldGetPriceProductItems] = "/yManager/g
 ThServerApiUrl[ThServerApi.YieldManagerGetKeyMetrics] = "/yManager/getKeyMetrics";
 
 ThServerApiUrl[ThServerApi.Report] = '/reports/report';
+
+ThServerApiUrl[ThServerApi.BookingDotComIntegrationConfigureHotel] = '/integrations/booking-dot-com/configureHotel';
+ThServerApiUrl[ThServerApi.BookingDotComIntegrationConfigureAuthentication] = '/integrations/booking-dot-com/configureAuthentication';
+ThServerApiUrl[ThServerApi.BookingDotComGetConfiguration] = '/integrations/booking-dot-com/getConfiguration';
+ThServerApiUrl[ThServerApi.BookingDotComIntegrationConfigurePriceProducts] = '/integrations/booking-dot-com/configurePriceProducts';
+ThServerApiUrl[ThServerApi.BookingDotComIntegrationConfigureRooms] = '/integrations/booking-dot-com/configureRooms';
+ThServerApiUrl[ThServerApi.EnableBookingDotComIntegration] = '/integrations/booking-dot-com/setEnabled';
 
 export class ServerApiBuilder {
     public static ClientId = "UnitPal-Web";

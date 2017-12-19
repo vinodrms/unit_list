@@ -1,4 +1,5 @@
-<div class="container full-height" customScroll>
+<loading-component [isLoading]="isLoading"></loading-component>
+<div class="container full-height" *ngIf="!isLoading" customScroll>
 	<div class="row basic-info-form">
 		<div class="col-xs-12 col-md-9">
 			<label class="control-label">
@@ -15,6 +16,9 @@
 					<li [ngClass]="{active : isAuthenticationStepSelected()}">
 						<a (click)="selectAuthenticationStep()">{{ 'Authentication' | translate }}</a>
 					</li>
+					<li [ngClass]="{active : isHotelConfigurationStepSelected()}">
+						<a (click)="selectHotelConfigurationStep()">{{ 'Hotel Configuration' | translate }}</a>
+					</li>
 					<li [ngClass]="{active : isRoomConfigurationStepSelected()}">
 						<a (click)="selectRoomConfigurationStep()">{{ 'Room Configuration' | translate }}</a>
 					</li>
@@ -24,6 +28,7 @@
 				</ul>
 				<div class="m-t-16">
 					<booking-dot-com-integration-authentication-step *ngIf="isAuthenticationStepSelected()"></booking-dot-com-integration-authentication-step>
+					<booking-dot-com-integration-hotel-configuration-step *ngIf="isHotelConfigurationStepSelected()"></booking-dot-com-integration-hotel-configuration-step>					
 					<booking-dot-com-integration-room-configuration-step *ngIf="isRoomConfigurationStepSelected()"></booking-dot-com-integration-room-configuration-step>
 					<booking-dot-com-integration-price-product-configuration-step *ngIf="isPriceProductConfigurationStepSelected()"></booking-dot-com-integration-price-product-configuration-step>										
 				</div>

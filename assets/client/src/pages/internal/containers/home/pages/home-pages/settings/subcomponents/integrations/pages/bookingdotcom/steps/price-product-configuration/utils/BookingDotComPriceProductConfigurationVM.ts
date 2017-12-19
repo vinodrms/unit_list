@@ -3,5 +3,6 @@ import { PriceProductVM } from "../../../../../../../../../../../../services/pri
 
 export class BookingDotComPriceProductConfigurationVM {
     priceProductVM: PriceProductVM;
-    enabled: boolean;
+    rateCategoryId: string;
+    enabled: boolean = false;
 }

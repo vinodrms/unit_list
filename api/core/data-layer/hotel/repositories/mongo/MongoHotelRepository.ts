@@ -8,22 +8,26 @@ import { HotelContactDetailsDO } from '../../data-objects/hotel-contact-details/
 import { GeoLocationDO } from '../../../common/data-objects/geo-location/GeoLocationDO';
 import {
 	IHotelRepository, HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO,
-	ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO, SequenceValue
+	ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO, SequenceValue, BookingDotComAuthenticationRepoDO, BookingDotComHotelConfigurationRepoDO, BookingDotComRoomsConfigurationRepoDO, BookingDotComPriceProductsConfigurationRepoDO
 } from '../IHotelRepository';
 import { LazyLoadRepoDO } from '../../../common/repo-data-objects/LazyLoadRepoDO';
 import { HotelSequenceType } from '../../data-objects/sequences/HotelSequencesDO';
+import { MongoHotelIntegrationsRepository } from './actions/MongoHotelIntegrationsRepository';
+import { BookingDotComConfigurationDO } from '../../../integrations/booking-dot-com/BookingDotComConfigurationDO';
 
 declare var sails: any;
 
 export class MongoHotelRepository extends MongoRepository implements IHotelRepository {
 	private _accountActionsRepository: MongoHotelAccountRepository;
 	private _hotelDetailsRepository: MongoHotelDetailsRepository;
+	private _hotelIntegrationsRepository: MongoHotelIntegrationsRepository;
 
 	constructor() {
 		var hotelsEntity = sails.models.hotelsentity;
 		super(hotelsEntity);
 		this._accountActionsRepository = new MongoHotelAccountRepository(hotelsEntity);
 		this._hotelDetailsRepository = new MongoHotelDetailsRepository(hotelsEntity);
+		this._hotelIntegrationsRepository = new MongoHotelIntegrationsRepository(hotelsEntity);
 	}
 	public addHotel(hotel: HotelDO): Promise<HotelDO> {
 		return this._accountActionsRepository.addHotel(hotel);
@@ -64,4 +68,20 @@ export class MongoHotelRepository extends MongoRepository implements IHotelRepos
 	public getNextSequenceValue(hotelId: string, sequenceType: HotelSequenceType): Promise<SequenceValue> {
 		return this._hotelDetailsRepository.getNextSequenceValue(hotelId, sequenceType);
 	}
+	public updateBookingDotComAuthentication(hotelMeta: HotelMetaRepoDO, authenticationInfo: BookingDotComAuthenticationRepoDO): Promise<HotelDO> {
+		return this._hotelIntegrationsRepository.updateBookingDotComAuthentication(hotelMeta, authenticationInfo);
+	}
+	public updateBookingDotComHotelConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComHotelConfigurationRepoDO): Promise<HotelDO> {
+		return this._hotelIntegrationsRepository.updateBookingDotComHotelConfiguration(hotelMeta, hotelInfo);
+	}
+	public updateBookingDotComRoomsConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComRoomsConfigurationRepoDO): Promise<HotelDO> {
+		return this._hotelIntegrationsRepository.updateBookingDotComRoomsConfiguration(hotelMeta, hotelInfo);
+	}
+	public updateBookingDotComPriceProductsConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComPriceProductsConfigurationRepoDO): Promise<HotelDO> {
+		return this._hotelIntegrationsRepository.updateBookingDotComPriceProductsConfiguration(hotelMeta, hotelInfo);
+	}
+	public enableBookingDotComIntegration(hotelMeta: HotelMetaRepoDO, enabled: boolean): Promise<HotelDO> {
+		return this._hotelIntegrationsRepository.enableBookingDotComIntegration(hotelMeta, enabled);		
+	}
+	
 }

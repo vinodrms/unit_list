@@ -2,38 +2,38 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 import {FormBuilder, FormGroup, Validators, AbstractControl, FormControl} from '@angular/forms';
-import { AppContext } from '../../../../../../../../../../../../../../common/utils/AppContext';
+import { AppContext, ThServerApi } from '../../../../../../../../../../../../../../common/utils/AppContext';
+import {BookingDotComAuthenticationDO} from "../utils/BookingDotComIntegrationAuthenticationDO";
 
 @Injectable()
 export class BookingDotComIntegrationAuthenticationStepService {
 	public didSubmitForm: boolean = false;
 	private _form: FormGroup;
 
-	private _accountName: FormControl;
-	private _accountId: FormControl;
-	private _accountPassword: FormControl;
+	private accountName: FormControl;
+	private accountId: FormControl;
+	private accountPassword: FormControl;
 
 	constructor(private formBuilder: FormBuilder,
 		private appContext: AppContext) {
         this.initForm();
-        this.updateFormValues();
 	}
 	private initForm() {
-		this._accountName = new FormControl("", Validators.compose([Validators.required, Validators.maxLength(100)]));
-		this._accountId = new FormControl("", Validators.compose([Validators.required, Validators.maxLength(100)]));
-		this._accountPassword = new FormControl("", Validators.compose([Validators.required, Validators.maxLength(100)]));
+		this.accountName = new FormControl("", Validators.compose([Validators.required, Validators.maxLength(100)]));
+		this.accountId = new FormControl("", Validators.compose([Validators.required, Validators.maxLength(100)]));
+		this.accountPassword = new FormControl("", Validators.compose([Validators.required, Validators.maxLength(100)]));
 
 		this._form = this.formBuilder.group({
-			"accountName": this._accountName,
-			"accountId": this._accountId,
-			"accountPassword": this._accountPassword
+			"accountName": this.accountName,
+			"accountId": this.accountId,
+			"accountPassword": this.accountPassword
 		})
 	}
 
-	public updateFormValues() {
-		this._accountName.setValue("account name test");
-		this._accountId.setValue("account id test");
-		this._accountPassword.setValue("account password test");
+	public updateFormValues(authenticationDO: BookingDotComAuthenticationDO) {
+		this.accountName.setValue(authenticationDO.accountName);
+		this.accountId.setValue(authenticationDO.accountId);
+		this.accountPassword.setValue(authenticationDO.accountPassword);
     }
     
 	private isValid(): boolean {
@@ -48,11 +48,20 @@ export class BookingDotComIntegrationAuthenticationStepService {
 			return this.reject();
 		}
 
-		return new Observable<any>((observer: Observer<any>) => {
-				observer.complete();
+		return this.appContext.thHttp.post({
+			serverApi: ThServerApi.BookingDotComIntegrationConfigureAuthentication,
+			body: JSON.stringify({
+				accountName: this.accountName.value,
+				accountId: this.accountId.value,
+				accountPassword: this.accountPassword.value
+			})
+		}).map((authenticationObject: Object) => {
+			var authenticationDO: BookingDotComAuthenticationDO = new BookingDotComAuthenticationDO();
+			authenticationDO.buildFromObject(authenticationObject);
+			this.updateFormValues(authenticationDO);
+			return authenticationDO;
 		});
 	}
-
 	private reject(): Observable<any> {
 		return new Observable((serviceObserver: Observer<any>) => {
 			serviceObserver.error(true);

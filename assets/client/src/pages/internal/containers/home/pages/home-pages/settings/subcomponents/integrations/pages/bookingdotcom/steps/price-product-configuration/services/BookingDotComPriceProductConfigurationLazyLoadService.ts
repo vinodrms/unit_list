@@ -16,6 +16,9 @@ import { BookingDotComPriceProductConfigurationVM } from '../utils/BookingDotCom
 import { YieldFiltersDO } from '../../../../../../../../../../../../services/hotel-configurations/data-objects/YieldFiltersDO';
 import { HotelAggregatedInfo } from '../../../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import { PriceProductVM } from '../../../../../../../../../../../../services/price-products/view-models/PriceProductVM';
+import { GetBookingDotComConfigurationService } from '../../../services/GetBookingDotComConfigurationService';
+import { BookingDotComPriceProductConfigurationDO } from '../utils/BookingDotComPriceProductConfigurationDO';
+import { BookingDotComConfigurationDO } from '../../../services/utils/BookingDotComConfigurationDO';
 
 import _  = require('underscore');
 
@@ -25,7 +28,8 @@ export class BookingDotComPriceProductConfigurationLazyLoadService extends ALazy
 		private _taxService: TaxService,
 		private _roomCategoriesService: RoomCategoriesService,
 		private _yieldFiltersService: YieldFiltersService,
-		private _hotelAggregatorService: HotelAggregatorService) {
+		private _hotelAggregatorService: HotelAggregatorService,
+		private getBookingDotComConfigurationService: GetBookingDotComConfigurationService) {
 		super(appContext, ThServerApi.PriceProductsCount, ThServerApi.PriceProducts);
 		this.defaultSearchCriteria = { status: PriceProductStatus.Active };
 	}
@@ -39,13 +43,15 @@ export class BookingDotComPriceProductConfigurationLazyLoadService extends ALazy
 			this._roomCategoriesService.getRoomCategoryList(),
 			this._yieldFiltersService.getYieldFiltersDO(),
 			this._hotelAggregatorService.getHotelAggregatedInfo(),
-			this.getParentPriceProducts(priceProducts)
-		).map((result: [TaxContainerDO, RoomCategoryDO[], YieldFiltersDO, HotelAggregatedInfo, PriceProductsDO]) => {
+			this.getParentPriceProducts(priceProducts),
+			this.getBookingDotComConfigurationService.getConfiguration()
+		).map((result: [TaxContainerDO, RoomCategoryDO[], YieldFiltersDO, HotelAggregatedInfo, PriceProductsDO, BookingDotComConfigurationDO]) => {
 			var taxContainer: TaxContainerDO = result[0];
 			var roomCategoryList: RoomCategoryDO[] = result[1];
 			var yieldFilters: YieldFiltersDO = result[2];
 			var hotelInfo: HotelAggregatedInfo = result[3];
 			var parentPriceProducts: PriceProductsDO = result[4];
+			var bookingDotComConfiguration: BookingDotComConfigurationDO = result[5];
 			var priceProductConfigurations:BookingDotComPriceProductConfigurationVM[] = [];
 			
 			_.forEach(priceProducts.priceProductList, (priceProductDO: PriceProductDO) => {
@@ -58,10 +64,14 @@ export class BookingDotComPriceProductConfigurationLazyLoadService extends ALazy
 				if (priceProductDO.hasParent()) {
 					priceProductVM.parentPriceProduct = parentPriceProducts.findById(priceProductDO.parentId);
 				}
-				var ppConfiguration = new BookingDotComPriceProductConfigurationVM();
-				ppConfiguration.priceProductVM = priceProductVM;
-				ppConfiguration.enabled = true;
-				priceProductConfigurations.push(ppConfiguration);
+				var ppConfigurationVM = new BookingDotComPriceProductConfigurationVM();
+				ppConfigurationVM.priceProductVM = priceProductVM;
+				var ppConfigurationDO = this.getBookingDotComPriceProductConfiguration(bookingDotComConfiguration, priceProductVM);
+				if (!this._appContext.thUtils.isUndefinedOrNull(ppConfigurationDO)) {
+					ppConfigurationVM.enabled = ppConfigurationDO.enabled;
+					ppConfigurationVM.rateCategoryId = ppConfigurationDO.rateCategoryId;
+				}
+				priceProductConfigurations.push(ppConfigurationVM);
 			});
 			return priceProductConfigurations;
 		});
@@ -99,4 +109,10 @@ export class BookingDotComPriceProductConfigurationLazyLoadService extends ALazy
 	public setAvailabilityFilter(availability: PriceProductAvailability) {
 		this.defaultSearchCriteria["availability"] = availability;
 	}
+	private getBookingDotComPriceProductConfiguration(configuration: BookingDotComConfigurationDO, priceProductVM: PriceProductVM): BookingDotComPriceProductConfigurationDO {
+        var bookingDotComRoomConfigurationDO: BookingDotComPriceProductConfigurationDO = _.find(configuration.priceProductConfiguration.priceProductConfigurations, (priceProductConfiguration: BookingDotComPriceProductConfigurationDO) => {
+            return priceProductConfiguration.priceProductId == priceProductVM.priceProduct.id;
+        });
+        return bookingDotComRoomConfigurationDO;
+    }
 }

@@ -7,6 +7,7 @@ import { OperationHoursDO } from './operation-hours/OperationHoursDO';
 import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
 import { HotelSequencesDO } from './sequences/HotelSequencesDO';
 import { PaymentMethodInstanceDO } from "../../common/data-objects/payment-method/PaymentMethodInstanceDO";
+import { BookingDotComConfigurationDO } from '../../integrations/booking-dot-com/BookingDotComConfigurationDO';
 
 export class HotelDO extends BaseDO {
 	constructor() {
@@ -30,6 +31,7 @@ export class HotelDO extends BaseDO {
 	sequences: HotelSequencesDO;
 	paymentDueInDays: number;
 	signupCode: string;
+	bookingDotComConfigurationDO: BookingDotComConfigurationDO;
 
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["id", "versionId", "logoUrl", "ccyCode", "amenityIdList", "additionalInvoiceDetails", "configurationCompleted", "timezone", "paymentDueInDays", "signupCode"];
@@ -72,5 +74,8 @@ export class HotelDO extends BaseDO {
 
 		this.sequences = new HotelSequencesDO();
 		this.sequences.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "sequences"));
+
+		this.bookingDotComConfigurationDO = new BookingDotComConfigurationDO();
+		this.bookingDotComConfigurationDO.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "bookingDotCom"));
 	}
 }

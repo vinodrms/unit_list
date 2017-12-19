@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BookingDotComIntegrationAuthenticationStepService } from './service/BookingDotComIntegrationAuthenticationStepService';
+import { BookingDotComIntegrationHotelConfigurationStepService } from './service/BookingDotComIntegrationHotelConfigurationStepService';
 import { FormGroup } from '@angular/forms';
 import { AppContext } from '../../../../../../../../../../../../../common/utils/AppContext';
 import { BaseFormComponent } from '../../../../../../../../../../../../../common/base/BaseFormComponent';
@@ -7,18 +7,18 @@ import { GetBookingDotComConfigurationService } from '../../services/GetBookingD
 import { BookingDotComConfigurationDO } from '../../services/utils/BookingDotComConfigurationDO';
 
 @Component({
-	selector: 'booking-dot-com-integration-authentication-step',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/integrations/pages/bookingdotcom/steps/authentication/template/booking-dot-com-integration-authentication-step.html',
-	providers: [BookingDotComIntegrationAuthenticationStepService, GetBookingDotComConfigurationService]
+	selector: 'booking-dot-com-integration-hotel-configuration-step',
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/integrations/pages/bookingdotcom/steps/hotel-configuration/template/booking-dot-com-integration-hotel-configuration-step.html',
+	providers: [BookingDotComIntegrationHotelConfigurationStepService, GetBookingDotComConfigurationService]
 })
-export class BookingDotComIntegrationAuthenticationStepComponent extends BaseFormComponent implements OnInit {
+export class BookingDotComIntegrationHotelConfigurationStepComponent extends BaseFormComponent implements OnInit {
 
 	public isSaving: boolean = false;
-	public isLoading: boolean = true;
+	public isLoading: boolean = false;
 	
 	constructor(
 		private appContext: AppContext,
-		private bookingDotComIntegrationService: BookingDotComIntegrationAuthenticationStepService,
+		private bookingDotComIntegrationService: BookingDotComIntegrationHotelConfigurationStepService,
 		private getBookingDotComConfigurationService: GetBookingDotComConfigurationService) {
 		super();
     }
@@ -26,7 +26,7 @@ export class BookingDotComIntegrationAuthenticationStepComponent extends BaseFor
 	ngOnInit() {
 		this.isLoading = true;
 		this.getBookingDotComConfigurationService.getConfiguration().subscribe((configuration: BookingDotComConfigurationDO) => {
-			this.bookingDotComIntegrationService.updateFormValues(configuration.authentication);
+			this.bookingDotComIntegrationService.updateFormValues(configuration.hotelConfiguration);
 			this.isLoading = false;
 		});
 	}
@@ -35,7 +35,7 @@ export class BookingDotComIntegrationAuthenticationStepComponent extends BaseFor
 		return this.bookingDotComIntegrationService.form;
 	}
 
-	public saveAuthenticationData() {
+	public saveHotelConfiguration() {
 		if (this.isSaving) { return; }
 		this.isSaving = true;
 		this.bookingDotComIntegrationService.saveForm().subscribe((result: any) => {
@@ -43,7 +43,7 @@ export class BookingDotComIntegrationAuthenticationStepComponent extends BaseFor
 			this.appContext.toaster.success(this.appContext.thTranslation.translate("Information Saved Succesfully"));
 		}, (error: any) => {
 			this.isSaving = false;
-			this.appContext.toaster.error(this.appContext.thTranslation.translate("Error Saving Information"));						
+			this.appContext.toaster.error(this.appContext.thTranslation.translate("Error Saving Information"));			
 		});
 	}
 }

@@ -47,6 +47,24 @@ export interface SequenceValue {
 	sequence: number;
 }
 
+export interface BookingDotComAuthenticationRepoDO {
+	accountName: string;
+	accountId: string;
+	accountPassword: string;
+}
+
+export interface BookingDotComHotelConfigurationRepoDO {
+	hotelId: string;
+}
+
+export interface BookingDotComRoomsConfigurationRepoDO {
+	roomConfigurations: {ourRoomId: string, roomId: string}[];
+}
+
+export interface BookingDotComPriceProductsConfigurationRepoDO {
+	priceProductConfigurations: {priceProductId: string, rateCategoryId: string, enabled: boolean}[];
+}
+
 export interface IHotelRepository {
 	addHotel(hotel: HotelDO): Promise<HotelDO>;
 	activateUserAccount(activationParams: UserAccountActivationRepoDO): Promise<UserDO>;
@@ -65,4 +83,12 @@ export interface IHotelRepository {
 	markConfigurationCompleted(hotelMeta: HotelMetaRepoDO, hotel: HotelDO): Promise<HotelDO>;
 
 	getNextSequenceValue(hotelId: string, sequenceType: HotelSequenceType): Promise<SequenceValue>;
+
+	updateBookingDotComAuthentication(hotelMeta: HotelMetaRepoDO, authenticationInfo: BookingDotComAuthenticationRepoDO): Promise<HotelDO>;
+	updateBookingDotComHotelConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComHotelConfigurationRepoDO): Promise<HotelDO>;
+	updateBookingDotComPriceProductsConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComPriceProductsConfigurationRepoDO): Promise<HotelDO>;
+	updateBookingDotComRoomsConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComRoomsConfigurationRepoDO): Promise<HotelDO>;
+	enableBookingDotComIntegration(hotelMeta: HotelMetaRepoDO, enabled: boolean): Promise<HotelDO>;
+	
+	
 }

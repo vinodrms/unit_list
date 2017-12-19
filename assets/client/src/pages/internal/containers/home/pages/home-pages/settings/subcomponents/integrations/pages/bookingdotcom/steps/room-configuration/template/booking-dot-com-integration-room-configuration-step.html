@@ -1,9 +1,9 @@
 <div class="m-b-16">
-    <div class="row m-l-16 m-b-24">{{ 'For each room type, fill the associated inventory code from Booking.com.' | translate }}</div>        
+    <div class="row m-l-16 m-b-24">{{ 'For each room type, fill the associated inventory code from Booking.com.' | translate }}</div>
     <lazy-loading-table>
     </lazy-loading-table>
-    <div class="col-xs-3 col-xs-offset-9 col-md-3 col-md-offset-9 m-t-24">
-        <button type="button" class="btn btn-primary btn-block" (click)="save()">
+    <div *ngIf="!isLoading" class="col-xs-3 col-xs-offset-9 col-md-3 col-md-offset-9 m-t-24">
+        <button type="button" class="btn btn-primary btn-block" (click)="saveChanges()">
             <i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
         </button>
     </div>

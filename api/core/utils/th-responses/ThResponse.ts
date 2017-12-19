@@ -585,6 +585,14 @@ export enum ThStatusCode {
     TransferInvoiceItemsItemNotFound,
     TransferInvoiceItemsLinkedItemsCannotBeMoved,
 
+    //integrations
+    ConfigureBookingDotComAuthenticationError,
+    ConfigureBookingDotComHotelError,
+    ConfigureBookingDotComPriceProductsError,
+    ConfigureBookingDotComRoomsError,
+    GetBookingDotComConfigurationError,
+    EnableBookingDotComIntegrationError,
+
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -1159,6 +1167,14 @@ ThMessage[ThStatusCode.TransferInvoiceItemsError] = "Error transferring items.";
 ThMessage[ThStatusCode.TransferInvoiceItemsUnpaidInvoicesNotFound] = "Items can only be transferred between unpaid invoices.";
 ThMessage[ThStatusCode.TransferInvoiceItemsItemNotFound] = "Some items have not been found on the invoices.";
 ThMessage[ThStatusCode.TransferInvoiceItemsLinkedItemsCannotBeMoved] = "Items linked to others (e.g., included add on products) cannot be moved.";
+
+//integrations
+ThMessage[ThStatusCode.ConfigureBookingDotComAuthenticationError] = "Error configuring Booking.com authentication.";
+ThMessage[ThStatusCode.ConfigureBookingDotComHotelError] = "Error configuring Booking.com hotel.";
+ThMessage[ThStatusCode.ConfigureBookingDotComRoomsError] = "Error configuring Booking.com rooms.";
+ThMessage[ThStatusCode.ConfigureBookingDotComPriceProductsError] = "Error configuring Booking.com price products.";
+ThMessage[ThStatusCode.GetBookingDotComConfigurationError] = "Error getting Booking.com configuration.";
+ThMessage[ThStatusCode.EnableBookingDotComIntegrationError] = "Error enabling Booking.com integration.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

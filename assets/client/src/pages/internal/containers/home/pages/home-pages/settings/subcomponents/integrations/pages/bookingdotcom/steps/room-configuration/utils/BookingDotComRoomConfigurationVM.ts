@@ -2,5 +2,5 @@ import { RoomVM } from "../../../../../../../../../../../../services/rooms/view-
 
 export class BookingDotComRoomConfigurationVM {
     roomVM: RoomVM;
-    inventoryCode: string;
+    roomId: string;
 }

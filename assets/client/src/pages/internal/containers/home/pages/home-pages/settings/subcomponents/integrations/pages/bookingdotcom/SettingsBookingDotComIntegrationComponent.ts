@@ -4,35 +4,75 @@ import { IntegrationType } from '../../utils/IntegrationType';
 import { AppContext } from '../../../../../../../../../../../common/utils/AppContext';
 import { FormGroup } from '@angular/forms';
 import { BaseComponent } from '../../../../../../../../../../../common/base/BaseComponent';
+import { GetBookingDotComConfigurationService } from './services/GetBookingDotComConfigurationService';
+import { BookingDotComConfigurationDO } from './services/utils/BookingDotComConfigurationDO';
+import { EnableBookingDotComIntegrationService } from './services/EnableBookingDotComIntegrationService';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 enum IntegrationStep {
 	Authentication,
+	HotelConfiguration,
 	RoomConfiguration,
 	PriceProductConfiguration
 }
 
 @Component({
 	selector: 'settings-booking-dot-com-integration',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/integrations/pages/bookingdotcom/template/settings-booking-dot-com-integration.html'
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/integrations/pages/bookingdotcom/template/settings-booking-dot-com-integration.html',
+	providers: [GetBookingDotComConfigurationService, EnableBookingDotComIntegrationService]
 })
 export class SettingsBookingDotComIntegrationComponent extends BaseComponent implements OnInit {
 
-	public isIntegrationEnabled: boolean;
+	public isLoading: boolean;
+	public _isIntegrationEnabled: boolean;
 	public selectedStep: IntegrationStep;
+	private enableBookingDotComSubscription: Subscription;
 
 	constructor(
-		private _appContext: AppContext,
-		private _pagesService: SettingsIntegrationsPagesService) {
+		private appContext: AppContext,
+		private pagesService: SettingsIntegrationsPagesService,
+		private enableBookingDotComIntegrationService: EnableBookingDotComIntegrationService,
+		private getBookingDotComConfigurationService: GetBookingDotComConfigurationService) {
 		super();
-		this._pagesService.bootstrapSelectedTab(IntegrationType.BookingDotCom);
+		this.pagesService.bootstrapSelectedTab(IntegrationType.BookingDotCom);
 		this.selectedStep = IntegrationStep.Authentication;
 	}
 	ngOnInit() {
-		this.isIntegrationEnabled = false;
+		this.isLoading = true;
+		this.getBookingDotComConfigurationService.getConfiguration().subscribe((configuration: BookingDotComConfigurationDO) => {
+			this.isLoading = false;
+			this._isIntegrationEnabled = configuration.enabled;
+		}, (error: any) => {
+			this.isLoading = false;
+		});
+		this._isIntegrationEnabled = false;
+	}
+
+	public set isIntegrationEnabled(value: boolean) {
+		this._isIntegrationEnabled = value;
+		if (this.enableBookingDotComSubscription) {
+			this.enableBookingDotComIntegrationService.refresh(this.isIntegrationEnabled);
+			return;
+		}
+		this.enableBookingDotComSubscription = this.enableBookingDotComIntegrationService.setEnabled(this.isIntegrationEnabled).subscribe((isEnabled: boolean) => {
+			this._isIntegrationEnabled = isEnabled;
+			
+		}, (error: any) => {
+			this._isIntegrationEnabled = false;
+		});
+	}
+
+	public get isIntegrationEnabled(): boolean {
+		return this._isIntegrationEnabled;
 	}
 
 	public isAuthenticationStepSelected(): boolean {
 		return this.selectedStep === IntegrationStep.Authentication;
+	}
+
+	public isHotelConfigurationStepSelected(): boolean {
+		return this.selectedStep === IntegrationStep.HotelConfiguration;
 	}
 
 	public isRoomConfigurationStepSelected(): boolean {
@@ -53,5 +93,9 @@ export class SettingsBookingDotComIntegrationComponent extends BaseComponent imp
 
 	public selectPriceProductConfigurationStep() {
 		this.selectedStep = IntegrationStep.PriceProductConfiguration;
+	}
+
+	public selectHotelConfigurationStep() {
+		this.selectedStep = IntegrationStep.HotelConfiguration;
 	}
 }

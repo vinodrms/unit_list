@@ -165,6 +165,13 @@ module.exports.routes = {
 
     'POST /api/token': 'OAuthTokenController.getToken',
 
+    'POST /api/integrations/booking-dot-com/configureAuthentication': 'BookingDotComIntegrationController.configureAuthentication',
+    'POST /api/integrations/booking-dot-com/configureHotel': 'BookingDotComIntegrationController.configureHotel',
+    'POST /api/integrations/booking-dot-com/configureRooms': 'BookingDotComIntegrationController.configureRooms',            
+    'POST /api/integrations/booking-dot-com/configurePriceProducts': 'BookingDotComIntegrationController.configurePriceProducts',        
+    'GET /api/integrations/booking-dot-com/getConfiguration': 'BookingDotComIntegrationController.getConfiguration',
+    'POST /api/integrations/booking-dot-com/setEnabled' : 'BookingDotComIntegrationController.setEnabled',
+
     /*Front End Views	*/
     'GET /home*': {
         controller: 'AppViewsController',

@@ -198,4 +198,5 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 		var name = hotel.contactDetails.name;
 		return name.trim().substring(0, Math.min(MongoHotelDetailsRepository.PrefixLength, name.length)).toUpperCase();
 	}
+
 }
