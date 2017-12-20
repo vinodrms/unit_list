@@ -69,7 +69,7 @@ export class InvoicesController extends BaseController {
         var saveInvoice = new SaveInvoice(req.appContext, req.sessionContext);
         saveInvoice.save(req.body.invoice, req.body.itemTransactionIdListToDelete, req.body.payerCustomerIdListToDelete)
             .then((updatedInvoice: InvoiceDO) => {
-                this.translateInvoiceHistory(updatedInvoice, req.sessionContext);
+                this.translateInvoiceHistory(updatedInvoice, this.getThTranslation(req.sessionContext));
                 this.returnSuccesfulResponse(req, res, { invoice: updatedInvoice });
             }).catch((err: any) => {
                 this.returnErrorResponse(req, res, err, ThStatusCode.InvoicesControllerErrorSavingInvoice);
