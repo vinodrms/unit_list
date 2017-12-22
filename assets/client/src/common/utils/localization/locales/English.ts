@@ -716,7 +716,6 @@ export var EnglishTranslations: Object = {
     "of": "of",
     "Pay": "Pay",
     "Add Invoice": "Add Invoice",
-    "You cannot create walk in invoices for customers with Pay Invoice By Agreement enabled.": "You cannot create walk in invoices for customers with Pay Invoice By Agreement enabled.",
     "Item Name": "Item Name",
     "Qty": "Qty",
     "Total": "Total",

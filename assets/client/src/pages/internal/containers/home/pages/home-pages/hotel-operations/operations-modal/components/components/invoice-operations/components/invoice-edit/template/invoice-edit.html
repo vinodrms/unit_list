@@ -15,7 +15,7 @@
                     <li *ngIf="hasInvoiceDownloadRight()" class="clickable" (click)="sendInvoiceConfirmation(payer)" title="{{ 'Send the invoice PDF to email' | translate }}">
                         {{ 'Send' }}
                     </li>
-                    <li *ngIf="canCreateWalkInInvoices(payer)" class="clickable" (click)="createInvoiceForPayer(payer)" title="{{ 'Create a new invoice for this customer' }}">
+                    <li class="clickable" (click)="createInvoiceForPayer(payer)" title="{{ 'Create a new invoice for this customer' }}">
                         {{ 'Add Invoice'}}
                     </li>
                     <li *ngIf="canMoveItemsToNewInvoice(payer)" class="clickable" (click)="openTransferPageWithNewInvoice(payer)" title="{{ 'Move items from this invoice to a new one for this customer' }}">

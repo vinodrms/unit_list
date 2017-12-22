@@ -34,20 +34,6 @@ export class InvoicePayersValidator {
             reject(thError);
             return;
         }
-        if (this.invoice.isWalkInInvoice()) {
-            for (var i = 0; i < this.invoice.payerList.length; i++) {
-                let payer = this.invoice.payerList[i];
-                let customer = this.customersContainer.getCustomerById(payer.customerId);
-                if (!customer.canCreateWalkInInvoices()) {
-                    var thError = new ThError(ThStatusCode.InvoicePayersValidatorNoAccessToWalkIn, null);
-                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Tried to use a customer with PIA enabled on a walk in bill", {
-                        invoiceid: this.invoice.id
-                    }, thError);
-                    reject(thError);
-                    return;
-                }
-            }
-        }
         resolve(this.invoice);
     }
 
