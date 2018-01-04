@@ -85,11 +85,11 @@ export class ThDateDO extends BaseDO {
         return outDate;
     }
 
-    public toString(): string {
+    public toString(separator: string = "/", startWithDay: boolean = true): string {
         if (!_.isNumber(this.year) || !_.isNumber(this.month) || !_.isNumber(this.day)) {
             return "";
         }
-        return this.getDayString() + "/" + this.getMonthString() + "/" + this.year;
+        return (startWithDay)? this.getDayString() + separator + this.getMonthString() + separator + this.year : this.year + separator + this.getMonthString() + separator + this.getDayString();
     }
     private getDayString(): string {
         return this.day < 10 ? ("0" + this.day) : ("" + this.day);

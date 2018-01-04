@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs/Subscription';
 enum IntegrationStep {
 	Authentication,
 	HotelConfiguration,
-	RoomConfiguration,
+	RoomCategoryConfiguration,
 	PriceProductConfiguration
 }
 
@@ -75,8 +75,8 @@ export class SettingsBookingDotComIntegrationComponent extends BaseComponent imp
 		return this.selectedStep === IntegrationStep.HotelConfiguration;
 	}
 
-	public isRoomConfigurationStepSelected(): boolean {
-		return this.selectedStep === IntegrationStep.RoomConfiguration;
+	public isRoomCategoryConfigurationStepSelected(): boolean {
+		return this.selectedStep === IntegrationStep.RoomCategoryConfiguration;
 	}
 
 	public isPriceProductConfigurationStepSelected(): boolean {
@@ -87,8 +87,8 @@ export class SettingsBookingDotComIntegrationComponent extends BaseComponent imp
 		this.selectedStep = IntegrationStep.Authentication;
 	}
 
-	public selectRoomConfigurationStep() {
-		this.selectedStep = IntegrationStep.RoomConfiguration;
+	public selectRoomCategoryConfigurationStep() {
+		this.selectedStep = IntegrationStep.RoomCategoryConfiguration;
 	}
 
 	public selectPriceProductConfigurationStep() {

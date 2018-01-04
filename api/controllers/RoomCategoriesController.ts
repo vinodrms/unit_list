@@ -81,6 +81,20 @@ class RoomCategoriesController extends BaseController {
         });
     }
 
+    public getRoomCategoryStatsListCount(req: any, res: any) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var roomCategStatsAggregator = new RoomCategoryStatsAggregator(appContext, sessionContext);
+        var roomCategoryIdList = req.body.roomCategoryIdList;
+
+        roomCategStatsAggregator.getRoomCategoryStatsList(req.body.roomCategoryIdList).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+            this.returnSuccesfulResponse(req, res, { numOfItems: roomCategoryStatsList.length });
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.RoomCategoriesControllerErrorGettingRoomCategoriesStats);
+        });
+    }
+
     public geUsedRoomCategoryStatsList(req: any, res: any) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
@@ -106,4 +120,5 @@ module.exports = {
     getRoomCategoryById: roomCategoriesController.getRoomCategoryById.bind(roomCategoriesController),
     getRoomCategoryStatsList: roomCategoriesController.getRoomCategoryStatsList.bind(roomCategoriesController),
     geUsedRoomCategoryStatsList: roomCategoriesController.geUsedRoomCategoryStatsList.bind(roomCategoriesController),
+    getRoomCategoryStatsListCount: roomCategoriesController.getRoomCategoryStatsListCount.bind(roomCategoriesController),
 }

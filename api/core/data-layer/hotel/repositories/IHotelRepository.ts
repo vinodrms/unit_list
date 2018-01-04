@@ -57,8 +57,8 @@ export interface BookingDotComHotelConfigurationRepoDO {
 	hotelId: string;
 }
 
-export interface BookingDotComRoomsConfigurationRepoDO {
-	roomConfigurations: {ourRoomId: string, roomId: string}[];
+export interface BookingDotComRoomCategoriessConfigurationRepoDO {
+	roomCategoryConfigurations: {ourRoomCategoryId: string, roomId: string}[];
 }
 
 export interface BookingDotComPriceProductsConfigurationRepoDO {
@@ -87,7 +87,7 @@ export interface IHotelRepository {
 	updateBookingDotComAuthentication(hotelMeta: HotelMetaRepoDO, authenticationInfo: BookingDotComAuthenticationRepoDO): Promise<HotelDO>;
 	updateBookingDotComHotelConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComHotelConfigurationRepoDO): Promise<HotelDO>;
 	updateBookingDotComPriceProductsConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComPriceProductsConfigurationRepoDO): Promise<HotelDO>;
-	updateBookingDotComRoomsConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComRoomsConfigurationRepoDO): Promise<HotelDO>;
+	updateBookingDotComRoomCategoriessConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComRoomCategoriessConfigurationRepoDO): Promise<HotelDO>;
 	enableBookingDotComIntegration(hotelMeta: HotelMetaRepoDO, enabled: boolean): Promise<HotelDO>;
 	
 	

@@ -19,8 +19,8 @@
 					<li [ngClass]="{active : isHotelConfigurationStepSelected()}">
 						<a (click)="selectHotelConfigurationStep()">{{ 'Hotel Configuration' | translate }}</a>
 					</li>
-					<li [ngClass]="{active : isRoomConfigurationStepSelected()}">
-						<a (click)="selectRoomConfigurationStep()">{{ 'Room Configuration' | translate }}</a>
+					<li [ngClass]="{active : isRoomCategoryConfigurationStepSelected()}">
+						<a (click)="selectRoomCategoryConfigurationStep()">{{ 'Room Configuration' | translate }}</a>
 					</li>
 					<li [ngClass]="{active : isPriceProductConfigurationStepSelected()}">
 						<a (click)="selectPriceProductConfigurationStep()">{{ 'Price Product Configuration' | translate }}</a>
@@ -29,7 +29,7 @@
 				<div class="m-t-16">
 					<booking-dot-com-integration-authentication-step *ngIf="isAuthenticationStepSelected()"></booking-dot-com-integration-authentication-step>
 					<booking-dot-com-integration-hotel-configuration-step *ngIf="isHotelConfigurationStepSelected()"></booking-dot-com-integration-hotel-configuration-step>					
-					<booking-dot-com-integration-room-configuration-step *ngIf="isRoomConfigurationStepSelected()"></booking-dot-com-integration-room-configuration-step>
+					<booking-dot-com-integration-room-category-configuration-step *ngIf="isRoomCategoryConfigurationStepSelected()"></booking-dot-com-integration-room-category-configuration-step>
 					<booking-dot-com-integration-price-product-configuration-step *ngIf="isPriceProductConfigurationStepSelected()"></booking-dot-com-integration-price-product-configuration-step>										
 				</div>
 			</div>

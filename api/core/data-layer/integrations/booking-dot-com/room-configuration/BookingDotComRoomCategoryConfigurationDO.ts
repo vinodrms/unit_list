@@ -6,19 +6,19 @@ import { StringValidationRule } from "../../../../utils/th-validation/rules/Stri
 import { BooleanValidationRule } from "../../../../utils/th-validation/rules/BooleanValidationRule";
 import { PrimitiveValidationStructure } from "../../../../utils/th-validation/structure/PrimitiveValidationStructure";
 
-export class BookingDotComRoomConfigurationDO extends BaseDO {
+export class BookingDotComRoomCategoryConfigurationDO extends BaseDO {
     
-    public ourRoomId: string;
+    public ourRoomCategoryId: string;
     public roomId: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["ourRoomId","roomId"];
+        return ["ourRoomCategoryId","roomId"];
     }
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
             {
-                key: "ourRoomId",
+                key: "ourRoomCategoryId",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
@@ -29,27 +29,27 @@ export class BookingDotComRoomConfigurationDO extends BaseDO {
     }
 }
 
-export class BookingDotComRoomConfigurationsDO extends BaseDO {
-    roomConfigurations: BookingDotComRoomConfigurationDO[];
+export class BookingDotComRoomCategoryConfigurationsDO extends BaseDO {
+    roomCategoryConfigurations: BookingDotComRoomCategoryConfigurationDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
         return [];
     }
 
     public buildFromObject(object: Object) {
-        this.roomConfigurations = [];
-        this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "roomConfigurations"), (roomConfigurationObject: Object) => {
-            var roomConfigurationDO = new BookingDotComRoomConfigurationDO();
-            roomConfigurationDO.buildFromObject(roomConfigurationObject);
-            this.roomConfigurations.push(roomConfigurationDO);
+        this.roomCategoryConfigurations = [];
+        this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "roomCategoryConfigurations"), (roomCategoryConfigurationObject: Object) => {
+            var roomCategoryConfigurationDO = new BookingDotComRoomCategoryConfigurationDO();
+            roomCategoryConfigurationDO.buildFromObject(roomCategoryConfigurationObject);
+            this.roomCategoryConfigurations.push(roomCategoryConfigurationDO);
         });
     }
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
             {
-                key: "roomConfigurations",
-                validationStruct: new ArrayValidationStructure(BookingDotComRoomConfigurationDO.getValidationStructure())
+                key: "roomCategoryConfigurations",
+                validationStruct: new ArrayValidationStructure(BookingDotComRoomCategoryConfigurationDO.getValidationStructure())
             },
         ]);
     }

@@ -1083,7 +1083,7 @@ export var EnglishTranslations: Object = {
     "Room ID": "Room ID",
     "Enabled": "Enabled",
     "Fill your Booking.com authentication data": "Fill your Booking.com authentication data",
-    "For each room type, fill the associated inventory code from Booking.com.": "For each room type, fill the associated inventory code from Booking.com.",
+    "For each room category, fill the associated inventory code from Booking.com.": "For each room category, fill the associated inventory code from Booking.com.",
     "Enable and fill the rate category ID's for the price products you want to make available for Booking.com.": "Enable and fill the rate category ID's for the price products you want to make available for Booking.com.",
     "Error Saving Information": "Error Saving Information",
 };

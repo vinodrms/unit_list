@@ -6,19 +6,19 @@ import { AppContext } from "../../../../utils/AppContext";
 import { ValidationResultParser } from "../../../common/ValidationResultParser";
 import { HotelDO } from "../../../../data-layer/hotel/data-objects/HotelDO";
 import { HotelMetaRepoDO } from "../../../../data-layer/hotel/repositories/IHotelRepository";
-import { BookingDotComRoomConfigurationsDO } from "../../../../data-layer/integrations/booking-dot-com/room-configuration/BookingDotComRoomConfigurationDO";
+import { BookingDotComRoomCategoryConfigurationsDO } from "../../../../data-layer/integrations/booking-dot-com/room-configuration/BookingDotComRoomCategoryConfigurationDO";
 
 export class ConfigureBookingDotComRooms {
 
-	private inputDO: BookingDotComRoomConfigurationsDO;
+	private inputDO: BookingDotComRoomCategoryConfigurationsDO;
 	private loadedHotel: HotelDO;
 	
 	constructor(private appContext: AppContext, private sessionContext: SessionContext) {
 	}
 
-    public configure(hotelConfigurationDO: BookingDotComRoomConfigurationsDO): Promise<BookingDotComRoomConfigurationsDO> {
+    public configure(hotelConfigurationDO: BookingDotComRoomCategoryConfigurationsDO): Promise<BookingDotComRoomCategoryConfigurationsDO> {
 		this.inputDO = hotelConfigurationDO;
-		return new Promise<BookingDotComRoomConfigurationsDO>((resolve: { (result: BookingDotComRoomConfigurationsDO): void }, reject: { (err: ThError): void }) => {
+		return new Promise<BookingDotComRoomCategoryConfigurationsDO>((resolve: { (result: BookingDotComRoomCategoryConfigurationsDO): void }, reject: { (err: ThError): void }) => {
 			try {
 				this.configureCore(resolve, reject);
 			} catch (error) {
@@ -28,8 +28,8 @@ export class ConfigureBookingDotComRooms {
 			}
 		});
 	}
-	private configureCore(resolve: { (result: BookingDotComRoomConfigurationsDO): void }, reject: { (err: ThError): void }) {
-		var validationResult = BookingDotComRoomConfigurationsDO.getValidationStructure().validateStructure(this.inputDO);
+	private configureCore(resolve: { (result: BookingDotComRoomCategoryConfigurationsDO): void }, reject: { (err: ThError): void }) {
+		var validationResult = BookingDotComRoomCategoryConfigurationsDO.getValidationStructure().validateStructure(this.inputDO);
 		if (!validationResult.isValid()) {
 			var parser = new ValidationResultParser(validationResult, this.inputDO);
 			parser.logAndReject("Error validating data for booking.com price products", reject);
@@ -38,10 +38,10 @@ export class ConfigureBookingDotComRooms {
 		var hotelRepository = this.appContext.getRepositoryFactory().getHotelRepository();
 		hotelRepository.getHotelById(this.sessionContext.sessionDO.hotel.id).then((hotel: HotelDO) => {
 			this.loadedHotel = hotel;
-			this.appContext.getRepositoryFactory().getHotelRepository().updateBookingDotComRoomsConfiguration(this.getHotelMetaDO(), this.inputDO).then((updatedHotel: HotelDO) => {
-				var updatedRoomConfigurationsDO = new BookingDotComRoomConfigurationsDO();
-				updatedRoomConfigurationsDO = updatedHotel.bookingDotComConfigurationDO.roomConfiguration;
-				resolve(updatedRoomConfigurationsDO);
+			this.appContext.getRepositoryFactory().getHotelRepository().updateBookingDotComRoomCategoriessConfiguration(this.getHotelMetaDO(), this.inputDO).then((updatedHotel: HotelDO) => {
+				var updatedRoomCategoryConfigurationsDO = new BookingDotComRoomCategoryConfigurationsDO();
+				updatedRoomCategoryConfigurationsDO = updatedHotel.bookingDotComConfigurationDO.roomCategoryConfiguration;
+				resolve(updatedRoomCategoryConfigurationsDO);
 			}).catch((error: any) => {
 				reject(error);
 			});

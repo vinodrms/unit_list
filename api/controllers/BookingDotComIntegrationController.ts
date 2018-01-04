@@ -10,8 +10,9 @@ import { AppContext } from '../core/utils/AppContext';
 import { SessionContext } from '../core/utils/SessionContext';
 import { HotelDO } from '../core/data-layer/hotel/data-objects/HotelDO';
 import { BookingDotComPriceProductConfigurationsDO } from '../core/data-layer/integrations/booking-dot-com/price-product-configuration/BookingDotComPriceProductConfigurationDO';
-import { BookingDotComRoomConfigurationsDO } from '../core/data-layer/integrations/booking-dot-com/room-configuration/BookingDotComRoomConfigurationDO';
+import { BookingDotComRoomCategoryConfigurationsDO } from '../core/data-layer/integrations/booking-dot-com/room-configuration/BookingDotComRoomCategoryConfigurationDO';
 import { EnableBookingDotComIntegration } from '../core/domain-layer/integrations/booking-dot-com/EnableBookingDotComIntegration';
+import { BookingDotComApi } from '../core/domain-layer/integrations/booking-dot-com/BookingDotComApi';
 
 class BookingDotComIntegrationController extends BaseController {
 
@@ -35,8 +36,13 @@ class BookingDotComIntegrationController extends BaseController {
 
 	public configurePriceProducts(req: any, res: any) {
 		var configurePriceProducts = new ConfigureBookingDotComPriceProducts(req.appContext, req.sessionContext);
+		var updatedPPConfiguration: BookingDotComPriceProductConfigurationsDO;
 		configurePriceProducts.configure(req.body).then((updatedConfiguration: BookingDotComPriceProductConfigurationsDO) => {
-			this.returnSuccesfulResponse(req, res, updatedConfiguration);
+			updatedPPConfiguration = updatedConfiguration;
+			var bookingDotComApi: BookingDotComApi = new BookingDotComApi(req.appContext, req.sessionContext);
+			return bookingDotComApi.synchronizeRateCategories();
+		}).then(() => {
+			this.returnSuccesfulResponse(req, res, updatedPPConfiguration);
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.ConfigureBookingDotComPriceProductsError);
 		});
@@ -44,7 +50,7 @@ class BookingDotComIntegrationController extends BaseController {
 
 	public configureRooms(req: any, res: any) {
 		var configureRooms = new ConfigureBookingDotComRooms(req.appContext, req.sessionContext);
-		configureRooms.configure(req.body).then((updatedConfiguration: BookingDotComRoomConfigurationsDO) => {
+		configureRooms.configure(req.body).then((updatedConfiguration: BookingDotComRoomCategoryConfigurationsDO) => {
 			this.returnSuccesfulResponse(req, res, updatedConfiguration);
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.ConfigureBookingDotComRoomsError);

@@ -1,4 +1,4 @@
-import { HotelMetaRepoDO, BookingDotComAuthenticationRepoDO, BookingDotComHotelConfigurationRepoDO, BookingDotComRoomsConfigurationRepoDO, BookingDotComPriceProductsConfigurationRepoDO } from "../../IHotelRepository";
+import { HotelMetaRepoDO, BookingDotComAuthenticationRepoDO, BookingDotComHotelConfigurationRepoDO, BookingDotComRoomCategoriessConfigurationRepoDO, BookingDotComPriceProductsConfigurationRepoDO } from "../../IHotelRepository";
 import { MongoRepository } from "../../../../common/base/MongoRepository";
 import { HotelDO } from "../../../data-objects/HotelDO";
 import { ThError } from "../../../../../utils/th-responses/ThError";
@@ -21,9 +21,9 @@ export class MongoHotelIntegrationsRepository extends MongoRepository {
 			"bookingDotCom.hotelConfiguration": hotelConfigurationInfo
 		});
 	}
-	public updateBookingDotComRoomsConfiguration(hotelMeta: HotelMetaRepoDO, roomConfigurationInfo: BookingDotComRoomsConfigurationRepoDO): Promise<HotelDO> {
+	public updateBookingDotComRoomCategoriesConfiguration(hotelMeta: HotelMetaRepoDO, roomCategoryConfigurationInfo: BookingDotComRoomCategoriessConfigurationRepoDO): Promise<HotelDO> {
 		return this.findAndModifyHotel(hotelMeta, {
-			"bookingDotCom.roomConfiguration": roomConfigurationInfo
+			"bookingDotCom.roomCategoryConfiguration": roomCategoryConfigurationInfo
 		});
 	}	
 	public updateBookingDotComPriceProductsConfiguration(hotelMeta: HotelMetaRepoDO, priceProductConfigurationInfo: BookingDotComPriceProductsConfigurationRepoDO): Promise<HotelDO> {

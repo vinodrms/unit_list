@@ -10,7 +10,7 @@ import { SharedDirectivesModule } from '../../../../../../../../../common/utils/
 import { SettingsIntegrationsComponent } from './main/SettingsIntegrationsComponent';
 import { SettingsBookingDotComIntegrationComponent } from './pages/bookingdotcom/SettingsBookingDotComIntegrationComponent';
 import { BookingDotComIntegrationAuthenticationStepComponent } from './pages/bookingdotcom/steps/authentication/BookingDotComIntegrationAuthenticationStepComponent';
-import { BookingDotComIntegrationRoomConfigurationStepComponent } from './pages/bookingdotcom/steps/room-configuration/BookingDotComIntegrationRoomConfigurationStepComponent';
+import { BookingDotComIntegrationRoomCategoryConfigurationStepComponent } from './pages/bookingdotcom/steps/room-configuration/BookingDotComIntegrationRoomCategoryConfigurationStepComponent';
 import { BookingDotComIntegrationPriceProductConfigurationStepComponent } from './pages/bookingdotcom/steps/price-product-configuration/BookingDotComIntegrationPriceProductConfigurationStepComponent';
 import { BookingDotComIntegrationHotelConfigurationStepService } from './pages/bookingdotcom/steps/hotel-configuration/service/BookingDotComIntegrationHotelConfigurationStepService';
 import { BookingDotComIntegrationHotelConfigurationStepComponent } from './pages/bookingdotcom/steps/hotel-configuration/BookingDotComIntegrationHotelConfigurationStepComponent';
@@ -20,7 +20,7 @@ var settingsIntegrationsComponents = [
     SettingsBookingDotComIntegrationComponent,
     BookingDotComIntegrationAuthenticationStepComponent,
     BookingDotComIntegrationHotelConfigurationStepComponent,
-    BookingDotComIntegrationRoomConfigurationStepComponent,
+    BookingDotComIntegrationRoomCategoryConfigurationStepComponent,
     BookingDotComIntegrationPriceProductConfigurationStepComponent
     
 ];

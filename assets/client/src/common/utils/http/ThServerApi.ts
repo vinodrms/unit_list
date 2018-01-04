@@ -41,6 +41,7 @@ export enum ThServerApi {
     RoomCategoriesStats,
     UsedRoomCategoriesStats,
     RoomsUsedRoomCategories,
+    RoomCategoriesStatsCount,
     HotelConfigurationsYieldFilters,
     HotelConfigurationsSaveYieldFilterValue,
     PriceProducts,
@@ -174,6 +175,7 @@ ThServerApiUrl[ThServerApi.RoomCategoriesSaveItem] = "/roomCategories/saveRoomCa
 ThServerApiUrl[ThServerApi.RoomCategoriesStats] = "/roomCategories/stats";
 ThServerApiUrl[ThServerApi.UsedRoomCategoriesStats] = "/usedRoomCategories/stats";
 ThServerApiUrl[ThServerApi.RoomsUsedRoomCategories] = "/rooms/usedRoomCategories";
+ThServerApiUrl[ThServerApi.RoomCategoriesStatsCount] = "/roomCategories/count";
 ThServerApiUrl[ThServerApi.HotelConfigurationsYieldFilters] = "/hotelConfigurations/yieldFilters";
 ThServerApiUrl[ThServerApi.HotelConfigurationsSaveYieldFilterValue] = "/hotelConfigurations/saveYieldFilterValue";
 ThServerApiUrl[ThServerApi.PriceProducts] = "/priceProducts";

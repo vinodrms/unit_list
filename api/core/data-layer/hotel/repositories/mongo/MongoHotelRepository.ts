@@ -8,7 +8,7 @@ import { HotelContactDetailsDO } from '../../data-objects/hotel-contact-details/
 import { GeoLocationDO } from '../../../common/data-objects/geo-location/GeoLocationDO';
 import {
 	IHotelRepository, HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO,
-	ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO, SequenceValue, BookingDotComAuthenticationRepoDO, BookingDotComHotelConfigurationRepoDO, BookingDotComRoomsConfigurationRepoDO, BookingDotComPriceProductsConfigurationRepoDO
+	ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO, SequenceValue, BookingDotComAuthenticationRepoDO, BookingDotComHotelConfigurationRepoDO, BookingDotComRoomCategoriessConfigurationRepoDO, BookingDotComPriceProductsConfigurationRepoDO
 } from '../IHotelRepository';
 import { LazyLoadRepoDO } from '../../../common/repo-data-objects/LazyLoadRepoDO';
 import { HotelSequenceType } from '../../data-objects/sequences/HotelSequencesDO';
@@ -74,8 +74,8 @@ export class MongoHotelRepository extends MongoRepository implements IHotelRepos
 	public updateBookingDotComHotelConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComHotelConfigurationRepoDO): Promise<HotelDO> {
 		return this._hotelIntegrationsRepository.updateBookingDotComHotelConfiguration(hotelMeta, hotelInfo);
 	}
-	public updateBookingDotComRoomsConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComRoomsConfigurationRepoDO): Promise<HotelDO> {
-		return this._hotelIntegrationsRepository.updateBookingDotComRoomsConfiguration(hotelMeta, hotelInfo);
+	public updateBookingDotComRoomCategoriessConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComRoomCategoriessConfigurationRepoDO): Promise<HotelDO> {
+		return this._hotelIntegrationsRepository.updateBookingDotComRoomCategoriesConfiguration(hotelMeta, hotelInfo);
 	}
 	public updateBookingDotComPriceProductsConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComPriceProductsConfigurationRepoDO): Promise<HotelDO> {
 		return this._hotelIntegrationsRepository.updateBookingDotComPriceProductsConfiguration(hotelMeta, hotelInfo);
