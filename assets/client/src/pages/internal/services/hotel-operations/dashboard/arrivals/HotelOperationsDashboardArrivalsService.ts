@@ -19,8 +19,14 @@ import { ThTranslation } from '../../../../../../common/utils/localization/ThTra
 
 import * as _ from "underscore";
 
+
+export class ArrivalsInfoVM {
+    public arrivalItems: ArrivalItemInfoVM[];
+    public totalArrivalsForReferenceDate: number;
+}
+
 @Injectable()
-export class HotelOperationsDashboardArrivalsService extends ARequestService<ArrivalItemInfoVM[]> {
+export class HotelOperationsDashboardArrivalsService extends ARequestService<ArrivalsInfoVM> {
     private _referenceDate: ThDateDO;
 
     constructor(
@@ -69,15 +75,18 @@ export class HotelOperationsDashboardArrivalsService extends ARequestService<Arr
                 }
                 arrivalItemVMList.push(arrivalItemVM);
             });
-            return arrivalItemVMList;
+            var arrivalsInfoVM = new ArrivalsInfoVM();
+            arrivalsInfoVM.arrivalItems = arrivalItemVMList;
+            arrivalsInfoVM.totalArrivalsForReferenceDate = arrivalsInfo.totalArrivalsForReferenceDate;
+            return arrivalsInfoVM;
         });
     }
 
-    protected parseResult(result: Object): ArrivalItemInfoVM[] {
-        return <ArrivalItemInfoVM[]>result;
+    protected parseResult(result: Object): ArrivalsInfoVM {
+        return <ArrivalsInfoVM>result;
     }
 
-    public getArrivalItems(referenceDate?: ThDateDO): Observable<ArrivalItemInfoVM[]> {
+    public getArrivalItems(referenceDate?: ThDateDO): Observable<ArrivalsInfoVM> {
         this._referenceDate = referenceDate;
         return this.getServiceObservable();
     }

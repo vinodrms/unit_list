@@ -2264,6 +2264,11 @@ a.btn.btn-square:focus {
             color: #5b5b62;
         }
 
+        .operations-dashboard .header .status{
+            color: #5b5b62;
+            
+        }
+
         .operations-dashboard .pane-search-bar{
             justify-content: space-between;
             display: flex;

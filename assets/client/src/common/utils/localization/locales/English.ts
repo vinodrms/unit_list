@@ -716,7 +716,6 @@ export var EnglishTranslations: Object = {
     "of": "of",
     "Pay": "Pay",
     "Add Invoice": "Add Invoice",
-    "You cannot create walk in invoices for customers with Pay Invoice By Agreement enabled.": "You cannot create walk in invoices for customers with Pay Invoice By Agreement enabled.",
     "Item Name": "Item Name",
     "Qty": "Qty",
     "Total": "Total",
@@ -1086,4 +1085,8 @@ export var EnglishTranslations: Object = {
     "For each room category, fill the associated inventory code from Booking.com.": "For each room category, fill the associated inventory code from Booking.com.",
     "Enable and fill the rate category ID's for the price products you want to make available for Booking.com.": "Enable and fill the rate category ID's for the price products you want to make available for Booking.com.",
     "Error Saving Information": "Error Saving Information",
+    "Arrivals Left": "Arrivals Left",
+    "Departures Left": "Departures left",
+    "Total Occupied Rooms": "Total Occupied Rooms",
+    "Total In-House Guests": "Total In-House Guests",
 };

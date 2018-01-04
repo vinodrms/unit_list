@@ -136,11 +136,8 @@ export class InvoiceEditComponent implements OnInit {
     public hasInvoiceReinstateRight(): boolean {
         return this.invoiceVM.invoiceMeta.invoiceReinstateRight === InvoiceReinstateRight.Edit;
     }
-    public canCreateWalkInInvoices(customer: CustomerDO): boolean {
-        return customer.canCreateWalkInInvoices();
-    }
     public canMoveItemsToNewInvoice(customer: CustomerDO): boolean {
-        return this.canCreateWalkInInvoices(customer) && this.invoiceVM.hasMovableItems()
+        return this.invoiceVM.hasMovableItems()
             && this.hasInvoiceEditItemsRight() && !this.disableInvoiceSplit;
     }
 
@@ -213,11 +210,6 @@ export class InvoiceEditComponent implements OnInit {
             modalDialogInstance.resultObservable.subscribe((selectedCustomerList: CustomerDO[]) => {
                 let selectedCustomer = selectedCustomerList[0];
 
-                if (this.invoiceVM.invoice.isWalkInInvoice() && !selectedCustomer.canCreateWalkInInvoices()) {
-                    let errorMessage = this.context.thTranslation.translate("You cannot create walk in invoices for customers with Pay Invoice By Agreement enabled.");
-                    this.context.toaster.error(errorMessage);
-                    return;
-                }
                 this.invoiceOperations.addPayer(this.invoiceVM.invoice, selectedCustomer.id).subscribe((updatedInvoice: InvoiceDO) => {
                     this.invoiceVM.invoice = updatedInvoice;
                     this.invoiceVM.addCustomer(selectedCustomer);

@@ -44,8 +44,10 @@ export interface DeparturelItemInfo {
 export class HotelOperationsDeparturesInfo {
     departureInfoList: DeparturelItemInfo[];
     referenceDate: ThDateDO;
+    totalDeparturesForReferenceDate: number;
 
     constructor() {
         this.departureInfoList = [];
+        this.totalDeparturesForReferenceDate = 0;
     }
 }

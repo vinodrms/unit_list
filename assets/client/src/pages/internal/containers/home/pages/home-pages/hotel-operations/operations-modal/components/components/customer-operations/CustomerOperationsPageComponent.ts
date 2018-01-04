@@ -60,10 +60,6 @@ export class CustomerOperationsPageComponent implements OnInit {
         this.updateContainerData();
     }
 
-    public canCreateWalkInInvoices(): boolean {
-        return this.customerOperationsPageData.customerVM.customer.canCreateWalkInInvoices();
-    }
-
     public createInvoice() {
         var title = this.context.thTranslation.translate("New Invoice");
         var content = this.context.thTranslation.translate("Are you sure you want to create a new invoice for %customer%?",
