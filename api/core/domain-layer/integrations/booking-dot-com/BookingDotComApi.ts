@@ -23,7 +23,7 @@ import { ConfigCapacityDO } from "../../../data-layer/common/data-objects/bed-co
 import { IndexedBookingInterval } from "../../../data-layer/price-products/utils/IndexedBookingInterval";
 import { RoomCategoryStatsDO } from "../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
 import { RoomCategoryStatsAggregator } from "../../room-categories/aggregators/RoomCategoryStatsAggregator";
-
+import { ThLogger, ThLogLevel } from "../../../utils/logging/ThLogger";
 
 var Axios = require('axios');
 require('xml-js');
@@ -99,12 +99,14 @@ export class BookingDotComApi {
             var errorElement =_.find(jsonResponse["elements"], (element: Object) => {return element["name"] == "error";});
             if (!this.appContext.thUtils.isUndefinedOrNull(errorElement)) {
                 var thError = new ThError(ThStatusCode.ConfigureBookingDotComPriceProductsError, jsonResponse["error"]);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "Booking.com API error.", xmlResponse, thError);                
                 reject(thError);
                 return;
             }
             resolve();
         }).catch((error: AxiosError) => {
             var thError = new ThError(ThStatusCode.ConfigureBookingDotComPriceProductsError, error);
+            ThLogger.getInstance().logError(ThLogLevel.Error, "Error synchronizing rate categories..", null, thError);                            
             reject(thError);
         });;
     }
