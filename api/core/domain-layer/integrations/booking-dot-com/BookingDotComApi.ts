@@ -129,7 +129,7 @@ export class BookingDotComApi {
 
         _.each(priceProductList, (priceProduct: PriceProductDO) => {
             var associatedRoomCategories: BookingDotComRoomCategoryConfigurationDO[] = _.filter(configuration.roomCategoryConfiguration.roomCategoryConfigurations, (roomCategoryConfiguration: BookingDotComRoomCategoryConfigurationDO) => {
-                return priceProduct.roomCategoryIdList.includes(roomCategoryConfiguration.ourRoomCategoryId);
+                return !this.appContext.thUtils.isUndefinedOrNull(_.find(priceProduct.roomCategoryIdList, (roomCategoryId: string) => {return roomCategoryId == roomCategoryConfiguration.ourRoomCategoryId}));
             });
             _.each(associatedRoomCategories, (roomCategory: BookingDotComRoomCategoryConfigurationDO) => {
                 requestObject.room.push({"_attributes": {id: roomCategory.roomId},
