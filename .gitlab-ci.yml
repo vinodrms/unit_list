@@ -33,7 +33,7 @@ deploy on staging:
   environment:
     name: staging
   only:
-    - development
+    - 566-demo-api-for-booking-com
 
 deploy on production:
   stage: deploy

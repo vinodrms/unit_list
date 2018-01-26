@@ -13,7 +13,7 @@ environment=$1
 case $environment in
   staging)
     inventory="staging"
-    branch="development"
+    branch="566-demo-api-for-booking-com"
     ;;
   production)
     inventory="production"
