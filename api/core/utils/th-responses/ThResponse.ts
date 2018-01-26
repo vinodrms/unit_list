@@ -591,6 +591,9 @@ export enum ThStatusCode {
     ConfigureBookingDotComRoomsError,
     GetBookingDotComConfigurationError,
     EnableBookingDotComIntegrationError,
+    SynchronizeRatesAndAvailabilityError,
+    SynchronizeRatesAndAvailabilityNothingToSyncError,
+
 
 }
 
@@ -1173,6 +1176,8 @@ ThMessage[ThStatusCode.ConfigureBookingDotComRoomsError] = "Error configuring Bo
 ThMessage[ThStatusCode.ConfigureBookingDotComPriceProductsError] = "Error configuring Booking.com price products.";
 ThMessage[ThStatusCode.GetBookingDotComConfigurationError] = "Error getting Booking.com configuration.";
 ThMessage[ThStatusCode.EnableBookingDotComIntegrationError] = "Error enabling Booking.com integration.";
+ThMessage[ThStatusCode.SynchronizeRatesAndAvailabilityError] = "Error synchronizing rates and availability";
+ThMessage[ThStatusCode.SynchronizeRatesAndAvailabilityNothingToSyncError] = "No rates or rooms to synchronize.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

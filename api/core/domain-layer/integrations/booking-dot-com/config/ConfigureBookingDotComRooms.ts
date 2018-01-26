@@ -12,7 +12,7 @@ export class ConfigureBookingDotComRooms {
 
 	private inputDO: BookingDotComRoomCategoryConfigurationsDO;
 	private loadedHotel: HotelDO;
-	
+
 	constructor(private appContext: AppContext, private sessionContext: SessionContext) {
 	}
 

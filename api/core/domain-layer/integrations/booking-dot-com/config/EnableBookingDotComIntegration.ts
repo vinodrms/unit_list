@@ -1,17 +1,17 @@
-import { ThError } from "../../../utils/th-responses/ThError";
-import { ThLogger, ThLogLevel } from "../../../utils/logging/ThLogger";
-import { ThStatusCode } from "../../../utils/th-responses/ThResponse";
-import { SessionContext } from "../../../utils/SessionContext";
-import { AppContext } from "../../../utils/AppContext";
-import { ValidationResultParser } from "../../common/ValidationResultParser";
-import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
-import { HotelMetaRepoDO } from "../../../data-layer/hotel/repositories/IHotelRepository";
+import { ThError } from "../../../../utils/th-responses/ThError";
+import { ThLogger, ThLogLevel } from "../../../../utils/logging/ThLogger";
+import { ThStatusCode } from "../../../../utils/th-responses/ThResponse";
+import { SessionContext } from "../../../../utils/SessionContext";
+import { AppContext } from "../../../../utils/AppContext";
+import { ValidationResultParser } from "../../../common/ValidationResultParser";
+import { HotelDO } from "../../../../data-layer/hotel/data-objects/HotelDO";
+import { HotelMetaRepoDO } from "../../../../data-layer/hotel/repositories/IHotelRepository";
 
 export class EnableBookingDotComIntegration {
 
     private enabled: boolean;
 	private loadedHotel: HotelDO;
-	
+
 	constructor(private appContext: AppContext, private sessionContext: SessionContext) {
 	}
 

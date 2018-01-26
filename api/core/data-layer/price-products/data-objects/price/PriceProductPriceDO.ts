@@ -90,7 +90,7 @@ export class PriceProductPriceDO extends BaseDO {
 	}
 
 	/**
-	 * Validates whether the prices contain all the values in relation with the people that can fit in a room category 
+	 * Validates whether the prices contain all the values in relation with the people that can fit in a room category
 	 */
 	public priceConfigurationIsValidFor(roomCategoryStatList: RoomCategoryStatsDO[]): boolean {
 		for (var i = 0; i < this.dynamicPriceList.length; i++) {
