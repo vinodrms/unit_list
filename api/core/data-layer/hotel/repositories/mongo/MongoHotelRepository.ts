@@ -81,7 +81,9 @@ export class MongoHotelRepository extends MongoRepository implements IHotelRepos
 		return this._hotelIntegrationsRepository.updateBookingDotComPriceProductsConfiguration(hotelMeta, hotelInfo);
 	}
 	public enableBookingDotComIntegration(hotelMeta: HotelMetaRepoDO, enabled: boolean): Promise<HotelDO> {
-		return this._hotelIntegrationsRepository.enableBookingDotComIntegration(hotelMeta, enabled);		
+		return this._hotelIntegrationsRepository.enableBookingDotComIntegration(hotelMeta, enabled);
 	}
-	
+	public updateLastSyncTimestamp(hotelMeta: HotelMetaRepoDO, lastSyncTimestamp: number): Promise<HotelDO> {
+        return this._hotelIntegrationsRepository.updateLastSyncTimestamp(hotelMeta, lastSyncTimestamp);
+    }
 }

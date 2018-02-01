@@ -167,10 +167,11 @@ module.exports.routes = {
 
     'POST /api/integrations/booking-dot-com/configureAuthentication': 'BookingDotComIntegrationController.configureAuthentication',
     'POST /api/integrations/booking-dot-com/configureHotel': 'BookingDotComIntegrationController.configureHotel',
-    'POST /api/integrations/booking-dot-com/configureRooms': 'BookingDotComIntegrationController.configureRooms',            
-    'POST /api/integrations/booking-dot-com/configurePriceProducts': 'BookingDotComIntegrationController.configurePriceProducts',        
+    'POST /api/integrations/booking-dot-com/configureRooms': 'BookingDotComIntegrationController.configureRooms',
+    'POST /api/integrations/booking-dot-com/configurePriceProducts': 'BookingDotComIntegrationController.configurePriceProducts',
     'GET /api/integrations/booking-dot-com/getConfiguration': 'BookingDotComIntegrationController.getConfiguration',
     'POST /api/integrations/booking-dot-com/setEnabled' : 'BookingDotComIntegrationController.setEnabled',
+    'POST /api/integrations/booking-dot-com/syncRatesAndAvailability' : 'BookingDotComIntegrationController.syncRatesAndAvailability',
 
     /*Front End Views	*/
     'GET /home*': {

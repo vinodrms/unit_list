@@ -11,9 +11,10 @@ export class BookingDotComConfigurationDO extends BaseDO {
     public hotelConfiguration: BookingDotComHotelConfigurationDO;
     public roomCategoryConfiguration: BookingDotComRoomCategoryConfigurationsDO;
     public priceProductConfiguration: BookingDotComPriceProductConfigurationsDO;
+    public lastSyncTimestamp: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["enabled"];
+        return ["enabled", "lastSyncTimestamp"];
     }
 
     public buildFromObject(object: Object) {

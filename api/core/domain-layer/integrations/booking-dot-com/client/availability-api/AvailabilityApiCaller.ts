@@ -33,6 +33,7 @@ import { PriceProductConstraintDO } from "../../../../../data-layer/price-produc
 import { PriceProductConstraintType } from "../../../../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint";
 import { MinimumLengthOfStayConstraintDO } from "../../../../../data-layer/price-products/data-objects/constraint/constraints/MinimumLengthOfStayConstraintDO";
 import { ThDateIntervalUtils } from "../../../../../utils/th-dates/ThDateIntervalUtils";
+import { BookingDotComHotelConfigurationDO } from "../../../../../data-layer/integrations/booking-dot-com/hotel-configuration/BookingDotComHotelConfigurationDO";
 
 var Axios = require('axios');
 require('xml-js');
@@ -55,13 +56,13 @@ export class AvailabilityApiCaller {
         this.sessionContext = sessionContext;
     }
 
-    public synchronizeAvailabilityAndRates(days: number): Promise<void> {
-        return new Promise<void>((resolve: { (): void }, reject: { (err: ThError): void }) => {
+    public synchronizeAvailabilityAndRates(days: number): Promise<BookingDotComConfigurationDO> {
+        return new Promise<BookingDotComConfigurationDO>((resolve: { (config: BookingDotComConfigurationDO): void }, reject: { (err: ThError): void }) => {
             return this.synchronizeAvailabilityAndRatesCore(days, resolve, reject);
         });
     }
 
-    private synchronizeAvailabilityAndRatesCore(days: number, resolve: { (): void }, reject: { (err: ThError): void }) {
+    private synchronizeAvailabilityAndRatesCore(days: number, resolve: { (config: BookingDotComConfigurationDO): void }, reject: { (err: ThError): void }) {
         let bookingDotComConfiguration: BookingDotComConfigurationDO;
         let enabledPriceProductList: PriceProductDO[];
         let hotelTimestamp: ThTimestampDO;
@@ -69,7 +70,7 @@ export class AvailabilityApiCaller {
         this.hotelRepository.getHotelById(this.sessionContext.sessionDO.hotel.id).then((hotel: HotelDO) => {
             bookingDotComConfiguration = hotel.bookingDotComConfigurationDO;
             if (!bookingDotComConfiguration.enabled) {
-                resolve();
+                resolve(bookingDotComConfiguration);
                 return;
             }
 
@@ -84,7 +85,6 @@ export class AvailabilityApiCaller {
                 bookingDotComConfiguration.priceProductConfiguration
             );
         }).then((requestData) => {
-            debugger
             let axiosInstance: AxiosInstance = Axios.create();
             return axiosInstance.post('https://supply-xml.booking.com/hotels/xml/availability',
                 requestData);
@@ -100,7 +100,15 @@ export class AvailabilityApiCaller {
                 return;
             }
 
-            resolve();
+            return this.hotelRepository.getHotelById(this.sessionContext.sessionDO.hotel.id);
+        }).then((hotel: HotelDO) => {
+            let lastSyncTimestamp = new Date().getTime();
+            return this.hotelRepository.updateLastSyncTimestamp({
+                id: hotel.id,
+                versionId: hotel.versionId
+            }, lastSyncTimestamp);
+        }).then((updatedHotel: HotelDO) => {
+            resolve(updatedHotel.bookingDotComConfigurationDO);
         }).catch((error: any) => {
             if (error instanceof ThError) {
                 reject(error);
@@ -275,7 +283,9 @@ export class AvailabilityApiCaller {
                             "_attributes": { value: query.date.toString("-", false) },
                             rate: { "_attributes": { id: rateId } },
                             price: priceForMaxAdultsCapacity,
-                            price1: priceForOneAdult,
+                            // disabling this attribute, as it seems that the single rate type needs to be activated by
+                            // booking.com for the property
+                            // price1: priceForOneAdult,
                             roomstosell: roomsToSell
                         },
                     };

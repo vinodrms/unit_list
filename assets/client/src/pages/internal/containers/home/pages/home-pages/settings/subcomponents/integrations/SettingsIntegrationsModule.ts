@@ -14,6 +14,7 @@ import { BookingDotComIntegrationRoomCategoryConfigurationStepComponent } from '
 import { BookingDotComIntegrationPriceProductConfigurationStepComponent } from './pages/bookingdotcom/steps/price-product-configuration/BookingDotComIntegrationPriceProductConfigurationStepComponent';
 import { BookingDotComIntegrationHotelConfigurationStepService } from './pages/bookingdotcom/steps/hotel-configuration/service/BookingDotComIntegrationHotelConfigurationStepService';
 import { BookingDotComIntegrationHotelConfigurationStepComponent } from './pages/bookingdotcom/steps/hotel-configuration/BookingDotComIntegrationHotelConfigurationStepComponent';
+import { BookingDotComIntegrationSyncStepComponent } from './pages/bookingdotcom/steps/sync/BookingDotComIntegrationSyncStepComponent';
 
 var settingsIntegrationsComponents = [
     SettingsIntegrationsComponent,
@@ -21,8 +22,9 @@ var settingsIntegrationsComponents = [
     BookingDotComIntegrationAuthenticationStepComponent,
     BookingDotComIntegrationHotelConfigurationStepComponent,
     BookingDotComIntegrationRoomCategoryConfigurationStepComponent,
-    BookingDotComIntegrationPriceProductConfigurationStepComponent
-    
+    BookingDotComIntegrationPriceProductConfigurationStepComponent,
+    BookingDotComIntegrationSyncStepComponent,
+
 ];
 @NgModule({
     imports: [CommonModule, FormsModule, ReactiveFormsModule, SharedPipesModule, SharedComponentsModule, SharedDirectivesModule, settingsIntegrationsRouting ],

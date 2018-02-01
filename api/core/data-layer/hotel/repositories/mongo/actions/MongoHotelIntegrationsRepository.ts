@@ -25,7 +25,7 @@ export class MongoHotelIntegrationsRepository extends MongoRepository {
 		return this.findAndModifyHotel(hotelMeta, {
 			"bookingDotCom.roomCategoryConfiguration": roomCategoryConfigurationInfo
 		});
-	}	
+	}
 	public updateBookingDotComPriceProductsConfiguration(hotelMeta: HotelMetaRepoDO, priceProductConfigurationInfo: BookingDotComPriceProductsConfigurationRepoDO): Promise<HotelDO> {
 		return this.findAndModifyHotel(hotelMeta, {
 			"bookingDotCom.priceProductConfiguration": priceProductConfigurationInfo
@@ -35,7 +35,12 @@ export class MongoHotelIntegrationsRepository extends MongoRepository {
 		return this.findAndModifyHotel(hotelMeta, {
 			"bookingDotCom.enabled": enabled
 		});
-	}
+    }
+    public updateLastSyncTimestamp(hotelMeta: HotelMetaRepoDO, lastSyncTimestamp: number) {
+        return this.findAndModifyHotel(hotelMeta, {
+			"bookingDotCom.lastSyncTimestamp": lastSyncTimestamp
+		});
+    }
 	private findAndModifyHotel(hotelMeta: HotelMetaRepoDO, updateQuery: Object): Promise<HotelDO> {
 		return new Promise<HotelDO>((resolve: { (updatedHotel: HotelDO): void }, reject: { (err: any): void }) => {
 			this.findAndModifyHotelCore(resolve, reject, hotelMeta, updateQuery);

@@ -14,6 +14,7 @@ import { EnableBookingDotComIntegration } from '../core/domain-layer/integration
 import { AvailabilityApiCaller } from '../core/domain-layer/integrations/booking-dot-com/client/availability-api/AvailabilityApiCaller';
 import { ConfigureBookingDotComHotel } from '../core/domain-layer/integrations/booking-dot-com/config/ConfigureBookingDotComHotel';
 import { ConfigureBookingDotComAuthentication } from '../core/domain-layer/integrations/booking-dot-com/config/ConfigureBookingDotComAuthentication';
+import { BookingDotComConfigurationDO } from '../core/data-layer/integrations/booking-dot-com/BookingDotComConfigurationDO';
 
 class BookingDotComIntegrationController extends BaseController {
     private readonly daysToSynchronize = 90;
@@ -78,6 +79,15 @@ class BookingDotComIntegrationController extends BaseController {
             this.returnErrorResponse(req, res, err, ThStatusCode.EnableBookingDotComIntegrationError);
         });
     }
+
+    public syncRatesAndAvailability(req: any, res: any) {
+        let availabilityApiCaller: AvailabilityApiCaller = new AvailabilityApiCaller(req.appContext, req.sessionContext);
+        availabilityApiCaller.synchronizeAvailabilityAndRates(this.daysToSynchronize).then((config: BookingDotComConfigurationDO) => {
+            this.returnSuccesfulResponse(req, res, config);
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.SynchronizeRatesAndAvailabilityError);
+        });
+    }
 }
 
 var controller = new BookingDotComIntegrationController();
@@ -88,5 +98,5 @@ module.exports = {
     configureRooms: controller.configureRooms.bind(controller),
     getConfiguration: controller.getConfiguration.bind(controller),
     setEnabled: controller.setEnabled.bind(controller),
-
+    syncRatesAndAvailability: controller.syncRatesAndAvailability.bind(controller),
 };

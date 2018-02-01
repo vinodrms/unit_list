@@ -14,7 +14,8 @@ enum IntegrationStep {
 	Authentication,
 	HotelConfiguration,
 	RoomCategoryConfiguration,
-	PriceProductConfiguration
+    PriceProductConfiguration,
+    Sync
 }
 
 @Component({
@@ -57,7 +58,7 @@ export class SettingsBookingDotComIntegrationComponent extends BaseComponent imp
 		}
 		this.enableBookingDotComSubscription = this.enableBookingDotComIntegrationService.setEnabled(this.isIntegrationEnabled).subscribe((isEnabled: boolean) => {
 			this._isIntegrationEnabled = isEnabled;
-			
+
 		}, (error: any) => {
 			this._isIntegrationEnabled = false;
 		});
@@ -83,6 +84,10 @@ export class SettingsBookingDotComIntegrationComponent extends BaseComponent imp
 		return this.selectedStep === IntegrationStep.PriceProductConfiguration;
 	}
 
+    public isSyncStepSelected(): boolean {
+		return this.selectedStep === IntegrationStep.Sync;
+	}
+
 	public selectAuthenticationStep() {
 		this.selectedStep = IntegrationStep.Authentication;
 	}
@@ -97,5 +102,9 @@ export class SettingsBookingDotComIntegrationComponent extends BaseComponent imp
 
 	public selectHotelConfigurationStep() {
 		this.selectedStep = IntegrationStep.HotelConfiguration;
+    }
+
+    public selectSyncStep() {
+		this.selectedStep = IntegrationStep.Sync;
 	}
 }

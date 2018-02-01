@@ -24,13 +24,17 @@
 					</li>
 					<li [ngClass]="{active : isPriceProductConfigurationStepSelected()}">
 						<a (click)="selectPriceProductConfigurationStep()">{{ 'Price Product Configuration' | translate }}</a>
+                    </li>
+                    <li [ngClass]="{active : isSyncStepSelected()}">
+						<a (click)="selectSyncStep()">{{ 'Sync' | translate }}</a>
 					</li>
 				</ul>
 				<div class="m-t-16">
 					<booking-dot-com-integration-authentication-step *ngIf="isAuthenticationStepSelected()"></booking-dot-com-integration-authentication-step>
-					<booking-dot-com-integration-hotel-configuration-step *ngIf="isHotelConfigurationStepSelected()"></booking-dot-com-integration-hotel-configuration-step>					
+					<booking-dot-com-integration-hotel-configuration-step *ngIf="isHotelConfigurationStepSelected()"></booking-dot-com-integration-hotel-configuration-step>
 					<booking-dot-com-integration-room-category-configuration-step *ngIf="isRoomCategoryConfigurationStepSelected()"></booking-dot-com-integration-room-category-configuration-step>
-					<booking-dot-com-integration-price-product-configuration-step *ngIf="isPriceProductConfigurationStepSelected()"></booking-dot-com-integration-price-product-configuration-step>										
+                    <booking-dot-com-integration-price-product-configuration-step *ngIf="isPriceProductConfigurationStepSelected()"></booking-dot-com-integration-price-product-configuration-step>
+                    <booking-dot-com-integration-sync-step *ngIf="isSyncStepSelected()"></booking-dot-com-integration-sync-step>
 				</div>
 			</div>
 		</div>

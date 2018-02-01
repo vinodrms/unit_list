@@ -89,6 +89,6 @@ export interface IHotelRepository {
 	updateBookingDotComPriceProductsConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComPriceProductsConfigurationRepoDO): Promise<HotelDO>;
 	updateBookingDotComRoomCategoriessConfiguration(hotelMeta: HotelMetaRepoDO, hotelInfo: BookingDotComRoomCategoriessConfigurationRepoDO): Promise<HotelDO>;
 	enableBookingDotComIntegration(hotelMeta: HotelMetaRepoDO, enabled: boolean): Promise<HotelDO>;
-	
-	
+    updateLastSyncTimestamp(hotelMeta: HotelMetaRepoDO, lastSyncTimestamp: number): Promise<HotelDO>;
+
 }

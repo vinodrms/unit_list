@@ -126,8 +126,8 @@ export enum ThServerApi {
     BookingDotComGetConfiguration,
     BookingDotComIntegrationConfigurePriceProducts,
     BookingDotComIntegrationConfigureRooms,
-    EnableBookingDotComIntegration
-    
+    EnableBookingDotComIntegration,
+    BookingDotComSyncRatesAndAvailability,
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -262,6 +262,7 @@ ThServerApiUrl[ThServerApi.BookingDotComGetConfiguration] = '/integrations/booki
 ThServerApiUrl[ThServerApi.BookingDotComIntegrationConfigurePriceProducts] = '/integrations/booking-dot-com/configurePriceProducts';
 ThServerApiUrl[ThServerApi.BookingDotComIntegrationConfigureRooms] = '/integrations/booking-dot-com/configureRooms';
 ThServerApiUrl[ThServerApi.EnableBookingDotComIntegration] = '/integrations/booking-dot-com/setEnabled';
+ThServerApiUrl[ThServerApi.BookingDotComSyncRatesAndAvailability] = '/integrations/booking-dot-com/syncRatesAndAvailability';
 
 export class ServerApiBuilder {
     public static ClientId = "UnitPal-Web";

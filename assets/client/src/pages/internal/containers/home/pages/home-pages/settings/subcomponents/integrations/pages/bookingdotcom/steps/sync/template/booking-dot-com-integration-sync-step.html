@@ -1,0 +1,7 @@
+<div class="form-group flex-row flex-center-v">
+    <div class="btn btn-danger uppercase f-10 clickable" (click)="syncRatesAndAvailability()">
+        <i class="fa fa-refresh fa-spin" *ngIf="isSyncing"></i>
+        {{'Sync rates & availability' | translate}}
+    </div>
+</div>
+<p>{{'Last Sync: ' | translate}} <b>{{lastSync}}</b></p>
