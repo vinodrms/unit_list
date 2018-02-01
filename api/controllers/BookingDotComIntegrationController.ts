@@ -16,7 +16,7 @@ import { ConfigureBookingDotComHotel } from '../core/domain-layer/integrations/b
 import { ConfigureBookingDotComAuthentication } from '../core/domain-layer/integrations/booking-dot-com/config/ConfigureBookingDotComAuthentication';
 
 class BookingDotComIntegrationController extends BaseController {
-    private readonly daysToSynchronize = 30;
+    private readonly daysToSynchronize = 90;
 
     public configureAuthentication(req: any, res: any) {
         var configureAuthentication = new ConfigureBookingDotComAuthentication(req.appContext, req.sessionContext);
@@ -42,7 +42,7 @@ class BookingDotComIntegrationController extends BaseController {
         configurePriceProducts.configure(req.body).then((updatedConfiguration: BookingDotComPriceProductConfigurationsDO) => {
             updatedPPConfiguration = updatedConfiguration;
             let availabilityApiCaller: AvailabilityApiCaller = new AvailabilityApiCaller(req.appContext, req.sessionContext);
-            return availabilityApiCaller.synchronizeRateCategories(this.daysToSynchronize);
+            return availabilityApiCaller.synchronizeAvailabilityAndRates(this.daysToSynchronize);
         }).then(() => {
             this.returnSuccesfulResponse(req, res, updatedPPConfiguration);
         }).catch((err: any) => {
@@ -78,17 +78,6 @@ class BookingDotComIntegrationController extends BaseController {
             this.returnErrorResponse(req, res, err, ThStatusCode.EnableBookingDotComIntegrationError);
         });
     }
-
-    public synchronizeRatesAndAvailability(req: any, res: any) {
-        debugger
-        let availabilityApiCaller: AvailabilityApiCaller = new AvailabilityApiCaller(req.appContext, req.sessionContext);
-            return availabilityApiCaller.synchronizeRateCategories(this.daysToSynchronize).then(() => {
-            this.returnSuccesfulResponse(req, res, {});
-        }).catch((err: any) => {
-            debugger
-            this.returnErrorResponse(req, res, err, ThStatusCode.SynchronizeRatesAndAvailabilityError);
-        });
-    }
 }
 
 var controller = new BookingDotComIntegrationController();
@@ -99,6 +88,5 @@ module.exports = {
     configureRooms: controller.configureRooms.bind(controller),
     getConfiguration: controller.getConfiguration.bind(controller),
     setEnabled: controller.setEnabled.bind(controller),
-    synchronizeRatesAndAvailability: controller.synchronizeRatesAndAvailability.bind(controller),
 
 };

@@ -27,10 +27,15 @@ import { IBookingRepository } from "../../../../../data-layer/bookings/repositor
 import { RoomCategoryStatsAggregator } from "../../../../room-categories/aggregators/RoomCategoryStatsAggregator";
 import { RoomCategoryStatsDO } from "../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
 import { PriceProductPriceQueryDO } from "../../../../../data-layer/price-products/data-objects/price/IPriceProductPrice";
+import { BookingOccupancyCalculator } from "../../../../bookings/search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator";
+import { IBookingOccupancy } from "../../../../bookings/search-bookings/utils/occupancy-calculator/results/IBookingOccupancy";
+import { PriceProductConstraintDO } from "../../../../../data-layer/price-products/data-objects/constraint/PriceProductConstraintDO";
+import { PriceProductConstraintType } from "../../../../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint";
+import { MinimumLengthOfStayConstraintDO } from "../../../../../data-layer/price-products/data-objects/constraint/constraints/MinimumLengthOfStayConstraintDO";
+import { ThDateIntervalUtils } from "../../../../../utils/th-dates/ThDateIntervalUtils";
 
 var Axios = require('axios');
 require('xml-js');
-
 
 interface RoomRatesPerDateQuery {
     date: ThDateDO,
@@ -50,26 +55,25 @@ export class AvailabilityApiCaller {
         this.sessionContext = sessionContext;
     }
 
-    public synchronizeRateCategories(days: number): Promise<void> {
+    public synchronizeAvailabilityAndRates(days: number): Promise<void> {
         return new Promise<void>((resolve: { (): void }, reject: { (err: ThError): void }) => {
-            return this.synchronizeRateCategoriesCore(days, resolve, reject);
+            return this.synchronizeAvailabilityAndRatesCore(days, resolve, reject);
         });
     }
 
-    private synchronizeRateCategoriesCore(days: number, resolve: { (): void }, reject: { (err: ThError): void }) {
+    private synchronizeAvailabilityAndRatesCore(days: number, resolve: { (): void }, reject: { (err: ThError): void }) {
         let bookingDotComConfiguration: BookingDotComConfigurationDO;
         let enabledPriceProductList: PriceProductDO[];
         let hotelTimestamp: ThTimestampDO;
 
         this.hotelRepository.getHotelById(this.sessionContext.sessionDO.hotel.id).then((hotel: HotelDO) => {
-
             bookingDotComConfiguration = hotel.bookingDotComConfigurationDO;
             if (!bookingDotComConfiguration.enabled) {
                 resolve();
                 return;
             }
 
-            let requestData = this.getSynchronizeRateCategoriesRequestData(
+            return this.getSynchronizeAvailabilityAndRatesRequestData(
                 {
                     username: bookingDotComConfiguration.authentication.accountName,
                     password: bookingDotComConfiguration.authentication.accountPassword,
@@ -79,7 +83,8 @@ export class AvailabilityApiCaller {
                 bookingDotComConfiguration.roomCategoryConfiguration,
                 bookingDotComConfiguration.priceProductConfiguration
             );
-
+        }).then((requestData) => {
+            debugger
             let axiosInstance: AxiosInstance = Axios.create();
             return axiosInstance.post('https://supply-xml.booking.com/hotels/xml/availability',
                 requestData);
@@ -94,6 +99,7 @@ export class AvailabilityApiCaller {
                 reject(thError);
                 return;
             }
+
             resolve();
         }).catch((error: any) => {
             if (error instanceof ThError) {
@@ -107,18 +113,18 @@ export class AvailabilityApiCaller {
         });
     }
 
-    private getSynchronizeRateCategoriesRequestData(
+    private getSynchronizeAvailabilityAndRatesRequestData(
         credentials: IBookingDotComCredentials,
         syncInterval: ThDateIntervalDO,
         roomCategoryConfiguration: BookingDotComRoomCategoryConfigurationsDO,
         priceProductConfiguration: BookingDotComPriceProductConfigurationsDO
     ): Promise<String> {
         return new Promise<String>((resolve: { (result: String): void }, reject: { (err: ThError): void }) => {
-            return this.getSynchronizeRateCategoriesRequestDataCore(resolve, reject, credentials, syncInterval, roomCategoryConfiguration, priceProductConfiguration);
+            return this.getSynchronizeAvailabilityAndRatesRequestDataCore(resolve, credentials, syncInterval, roomCategoryConfiguration, priceProductConfiguration);
         });
     }
 
-    private getSynchronizeRateCategoriesRequestDataCore(resolve: { (result: String): void }, reject: { (err: ThError): void }, credentials: IBookingDotComCredentials,
+    private getSynchronizeAvailabilityAndRatesRequestDataCore(resolve: { (result: String): void }, credentials: IBookingDotComCredentials,
         syncInterval: ThDateIntervalDO,
         roomCategoryConfiguration: BookingDotComRoomCategoryConfigurationsDO,
         priceProductConfiguration: BookingDotComPriceProductConfigurationsDO) {
@@ -152,7 +158,7 @@ export class AvailabilityApiCaller {
             let syncDates = syncInterval.getThDateDOList();
             syncDates.forEach((date: ThDateDO) => {
                 roomRatesPerDateCalculators.push(
-                    this.getRoomRatesForDate({
+                    this.getRoomAvailabilityAndRatesForDate({
                         date: date,
                         enabledPriceProductList: enabledPriceProductList,
                         enabledRooms: enabledRooms,
@@ -175,69 +181,124 @@ export class AvailabilityApiCaller {
 
             let httpDataObject = new Object();
             httpDataObject["request"] = requestObject;
-            var jsonRequestObject = JSON.stringify(httpDataObject);
-            var xmlData: String = json2xml(jsonRequestObject, { compact: true, spaces: 4 });
+            let jsonRequestObject = JSON.stringify(httpDataObject);
+            let xmlData: String = json2xml(jsonRequestObject, { compact: true, spaces: 4 });
             resolve(xmlData);
         });
     }
 
-    private getRoomRatesForDate(query: RoomRatesPerDateQuery) {
+    private getRoomAvailabilityAndRatesForDate(query: RoomRatesPerDateQuery) {
         return new Promise<IRoomRateDetailsPerDate[]>((resolve: { (result: IRoomRateDetailsPerDate[]): void }, reject: { (err: ThError): void }) => {
-            return this.getRoomRatesForDateCore(resolve, reject, query);
+            return this.getRoomAvailabilityAndRatesForDateCore(resolve, reject, query);
         });
     }
 
-    private getRoomRatesForDateCore(
+    private getRoomAvailabilityAndRatesForDateCore(
         resolve: { (result: IRoomRateDetailsPerDate[]): void },
         reject: { (err: ThError): void },
         query: RoomRatesPerDateQuery
     ) {
+        let dateUtils = new ThDateUtils();
+        let bookingInterval = new ThDateIntervalDO();
+        bookingInterval.start = query.date;
+        bookingInterval.end = dateUtils.addDaysToThDateDO(query.date, 1);
 
+        let indexedBookingInterval = new IndexedBookingInterval(bookingInterval);
         let roomRates: IRoomRateDetailsPerDate[] = [];
 
-        query.enabledPriceProductList.forEach((priceProduct: PriceProductDO) => {
-            let ppRoomCategories = priceProduct.roomCategoryIdList;
+        let occupancyCalculator = new BookingOccupancyCalculator(this.appContext, this.sessionContext, query.enabledRooms);
+        occupancyCalculator.compute(bookingInterval).then((occupancy: IBookingOccupancy) => {
+            query.enabledPriceProductList.forEach((priceProduct: PriceProductDO) => {
+                let ppRoomCategories = priceProduct.roomCategoryIdList;
 
-            let associatedRoomCategoryConfigurations: BookingDotComRoomCategoryConfigurationDO[] =
-                query.roomCategoryConfiguration.roomCategoryConfigurations.filter((roomCategoryConfiguration: BookingDotComRoomCategoryConfigurationDO) => {
-                    return ppRoomCategories.indexOf(roomCategoryConfiguration.ourRoomCategoryId) !== -1;
+                let associatedRoomCategoryConfigurations: BookingDotComRoomCategoryConfigurationDO[] =
+                    query.roomCategoryConfiguration.roomCategoryConfigurations.filter((roomCategoryConfiguration: BookingDotComRoomCategoryConfigurationDO) => {
+                        return ppRoomCategories.indexOf(roomCategoryConfiguration.ourRoomCategoryId) !== -1;
+                    });
+
+                let rateId =
+                    query.priceProductConfiguration.priceProductConfigurations.find(
+                        (priceProductConfig: BookingDotComPriceProductConfigurationDO) => { return priceProductConfig.priceProductId == priceProduct.id }
+                    ).rateCategoryId;
+
+                let minStayConstraint = priceProduct.constraints.constraintList.find((constraint: PriceProductConstraintDO) => {
+                    return constraint.type === PriceProductConstraintType.MinimumLengthOfStay;
                 });
 
-            let rateId =
-                query.priceProductConfiguration.priceProductConfigurations.find(
-                    (priceProductConfig: BookingDotComPriceProductConfigurationDO) => { return priceProductConfig.priceProductId == priceProduct.id }
-                ).rateCategoryId;
+                let minStay = 0;
+                if (!this.appContext.thUtils.isUndefinedOrNull(minStayConstraint)) {
+                    minStay = (<MinimumLengthOfStayConstraintDO>minStayConstraint.constraint).lengthOfStay;
+                }
 
-            let bookingInterval = new ThDateIntervalDO();
-            bookingInterval.start = query.date;
-            bookingInterval.end = query.date;
-            let indexedBookingInterval = new IndexedBookingInterval(bookingInterval);
-            let configCapacity = new ConfigCapacityDO();
-            configCapacity.noAdults = 1;
+                let openIntervalUtils = new ThDateIntervalUtils(priceProduct.openIntervalList);
+                let openForArrivalIntervalUtils = new ThDateIntervalUtils(priceProduct.openForArrivalIntervalList);
+                let openForDepartureIntervalUtils = new ThDateIntervalUtils(priceProduct.openForDepartureIntervalList);
 
-            associatedRoomCategoryConfigurations.forEach((roomCategory: BookingDotComRoomCategoryConfigurationDO) => {
-                let price = priceProduct.price.getEnabledDynamicPriceForDate(query.date).getPriceForDate(
-                    {
-                        bookingInterval: indexedBookingInterval,
-                        configCapacity: configCapacity,
-                        roomCategoryId: roomCategory.ourRoomCategoryId,
-                        roomCategoryStatsList: query.roomCategoryStatsList
-                    }, query.date);
-                let roomsToSell = query.roomCategoryStatsList.find((roomCategoryStats: RoomCategoryStatsDO) => { return roomCategoryStats.roomCategory.id == roomCategory.ourRoomCategoryId }).noOfRooms;
+                let open = openIntervalUtils.containsThDateDO(query.date);
+                let operForArrival = openForArrivalIntervalUtils.containsThDateDO(query.date);
+                let openForDeparture = openForDepartureIntervalUtils.containsThDateDO(query.date);
 
-                roomRates.push({
-                    "_attributes": { id: roomCategory.roomId },
-                    date: {
-                        "_attributes": { value: query.date.toString("-", false) },
-                        rate: { "_attributes": { id: rateId } },
-                        price: 1,
-                        roomstosell: 0
-                    },
+                associatedRoomCategoryConfigurations.forEach((roomCategory: BookingDotComRoomCategoryConfigurationDO) => {
+                    let roomCategoryStats = query.roomCategoryStatsList.find((stats: RoomCategoryStatsDO) => {
+                        return stats.roomCategory.id === roomCategory.ourRoomCategoryId;
+                    });
+                    let oneAdultCapacity = new ConfigCapacityDO();
+                    oneAdultCapacity.noAdults = 1;
+
+                    let maxAdultCapacity = new ConfigCapacityDO();
+                    maxAdultCapacity.noAdults = roomCategoryStats.capacity.totalCapacity.noAdults;
+
+                    let enabledDynamicPrice = priceProduct.price.getEnabledDynamicPriceForDate(query.date);
+                    let priceForOneAdult = enabledDynamicPrice.getPriceForDate(
+                        {
+                            bookingInterval: indexedBookingInterval,
+                            configCapacity: oneAdultCapacity,
+                            roomCategoryId: roomCategory.ourRoomCategoryId,
+                            roomCategoryStatsList: query.roomCategoryStatsList
+                        }, query.date);
+
+                    let priceForMaxAdultsCapacity = enabledDynamicPrice.getPriceForDate(
+                        {
+                            bookingInterval: indexedBookingInterval,
+                            configCapacity: maxAdultCapacity,
+                            roomCategoryId: roomCategory.ourRoomCategoryId,
+                            roomCategoryStatsList: query.roomCategoryStatsList
+                        }, query.date);
+
+
+                    let totalAvailableRooms = query.roomCategoryStatsList.find((roomCategoryStats: RoomCategoryStatsDO) => { return roomCategoryStats.roomCategory.id == roomCategory.ourRoomCategoryId }).noOfRooms;
+                    let roomsToSell = totalAvailableRooms - occupancy.getOccupancyForRoomCategoryId(roomCategory.ourRoomCategoryId);
+
+                    let roomRate = {
+                        "_attributes": { id: roomCategory.roomId },
+                        date: {
+                            "_attributes": { value: query.date.toString("-", false) },
+                            rate: { "_attributes": { id: rateId } },
+                            price: priceForMaxAdultsCapacity,
+                            price1: priceForOneAdult,
+                            roomstosell: roomsToSell
+                        },
+                    };
+
+                    if (minStay !== 0) {
+                        roomRate.date["minimumstay"] = minStay;
+                    }
+                    if (!open) {
+                        roomRate.date["closed"] = 1;
+                    }
+                    if (!operForArrival) {
+                        roomRate.date["closedonarrival"] = 1;
+                    }
+                    if (!openForDeparture) {
+                        roomRate.date["closedondeparture"] = 1;
+                    }
+
+                    roomRates.push(roomRate);
                 });
             });
-        });
 
-        resolve(roomRates);
+            resolve(roomRates);
+        });
     }
 
     private getSyncInterval(start: ThDateDO, days: number): ThDateIntervalDO {
