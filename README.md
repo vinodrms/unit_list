@@ -100,7 +100,10 @@ sudo letsencrypt certonly --webroot -w /var/www/html -d app.unitpal.com -d www.a
     sudo service nginx stop
     sudo cp /etc/nginx/sites-available/unitpal /etc/nginx/sites-available/unitpal_bkp
     sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/unitpal
+    sudo service nginx start
     sudo letsencrypt renew
+    sudo service nginx stop
+    sudo cp /etc/nginx/sites-available/unitpal_bkp /etc/nginx/sites-available/unitpal
     sudo service nginx start
     ```
 
